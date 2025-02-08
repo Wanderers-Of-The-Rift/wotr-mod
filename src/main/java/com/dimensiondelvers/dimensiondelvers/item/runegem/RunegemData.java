@@ -10,6 +10,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
+
 public record RunegemData(RuneGemShape shape, TagKey<Modifier> tag, RuneGemTier tier) {
     public static Codec<RunegemData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             RuneGemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
@@ -17,10 +19,9 @@ public record RunegemData(RuneGemShape shape, TagKey<Modifier> tag, RuneGemTier 
             RuneGemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
     ).apply(inst, RunegemData::new));
 
-    public Holder<Enchantment> getRandomModifier(Level level) {
+    public Optional<Holder<Enchantment>> getRandomModifier(Level level) {
         return level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
                 .get(tag)
-                .flatMap(holders -> holders.getRandomElement(level.random))
-                .orElse(null);
+                .flatMap(holders -> holders.getRandomElement(level.random));
     }
 }

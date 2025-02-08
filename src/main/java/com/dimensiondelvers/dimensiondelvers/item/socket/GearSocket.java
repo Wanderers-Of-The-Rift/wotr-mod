@@ -9,7 +9,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 // Vanilla Equivalent ItemEnchantments
 public record GearSocket(RuneGemShape runeGemShape, ModifierInstance modifier, ItemStack runegem) {
@@ -23,7 +26,7 @@ public record GearSocket(RuneGemShape runeGemShape, ModifierInstance modifier, I
     ).apply(inst, GearSocket::new));
 
     public boolean isEmpty() {
-        return runegem == null;
+        return runegem == null || runegem.isEmpty();
     }
 
     public boolean canBeApplied(RunegemData runegemData) {
@@ -33,9 +36,9 @@ public record GearSocket(RuneGemShape runeGemShape, ModifierInstance modifier, I
     public GearSocket applyRunegem(ItemStack stack, Level level) {
         RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) {
-            return new GearSocket(runeGemShape(), null, null);
+            return new GearSocket(runeGemShape(), Optional.empty(), ItemStack.EMPTY);
         }
-        Holder<Enchantment> modifier = runegemData.getRandomModifier(level);
+        Optional<Holder<Enchantment>> modifier = runegemData.getRandomModifier(level);
         return new GearSocket(runeGemShape(), modifier, stack);
     }
 }
