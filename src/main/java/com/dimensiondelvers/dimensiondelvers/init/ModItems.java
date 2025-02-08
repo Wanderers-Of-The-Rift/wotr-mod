@@ -6,9 +6,12 @@ import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemTier;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.Runegem;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import net.minecraft.core.registries.Registries;
+import com.dimensiondelvers.dimensiondelvers.item.abilities.AbilityBagItem;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -49,5 +52,9 @@ public class ModItems {
                     .component(ModDataComponentType.RUNEGEM_DATA,
                             new RunegemData(RuneGemShape.CIRCLE, tagId(Registries.ENCHANTMENT, "raw_fire_rune"), RuneGemTier.RAW)))
             );
+
+    public static final DeferredItem<Item> ABILITY_BAG = ITEMS.register("ability_bag", registryName ->
+            new AbilityBagItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.EMPTY)));
+
 
 }

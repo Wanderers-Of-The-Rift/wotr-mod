@@ -26,6 +26,7 @@ public class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.RUNE_ANVIL_BLOCK, "Rune Anvil");
 
         // Adds an item translation.
+        addItem(ModItems.ABILITY_BAG, "Ability Bag");
         addItem(ModItems.EXAMPLE_ITEM, "Example Item");
         addItem(ModItems.RUNEGEM, "Runegem");
 

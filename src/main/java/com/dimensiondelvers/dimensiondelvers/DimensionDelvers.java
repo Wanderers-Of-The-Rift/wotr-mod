@@ -1,6 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers;
 
 import com.dimensiondelvers.dimensiondelvers.gui.screen.RuneAnvilScreen;
+import com.dimensiondelvers.dimensiondelvers.gui.screen.AbilityBagScreen;
 import com.dimensiondelvers.dimensiondelvers.init.ModBlocks;
 import com.dimensiondelvers.dimensiondelvers.init.ModCreativeTabs;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
@@ -87,10 +88,10 @@ public class DimensionDelvers {
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
-
         @SubscribeEvent
         private static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(ModMenuTypes.RUNE_ANVIL_MENU.get(), RuneAnvilScreen::new);
+            event.register(ModMenuTypes.ABILITY_BAG_MENU.get(), AbilityBagScreen::new);
         }
     }
 
