@@ -21,6 +21,7 @@ public class ModCreativeTabs {
                                 output.accept(ModItems.EXAMPLE_BLOCK_ITEM.get());
                                 output.accept(ModItems.EXAMPLE_ITEM);
                                 output.accept(ModItems.DEV_BLOCK_ITEM);
+                                output.accept(ModItems.ABILITY_BAG);
                             }).build());
 
 }

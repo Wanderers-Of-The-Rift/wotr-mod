@@ -25,6 +25,7 @@ public class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.DEV_BLOCK, "Dev Block");
 
         // Adds an item translation.
+        addItem(ModItems.ABILITY_BAG, "Ability Bag");
         addItem(ModItems.EXAMPLE_ITEM, "Example Item");
 
         // Adds a generic translation
