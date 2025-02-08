@@ -3,27 +3,25 @@ package com.dimensiondelvers.dimensiondelvers.item.socket;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
-import com.dimensiondelvers.dimensiondelvers.modifier.ModifierInstance;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
 // Vanilla Equivalent ItemEnchantments
-public record GearSocket(RuneGemShape runeGemShape, ModifierInstance modifier, ItemStack runegem) {
+public record GearSocket(RuneGemShape runeGemShape, Optional<Holder<Enchantment>> modifier, ItemStack runegem) {
     // Further define runeGemShape
     // Needs to have a modifier and a Runegem
     // should eventually also have the roll of the modifier (and a tier?)
     public static Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             RuneGemShape.CODEC.fieldOf("shape").forGetter(GearSocket::runeGemShape),
-            ModifierInstance.CODEC.optionalFieldOf("modifier", null).forGetter(GearSocket::modifier),
-            ItemStack.CODEC.optionalFieldOf("runegem", null).forGetter(GearSocket::runegem)
+            Enchantment.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
+            ItemStack.CODEC.optionalFieldOf("runegem", ItemStack.EMPTY).forGetter(GearSocket::runegem)
     ).apply(inst, GearSocket::new));
 
     public boolean isEmpty() {

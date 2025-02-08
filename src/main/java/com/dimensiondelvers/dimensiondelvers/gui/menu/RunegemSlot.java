@@ -9,10 +9,12 @@ public class RunegemSlot extends Slot {
     @Nullable
     private RuneGemShape shape = null;
     public boolean isDirty = false;
+    private int socketIndex = 0;
 
     public RunegemSlot(Container container, int slot, int x, int y, @Nullable RuneGemShape shape) {
         super(container, slot, x, y);
         this.shape = shape;
+        socketIndex = slot;
     }
 
     public RuneGemShape getShape() {
@@ -31,9 +33,7 @@ public class RunegemSlot extends Slot {
         isDirty = dirty;
     }
 
-    @Override
-    public void setChanged() {
-        super.setChanged();
-        setDirty(true);
+    public int getSocketIndex() {
+        return socketIndex;
     }
 }
