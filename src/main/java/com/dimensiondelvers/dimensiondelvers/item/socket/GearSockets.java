@@ -11,8 +11,10 @@ public record GearSockets(List<GearSocket> sockets) {
             GearSocket.CODEC.listOf().fieldOf("sockets").forGetter(GearSockets::sockets)
     ).apply(inst, GearSockets::new));
 
-    /*public static StreamCodec<RegistryFriendlyByteBuf, GearSockets> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.
-            GearSockets::new
-    );*/
+    public GearSocket socket(int index) {
+        if (index < 0 || index >= sockets.size()) {
+            return null;
+        }
+        return sockets.get(index);
+    }
 }
