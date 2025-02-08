@@ -7,7 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class RunegemSlot extends Slot {
     @Nullable
-   private RuneGemShape shape = null;
+    private RuneGemShape shape = null;
+    public boolean isDirty = false;
 
     public RunegemSlot(Container container, int slot, int x, int y, @Nullable RuneGemShape shape) {
         super(container, slot, x, y);
@@ -20,5 +21,19 @@ public class RunegemSlot extends Slot {
 
     public void setShape(RuneGemShape shape) {
         this.shape = shape;
+    }
+
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        isDirty = dirty;
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        setDirty(true);
     }
 }

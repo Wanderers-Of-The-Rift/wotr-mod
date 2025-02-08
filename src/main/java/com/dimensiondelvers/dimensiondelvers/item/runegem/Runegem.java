@@ -7,6 +7,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 
+
 public class Runegem extends Item {
     public Runegem(Properties properties) {
         super(properties);

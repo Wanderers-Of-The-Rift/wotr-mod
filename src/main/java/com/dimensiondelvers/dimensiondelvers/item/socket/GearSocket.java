@@ -1,11 +1,15 @@
 package com.dimensiondelvers.dimensiondelvers.item.socket;
 
+import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.modifier.ModifierInstance;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 
 // Vanilla Equivalent ItemEnchantments
 public record GearSocket(RuneGemShape runeGemShape, ModifierInstance modifier, ItemStack runegem) {
@@ -24,5 +28,14 @@ public record GearSocket(RuneGemShape runeGemShape, ModifierInstance modifier, I
 
     public boolean canBeApplied(RunegemData runegemData) {
         return isEmpty() && runeGemShape().equals(runegemData.shape());
+    }
+
+    public GearSocket applyRunegem(ItemStack stack, Level level) {
+        RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
+        if (runegemData == null) {
+            return new GearSocket(runeGemShape(), null, null);
+        }
+        Holder<Enchantment> modifier = runegemData.getRandomModifier(level);
+        return new GearSocket(runeGemShape(), modifier, stack);
     }
 }
