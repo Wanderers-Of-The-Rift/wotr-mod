@@ -26,7 +26,17 @@ public class AbilityBagMenu extends AbstractContainerMenu {
         super(ModMenuTypes.ABILITY_BAG_MENU.get(),containerId);
         this.playerInventory = playerInventory;
         this.bagInventory = bagInventory;
-        this.createInventorySlots(playerInventory);
+        this.createInventorySlots(this.playerInventory);
+    }
+    public AbilityBagMenu(int containerId, Inventory playerInventory) {
+        super(ModMenuTypes.ABILITY_BAG_MENU.get(),containerId);
+        this.playerInventory = playerInventory;
+        this.createInventorySlots(this.playerInventory);
+        if (bagInventory == null) {
+            DimensionDelvers.LOGGER.info("null inventory");
+            return;
+        }
+        this.createBagSlots(bagInventory);
 
 
     }
