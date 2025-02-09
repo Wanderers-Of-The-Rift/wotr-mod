@@ -7,8 +7,10 @@ import com.dimensiondelvers.dimensiondelvers.init.ModMenuTypes;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
@@ -127,6 +130,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     }
 
     private void gearSlotChanged() {
+        returnRunegems(null);
+
         ItemStack gear = this.gearSlot.getItem();
         if (gear.isEmpty()) {
             this.activeSocketSlots = 0;
@@ -211,23 +216,50 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         };
     }
 
+    public void returnRunegems(@Nullable Player player) {
+        if (player == null) player = this.playerInventory.player;
+
+        for (RunegemSlot socketSlot : this.socketSlots) {
+            if (!socketSlot.getMayTake() || !socketSlot.hasItem()) {
+                return;
+            }
+
+            ItemStack stack = socketSlot.getItem();
+
+            // this is copied over from AbstractContainerMenu.dropOrPlaceInInventory because its private for somefuckingreason
+            boolean flag;
+            boolean flag2;
+            label27:
+            {
+                flag = player.isRemoved() && player.getRemovalReason() != Entity.RemovalReason.CHANGED_DIMENSION;
+                if (player instanceof ServerPlayer serverplayer) {
+                    if (serverplayer.hasDisconnected()) {
+                        flag2 = true;
+                        break label27;
+                    }
+                }
+
+                flag2 = false;
+            }
+
+            if (!flag && !flag2) {
+                if (player instanceof ServerPlayer) {
+                    player.getInventory().placeItemBackInInventory(stack);
+                }
+            } else {
+                player.drop(stack, false);
+            }
+
+            socketSlot.set(ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
         this.access.execute((world, pos) -> {
             this.clearContainer(player, this.gearSlotContainer);
-            for (RunegemSlot socketSlot : this.socketSlots) {
-                if (!socketSlot.getMayTake() || !socketSlot.hasItem()) {
-                    return;
-                }
-
-                boolean success = player.getInventory().add(socketSlot.getItem());
-                if (!success) {
-                    player.drop(socketSlot.getItem(), false);
-                }
-
-                socketSlot.set(ItemStack.EMPTY);
-            }
+            returnRunegems(player);
         });
     }
 
