@@ -1,10 +1,10 @@
 package com.dimensiondelvers.dimensiondelvers.init;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemTier;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.Runegem;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

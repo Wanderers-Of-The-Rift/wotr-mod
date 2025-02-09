@@ -1,8 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.item.socket;
 
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
-import net.minecraft.world.item.ItemStack;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static com.dimensiondelvers.dimensiondelvers.DimensionDelvers.MODID;
-import static net.neoforged.fml.common.EventBusSubscriber.*;
+import static net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 @EventBusSubscriber(bus = Bus.MOD, modid = MODID)
 public class GearSocketModEvents {
@@ -24,52 +23,39 @@ public class GearSocketModEvents {
                 builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets1()))
         );
 
-        event.modify(Items.GOLDEN_SWORD, builder ->
+        event.modify(Items.DIAMOND_SWORD, builder ->
                 builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets2()))
         );
 
-        event.modify(Items.DIAMOND_SWORD, builder ->
-                builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets3()))
-        );
-
         event.modify(Items.NETHERITE_SWORD, builder ->
-                builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets4()))
+                builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets3()))
         );
     }
 
     private static @NotNull ArrayList<GearSocket> getExampleSockets1() {
         ArrayList<GearSocket> objects = new ArrayList<>();
-        objects.add(new GearSocket(RuneGemShape.CIRCLE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.SQUARE, Optional.empty(), ItemStack.EMPTY));
+        objects.add(new GearSocket(RunegemShape.HEART, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.CIRCLE, Optional.empty(), Optional.empty()));
         return objects;
     }
 
     private static @NotNull ArrayList<GearSocket> getExampleSockets2() {
         ArrayList<GearSocket> objects = new ArrayList<>();
-        objects.add(new GearSocket(RuneGemShape.CIRCLE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.SQUARE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.TRIANGLE, Optional.empty(), ItemStack.EMPTY));
+        objects.add(new GearSocket(RunegemShape.TRIANGLE, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.TRIANGLE, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.CIRCLE, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.SQUARE, Optional.empty(), Optional.empty()));
         return objects;
     }
 
     private static @NotNull ArrayList<GearSocket> getExampleSockets3() {
         ArrayList<GearSocket> objects = new ArrayList<>();
-        objects.add(new GearSocket(RuneGemShape.CIRCLE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.SQUARE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.TRIANGLE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.DIAMOND, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.HEART, Optional.empty(), ItemStack.EMPTY));
-        return objects;
-    }
-
-    private static @NotNull ArrayList<GearSocket> getExampleSockets4() {
-        ArrayList<GearSocket> objects = new ArrayList<>();
-        objects.add(new GearSocket(RuneGemShape.PENTAGON, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.HEART, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.DIAMOND, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.TRIANGLE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.SQUARE, Optional.empty(), ItemStack.EMPTY));
-        objects.add(new GearSocket(RuneGemShape.CIRCLE, Optional.empty(), ItemStack.EMPTY));
+        objects.add(new GearSocket(RunegemShape.PENTAGON, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.HEART, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.DIAMOND, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.TRIANGLE, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.SQUARE, Optional.empty(), Optional.empty()));
+        objects.add(new GearSocket(RunegemShape.CIRCLE, Optional.empty(), Optional.empty()));
         return objects;
     }
 }

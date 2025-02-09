@@ -5,7 +5,7 @@ import com.dimensiondelvers.dimensiondelvers.block.BlockFamilyHelper;
 import com.dimensiondelvers.dimensiondelvers.client.render.item.properties.select.SelectRuneGemShape;
 import com.dimensiondelvers.dimensiondelvers.init.ModBlocks;
 import com.dimensiondelvers.dimensiondelvers.init.ModItems;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -85,8 +85,8 @@ public class ModModelProvider extends ModelProvider {
     public void generateRunegemItem(Item item, ItemModelGenerators itemModels) {
         ResourceLocation modelLocation = ModelLocationUtils.getModelLocation(item);
         ResourceLocation shapeLocation = ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "item/runegem/shape/");
-        List<SelectItemModel.SwitchCase<RuneGemShape>> list = new ArrayList<>(RuneGemShape.values().length);
-        for (RuneGemShape shape : RuneGemShape.values()) {
+        List<SelectItemModel.SwitchCase<RunegemShape>> list = new ArrayList<>(RunegemShape.values().length);
+        for (RunegemShape shape : RunegemShape.values()) {
             ItemModel.Unbaked model = ItemModelUtils.plainModel(createRuneGemShapeModel(shapeLocation.withSuffix(shape.getName()), ModItems.RUNEGEM.get(), shape.getName(), ModelTemplates.FLAT_ITEM, itemModels));
             list.add(ItemModelUtils.when(shape, model));
         }

@@ -4,7 +4,7 @@ package com.dimensiondelvers.dimensiondelvers.item.runegem;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
-public enum RuneGemTier {
+public enum RunegemTier {
 
     RAW("raw"),
     SHAPED("shaped"),
@@ -13,11 +13,11 @@ public enum RuneGemTier {
     FRAMED("framed"),
     UNIQUE("unique");
 
-    public static final Codec<RuneGemTier> CODEC = Codec.STRING.flatComapMap(s -> RuneGemTier.byName(s, null), d -> DataResult.success(d.getName()));
+    public static final Codec<RunegemTier> CODEC = Codec.STRING.flatComapMap(s -> RunegemTier.byName(s, null), d -> DataResult.success(d.getName()));
 
     private final String name;
 
-    private RuneGemTier(String name) {
+    private RunegemTier(String name) {
         this.name = name;
     }
 
@@ -25,8 +25,8 @@ public enum RuneGemTier {
         return name;
     }
 
-    public static RuneGemTier byName(String name, RuneGemTier defaultReturn) {
-        for (RuneGemTier value : values()){
+    public static RunegemTier byName(String name, RunegemTier defaultReturn) {
+        for (RunegemTier value : values()){
             if (value.name.equalsIgnoreCase(name)) {
                 return value;
             }
