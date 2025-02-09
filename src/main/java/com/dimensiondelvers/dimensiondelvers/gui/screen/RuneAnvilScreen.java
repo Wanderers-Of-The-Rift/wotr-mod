@@ -4,6 +4,7 @@ import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RuneAnvilMenu;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RunegemSlot;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
+import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilCombinePacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,6 +16,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> implements ContainerListener {
@@ -32,7 +34,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
         super.init();
 
         Button coombineButton = Button
-                .builder(Component.translatable("container.dimensiondelvers.rune_anvil.combine"), (button) -> menu.combine())
+                .builder(Component.translatable("container.dimensiondelvers.rune_anvil.combine"), (button) -> PacketDistributor.sendToServer(new C2SRuneAnvilCombinePacket(this.menu.containerId)))
                 .pos(this.leftPos + 115, this.topPos + 145)
                 .size(54, 15)
                 .build();

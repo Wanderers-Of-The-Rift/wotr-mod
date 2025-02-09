@@ -1,6 +1,5 @@
 package com.dimensiondelvers.dimensiondelvers.gui.menu;
 
-import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.init.ModBlocks;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.init.ModItems;
@@ -23,6 +22,7 @@ import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RuneAnvilMenu extends AbstractContainerMenu {
     public static final List<Vector2i> RUNE_SLOT_POSITIONS = List.of( // CLOCKWISE FROM TOP CENTER
@@ -41,6 +41,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     private final Inventory playerInventory;
     private final ContainerLevelAccess access;
     public int activeSocketSlots = 0;
+    private boolean isClient = false;
     private Container gearSlotContainer;
     private Container socketSlotsContainer;
     private Slot gearSlot;
@@ -48,6 +49,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     // Client
     public RuneAnvilMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
+
+        this.isClient = true;
     }
 
     // Server
@@ -93,7 +96,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                     // This piece of code needs to be rewritten and all functionality needs to move into the Container.
                     // Pass the menu along and add public functions to access the necessary info.
                     (RunegemSlot) this.addSlot(new RunegemSlot(this.socketSlotsContainer, finalI, position.x, position.y, null) {
-
                         public boolean mayPlace(@NotNull ItemStack stack) {
                             if (this.isDisabled() || !stack.is(ModItems.RUNEGEM)) return false;
                             ItemStack item = gearSlotContainer.getItem(0);
@@ -131,6 +133,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             for (RunegemSlot socketSlot : this.socketSlots) {
                 socketSlot.set(ItemStack.EMPTY);
                 socketSlot.setShape(null);
+                socketSlot.setMayTake(false);
             }
         } else {
             GearSockets sockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
@@ -143,9 +146,26 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
             List<GearSocket> socketList = sockets.sockets();
 
-            for (int i = 0; i < this.activeSocketSlots; i++) {
+            for (int i = 0; i < 6; i++) {
                 RunegemSlot slot = this.socketSlots.get(i);
-                slot.setShape(socketList.get(i).shape());
+                if (i >= this.activeSocketSlots) {
+                    slot.set(ItemStack.EMPTY);
+                    slot.setShape(null);
+                    slot.setMayTake(false);
+                    continue;
+                }
+
+                GearSocket socket = socketList.get(i);
+                slot.setShape(socket.shape());
+
+                Optional<ItemStack> optionalRunegem = socket.runegem();
+                if (optionalRunegem.isPresent()) {
+                    slot.set(optionalRunegem.get());
+                    slot.setMayTake(false);
+                } else {
+                    slot.set(ItemStack.EMPTY);
+                    slot.setMayTake(true);
+                }
             }
         }
     }
@@ -154,8 +174,28 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     }
 
+    // DO NOT EVER CALL THIS CLIENT SIDE
     public void combine() {
-        DimensionDelvers.LOGGER.info("Combining");
+        ItemStack gear = this.gearSlot.getItem();
+        if (gear.isEmpty()) {
+            return;
+        }
+
+        GearSockets sockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
+        if (sockets == null) {
+            return;
+        }
+
+        List<GearSocket> newSockets = new ArrayList<>();
+        for (int i = 0; i < this.activeSocketSlots; i++) {
+            RunegemSlot slot = this.socketSlots.get(i);
+            ItemStack runegem = slot.getItem();
+            Optional<ItemStack> optionalRunegem = runegem.isEmpty() ? Optional.empty() : Optional.of(runegem);
+            if (optionalRunegem.isPresent()) slot.setMayTake(false);
+            newSockets.add(new GearSocket(slot.getShape(), Optional.empty(), optionalRunegem));
+        }
+        GearSockets newGearSockets = new GearSockets(newSockets);
+        gear.set(ModDataComponentType.GEAR_SOCKETS.get(), newGearSockets);
     }
 
     private Container createContainer(int size, int maxStackSize) {
@@ -174,7 +214,21 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
-        this.access.execute((world, pos) -> this.clearContainer(player, this.gearSlotContainer));
+        this.access.execute((world, pos) -> {
+            this.clearContainer(player, this.gearSlotContainer);
+            for (RunegemSlot socketSlot : this.socketSlots) {
+                if (!socketSlot.getMayTake() || !socketSlot.hasItem()) {
+                    return;
+                }
+
+                boolean success = player.getInventory().add(socketSlot.getItem());
+                if (!success) {
+                    player.drop(socketSlot.getItem(), false);
+                }
+
+                socketSlot.set(ItemStack.EMPTY);
+            }
+        });
     }
 
     /**
