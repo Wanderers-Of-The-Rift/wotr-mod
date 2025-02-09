@@ -1,0 +1,6 @@
+{
+  "replace" : false,
+  "entries" : [
+    "dimensiondelvers:retain_inventory_snapshot"
+  ]
+}
