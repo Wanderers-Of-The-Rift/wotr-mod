@@ -26,9 +26,16 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
         this.imageHeight = 248;
         this.inventoryLabelY = this.imageHeight - 94;
 
+
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
         Button coombineButton = Button
                 .builder(Component.translatable("container.dimensiondelvers.rune_anvil.combine"), (button) -> menu.combine())
-                .pos(115, 145)
+                .pos(this.leftPos + 115, this.topPos + 145)
                 .size(54, 15)
                 .build();
         this.addRenderableWidget(coombineButton);
