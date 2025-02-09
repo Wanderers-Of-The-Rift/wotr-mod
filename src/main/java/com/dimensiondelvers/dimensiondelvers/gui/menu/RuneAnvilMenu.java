@@ -175,7 +175,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     }
 
     // DO NOT EVER CALL THIS CLIENT SIDE
-    public void combine() {
+    public void apply() {
         ItemStack gear = this.gearSlot.getItem();
         if (gear.isEmpty()) {
             return;
