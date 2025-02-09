@@ -44,6 +44,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add("itemGroup.dimensiondelvers", "Dimension Delvers");
 
         add("container.dimensiondelvers.rune_anvil", "Rune Anvil");
+        add("container.dimensiondelvers.rune_anvil.combine", "Combine");
         add("container.dimensiondelvers.rift_chest", "Rift Chest");
 
         add("accessibility.dimensiondelvers.screen.title", "Dimension Delvers: Accessibility Settings");
