@@ -1,7 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.events;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilCombinePacket;
+import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -13,9 +13,9 @@ public class ModPacketRegistrationEvent {
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(
-                C2SRuneAnvilCombinePacket.TYPE,
-                C2SRuneAnvilCombinePacket.STREAM_CODEC,
-                new C2SRuneAnvilCombinePacket.C2SRuneAnvilCombinePacketHandler()
+                C2SRuneAnvilApplyPacket.TYPE,
+                C2SRuneAnvilApplyPacket.STREAM_CODEC,
+                new C2SRuneAnvilApplyPacket.C2SRuneAnvilApplyPacketHandler()
         );
     }
 }
