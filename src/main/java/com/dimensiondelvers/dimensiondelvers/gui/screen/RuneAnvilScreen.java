@@ -3,7 +3,7 @@ package com.dimensiondelvers.dimensiondelvers.gui.screen;
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RuneAnvilMenu;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RunegemSlot;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -20,13 +20,11 @@ import org.jetbrains.annotations.NotNull;
 public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> implements ContainerListener {
     private static final ResourceLocation BACKGROUND = DimensionDelvers.id("textures/gui/container/rune_anvil/background.png");
     private static final ResourceLocation SLOTS = DimensionDelvers.id("textures/gui/container/rune_anvil/slots.png");
-    //TODO: Make sure blit is passed correct texture size for all calls.
+
     public RuneAnvilScreen(RuneAnvilMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageHeight = 248;
         this.inventoryLabelY = this.imageHeight - 94;
-
-
     }
 
     @Override
@@ -54,83 +52,68 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
 
     @Override
     protected void renderSlot(@NotNull GuiGraphics guiGraphics, @NotNull Slot slot) {
-        if (!slot.isFake()) {
-            int x = slot.x - 1;
-            int y = slot.y - 1;
-            if (slot instanceof RunegemSlot runegemSlot) {
-                RuneGemShape shape = runegemSlot.getShape();
-                if (shape == null) {
-                    return;
-                }
-
-                switch (shape) {
-                    case DIAMOND:
-                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 18, 0, 18, 18, 256, 256);
-                        break;
-                    case TRIANGLE:
-                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 36, 0, 18, 18, 256, 256);
-                        break;
-                    case HEART:
-                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 54, 0, 18, 18, 256, 256);
-                        break;
-                    case CIRCLE:
-                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 72, 0, 18, 18, 256, 256);
-                        break;
-                    case SQUARE:
-                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 90, 0, 18, 18, 256, 256);
-                        break;
-                    case PENTAGON:
-                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 0, 18, 18, 256, 256);
-                        break;
-                }
-            } else {
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 0, 0, 18, 18, 256, 256);
-            }
+        if (slot instanceof RunegemSlot runegemSlot && runegemSlot.isDisabled()) {
+            return;
         }
+
+        int x = slot.x - 1;
+        int y = slot.y - 1;
+        if (slot instanceof RunegemSlot runegemSlot && runegemSlot.getShape() != null) {
+            RunegemShape shape = runegemSlot.getShape();
+
+            switch (shape) {
+                case DIAMOND:
+                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 18, 0, 18, 18, 256, 256);
+                    break;
+                case TRIANGLE:
+                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 36, 0, 18, 18, 256, 256);
+                    break;
+                case HEART:
+                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 54, 0, 18, 18, 256, 256);
+                    break;
+                case CIRCLE:
+                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 72, 0, 18, 18, 256, 256);
+                    break;
+                case SQUARE:
+                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 90, 0, 18, 18, 256, 256);
+                    break;
+                case PENTAGON:
+                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 0, 18, 18, 256, 256);
+                    break;
+            }
+        } else {
+            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 0, 0, 18, 18, 256, 256);
+        }
+
         super.renderSlot(guiGraphics, slot);
+
+        // Render custom shaped slot overlay for runegem slots
+        if (this.hoveredSlot != slot || !(slot instanceof RunegemSlot runegemSlot) || runegemSlot.getShape() == null) {
+            return;
+        }
+
+        RunegemShape shape = runegemSlot.getShape();
+        switch (shape) {
+            case DIAMOND:
+                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 18, 18, 18, 18, 256, 256);
+                break;
+            case TRIANGLE:
+                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 36, 18, 18, 18, 256, 256);
+                break;
+            case HEART:
+                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 54, 18, 18, 18, 256, 256);
+                break;
+            case CIRCLE:
+                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 72, 18, 18, 18, 256, 256);
+                break;
+            case SQUARE:
+                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 90, 18, 18, 18, 256, 256);
+                break;
+            case PENTAGON:
+                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 18, 18, 18, 256, 256);
+                break;
+        }
     }
-
-    //TODO: Find replacement for this override.
-//    @Override
-//    protected void renderSlotHighlight(@NotNull GuiGraphics guiGraphics, @NotNull Slot slot, int mouseX, int mouseY, float partialTick) {
-//        if (!slot.isHighlightable()) {
-//            return;
-//        }
-//
-//        if (slot instanceof RunegemSlot runegemSlot) {
-//            if (runegemSlot.isFake()) {
-//                return;
-//            }
-//            RuneGemShape shape = runegemSlot.getShape();
-//            if (shape != null) {
-//                int x = slot.x - 1;
-//                int y = slot.y - 1;
-//                switch (shape) {
-//                    case DIAMOND:
-//                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 18, 18, 18, 18);
-//                        break;
-//                    case TRIANGLE:
-//                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 36, 18, 18, 18);
-//                        break;
-//                    case HEART:
-//                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 54, 18, 18, 18);
-//                        break;
-//                    case CIRCLE:
-//                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 72, 18, 18, 18);
-//                        break;
-//                    case SQUARE:
-//                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 90, 18, 18, 18);
-//                        break;
-//                    case PENTAGON:
-//                        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 18, 18, 18);
-//                        break;
-//                }
-//                return;
-//            }
-//        }
-
-        //renderSlotHighlight(guiGraphics, slot.x, slot.y, 0, this.getSlotColor(slot.index));
-   // }
 
     @Override
     public void slotChanged(@NotNull AbstractContainerMenu abstractContainerMenu, int i, @NotNull ItemStack itemStack) {

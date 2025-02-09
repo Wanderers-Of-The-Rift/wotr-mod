@@ -1,10 +1,10 @@
 package com.dimensiondelvers.dimensiondelvers.init;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemTier;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.Runegem;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +50,7 @@ public class ModItems {
             registryName -> new Runegem(new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "runegem")))
                     .component(ModDataComponentType.RUNEGEM_DATA,
-                            new RunegemData(RuneGemShape.CIRCLE, tagId(Registries.ENCHANTMENT, "raw_fire_rune"), RuneGemTier.RAW)))
-            );
+                            new RunegemData(RunegemShape.CIRCLE, tagId(Registries.ENCHANTMENT, "raw_fire_rune"), RunegemTier.RAW)))
+    );
 
 }
