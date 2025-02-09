@@ -3,6 +3,7 @@
   "block.dimensiondelvers.example_block": "Example Block",
   "block.dimensiondelvers.rune_anvil": "Rune Anvil",
   "container.dimensiondelvers.rune_anvil": "Rune Anvil",
+  "container.dimensiondelvers.rune_anvil.combine": "Combine",
   "item.dimensiondelvers.example_item": "Example Item",
   "item.dimensiondelvers.runegem": "Runegem",
   "itemGroup.dimensiondelvers": "Dimension Delvers"
