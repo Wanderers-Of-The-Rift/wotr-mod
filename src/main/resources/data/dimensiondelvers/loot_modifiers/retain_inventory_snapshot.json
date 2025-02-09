@@ -1,0 +1,5 @@
+{
+  "type": "dimensiondelvers:retain_inventory_snapshot",
+  "conditions" : [
+  ]
+}

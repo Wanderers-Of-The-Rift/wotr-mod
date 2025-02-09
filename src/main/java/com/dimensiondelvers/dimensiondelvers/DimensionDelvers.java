@@ -1,17 +1,16 @@
 package com.dimensiondelvers.dimensiondelvers;
 
+import com.dimensiondelvers.dimensiondelvers.commands.InventorySnapshotCommands;
 import com.dimensiondelvers.dimensiondelvers.gui.screen.RuneAnvilScreen;
-import com.dimensiondelvers.dimensiondelvers.init.ModBlocks;
-import com.dimensiondelvers.dimensiondelvers.init.ModCreativeTabs;
-import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
-import com.dimensiondelvers.dimensiondelvers.init.ModItems;
-import com.dimensiondelvers.dimensiondelvers.init.ModMenuTypes;
+import com.dimensiondelvers.dimensiondelvers.init.*;
+import com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot.InventorySnapshotSystem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
@@ -27,6 +26,9 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -44,6 +46,8 @@ public class DimensionDelvers {
         ModItems.ITEMS.register(modEventBus);
         ModMenuTypes.MENUS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
+        ModLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (DimensionDelvers) to respond directly to events.
@@ -62,9 +66,28 @@ public class DimensionDelvers {
 
         if (Config.logDirtBlock) LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
 
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
+        LOGGER.info("{} {}", Config.magicNumberIntroduction, Config.magicNumber);
 
        // Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+    }
+
+    @SubscribeEvent
+    private void registerCommands(RegisterCommandsEvent event) {
+        InventorySnapshotCommands.register(event.getDispatcher(), event.getBuildContext());
+    }
+
+    @SubscribeEvent
+    private void onDropsFromDeath(LivingDropsEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            InventorySnapshotSystem.updateSnapshotForDeath(player, event);
+        }
+    }
+
+    @SubscribeEvent
+    private void onPlayerDeath(PlayerEvent.PlayerRespawnEvent event) {
+        if (!event.isEndConquered() && event.getEntity() instanceof ServerPlayer player) {
+            InventorySnapshotSystem.restoreFromSnapshot(player);
+        }
     }
 
     // Add the example block item to the building blocks tab
