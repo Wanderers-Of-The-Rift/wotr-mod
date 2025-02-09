@@ -5,6 +5,7 @@ import com.dimensiondelvers.dimensiondelvers.gui.menu.RuneAnvilMenu;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RunegemSlot;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -24,6 +25,13 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
         super(menu, playerInventory, title);
         this.imageHeight = 248;
         this.inventoryLabelY = this.imageHeight - 94;
+
+        Button coombineButton = Button
+                .builder(Component.translatable("container.dimensiondelvers.rune_anvil.combine"), (button) -> menu.combine())
+                .pos(115, 145)
+                .size(54, 15)
+                .build();
+        this.addRenderableWidget(coombineButton);
     }
 
     @Override

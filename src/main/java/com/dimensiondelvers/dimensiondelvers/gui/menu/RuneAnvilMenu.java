@@ -8,6 +8,7 @@ import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
 import com.mojang.logging.LogUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,9 +27,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class RuneAnvilMenu extends AbstractContainerMenu {
-    private static final int GEAR_SLOT = 36;
-    private static final Vector2i GEAR_SLOT_POSITION = new Vector2i(80, 76);
-    private static final List<Integer> RUNE_SLOTS = List.of(37, 38, 39, 40, 41, 42);
     public static final List<Vector2i> RUNE_SLOT_POSITIONS = List.of( // CLOCKWISE FROM TOP CENTER
             new Vector2i(80, 26),
             new Vector2i(127, 51),
@@ -37,16 +35,17 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             new Vector2i(33, 101),
             new Vector2i(33, 51)
     );
-
-    private Level level;
-
-    private Inventory playerInventory;
-    private ContainerLevelAccess access;
+    private static final int GEAR_SLOT = 36;
+    private static final Vector2i GEAR_SLOT_POSITION = new Vector2i(80, 76);
+    private static final List<Integer> RUNE_SLOTS = List.of(37, 38, 39, 40, 41, 42);
+    private final List<RunegemSlot> socketSlots = new ArrayList<>();
+    private final Level level;
+    private final Inventory playerInventory;
+    private final ContainerLevelAccess access;
+    public int activeSocketSlots = 0;
     private Container gearSlotContainer;
     private Container socketSlotsContainer;
     private Slot gearSlot;
-    private final List<RunegemSlot> socketSlots = new ArrayList<>();
-    public int activeSocketSlots = 0;
 
     // Client
     public RuneAnvilMenu(int containerId, Inventory playerInventory) {
@@ -230,6 +229,10 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             slot.setShape(null);
             slot.set(ItemStack.EMPTY);
         });
+    }
+
+    public void combine() {
+        playerInventory.player.sendSystemMessage(Component.literal("combine button pressed"));
     }
 
     private Container createContainer(int size, int maxStackSize) {
