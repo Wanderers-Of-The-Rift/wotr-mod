@@ -216,6 +216,9 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         };
     }
 
+    // there is still a bug with this i think
+    // might be getting called from client or something idk
+    // but basically sometimes runegems can still just get voided when you take out the gear item or replace it
     public void returnRunegems(@Nullable Player player) {
         if (player == null) player = this.playerInventory.player;
 
