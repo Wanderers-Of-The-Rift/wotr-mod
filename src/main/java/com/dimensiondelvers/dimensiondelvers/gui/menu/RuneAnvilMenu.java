@@ -179,8 +179,12 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     }
 
-    // DO NOT EVER CALL THIS CLIENT SIDE
     public void apply() {
+        if (this.isClient) {
+            //should make this send the packet to the server
+            return;
+        }
+
         ItemStack gear = this.gearSlot.getItem();
         if (gear.isEmpty()) {
             return;
