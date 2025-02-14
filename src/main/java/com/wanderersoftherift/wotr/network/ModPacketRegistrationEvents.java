@@ -23,9 +23,9 @@ public class ModPacketRegistrationEvents {
         );
 
         registrar.playToClient(
-                S2CDimensionTypesUpdatePacket.TYPE,
-                S2CDimensionTypesUpdatePacket.STREAM_CODEC,
-                new S2CDimensionTypesUpdatePacket.S2CDimensionTypesUpdatePacketHandler()
+                S2CLevelListUpdatePacket.TYPE,
+                S2CLevelListUpdatePacket.STREAM_CODEC,
+                new S2CLevelListUpdatePacket.S2CLevelListUpdatePacketHandler()
         );
     }
 }
