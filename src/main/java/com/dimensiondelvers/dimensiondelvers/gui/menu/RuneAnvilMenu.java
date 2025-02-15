@@ -7,6 +7,7 @@ import com.dimensiondelvers.dimensiondelvers.init.ModMenuTypes;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
+import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -19,6 +20,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2i;
@@ -181,7 +183,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     public void apply() {
         if (this.isClient) {
-            //should make this send the packet to the server
+            PacketDistributor.sendToServer(new C2SRuneAnvilApplyPacket(this.containerId));
             return;
         }
 
@@ -200,8 +202,14 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             RunegemSlot slot = this.socketSlots.get(i);
             ItemStack runegem = slot.getItem();
             Optional<ItemStack> optionalRunegem = runegem.isEmpty() ? Optional.empty() : Optional.of(runegem);
-            if (optionalRunegem.isPresent()) slot.setMayTake(false);
-            newSockets.add(new GearSocket(slot.getShape(), Optional.empty(), optionalRunegem));
+            // Check if mayTake is false, if so, no new runegem is applied, use the old gearSocket
+            GearSocket currentSocket = sockets.sockets().get(i);
+            if(slot.getMayTake()) {
+                if (optionalRunegem.isPresent()) slot.setMayTake(false);
+                currentSocket.applyRunegem(runegem, this.level);
+            }else{
+                newSockets.add(currentSocket);
+            }
         }
         GearSockets newGearSockets = new GearSockets(newSockets);
         gear.set(ModDataComponentType.GEAR_SOCKETS.get(), newGearSockets);

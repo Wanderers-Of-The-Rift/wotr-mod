@@ -33,12 +33,12 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
     protected void init() {
         super.init();
 
-        Button coombineButton = Button
-                .builder(Component.translatable("container.dimensiondelvers.rune_anvil.apply"), (button) -> PacketDistributor.sendToServer(new C2SRuneAnvilApplyPacket(this.menu.containerId)))
+        Button applyButtonWidget = Button
+                .builder(Component.translatable("container.dimensiondelvers.rune_anvil.apply"), (button) -> this.menu.apply())
                 .pos(this.leftPos + 115, this.topPos + 145)
                 .size(54, 15)
                 .build();
-        this.addRenderableWidget(coombineButton);
+        this.addRenderableWidget(applyButtonWidget);
     }
 
     @Override
