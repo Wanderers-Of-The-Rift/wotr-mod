@@ -3,6 +3,7 @@ package com.dimensiondelvers.dimensiondelvers.modifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 
 
 public class ModifierInstance {
@@ -27,5 +28,9 @@ public class ModifierInstance {
 
     public float getRoll() {
         return roll;
+    }
+
+    public static ModifierInstance of(Holder<Modifier> modifier, RandomSource random) {
+        return new ModifierInstance(modifier, random.nextFloat());
     }
 }

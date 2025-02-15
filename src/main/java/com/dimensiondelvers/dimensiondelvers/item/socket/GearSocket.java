@@ -3,9 +3,12 @@ package com.dimensiondelvers.dimensiondelvers.item.socket;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
+import com.dimensiondelvers.dimensiondelvers.modifier.Modifier;
 import com.dimensiondelvers.dimensiondelvers.modifier.ModifierInstance;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -18,13 +21,9 @@ public record GearSocket(
         Optional<ModifierInstance> modifier,
         Optional<ItemStack> runegem
 ) {
-
-    // Further define runeGemShape
-    // Needs to have a modifier and a Runegem
-    // should eventually also have the roll of the modifier (and a tier?)
     public static Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             RunegemShape.CODEC.fieldOf("shape").forGetter(GearSocket::shape),
-            ModifierInstance.CODEC.optionalFieldOf("modifier", null).forGetter(GearSocket::modifier),
+            ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
             ItemStack.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem)
     ).apply(inst, GearSocket::new));
 
@@ -41,7 +40,10 @@ public record GearSocket(
         if (runegemData == null) {
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        Optional<Holder<Enchantment>> modifier = runegemData.getRandomModifier(level);
-        return new GearSocket(this.shape(), modifier, Optional.of(stack));
+        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifier(level);
+        if (modifierHolder.isEmpty()) {
+            return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
+        }
+        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), level.random)), Optional.of(stack));
     }
 }
