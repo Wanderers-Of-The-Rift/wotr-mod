@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "wotr:block/rift_portal"
+    }
+  }
+}

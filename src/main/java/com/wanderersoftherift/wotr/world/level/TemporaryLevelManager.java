@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.world.level;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -79,6 +81,7 @@ public class TemporaryLevelManager {
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
         TemporaryLevelManager.levels.add(level);
+        level.setBlock(new BlockPos(0,-64,0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
         return level;
     }
 
