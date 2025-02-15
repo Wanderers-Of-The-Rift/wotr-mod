@@ -10,15 +10,15 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public record RunegemData(RunegemShape shape, TagKey<Enchantment> tag, RunegemTier tier) {
+public record RunegemData(RunegemShape shape, TagKey<Modifier> tag, RunegemTier tier) {
     public static Codec<RunegemData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             RunegemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
             TagKey.codec(Registries.ENCHANTMENT).fieldOf("tag").forGetter(RunegemData::tag),
             RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
     ).apply(inst, RunegemData::new));
 
-    public Optional<Holder<Enchantment>> getRandomModifier(Level level) {
-        return level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+    public Optional<Holder<Modifier>> getRandomModifier(Level level) {
+        return level.registryAccess().lookupOrThrow(ModModifiers.MODIFIER_KEY)
                 .get(tag)
                 .flatMap(holders -> holders.getRandomElement(level.random));
     }

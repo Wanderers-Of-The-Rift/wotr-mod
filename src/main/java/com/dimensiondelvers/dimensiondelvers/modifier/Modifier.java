@@ -5,8 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.dimensiondelvers.dimensiondelvers.init.ModModifiers.MODIFIER_KEY;
 
