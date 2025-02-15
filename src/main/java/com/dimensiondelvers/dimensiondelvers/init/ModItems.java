@@ -50,7 +50,7 @@ public class ModItems {
             registryName -> new Runegem(new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "runegem")))
                     .component(ModDataComponentType.RUNEGEM_DATA,
-                            new RunegemData(RunegemShape.CIRCLE, tagId(Registries.ENCHANTMENT, "raw_fire_rune"), RunegemTier.RAW)))
+                            new RunegemData(RunegemShape.CIRCLE, tagId(ModModifiers.MODIFIER_KEY, "raw_fire_rune"), RunegemTier.RAW)))
     );
 
 }

@@ -1,5 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.item.runegem;
 
+import com.dimensiondelvers.dimensiondelvers.init.ModModifiers;
+import com.dimensiondelvers.dimensiondelvers.modifier.Modifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -13,7 +15,7 @@ import java.util.Optional;
 public record RunegemData(RunegemShape shape, TagKey<Enchantment> tag, RunegemTier tier) {
     public static Codec<RunegemData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             RunegemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
-            TagKey.codec(Registries.ENCHANTMENT).fieldOf("tag").forGetter(RunegemData::tag),
+            TagKey.codec(ModModifiers.MODIFIER_KEY).fieldOf("tag").forGetter(RunegemData::tag),
             RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
     ).apply(inst, RunegemData::new));
 
