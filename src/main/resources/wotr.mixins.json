@@ -12,7 +12,8 @@
     "InvokerBlockBehaviour",
     "MixinStructureTemplate",
     "MixinLivingEntity",
-    "MixinServerPlayer"
+    "MixinServerPlayer",
+    "AccessorMinecraftServer"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",
