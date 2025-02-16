@@ -19,5 +19,4 @@ public class Runegem extends Item {
                 .flatMap(holders -> holders.getRandomElement(serverLevel.random))
                 .orElse(null);
     }
-
 }
