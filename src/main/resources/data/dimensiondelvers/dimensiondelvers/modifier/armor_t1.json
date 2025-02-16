@@ -1,0 +1,10 @@
+{
+  "modifiers": [
+    {
+      "type": "dimensiondelvers:attribute",
+      "attribute": "armor",
+      "min_roll": 2,
+      "max_roll": 5
+    }
+  ]
+}
