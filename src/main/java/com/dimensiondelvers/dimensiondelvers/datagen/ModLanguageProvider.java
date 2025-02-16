@@ -35,5 +35,6 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add("container.dimensiondelvers.rune_anvil", "Rune Anvil");
         add("container.dimensiondelvers.rune_anvil.apply", "Apply");
+        add("tooltip.dimensiondelvers.socket", "Sockets: ");
     }
 }
