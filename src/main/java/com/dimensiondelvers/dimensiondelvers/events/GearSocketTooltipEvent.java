@@ -2,22 +2,24 @@ package com.dimensiondelvers.dimensiondelvers.events;
 
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
+import com.dimensiondelvers.dimensiondelvers.client.tooltip.GearSocketTooltipRenderer;
+import com.dimensiondelvers.dimensiondelvers.client.tooltip.ImageTooltipRenderer;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
-import com.dimensiondelvers.dimensiondelvers.modifier.Modifier;
 import com.dimensiondelvers.dimensiondelvers.modifier.ModifierInstance;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,8 @@ public class GearSocketTooltipEvent {
     );
 
     @SubscribeEvent
-    public static void onTooltipRender(ItemTooltipEvent event) {
+    public static void on(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
         if (!stack.has(ModDataComponentType.GEAR_SOCKETS)) return;
 
@@ -43,28 +46,28 @@ public class GearSocketTooltipEvent {
         if (sockets == null) return;
         List<GearSocket> socketList = sockets.sockets();
 
-        List<Component> toAdd = new ArrayList<>();
-        MutableComponent component = Component.literal("Sockets:").withStyle(Style.EMPTY.withBold(true));
-        toAdd.add(component);
+        List<TooltipComponent> toAdd = new ArrayList<>();
+        toAdd.add(new GearSocketTooltipRenderer.GearSocketComponent(stack, socketList));
 
         for (GearSocket socket : socketList) {
             boolean hasGem = socket.runegem().isPresent();
-            MutableComponent component1;
-            Style style = Style.EMPTY.withBold(hasGem).withUnderlined(hasGem).withColor(colorMap.get(socket.shape()));
+
             if (!hasGem || socket.modifier().isEmpty()) {
-                component1 = Component.literal(socket.shape().getName()).withStyle(style);
+
             } else {
                 ModifierInstance modifierInstance = socket.modifier().get();
-                Holder<Modifier> modifierHolder = modifierInstance.modifier();
-                Modifier modifier = modifierHolder.value();
                 float roll = modifierInstance.roll();
-                component1 = Component.literal(modifierHolder.getRegisteredName() + " " + roll).withStyle(style);
+                float roundedValue = (float) (Math.ceil(roll * 100) / 100);
+
+                // TODO: Hardcoded currently, need to see how the modifier stuff develops further
+                MutableComponent cmp = Component.literal("+" + roundedValue + " " + modifierInstance.modifier().getRegisteredName()).withStyle(ChatFormatting.RED);
+                toAdd.addLast(new ImageTooltipRenderer.ImageComponent(stack, cmp, DimensionDelvers.id("textures/tooltip/attribute/damage_attribute.png")));
             }
-            toAdd.add(component1);
         }
 
-        for (int i = toAdd.size() - 1; i >= 0; i--) {
-            event.getToolTip().add(1, toAdd.get(i));
+
+        for (int i = 0; i < toAdd.size(); i++) {
+            list.add(i + 1, Either.right(toAdd.get(i)));
         }
     }
 }

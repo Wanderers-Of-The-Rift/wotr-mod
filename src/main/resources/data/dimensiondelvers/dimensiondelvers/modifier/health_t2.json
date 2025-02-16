@@ -1,0 +1,10 @@
+{
+  "modifiers": [
+    {
+      "type": "dimensiondelvers:attribute",
+      "attribute": "max_health",
+      "min_roll": 3,
+      "max_roll": 4
+    }
+  ]
+}
