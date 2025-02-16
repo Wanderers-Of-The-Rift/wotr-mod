@@ -2,9 +2,11 @@
   "modifiers": [
     {
       "type": "dimensiondelvers:attribute",
+      "id": "dimensiondelvers:flat_armor",
       "attribute": "armor",
       "min_roll": 2,
-      "max_roll": 5
+      "max_roll": 5,
+      "operation": "add_value"
     }
   ]
 }
