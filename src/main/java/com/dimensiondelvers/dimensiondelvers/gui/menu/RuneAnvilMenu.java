@@ -8,7 +8,6 @@ import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
 import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
-import com.dimensiondelvers.dimensiondelvers.util.ContainerTest;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
