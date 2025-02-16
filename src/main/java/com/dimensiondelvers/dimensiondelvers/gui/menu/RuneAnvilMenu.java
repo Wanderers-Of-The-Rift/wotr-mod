@@ -100,7 +100,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             socketSlots.add(
                     // This piece of code needs to be rewritten and all functionality needs to move into the Container.
                     // Pass the menu along and add public functions to access the necessary info.
-                    (RunegemSlot) this.addSlot(new RunegemSlot(this.socketSlotsContainer, finalI, position.x, position.y, null) {
+                    (RunegemSlot) this.addSlot(new RunegemSlot(this.socketSlotsContainer, finalI, position.x, position.y) {
                         public boolean mayPlace(@NotNull ItemStack stack) {
                             if (this.isDisabled() || !stack.is(ModItems.RUNEGEM)) return false;
                             ItemStack item = gearSlotContainer.getItem(0);
@@ -139,7 +139,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             this.activeSocketSlots = 0;
             for (RunegemSlot socketSlot : this.socketSlots) {
                 socketSlot.set(ItemStack.EMPTY);
-                socketSlot.setShape(null);
+                socketSlot.setSocket(null);
                 socketSlot.setMayTake(false);
             }
         } else {
@@ -157,13 +157,13 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                 RunegemSlot slot = this.socketSlots.get(i);
                 if (i >= this.activeSocketSlots) {
                     slot.set(ItemStack.EMPTY);
-                    slot.setShape(null);
+                    slot.setSocket(null);
                     slot.setMayTake(false);
                     continue;
                 }
 
                 GearSocket socket = socketList.get(i);
-                slot.setShape(socket.shape());
+                slot.setSocket(socket);
 
                 Optional<ItemStack> optionalRunegem = socket.runegem();
                 if (optionalRunegem.isPresent()) {
@@ -200,14 +200,13 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         List<GearSocket> newSockets = new ArrayList<>();
         for (int i = 0; i < this.activeSocketSlots; i++) {
             RunegemSlot slot = this.socketSlots.get(i);
+            GearSocket currentSocket = slot.getSocket();
             ItemStack runegem = slot.getItem();
-            Optional<ItemStack> optionalRunegem = runegem.isEmpty() ? Optional.empty() : Optional.of(runegem);
-            // Check if mayTake is false, if so, no new runegem is applied, use the old gearSocket
-            GearSocket currentSocket = sockets.sockets().get(i);
-            if(slot.getMayTake()) {
-                if (optionalRunegem.isPresent()) slot.setMayTake(false);
-                currentSocket.applyRunegem(runegem, this.level);
-            }else{
+            if (slot.getMayTake() && !runegem.isEmpty()) {
+                slot.setMayTake(false);
+                GearSocket newGearSocket = currentSocket.applyRunegem(runegem, this.level);
+                newSockets.add(newGearSocket);
+            } else {
                 newSockets.add(currentSocket);
             }
         }
@@ -228,33 +227,23 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         };
     }
 
-    // there is still a bug with this i think
-    // might be getting called from client or something idk
-    // but basically sometimes runegems can still just get voided when you take out the gear item or replace it
     public void returnRunegems(@Nullable Player player) {
         if (player == null) player = this.playerInventory.player;
 
         for (RunegemSlot socketSlot : this.socketSlots) {
             if (!socketSlot.getMayTake() || !socketSlot.hasItem()) {
-                return;
+                continue;
             }
 
             ItemStack stack = socketSlot.getItem();
 
-            // this is copied over from AbstractContainerMenu.dropOrPlaceInInventory because its private for somefuckingreason
-            boolean flag;
-            boolean flag2;
-            label27:
-            {
-                flag = player.isRemoved() && player.getRemovalReason() != Entity.RemovalReason.CHANGED_DIMENSION;
-                if (player instanceof ServerPlayer serverplayer) {
-                    if (serverplayer.hasDisconnected()) {
-                        flag2 = true;
-                        break label27;
-                    }
+            // this is copied over and cleaned up from AbstractContainerMenu.dropOrPlaceInInventory because its private for somefuckingreason
+            boolean flag = player.isRemoved() && player.getRemovalReason() != Entity.RemovalReason.CHANGED_DIMENSION;
+            boolean flag2 = false;
+            if (player instanceof ServerPlayer serverplayer) {
+                if (serverplayer.hasDisconnected()) {
+                    flag2 = true;
                 }
-
-                flag2 = false;
             }
 
             if (!flag && !flag2) {

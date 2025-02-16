@@ -20,7 +20,6 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         this.maxRoll = maxRoll;
     }
 
-    // Still being worked on, reference modifier.ModifierInstance
     @Override
     public MapCodec<? extends AbstractModifierEffect> getCodec() {
         return MODIFIER_CODEC;
@@ -28,8 +27,8 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
 
     public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BuiltInRegistries.ATTRIBUTE.byNameCodec().fieldOf("attribute").forGetter(AttributeModifierEffect::getAttribute),
-            Codec.INT.fieldOf("minRoll").forGetter(AttributeModifierEffect::getMinimumRoll),
-            Codec.INT.fieldOf("maxRoll").forGetter(AttributeModifierEffect::getMaximumRoll)
+            Codec.INT.fieldOf("min_roll").forGetter(AttributeModifierEffect::getMinimumRoll),
+            Codec.INT.fieldOf("max_roll").forGetter(AttributeModifierEffect::getMaximumRoll)
             ).apply(instance, AttributeModifierEffect::new)
     );
 

@@ -27,6 +27,6 @@ public class ModModifierEffects {
     );
 
     public static final Supplier<MapCodec<? extends AbstractModifierEffect>> ATTRIBUTE_MODIFIER = MODIFIER_EFFECT_TYPES.register(
-            "attribute_modifier", () -> AttributeModifierEffect.MODIFIER_CODEC
+            "attribute", () -> AttributeModifierEffect.MODIFIER_CODEC
     );
 }
