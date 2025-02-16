@@ -30,19 +30,19 @@ public class ModCreativeTabs {
                                 output.accept(circleGem);
 
                                 ItemStack squareGem = ModItems.RUNEGEM.toStack();
-                                squareGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.SQUARE, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));
+                                squareGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.SQUARE, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "cut_health_rune"), RunegemTier.CUT));
                                 output.accept(squareGem);
 
                                 ItemStack triangleGem = ModItems.RUNEGEM.toStack();
-                                triangleGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.TRIANGLE, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));
+                                triangleGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.TRIANGLE, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "raw_defense_rune"), RunegemTier.RAW));
                                 output.accept(triangleGem);
 
                                 ItemStack diamondGem = ModItems.RUNEGEM.toStack();
-                                diamondGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.DIAMOND, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));
+                                diamondGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.DIAMOND, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "shaped_defense_rune"), RunegemTier.SHAPED));
                                 output.accept(diamondGem);
 
                                 ItemStack heartGem = ModItems.RUNEGEM.toStack();
-                                heartGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.HEART, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));
+                                heartGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.HEART, DimensionDelvers.tagId(ModModifiers.MODIFIER_KEY, "cut_health_rune"), RunegemTier.CUT));
                                 output.accept(heartGem);
 
                                 ItemStack pentagonGem = ModItems.RUNEGEM.toStack();
