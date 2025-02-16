@@ -1,0 +1,23 @@
+{
+  "ultrawarm": false,
+  "natural": true,
+  "piglin_safe": false,
+  "respawn_anchor_works": false,
+  "bed_works": false,
+  "has_raids": false,
+  "has_skylight": true,
+  "has_ceiling": false,
+  "coordinate_scale": 1,
+  "ambient_light": 1,
+  "fixed_time": 0,
+  "logical_height": 384,
+  "effects": "wotr:rift_dimension_renderer",
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "min_y": -64,
+  "height": 384,
+  "monster_spawn_light_level": {
+    "type": "minecraft:constant",
+    "value": 15
+  },
+  "monster_spawn_block_light_limit": 0
+}
