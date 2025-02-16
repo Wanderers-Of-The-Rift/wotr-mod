@@ -123,12 +123,13 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     }
 
     public void slotsChanged(@NotNull Container inventory) {
-        super.slotsChanged(inventory);
         if (inventory == this.gearSlotContainer) {
             gearSlotChanged();
         } else if (inventory == this.socketSlotsContainer) {
             socketSlotChanged();
         }
+
+        super.slotsChanged(inventory);
     }
 
     private void gearSlotChanged() {
