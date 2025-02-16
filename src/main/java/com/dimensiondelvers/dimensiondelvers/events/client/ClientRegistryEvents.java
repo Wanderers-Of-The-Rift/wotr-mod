@@ -2,6 +2,7 @@ package com.dimensiondelvers.dimensiondelvers.events.client;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.client.render.item.properties.select.SelectRuneGemShape;
+import com.dimensiondelvers.dimensiondelvers.client.tooltip.GearSocketTooltipRenderer;
 import com.dimensiondelvers.dimensiondelvers.client.tooltip.ImageTooltipRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -21,5 +22,6 @@ public class ClientRegistryEvents {
     @SubscribeEvent
     public static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(ImageTooltipRenderer.ImageComponent.class, ImageTooltipRenderer::new);
+        event.register(GearSocketTooltipRenderer.GearSocketComponent.class, GearSocketTooltipRenderer::new);
     }
 }
