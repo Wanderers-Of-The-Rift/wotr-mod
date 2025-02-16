@@ -17,12 +17,13 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @EventBusSubscriber(modid = DimensionDelvers.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class GearSocketTooltipEvent {
@@ -48,18 +49,18 @@ public class GearSocketTooltipEvent {
         List<TooltipComponent> toAdd = new ArrayList<>();
         toAdd.add(new GearSocketTooltipRenderer.GearSocketComponent(stack, socketList));
 
-        for(GearSocket socket : socketList) {
+        for (GearSocket socket : socketList) {
             boolean hasGem = socket.runegem().isPresent();
 
             if (!hasGem || socket.modifier().isEmpty()) {
 
             } else {
                 ModifierInstance modifierInstance = socket.modifier().get();
-                float roll = modifierInstance.roll;
+                float roll = modifierInstance.roll();
                 float roundedValue = (float) (Math.ceil(roll * 100) / 100);
 
                 // TODO: Hardcoded currently, need to see how the modifier stuff develops further
-                MutableComponent cmp = Component.literal("+" + roundedValue +  " " + modifierInstance.getModifier().getRegisteredName()).withStyle(ChatFormatting.RED);
+                MutableComponent cmp = Component.literal("+" + roundedValue + " " + modifierInstance.modifier().getRegisteredName()).withStyle(ChatFormatting.RED);
                 toAdd.addLast(new ImageTooltipRenderer.ImageComponent(stack, cmp, DimensionDelvers.id("textures/tooltip/attribute/damage_attribute.png")));
             }
         }
