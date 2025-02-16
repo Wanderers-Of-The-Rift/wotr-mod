@@ -17,7 +17,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-// Vanilla Equivalent ItemEnchantments
 public record GearSocket(
         RunegemShape shape,
         Optional<ModifierInstance> modifier,
@@ -40,7 +39,7 @@ public record GearSocket(
     );
 
     public boolean isEmpty() {
-        return runegem.isEmpty();
+        return runegem.isEmpty() || modifier.isEmpty();
     }
 
     public boolean canBeApplied(RunegemData runegemData) {

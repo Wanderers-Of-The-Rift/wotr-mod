@@ -1,6 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.modifier;
 
 import com.dimensiondelvers.dimensiondelvers.modifier.effect.AbstractModifierEffect;
+import com.dimensiondelvers.dimensiondelvers.modifier.source.ModifierSource;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -8,6 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 
@@ -29,4 +31,17 @@ public class Modifier {
     public List<AbstractModifierEffect> getModifierEffects() {
         return modifierEffects;
     }
+
+    public void enableModifier(float roll, Entity entity, ModifierSource source){
+        for(AbstractModifierEffect effect : modifierEffects){
+            effect.enableModifier(roll, entity, source);
+        }
+    }
+
+    public void disableModifier(float roll, Entity entity, ModifierSource source){
+        for(AbstractModifierEffect effect : modifierEffects){
+            effect.disableModifier(roll, entity, source);
+        }
+    }
+
 }

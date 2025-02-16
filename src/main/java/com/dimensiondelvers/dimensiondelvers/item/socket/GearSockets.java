@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// Vanilla Equivalent ItemEnchantments
 public record GearSockets(List<GearSocket> sockets) {
     public static Codec<GearSockets> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             GearSocket.CODEC.listOf().fieldOf("sockets").forGetter(GearSockets::sockets)
@@ -22,6 +21,10 @@ public record GearSockets(List<GearSocket> sockets) {
             GearSockets::sockets,
             GearSockets::new
     );
+
+    public boolean isEmpty() {
+        return sockets.isEmpty();
+    }
 
     public static GearSockets randomSockets() {
         Random random = new Random();

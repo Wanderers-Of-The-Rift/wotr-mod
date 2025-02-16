@@ -1,8 +1,11 @@
 package com.dimensiondelvers.dimensiondelvers.modifier.effect;
 
-import com.mojang.serialization.*;
+import com.dimensiondelvers.dimensiondelvers.modifier.source.ModifierSource;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.entity.Entity;
 
 import java.util.function.Function;
 
@@ -12,6 +15,10 @@ import static com.dimensiondelvers.dimensiondelvers.init.ModModifierEffects.MODI
 
 public abstract class AbstractModifierEffect {
     public abstract MapCodec<? extends AbstractModifierEffect> getCodec();
+
+    public abstract void enableModifier(float roll, Entity entity,  ModifierSource source);
+
+    public abstract void disableModifier(float roll, Entity entity, ModifierSource source);
 
     public abstract void applyModifier();
 
