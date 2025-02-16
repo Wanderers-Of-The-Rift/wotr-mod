@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.world.level;
 
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -22,16 +23,29 @@ import java.util.concurrent.Executor;
 public class TemporaryLevel extends ServerLevel {
     private final ResourceLocation id;
 
+    public ResourceKey<Level> getPortalDimension() {
+        return portalDimension;
+    }
+
+    public BlockPos getPortalPos() {
+        return portalPos;
+    }
+
+    private final ResourceKey<Level> portalDimension;
+    private final BlockPos portalPos;
+
     private TemporaryLevel(MinecraftServer server, Executor dispatcher, LevelStorageSource.LevelStorageAccess levelStorageAccess,
                            ServerLevelData serverLevelData, ResourceKey<Level> dimension, LevelStem levelStem, ChunkProgressListener progressListener,
                            boolean isDebug, long biomeZoomSeed, List<CustomSpawner> customSpawners, boolean tickTime,
-                           RandomSequences randomSequences, ResourceLocation id) {
+                           RandomSequences randomSequences, ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         super(server, dispatcher, levelStorageAccess, serverLevelData, dimension, levelStem, progressListener, isDebug, biomeZoomSeed, customSpawners, tickTime, randomSequences);
         this.id = id;
+        this.portalDimension = portalDimension;
+        this.portalPos = portalPos;
     }
 
 
-    public static TemporaryLevel create(ResourceLocation id, LevelStem stem) {
+    public static TemporaryLevel create(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
         var chunkProgressListener = server.getProgressListenerFactory().create(0);
         var storageSource = server.getStorageSource();
@@ -51,7 +65,9 @@ public class TemporaryLevel extends ServerLevel {
             List.of(),
             false,
             ServerLifecycleHooks.getCurrentServer().overworld().getRandomSequences(),
-            id
+            id,
+            portalDimension,
+            portalPos
         );
     }
 

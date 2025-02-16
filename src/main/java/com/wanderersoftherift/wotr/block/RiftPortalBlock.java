@@ -4,6 +4,8 @@ import com.wanderersoftherift.wotr.world.level.TemporaryLevel;
 import com.wanderersoftherift.wotr.world.level.TemporaryLevelManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,19 +32,20 @@ public class RiftPortalBlock extends Block {
         } else {
             if (level instanceof TemporaryLevel temporaryLevel) {
                 if (player instanceof ServerPlayer serverPlayer){
-                    var respawnPos = serverPlayer.getRespawnPosition();
-                    if (respawnPos == null){
-                        respawnPos = level.getSharedSpawnPos();
-                    }
                     TemporaryLevelManager.unregisterLevel(temporaryLevel);
-                    player.teleportTo(level.getServer().overworld(),respawnPos.getX(), respawnPos.getY(), respawnPos.getZ(), Set.of(), player.getYRot(), player.getXRot(), false);
+
+                    ResourceKey<Level> respawnKey = temporaryLevel.getPortalDimension();
+                    ServerLevel respawnDimension = level.getServer().getLevel(respawnKey);
+                    var respawnPos = temporaryLevel.getPortalPos().above();
+
+                    player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
                 } else {
                     player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 }
 
                 return InteractionResult.SUCCESS;
             }
-            var lvl = TemporaryLevelManager.createRiftLevel();
+            var lvl = TemporaryLevelManager.createRiftLevel(level.dimension(), pos);
             if (lvl == null) {
                 player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 return InteractionResult.FAIL;
