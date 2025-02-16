@@ -8,6 +8,7 @@ import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
 import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
+import com.dimensiondelvers.dimensiondelvers.util.ContainerTest;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -128,8 +129,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         } else if (inventory == this.socketSlotsContainer) {
             socketSlotChanged();
         }
-
-        super.slotsChanged(inventory);
     }
 
     private void gearSlotChanged() {
@@ -218,8 +217,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     private Container createContainer(int size, int maxStackSize) {
         return new SimpleContainer(size) {
             public void setChanged() {
-                super.setChanged();
                 RuneAnvilMenu.this.slotsChanged(this);
+                super.setChanged();
             }
 
             public int getMaxStackSize() {
