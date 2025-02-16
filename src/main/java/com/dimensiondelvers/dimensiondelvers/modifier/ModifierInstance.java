@@ -1,34 +1,30 @@
 package com.dimensiondelvers.dimensiondelvers.modifier;
 
+import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 
 
-public class ModifierInstance {
+public record ModifierInstance(Holder<Modifier> modifier, float roll) {
 
     public static Codec<ModifierInstance> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            Modifier.CODEC.fieldOf("modifier").forGetter(ModifierInstance::getModifier),
-            Codec.FLOAT.fieldOf("roll").forGetter(ModifierInstance::getRoll)
+            Modifier.CODEC.fieldOf("modifier").forGetter(ModifierInstance::modifier),
+            Codec.FLOAT.fieldOf("roll").forGetter(ModifierInstance::roll)
     ).apply(inst, ModifierInstance::new));
 
-    public final Holder<Modifier> modifier;
-
-    public final float roll;
-
-    public ModifierInstance(Holder<Modifier> modifier, float roll) {
-        this.modifier = modifier;
-        this.roll = roll;
-    }
-
-    public Holder<Modifier> getModifier() {
-        return modifier;
-    }
-
-    public float getRoll() {
-        return roll;
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, ModifierInstance> STREAM_CODEC = StreamCodec.composite(
+            Modifier.STREAM_CODEC,
+            ModifierInstance::modifier,
+            ByteBufCodecs.FLOAT,
+            ModifierInstance::roll,
+            ModifierInstance::new
+    );
 
     public static ModifierInstance of(Holder<Modifier> modifier, RandomSource random) {
         return new ModifierInstance(modifier, random.nextFloat());

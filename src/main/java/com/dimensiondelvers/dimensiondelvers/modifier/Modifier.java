@@ -4,6 +4,9 @@ import com.dimensiondelvers.dimensiondelvers.modifier.effect.AbstractModifierEff
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 
 import java.util.List;
@@ -15,6 +18,7 @@ public class Modifier {
             AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects)
     ).apply(inst, Modifier::new));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(MODIFIER_KEY);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs.holderRegistry(MODIFIER_KEY);
 
     private final List<AbstractModifierEffect> modifierEffects;
 

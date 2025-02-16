@@ -55,7 +55,7 @@ public class GearSocketTooltipEvent {
 
             } else {
                 ModifierInstance modifierInstance = socket.modifier().get();
-                float roll = modifierInstance.getRoll();
+                float roll = modifierInstance.roll;
                 float roundedValue = (float) (Math.ceil(roll * 100) / 100);
 
                 // TODO: Hardcoded currently, need to see how the modifier stuff develops further

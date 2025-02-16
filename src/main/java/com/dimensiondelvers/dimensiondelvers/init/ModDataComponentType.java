@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModDataComponentType {
     public static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, DimensionDelvers.MODID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<GearSockets>> GEAR_SOCKETS  = register("gear_sockets", GearSockets.CODEC, null);//, GearSockets.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<GearSockets>> GEAR_SOCKETS  = register("gear_sockets", GearSockets.CODEC, GearSockets.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<RunegemData>> RUNEGEM_DATA  = register("runegem_data", RunegemData.CODEC, null);
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, final Codec<T> codec, final StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
