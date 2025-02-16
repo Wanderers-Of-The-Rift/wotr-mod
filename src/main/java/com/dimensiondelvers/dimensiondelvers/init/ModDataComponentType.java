@@ -18,7 +18,7 @@ import java.util.UUID;
 public class ModDataComponentType {
     public static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, DimensionDelvers.MODID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<GearSockets>> GEAR_SOCKETS  = register("gear_sockets", GearSockets.CODEC, null);//, GearSockets.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<GearSockets>> GEAR_SOCKETS  = register("gear_sockets", GearSockets.CODEC, GearSockets.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<RunegemData>> RUNEGEM_DATA  = register("runegem_data", RunegemData.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_SNAPSHOT_ID = register("inventory_snapshot_id", UUIDUtil.CODEC, null);
 

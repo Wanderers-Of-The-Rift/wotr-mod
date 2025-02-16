@@ -9,6 +9,9 @@ import com.dimensiondelvers.dimensiondelvers.modifier.ModifierInstance;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -25,6 +28,16 @@ public record GearSocket(
             ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
             ItemStack.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem)
     ).apply(inst, GearSocket::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, GearSocket> STREAM_CODEC = StreamCodec.composite(
+            RunegemShape.STREAM_CODEC,
+            GearSocket::shape,
+            ByteBufCodecs.optional(ModifierInstance.STREAM_CODEC),
+            GearSocket::modifier,
+            ByteBufCodecs.optional(ItemStack.STREAM_CODEC),
+            GearSocket::runegem,
+            GearSocket::new
+    );
 
     public boolean isEmpty() {
         return runegem.isEmpty() || runegem.get().isEmpty();
