@@ -55,9 +55,9 @@ public class GearSocketTooltipEvent {
                 component1 = Component.literal(socket.shape().getName()).withStyle(style);
             } else {
                 ModifierInstance modifierInstance = socket.modifier().get();
-                Holder<Modifier> modifierHolder = modifierInstance.getModifier();
+                Holder<Modifier> modifierHolder = modifierInstance.modifier();
                 Modifier modifier = modifierHolder.value();
-                float roll = modifierInstance.getRoll();
+                float roll = modifierInstance.roll();
                 component1 = Component.literal(modifierHolder.getRegisteredName() + " " + roll).withStyle(style);
             }
             toAdd.add(component1);
