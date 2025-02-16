@@ -35,14 +35,34 @@ public class RiftPortalBlock extends Block {
                     TemporaryLevelManager.unregisterLevel(temporaryLevel);
 
                     ResourceKey<Level> respawnKey = temporaryLevel.getPortalDimension();
+                    if (respawnKey == level.dimension()){
+                        respawnKey = Level.OVERWORLD;
+                    }
                     ServerLevel respawnDimension = level.getServer().getLevel(respawnKey);
                     var respawnPos = temporaryLevel.getPortalPos().above();
 
                     player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
-                } else {
+                } else{
                     player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 }
 
+                return InteractionResult.SUCCESS;
+            }
+            if(level.dimension().location().getNamespace().equals("dimensiondelvers")) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    player.displayClientMessage(Component.literal("You're in inactive rift - teleporting to respawn pos"), true);
+                    ResourceKey<Level> respawnKey = serverPlayer.getRespawnDimension();
+                    var respawnPos = serverPlayer.getRespawnPosition();
+                    if (respawnKey.location().getNamespace().equals("dimensiondelvers")) {
+                        respawnKey = Level.OVERWORLD;
+                        respawnPos = null;
+                    }
+                    ServerLevel respawnDimension = level.getServer().getLevel(respawnKey);
+                    if (respawnPos == null){
+                        respawnPos = respawnDimension.getSharedSpawnPos();
+                    }
+                    player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
+                }
                 return InteractionResult.SUCCESS;
             }
             var lvl = TemporaryLevelManager.createRiftLevel(level.dimension(), pos);
