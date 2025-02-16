@@ -6,7 +6,10 @@ import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
+import com.dimensiondelvers.dimensiondelvers.modifier.Modifier;
+import com.dimensiondelvers.dimensiondelvers.modifier.ModifierInstance;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -46,7 +49,17 @@ public class GearSocketTooltipEvent {
 
         for (GearSocket socket : socketList) {
             boolean hasGem = socket.runegem().isPresent();
-            MutableComponent component1 = Component.literal(socket.shape().getName()).withStyle(Style.EMPTY.withBold(hasGem).withUnderlined(hasGem).withColor(colorMap.get(socket.shape())));
+            MutableComponent component1;
+            Style style = Style.EMPTY.withBold(hasGem).withUnderlined(hasGem).withColor(colorMap.get(socket.shape()));
+            if (!hasGem || socket.modifier().isEmpty()) {
+                component1 = Component.literal(socket.shape().getName()).withStyle(style);
+            } else {
+                ModifierInstance modifierInstance = socket.modifier().get();
+                Holder<Modifier> modifierHolder = modifierInstance.getModifier();
+                Modifier modifier = modifierHolder.value();
+                float roll = modifierInstance.getRoll();
+                component1 = Component.literal(modifierHolder.getRegisteredName() + " " + roll).withStyle(style);
+            }
             toAdd.add(component1);
         }
 
