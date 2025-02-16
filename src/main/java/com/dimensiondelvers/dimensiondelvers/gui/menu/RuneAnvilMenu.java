@@ -128,8 +128,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         } else if (inventory == this.socketSlotsContainer) {
             socketSlotChanged();
         }
-
-        super.slotsChanged(inventory);
     }
 
     private void gearSlotChanged() {
@@ -218,8 +216,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     private Container createContainer(int size, int maxStackSize) {
         return new SimpleContainer(size) {
             public void setChanged() {
-                super.setChanged();
                 RuneAnvilMenu.this.slotsChanged(this);
+                super.setChanged();
             }
 
             public int getMaxStackSize() {
