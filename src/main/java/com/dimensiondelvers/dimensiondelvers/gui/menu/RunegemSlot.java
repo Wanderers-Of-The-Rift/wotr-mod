@@ -1,6 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.gui.menu;
 
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
+import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -8,22 +9,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RunegemSlot extends Slot {
+
     @Nullable
-    private RunegemShape shape = null;
+    private GearSocket socket = null;
 
     private boolean mayTake = true;
 
-    public RunegemSlot(Container container, int slot, int x, int y, @Nullable RunegemShape shape) {
+    public RunegemSlot(Container container, int slot, int x, int y) {
         super(container, slot, x, y);
-        this.shape = shape;
     }
 
     public @Nullable RunegemShape getShape() {
-        return shape;
+        return socket != null ? socket.shape() : null;
     }
 
-    public void setShape(@Nullable RunegemShape shape) {
-        this.shape = shape;
+    public @Nullable GearSocket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(@Nullable GearSocket socket) {
+        this.socket = socket;
     }
 
     public boolean isDisabled() {

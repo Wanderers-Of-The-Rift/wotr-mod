@@ -1,0 +1,10 @@
+{
+  "modifiers": [
+    {
+      "type": "dimensiondelvers:attribute",
+      "attribute": "attack_damage",
+      "min_roll": 1,
+      "max_roll": 3
+    }
+  ]
+}

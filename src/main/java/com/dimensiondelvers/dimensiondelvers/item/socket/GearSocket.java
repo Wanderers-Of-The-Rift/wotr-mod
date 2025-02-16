@@ -1,5 +1,6 @@
 package com.dimensiondelvers.dimensiondelvers.item.socket;
 
+import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
@@ -40,6 +41,7 @@ public record GearSocket(
         }
         Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifier(level);
         if (modifierHolder.isEmpty()) {
+            DimensionDelvers.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
         return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), level.random)), Optional.of(stack));

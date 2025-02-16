@@ -12,17 +12,17 @@ import static com.dimensiondelvers.dimensiondelvers.init.ModModifiers.MODIFIER_K
 
 public class Modifier {
     public static Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            AbstractModifierEffect.CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects)
+            AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects)
     ).apply(inst, Modifier::new));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(MODIFIER_KEY);
 
-    private final List<Holder<AbstractModifierEffect>> modifierEffects;
+    private final List<AbstractModifierEffect> modifierEffects;
 
-    public Modifier(List<Holder<AbstractModifierEffect>> modifierEffects) {
+    public Modifier(List<AbstractModifierEffect> modifierEffects) {
         this.modifierEffects = modifierEffects;
     }
 
-    public List<Holder<AbstractModifierEffect>> getModifierEffects() {
+    public List<AbstractModifierEffect> getModifierEffects() {
         return modifierEffects;
     }
 }
