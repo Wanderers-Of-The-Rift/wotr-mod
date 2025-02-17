@@ -78,7 +78,7 @@ public class RiftPortalBlock extends Block {
                 return InteractionResult.FAIL;
             }
             player.displayClientMessage(Component.literal("Created rift with id: " + lvl.getId()), true);
-            player.teleportTo(lvl, 0.5, -63, 0.5, Set.of(), player.getYRot(), player.getXRot(), false);
+            player.teleportTo(lvl, 0.5, 0, 0.5, Set.of(), player.getYRot(), player.getXRot(), false);
             NeoForge.EVENT_BUS.post(new PlayerEvent.PlayerChangedDimensionEvent(player, level.dimension(), lvl.dimension()));
 
             return InteractionResult.SUCCESS;

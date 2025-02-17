@@ -11,13 +11,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.FlatLevelSource;
-import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -75,7 +70,7 @@ public class TemporaryLevelManager {
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
         TemporaryLevelManager.levels.add(level);
-        level.setBlock(new BlockPos(0, -64, 0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
+        level.setBlock(new BlockPos(0, -1, 0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
         return level;
     }
 
@@ -116,14 +111,6 @@ public class TemporaryLevelManager {
     }
 
     private static ChunkGenerator getRiftChunkGenerator() {
-        var biomeHolder = ServerLifecycleHooks.getCurrentServer().overworld().registryAccess().lookup(Registries.BIOME).flatMap(x -> x.get(Biomes.THE_VOID)).orElse(null);
-        if (biomeHolder == null) {
-            return null;
-        }
-        var flatSettings = new FlatLevelGeneratorSettings(Optional.empty(), biomeHolder, List.of());
-        List<FlatLayerInfo> layerInfos = new ArrayList<>();
-        layerInfos.add(new FlatLayerInfo(1, Blocks.STONE));
-        flatSettings = flatSettings.withBiomeAndLayers(layerInfos, Optional.empty(), biomeHolder);
-        return new FlatLevelSource(flatSettings);
+        return new RiftChunkGenerator(ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().getGenerator().getBiomeSource(), ResourceLocation.withDefaultNamespace("melon"));
     }
 }
