@@ -4,10 +4,10 @@ package com.dimensiondelvers.dimensiondelvers.item.runegem;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.Direction;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
+import net.minecraft.util.RandomSource;
 
 import java.util.function.IntFunction;
 
@@ -39,6 +39,10 @@ public enum RunegemShape {
             }
         }
         return defaultReturn;
+    }
+
+    public static RunegemShape getRandomShape(RandomSource random) {
+        return BY_ID.apply(random.nextInt(RunegemShape.values().length));
     }
 
     public int getId() {

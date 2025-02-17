@@ -12,6 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -37,6 +38,11 @@ public record GearSocket(
             GearSocket::runegem,
             GearSocket::new
     );
+
+    public static GearSocket getRandomSocket(RandomSource random) {
+        RunegemShape shape = RunegemShape.getRandomShape(random);
+        return null;
+    }
 
     public boolean isEmpty() {
         return runegem.isEmpty() || modifier.isEmpty();
