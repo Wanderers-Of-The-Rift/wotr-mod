@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
 import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.ModChunkGenerators;
 import com.wanderersoftherift.wotr.init.ModCreativeTabs;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModEntityTypes;
@@ -75,6 +76,7 @@ public class WanderersOfTheRift {
         ModEntityTypes.ENTITIES.register(modEventBus);
         ModLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
         ModSoundEvents.SOUND_EVENTS.register(modEventBus);
+        ModChunkGenerators.CHUNK_GENERATORS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (Wotr) to respond directly to events.

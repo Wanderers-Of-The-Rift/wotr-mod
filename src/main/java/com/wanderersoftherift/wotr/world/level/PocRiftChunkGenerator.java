@@ -34,18 +34,18 @@ import java.util.concurrent.CompletableFuture;
 import static net.minecraft.world.level.block.Blocks.AIR;
 
 // https://wiki.fabricmc.net/tutorial:chunkgenerator
-public class RiftChunkGenerator extends ChunkGenerator {
+public class PocRiftChunkGenerator extends ChunkGenerator {
 
-    public static final MapCodec<RiftChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final MapCodec<PocRiftChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-        BiomeSource.CODEC.fieldOf("biome_source").forGetter(RiftChunkGenerator::getBiomeSource),
-                ResourceLocation.CODEC.fieldOf("custom_block").forGetter(RiftChunkGenerator::getCustomBlockID)
-                ).apply(instance, RiftChunkGenerator::new));
+        BiomeSource.CODEC.fieldOf("biome_source").forGetter(PocRiftChunkGenerator::getBiomeSource),
+                ResourceLocation.CODEC.fieldOf("custom_block").forGetter(PocRiftChunkGenerator::getCustomBlockID)
+                ).apply(instance, PocRiftChunkGenerator::new));
 
     private final ResourceLocation customBlockID;
     private final BlockState customBlock;
 
-    public RiftChunkGenerator(BiomeSource biomeSource, ResourceLocation defaultBlock) {
+    public PocRiftChunkGenerator(BiomeSource biomeSource, ResourceLocation defaultBlock) {
         super(biomeSource);
         this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock).map(Holder.Reference::value).map(Block::defaultBlockState).orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;

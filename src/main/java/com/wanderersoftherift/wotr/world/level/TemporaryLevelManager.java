@@ -111,6 +111,6 @@ public class TemporaryLevelManager {
     }
 
     private static ChunkGenerator getRiftChunkGenerator() {
-        return new RiftChunkGenerator(ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().getGenerator().getBiomeSource(), ResourceLocation.withDefaultNamespace("melon"));
+        return new PocRiftChunkGenerator(ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().getGenerator().getBiomeSource(), ResourceLocation.withDefaultNamespace("melon"));
     }
 }
