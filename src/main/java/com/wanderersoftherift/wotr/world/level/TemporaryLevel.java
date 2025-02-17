@@ -22,15 +22,6 @@ import java.util.concurrent.Executor;
 
 public class TemporaryLevel extends ServerLevel {
     private final ResourceLocation id;
-
-    public ResourceKey<Level> getPortalDimension() {
-        return portalDimension;
-    }
-
-    public BlockPos getPortalPos() {
-        return portalPos;
-    }
-
     private final ResourceKey<Level> portalDimension;
     private final BlockPos portalPos;
 
@@ -73,5 +64,13 @@ public class TemporaryLevel extends ServerLevel {
 
     public ResourceLocation getId() {
         return id;
+    }
+
+    public ResourceKey<Level> getPortalDimension() {
+        return portalDimension;
+    }
+
+    public BlockPos getPortalPos() {
+        return portalPos;
     }
 }

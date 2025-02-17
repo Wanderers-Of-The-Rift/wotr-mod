@@ -13,7 +13,8 @@
     "MixinStructureTemplate",
     "MixinLivingEntity",
     "MixinServerPlayer",
-    "AccessorMinecraftServer"
+    "AccessorMinecraftServer",
+    "MixinMinecraftServer"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",

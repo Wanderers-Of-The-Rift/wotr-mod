@@ -31,34 +31,41 @@ public class RiftPortalBlock extends Block {
             return InteractionResult.SUCCESS;
         } else {
             if (level instanceof TemporaryLevel temporaryLevel) {
-                if (player instanceof ServerPlayer serverPlayer){
+                if (player instanceof ServerPlayer serverPlayer) {
                     TemporaryLevelManager.unregisterLevel(temporaryLevel);
 
                     ResourceKey<Level> respawnKey = temporaryLevel.getPortalDimension();
-                    if (respawnKey == level.dimension()){
+                    if (respawnKey == level.dimension()) {
                         respawnKey = Level.OVERWORLD;
                     }
                     ServerLevel respawnDimension = level.getServer().getLevel(respawnKey);
-                    var respawnPos = temporaryLevel.getPortalPos().above();
+                    if (respawnDimension == null) {
+                       respawnDimension = level.getServer().overworld();
+                    }
+                    var portalPos = temporaryLevel.getPortalPos();
+                    var respawnPos = respawnDimension.getSharedSpawnPos();
+                    if (portalPos != null) {
+                        respawnPos = portalPos.above();
+                    }
 
                     player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
-                } else{
+                } else {
                     player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 }
 
                 return InteractionResult.SUCCESS;
             }
-            if(level.dimension().location().getNamespace().equals("dimensiondelvers")) {
+            if (level.dimension().location().getNamespace().equals("wotr")) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     player.displayClientMessage(Component.literal("You're in inactive rift - teleporting to respawn pos"), true);
                     ResourceKey<Level> respawnKey = serverPlayer.getRespawnDimension();
                     var respawnPos = serverPlayer.getRespawnPosition();
-                    if (respawnKey.location().getNamespace().equals("dimensiondelvers")) {
+                    if (respawnKey.location().getNamespace().equals("wotr")) {
                         respawnKey = Level.OVERWORLD;
                         respawnPos = null;
                     }
                     ServerLevel respawnDimension = level.getServer().getLevel(respawnKey);
-                    if (respawnPos == null){
+                    if (respawnPos == null) {
                         respawnPos = respawnDimension.getSharedSpawnPos();
                     }
                     player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
