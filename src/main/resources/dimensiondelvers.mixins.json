@@ -6,6 +6,7 @@
   "refmap": "dimensiondelvers.refmap.json",
   "mixins": [
     "MixinEnchantingTableBlock",
+    "MixinItemStack",
     "MixinLivingEntity",
     "MixinServerPlayer"
   ],

@@ -41,7 +41,7 @@ public record GearSocket(
 
     public static GearSocket getRandomSocket(RandomSource random) {
         RunegemShape shape = RunegemShape.getRandomShape(random);
-        return null;
+        return new GearSocket(shape, Optional.empty(), Optional.empty());
     }
 
     public boolean isEmpty() {
