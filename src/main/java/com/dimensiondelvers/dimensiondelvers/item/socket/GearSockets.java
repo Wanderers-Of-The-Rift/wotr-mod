@@ -1,15 +1,20 @@
 package com.dimensiondelvers.dimensiondelvers.item.socket;
 
-import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
+import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import static com.dimensiondelvers.dimensiondelvers.init.ModTags.Items.SOCKETABLE;
 
 public record GearSockets(List<GearSocket> sockets) {
     public static Codec<GearSockets> CODEC = RecordCodecBuilder.create(inst -> inst.group(
@@ -26,19 +31,25 @@ public record GearSockets(List<GearSocket> sockets) {
         return sockets.isEmpty();
     }
 
-    public static GearSockets randomSockets() {
-        Random random = new Random();
-        int count = random.nextInt(6);
-        ArrayList<GearSocket> sockets = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            RunegemShape[] shapes = RunegemShape.values();
-            RunegemShape shape = shapes[random.nextInt(shapes.length)];
-            sockets.add(new GearSocket(shape, null, null));
+    public static GearSockets randomSockets(int maxSockets, RandomSource random) {
+        List<GearSocket> sockets = new ArrayList<>();
+        int actualSockets = random.nextInt(maxSockets)+1;
+        for (int i = 0; i < actualSockets; i++) {
+            GearSocket socket = GearSocket.getRandomSocket(random);
+            if (socket != null) {
+                sockets.add(socket);
+            }
         }
         return new GearSockets(sockets);
     }
 
     public static GearSockets emptySockets() {
         return new GearSockets(new ArrayList<>());
+    }
+
+    public static void generateForItem(ItemStack itemStack, Level level, Player player) {
+        if(level.isClientSide() || !itemStack.is(SOCKETABLE)) return;
+        GearSockets sockets = GearSockets.randomSockets(3, level.random);
+        itemStack.set(ModDataComponentType.GEAR_SOCKETS, sockets);
     }
 }

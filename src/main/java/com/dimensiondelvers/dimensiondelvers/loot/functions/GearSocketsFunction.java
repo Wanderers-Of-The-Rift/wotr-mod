@@ -1,7 +1,6 @@
 package com.dimensiondelvers.dimensiondelvers.loot.functions;
 
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
-import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.dimensiondelvers.dimensiondelvers.init.ModLootItemFunctionTypes.GEAR_SOCKETS_FUNCTION;
@@ -50,14 +48,7 @@ public class GearSocketsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, RandomSource random) {
-        List<GearSocket> sockets = new ArrayList<>();
-        for (int i = 0; i < random.nextInt(maxSockets + 1); i++) {
-            GearSocket socket = GearSocket.getRandomSocket(random);
-            if (socket != null) {
-                sockets.add(socket);
-            }
-        }
-        itemStack.set(ModDataComponentType.GEAR_SOCKETS, new GearSockets(sockets));
+        itemStack.set(ModDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(maxSockets, random));
         return itemStack;
     }
 }
