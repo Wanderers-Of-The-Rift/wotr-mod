@@ -24,6 +24,7 @@ public class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.EXAMPLE_BLOCK, "Example Block");
         addBlock(ModBlocks.DEV_BLOCK, "Dev Block");
         addBlock(ModBlocks.RUNE_ANVIL_BLOCK, "Rune Anvil");
+        addBlock(ModBlocks.RIFT_CHEST, "Rift Chest");
 
         // Adds an item translation.
         addItem(ModItems.EXAMPLE_ITEM, "Example Item");
@@ -36,5 +37,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add("container.dimensiondelvers.rune_anvil", "Rune Anvil");
         add("container.dimensiondelvers.rune_anvil.apply", "Apply");
         add("tooltip.dimensiondelvers.socket", "Sockets: ");
+        add("container.dimensiondelvers.rift_chest", "Rift Chest");
     }
 }

@@ -1,7 +1,9 @@
 {
   "block.dimensiondelvers.dev_block": "Dev Block",
   "block.dimensiondelvers.example_block": "Example Block",
+  "block.dimensiondelvers.rift_chest": "Rift Chest",
   "block.dimensiondelvers.rune_anvil": "Rune Anvil",
+  "container.dimensiondelvers.rift_chest": "Rift Chest",
   "container.dimensiondelvers.rune_anvil": "Rune Anvil",
   "container.dimensiondelvers.rune_anvil.apply": "Apply",
   "item.dimensiondelvers.example_item": "Example Item",

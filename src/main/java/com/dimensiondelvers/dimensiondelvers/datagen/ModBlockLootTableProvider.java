@@ -20,6 +20,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.EXAMPLE_BLOCK.get());
         dropSelf(ModBlocks.DEV_BLOCK.get());
         dropSelf(ModBlocks.RUNE_ANVIL_BLOCK.get());
+        dropSelf(ModBlocks.RIFT_CHEST.get());
     }
 
     @Override

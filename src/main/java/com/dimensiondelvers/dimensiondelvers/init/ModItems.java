@@ -35,6 +35,11 @@ public class ModItems {
             ModBlocks.RUNE_ANVIL_BLOCK
     );
 
+    public static final DeferredItem<BlockItem> RIFT_CHEST_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(
+            "rift_chest",
+            ModBlocks.RIFT_CHEST
+    );
+
     public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem(
             "example_item",
             new Item.Properties().food(new FoodProperties.Builder()

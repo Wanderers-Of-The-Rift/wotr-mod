@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "dimensiondelvers:block/rift_chest"
+    },
+    "facing=north": {
+      "model": "dimensiondelvers:block/rift_chest"
+    },
+    "facing=south": {
+      "model": "dimensiondelvers:block/rift_chest"
+    },
+    "facing=west": {
+      "model": "dimensiondelvers:block/rift_chest"
+    }
+  }
+}
