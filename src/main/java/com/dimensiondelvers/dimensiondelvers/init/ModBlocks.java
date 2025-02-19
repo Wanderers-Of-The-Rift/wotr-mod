@@ -3,7 +3,7 @@ package com.dimensiondelvers.dimensiondelvers.init;
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.block.BlockFamilyHelper;
 import com.dimensiondelvers.dimensiondelvers.block.RiftChestEntityBlock;
-import com.dimensiondelvers.dimensiondelvers.block.RuneAnvilBlock;
+import com.dimensiondelvers.dimensiondelvers.block.RuneAnvilEntityBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -31,11 +31,14 @@ public class ModBlocks {
             .lightLevel(state -> 7)
     ));
 
-    public static final DeferredBlock<RuneAnvilBlock> RUNE_ANVIL_BLOCK = registerBlock("rune_anvil", () -> new RuneAnvilBlock(BlockBehaviour.Properties.of()
-            .setId(blockId("rune_anvil"))
-            .strength(2.5F)
-            .sound(SoundType.METAL)
-    ));
+    public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = BLOCKS.register(
+            "rune_anvil",
+            () -> new RuneAnvilEntityBlock(BlockBehaviour.Properties.of()
+                    .setId(blockId("rune_anvil"))
+                    .strength(2.5F)
+                    .sound(SoundType.METAL)
+            )
+    );
 
     public static final DeferredBlock<RiftChestEntityBlock> RIFT_CHEST = registerBlock(
             "rift_chest",
@@ -60,7 +63,7 @@ public class ModBlocks {
     public static final BlockFamilyHelper PROCESSOR_BLOCK_12 = registerBuildingBlock("processor_block_12", () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_12"))));
     public static final BlockFamilyHelper PROCESSOR_BLOCK_13 = registerBuildingBlock("processor_block_13", () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_13"))));
     public static final BlockFamilyHelper PROCESSOR_BLOCK_14 = registerBuildingBlock("processor_block_14", () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_14"))));
-    
+
     private static BlockFamilyHelper registerBuildingBlock(String id, Supplier<Block> sup) {
         DeferredBlock<Block> block = registerBlock(id, sup);
         BlockFamilyHelper buildingBlockHelper = new BlockFamilyHelper.Builder()
