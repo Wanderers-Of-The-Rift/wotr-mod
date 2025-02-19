@@ -22,8 +22,7 @@ import java.util.concurrent.Executor;
 
 public class TemporaryLevel extends ServerLevel {
     private final ResourceLocation id;
-    private final ResourceKey<Level> portalDimension;
-    private final BlockPos portalPos;
+    private final RiftSavedData data;
 
     private TemporaryLevel(MinecraftServer server, Executor dispatcher, LevelStorageSource.LevelStorageAccess levelStorageAccess,
                            ServerLevelData serverLevelData, ResourceKey<Level> dimension, LevelStem levelStem, ChunkProgressListener progressListener,
@@ -31,8 +30,7 @@ public class TemporaryLevel extends ServerLevel {
                            RandomSequences randomSequences, ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         super(server, dispatcher, levelStorageAccess, serverLevelData, dimension, levelStem, progressListener, isDebug, biomeZoomSeed, customSpawners, tickTime, randomSequences);
         this.id = id;
-        this.portalDimension = portalDimension;
-        this.portalPos = portalPos;
+        this.data = this.getDataStorage().computeIfAbsent(RiftSavedData.factory(portalDimension, portalPos), "data_"+ id.getPath());
     }
 
 
@@ -67,10 +65,10 @@ public class TemporaryLevel extends ServerLevel {
     }
 
     public ResourceKey<Level> getPortalDimension() {
-        return portalDimension;
+        return data.getPortalDimension();
     }
 
     public BlockPos getPortalPos() {
-        return portalPos;
+        return data.getPortalPos();
     }
 }

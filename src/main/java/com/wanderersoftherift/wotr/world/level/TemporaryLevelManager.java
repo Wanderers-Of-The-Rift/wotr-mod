@@ -25,8 +25,6 @@ import java.util.Optional;
 public class TemporaryLevelManager {
     private static final List<TemporaryLevel> levels = new ArrayList<>();
 
-    // TODO: persistent rift data - after restart you'll get TemporaryLevel without portalPos and portalDimension. We must store riftID -> {portalDimension, portalPos} mapping
-
     // TODO: deregister and delete files after exiting rift
     public static TemporaryLevel createRiftLevel(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         // Blockpos until we store dimension id in the portal
