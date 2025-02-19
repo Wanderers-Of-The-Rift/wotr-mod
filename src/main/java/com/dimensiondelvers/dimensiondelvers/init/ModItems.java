@@ -32,7 +32,7 @@ public class ModItems {
 
     public static final DeferredItem<BlockItem> RUNE_ANVIL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(
             "rune_anvil",
-            ModBlocks.RUNE_ANVIL_BLOCK
+            ModBlocks.RUNE_ANVIL_ENTITY_BLOCK
     );
 
     public static final DeferredItem<BlockItem> RIFT_CHEST_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(

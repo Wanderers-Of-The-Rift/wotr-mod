@@ -4,7 +4,6 @@ import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RuneAnvilMenu;
 import com.dimensiondelvers.dimensiondelvers.gui.menu.RunegemSlot;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemShape;
-import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,14 +11,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> implements ContainerListener {
+public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
     private static final ResourceLocation BACKGROUND = DimensionDelvers.id("textures/gui/container/rune_anvil/background.png");
     private static final ResourceLocation SLOTS = DimensionDelvers.id("textures/gui/container/rune_anvil/slots.png");
 
@@ -54,13 +49,10 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
 
     @Override
     protected void renderSlot(@NotNull GuiGraphics guiGraphics, @NotNull Slot slot) {
-        if (slot instanceof RunegemSlot runegemSlot && runegemSlot.isDisabled()) {
-            return;
-        }
-
         int x = slot.x - 1;
         int y = slot.y - 1;
-        if (slot instanceof RunegemSlot runegemSlot && runegemSlot.getShape() != null) {
+        if (slot instanceof RunegemSlot runegemSlot) {
+            if (runegemSlot.getShape() == null) return;
             RunegemShape shape = runegemSlot.getShape();
 
             switch (shape) {
@@ -115,15 +107,5 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> impl
                 guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 18, 18, 18, 256, 256);
                 break;
         }
-    }
-
-    @Override
-    public void slotChanged(@NotNull AbstractContainerMenu abstractContainerMenu, int i, @NotNull ItemStack itemStack) {
-
-    }
-
-    @Override
-    public void dataChanged(@NotNull AbstractContainerMenu abstractContainerMenu, int i, int i1) {
-
     }
 }

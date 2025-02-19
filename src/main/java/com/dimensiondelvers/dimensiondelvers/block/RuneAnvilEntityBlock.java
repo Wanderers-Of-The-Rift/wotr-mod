@@ -1,6 +1,6 @@
 package com.dimensiondelvers.dimensiondelvers.block;
 
-import com.dimensiondelvers.dimensiondelvers.gui.menu.RuneAnvilMenu;
+import com.dimensiondelvers.dimensiondelvers.block.blockentity.RuneAnvilBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -8,28 +8,32 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class RuneAnvilBlock extends Block {
-    public static final MapCodec<RuneAnvilBlock> CODEC = simpleCodec(RuneAnvilBlock::new);
+public class RuneAnvilEntityBlock extends BaseEntityBlock {
+    public static final MapCodec<RuneAnvilEntityBlock> CODEC = simpleCodec(RuneAnvilEntityBlock::new);
     private static final Component CONTAINER_TITLE = Component.translatable("container.dimensiondelvers.rune_anvil");
 
-    public @NotNull MapCodec<RuneAnvilBlock> codec() {
-        return CODEC;
-    }
-
-    public RuneAnvilBlock(BlockBehaviour.Properties properties) {
+    public RuneAnvilEntityBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
 
+    public @NotNull MapCodec<RuneAnvilEntityBlock> codec() {
+        return CODEC;
+    }
+
     protected MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
-        return new SimpleMenuProvider((containerId, playerInventory, player) -> new RuneAnvilMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE);
+        return new SimpleMenuProvider((containerId, playerInventory, player) -> {
+            RuneAnvilBlockEntity blockEntity = (RuneAnvilBlockEntity) level.getBlockEntity(pos);
+            return blockEntity == null ? null : blockEntity.createMenu(containerId, playerInventory, player);
+        }, CONTAINER_TITLE);
     }
 
     protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
@@ -39,5 +43,10 @@ public class RuneAnvilBlock extends Block {
             player.openMenu(state.getMenuProvider(level, pos));
             return InteractionResult.CONSUME;
         }
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+        return new RuneAnvilBlockEntity(blockPos, blockState);
     }
 }

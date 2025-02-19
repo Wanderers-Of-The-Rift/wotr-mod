@@ -2,7 +2,7 @@ package com.dimensiondelvers.dimensiondelvers.init;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.block.RiftChestEntityBlock;
-import com.dimensiondelvers.dimensiondelvers.block.RuneAnvilBlock;
+import com.dimensiondelvers.dimensiondelvers.block.RuneAnvilEntityBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -30,9 +30,9 @@ public class ModBlocks {
                     .lightLevel(state -> 7)
             ));
 
-    public static final DeferredBlock<RuneAnvilBlock> RUNE_ANVIL_BLOCK = BLOCKS.register(
+    public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = BLOCKS.register(
             "rune_anvil",
-            () -> new RuneAnvilBlock(BlockBehaviour.Properties.of()
+            () -> new RuneAnvilEntityBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("rune_anvil"))
                     .strength(2.5F)
                     .sound(SoundType.METAL)
