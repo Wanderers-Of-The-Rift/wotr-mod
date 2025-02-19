@@ -11,7 +11,6 @@ import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
 import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -49,7 +48,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     // Client
     public RuneAnvilMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, false, new SimpleContainer(7));
+        this(containerId, playerInventory, ContainerLevelAccess.NULL, false, new RuneAnvilSimpleClientContainer());
     }
 
     // Server
@@ -151,8 +150,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     }
 
     private void gearSlotChanged() {
-        returnRunegems(null);
-
         ItemStack gear = this.gearSlot.getItem();
         if (gear.isEmpty()) {
             this.activeSocketSlots = 0;
@@ -195,14 +192,18 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     }
 
     public void returnRunegems(@Nullable Player player) {
+        // have to figure out how to do this properly without just duping the runegems
+        // i think its because mayPickup is returning true since by the time this is called the gear is already changed
+
+
         if (player == null) player = this.playerInventory.player;
 
         for (RunegemSlot socketSlot : this.socketSlots) {
-            if (!socketSlot.mayPickup(player) || !socketSlot.hasItem()) {
+            ItemStack stack = socketSlot.getItem();
+
+            if (stack.isEmpty() || !socketSlot.mayPickup(player)) {
                 continue;
             }
-
-            ItemStack stack = socketSlot.getItem();
 
             // this is copied over and cleaned up from AbstractContainerMenu.dropOrPlaceInInventory because its private for somefuckingreason
             boolean flag = player.isRemoved() && player.getRemovalReason() != Entity.RemovalReason.CHANGED_DIMENSION;
