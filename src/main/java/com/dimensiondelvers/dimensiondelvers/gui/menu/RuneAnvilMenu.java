@@ -91,7 +91,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.has(ModDataComponentType.GEAR_SOCKETS);
+                return container.canPlaceItem(0, stack);
             }
         });
     }
@@ -103,36 +103,12 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             socketSlots.add((RunegemSlot) this.addSlot(new RunegemSlot(this.container, finalI + 1, position.x, position.y) {
                 @Override
                 public boolean mayPlace(@NotNull ItemStack stack) {
-                    if (!stack.is(ModItems.RUNEGEM)) return false;
-
-                    ItemStack gear = RuneAnvilMenu.this.gearSlot.getItem();
-                    GearSockets gearSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
-                    RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA.get());
-                    if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null) return false;
-
-                    List<GearSocket> sockets = gearSockets.sockets();
-                    if (sockets.size() <= finalI) return false;
-
-                    GearSocket socket = sockets.get(finalI);
-                    return socket.canBeApplied(runegemData);
+                    return container.canPlaceItem(finalI + 1, stack);
                 }
 
                 @Override
                 public boolean mayPickup(@NotNull Player player) {
-                    ItemStack gear = RuneAnvilMenu.this.gearSlot.getItem();
-                    ItemStack stack = this.getItem();
-                    GearSockets gearSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
-                    RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA.get());
-                    if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null)
-                        return true; // i'm not sure this is right
-
-                    List<GearSocket> sockets = gearSockets.sockets();
-                    if (sockets.size() <= finalI) return false;
-
-                    GearSocket socket = sockets.get(finalI);
-                    RunegemData appliedRunegem = socket.runegem().orElse(null);
-                    if (appliedRunegem == null) return true;
-                    return !appliedRunegem.equals(runegemData);
+                    return container.canTakeItem(RuneAnvilMenu.this.playerInventory, finalI + 1, this.getItem());
                 }
             }));
         }
@@ -146,7 +122,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     public void apply() {
         if (!this.isServer) {
             PacketDistributor.sendToServer(new C2SRuneAnvilApplyPacket(this.containerId));
-            return;
         }
 
         ItemStack gear = this.gearSlot.getItem();
@@ -217,10 +192,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                 }
             }
         }
-    }
-
-    private void socketSlotChanged(int i) {
-
     }
 
     public void returnRunegems(@Nullable Player player) {
