@@ -8,6 +8,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
@@ -16,7 +17,8 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -38,15 +41,14 @@ public class PocRiftChunkGenerator extends ChunkGenerator {
 
     public static final MapCodec<PocRiftChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-        BiomeSource.CODEC.fieldOf("biome_source").forGetter(PocRiftChunkGenerator::getBiomeSource),
                 ResourceLocation.CODEC.fieldOf("custom_block").forGetter(PocRiftChunkGenerator::getCustomBlockID)
                 ).apply(instance, PocRiftChunkGenerator::new));
 
     private final ResourceLocation customBlockID;
     private final BlockState customBlock;
 
-    public PocRiftChunkGenerator(BiomeSource biomeSource, ResourceLocation defaultBlock) {
-        super(biomeSource);
+    public PocRiftChunkGenerator(ResourceLocation defaultBlock) {
+        super(new FixedBiomeSource(ServerLifecycleHooks.getCurrentServer().overworld().registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).get()));
         this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock).map(Holder.Reference::value).map(Block::defaultBlockState).orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
     }
@@ -161,7 +163,7 @@ public class PocRiftChunkGenerator extends ChunkGenerator {
     }
 
     @Override public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
-        return -64;
+        return 384;
     }
 
     @Override public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {

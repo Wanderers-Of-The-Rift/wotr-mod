@@ -43,9 +43,6 @@ public class TemporaryLevelManager {
         }
 
         ChunkGenerator chunkGen = getRiftChunkGenerator();
-        if (chunkGen == null) {
-            return null;
-        }
 
         var stem = getLevelStem(server, id, chunkGen);
         if (stem == null) {
@@ -96,8 +93,7 @@ public class TemporaryLevelManager {
     @SuppressWarnings("deprecation")
     public static void unregisterLevel(TemporaryLevel level) {
         level.save(null, true, false);
-        //TODO: what to do with LevelStem?
-        level.getServer().forgeGetWorldMap().remove(level);
+        level.getServer().forgeGetWorldMap().remove(level.dimension());
         NeoForge.EVENT_BUS.post(new LevelEvent.Unload(level));
         ResourceLocation id = level.getId();
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, true));
@@ -109,6 +105,6 @@ public class TemporaryLevelManager {
     }
 
     private static ChunkGenerator getRiftChunkGenerator() {
-        return new PocRiftChunkGenerator(ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().getGenerator().getBiomeSource(), ResourceLocation.withDefaultNamespace("melon"));
+        return new PocRiftChunkGenerator(ResourceLocation.withDefaultNamespace("melon"));
     }
 }
