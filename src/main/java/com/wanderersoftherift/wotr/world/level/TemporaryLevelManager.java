@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.neoforged.neoforge.common.NeoForge;
@@ -105,6 +107,7 @@ public class TemporaryLevelManager {
     }
 
     private static ChunkGenerator getRiftChunkGenerator() {
-        return new PocRiftChunkGenerator(ResourceLocation.withDefaultNamespace("melon"));
+        var voidBiomeSource =  new FixedBiomeSource(ServerLifecycleHooks.getCurrentServer().overworld().registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).get());
+        return new PocRiftChunkGenerator(voidBiomeSource, ResourceLocation.withDefaultNamespace("melon"));
     }
 }
