@@ -2,6 +2,7 @@ package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot;
 
 import com.dimensiondelvers.dimensiondelvers.init.ModAttachments;
 import com.dimensiondelvers.dimensiondelvers.init.ModDataComponentType;
+import com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot.containers.*;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -41,6 +42,7 @@ public class InventorySnapshotSystem {
 
     private InventorySnapshotSystem() {
         containerStrategies.add(new ComponentContainerType());
+        containerStrategies.add(new BundleContainerType());
     }
 
     public void registerContainerStrategy(ContainerType strategy) {
@@ -179,9 +181,11 @@ public class InventorySnapshotSystem {
                 } else {
                     boolean retainItem = shouldRetainNonStackable(item);
 
-                    for (ContainerItemWrapper content : getContents(item)) {
+                    ContainerWrapper contents = getContents(item);
+                    for (ContainerItemWrapper content : contents) {
                         processContainerItem(content, retainItem);
                     }
+                    contents.recordChanges();
 
                     if (retainItem) {
                         retainItems.add(item);
@@ -216,9 +220,11 @@ public class InventorySnapshotSystem {
             } else {
                 boolean retainItem = shouldRetainNonStackable(item);
 
-                for (ContainerItemWrapper content : getContents(item)) {
+                ContainerWrapper contents = getContents(item);
+                for (ContainerItemWrapper content : contents) {
                     processContainerItem(content, retainItem);
                 }
+                contents.recordChanges();
 
                 if (retainingContainer && !retainItem) {
                     List<ItemStack> dropItems = containerItem.remove();
@@ -279,22 +285,24 @@ public class InventorySnapshotSystem {
 
     private void clearItemIds(ContainerItemWrapper item) {
         item.applyComponents(REMOVE_SNAPSHOT_ID_PATCH);
-        for (ContainerItemWrapper content : getContents(item.getReadOnlyItemStack())) {
+        ContainerWrapper contents = getContents(item.getReadOnlyItemStack());
+        for (ContainerItemWrapper content : contents) {
             clearItemIds(content);
         }
+        contents.recordChanges();
     }
 
     /**
      * @param itemStack An item stack (that may or may not be a container)
      * @return An iterable over the contents of the given itemStack, if any
      */
-    private Iterable<ContainerItemWrapper> getContents(ItemStack itemStack) {
+    private ContainerWrapper getContents(ItemStack itemStack) {
         for (ContainerType strategy : containerStrategies) {
             if (strategy.isContainer(itemStack)) {
-                return strategy.iterateContainerContents(itemStack);
+                return strategy.getWrapper(itemStack);
             }
         }
-        return Collections.emptyList();
+        return NonContainerWrapper.INSTANCE;
     }
 
 }

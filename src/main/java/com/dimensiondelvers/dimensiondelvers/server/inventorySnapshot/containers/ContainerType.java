@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot;
+package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot.containers;
 
 import net.minecraft.world.item.ItemStack;
 
@@ -13,8 +13,9 @@ public interface ContainerType {
     boolean isContainer(ItemStack item);
 
     /**
-     * @return Iterator over the non-empty contents of the given container
+     * @return A container wrapper for working with the given container item
      */
-    Iterable<ContainerItemWrapper> iterateContainerContents(ItemStack item);
+    ContainerWrapper getWrapper(ItemStack item);
+
 
 }

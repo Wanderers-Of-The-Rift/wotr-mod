@@ -11,6 +11,8 @@
     "MixinServerPlayer"
   ],
   "client": [
+    "MixinAccessibilityOptionsScreen",
+    "MixinMinecraft"
   ],
   "injectors": {
     "defaultRequire": 1

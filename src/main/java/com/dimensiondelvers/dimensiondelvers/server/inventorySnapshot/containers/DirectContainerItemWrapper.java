@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot;
+package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot.containers;
 
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Wrapper for normal Minecraft item, as can be found in the CONTAINER data component or directly in a player's inventory
+ * Wrapper for directly working with an item stack for situations where that is appropriate.
  */
 public class DirectContainerItemWrapper implements ContainerItemWrapper {
 

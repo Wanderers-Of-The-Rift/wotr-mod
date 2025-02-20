@@ -38,5 +38,22 @@ public class ModLanguageProvider extends LanguageProvider {
         add("container.dimensiondelvers.rune_anvil.apply", "Apply");
         add("tooltip.dimensiondelvers.socket", "Sockets: ");
         add("container.dimensiondelvers.rift_chest", "Rift Chest");
+
+        add("accessibility.dimensiondelvers.screen.title", "Dimension Delvers: Accessibility Settings");
+        add("accessibility.dimensiondelvers.menubutton", "DimDelvers Accessibility (tmp)");
+        add("accessibility.dimensiondelvers.screen.trypophobia", "Trypophobia");
+        add("accessibility.dimensiondelvers.screen.arachnophobia", "Arachnophobia");
+        add("accessibility.dimensiondelvers.screen.flashing_lights", "Flashing Lights");
+        add("accessibility.dimensiondelvers.screen.misophonia", "Misophonia");
+        add("accessibility.dimensiondelvers.screen.high_contrast", "High Contrast");
+        add("accessibility.dimensiondelvers.screen.hard_of_hearing", "Hard of Hearing");
+        add("accessibility.dimensiondelvers.screen.reduced_motion", "Reduced Motion");
+        add("accessibility.dimensiondelvers.screen.tooltip.trypophobia", "Removes any trypophobia-triggering aspects");
+        add("accessibility.dimensiondelvers.screen.tooltip.arachnophobia", "Replaces all the spiders with cute cats!");
+        add("accessibility.dimensiondelvers.screen.tooltip.flashing_lights", "Reduces flashing-light effects");
+        add("accessibility.dimensiondelvers.screen.tooltip.misophonia", "Replaces certain sounds that are potentially triggering with different ones (?)");
+        add("accessibility.dimensiondelvers.screen.tooltip.high_contrast", "Enhances UI and HUD elements with higher contrast for better visibility");
+        add("accessibility.dimensiondelvers.screen.tooltip.hard_of_hearing", "Enhances audio cues for better accessibility");
+        add("accessibility.dimensiondelvers.screen.tooltip.reduced_motion", "Disables or slows down UI animations, camera shake, or screen effects");
     }
 }
