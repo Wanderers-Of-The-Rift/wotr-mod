@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 
-import static com.dimensiondelvers.dimensiondelvers.init.ModModifiers.MODIFIER_KEY;
+import static com.dimensiondelvers.dimensiondelvers.init.ModDatapackRegistries.MODIFIER_KEY;
 
 public class Modifier {
     public static Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(

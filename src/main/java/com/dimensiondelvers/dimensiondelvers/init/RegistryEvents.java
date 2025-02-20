@@ -1,6 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.init;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
+import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.modifier.Modifier;
 import com.dimensiondelvers.dimensiondelvers.modifier.effect.AbstractModifierEffect;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,9 +24,14 @@ public class RegistryEvents {
                 AbstractModifierEffect.DIRECT_CODEC
         );
         event.dataPackRegistry(
-                ModModifiers.MODIFIER_KEY,
+                ModDatapackRegistries.MODIFIER_KEY,
                 Modifier.DIRECT_CODEC,
                 Modifier.DIRECT_CODEC
+        );
+        event.dataPackRegistry(
+                ModDatapackRegistries.RUNEGEM_DATA_KEY,
+                RunegemData.CODEC,
+                RunegemData.CODEC
         );
     }
 }
