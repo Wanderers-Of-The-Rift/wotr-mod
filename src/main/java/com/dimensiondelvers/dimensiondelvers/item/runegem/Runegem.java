@@ -53,5 +53,4 @@ public class Runegem extends Item {
 
         return super.getTooltipImage(stack);
     }
-
 }
