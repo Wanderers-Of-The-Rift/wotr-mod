@@ -8,10 +8,9 @@ import com.dimensiondelvers.dimensiondelvers.init.ModMenuTypes;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RunegemData;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSocket;
 import com.dimensiondelvers.dimensiondelvers.item.socket.GearSockets;
+import com.dimensiondelvers.dimensiondelvers.mixin.InvokerAbstractContainerMenu;
 import com.dimensiondelvers.dimensiondelvers.network.C2SRuneAnvilApplyPacket;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -205,22 +204,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                 continue;
             }
 
-            // this is copied over and cleaned up from AbstractContainerMenu.dropOrPlaceInInventory because its private for somefuckingreason
-            boolean flag = player.isRemoved() && player.getRemovalReason() != Entity.RemovalReason.CHANGED_DIMENSION;
-            boolean flag2 = false;
-            if (player instanceof ServerPlayer serverplayer) {
-                if (serverplayer.hasDisconnected()) {
-                    flag2 = true;
-                }
-            }
-
-            if (!flag && !flag2) {
-                if (player instanceof ServerPlayer) {
-                    player.getInventory().placeItemBackInInventory(stack);
-                }
-            } else {
-                player.drop(stack, false);
-            }
+            InvokerAbstractContainerMenu.dropOrPlaceInInventory(player, stack);
 
             socketSlot.set(ItemStack.EMPTY);
         }
