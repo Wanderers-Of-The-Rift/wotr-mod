@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot;
+package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot.containers;
 
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;

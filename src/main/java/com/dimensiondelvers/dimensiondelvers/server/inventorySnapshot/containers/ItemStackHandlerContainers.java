@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot;
+package com.dimensiondelvers.dimensiondelvers.server.inventorySnapshot.containers;
 
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
@@ -9,7 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Interop for working with containers that use Neoforge's ItemStackHandler interface
+ * Interop for working with containers that use Neoforge's ItemStackHandler interface. For use in producing
+ * container types for mods
  */
 public final class ItemStackHandlerContainers {
 
