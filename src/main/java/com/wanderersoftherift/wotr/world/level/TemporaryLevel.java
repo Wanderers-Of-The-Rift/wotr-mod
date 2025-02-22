@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.world.level;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -41,6 +42,12 @@ public class TemporaryLevel extends ServerLevel {
         var storageSource = server.getStorageSource();
         var worldData = server.getWorldData();
         var executor = server.getExecutor();
+
+        if (portalDimension == null || portalPos == null) {
+            WanderersOfTheRift.LOGGER.warn("Tried to create rift {} with portal from dimension {} at position {}, using overworld spawnpoint instead.",id, portalDimension, portalPos);
+            portalDimension = Level.OVERWORLD;
+            portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
+        }
 
         return new TemporaryLevel(
             ServerLifecycleHooks.getCurrentServer(),

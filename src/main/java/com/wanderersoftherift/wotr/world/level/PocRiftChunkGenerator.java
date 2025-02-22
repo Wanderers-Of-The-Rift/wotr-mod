@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,12 +23,15 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 
 // https://wiki.fabricmc.net/tutorial:chunkgenerator
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class PocRiftChunkGenerator extends ChunkGenerator {
 
     public static final MapCodec<PocRiftChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->

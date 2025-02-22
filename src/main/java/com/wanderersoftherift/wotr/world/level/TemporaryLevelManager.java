@@ -13,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -57,7 +58,10 @@ public class TemporaryLevelManager {
             return null;
         }
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator();
+        ChunkGenerator chunkGen = getRiftChunkGenerator(ow);
+        if (chunkGen == null){
+            return null;
+        }
 
         var stem = getLevelStem(server, id, chunkGen);
         if (stem == null) {
@@ -92,7 +96,11 @@ public class TemporaryLevelManager {
         }
 
         var riftType = server.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE)
-            .get(RiftDimensionType.RIFT_DIMENSION_TYPE).get();
+            .get(RiftDimensionType.RIFT_DIMENSION_TYPE).orElse(null);
+        if (riftType == null){
+            WanderersOfTheRift.LOGGER.error("Failed to get rift dimension type");
+            return null;
+        }
         var stem = new LevelStem(riftType, chunkGen);
         var stemRegistry = levelStemRegistry.get();
         if (stemRegistry instanceof MappedRegistry<LevelStem> mappedStemRegistry) {
@@ -103,20 +111,6 @@ public class TemporaryLevelManager {
             mappedStemRegistry.freeze();
         }
         return stem;
-    }
-
-    @SuppressWarnings("deprecation")
-    public static void unregisterLevel(TemporaryLevel level) {
-        if (!level.getPlayers().isEmpty()) {
-            return;
-        }
-        level.save(null, true, false);
-        level.getServer().forgeGetWorldMap().remove(level.dimension());
-        NeoForge.EVENT_BUS.post(new LevelEvent.Unload(level));
-        ResourceLocation id = level.getId();
-        PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, true));
-        level.getServer().markWorldsDirty();
-        TemporaryLevelManager.levels.remove(level);
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
@@ -139,7 +133,7 @@ public class TemporaryLevelManager {
         var dimPath = ((AccessorMinecraftServer)level.getServer()).getStorageSource().getDimensionPath(level.dimension());
         WanderersOfTheRift.LOGGER.info("Deleting level {}", dimPath);
         try {
-            Files.walkFileTree(dimPath, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(dimPath, new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes attributes) throws IOException {
                     WanderersOfTheRift.LOGGER.debug("Deleting {}", path);
@@ -177,16 +171,19 @@ public class TemporaryLevelManager {
                 }
                 ((AccessorMappedRegistry<Level>)mr).getToId().remove(holder.value());
                 ((AccessorMappedRegistry<Level>)mr).getById().set(dimId, null);
-                ((AccessorMappedRegistry<Level>)mr).getByKey().remove(holder);
-                ((AccessorMappedRegistry<Level>)mr).getByValue().remove(holder);
+                ((AccessorMappedRegistry<Level>)mr).getByKey().remove(holder.key());
+                ((AccessorMappedRegistry<Level>)mr).getByValue().remove(holder.value());
                 ((AccessorMappedRegistry<Level>)mr).getRegistrationInfos().remove(holder.key());
             }
         });
         level.getServer().overworld().save(null, true, false);
     }
 
-    private static ChunkGenerator getRiftChunkGenerator() {
-        var voidBiomeSource =  new FixedBiomeSource(ServerLifecycleHooks.getCurrentServer().overworld().registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).get());
-        return new PocRiftChunkGenerator(voidBiomeSource, ResourceLocation.withDefaultNamespace("melon"));
+    private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld) {
+        var voidBiome = overworld.registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).orElse(null);
+        if (voidBiome == null){
+            return null;
+        }
+        return new PocRiftChunkGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("melon"));
     }
 }
