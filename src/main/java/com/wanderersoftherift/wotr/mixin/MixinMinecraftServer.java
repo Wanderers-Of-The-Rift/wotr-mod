@@ -31,11 +31,11 @@ public abstract class MixinMinecraftServer {
     // It will then create TemporaryLevel for each rift and load it
     // nonRifts will be passed back for normal loading
     @WrapOperation(method = "createLevels", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;entrySet()Ljava/util/Set;"))
-    private Set<Map.Entry<ResourceKey<LevelStem>, LevelStem>> createRift(Registry<LevelStem> instance, Operation<Set<Map.Entry<ResourceKey<LevelStem>, LevelStem>>> original){
+    private Set<Map.Entry<ResourceKey<LevelStem>, LevelStem>> createRift(Registry<LevelStem> instance, Operation<Set<Map.Entry<ResourceKey<LevelStem>, LevelStem>>> original) {
         var originalSet = original.call(instance);
         var rifts = originalSet.stream().filter(e -> e.getKey().location().getNamespace().equals("wotr")).toList();
         var nonRifts = originalSet.stream().filter(e -> !e.getKey().location().getNamespace().equals("wotr")).collect(Collectors.toSet());
-        for (Map.Entry<ResourceKey<LevelStem>, LevelStem> rift : rifts){
+        for (Map.Entry<ResourceKey<LevelStem>, LevelStem> rift : rifts) {
             var level = TemporaryLevel.create(rift.getKey().location(), rift.getValue(), null, null);
             this.forgeGetWorldMap().put(ResourceKey.create(Registries.DIMENSION, rift.getKey().location()), level);
             NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));

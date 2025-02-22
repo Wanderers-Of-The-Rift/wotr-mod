@@ -18,6 +18,7 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 
 public class TemporaryLevel extends ServerLevel {
@@ -53,7 +54,7 @@ public class TemporaryLevel extends ServerLevel {
             0L,
             List.of(),
             false,
-            ServerLifecycleHooks.getCurrentServer().overworld().getRandomSequences(),
+            null,
             id,
             portalDimension,
             portalPos
@@ -71,4 +72,17 @@ public class TemporaryLevel extends ServerLevel {
     public BlockPos getPortalPos() {
         return data.getPortalPos();
     }
+
+    public List<UUID> getPlayers() {
+        return data.getPlayers();
+    }
+
+    public void removePlayer(UUID player) {
+        data.removePlayer(player);
+    }
+
+    public void addPlayer(UUID player) {
+        data.addPlayer(player);
+    }
+
 }

@@ -32,7 +32,7 @@ public class RiftPortalBlock extends Block {
         } else {
             if (level instanceof TemporaryLevel temporaryLevel) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    TemporaryLevelManager.unregisterLevel(temporaryLevel);
+
                     ResourceKey<Level> respawnKey = temporaryLevel.getPortalDimension();
                     if (respawnKey == level.dimension()) {
                         respawnKey = Level.OVERWORLD;
@@ -43,6 +43,8 @@ public class RiftPortalBlock extends Block {
                     }
                     var respawnPos = temporaryLevel.getPortalPos().above();
                     player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
+                    temporaryLevel.removePlayer(player.getUUID());
+                    TemporaryLevelManager.unregisterAndDeleteLevel(temporaryLevel);
                 } else {
                     player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 }
@@ -64,6 +66,7 @@ public class RiftPortalBlock extends Block {
                 player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 return InteractionResult.FAIL;
             }
+            lvl.addPlayer(player.getUUID());
             player.displayClientMessage(Component.literal("Created rift with id: " + lvl.getId()), true);
             player.teleportTo(lvl, 0.5, 0, 0.5, Set.of(), player.getYRot(), player.getXRot(), false);
             NeoForge.EVENT_BUS.post(new PlayerEvent.PlayerChangedDimensionEvent(player, level.dimension(), lvl.dimension()));

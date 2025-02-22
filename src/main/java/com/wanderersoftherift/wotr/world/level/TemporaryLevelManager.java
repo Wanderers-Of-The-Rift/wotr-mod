@@ -2,8 +2,11 @@ package com.wanderersoftherift.wotr.world.level;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
+import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -20,6 +23,12 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,17 +36,21 @@ import java.util.Optional;
 public class TemporaryLevelManager {
     private static final List<TemporaryLevel> levels = new ArrayList<>();
 
-    // TODO: deregister and delete files after exiting rift
     public static TemporaryLevel createRiftLevel(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         // Blockpos until we store dimension id in the portal
         ResourceLocation id = WanderersOfTheRift.id("rift_" + portalPos.getX() + "_" + portalPos.getY() + "_" + portalPos.getZ()/* UUID.randomUUID()*/);
-        return createRiftLevel(id, portalDimension, portalPos);
+        return getOrCreateRiftLevel(id, portalDimension, portalPos);
     }
 
     @SuppressWarnings("deprecation")
-    public static TemporaryLevel createRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    public static TemporaryLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var ow = server.overworld();
+
+        var existingRift = levels.stream().filter(level -> level.getId().equals(id)).findAny();
+        if (existingRift.isPresent()) {
+            return existingRift.get();
+        }
 
         Optional<Registry<Level>> dimensionRegistry = ow.registryAccess().lookup(Registries.DIMENSION);
         if (dimensionRegistry.isEmpty()) {
@@ -94,6 +107,9 @@ public class TemporaryLevelManager {
 
     @SuppressWarnings("deprecation")
     public static void unregisterLevel(TemporaryLevel level) {
+        if (!level.getPlayers().isEmpty()) {
+            return;
+        }
         level.save(null, true, false);
         level.getServer().forgeGetWorldMap().remove(level.dimension());
         NeoForge.EVENT_BUS.post(new LevelEvent.Unload(level));
@@ -103,7 +119,70 @@ public class TemporaryLevelManager {
         TemporaryLevelManager.levels.remove(level);
     }
 
-    public static void deleteLevel(TemporaryLevel level) {
+    @SuppressWarnings({"unchecked", "deprecation"})
+    public static void unregisterAndDeleteLevel(TemporaryLevel level) {
+        if (!level.getPlayers().isEmpty()) {
+            // multiplayer
+            return;
+        }
+
+        // unload the level
+        level.save(null, true, false);
+        level.getServer().forgeGetWorldMap().remove(level.dimension());
+        NeoForge.EVENT_BUS.post(new LevelEvent.Unload(level));
+        ResourceLocation id = level.getId();
+        PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, true));
+        level.getServer().markWorldsDirty();
+        TemporaryLevelManager.levels.remove(level);
+
+        // Delete level files
+        var dimPath = ((AccessorMinecraftServer)level.getServer()).getStorageSource().getDimensionPath(level.dimension());
+        WanderersOfTheRift.LOGGER.info("Deleting level {}", dimPath);
+        try {
+            Files.walkFileTree(dimPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path path, BasicFileAttributes attributes) throws IOException {
+                    WanderersOfTheRift.LOGGER.debug("Deleting {}", path);
+                    Files.delete(path);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path path, IOException exception) throws IOException {
+                    if (exception != null) {
+                        throw exception;
+                    } else {
+                        Files.deleteIfExists(path);
+                        return FileVisitResult.CONTINUE;
+                    }
+                }
+            });
+        } catch (IOException var7) {
+            WanderersOfTheRift.LOGGER.error("Failed to delete level", var7);
+        }
+
+        // dimensions are also saved in level.dat
+        // this monstrosity deletes them from the registry to prevent reloading them on next server start
+        level.getServer().registryAccess().lookupOrThrow(Registries.DIMENSION).get(level.dimension()).ifPresent(dim -> {
+            if (level.getServer().registryAccess().lookupOrThrow(Registries.DIMENSION) instanceof MappedRegistry<Level> mr) {
+                Holder.Reference<Level> holder = ((AccessorMappedRegistry<Level>)mr).getByLocation().remove(id);
+                if (holder == null) {
+                    WanderersOfTheRift.LOGGER.error("Failed to remove level from registry (null holder)");
+                    return;
+                }
+                int dimId = mr.getId(level.dimension());
+                if (dimId == -1){
+                    WanderersOfTheRift.LOGGER.error("Failed to remove level from registry (id -1)");
+                    return;
+                }
+                ((AccessorMappedRegistry<Level>)mr).getToId().remove(holder.value());
+                ((AccessorMappedRegistry<Level>)mr).getById().set(dimId, null);
+                ((AccessorMappedRegistry<Level>)mr).getByKey().remove(holder);
+                ((AccessorMappedRegistry<Level>)mr).getByValue().remove(holder);
+                ((AccessorMappedRegistry<Level>)mr).getRegistrationInfos().remove(holder.key());
+            }
+        });
+        level.getServer().overworld().save(null, true, false);
     }
 
     private static ChunkGenerator getRiftChunkGenerator() {
