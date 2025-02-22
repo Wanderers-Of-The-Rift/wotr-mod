@@ -1,0 +1,34 @@
+{
+  "fallback": "dimensiondelvers:rift/terminator",
+
+  "elements": [
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "dimensiondelvers:rift/room/unstable/333/dev_test",
+
+        "processors": "dimensiondelvers:forest",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "dimensiondelvers:rift/room/unstable/313/dev_test",
+
+        "processors": "dimensiondelvers:forest",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

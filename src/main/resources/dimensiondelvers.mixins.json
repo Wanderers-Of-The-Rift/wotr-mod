@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "dimensiondelvers.refmap.json",
   "mixins": [
-    "MixinEnchantingTableBlock"
+    "InvokerBlockBehaviour",
+    "MixinEnchantingTableBlock",
+    "MixinStructureTemplate"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",

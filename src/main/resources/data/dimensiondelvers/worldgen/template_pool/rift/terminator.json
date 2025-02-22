@@ -1,0 +1,20 @@
+{
+  "fallback": "minecraft:empty",
+
+  "elements": [
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "dimensiondelvers:rift/terminator/flat",
+
+        "processors": "dimensiondelvers:forest",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

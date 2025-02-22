@@ -1,6 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.init;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
+import com.dimensiondelvers.dimensiondelvers.item.BuilderGlasses;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemShape;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.RuneGemTier;
 import com.dimensiondelvers.dimensiondelvers.item.runegem.Runegem;
@@ -33,6 +34,11 @@ public class ModItems {
                     .saturationModifier(2f)
                     .build()
             )
+    );
+
+    public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register(
+            "builder_glasses",
+            BuilderGlasses::new
     );
 
     //Runegems

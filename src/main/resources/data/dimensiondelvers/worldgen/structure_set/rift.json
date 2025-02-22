@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "dimensiondelvers:rift",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+
+    "salt": 9841464,
+
+    "spacing": 12,
+
+    "separation": 4
+  }
+}
