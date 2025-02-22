@@ -98,7 +98,7 @@
     {
       "processor_type": "dimensiondelvers:attachment",
       "requires_sides": 1,
-      "rarity": 0.4,
+      "rarity": 0.3,
       "blockstate": {
         "Name": "minecraft:oak_leaves",
         "Properties": {
@@ -111,7 +111,7 @@
     {
       "processor_type": "dimensiondelvers:attachment",
       "requires_sides": 1,
-      "rarity": 0.2,
+      "rarity": 0.1,
       "blockstate": {
         "Name": "minecraft:oak_leaves",
         "Properties": {
@@ -124,7 +124,7 @@
     {
       "processor_type": "dimensiondelvers:attachment",
       "requires_up": true,
-      "rarity": 0.6,
+      "rarity": 0.4,
       "blockstate": {
         "Name": "minecraft:oak_leaves",
         "Properties": {
@@ -136,7 +136,7 @@
     },
     {
       "processor_type": "dimensiondelvers:vines",
-      "rarity": 0.2
+      "rarity": 0.1
     }
   ]
 }
