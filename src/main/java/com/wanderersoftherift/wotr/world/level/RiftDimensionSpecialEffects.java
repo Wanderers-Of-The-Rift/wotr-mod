@@ -10,7 +10,7 @@ import org.joml.Matrix4f;
 public class RiftDimensionSpecialEffects extends DimensionSpecialEffects {
     public RiftDimensionSpecialEffects() {
         super(
-                0.0f,
+                Float.NaN,
                 false,
                 DimensionSpecialEffects.SkyType.NONE,
                 true, // idk, might want to change this no clue what it does tbh
