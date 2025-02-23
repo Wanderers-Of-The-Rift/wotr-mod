@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.world.level;
+package com.wanderersoftherift.wotr.core.rift;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -22,28 +22,28 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RiftSavedData extends SavedData {
+public class RiftData extends SavedData {
     private final ResourceKey<Level> portalDimension;
     private final BlockPos portalPos;
     private final List<UUID> players;
 
 
-    public static SavedData.Factory<RiftSavedData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
-        return new SavedData.Factory<>(() -> new RiftSavedData(portalDimension, portalPos, List.of()), RiftSavedData::load);
+    public static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
+        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of()), RiftData::load);
     }
 
-    private RiftSavedData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
+    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new ArrayList<>(Objects.requireNonNull(players));
     }
 
-    public static RiftSavedData load(CompoundTag tag, HolderLookup.Provider registries) {
+    public static RiftData load(CompoundTag tag, HolderLookup.Provider registries) {
         ResourceLocation portalDimensionLocation = ResourceLocation.parse(tag.getString("PortalDimension"));
         ResourceKey<Level> portalDimension = ResourceKey.create(Registries.DIMENSION, portalDimensionLocation);
         List<UUID> players = new ArrayList<>();
         tag.getList("Players", Tag.TAG_STRING).forEach( player -> players.add(UUID.fromString(player.getAsString())));
-        return new RiftSavedData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players);
+        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players);
     }
 
     @Override

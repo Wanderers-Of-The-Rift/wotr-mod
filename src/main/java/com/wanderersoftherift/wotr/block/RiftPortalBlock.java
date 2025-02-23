@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.block;
 
-import com.wanderersoftherift.wotr.world.level.TemporaryLevel;
-import com.wanderersoftherift.wotr.world.level.TemporaryLevelManager;
+import com.wanderersoftherift.wotr.core.rift.RiftLevel;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -31,10 +31,10 @@ public class RiftPortalBlock extends Block {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level,BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide) {
-            if (level instanceof TemporaryLevel temporaryLevel) {
+            if (level instanceof RiftLevel riftLevel) {
                 if (player instanceof ServerPlayer serverPlayer) {
 
-                    ResourceKey<Level> respawnKey = temporaryLevel.getPortalDimension();
+                    ResourceKey<Level> respawnKey = riftLevel.getPortalDimension();
                     if (respawnKey == level.dimension()) {
                         respawnKey = Level.OVERWORLD;
                     }
@@ -42,10 +42,10 @@ public class RiftPortalBlock extends Block {
                     if (respawnDimension == null) {
                         respawnDimension = level.getServer().overworld();
                     }
-                    var respawnPos = temporaryLevel.getPortalPos().above();
+                    var respawnPos = riftLevel.getPortalPos().above();
                     player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
-                    temporaryLevel.removePlayer(player.getUUID());
-                    TemporaryLevelManager.unregisterAndDeleteLevel(temporaryLevel);
+                    riftLevel.removePlayer(player.getUUID());
+                    RiftLevelManager.unregisterAndDeleteLevel(riftLevel);
                 } else {
                     player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 }
@@ -63,7 +63,7 @@ public class RiftPortalBlock extends Block {
                 }
                 return InteractionResult.SUCCESS;
             }
-            TemporaryLevel lvl = TemporaryLevelManager.createRiftLevel(level.dimension(), pos);
+            RiftLevel lvl = RiftLevelManager.createRiftLevel(level.dimension(), pos);
             if (lvl == null) {
                 player.displayClientMessage(Component.literal("Failed to create rift"), true);
                 return InteractionResult.FAIL;

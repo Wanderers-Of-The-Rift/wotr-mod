@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.world.level;
+package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
@@ -22,21 +22,21 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 
-public class TemporaryLevel extends ServerLevel {
+public class RiftLevel extends ServerLevel {
     private final ResourceLocation id;
-    private final RiftSavedData data;
+    private final RiftData data;
 
-    private TemporaryLevel(MinecraftServer server, Executor dispatcher, LevelStorageSource.LevelStorageAccess levelStorageAccess,
-                           ServerLevelData serverLevelData, ResourceKey<Level> dimension, LevelStem levelStem, ChunkProgressListener progressListener,
-                           boolean isDebug, long biomeZoomSeed, List<CustomSpawner> customSpawners, boolean tickTime,
-                           RandomSequences randomSequences, ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    private RiftLevel(MinecraftServer server, Executor dispatcher, LevelStorageSource.LevelStorageAccess levelStorageAccess,
+                      ServerLevelData serverLevelData, ResourceKey<Level> dimension, LevelStem levelStem, ChunkProgressListener progressListener,
+                      boolean isDebug, long biomeZoomSeed, List<CustomSpawner> customSpawners, boolean tickTime,
+                      RandomSequences randomSequences, ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         super(server, dispatcher, levelStorageAccess, serverLevelData, dimension, levelStem, progressListener, isDebug, biomeZoomSeed, customSpawners, tickTime, randomSequences);
         this.id = id;
-        this.data = this.getDataStorage().computeIfAbsent(RiftSavedData.factory(portalDimension, portalPos), "data_"+ id.getPath());
+        this.data = this.getDataStorage().computeIfAbsent(RiftData.factory(portalDimension, portalPos), "data_"+ id.getPath());
     }
 
 
-    public static TemporaryLevel create(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    public static RiftLevel create(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
         var chunkProgressListener = server.getProgressListenerFactory().create(0);
         var storageSource = server.getStorageSource();
@@ -49,7 +49,7 @@ public class TemporaryLevel extends ServerLevel {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        return new TemporaryLevel(
+        return new RiftLevel(
             ServerLifecycleHooks.getCurrentServer(),
             executor,
             storageSource,

@@ -1,10 +1,12 @@
-package com.wanderersoftherift.wotr.world.level;
+package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
+import com.wanderersoftherift.wotr.world.level.PocRiftChunkGenerator;
+import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
@@ -30,27 +32,28 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class TemporaryLevelManager {
-    private static final List<TemporaryLevel> levels = new ArrayList<>();
+public class RiftLevelManager {
+    private static final Map<ResourceLocation, RiftLevel> activeRifts = new HashMap<>();
 
-    public static TemporaryLevel createRiftLevel(ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    public static RiftLevel createRiftLevel(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         // Blockpos until we store dimension id in the portal
         ResourceLocation id = WanderersOfTheRift.id("rift_" + portalPos.getX() + "_" + portalPos.getY() + "_" + portalPos.getZ()/* UUID.randomUUID()*/);
         return getOrCreateRiftLevel(id, portalDimension, portalPos);
     }
 
     @SuppressWarnings("deprecation")
-    public static TemporaryLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    public static RiftLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var ow = server.overworld();
 
-        var existingRift = levels.stream().filter(level -> level.getId().equals(id)).findAny();
-        if (existingRift.isPresent()) {
-            return existingRift.get();
+        var existingRift = activeRifts.get(id);
+        if (existingRift != null) {
+            WanderersOfTheRift.LOGGER.debug("Found existing rift level {}", id);
+            return existingRift;
         }
 
         Optional<Registry<Level>> dimensionRegistry = ow.registryAccess().lookup(Registries.DIMENSION);
@@ -68,7 +71,7 @@ public class TemporaryLevelManager {
             return null;
         }
 
-        TemporaryLevel level = TemporaryLevel.create(id, stem, portalDimension, portalPos);
+        RiftLevel level = RiftLevel.create(id, stem, portalDimension, portalPos);
 
         Registry<Level> registry = dimensionRegistry.get();
         if (registry instanceof MappedRegistry<Level> mappedRegistry) {
@@ -83,8 +86,9 @@ public class TemporaryLevelManager {
         level.getServer().markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
-        TemporaryLevelManager.levels.add(level);
+        addActiveRift(level);
         level.setBlock(new BlockPos(0, -1, 0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
+        WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
     }
 
@@ -114,7 +118,7 @@ public class TemporaryLevelManager {
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
-    public static void unregisterAndDeleteLevel(TemporaryLevel level) {
+    public static void unregisterAndDeleteLevel(RiftLevel level) {
         if (!level.getPlayers().isEmpty()) {
             // multiplayer
             return;
@@ -127,7 +131,7 @@ public class TemporaryLevelManager {
         ResourceLocation id = level.getId();
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, true));
         level.getServer().markWorldsDirty();
-        TemporaryLevelManager.levels.remove(level);
+        RiftLevelManager.activeRifts.remove(level.getId());
 
         // Delete level files
         var dimPath = ((AccessorMinecraftServer)level.getServer()).getStorageSource().getDimensionPath(level.dimension());
@@ -145,14 +149,13 @@ public class TemporaryLevelManager {
                 public FileVisitResult postVisitDirectory(Path path, IOException exception) throws IOException {
                     if (exception != null) {
                         throw exception;
-                    } else {
-                        Files.deleteIfExists(path);
-                        return FileVisitResult.CONTINUE;
                     }
+                    Files.deleteIfExists(path);
+                    return FileVisitResult.CONTINUE;
                 }
             });
-        } catch (IOException var7) {
-            WanderersOfTheRift.LOGGER.error("Failed to delete level", var7);
+        } catch (IOException e) {
+            WanderersOfTheRift.LOGGER.error("Failed to delete level", e);
         }
 
         // dimensions are also saved in level.dat
@@ -185,5 +188,12 @@ public class TemporaryLevelManager {
             return null;
         }
         return new PocRiftChunkGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("melon"));
+    }
+
+    public static void addActiveRift(RiftLevel level) {
+        if (level == null) {
+            return;
+        }
+        activeRifts.put(level.getId(), level);
     }
 }
