@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
+import net.minecraft.util.RandomSource;
 
 import java.util.function.IntFunction;
 
@@ -47,5 +48,4 @@ public enum RunegemTier {
         }
         return defaultReturn;
     }
-
 }
