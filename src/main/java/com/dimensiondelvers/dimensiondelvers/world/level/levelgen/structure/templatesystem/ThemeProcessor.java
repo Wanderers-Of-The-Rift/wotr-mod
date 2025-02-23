@@ -3,6 +3,7 @@ package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.tem
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil;
 import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.theme.LevelRiftThemeData;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -26,7 +27,6 @@ public class ThemeProcessor extends StructureProcessor {
     public static final MapCodec<ThemeProcessor> CODEC = MapCodec.unit(ThemeProcessor::new);
 
     private static final long SEED = 268431L;
-
 
     public ThemeProcessor() {
     }
@@ -59,19 +59,21 @@ public class ThemeProcessor extends StructureProcessor {
 
     private List<StructureProcessor> getThemeProcessors(LevelReader world, BlockPos piecePos, BlockPos structurePos) {
         if(world instanceof ServerLevel serverLevel) {
+            LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
+            if(riftThemeData.getTheme() != null) {
+                return riftThemeData.getTheme().processors().value().list();
+            }
             return randomThemeProcessors(serverLevel, piecePos, structurePos);
         }
         return new ArrayList<>();
     }
-
-
 
     private List<StructureProcessor> randomThemeProcessors(ServerLevel world, BlockPos piecePos, BlockPos structurePos) {
         Optional<Registry<StructureProcessorList>> registryReference = world.registryAccess().lookup(Registries.PROCESSOR_LIST);
         if (registryReference.isPresent()) {
             RandomSource random = ProcessorUtil.getRandom(StructureRandomType.STRUCTURE, structurePos, piecePos, structurePos, world, SEED);
             List<StructureProcessorList> processorLists = new ArrayList<>();
-            processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "forest")).get().value());
+            //processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "forest")).get().value());
             processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "cave")).get().value());
             return processorLists.get(random.nextInt(processorLists.size())).list();
         }
