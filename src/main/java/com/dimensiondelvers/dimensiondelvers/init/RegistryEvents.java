@@ -31,7 +31,7 @@ public class RegistryEvents {
         event.dataPackRegistry(
                 ModRiftThemes.RIFT_THEME_KEY,
                 RiftTheme.DIRECT_CODEC,
-                RiftTheme.DIRECT_CODEC
+                RiftTheme.DIRECT_SYNC_CODEC
         );
     }
 }
