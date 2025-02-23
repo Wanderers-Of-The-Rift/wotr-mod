@@ -1,0 +1,7 @@
+{
+  "processors": [
+    {
+      "processor_type": "dimensiondelvers:rift_theme"
+    }
+  ]
+}

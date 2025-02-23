@@ -11,7 +11,8 @@ import java.util.function.Supplier;
 public class ModProcessors {
     public static final DeferredRegister<StructureProcessorType<?>> PROCESSORS = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR,DimensionDelvers.MODID);
 
-    // Add VINES
+    public static final Supplier<StructureProcessorType<ThemeProcessor>> RIFT_THEME = PROCESSORS.register("rift_theme", () -> () -> ThemeProcessor.CODEC);
+
     public static final Supplier<StructureProcessorType<GradientReplaceProcessor>> GRADIENT_SPOT_REPLACE = PROCESSORS.register("spot_gradient", () -> () -> GradientReplaceProcessor.CODEC);
     public static final Supplier<StructureProcessorType<WeightedReplaceProcessor>> WEIGHTED_REPLACE = PROCESSORS.register("weighted_replace", () -> () -> WeightedReplaceProcessor.CODEC);
     public static final Supplier<StructureProcessorType<AttachmentProcessor>> ATTACHMENT = PROCESSORS.register("attachment", () -> () -> AttachmentProcessor.CODEC);

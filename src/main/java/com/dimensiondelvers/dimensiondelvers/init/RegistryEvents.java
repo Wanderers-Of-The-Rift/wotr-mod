@@ -3,6 +3,7 @@ package com.dimensiondelvers.dimensiondelvers.init;
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
 import com.dimensiondelvers.dimensiondelvers.modifier.Modifier;
 import com.dimensiondelvers.dimensiondelvers.modifier.effect.AbstractModifierEffect;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.theme.RiftTheme;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
@@ -26,6 +27,11 @@ public class RegistryEvents {
                 ModModifiers.MODIFIER_KEY,
                 Modifier.DIRECT_CODEC,
                 Modifier.DIRECT_CODEC
+        );
+        event.dataPackRegistry(
+                ModRiftThemes.RIFT_THEME_KEY,
+                RiftTheme.DIRECT_CODEC,
+                RiftTheme.DIRECT_CODEC
         );
     }
 }

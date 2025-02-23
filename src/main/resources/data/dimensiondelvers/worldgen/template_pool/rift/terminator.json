@@ -9,7 +9,7 @@
 
         "location": "dimensiondelvers:rift/terminator/flat",
 
-        "processors": "dimensiondelvers:forest",
+        "processors": "dimensiondelvers:rift_default",
 
         "projection": "rigid",
 

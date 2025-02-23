@@ -9,7 +9,7 @@
 
         "location": "dimensiondelvers:rift/room/unstable/333/dev_test",
 
-        "processors": "dimensiondelvers:forest",
+        "processors": "dimensiondelvers:rift_default",
 
         "projection": "rigid",
 
@@ -23,7 +23,7 @@
 
         "location": "dimensiondelvers:rift/room/unstable/313/dev_test",
 
-        "processors": "dimensiondelvers:forest",
+        "processors": "dimensiondelvers:rift_default",
 
         "projection": "rigid",
 
