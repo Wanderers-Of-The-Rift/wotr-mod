@@ -17,15 +17,22 @@ import static com.dimensiondelvers.dimensiondelvers.init.ModDatapackRegistries.M
 
 public class Modifier {
     public static Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
+            Codec.INT.fieldOf("tier").forGetter(Modifier::getTier),
             AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects)
     ).apply(inst, Modifier::new));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(MODIFIER_KEY);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs.holderRegistry(MODIFIER_KEY);
 
+    private final int tier;
     private final List<AbstractModifierEffect> modifierEffects;
 
-    public Modifier(List<AbstractModifierEffect> modifierEffects) {
+    public Modifier(int tier, List<AbstractModifierEffect> modifierEffects) {
+        this.tier = tier;
         this.modifierEffects = modifierEffects;
+    }
+
+    public int getTier() {
+        return tier;
     }
 
     public List<AbstractModifierEffect> getModifierEffects() {

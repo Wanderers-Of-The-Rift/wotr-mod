@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
-import net.minecraft.util.RandomSource;
 
 import java.util.function.IntFunction;
 
@@ -27,7 +26,7 @@ public enum RunegemTier {
     private final int id;
     private final String name;
 
-    private RunegemTier(int id, String name) {
+    RunegemTier(int id, String name) {
         this.id = id;
         this.name = name;
     }
