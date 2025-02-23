@@ -1,4 +1,5 @@
 {
+  "tier": 1,
   "modifiers": [
     {
       "type": "dimensiondelvers:attribute",
