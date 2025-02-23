@@ -25,11 +25,6 @@ public class LevelRiftThemeData extends SavedData {
     private Holder<RiftTheme> theme;
 
     public static LevelRiftThemeData getFromLevel(ServerLevel level) {
-        LevelRiftThemeData riftTheme = level.getServer().overworld().getDataStorage().computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
-        level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY).ifPresent(holder -> {
-            Optional<Holder.Reference<RiftTheme>> theme = holder.get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "forest"));
-            theme.ifPresent(riftTheme::setTheme);
-        });
         return level.getDataStorage().computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
     }
 

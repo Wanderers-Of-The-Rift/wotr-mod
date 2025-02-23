@@ -45,9 +45,6 @@ public class ThemeProcessor extends StructureProcessor {
 
     @Override
     public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel, BlockPos piecePos, BlockPos structurePos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
-        List<StructureProcessor> processors = getThemeProcessors(serverLevel, piecePos, structurePos);
-        Iterator<StructureProcessor> iterator = processors.iterator();
-
         List<StructureTemplate.StructureBlockInfo> list1 = processedBlockInfos;
 
         for (StructureProcessor structureprocessor : getThemeProcessors(serverLevel, piecePos, structurePos)) {
@@ -73,7 +70,7 @@ public class ThemeProcessor extends StructureProcessor {
         if (registryReference.isPresent()) {
             RandomSource random = ProcessorUtil.getRandom(StructureRandomType.STRUCTURE, structurePos, piecePos, structurePos, world, SEED);
             List<StructureProcessorList> processorLists = new ArrayList<>();
-            //processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "forest")).get().value());
+            processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "forest")).get().value());
             processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "cave")).get().value());
             return processorLists.get(random.nextInt(processorLists.size())).list();
         }
