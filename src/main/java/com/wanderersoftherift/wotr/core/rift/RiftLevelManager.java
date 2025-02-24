@@ -21,6 +21,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.storage.DerivedLevelData;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -32,25 +33,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 public class RiftLevelManager {
-    private static final Map<ResourceLocation, RiftLevel> activeRifts = new HashMap<>();
 
-    public static RiftLevel createRiftLevel(ResourceKey<Level> portalDimension, BlockPos portalPos) {
-        // Blockpos until we store dimension id in the portal
-        ResourceLocation id = WanderersOfTheRift.id("rift_" + portalPos.getX() + "_" + portalPos.getY() + "_" + portalPos.getZ()/* UUID.randomUUID()*/);
-        return getOrCreateRiftLevel(id, portalDimension, portalPos);
-    }
-
+    //TODO: unload the dimesnions if all plauers are disconnected, but still in the dimension
     @SuppressWarnings("deprecation")
-    public static RiftLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    public static ServerLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var ow = server.overworld();
 
-        var existingRift = activeRifts.get(id);
+        var existingRift = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
         if (existingRift != null) {
             WanderersOfTheRift.LOGGER.debug("Found existing rift level {}", id);
             return existingRift;
@@ -71,7 +65,7 @@ public class RiftLevelManager {
             return null;
         }
 
-        RiftLevel level = RiftLevel.create(id, stem, portalDimension, portalPos);
+        ServerLevel level = createRift(id, stem, portalDimension, portalPos);
 
         Registry<Level> registry = dimensionRegistry.get();
         if (registry instanceof MappedRegistry<Level> mappedRegistry) {
@@ -86,7 +80,6 @@ public class RiftLevelManager {
         level.getServer().markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
-        addActiveRift(level);
         level.setBlock(new BlockPos(0, -1, 0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
@@ -118,9 +111,12 @@ public class RiftLevelManager {
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
-    public static void unregisterAndDeleteLevel(RiftLevel level) {
-        if (!level.getPlayers().isEmpty()) {
-            // multiplayer
+    public static void unregisterAndDeleteLevel(ServerLevel level) {
+        if (!RiftData.isRift(level)) {
+            return;
+        }
+        if (!RiftData.get(level).getPlayers().isEmpty()) {
+            // multiplayer - delete after all players leave
             return;
         }
 
@@ -128,12 +124,11 @@ public class RiftLevelManager {
         level.save(null, true, false);
         level.getServer().forgeGetWorldMap().remove(level.dimension());
         NeoForge.EVENT_BUS.post(new LevelEvent.Unload(level));
-        ResourceLocation id = level.getId();
+        ResourceLocation id = level.dimension().location();
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, true));
         level.getServer().markWorldsDirty();
-        RiftLevelManager.activeRifts.remove(level.getId());
 
-        // Delete level files
+        // Delete level files - we might need to move this to end of tick because ticking (block)entities might have references to the level
         var dimPath = ((AccessorMinecraftServer)level.getServer()).getStorageSource().getDimensionPath(level.dimension());
         WanderersOfTheRift.LOGGER.info("Deleting level {}", dimPath);
         try {
@@ -190,10 +185,36 @@ public class RiftLevelManager {
         return new PocRiftChunkGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("melon"));
     }
 
-    public static void addActiveRift(RiftLevel level) {
-        if (level == null) {
-            return;
+    private static ServerLevel createRift(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+        AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
+        var chunkProgressListener = server.getProgressListenerFactory().create(0);
+        var storageSource = server.getStorageSource();
+        var worldData = server.getWorldData();
+        var executor = server.getExecutor();
+
+        if (portalDimension == null || portalPos == null) {
+            WanderersOfTheRift.LOGGER.warn("Tried to create rift {} with portal from dimension {} at position {}, using overworld spawnpoint instead.", id, portalDimension, portalPos);
+            portalDimension = Level.OVERWORLD;
+            portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
-        activeRifts.put(level.getId(), level);
+
+        var riftLevel = new ServerLevel(
+            ServerLifecycleHooks.getCurrentServer(),
+            executor,
+            storageSource,
+            new DerivedLevelData(worldData, worldData.overworldData()),
+            ResourceKey.create(Registries.DIMENSION, id),
+            stem,
+            chunkProgressListener,
+            false,
+            0L,
+            List.of(),
+            false,
+            null
+        );
+        var riftData = RiftData.get(riftLevel);
+        riftData.setPortalDimension(portalDimension);
+        riftData.setPortalPos(portalPos);
+        return riftLevel;
     }
 }
