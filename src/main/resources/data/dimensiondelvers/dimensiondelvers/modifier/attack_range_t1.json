@@ -1,0 +1,13 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "dimensiondelvers:attribute",
+      "id": "dimensiondelvers:attack_range",
+      "attribute": "generic.attack_reach",
+      "min_roll": 1,
+      "max_roll": 2,
+      "operation": "add_value"
+    }
+  ]
+}
