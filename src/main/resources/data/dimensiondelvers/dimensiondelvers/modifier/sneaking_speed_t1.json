@@ -3,11 +3,11 @@
     "modifiers": [
       {
         "type": "dimensiondelvers:attribute",
-        "id": "dimensiondelvers:movement_speed",
-        "attribute": "movement_speed",
+        "id": "dimensiondelvers:sneaking_speed",
+        "attribute": "sneaking_speed",
         "min_roll": 0.1,
         "max_roll": 0.2,
-        "operation": "add_value"
+        "operation": "add_multiplied_base"
       }
     ]
   }

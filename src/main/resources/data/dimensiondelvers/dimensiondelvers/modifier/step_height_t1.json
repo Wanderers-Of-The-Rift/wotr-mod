@@ -3,7 +3,7 @@
     "modifiers": [
       {
         "type": "dimensiondelvers:attribute",
-        "id": "dimensiondelvers:step_height_unique",
+        "id": "dimensiondelvers:step_height_t1",
         "attribute": "step_height",
         "min_roll": 0.5,
         "max_roll": 0.5,
