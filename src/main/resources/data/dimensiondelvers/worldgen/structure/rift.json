@@ -5,7 +5,7 @@
 
   "size": 6,
 
-  "max_distance_from_center": 256,
+  "max_distance_from_center": 128,
 
   "biomes": "#minecraft:has_structure/village_plains",
 
