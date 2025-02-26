@@ -20,7 +20,7 @@
           "step_size": 0.15
         }
       ],
-      "to_replace": "minecraft:brown_wool"
+      "to_replace": "dimensiondelvers:processor_block_1"
     },
     {
       "processor_type": "dimensiondelvers:spot_gradient",
@@ -38,7 +38,7 @@
           "step_size": 0.95
         }
       ],
-      "to_replace": "minecraft:lime_wool"
+      "to_replace": "dimensiondelvers:processor_block_2"
     },
     {
       "processor_type": "dimensiondelvers:spot_gradient",
@@ -52,7 +52,7 @@
           "step_size": 0.1
         }
       ],
-      "to_replace": "minecraft:black_wool"
+      "to_replace": "dimensiondelvers:processor_block_3"
     },
     {
       "processor_type": "dimensiondelvers:mushrooms",
