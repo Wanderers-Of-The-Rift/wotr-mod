@@ -20,7 +20,6 @@ import java.util.List;
 public class BuilderGlassItemTooltipEvent {
     @SubscribeEvent
     public static void on(RenderTooltipEvent.GatherComponents event) {
-        DimensionDelvers.LOGGER.info("Tooltip event");
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
         if (!stack.is(ModItems.BUILDER_GLASSES.get())) return;
