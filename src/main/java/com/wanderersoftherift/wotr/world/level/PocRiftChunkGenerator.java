@@ -14,7 +14,6 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -72,26 +71,6 @@ public class PocRiftChunkGenerator extends ChunkGenerator {
 
     @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunk) {
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-        Heightmap heightmap = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR_WG);
-        Heightmap heightmap1 = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE_WG);
-
-        for (int i = 0; i < 64; i++) {
-            BlockState blockstate = customBlock;
-            if (blockstate != null) {
-                int j = chunk.getMinY() + i;
-
-                for (int k = 0; k < 16; k++) {
-                    for (int l = 0; l < 16; l++) {
-
-                        chunk.setBlockState(blockpos$mutableblockpos.set(k, j, l), (k == 0 || l == 0) ? Blocks.BEDROCK.defaultBlockState() :blockstate, false);
-                        heightmap.update(k, j, l, blockstate);
-                        heightmap1.update(k, j, l, blockstate);
-                    }
-                }
-            }
-        }
-
         return CompletableFuture.completedFuture(chunk);
     }
 

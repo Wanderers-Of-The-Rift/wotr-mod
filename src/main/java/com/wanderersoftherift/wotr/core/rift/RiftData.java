@@ -28,7 +28,7 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RiftData extends SavedData {
+public class RiftData extends SavedData { //TODO: split this
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
     private final List<UUID> players;

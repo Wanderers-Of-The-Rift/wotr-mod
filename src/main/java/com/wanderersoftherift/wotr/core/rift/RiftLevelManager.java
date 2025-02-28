@@ -21,6 +21,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -215,6 +216,17 @@ public class RiftLevelManager {
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
+        placeInitialJigsaw(riftLevel, DimensionDelvers.id("start"), ResourceLocation.withDefaultNamespace("empty"), 6, new BlockPos(0, 0, 0));
         return riftLevel;
+    }
+
+
+    private static void placeInitialJigsaw(ServerLevel level, ResourceLocation templatePoolKey, ResourceLocation target, int maxDepth, BlockPos pos) {
+        var templatePool = level.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(templatePoolKey).orElse(null);
+        if (templatePool == null) {
+            DimensionDelvers.LOGGER.error("Template pool {} not found", templatePoolKey);
+            return;
+        }
+        JigsawPlacement.generateJigsaw(level, templatePool, target, maxDepth, pos, false);
     }
 }
