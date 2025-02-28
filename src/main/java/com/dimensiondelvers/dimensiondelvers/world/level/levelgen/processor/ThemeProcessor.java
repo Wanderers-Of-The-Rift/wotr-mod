@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
 import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.theme.LevelRiftThemeData;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;

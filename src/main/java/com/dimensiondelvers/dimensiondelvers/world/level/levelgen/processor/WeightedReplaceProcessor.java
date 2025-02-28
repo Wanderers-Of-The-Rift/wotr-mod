@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.WeightedBlockstateEntry;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.WeightedBlockstateEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.WEIGHTED_REPLACE;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 
 public class WeightedReplaceProcessor extends StructureProcessor {
     public static final MapCodec<WeightedReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->

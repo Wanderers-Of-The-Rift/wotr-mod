@@ -1,7 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
 
 import com.dimensiondelvers.dimensiondelvers.util.OpenSimplex2F;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output.OutputBlockState;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -24,23 +25,23 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.GRADIENT_SPOT_REPLACE;
-import static com.dimensiondelvers.dimensiondelvers.util.ModCodecs.BLOCK_STATE_CODEC;
+import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output.OutputBlockState.DIRECT_CODEC;
 
 public class GradientReplaceProcessor extends StructureProcessor {
     public static final MapCodec<GradientReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
-                    Codec.mapPair(BLOCK_STATE_CODEC.fieldOf("output_state"),Codec.floatRange(0, 1).fieldOf("step_size")).codec().listOf().fieldOf("gradient_list").forGetter(GradientReplaceProcessor::getGradientList),
+                    Codec.mapPair(DIRECT_CODEC.fieldOf("output_state"),Codec.floatRange(0, 1).fieldOf("step_size")).codec().listOf().fieldOf("gradient_list").forGetter(GradientReplaceProcessor::getGradientList),
                     Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment),
                     BuiltInRegistries.BLOCK.byNameCodec().fieldOf("to_replace").forGetter(GradientReplaceProcessor::getToReplace)
             ).apply(builder, GradientReplaceProcessor::new));
 
-    private final List<Pair<BlockState, Float>> gradientList;
+    private final List<Pair<OutputBlockState, Float>> gradientList;
     private final int seedAdjustment;
     private final Block toReplace;
 
     protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
 
-    public GradientReplaceProcessor(List<Pair<BlockState, Float>> gradientList, int seedAdjustment, Block toReplace) {
+    public GradientReplaceProcessor(List<Pair<OutputBlockState, Float>> gradientList, int seedAdjustment, Block toReplace) {
         this.gradientList = gradientList;
         this.seedAdjustment = seedAdjustment;
         this.toReplace = toReplace;
@@ -84,10 +85,10 @@ public class GradientReplaceProcessor extends StructureProcessor {
     private BlockState getReplacementBlock(BlockPos blockPos, OpenSimplex2F noiseGen) {
         double noiseValue = (noiseGen.noise3_Classic(blockPos.getX() * 0.075D, blockPos.getY() * 0.075D, blockPos.getZ() * 0.075D));
         float stepSize = 0;
-        for(Pair<BlockState, Float> pair: gradientList){
+        for(Pair<OutputBlockState, Float> pair: gradientList){
             stepSize = stepSize+pair.getSecond();
             if (noiseValue < stepSize && noiseValue > (stepSize * -1)) {
-                return pair.getFirst();
+                return pair.getFirst().convertBlockState();
             }
         }
         return null;
@@ -97,7 +98,7 @@ public class GradientReplaceProcessor extends StructureProcessor {
         return GRADIENT_SPOT_REPLACE.get();
     }
 
-    public List<Pair<BlockState, Float>> getGradientList() {
+    public List<Pair<OutputBlockState, Float>> getGradientList() {
         return gradientList;
     }
 

@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.util.ModCodecs;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType;
+import com.dimensiondelvers.dimensiondelvers.codec.OutputStateCodecs;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -18,12 +18,11 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.ATTACHMENT;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil.*;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.core.Direction.WEST;
 
@@ -31,7 +30,7 @@ import static net.minecraft.core.Direction.WEST;
 public class AttachmentProcessor extends StructureProcessor {
     public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
-                    ModCodecs.BLOCK_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
+                    OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
                     Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
                     Codec.BOOL.optionalFieldOf("requires_up", false).forGetter(AttachmentProcessor::isRequiresUp),
                     Codec.BOOL.optionalFieldOf("requires_down", false).forGetter(AttachmentProcessor::isRequiresDown),

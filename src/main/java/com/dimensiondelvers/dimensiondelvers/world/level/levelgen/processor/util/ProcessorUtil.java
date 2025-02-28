@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util;
 
 import com.dimensiondelvers.dimensiondelvers.mixin.InvokerBlockBehaviour;
 import net.minecraft.Util;

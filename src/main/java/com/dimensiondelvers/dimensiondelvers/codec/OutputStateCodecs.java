@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.util;
+package com.dimensiondelvers.dimensiondelvers.codec;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Function;
 
-public class ModCodecs {
-    public static final Codec<BlockState> BLOCK_STATE_CODEC = Codec.either(
+public class OutputStateCodecs {
+    public static final Codec<BlockState> OUTPUT_STATE_CODEC = Codec.either(
             BuiltInRegistries.BLOCK.byNameCodec(),
             BlockState.CODEC
     ).xmap(either -> either.map(Block::defaultBlockState, Function.identity()), entry -> entry == entry.getBlock().defaultBlockState() ? Either.left(entry.getBlock()) : Either.right(entry));

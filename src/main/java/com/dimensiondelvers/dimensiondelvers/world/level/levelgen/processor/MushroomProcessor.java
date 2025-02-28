@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
 
 import com.dimensiondelvers.dimensiondelvers.init.ModProcessors;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.ProcessorUtil.*;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.DOWN;
 import static net.minecraft.core.Direction.UP;
 import static net.neoforged.neoforge.common.Tags.Items.MUSHROOMS;

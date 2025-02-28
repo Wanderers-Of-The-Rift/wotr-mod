@@ -27,6 +27,7 @@
       "gradient_list": [
         {
           "output_state": {
+            "type": "dimensiondelvers:blockstate",
             "Name": "minecraft:oak_leaves",
             "Properties": {
               "persistent": "true",
@@ -42,6 +43,7 @@
         },
         {
           "output_state": {
+            "type": "dimensiondelvers:blockstate",
             "Name": "minecraft:oak_leaves",
             "Properties": {
               "distance": "7",
@@ -89,6 +91,16 @@
           "step_size": 0.1
         }
       ],
+      "to_replace": "dimensiondelvers:processor_block_2"
+    },
+    {
+      "processor_type": "dimensiondelvers:spot_gradient",
+      "gradient_list": [
+        {
+          "output_state": "minecraft:oak_planks",
+          "step_size": 1
+        }
+      ],
       "to_replace": "dimensiondelvers:processor_block_4"
     },
     {
@@ -100,6 +112,7 @@
       "requires_sides": 1,
       "rarity": 0.3,
       "blockstate": {
+        "type": "dimensiondelvers:blockstate",
         "Name": "minecraft:oak_leaves",
         "Properties": {
           "distance": "7",
@@ -113,6 +126,7 @@
       "requires_sides": 1,
       "rarity": 0.05,
       "blockstate": {
+        "type": "dimensiondelvers:blockstate",
         "Name": "minecraft:oak_leaves",
         "Properties": {
           "distance": "7",
@@ -126,6 +140,7 @@
       "requires_up": true,
       "rarity": 0.4,
       "blockstate": {
+        "type": "dimensiondelvers:blockstate",
         "Name": "minecraft:oak_leaves",
         "Properties": {
           "distance": "7",

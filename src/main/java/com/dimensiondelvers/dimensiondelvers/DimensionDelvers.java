@@ -48,6 +48,7 @@ public class DimensionDelvers {
         ModMenuTypes.MENUS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModProcessors.PROCESSORS.register(modEventBus);
+        ModOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
         ModLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         ModModifierEffects.MODIFIER_EFFECT_TYPES.register(modEventBus);

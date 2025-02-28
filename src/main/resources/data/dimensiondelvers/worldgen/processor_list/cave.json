@@ -55,6 +55,16 @@
       "to_replace": "dimensiondelvers:processor_block_3"
     },
     {
+      "processor_type": "dimensiondelvers:spot_gradient",
+      "gradient_list": [
+        {
+          "output_state": "minecraft:stone_bricks",
+          "step_size": 1
+        }
+      ],
+      "to_replace": "dimensiondelvers:processor_block_4"
+    },
+    {
       "processor_type": "dimensiondelvers:mushrooms",
       "rarity": 0.05
     },

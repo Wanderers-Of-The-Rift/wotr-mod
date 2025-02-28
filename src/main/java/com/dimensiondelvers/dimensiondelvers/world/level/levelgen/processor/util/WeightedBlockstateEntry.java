@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.util;
+package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -6,13 +6,13 @@ import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static com.dimensiondelvers.dimensiondelvers.util.ModCodecs.BLOCK_STATE_CODEC;
+import static com.dimensiondelvers.dimensiondelvers.codec.OutputStateCodecs.OUTPUT_STATE_CODEC;
 
 public class WeightedBlockstateEntry implements WeightedEntry {
 
     public static final Codec<WeightedBlockstateEntry> CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
-                    BLOCK_STATE_CODEC.fieldOf("blockstate").forGetter(WeightedBlockstateEntry::getBlockState),
+                    OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(WeightedBlockstateEntry::getBlockState),
                     Codec.INT.fieldOf("weight").xmap(Weight::of, Weight::asInt).forGetter(WeightedBlockstateEntry::getWeight)
             ).apply(builder, WeightedBlockstateEntry::new));
 

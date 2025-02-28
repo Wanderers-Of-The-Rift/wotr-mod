@@ -1,7 +1,7 @@
 package com.dimensiondelvers.dimensiondelvers.init;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.structure.templatesystem.*;
+import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.neoforged.neoforge.registries.DeferredRegister;
