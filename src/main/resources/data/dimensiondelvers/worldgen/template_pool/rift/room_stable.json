@@ -15,6 +15,20 @@
 
         "element_type": "minecraft:single_pool_element"
       }
+    },
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "dimensiondelvers:rift/room/stable/333/pillar",
+
+        "processors": "dimensiondelvers:rift_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
     }
   ]
 }
