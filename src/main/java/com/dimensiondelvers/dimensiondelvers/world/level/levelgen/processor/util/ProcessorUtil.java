@@ -165,13 +165,13 @@ public class ProcessorUtil {
     }
 
     public static boolean isFaceFull(StructureTemplate.StructureBlockInfo blockinfo, Direction direction) {
-        if (blockinfo != null && blockinfo.state().is(JIGSAW)) {
+        if(blockinfo == null) return false;
+        if (blockinfo.state().is(JIGSAW)) {
             Block block = BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(blockinfo.nbt().getString(NBT_FINAL_STATE)));
             return block != null && !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock) &&
                     Block.isFaceFull(((InvokerBlockBehaviour) block).invokeGetShape(block.defaultBlockState(), null, blockinfo.pos(), CollisionContext.empty()), direction);
         } else {
-            return blockinfo != null && !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock) &&
-                    Block.isFaceFull(((InvokerBlockBehaviour) blockinfo.state().getBlock()).invokeGetCollisionShape(blockinfo.state(), null, blockinfo.pos(), CollisionContext.empty()), direction);
+            return !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock) && Block.isFaceFull(((InvokerBlockBehaviour) blockinfo.state().getBlock()).invokeGetCollisionShape(blockinfo.state(), null, blockinfo.pos(), CollisionContext.empty()), direction);
         }
     }
 
@@ -185,14 +185,11 @@ public class ProcessorUtil {
     }
 
     public static StructureTemplate.StructureBlockInfo getBlockInfo(List<StructureTemplate.StructureBlockInfo> mapByPos, BlockPos pos) {
-        //Calculate the index of the block info in the list based on the pos() of the blockInfo
-        //This can be done by calculating the exact position of the blockInfo in the list using the x, y, z coordinates
-        //The formula to calculate the index is: x + y * width + z * width * height
-        //Where width is the width of the structure, height is the height of the structure and x, y, z are the coordinates of the blockInfo
-        //The width and height of the structure can be calculated by finding the maximum x, y, z coordinates of the blockInfos in the list, which are in the last element
-        //the calculation needs to be offset with the first element's coordinates to get the correct index
         BlockPos firstPos = mapByPos.getFirst().pos();
         BlockPos lastPos = mapByPos.getLast().pos();
+        if(isPosBetween(pos, firstPos, lastPos)){
+            return null;
+        }
         int width = lastPos.getX() + 1 - firstPos.getX();
         int height = lastPos.getY() + 1 - firstPos.getY();
         int index = (pos.getX() - firstPos.getX()) + (pos.getY()- firstPos.getY()) * width + (pos.getZ()-firstPos.getZ()) * width * height;
@@ -200,5 +197,11 @@ public class ProcessorUtil {
             return null;
         }
         return mapByPos.get(index);
+    }
+
+    private static boolean isPosBetween(BlockPos pos, BlockPos firstPos, BlockPos lastPos) {
+        return pos.getX() < firstPos.getX() || pos.getX() > lastPos.getX() ||
+                pos.getY() < firstPos.getY() || pos.getY() > lastPos.getY() ||
+                pos.getZ() < firstPos.getZ() || pos.getZ() > lastPos.getZ();
     }
 }
