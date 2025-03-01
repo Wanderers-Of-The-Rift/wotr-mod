@@ -38,7 +38,7 @@ public class MushroomProcessor extends StructureProcessor {
                     RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK).forGetter(MushroomProcessor::getStructureRandomType),
                     RANDOM_TYPE_CODEC.optionalFieldOf("tag_random_type", StructureRandomType.PIECE).forGetter(MushroomProcessor::getTagStructureRandomType)
             ).apply(builder, MushroomProcessor::new));
-    private static final long SEED = 3478985L;
+    private static final long SEED = 674417L;
 
     private final TagKey<Item> itemTag = MUSHROOMS;
     private final List<Block> exclusionList;
@@ -69,7 +69,7 @@ public class MushroomProcessor extends StructureProcessor {
         BlockPos blockpos = blockInfo.pos();
         if(blockstate.isAir() && random.nextFloat() <= rarity){
             if(isFaceFull(getBlockInfo(mapByPos, rawBlockInfo.pos().relative(DOWN)), UP)) {
-                RandomSource tagRandom = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos, world, SEED);
+                RandomSource tagRandom = ProcessorUtil.getRandom(tagStructureRandomType, blockInfo.pos(), piecePos, structurePos, world, SEED);
                 Block block = getRandomBlockFromItemTag(itemTag, tagRandom, exclusionList);
                 return new StructureTemplate.StructureBlockInfo(blockpos, block.defaultBlockState(), blockInfo.nbt());
             }

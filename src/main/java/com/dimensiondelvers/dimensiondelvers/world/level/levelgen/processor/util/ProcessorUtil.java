@@ -35,7 +35,9 @@ public class ProcessorUtil {
     public static final String NBT_FINAL_STATE = "final_state";
 
     public static RandomSource getRandom(StructureRandomType type, BlockPos blockPos, BlockPos piecePos, BlockPos structurePos, LevelReader world, long processorSeed) {
-        return RandomSource.create(getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
+        RandomSource randomSource = RandomSource.create(getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
+        randomSource.consumeCount(3);
+        return randomSource;
     }
 
     public static long getRandomSeed(StructureRandomType type, BlockPos blockPos, BlockPos piecePos, BlockPos structurePos, LevelReader world, long processorSeed) {
