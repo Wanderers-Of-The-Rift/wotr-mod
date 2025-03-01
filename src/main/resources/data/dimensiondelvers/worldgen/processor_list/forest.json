@@ -104,6 +104,17 @@
       "to_replace": "dimensiondelvers:processor_block_4"
     },
     {
+      "processor_type": "dimensiondelvers:rift_chests",
+      "base_loot_table": "dimensiondelvers:chests/",
+      "rarity": 0.6,
+      "chest_types": [
+        {
+          "chest_type": "wooden",
+          "weight": 1
+        }
+      ]
+    },
+    {
       "processor_type": "dimensiondelvers:mushrooms",
       "rarity": 0.05
     },
