@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.core.Direction;
@@ -72,7 +73,10 @@ public class VineProcessor extends StructureProcessor {
             return blockInfo;
         } else {
             if(selectedDirection != UP) {
-                selectedDirection = settings.getRotation().rotate(selectedDirection).getOpposite();
+                selectedDirection = settings.getRotation().rotate(selectedDirection);
+                if(settings.getRotation() == Rotation.CLOCKWISE_90 || settings.getRotation() == Rotation.COUNTERCLOCKWISE_90) {
+                    selectedDirection = selectedDirection.getOpposite();
+                }
             }
             BooleanProperty property = PROPERTY_BY_DIRECTION.get(selectedDirection);
             return new StructureTemplate.StructureBlockInfo(blockpos, VINE.defaultBlockState().setValue(property, true), null);
