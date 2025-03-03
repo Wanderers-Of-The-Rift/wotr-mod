@@ -31,7 +31,7 @@ public class ModBlocks {
             .lightLevel(state -> 7)
     ));
 
-    public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = BLOCKS.register(
+    public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlock(
             "rune_anvil",
             () -> new RuneAnvilEntityBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("rune_anvil"))

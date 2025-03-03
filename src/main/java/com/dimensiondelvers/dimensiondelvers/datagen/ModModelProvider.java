@@ -38,7 +38,6 @@ public class ModModelProvider extends ModelProvider {
     @Override
     protected void registerModels(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
-        blockModels.createTrivialCube(ModBlocks.EXAMPLE_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.DEV_BLOCK.get());
 
         ResourceLocation modelLoc = DimensionDelvers.id("block/rift_chest");
