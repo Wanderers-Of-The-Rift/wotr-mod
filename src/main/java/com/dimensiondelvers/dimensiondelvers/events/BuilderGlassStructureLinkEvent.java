@@ -19,7 +19,6 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 public class BuilderGlassStructureLinkEvent {
     @SubscribeEvent
     public static void onStructureLink(UseItemOnBlockEvent event) {
-        DimensionDelvers.LOGGER.info("Structure link event");
         if (event.getSide() != LogicalSide.SERVER) return;
         if (event.getPlayer() == null) return;
         if (event.getItemStack().isEmpty()) return;
