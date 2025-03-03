@@ -1,7 +1,6 @@
 package com.dimensiondelvers.dimensiondelvers.datagen;
 
 import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.block.BlockFamilyHelper;
 import com.dimensiondelvers.dimensiondelvers.init.ModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.BlockFamily;
@@ -10,8 +9,7 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-import static net.minecraft.tags.BlockTags.FENCES;
-import static net.minecraft.tags.BlockTags.WALLS;
+import static net.minecraft.tags.BlockTags.*;
 
 /* Handles Data Generation for Block Tags of the DimensionDelvers mod */
 public class ModBlockTagProvider extends BlockTagsProvider {
@@ -27,6 +25,9 @@ public class ModBlockTagProvider extends BlockTagsProvider {
             }
             if(family.getVariant(BlockFamily.Variant.FENCE) != null) {
                 tag(FENCES).add(family.getVariant(BlockFamily.Variant.FENCE).get());
+            }
+            if(family.getVariant(BlockFamily.Variant.FENCE_GATE) != null) {
+                tag(FENCE_GATES).add(family.getVariant(BlockFamily.Variant.FENCE_GATE).get());
             }
         });
     }
