@@ -3,8 +3,8 @@
     "modifiers": [
       {
         "type": "dimensiondelvers:attribute",
-        "id": "dimensiondelvers:absorbtion",
-        "attribute": "max_absorbtion",
+        "id": "dimensiondelvers:absorption",
+        "attribute": "max_absorption",
         "min_roll": 5,
         "max_roll": 6,
         "operation": "add_value"

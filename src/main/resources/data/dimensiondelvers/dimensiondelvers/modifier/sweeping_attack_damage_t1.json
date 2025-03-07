@@ -4,7 +4,7 @@
     {
       "type": "dimensiondelvers:attribute",
       "id": "dimensiondelvers:sweeping_attack_damage",
-      "attribute": "swweeping_damage_ratio",
+      "attribute": "sweeping_damage_ratio",
       "min_roll": 0.25,
       "max_roll": 0.5,
       "operation": "add_value"
