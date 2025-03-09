@@ -1,6 +1,6 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor.util;
 
-import com.dimensiondelvers.dimensiondelvers.mixin.InvokerBlockBehaviour;
+import com.wanderersoftherift.wotr.mixin.InvokerBlockBehaviour;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,7 +51,7 @@ public class ProcessorUtil {
             case WORLD:
                 return ((WorldGenLevel) world).getSeed() + processorSeed;
             default:
-                throw new RuntimeException("Unknown random type: " + type.toString());
+                throw new RuntimeException("Unknown random type: " + type);
         }
     }
 

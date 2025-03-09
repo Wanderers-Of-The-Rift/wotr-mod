@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.theme;
+package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,7 +9,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 
 import java.util.ArrayList;
 
-import static com.dimensiondelvers.dimensiondelvers.init.ModRiftThemes.RIFT_THEME_KEY;
+import static com.wanderersoftherift.wotr.init.ModRiftThemes.RIFT_THEME_KEY;
 
 public record RiftTheme(Holder<StructureProcessorList> processors) {
     public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder ->

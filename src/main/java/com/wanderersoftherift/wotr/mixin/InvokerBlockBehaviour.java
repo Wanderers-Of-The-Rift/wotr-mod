@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.mixin;
+package com.wanderersoftherift.wotr.mixin;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface InvokerBlockBehaviour {
 
     @Invoker("getShape")
-    public VoxelShape invokeGetShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
+    VoxelShape invokeGetShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
 
     @Invoker("getCollisionShape")
-    public VoxelShape invokeGetCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
+    VoxelShape invokeGetCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
 }

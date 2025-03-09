@@ -1,12 +1,12 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.block.RiftChestEntityBlock;
-import com.dimensiondelvers.dimensiondelvers.item.RiftChestType;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output.DefaultOutputBlockState;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output.OutputBlockState;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.WeightedRiftChestTypeEntry;
+import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
+import com.wanderersoftherift.wotr.item.RiftChestType;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.DefaultOutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedRiftChestTypeEntry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -33,10 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.dimensiondelvers.dimensiondelvers.init.ModBlocks.CHEST_TYPES;
-import static com.dimensiondelvers.dimensiondelvers.init.ModBlocks.RIFT_CHEST;
-import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.RIFT_CHESTS;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.wanderersoftherift.wotr.init.ModBlocks.CHEST_TYPES;
+import static com.wanderersoftherift.wotr.init.ModBlocks.RIFT_CHEST;
+import static com.wanderersoftherift.wotr.init.ModProcessors.RIFT_CHESTS;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.world.level.block.Blocks.AIR;
 import static net.minecraft.world.level.block.Blocks.CHEST;
 import static net.minecraft.world.level.block.ChestBlock.FACING;

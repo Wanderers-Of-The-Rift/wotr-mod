@@ -1,20 +1,15 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.theme;
+package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 
-import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.init.ModRiftThemes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
-import java.util.Optional;
-
-import static com.dimensiondelvers.dimensiondelvers.DimensionDelvers.LOGGER;
+import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
 public class LevelRiftThemeData extends SavedData {
 

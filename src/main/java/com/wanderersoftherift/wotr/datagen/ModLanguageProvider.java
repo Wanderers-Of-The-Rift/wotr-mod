@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.datagen;
 
-import com.mojang.datafixers.optics.Wander;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.init.ModItems;
@@ -33,6 +32,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // Adds an item translation.
         addItem(ModItems.EXAMPLE_ITEM, "Example Item");
+        addItem(ModItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(ModItems.RUNEGEM, "Runegem");
 
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {

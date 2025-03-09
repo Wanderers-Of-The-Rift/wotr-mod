@@ -1,6 +1,6 @@
-package com.dimensiondelvers.dimensiondelvers.datagen;
+package com.wanderersoftherift.wotr.datagen;
 
-import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
@@ -34,7 +34,7 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
     }
 
     private static @NotNull ResourceKey<LootTable> getResourceKey(String path) {
-        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, path));
+        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, path));
     }
 
     public HolderLookup.Provider registries() {

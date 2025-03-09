@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.util.OpenSimplex2F;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output.OutputBlockState;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.util.OpenSimplex2F;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.GRADIENT_SPOT_REPLACE;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output.OutputBlockState.DIRECT_CODEC;
+import static com.wanderersoftherift.wotr.init.ModProcessors.GRADIENT_SPOT_REPLACE;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState.DIRECT_CODEC;
 
 public class GradientReplaceProcessor extends StructureProcessor {
     public static final MapCodec<GradientReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->

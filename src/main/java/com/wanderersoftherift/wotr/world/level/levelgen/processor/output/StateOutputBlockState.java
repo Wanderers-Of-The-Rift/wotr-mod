@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.output;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor.output;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.state.BlockState;

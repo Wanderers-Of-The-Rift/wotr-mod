@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.init.ModProcessors;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
+import com.wanderersoftherift.wotr.init.ModProcessors;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -23,8 +23,8 @@ import java.util.List;
 
 import net.minecraft.util.RandomSource;
 
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil.*;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;

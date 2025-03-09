@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "dimensiondelvers:block/processor_block_2_fence_gate"
+    "model": "wotr:block/processor_block_2_fence_gate"
   }
 }

@@ -1,7 +1,7 @@
-package com.dimensiondelvers.dimensiondelvers.events;
+package com.wanderersoftherift.wotr.events;
 
-import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.init.ModItems;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.ModItems;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +16,7 @@ import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = DimensionDelvers.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class BuilderGlassItemTooltipEvent {
     @SubscribeEvent
     public static void on(RenderTooltipEvent.GatherComponents event) {

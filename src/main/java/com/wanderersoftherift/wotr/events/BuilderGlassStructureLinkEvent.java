@@ -1,7 +1,7 @@
-package com.dimensiondelvers.dimensiondelvers.events;
+package com.wanderersoftherift.wotr.events;
 
-import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.init.ModItems;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.ModItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,7 +15,7 @@ import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 
-@EventBusSubscriber(modid = DimensionDelvers.MODID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class BuilderGlassStructureLinkEvent {
     @SubscribeEvent
     public static void onStructureLink(UseItemOnBlockEvent event) {

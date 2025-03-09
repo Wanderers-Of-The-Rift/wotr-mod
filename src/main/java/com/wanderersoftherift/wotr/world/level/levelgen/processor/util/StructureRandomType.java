@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;

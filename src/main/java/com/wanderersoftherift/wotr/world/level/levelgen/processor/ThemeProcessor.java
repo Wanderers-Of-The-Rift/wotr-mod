@@ -1,9 +1,9 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.DimensionDelvers;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.theme.LevelRiftThemeData;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.RIFT_THEME;
+import static com.wanderersoftherift.wotr.init.ModProcessors.RIFT_THEME;
 
 public class ThemeProcessor extends StructureProcessor {
     public static final MapCodec<ThemeProcessor> CODEC = MapCodec.unit(ThemeProcessor::new);
@@ -70,8 +70,8 @@ public class ThemeProcessor extends StructureProcessor {
         if (registryReference.isPresent()) {
             RandomSource random = ProcessorUtil.getRandom(StructureRandomType.STRUCTURE, structurePos, piecePos, structurePos, world, SEED);
             List<StructureProcessorList> processorLists = new ArrayList<>();
-            processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "forest")).get().value());
-            processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(DimensionDelvers.MODID, "cave")).get().value());
+            processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "forest")).get().value());
+            processorLists.add(registryReference.get().get(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "cave")).get().value());
             return processorLists.get(random.nextInt(processorLists.size())).list();
         }
         return new ArrayList<>();

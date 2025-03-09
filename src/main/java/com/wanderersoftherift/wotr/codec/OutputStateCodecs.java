@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.codec;
+package com.wanderersoftherift.wotr.codec;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;

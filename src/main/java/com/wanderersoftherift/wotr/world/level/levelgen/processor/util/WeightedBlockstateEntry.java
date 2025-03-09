@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -6,7 +6,7 @@ import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static com.dimensiondelvers.dimensiondelvers.codec.OutputStateCodecs.OUTPUT_STATE_CODEC;
+import static com.wanderersoftherift.wotr.codec.OutputStateCodecs.OUTPUT_STATE_CODEC;
 
 public class WeightedBlockstateEntry implements WeightedEntry {
 

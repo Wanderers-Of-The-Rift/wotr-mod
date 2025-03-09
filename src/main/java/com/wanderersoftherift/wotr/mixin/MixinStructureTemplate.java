@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.mixin;
+package com.wanderersoftherift.wotr.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;

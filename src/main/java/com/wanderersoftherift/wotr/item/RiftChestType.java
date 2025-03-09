@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.item;
+package com.wanderersoftherift.wotr.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;

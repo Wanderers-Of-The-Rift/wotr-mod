@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_fence_gate_wall_open",
   "textures": {
-    "texture": "dimensiondelvers:block/processor_block_1"
+    "texture": "wotr:block/processor_block_1"
   }
 }

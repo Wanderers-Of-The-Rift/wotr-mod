@@ -1,6 +1,6 @@
-package com.dimensiondelvers.dimensiondelvers.item;
+package com.wanderersoftherift.wotr.item;
 
-import com.dimensiondelvers.dimensiondelvers.init.ModItems;
+import com.wanderersoftherift.wotr.init.ModItems;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 

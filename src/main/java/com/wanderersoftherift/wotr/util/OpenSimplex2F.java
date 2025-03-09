@@ -1,4 +1,4 @@
-package com.dimensiondelvers.dimensiondelvers.util;
+package com.wanderersoftherift.wotr.util;
 /**
  * K.jpg's OpenSimplex 2, faster variant
  *
@@ -16,10 +16,10 @@ public class OpenSimplex2F {
     private static final int PSIZE = 2048;
     private static final int PMASK = 2047;
 
-    private short[] perm;
-    private Grad2[] permGrad2;
-    private Grad3[] permGrad3;
-    private Grad4[] permGrad4;
+    private final short[] perm;
+    private final Grad2[] permGrad2;
+    private final Grad3[] permGrad3;
+    private final Grad4[] permGrad4;
 
     public OpenSimplex2F(long seed) {
         perm = new short[PSIZE];

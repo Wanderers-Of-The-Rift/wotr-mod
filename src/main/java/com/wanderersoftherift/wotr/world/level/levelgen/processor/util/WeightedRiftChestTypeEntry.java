@@ -1,6 +1,6 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor.util;
 
-import com.dimensiondelvers.dimensiondelvers.item.RiftChestType;
+import com.wanderersoftherift.wotr.item.RiftChestType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.random.Weight;

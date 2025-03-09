@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "dimensiondelvers:processor_block_3_fence_gate"
+          "name": "wotr:processor_block_3_fence_gate"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "dimensiondelvers:blocks/processor_block_3_fence_gate"
+  "random_sequence": "wotr:blocks/processor_block_3_fence_gate"
 }

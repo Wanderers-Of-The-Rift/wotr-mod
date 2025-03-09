@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "dimensiondelvers:item/builder_glasses"
+    "model": "wotr:item/builder_glasses"
   }
 }

@@ -1,8 +1,8 @@
-package com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor;
+package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.dimensiondelvers.dimensiondelvers.codec.OutputStateCodecs;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil;
-import com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType;
+import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -20,9 +20,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dimensiondelvers.dimensiondelvers.init.ModProcessors.ATTACHMENT;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.ProcessorUtil.*;
-import static com.dimensiondelvers.dimensiondelvers.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.wanderersoftherift.wotr.init.ModProcessors.ATTACHMENT;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.core.Direction.WEST;
 
@@ -101,7 +101,7 @@ public class AttachmentProcessor extends StructureProcessor {
         }
         if(hasDirection(processedBlockInfos, blockpos, WEST)) {
             sides++;
-            if(sides >= requiresSides) return true;
+            return sides >= requiresSides;
         }
         return false;
     }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_fence_gate_wall",
   "textures": {
-    "texture": "dimensiondelvers:block/processor_block_12"
+    "texture": "wotr:block/processor_block_12"
   }
 }
