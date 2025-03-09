@@ -1,18 +1,18 @@
 {
   "values": [
-    "dimensiondelvers:processor_block_1_wall",
-    "dimensiondelvers:processor_block_2_wall",
-    "dimensiondelvers:processor_block_3_wall",
-    "dimensiondelvers:processor_block_4_wall",
-    "dimensiondelvers:processor_block_5_wall",
-    "dimensiondelvers:processor_block_6_wall",
-    "dimensiondelvers:processor_block_7_wall",
-    "dimensiondelvers:processor_block_8_wall",
-    "dimensiondelvers:processor_block_9_wall",
-    "dimensiondelvers:processor_block_10_wall",
-    "dimensiondelvers:processor_block_11_wall",
-    "dimensiondelvers:processor_block_12_wall",
-    "dimensiondelvers:processor_block_13_wall",
-    "dimensiondelvers:processor_block_14_wall"
+    "wotr:processor_block_1_wall",
+    "wotr:processor_block_2_wall",
+    "wotr:processor_block_3_wall",
+    "wotr:processor_block_4_wall",
+    "wotr:processor_block_5_wall",
+    "wotr:processor_block_6_wall",
+    "wotr:processor_block_7_wall",
+    "wotr:processor_block_8_wall",
+    "wotr:processor_block_9_wall",
+    "wotr:processor_block_10_wall",
+    "wotr:processor_block_11_wall",
+    "wotr:processor_block_12_wall",
+    "wotr:processor_block_13_wall",
+    "wotr:processor_block_14_wall"
   ]
 }

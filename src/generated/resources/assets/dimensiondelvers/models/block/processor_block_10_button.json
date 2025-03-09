@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/button",
-  "textures": {
-    "texture": "dimensiondelvers:block/processor_block_10"
-  }
-}

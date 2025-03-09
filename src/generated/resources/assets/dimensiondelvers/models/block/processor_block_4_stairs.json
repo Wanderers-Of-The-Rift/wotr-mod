@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "dimensiondelvers:block/processor_block_4",
-    "side": "dimensiondelvers:block/processor_block_4",
-    "top": "dimensiondelvers:block/processor_block_4"
-  }
-}

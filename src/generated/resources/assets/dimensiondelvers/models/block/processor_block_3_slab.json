@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "dimensiondelvers:block/processor_block_3",
-    "side": "dimensiondelvers:block/processor_block_3",
-    "top": "dimensiondelvers:block/processor_block_3"
-  }
-}
