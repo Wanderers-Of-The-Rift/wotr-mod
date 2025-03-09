@@ -1,0 +1,34 @@
+{
+  "fallback": "wotr:rift/terminator",
+
+  "elements": [
+    {
+
+      "weight": 5,
+      "element": {
+
+        "location": "wotr:rift/room/stable/333/dev_test",
+
+        "processors": "wotr:rift_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 5,
+      "element": {
+
+        "location": "wotr:rift/room/stable/333/pillar",
+
+        "processors": "wotr:rift_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

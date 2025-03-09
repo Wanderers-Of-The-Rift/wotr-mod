@@ -44,7 +44,7 @@ import static net.minecraft.world.level.block.ChestBlock.FACING;
 public class RiftChestProcessor extends StructureProcessor {
 
     public static final MapCodec<RiftChestProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-            ResourceLocation.CODEC.optionalFieldOf("base_loot_table", ResourceLocation.parse("dimensiondelvers:empty")).forGetter(RiftChestProcessor::getBaseLootTable),
+            ResourceLocation.CODEC.optionalFieldOf("base_loot_table", ResourceLocation.parse("wotr:empty")).forGetter(RiftChestProcessor::getBaseLootTable),
             OutputBlockState.DIRECT_CODEC.optionalFieldOf("output_state", new DefaultOutputBlockState(AIR)).forGetter(RiftChestProcessor::getReplaceOutput),
             Codec.FLOAT.optionalFieldOf("rarity", 1.0F).forGetter(RiftChestProcessor::getRarity),
             WeightedRiftChestTypeEntry.CODEC.listOf().fieldOf("chest_types").forGetter(RiftChestProcessor::getChestTypes),
