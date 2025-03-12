@@ -11,6 +11,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import org.joml.Matrix4f;
 
+import static com.wanderersoftherift.wotr.events.client.ModClientEvents.JIGSAW_NAME_TOGGLE_KEY;
+
 public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBlockEntity> {
 
     public JigsawBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
@@ -18,6 +20,7 @@ public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBloc
 
     @Override
     public void render(JigsawBlockEntity jigsawBlockEntity, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
+        if(!JIGSAW_NAME_TOGGLE_KEY.isDown()) return;
         MutableComponent name = Component.literal(jigsawBlockEntity.getPool().location().toString());
         renderNameTag(name, poseStack, multiBufferSource, i);
     }

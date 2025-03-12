@@ -13,6 +13,7 @@ import java.util.Locale;
 
 /* Handles Data Generation for I18n of the locale 'en_us' of the Wotr mod */
 public class ModLanguageProvider extends LanguageProvider {
+
     public ModLanguageProvider(PackOutput output) {
         super(output, WanderersOfTheRift.MODID, "en_us");
     }
@@ -36,9 +37,24 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.RUNEGEM, "Runegem");
 
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
-            addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));
+            //addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));
             helper.getVariants().forEach((variant, block) -> addBlock(block, getTranslationString(block.get())));
         });
+
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_1", "Processor Block 1 [Wall]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_2", "Processor Block 2 [Path]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_3", "Processor Block 3 [Floor]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_4", "Processor Block 4 [Alt Wall]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_5", "Processor Block 5 [Alt Floor]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_6", "Processor Block 6 [Planks]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_7", "Processor Block 7 [Bricks]");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_8", "Processor Block 8");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_9", "Processor Block 9");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_10", "Processor Block 10");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_11", "Processor Block 11");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_12", "Processor Block 12");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_13", "Processor Block 13");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_14", "Processor Block 14");
 
 
         // Adds a generic translation
