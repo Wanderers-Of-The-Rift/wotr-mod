@@ -1,0 +1,13 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:efficiency",
+      "attribute": "mining_efficiency",
+      "min_roll": 2,
+      "max_roll": 2,
+      "operation": "add_value"
+    }
+  ]
+}

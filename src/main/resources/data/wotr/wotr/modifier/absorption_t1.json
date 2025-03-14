@@ -1,0 +1,13 @@
+{
+    "tier": 1,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:absorption",
+        "attribute": "max_absorption",
+        "min_roll": 1,
+        "max_roll": 2,
+        "operation": "add_value"
+      }
+    ]
+  }

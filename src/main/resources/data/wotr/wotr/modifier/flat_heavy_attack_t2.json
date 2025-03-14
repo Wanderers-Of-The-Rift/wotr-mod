@@ -1,0 +1,21 @@
+{
+  "tier": 2,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:flat_attack_damage",
+      "attribute": "attack_damage",
+      "min_roll": 5,
+      "max_roll": 7,
+      "operation": "add_value"
+    },
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:flat_attack_speed",
+      "attribute": "attack_speed",
+      "min_roll": -0.1,
+      "max_roll": -0.5,
+      "operation": "add_value"
+    }
+  ]
+}

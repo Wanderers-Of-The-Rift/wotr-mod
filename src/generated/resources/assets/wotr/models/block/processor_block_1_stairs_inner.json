@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "wotr:block/processor_block_1",
+    "side": "wotr:block/processor_block_1",
+    "top": "wotr:block/processor_block_1"
+  }
+}

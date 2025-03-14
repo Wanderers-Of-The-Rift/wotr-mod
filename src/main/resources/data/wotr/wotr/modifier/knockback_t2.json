@@ -1,0 +1,13 @@
+{
+    "tier": 2,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:knockback",
+        "attribute": "attack_knockback",
+        "min_roll": 2.5,
+        "max_roll": 5,
+        "operation": "add_value"
+      }
+    ]
+  } 

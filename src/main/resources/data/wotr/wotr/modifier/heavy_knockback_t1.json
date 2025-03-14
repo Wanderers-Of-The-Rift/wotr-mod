@@ -1,0 +1,21 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:knockback",
+      "attribute": "attack_knockback",
+      "min_roll": 2.5,
+      "max_roll": 5,
+      "operation": "add_value"
+    },
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:flat_attack_speed",
+      "attribute": "attack_speed",
+      "min_roll": -1,
+      "max_roll": -0.5,
+      "operation": "add_value"
+    }
+  ]
+}

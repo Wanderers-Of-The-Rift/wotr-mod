@@ -1,0 +1,5 @@
+{
+  "type": "wotr:retain_inventory_snapshot_id",
+  "conditions" : [
+  ]
+}

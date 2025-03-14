@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/button_inventory",
-  "textures": {
-    "texture": "dimensiondelvers:block/processor_block_5"
-  }
-}

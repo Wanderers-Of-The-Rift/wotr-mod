@@ -1,0 +1,13 @@
+{
+    "tier": 1,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:size",
+        "attribute": "scale",
+        "min_roll": 0.1,
+        "max_roll": 0.1,
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }

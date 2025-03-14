@@ -1,0 +1,29 @@
+name: Nightly Build Release
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+    - name: Compute Short Commit Hash
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    - name: Build with Gradle
+      run: ./gradlew build -Pmod_version=${{ steps.vars.outputs.sha_short }}
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: wotr-nightly-${{ steps.vars.outputs.sha_short }}.jar
+        path: build/libs/*.jar
+        retention-days: 14

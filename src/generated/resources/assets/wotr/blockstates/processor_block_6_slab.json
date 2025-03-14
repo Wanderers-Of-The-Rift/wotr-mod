@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wotr:block/processor_block_6_slab"
+    },
+    "type=double": {
+      "model": "wotr:block/processor_block_6"
+    },
+    "type=top": {
+      "model": "wotr:block/processor_block_6_slab_top"
+    }
+  }
+}

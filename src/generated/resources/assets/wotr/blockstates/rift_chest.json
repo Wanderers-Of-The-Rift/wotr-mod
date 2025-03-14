@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "wotr:block/rift_chest",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "wotr:block/rift_chest",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "wotr:block/rift_chest",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "wotr:block/rift_chest",
+      "y": 270
+    }
+  }
+}
