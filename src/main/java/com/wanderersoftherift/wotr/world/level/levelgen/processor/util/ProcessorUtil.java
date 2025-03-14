@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -168,11 +170,24 @@ public class ProcessorUtil {
         if(blockinfo == null) return false;
         if (blockinfo.state().is(JIGSAW)) {
             Block block = BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(blockinfo.nbt().getString(NBT_FINAL_STATE)));
-            return block != null && !blockinfo.state().isAir() && !(blockinfo.state().getBlock() instanceof LiquidBlock) &&
-                    Block.isFaceFull(((InvokerBlockBehaviour) block).invokeGetShape(block.defaultBlockState(), null, blockinfo.pos(), CollisionContext.empty()), direction);
+            return isFaceFullFast(block.defaultBlockState(), blockinfo.pos(), direction);
         } else {
-            return !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock) && Block.isFaceFull(((InvokerBlockBehaviour) blockinfo.state().getBlock()).invokeGetCollisionShape(blockinfo.state(), null, blockinfo.pos(), CollisionContext.empty()), direction);
+            return isFaceFullFast(blockinfo.state(), blockinfo.pos(), direction);
         }
+    }
+
+    private static boolean isFaceFullFast(BlockState state, BlockPos pos, Direction direction) {
+        if(state.isAir() || state.getBlock() instanceof LiquidBlock){
+            return false;
+        }
+        VoxelShape overallShape = ((InvokerBlockBehaviour) state.getBlock()).invokeGetShape(state, null, pos, CollisionContext.empty());
+        if(overallShape == Shapes.block()){
+            return true;
+        }
+        if(overallShape == Shapes.empty()){
+            return false;
+        }
+        return Block.isFaceFull(overallShape, direction);
     }
 
     public static StructureTemplate.Palette getCurrentPalette(List<StructureTemplate.Palette> palettes) {
