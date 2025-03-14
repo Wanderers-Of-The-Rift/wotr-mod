@@ -41,30 +41,24 @@ public class ProcessorUtil {
     }
 
     public static long getRandomSeed(StructureRandomType type, BlockPos blockPos, BlockPos piecePos, BlockPos structurePos, LevelReader world, long processorSeed) {
-        switch (type) {
-            case BLOCK:
-                return getRandomSeed(blockPos, processorSeed);
-            case PIECE:
-                return getRandomSeed(piecePos, processorSeed);
-            case STRUCTURE:
-                return getRandomSeed(structurePos, processorSeed);
-            case WORLD:
-                return ((WorldGenLevel) world).getSeed() + processorSeed;
-            default:
-                throw new RuntimeException("Unknown random type: " + type);
-        }
+        return switch (type) {
+            case BLOCK -> getRandomSeed(blockPos, processorSeed);
+            case PIECE -> getRandomSeed(piecePos, processorSeed);
+            case STRUCTURE -> getRandomSeed(structurePos, processorSeed);
+            case WORLD -> ((WorldGenLevel) world).getSeed() + processorSeed;
+        };
     }
 
     public static long getRandomSeed(BlockPos pos, long processorSeed) {
         return pos == null ? Util.getMillis() + processorSeed : Mth.getSeed(pos) + processorSeed;
     }
 
-    public static Block getRandomBlockFromBlockTag(TagKey<Block> tagKey, RandomSource random, List<ResourceLocation> exclusionList) {
+    public static Block getRandomBlockFromBlockTag(TagKey<Block> tagKey, RandomSource random, List<Block> exclusionList) {
         Optional<HolderSet.Named<Block>> tagHolders = BuiltInRegistries.BLOCK.get(tagKey);
         if (tagHolders.isPresent()) {
             List<Block> collect = tagHolders.get().stream()
                     .map(Holder::value)
-                    .filter(block -> !exclusionList.contains(BuiltInRegistries.BLOCK.getKey(block)))
+                    .filter(block -> !exclusionList.contains(block))
                     .toList();
             if (!collect.isEmpty()) {
                 return collect.get(random.nextInt(collect.size()));
@@ -87,6 +81,10 @@ public class ProcessorUtil {
             }
         }
         return Blocks.AIR;
+    }
+
+    public List<Block> getBlocksFromTag(TagKey<Block> tag){
+        return BuiltInRegistries.BLOCK.get(tag).map(it -> it.stream().map(Holder::value).toList()).orElseGet(List::of);
     }
 
     /*public static Item getRandomItemFromTag(TagKey<Item> tag, RandomSource random, List<ResourceLocation> exclusionList){
@@ -160,9 +158,9 @@ public class ProcessorUtil {
     public static boolean isSolid(StructureTemplate.StructureBlockInfo blockinfo){
         if(blockinfo != null && blockinfo.state().is(JIGSAW)){
             Block block = BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(blockinfo.nbt().getString(NBT_FINAL_STATE)));
-            return block != null && !block.defaultBlockState().is(AIR) && !(block instanceof LiquidBlock);
+            return block != null && !block.defaultBlockState().isAir() && !(block instanceof LiquidBlock);
         }else {
-            return blockinfo != null && !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock);
+            return blockinfo != null && !blockinfo.state().isAir() && !(blockinfo.state().getBlock() instanceof LiquidBlock);
         }
     }
 
@@ -170,7 +168,7 @@ public class ProcessorUtil {
         if(blockinfo == null) return false;
         if (blockinfo.state().is(JIGSAW)) {
             Block block = BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(blockinfo.nbt().getString(NBT_FINAL_STATE)));
-            return block != null && !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock) &&
+            return block != null && !blockinfo.state().isAir() && !(blockinfo.state().getBlock() instanceof LiquidBlock) &&
                     Block.isFaceFull(((InvokerBlockBehaviour) block).invokeGetShape(block.defaultBlockState(), null, blockinfo.pos(), CollisionContext.empty()), direction);
         } else {
             return !blockinfo.state().is(AIR) && !(blockinfo.state().getBlock() instanceof LiquidBlock) && Block.isFaceFull(((InvokerBlockBehaviour) blockinfo.state().getBlock()).invokeGetCollisionShape(blockinfo.state(), null, blockinfo.pos(), CollisionContext.empty()), direction);
@@ -189,7 +187,7 @@ public class ProcessorUtil {
     public static StructureTemplate.StructureBlockInfo getBlockInfo(List<StructureTemplate.StructureBlockInfo> mapByPos, BlockPos pos) {
         BlockPos firstPos = mapByPos.getFirst().pos();
         BlockPos lastPos = mapByPos.getLast().pos();
-        if(isPosBetween(pos, firstPos, lastPos)){
+        if(!isPosBetween(pos, firstPos, lastPos)){
             return null;
         }
         int width = lastPos.getX() + 1 - firstPos.getX();
@@ -202,8 +200,8 @@ public class ProcessorUtil {
     }
 
     private static boolean isPosBetween(BlockPos pos, BlockPos firstPos, BlockPos lastPos) {
-        return pos.getX() < firstPos.getX() || pos.getX() > lastPos.getX() ||
-                pos.getY() < firstPos.getY() || pos.getY() > lastPos.getY() ||
-                pos.getZ() < firstPos.getZ() || pos.getZ() > lastPos.getZ();
+        return pos.getX() > firstPos.getX() && pos.getX() < lastPos.getX() &&
+                pos.getY() > firstPos.getY() && pos.getY() < lastPos.getY() &&
+                pos.getZ() > firstPos.getZ() && pos.getZ() < lastPos.getZ();
     }
 }

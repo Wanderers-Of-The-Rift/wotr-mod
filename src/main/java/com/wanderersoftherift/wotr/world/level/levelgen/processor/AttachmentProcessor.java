@@ -1,11 +1,11 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.ATTACHMENT;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
-import static net.minecraft.core.Direction.*;
-import static net.minecraft.core.Direction.WEST;
+import static net.minecraft.core.Direction.Plane;
 
 
 public class AttachmentProcessor extends StructureProcessor {
@@ -74,10 +74,10 @@ public class AttachmentProcessor extends StructureProcessor {
         BlockState blockstate = blockInfo.state();
         BlockPos blockpos = blockInfo.pos();
         if(blockstate.isAir() && random.nextFloat() <= rarity){
-            boolean hasSides = isHasSides(blockpos, processedBlockInfos);
-            boolean hasUp = !requiresUp || hasDirection(processedBlockInfos, rawBlockInfo.pos(), Direction.UP);
-            boolean hasDown = !requiresDown || hasDirection(processedBlockInfos, rawBlockInfo.pos(), Direction.DOWN);
-            if(hasSides && hasUp && hasDown){
+            boolean validSides = isHasSides(blockpos, processedBlockInfos);
+            boolean validUp = !requiresUp || hasDirection(processedBlockInfos, rawBlockInfo.pos(), Direction.UP);
+            boolean validDown = !requiresDown || hasDirection(processedBlockInfos, rawBlockInfo.pos(), Direction.DOWN);
+            if(validSides && validUp && validDown){
                 return new StructureTemplate.StructureBlockInfo(blockpos, blockState, blockInfo.nbt());
             }
         }
@@ -87,21 +87,11 @@ public class AttachmentProcessor extends StructureProcessor {
     private boolean isHasSides(BlockPos blockpos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
         if(requiresSides == 0) return true;
         int sides = 0;
-        if(hasDirection(processedBlockInfos, blockpos, NORTH)) {
-            sides++;
-            if(sides >= requiresSides) return true;
-        }
-        if(hasDirection(processedBlockInfos, blockpos, EAST)) {
-            sides++;
-            if(sides >= requiresSides) return true;
-        }
-        if(hasDirection(processedBlockInfos, blockpos, SOUTH)) {
-            sides++;
-            if(sides >= requiresSides) return true;
-        }
-        if(hasDirection(processedBlockInfos, blockpos, WEST)) {
-            sides++;
-            return sides >= requiresSides;
+        for (Direction direction : Plane.HORIZONTAL) {
+            if (hasDirection(processedBlockInfos, blockpos, direction)) {
+                sides++;
+                if (sides >= requiresSides) return true;
+            }
         }
         return false;
     }

@@ -45,13 +45,13 @@ public class ThemeProcessor extends StructureProcessor {
 
     @Override
     public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel, BlockPos piecePos, BlockPos structurePos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
-        List<StructureTemplate.StructureBlockInfo> list1 = processedBlockInfos;
+        List<StructureTemplate.StructureBlockInfo> result = processedBlockInfos;
 
         for (StructureProcessor structureprocessor : getThemeProcessors(serverLevel, piecePos, structurePos)) {
-            list1 = structureprocessor.finalizeProcessing(serverLevel, piecePos, structurePos, originalBlockInfos, list1, settings);
+            result = structureprocessor.finalizeProcessing(serverLevel, piecePos, structurePos, originalBlockInfos, result, settings);
         }
 
-        return list1;
+        return result;
     }
 
     private List<StructureProcessor> getThemeProcessors(LevelReader world, BlockPos piecePos, BlockPos structurePos) {

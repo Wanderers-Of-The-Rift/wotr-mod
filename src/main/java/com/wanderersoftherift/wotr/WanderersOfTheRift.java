@@ -48,6 +48,7 @@ public class WanderersOfTheRift {
         ModMenuTypes.MENUS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModProcessors.PROCESSORS.register(modEventBus);
+        ModInputBlockStateTypes.INPUT_BLOCKSTATE_TYPES.register(modEventBus);
         ModOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
         ModLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);

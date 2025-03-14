@@ -1,18 +1,16 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.wanderersoftherift.wotr.util.OpenSimplex2F;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.util.OpenSimplex2F;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -25,26 +23,23 @@ import java.util.List;
 import java.util.Map;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.GRADIENT_SPOT_REPLACE;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState.DIRECT_CODEC;
 
 public class GradientReplaceProcessor extends StructureProcessor {
     public static final MapCodec<GradientReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
-                    Codec.mapPair(DIRECT_CODEC.fieldOf("output_state"),Codec.floatRange(0, 1).fieldOf("step_size")).codec().listOf().fieldOf("gradient_list").forGetter(GradientReplaceProcessor::getGradientList),
-                    Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment),
-                    BuiltInRegistries.BLOCK.byNameCodec().fieldOf("to_replace").forGetter(GradientReplaceProcessor::getToReplace)
+                    InputToOutputs.CODEC.listOf().fieldOf("replacements")
+                            .xmap(InputToOutputs::toMap, InputToOutputs::toInputToOutputs).forGetter(GradientReplaceProcessor::getReplaceMap),
+                    Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment)
             ).apply(builder, GradientReplaceProcessor::new));
 
-    private final List<Pair<OutputBlockState, Float>> gradientList;
+    private final Map<InputBlockState, List<OutputStep>> replaceMap;
     private final int seedAdjustment;
-    private final Block toReplace;
 
     protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
 
-    public GradientReplaceProcessor(List<Pair<OutputBlockState, Float>> gradientList, int seedAdjustment, Block toReplace) {
-        this.gradientList = gradientList;
+    public GradientReplaceProcessor(Map<InputBlockState, List<OutputStep>> replaceMap, int seedAdjustment) {
+        this.replaceMap = replaceMap;
         this.seedAdjustment = seedAdjustment;
-        this.toReplace = toReplace;
     }
 
     public OpenSimplex2F getNoiseGen(long seed) {
@@ -53,20 +48,22 @@ public class GradientReplaceProcessor extends StructureProcessor {
 
     @Override
     public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
-        OpenSimplex2F noiseGen = null;
-        if(world instanceof WorldGenLevel) {
-            noiseGen = getNoiseGen(((WorldGenLevel) world).getSeed()+seedAdjustment);
-        }else{
-            noiseGen = getNoiseGen(structurePos.asLong()+seedAdjustment);
-        }
 
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
-        if(!blockstate.is(toReplace)){
-            return blockInfo;
+        for (Map.Entry<InputBlockState, List<OutputStep>> entry : replaceMap.entrySet()) {
+            InputBlockState inputBlockState = entry.getKey();
+            List<OutputStep> outputSteps = entry.getValue();
+            if (inputBlockState.matchesBlockstate(blockstate)) {
+                return getOutputBlockInfo(outputSteps, world, structurePos, blockInfo, blockPos, blockstate);
+            }
         }
+        return blockInfo;
+    }
 
-        BlockState newBlockState = getReplacementBlock(blockPos, noiseGen);
+    private StructureTemplate.StructureBlockInfo getOutputBlockInfo(List<OutputStep> outputSteps, LevelReader world, BlockPos structurePos, StructureTemplate.StructureBlockInfo blockInfo, BlockPos blockPos, BlockState blockstate) {
+        OpenSimplex2F noiseGen = getNoiseGen(world, structurePos);
+        BlockState newBlockState = getReplacementBlock(outputSteps, blockPos, noiseGen);
         if(newBlockState == null){
             return blockInfo;
         }
@@ -82,13 +79,23 @@ public class GradientReplaceProcessor extends StructureProcessor {
         }
     }
 
-    private BlockState getReplacementBlock(BlockPos blockPos, OpenSimplex2F noiseGen) {
+    private OpenSimplex2F getNoiseGen(LevelReader world, BlockPos structurePos) {
+        OpenSimplex2F noiseGen = null;
+        if(world instanceof WorldGenLevel) {
+            noiseGen = getNoiseGen(((WorldGenLevel) world).getSeed()+seedAdjustment);
+        }else{
+            noiseGen = getNoiseGen(structurePos.asLong()+seedAdjustment);
+        }
+        return noiseGen;
+    }
+
+    private BlockState getReplacementBlock(List<OutputStep> outputSteps, BlockPos blockPos, OpenSimplex2F noiseGen) {
         double noiseValue = (noiseGen.noise3_Classic(blockPos.getX() * 0.075D, blockPos.getY() * 0.075D, blockPos.getZ() * 0.075D));
         float stepSize = 0;
-        for(Pair<OutputBlockState, Float> pair: gradientList){
-            stepSize = stepSize+pair.getSecond();
+        for(OutputStep outputStep: outputSteps){
+            stepSize = stepSize+outputStep.stepSize;
             if (noiseValue < stepSize && noiseValue > (stepSize * -1)) {
-                return pair.getFirst().convertBlockState();
+                return outputStep.outputBlockState.convertBlockState();
             }
         }
         return null;
@@ -98,15 +105,39 @@ public class GradientReplaceProcessor extends StructureProcessor {
         return GRADIENT_SPOT_REPLACE.get();
     }
 
-    public List<Pair<OutputBlockState, Float>> getGradientList() {
-        return gradientList;
+    public Map<InputBlockState, List<OutputStep>> getReplaceMap() {
+        return replaceMap;
     }
 
     public int getSeedAdjustment() {
         return seedAdjustment;
     }
 
-    public Block getToReplace() {
-        return toReplace;
+    private record InputToOutputs(InputBlockState inputBlockState, List<OutputStep> outputSteps) {
+        public static final Codec<InputToOutputs> CODEC = RecordCodecBuilder.create(builder ->
+                builder.group(
+                        InputBlockState.DIRECT_CODEC.fieldOf("input_state").forGetter(InputToOutputs::inputBlockState),
+                        OutputStep.CODEC.listOf().fieldOf("output_steps").forGetter(InputToOutputs::outputSteps)
+                ).apply(builder, InputToOutputs::new));
+
+        public static Map<InputBlockState, List<OutputStep>> toMap(List<InputToOutputs> inputToOutputs) {
+            Map<InputBlockState, List<OutputStep>> map = new HashMap<>();
+            for (InputToOutputs inputToOutput : inputToOutputs) {
+                map.put(inputToOutput.inputBlockState(), inputToOutput.outputSteps());
+            }
+            return map;
+        }
+
+        public static List<InputToOutputs> toInputToOutputs(Map<InputBlockState, List<OutputStep>> map) {
+            return map.entrySet().stream().map(entry -> new InputToOutputs(entry.getKey(), entry.getValue())).toList();
+        }
+    }
+
+    private record OutputStep(OutputBlockState outputBlockState, float stepSize) {
+        public static final Codec<OutputStep> CODEC = RecordCodecBuilder.create(builder ->
+            builder.group(
+                    OutputBlockState.DIRECT_CODEC.fieldOf("output_state").forGetter(OutputStep::outputBlockState),
+                    Codec.floatRange(0, 1).fieldOf("step_size").forGetter(OutputStep::stepSize)
+            ).apply(builder, OutputStep::new));
     }
 }

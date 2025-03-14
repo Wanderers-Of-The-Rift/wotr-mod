@@ -22,10 +22,9 @@ public class BuilderGlassItemTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.is(ModItems.BUILDER_GLASSES.get())) return;
-        if (!stack.has(DataComponents.CUSTOM_DATA)) return;
+        if (!stack.is(ModItems.BUILDER_GLASSES.get()) || !stack.has(DataComponents.CUSTOM_DATA)) { return;}
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (data == null) return;
+        if (data == null) { return;}
         CompoundTag tag = data.copyTag();
         if (!tag.contains("structureDim") || !tag.contains("structurePos")) return;
         String dim = tag.getString("structureDim");

@@ -19,12 +19,14 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 public class BuilderGlassStructureLinkEvent {
     @SubscribeEvent
     public static void onStructureLink(UseItemOnBlockEvent event) {
-        if (event.getSide() != LogicalSide.SERVER) return;
-        if (event.getPlayer() == null) return;
-        if (event.getItemStack().isEmpty()) return;
-        if (!event.getPlayer().isCrouching()) return;
-        if (!event.getLevel().getBlockState(event.getPos()).is(Blocks.STRUCTURE_BLOCK)) return;
-        if (!event.getItemStack().is(ModItems.BUILDER_GLASSES.get())) return;
+        if (event.getSide() != LogicalSide.SERVER ||
+                event.getPlayer() == null ||
+                event.getItemStack().isEmpty() ||
+                !event.getPlayer().isCrouching() ||
+                !event.getLevel().getBlockState(event.getPos()).is(Blocks.STRUCTURE_BLOCK) ||
+                !event.getItemStack().is(ModItems.BUILDER_GLASSES.get()))
+        { return;}
+
         event.cancelWithResult(InteractionResult.CONSUME);
         Player player = event.getPlayer();
         ItemStack stack = event.getItemStack();
