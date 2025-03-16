@@ -59,8 +59,7 @@ public class AttachmentProcessor extends StructureProcessor {
 
     @Override
     public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel, BlockPos offset, BlockPos pos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
-        //Map<BlockPos, StructureTemplate.StructureBlockInfo> mapByPos = mapByPos(processedBlockInfos);
-        List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>();
+        List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
             StructureTemplate.StructureBlockInfo newBlockInfo = processFinal(serverLevel, offset, pos, blockInfo, blockInfo, settings, processedBlockInfos);
             newBlockInfos.add(newBlockInfo);
@@ -68,15 +67,13 @@ public class AttachmentProcessor extends StructureProcessor {
         return newBlockInfos;
     }
 
-
     public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
         RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos, world, seed);
-        BlockState blockstate = blockInfo.state();
         BlockPos blockpos = blockInfo.pos();
-        if(blockstate.isAir() && random.nextFloat() <= rarity){
-            boolean validSides = isHasSides(blockpos, processedBlockInfos);
-            boolean validUp = !requiresUp || hasDirection(processedBlockInfos, rawBlockInfo.pos(), Direction.UP);
-            boolean validDown = !requiresDown || hasDirection(processedBlockInfos, rawBlockInfo.pos(), Direction.DOWN);
+        if(blockInfo.state().isAir() && random.nextFloat() <= rarity){
+            boolean validSides = validSides(blockpos, processedBlockInfos);
+            boolean validUp = !requiresUp || hasDirection(processedBlockInfos, blockpos, Direction.UP);
+            boolean validDown = !requiresDown || hasDirection(processedBlockInfos, blockpos, Direction.DOWN);
             if(validSides && validUp && validDown){
                 return new StructureTemplate.StructureBlockInfo(blockpos, blockState, blockInfo.nbt());
             }
@@ -84,7 +81,7 @@ public class AttachmentProcessor extends StructureProcessor {
         return blockInfo;
     }
 
-    private boolean isHasSides(BlockPos blockpos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
+    private boolean validSides(BlockPos blockpos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
         if(requiresSides == 0) return true;
         int sides = 0;
         for (Direction direction : Plane.HORIZONTAL) {
