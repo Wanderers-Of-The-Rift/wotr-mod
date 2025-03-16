@@ -124,34 +124,6 @@
       "rarity": 0.05
     },
     {
-      "processor_type": "wotr:attachment",
-      "requires_sides": 1,
-      "rarity": 0.3,
-      "blockstate": {
-        "type": "wotr:blockstate",
-        "Name": "minecraft:oak_leaves",
-        "Properties": {
-          "distance": "7",
-          "persistent": "true",
-          "waterlogged": "false"
-        }
-      }
-    },
-    {
-      "processor_type": "wotr:attachment",
-      "requires_up": true,
-      "rarity": 0.3,
-      "blockstate": {
-        "type": "wotr:blockstate",
-        "Name": "minecraft:oak_leaves",
-        "Properties": {
-          "distance": "7",
-          "persistent": "true",
-          "waterlogged": "false"
-        }
-      }
-    },
-    {
       "processor_type": "wotr:vines",
       "rarity": 0.1
     }
