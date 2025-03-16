@@ -26,7 +26,6 @@ public class RunegemTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.RUNEGEM_DATA)) return;
 
         RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) return;
