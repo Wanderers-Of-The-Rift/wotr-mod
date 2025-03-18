@@ -61,19 +61,14 @@ public class ThemeProcessor extends StructureProcessor {
             if(riftThemeData.getTheme() != null) {
                 return riftThemeData.getTheme().value().processors().value().list();
             }
-            return randomThemeProcessors(serverLevel, structurePos);
+            return defaultThemeProcessors(serverLevel, structurePos);
         }
         return new ArrayList<>();
     }
 
-    private static final Cache<Long, List<StructureProcessor>> RANDOM_THEME_CACHE = CacheBuilder.newBuilder().maximumSize(5).build();
-
-    private List<StructureProcessor> randomThemeProcessors(ServerLevel world, BlockPos structurePos) {
-        try {
-            return RANDOM_THEME_CACHE.get(structurePos.asLong(), () -> getRandomThemeProcessor(world, structurePos));
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+    private List<StructureProcessor> defaultThemeProcessors(ServerLevel world, BlockPos structurePos) {
+        Optional<Registry<StructureProcessorList>> registryReference = world.registryAccess().lookup(Registries.PROCESSOR_LIST);
+        return registryReference.get().get(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "cave")).get().value().list();
     }
 
     private static @NotNull List<StructureProcessor> getRandomThemeProcessor(ServerLevel world, BlockPos structurePos) {
