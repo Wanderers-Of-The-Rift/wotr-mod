@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.util.RandomSource;
 
@@ -37,7 +38,6 @@ public class VineProcessor extends StructureProcessor {
                     Codec.FLOAT.fieldOf("rarity").forGetter(VineProcessor::getRarity),
                     RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK).forGetter(VineProcessor::getStructureRandomType)
             ).apply(builder, VineProcessor::new));
-    private static final long SEED = 8514174L;
 
     private final boolean attachToWall;
     private final boolean attachToCeiling;
@@ -62,7 +62,7 @@ public class VineProcessor extends StructureProcessor {
     }
 
     public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, List<StructureTemplate.StructureBlockInfo> mapByPos) {
-        RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos, world, SEED);
+        RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos, world, Optional.empty());
         BlockState blockstate = blockInfo.state();
         BlockPos blockpos = blockInfo.pos();
         Direction selectedDirection = null;

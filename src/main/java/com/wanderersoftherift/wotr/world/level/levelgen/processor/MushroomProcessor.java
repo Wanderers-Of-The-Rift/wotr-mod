@@ -20,9 +20,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
@@ -38,7 +36,7 @@ public class MushroomProcessor extends StructureProcessor {
                     RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK).forGetter(MushroomProcessor::getStructureRandomType),
                     RANDOM_TYPE_CODEC.optionalFieldOf("tag_random_type", StructureRandomType.PIECE).forGetter(MushroomProcessor::getTagStructureRandomType)
             ).apply(builder, MushroomProcessor::new));
-    private static final long SEED = 674417L;
+    private static final Optional<Long> SEED = Optional.empty();
 
     private final TagKey<Item> itemTag = MUSHROOMS;
     private final List<Block> exclusionList;
@@ -57,18 +55,17 @@ public class MushroomProcessor extends StructureProcessor {
     public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel, BlockPos offset, BlockPos pos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
-            StructureTemplate.StructureBlockInfo newBlockInfo = processFinal(serverLevel, offset, pos, blockInfo, blockInfo, settings, processedBlockInfos);
-            newBlockInfos.add(newBlockInfo);
+            newBlockInfos.add(processFinal(serverLevel, offset, pos, blockInfo, settings, processedBlockInfos));
         }
         return newBlockInfos;
     }
 
-    public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, List<StructureTemplate.StructureBlockInfo> mapByPos) {
+    public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, List<StructureTemplate.StructureBlockInfo> mapByPos) {
         RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos, world, SEED);
         BlockState blockstate = blockInfo.state();
         BlockPos blockpos = blockInfo.pos();
         if(blockstate.isAir() && random.nextFloat() <= rarity){
-            if(isFaceFull(getBlockInfo(mapByPos, rawBlockInfo.pos().relative(DOWN)), UP)) {
+            if(isFaceFull(getBlockInfo(mapByPos, blockInfo.pos().relative(DOWN)), UP)) {
                 RandomSource tagRandom = ProcessorUtil.getRandom(tagStructureRandomType, blockInfo.pos(), piecePos, structurePos, world, SEED);
                 Block block = getRandomBlockFromItemTag(itemTag, tagRandom, exclusionList);
                 return new StructureTemplate.StructureBlockInfo(blockpos, block.defaultBlockState(), blockInfo.nbt());

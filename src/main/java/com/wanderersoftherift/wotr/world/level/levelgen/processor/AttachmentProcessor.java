@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.ATTACHMENT;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
@@ -36,7 +37,7 @@ public class AttachmentProcessor extends StructureProcessor {
                     Codec.BOOL.optionalFieldOf("requires_down", false).forGetter(AttachmentProcessor::isRequiresDown),
                     Codec.FLOAT.fieldOf("rarity").forGetter(AttachmentProcessor::getRarity),
                     RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK).forGetter(AttachmentProcessor::getStructureRandomType),
-                    Codec.LONG.optionalFieldOf("seed", 7645816L).forGetter(AttachmentProcessor::getSeed)
+                    Codec.LONG.optionalFieldOf("seed").forGetter(AttachmentProcessor::getSeed)
             ).apply(builder, AttachmentProcessor::new));
 
     private final BlockState blockState;
@@ -45,9 +46,9 @@ public class AttachmentProcessor extends StructureProcessor {
     private final boolean requiresDown;
     private final float rarity;
     private final StructureRandomType structureRandomType;
-    private final long seed;
+    private final Optional<Long> seed;
 
-    public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown, float rarity, StructureRandomType structureRandomType, long seed) {
+    public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown, float rarity, StructureRandomType structureRandomType, Optional<Long> seed) {
         this.blockState = blockState;
         this.requiresSides = requiresSides;
         this.requiresUp = requiresUp;
@@ -126,7 +127,7 @@ public class AttachmentProcessor extends StructureProcessor {
         return structureRandomType;
     }
 
-    public long getSeed() {
+    public Optional<Long> getSeed() {
         return seed;
     }
 }

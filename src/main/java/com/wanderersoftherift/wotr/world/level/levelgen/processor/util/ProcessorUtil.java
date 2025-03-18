@@ -9,12 +9,12 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.LevelReader;
@@ -22,19 +22,19 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import static net.minecraft.tags.BlockTags.AIR;
 import static net.minecraft.world.level.block.Blocks.JIGSAW;
 
 
@@ -58,6 +58,23 @@ public class ProcessorUtil {
 
     public static long getRandomSeed(BlockPos pos, long processorSeed) {
         return pos == null ? Util.getMillis() + processorSeed : Mth.getSeed(pos) + processorSeed;
+    }
+
+    private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
+
+    public static RandomSource getRandom(StructureRandomType type, BlockPos blockPos, BlockPos piecePos, BlockPos structurePos, LevelReader world, Optional<Long> processorSeed) {
+        return switch (type) {
+            case BLOCK -> RANDOM_SEED_CACHE.computeIfAbsent(structurePos.asLong(), key -> createRandom(getRandomSeed(blockPos, 0L)));
+            case PIECE -> createRandom(getRandomSeed(piecePos, processorSeed.orElse(0L)));
+            case STRUCTURE -> createRandom(getRandomSeed(structurePos, processorSeed.orElse(0L)));
+            case WORLD -> createRandom(((WorldGenLevel) world).getSeed() + processorSeed.orElse(0L));
+        };
+    }
+
+    public static RandomSource createRandom(Long processorSeed) {
+        RandomSource randomSource = RandomSource.create(processorSeed);
+        randomSource.consumeCount(3);
+        return randomSource;
     }
 
     public static Block getRandomBlockFromBlockTag(TagKey<Block> tagKey, RandomSource random, List<Block> exclusionList) {
