@@ -4,7 +4,7 @@
   "elements": [
     {
 
-      "weight": 5,
+      "weight": 1,
       "element": {
 
         "location": "wotr:rift/room/stable/333/dev_test",
@@ -18,10 +18,10 @@
     },
     {
 
-      "weight": 5,
+      "weight": 100,
       "element": {
 
-        "location": "wotr:rift/room/stable/333/pillar",
+        "location": "wotr:rift/room/stable/333/cave_pillar-1-wout",
 
         "processors": "wotr:rift_default",
 
