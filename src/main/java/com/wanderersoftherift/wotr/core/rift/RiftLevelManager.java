@@ -131,27 +131,29 @@ public class RiftLevelManager {
 
         // Delete level files - we might need to move this to end of tick because ticking (block)entities might have references to the level
         var dimPath = ((AccessorMinecraftServer)level.getServer()).getStorageSource().getDimensionPath(level.dimension());
-        WanderersOfTheRift.LOGGER.info("Deleting level {}", dimPath);
-        try {
-            Files.walkFileTree(dimPath, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult visitFile(Path path, BasicFileAttributes attributes) throws IOException {
-                    WanderersOfTheRift.LOGGER.debug("Deleting {}", path);
-                    Files.delete(path);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult postVisitDirectory(Path path, IOException exception) throws IOException {
-                    if (exception != null) {
-                        throw exception;
+        if(Files.exists(dimPath)){
+            WanderersOfTheRift.LOGGER.info("Deleting level {}", dimPath);
+            try {
+                Files.walkFileTree(dimPath, new SimpleFileVisitor<>() {
+                    @Override
+                    public FileVisitResult visitFile(Path path, BasicFileAttributes attributes) throws IOException {
+                        WanderersOfTheRift.LOGGER.debug("Deleting {}", path);
+                        Files.deleteIfExists(path);
+                        return FileVisitResult.CONTINUE;
                     }
-                    Files.deleteIfExists(path);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } catch (IOException e) {
-            WanderersOfTheRift.LOGGER.error("Failed to delete level", e);
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path path, IOException exception) throws IOException {
+                        if (exception != null) {
+                            WanderersOfTheRift.LOGGER.error("Failed to delete directory {}", path, exception);
+                        }
+                        Files.deleteIfExists(path);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+            } catch (IOException e) {
+                WanderersOfTheRift.LOGGER.error("Failed to delete level", e);
+            }
         }
 
         // dimensions are also saved in level.dat
@@ -216,7 +218,7 @@ public class RiftLevelManager {
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
-        placeInitialJigsaw(riftLevel, DimensionDelvers.id("start"), ResourceLocation.withDefaultNamespace("empty"), 6, new BlockPos(0, 0, 0));
+        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("start"), ResourceLocation.withDefaultNamespace("empty"), 6, new BlockPos(0, 0, 0));
         return riftLevel;
     }
 
@@ -224,7 +226,7 @@ public class RiftLevelManager {
     private static void placeInitialJigsaw(ServerLevel level, ResourceLocation templatePoolKey, ResourceLocation target, int maxDepth, BlockPos pos) {
         var templatePool = level.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(templatePoolKey).orElse(null);
         if (templatePool == null) {
-            DimensionDelvers.LOGGER.error("Template pool {} not found", templatePoolKey);
+            WanderersOfTheRift.LOGGER.error("Template pool {} not found", templatePoolKey);
             return;
         }
         JigsawPlacement.generateJigsaw(level, templatePool, target, maxDepth, pos, false);
