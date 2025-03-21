@@ -15,6 +15,10 @@ public class ClientConfig {
     public static final ModConfigSpec.BooleanValue ACCESSIBILITY_REDUCED_MOTION;
     public static final ModConfigSpec.BooleanValue ACCESSIBILITY_HARD_OF_HEARING; // I am unsure what this should change currently
 
+    // Rift Map Settings
+    public static final ModConfigSpec.BooleanValue MOUSE_MODE;
+    public static final ModConfigSpec.DoubleValue LERP_SPEED;
+
     static {
         BUILDER.comment(" == Wotr Client Configs ==");
 
@@ -29,6 +33,9 @@ public class ClientConfig {
             ACCESSIBILITY_HARD_OF_HEARING = BUILDER.comment(" Whether certain sounds should be upped").define("accessibilityHardOfHearing", false);
         BUILDER.pop();
 
+        BUILDER.push(" == Rift Map == ");
+            MOUSE_MODE = BUILDER.comment(" Whether to use the Whale mouse mode").define("mouseMode", false);
+            LERP_SPEED = BUILDER.comment(" What speed the map should lerp at. 0 = Off").defineInRange("lerpSpeed", 1.0, 0.0, 2.0);
 
 
         SPEC = BUILDER.build();

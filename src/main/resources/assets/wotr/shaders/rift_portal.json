@@ -1,0 +1,73 @@
+{
+  "vertex": "wotr:rift_portal",
+  "fragment": "wotr:rift_portal",
+  "defines": {
+    "values": {
+      "ALPHA_CUTOUT": "0.1"
+    }
+  },
+  "samplers": [
+    {
+      "name": "Sampler0"
+    },
+    {
+      "name": "Sampler1"
+    }
+  ],
+  "uniforms": [
+    {
+      "name": "ModelViewMat",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+      ]
+    },
+    {
+      "name": "ProjMat",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+      ]
+    },
+    {
+      "name": "InnerScale",
+      "type": "float",
+      "count": 1,
+      "values": [
+        1.5
+      ]
+    },
+    {
+      "name": "GameTime",
+      "type": "float",
+      "count": 1,
+      "values": [
+        0
+      ]
+    },
+    {
+      "name": "Frames0",
+      "type": "float",
+      "count": 1,
+      "values": [
+        2
+      ]
+    },
+    {
+      "name": "FrameRate0",
+      "type": "float",
+      "count": 1,
+      "values": [
+        1
+      ]
+    }
+  ]
+}

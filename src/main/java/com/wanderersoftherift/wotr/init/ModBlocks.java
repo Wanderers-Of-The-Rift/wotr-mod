@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
 import com.wanderersoftherift.wotr.block.RuneAnvilEntityBlock;
+import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +47,15 @@ public class ModBlocks {
                     .setId(blockId("rift_chest"))
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
+            )
+    );
+
+    public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = registerBlock(
+            "rift_spawner",
+            () -> new RiftSpawnerBlock(BlockBehaviour.Properties.of()
+                    .setId(blockId("rift_spawner"))
+                    .strength(2.0f)
+                    .sound(SoundType.STONE)
             )
     );
 

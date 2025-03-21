@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "wotr:block/rift_spawner",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "wotr:block/rift_spawner",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "wotr:block/rift_spawner",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "wotr:block/rift_spawner",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "wotr:block/rift_spawner"
+    },
+    "facing=west": {
+      "model": "wotr:block/rift_spawner",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

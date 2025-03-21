@@ -9,7 +9,8 @@
     "MixinEnchantingTableBlock",
     "MixinItemStack",
     "MixinLivingEntity",
-    "MixinServerPlayer"
+    "MixinServerPlayer",
+    "MixinSetItemDamageFunction"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",

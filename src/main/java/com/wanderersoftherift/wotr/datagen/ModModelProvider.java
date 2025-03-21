@@ -40,43 +40,30 @@ public class ModModelProvider extends ModelProvider {
         blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.DEV_BLOCK.get());
 
-        ResourceLocation modelLoc = WanderersOfTheRift.id("block/rift_chest");
+        ResourceLocation baseChestModel = WanderersOfTheRift.id("block/rift_chest");
         blockModels.blockStateOutput.accept(
-                MultiVariantGenerator.multiVariant(ModBlocks.RIFT_CHEST.get())
-                        .with(
-                                PropertyDispatch.property(BlockStateProperties.HORIZONTAL_FACING)
-                                        .select(Direction.NORTH,
-                                                Variant.variant()
-                                                        .with(VariantProperties.MODEL, modelLoc)
-                                                        .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R0)
-                                        )
-                                        .select(
-                                                Direction.EAST,
-                                                Variant.variant()
-                                                        .with(VariantProperties.MODEL, modelLoc)
-                                                        .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
-                                        )
-                                        .select(
-                                                Direction.SOUTH,
-                                                Variant.variant()
-                                                        .with(VariantProperties.MODEL, modelLoc)
-                                                        .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)
-                                        )
-                                        .select(
-                                                Direction.WEST,
-                                                Variant.variant()
-                                                        .with(VariantProperties.MODEL, modelLoc)
-                                                        .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
-                                        )
-                        )
+                MultiVariantGenerator.multiVariant(
+                                ModBlocks.RIFT_CHEST.get(),
+                                Variant.variant().with(VariantProperties.MODEL, baseChestModel))
+                        .with(BlockModelGenerators.createHorizontalFacingDispatch())
         );
 
+        ResourceLocation baseRiftSpawnerModel = WanderersOfTheRift.id("block/rift_spawner");
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.multiVariant(ModBlocks.RIFT_SPAWNER.get(), Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
+                        .with(createFacingDispatchFromUpModel())
+        );
+
+
+
         itemModels.generateFlatItem(ModItems.EXAMPLE_ITEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
 
         this.generateRunegemItem(ModItems.RUNEGEM.get(), itemModels);
 
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels, itemModels));
     }
+
 
     private void createModelsForBuildBlock(BlockFamilyHelper helper, BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
         blockModels.family(helper.getBlock().get()).generateFor(helper.getFamily());
@@ -91,6 +78,19 @@ public class ModModelProvider extends ModelProvider {
             list.add(ItemModelUtils.when(shape, model));
         }
         itemModels.itemModelOutput.accept(item, ItemModelUtils.select(new SelectRuneGemShape(), ItemModelUtils.plainModel(modelLocation), list));
+    }
+
+    /**
+     * @return A dispatch for facing a model away from the surface it is placed on, starting from an upward facing model
+     */
+    public static PropertyDispatch createFacingDispatchFromUpModel() {
+        return PropertyDispatch.property(BlockStateProperties.FACING)
+                .select(Direction.UP, Variant.variant())
+                .select(Direction.DOWN, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R180))
+                .select(Direction.NORTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+                .select(Direction.EAST, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+                .select(Direction.SOUTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
+                .select(Direction.WEST, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270));
     }
 
 }
