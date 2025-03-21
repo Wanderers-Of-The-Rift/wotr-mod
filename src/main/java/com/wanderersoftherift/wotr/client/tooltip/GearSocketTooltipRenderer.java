@@ -83,12 +83,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
                 guiGraphics.renderFakeItem(fakeStack, scaledX, scaledY -1);
             } else {
-                // I dont know why i need to multiply it by 28, but i have to, do i want to know? No
                 guiGraphics.blit(RenderType.GUI_TEXTURED,
                         SHAPE_RESOURCE_LOCATION_MAP.get(socket.shape()),
                         scaledX, scaledY - 1,
                         0, 0,
-                        (int) (28 * scaleFactor), (int) (28 * scaleFactor),
+                        16, 16,
                         16, 16
                 );
             }

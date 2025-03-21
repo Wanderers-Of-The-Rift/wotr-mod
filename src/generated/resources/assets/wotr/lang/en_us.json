@@ -130,6 +130,7 @@
   "block.wotr.processor_block_9_wall": "Processor Block 9 Wall",
   "block.wotr.rift_chest": "Rift Chest",
   "block.wotr.rune_anvil": "Rune Anvil",
+  "container.wotr.rift_chest": "Rift Chest",
   "container.wotr.rune_anvil": "Rune Anvil",
   "container.wotr.rune_anvil.apply": "Apply",
   "item.wotr.example_item": "Example Item",

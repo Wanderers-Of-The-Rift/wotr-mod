@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.block.blockentity;
 
+import com.google.common.base.Preconditions;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilContainer;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
@@ -39,9 +40,7 @@ public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements Ru
 
     @Override
     protected @NotNull AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
-        if (this.level == null) {
-            throw new IllegalStateException("Attempted to create a menu for a block entity without a level");
-        }
+        Preconditions.checkState(this.level != null, "Attempted to create a menu for a block entity without a level");
 
         return new RuneAnvilMenu(containerId, inventory, ContainerLevelAccess.create(this.level, this.worldPosition), true, this);
     }
