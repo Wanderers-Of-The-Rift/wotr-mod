@@ -1,0 +1,20 @@
+{
+  "fallback": "wotr:rift/poi/terminator",
+
+  "elements": [
+    {
+
+      "weight": 100,
+      "element": {
+
+        "location": "wotr:rift/poi/wall/9/tunnel_wagon-1-wout",
+
+        "processors": "wotr:rift_poi_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

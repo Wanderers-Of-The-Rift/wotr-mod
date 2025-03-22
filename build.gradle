@@ -117,6 +117,12 @@ dependencies {
     runtimeOnly "curse.maven:spark-361579:${spark_version}"
     runtimeOnly "curse.maven:jade-324717:${jade_version}"
     runtimeOnly "curse.maven:roughly-enough-items-310111:${rei_version}"
+    runtimeOnly "curse.maven:resourceful-config-714059:${resourceful_config_version}"
+    runtimeOnly "curse.maven:structure-layout-optimizer-1087831:${structure_layout_optimizer_version}"
+    runtimeOnly "curse.maven:commandstructures-565119:${command_structures_version}"
+    runtimeOnly "curse.maven:huge-structure-blocks-474114:${huge_structure_blocks_version}"
+    runtimeOnly "curse.maven:building-wands-363392:${building_wands_version}"
+    runtimeOnly "curse.maven:worldedit-225608:${worldedit_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

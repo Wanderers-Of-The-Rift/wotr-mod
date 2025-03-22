@@ -8,7 +8,9 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -21,6 +23,8 @@ public class ModDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<GearSockets>> GEAR_SOCKETS  = register("gear_sockets", GearSockets.CODEC, GearSockets.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<RunegemData>> RUNEGEM_DATA  = register("runegem_data", RunegemData.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_SNAPSHOT_ID = register("inventory_snapshot_id", UUIDUtil.CODEC, null);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_TIER = register("rift_tier", Codec.INT, ByteBufCodecs.INT);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> RIFT_THEME = register("rift_theme", ResourceLocation.CODEC, ResourceLocation.STREAM_CODEC);
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, final Codec<T> codec, @Nullable final StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
         if (streamCodec == null) {

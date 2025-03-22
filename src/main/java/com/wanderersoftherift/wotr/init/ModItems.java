@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -36,6 +37,11 @@ public class ModItems {
             )
     );
 
+    public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register(
+            "builder_glasses",
+            BuilderGlasses::new
+    );
+
     //Runegems
     public static final DeferredItem<Item> RUNEGEM = ITEMS.register("runegem",
             registryName -> new Runegem(new Item.Properties()
@@ -45,10 +51,12 @@ public class ModItems {
     );
 
     public static final DeferredItem<Item> RIFT_KEY = ITEMS.register("rift_key", registryName -> new RiftKey(new Item.Properties()
-            .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("rift_key"))
-            )));
+            .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("rift_key")))
+            .stacksTo(1)
+    ));
 
-    public static <T extends Block> DeferredItem<BlockItem> registerSimpleBlockItem(String id, DeferredBlock<T> block){
+
+    public static <T extends Block> DeferredItem<BlockItem> registerSimpleBlockItem(String id, DeferredBlock<T> block) {
         DeferredItem<BlockItem> simpleBlockItem = ITEMS.registerSimpleBlockItem(id, block);
         BLOCK_ITEMS.add(simpleBlockItem);
         return simpleBlockItem;

@@ -39,6 +39,7 @@ public class ModModelProvider extends ModelProvider {
     protected void registerModels(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.DEV_BLOCK.get());
+        blockModels.createTrivialCube(ModBlocks.KEY_FORGE.get());
 
         ResourceLocation baseChestModel = WanderersOfTheRift.id("block/rift_chest");
         blockModels.blockStateOutput.accept(
@@ -56,6 +57,8 @@ public class ModModelProvider extends ModelProvider {
 
 
 
+        itemModels.itemModelOutput.accept(ModItems.BUILDER_GLASSES.get(), ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
+
         itemModels.generateFlatItem(ModItems.EXAMPLE_ITEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
 
@@ -63,7 +66,6 @@ public class ModModelProvider extends ModelProvider {
 
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels, itemModels));
     }
-
 
     private void createModelsForBuildBlock(BlockFamilyHelper helper, BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
         blockModels.family(helper.getBlock().get()).generateFor(helper.getFamily());

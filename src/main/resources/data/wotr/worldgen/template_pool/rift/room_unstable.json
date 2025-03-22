@@ -1,0 +1,48 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+
+  "elements": [
+    {
+
+      "weight": 3,
+      "element": {
+
+        "location": "wotr:rift/room/unstable/333/dev_test",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 3,
+      "element": {
+
+        "location": "wotr:rift/room/unstable/313/dev_test",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 3,
+      "element": {
+
+        "location": "wotr:rift/room/unstable/333/oldwool",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

@@ -20,6 +20,7 @@ public class BlockFamilyHelper {
     public static final String PLATE_SUFFIX = "_pressure_plate";
     public static final String WALL_SUFFIX = "_wall";
     public static final String FENCE_SUFFIX = "_fence";
+    public static final String FENCE_GATE_SUFFIX = "_fence_gate";
     public static final String TRAPDOOR_SUFFIX = "_trapdoor";
 
     private final String blockId;
@@ -60,6 +61,7 @@ public class BlockFamilyHelper {
         if(variants.containsKey(PRESSURE_PLATE)) blockFamilyBuilder.pressurePlate(variants.get(PRESSURE_PLATE).get());
         if(variants.containsKey(WALL)) blockFamilyBuilder.wall(variants.get(WALL).get());
         if(variants.containsKey(FENCE)) blockFamilyBuilder.fence(variants.get(FENCE).get());
+        if(variants.containsKey(FENCE_GATE)) blockFamilyBuilder.fenceGate(variants.get(FENCE_GATE).get());
         if(variants.containsKey(TRAPDOOR)) blockFamilyBuilder.trapdoor(variants.get(TRAPDOOR).get());
         return blockFamilyBuilder.getFamily();
     }
@@ -114,6 +116,11 @@ public class BlockFamilyHelper {
 
         public Builder withFence(Supplier<Block> fence) {
             this.variants.put(BlockFamily.Variant.FENCE, fence);
+            return this;
+        }
+
+        public Builder withFenceGate(Supplier<Block> fenceGate) {
+            this.variants.put(BlockFamily.Variant.FENCE_GATE, fenceGate);
             return this;
         }
 

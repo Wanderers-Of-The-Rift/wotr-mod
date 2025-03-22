@@ -1,0 +1,26 @@
+{
+  "values": {
+    "#c:cobblestones": {
+      "wotr:earth": 1
+    },
+    "#c:crops": {
+      "wotr:life": 1
+    },
+    "#c:foods/cooked_meat": {
+      "wotr:meat": 2
+    },
+    "#c:foods/raw_meat": {
+      "wotr:meat": 1
+    },
+    "#c:stones": {
+      "wotr:earth": 2
+    },
+    "#c:stripped_logs": {
+      "wotr:life": 8
+    },
+    "minecraft:potato": {
+      "wotr:earth": 1,
+      "wotr:life": 2
+    }
+  }
+}

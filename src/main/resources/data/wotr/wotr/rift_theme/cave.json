@@ -1,0 +1,12 @@
+{
+  "processors": [
+    {
+      "piece_type": "poi",
+      "processors": "wotr:cave_poi"
+    },
+    {
+      "piece_type": "room",
+      "processors": "wotr:cave_room"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "processors": [
+    {
+      "piece_type": "poi",
+      "processors": "wotr:forest_poi"
+    },
+    {
+      "piece_type": "room",
+      "processors": "wotr:forest_room"
+    }
+  ]
+}

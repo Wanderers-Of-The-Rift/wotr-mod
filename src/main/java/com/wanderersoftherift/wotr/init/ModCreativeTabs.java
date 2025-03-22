@@ -23,8 +23,11 @@ public class ModCreativeTabs {
                             .displayItems((parameters, output) -> {
                                 output.accept(ModItems.EXAMPLE_ITEM);
                                 output.accept(ModItems.RIFT_KEY);
-                                output.accept(ModItems.RUNEGEM);
                                 ModItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
+
+                                output.accept(ModItems.BUILDER_GLASSES);
+
+                                output.accept(ModItems.RUNEGEM);
 
                                 ItemStack circleGem = ModItems.RUNEGEM.toStack();
                                 circleGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.CIRCLE, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));

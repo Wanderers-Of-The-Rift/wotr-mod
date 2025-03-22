@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr;
 import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.commands.InventorySnapshotCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
+import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
@@ -10,12 +11,15 @@ import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.init.ModCreativeTabs;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModEntityTypes;
+import com.wanderersoftherift.wotr.init.ModInputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.ModItems;
 import com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.ModLootModifiers;
 import com.wanderersoftherift.wotr.init.ModMenuTypes;
 import com.wanderersoftherift.wotr.init.ModModifierEffects;
 import com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes;
+import com.wanderersoftherift.wotr.init.ModOutputBlockStateTypes;
+import com.wanderersoftherift.wotr.init.ModProcessors;
 import com.wanderersoftherift.wotr.server.inventorySnapshot.InventorySnapshotSystem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -54,6 +58,9 @@ public class WanderersOfTheRift {
         ModItems.ITEMS.register(modEventBus);
         ModMenuTypes.MENUS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        ModProcessors.PROCESSORS.register(modEventBus);
+        ModInputBlockStateTypes.INPUT_BLOCKSTATE_TYPES.register(modEventBus);
+        ModOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
         ModLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         ModModifierEffects.MODIFIER_EFFECT_TYPES.register(modEventBus);
@@ -99,7 +106,7 @@ public class WanderersOfTheRift {
 
         if (Config.logDirtBlock) LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
 
-        LOGGER.info("{} {}", Config.magicNumberIntroduction, Config.magicNumber);
+        LOGGER.info("Reticulating splines");
 
         // Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
@@ -107,6 +114,7 @@ public class WanderersOfTheRift {
     @SubscribeEvent
     private void registerCommands(RegisterCommandsEvent event) {
         InventorySnapshotCommands.register(event.getDispatcher(), event.getBuildContext());
+        SpawnPieceCommand.register(event.getDispatcher(), event.getBuildContext());
         if (FMLEnvironment.dist.isClient()) {
             RiftMapCommands.register(event.getDispatcher(), event.getBuildContext());
         }

@@ -12,6 +12,7 @@ uniform float FrameRate0;
 out vec4 texProj0;
 out vec4 texProj1;
 out vec2 texCoord0;
+out float dist;
 
 vec4 getPortalProjection(vec3 position) {
     vec4 portalViewPos = ProjMat * vec4(position, 1.0);
@@ -22,10 +23,12 @@ vec4 getPortalProjection(vec3 position) {
 }
 
 void main() {
-    gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
+    vec4 cameraPos = ModelViewMat * vec4(Position, 1.0);
+    dist = -cameraPos.z;
+    gl_Position = ProjMat * cameraPos;
     float frameSize0 = 1.0 / Frames0;
-    float frame = floor(FrameRate0 * GameTime * 1200.0);
-    texCoord0 = vec2(UV0.x, frameSize0 * (frame + UV0.y));
+    float frame = floor(FrameRate0 * GameTime * 1200.0);        
+    texCoord0 = UV0.xy;
 
     float aspect = ProjMat[1][1]/ProjMat[0][0];
     texProj0 = getPortalProjection(Position);

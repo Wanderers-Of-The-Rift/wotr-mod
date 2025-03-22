@@ -9,8 +9,7 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-import static net.minecraft.tags.BlockTags.FENCES;
-import static net.minecraft.tags.BlockTags.WALLS;
+import static net.minecraft.tags.BlockTags.*;
 
 /* Handles Data Generation for Block Tags of the Wotr mod */
 public class ModBlockTagProvider extends BlockTagsProvider {
@@ -21,11 +20,20 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(family -> {
+            if(family.getVariant(BlockFamily.Variant.STAIRS) != null) {
+                tag(STAIRS).add(family.getVariant(BlockFamily.Variant.STAIRS).get());
+            }
+            if(family.getVariant(BlockFamily.Variant.SLAB) != null) {
+                tag(SLABS).add(family.getVariant(BlockFamily.Variant.SLAB).get());
+            }
             if(family.getVariant(BlockFamily.Variant.WALL) != null) {
                 tag(WALLS).add(family.getVariant(BlockFamily.Variant.WALL).get());
             }
             if(family.getVariant(BlockFamily.Variant.FENCE) != null) {
                 tag(FENCES).add(family.getVariant(BlockFamily.Variant.FENCE).get());
+            }
+            if(family.getVariant(BlockFamily.Variant.FENCE_GATE) != null) {
+                tag(FENCE_GATES).add(family.getVariant(BlockFamily.Variant.FENCE_GATE).get());
             }
         });
     }

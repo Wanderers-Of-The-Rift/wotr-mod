@@ -1,0 +1,20 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+
+  "elements": [
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "wotr:rift/room/portal/333/portal_flat",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "a": "#minecraft:anvil"
+  },
+  "pattern": [
+    "   ",
+    " E ",
+    " a "
+  ],
+  "result": {
+    "count": 1,
+    "id": "wotr:key_forge"
+  }
+}

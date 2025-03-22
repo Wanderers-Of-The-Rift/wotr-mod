@@ -1,0 +1,34 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+
+  "elements": [
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "wotr:rift/room/stable/333/dev_test",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 100,
+      "element": {
+
+        "location": "wotr:rift/room/stable/333/cave_pillar-1-wout",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

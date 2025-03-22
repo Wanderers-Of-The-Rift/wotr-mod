@@ -1,0 +1,123 @@
+{
+  "processors": [
+    {
+      "processor_type": "wotr:spot_gradient",
+      "replacements": [
+        {
+          "input_state": "wotr:processor_block_1",
+          "output_steps": [
+            {
+              "output_state": "minecraft:green_concrete",
+              "step_size": 0.4
+            },
+            {
+              "output_state": "minecraft:oak_wood",
+              "step_size": 0.1
+            },
+            {
+              "output_state": "minecraft:green_concrete",
+              "step_size": 0.4
+            },
+            {
+              "output_state": "minecraft:oak_wood",
+              "step_size": 0.1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dirt_path",
+              "step_size": 0.9
+            },
+            {
+              "output_state": "minecraft:coarse_dirt",
+              "step_size": 0.1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3",
+          "output_steps": [
+            {
+              "output_state": "minecraft:grass_block",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:coarse_dirt",
+              "step_size": 0.2
+            },
+            {
+              "output_state": "minecraft:dirt",
+              "step_size": 0.1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4",
+          "output_steps": [
+            {
+              "output_state": "minecraft:oak_planks",
+              "step_size": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "processor_type": "wotr:spot_gradient",
+      "replacements": [
+        {
+          "input_state": "minecraft:green_concrete",
+          "output_steps": [
+            {
+              "output_state": {
+                "type": "wotr:blockstate",
+                "Name": "minecraft:oak_leaves",
+                "Properties": {
+                  "persistent": "true",
+                  "distance": "7",
+                  "waterlogged": "false"
+                }
+              },
+              "step_size": 0.1
+            },
+            {
+              "output_state": "minecraft:green_concrete",
+              "step_size": 0.4
+            },
+            {
+              "output_state": {
+                "type": "wotr:blockstate",
+                "Name": "minecraft:oak_leaves",
+                "Properties": {
+                  "distance": "7",
+                  "persistent": "true",
+                  "waterlogged": "false"
+                }
+              },
+              "step_size": 0.1
+            },
+            {
+              "output_state": "minecraft:green_concrete",
+              "step_size": 0.4
+            }
+          ],
+          "seed_adjustment": 100
+        }
+      ]
+    },
+    {
+      "processor_type": "wotr:rift_chests",
+      "base_loot_table": "wotr:chests/",
+      "rarity": 0.6,
+      "chest_types": [
+        {
+          "chest_type": "wooden",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

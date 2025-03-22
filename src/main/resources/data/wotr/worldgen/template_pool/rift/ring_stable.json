@@ -1,0 +1,34 @@
+{
+  "fallback": "wotr:rift/passage_terminator",
+
+  "elements": [
+    {
+
+      "weight": 80,
+      "element": {
+
+        "location": "wotr:rift/passage/ring_stable",
+
+        "processors": "wotr:rift_poi_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 20,
+      "element": {
+
+        "location": "wotr:rift/passage/ring_unstable",
+
+        "processors": "wotr:rift_poi_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

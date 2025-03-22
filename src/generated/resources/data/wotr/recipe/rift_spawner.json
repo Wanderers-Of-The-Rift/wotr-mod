@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "s": "minecraft:stone"
+  },
+  "pattern": [
+    "sss",
+    "sEs",
+    "sss"
+  ],
+  "result": {
+    "count": 1,
+    "id": "wotr:rift_spawner"
+  }
+}

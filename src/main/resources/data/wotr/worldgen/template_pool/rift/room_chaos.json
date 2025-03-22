@@ -1,0 +1,62 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+
+  "elements": [
+    {
+
+      "weight": 150,
+      "element": {
+
+        "location": "wotr:rift/room/chaos/333/winding_pat-1-team",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "wotr:rift/room/chaos/111/filler_pat",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 1,
+      "element": {
+
+        "location": "wotr:rift/room/chaos/111/tavern",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+
+      "weight": 10,
+      "element": {
+
+        "location": "wotr:rift/room/chaos/131/spiraling_snake",
+
+        "processors": "wotr:rift_room_default",
+
+        "projection": "rigid",
+
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

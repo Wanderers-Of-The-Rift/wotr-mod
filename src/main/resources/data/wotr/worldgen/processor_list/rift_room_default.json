@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "processor_type": "wotr:rift_theme",
+      "piece_type": "room"
+    }
+  ]
+}

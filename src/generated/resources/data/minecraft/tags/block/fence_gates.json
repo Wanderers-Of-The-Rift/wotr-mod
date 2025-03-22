@@ -1,0 +1,18 @@
+{
+  "values": [
+    "wotr:processor_block_1_fence_gate",
+    "wotr:processor_block_2_fence_gate",
+    "wotr:processor_block_3_fence_gate",
+    "wotr:processor_block_4_fence_gate",
+    "wotr:processor_block_5_fence_gate",
+    "wotr:processor_block_6_fence_gate",
+    "wotr:processor_block_7_fence_gate",
+    "wotr:processor_block_8_fence_gate",
+    "wotr:processor_block_9_fence_gate",
+    "wotr:processor_block_10_fence_gate",
+    "wotr:processor_block_11_fence_gate",
+    "wotr:processor_block_12_fence_gate",
+    "wotr:processor_block_13_fence_gate",
+    "wotr:processor_block_14_fence_gate"
+  ]
+}

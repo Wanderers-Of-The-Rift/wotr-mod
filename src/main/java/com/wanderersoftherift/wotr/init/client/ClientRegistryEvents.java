@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapData;
 import com.wanderersoftherift.wotr.client.map.MapRoom;
 import com.wanderersoftherift.wotr.client.render.entity.RiftEntranceRenderer;
+import com.wanderersoftherift.wotr.gui.screen.KeyForgeScreen;
 import com.wanderersoftherift.wotr.gui.screen.RuneAnvilScreen;
 import com.wanderersoftherift.wotr.init.ModEntityTypes;
 import com.wanderersoftherift.wotr.init.ModMenuTypes;
@@ -60,6 +61,7 @@ public final class ClientRegistryEvents {
     @SubscribeEvent
     private static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.RUNE_ANVIL_MENU.get(), RuneAnvilScreen::new);
+        event.register(ModMenuTypes.KEY_FORGE_MENU.get(), KeyForgeScreen::new);
     }
 
     @SubscribeEvent
