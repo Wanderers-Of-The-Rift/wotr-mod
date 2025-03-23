@@ -1,13 +1,19 @@
 package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.block.RiftPortalBlock;
+import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
+import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
+import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
 import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.ModEntityTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.PocRiftChunkGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -23,6 +29,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.storage.DerivedLevelData;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -81,9 +88,22 @@ public class RiftLevelManager {
         level.getServer().markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
-        level.setBlock(new BlockPos(0, -1, 0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
+//        level.setBlock(new BlockPos(0, -1, 0), ModBlocks.RIFT_PORTAL_BLOCK.get().defaultBlockState(), 3);
+
+//        level.setBlock(new BlockPos(0, -1, 0), ModBlocks.RIFT_SPAWNER.get().defaultBlockState(), 3);
+        spawnRift(level, new BlockPos(0,0,0).above().getBottomCenter(), Direction.UP);
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
+    }
+
+    /** copy of {@link com.wanderersoftherift.wotr.item.riftkey.RiftKey#spawnRift(Level, Vec3, Direction)}*/
+    //TODO: clean it up (maybe move as static method to the entity or the spawner class)
+    private static void spawnRift(Level level, Vec3 pos, Direction dir) {
+        RiftPortalEntity rift = new RiftPortalEntity(ModEntityTypes.RIFT_ENTRANCE.get(), level);
+        rift.setPos(pos);
+        rift.setYRot(dir.toYRot());
+        rift.setBillboard(dir.getAxis().isVertical());
+        level.addFreshEntity(rift);
     }
 
     @SuppressWarnings("deprecation")
