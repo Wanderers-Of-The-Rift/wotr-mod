@@ -86,7 +86,7 @@ public class RiftPortalEntity extends Entity {
     private static Vec3 getRiftSpawnCoords(){
         var random = new Random();
         double x = random.nextDouble(2,4);
-        double y = -1;
+        double y = 0;
         double z = random.nextDouble(2,4);
         if (random.nextBoolean()) {
             x = -x;

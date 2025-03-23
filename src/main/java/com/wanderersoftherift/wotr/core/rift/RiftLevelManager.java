@@ -238,7 +238,7 @@ public class RiftLevelManager {
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
-        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("start"), ResourceLocation.withDefaultNamespace("empty"), 6, new BlockPos(0, 0, 0));
+        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("room"), 20, new BlockPos(-23, 3, 0)); //TODO: fix placement
         return riftLevel;
     }
 
