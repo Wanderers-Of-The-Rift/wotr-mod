@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.PocRiftChunkGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -238,7 +239,9 @@ public class RiftLevelManager {
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
-        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("room"), 20, new BlockPos(-23, 3, 0)); //TODO: fix placement
+        var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
+        themeData.setTheme(LevelRiftThemeData.getRandomTheme(riftLevel));
+        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("room"), 10, new BlockPos(-23, 3, 0)); //TODO: fix placement
         return riftLevel;
     }
 
