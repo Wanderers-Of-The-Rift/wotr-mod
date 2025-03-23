@@ -66,7 +66,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     @Override
     public void renderImage(@NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphics guiGraphics) {
         PoseStack pose = guiGraphics.pose();
-        float scaleFactor = 0.6F;
+        float scaleFactor = 0.5F;
 
         x += font.width(getSocketDesc());
         for (GearSocket socket : this.cmp.gearSocket) {
