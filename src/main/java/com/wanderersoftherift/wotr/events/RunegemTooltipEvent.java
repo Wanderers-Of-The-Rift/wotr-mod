@@ -2,15 +2,18 @@ package com.wanderersoftherift.wotr.events;
 
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,13 +32,17 @@ public class RunegemTooltipEvent {
 
         RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) return;
-        TagKey<Modifier> tag = runegemData.tag();
+        /*for(Pair<HolderSet<Item>, HolderSet<Modifier>> pair : runegemData.modifierLists()) {
+            pair.getFirst();
+            TagKey<Modifier> tag = runegemData.tag();
 
-        List<MutableComponent> toAdd = new ArrayList<>();
-        toAdd.add(Component.literal(tag.location().getPath()));
+            List<MutableComponent> toAdd = new ArrayList<>();
+            toAdd.add(Component.literal(tag.location().getPath()));
 
-        for (int i = 0; i < toAdd.size(); i++) {
-            list.add(i + 1, Either.left(toAdd.get(i)));
-        }
+
+            for (int i = 0; i < toAdd.size(); i++) {
+                list.add(i + 1, Either.left(toAdd.get(i)));
+            }
+        }*/
     }
 }

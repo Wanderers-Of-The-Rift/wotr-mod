@@ -3,9 +3,6 @@ package com.wanderersoftherift.wotr.item.socket;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,12 +18,6 @@ public record GearSockets(List<GearSocket> sockets) {
     public static Codec<GearSockets> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             GearSocket.CODEC.listOf().fieldOf("sockets").forGetter(GearSockets::sockets)
     ).apply(inst, GearSockets::new));
-
-    public static final StreamCodec<RegistryFriendlyByteBuf, GearSockets> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.collection(ArrayList::new, GearSocket.STREAM_CODEC),
-            GearSockets::sockets,
-            GearSockets::new
-    );
 
     public boolean isEmpty() {
         return sockets.isEmpty();

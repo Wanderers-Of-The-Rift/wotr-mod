@@ -2,12 +2,9 @@ package com.wanderersoftherift.wotr.loot.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
-import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
-import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -21,6 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS_FUNCTION;
 import static com.wanderersoftherift.wotr.init.ModTags.Runegems.RAW;
@@ -48,15 +46,14 @@ public class RunegemsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, ServerLevel level, RandomSource random) {
-        itemStack.set(ModDataComponentType.RUNEGEM_DATA, getRandomRunegem(level, RAW));
+        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, RAW);
+        randomRunegem.ifPresent(runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
         return itemStack;
     }
 
-    public RunegemData getRandomRunegem(Level level, TagKey<RunegemData> tag) {
+    public Optional<Holder<RunegemData>> getRandomRunegem(Level level, TagKey<RunegemData> tag) {
         return level.registryAccess().lookupOrThrow(ModDatapackRegistries.RUNEGEM_DATA_KEY)
                 .get(tag)
-                .flatMap(holders -> holders.getRandomElement(level.random))
-                .orElse(Holder.direct(new RunegemData (RunegemShape.CIRCLE, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW)))
-                .value();
+                .flatMap(holders -> holders.getRandomElement(level.random));
     }
 }

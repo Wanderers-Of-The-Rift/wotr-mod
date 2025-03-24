@@ -1,5 +1,8 @@
 {
   "shape": "square",
-  "tag": "wotr:shaped_defense_rune",
+  "modifier_options" :{
+    "supported_items": "#wotr:socketable",
+    "modifiers": "#wotr:shaped_defense_rune"
+  },
   "tier": "shaped"
 }

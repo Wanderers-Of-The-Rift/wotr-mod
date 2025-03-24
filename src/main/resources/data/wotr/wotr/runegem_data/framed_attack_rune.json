@@ -1,5 +1,8 @@
 {
   "shape": "circle",
-  "tag": "wotr:framed_attack_rune",
+  "modifier_options" :{
+    "supported_items": "#wotr:socketable",
+    "modifiers": "#wotr:framed_attack_rune"
+  },
   "tier": "framed"
 }

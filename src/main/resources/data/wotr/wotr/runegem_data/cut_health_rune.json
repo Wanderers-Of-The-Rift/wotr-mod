@@ -1,5 +1,8 @@
 {
   "shape": "square",
-  "tag": "wotr:cut_health_rune",
+  "modifier_options" :{
+    "supported_items": "#wotr:socketable",
+    "modifiers": "#wotr:cut_health_rune"
+  },
   "tier": "cut"
 }

@@ -9,9 +9,6 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import net.minecraft.core.Holder;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,16 +25,6 @@ public record GearSocket(
             ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
             RunegemData.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem)
     ).apply(inst, GearSocket::new));
-
-    public static final StreamCodec<RegistryFriendlyByteBuf, GearSocket> STREAM_CODEC = StreamCodec.composite(
-            RunegemShape.STREAM_CODEC,
-            GearSocket::shape,
-            ByteBufCodecs.optional(ModifierInstance.STREAM_CODEC),
-            GearSocket::modifier,
-            ByteBufCodecs.optional(RunegemData.STREAM_CODEC),
-            GearSocket::runegem,
-            GearSocket::new
-    );
 
     public static GearSocket getRandomSocket(RandomSource random) {
         RunegemShape shape = RunegemShape.getRandomShape(random);
@@ -57,7 +44,7 @@ public record GearSocket(
         if (runegemData == null) {
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifier(level);
+        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifier(level, stack);
         if (modifierHolder.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
