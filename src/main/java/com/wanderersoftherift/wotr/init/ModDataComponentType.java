@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import net.minecraft.core.UUIDUtil;
@@ -25,6 +26,7 @@ public class ModDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_SNAPSHOT_ID = register("inventory_snapshot_id", UUIDUtil.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_TIER = register("rift_tier", Codec.INT, ByteBufCodecs.INT);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> RIFT_THEME = register("rift_theme", ResourceLocation.CODEC, ResourceLocation.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<LootBox>> LOOT_BOX = register("loot_box", LootBox.CODEC, null);
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, final Codec<T> codec, @Nullable final StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
         if (streamCodec == null) {

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
+import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -21,18 +22,25 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS_FUNCTION;
-import static com.wanderersoftherift.wotr.init.ModTags.Runegems.RAW;
 
 
 public class RunegemsFunction extends LootItemConditionalFunction {
     public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> commonFields(inst)
-
+            inst -> commonFields(inst).and(
+                            RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemsFunction::getRunegemTier)
+                    )
                     .apply(inst, RunegemsFunction::new)
     );
 
-    protected RunegemsFunction(List<LootItemCondition> predicates) {
+    private RunegemTier runegemTier;
+
+    protected RunegemsFunction(List<LootItemCondition> predicates, RunegemTier runegemTier) {
         super(predicates);
+        this.runegemTier = runegemTier;
+    }
+
+    public RunegemTier getRunegemTier() {
+        return runegemTier;
     }
 
     @Override
@@ -46,7 +54,7 @@ public class RunegemsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, ServerLevel level, RandomSource random) {
-        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, RAW);
+        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegemTier.getTagKey());
         randomRunegem.ifPresent(runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
         return itemStack;
     }
@@ -55,5 +63,11 @@ public class RunegemsFunction extends LootItemConditionalFunction {
         return level.registryAccess().lookupOrThrow(ModDatapackRegistries.RUNEGEM_DATA_KEY)
                 .get(tag)
                 .flatMap(holders -> holders.getRandomElement(level.random));
+    }
+
+    public static LootItemConditionalFunction.Builder<?> setTier(RunegemTier tier) {
+        return simpleBuilder((p_298130_) -> {
+            return new RunegemsFunction(p_298130_, tier);
+        });
     }
 }

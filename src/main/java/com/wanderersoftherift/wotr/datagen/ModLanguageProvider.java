@@ -40,6 +40,7 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(ModItems.RUNEGEM, "Runegem");
         addItem(ModItems.RIFT_KEY, "Rift Key");
+        addItem(ModItems.RUNEGEM_GEODE, "Runegem Geode");
 
         addEntityType(ModEntityTypes.RIFT_ENTRANCE, "Rift Entrance");
 

@@ -1,19 +1,12 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.item.runegem.RunegemData;
-import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
-import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import static com.wanderersoftherift.wotr.init.ModTags.Items.SOCKETABLE;
 
 public class ModCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WanderersOfTheRift.MODID);
@@ -30,7 +23,7 @@ public class ModCreativeTabs {
 
                                 output.accept(ModItems.BUILDER_GLASSES);
 
-                                output.accept(ModItems.RUNEGEM);
+                                output.accept(ModItems.RUNEGEM_GEODE);
 //
 //                                ItemStack circleGem = ModItems.RUNEGEM.toStack();
 //                                new RunegemData.ModifierGroup(BuiltInRegistries.ITEM.getOrThrow(SOCKETABLE), ModModifiers.MODIFIER_KEY.)
