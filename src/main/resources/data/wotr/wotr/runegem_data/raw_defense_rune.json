@@ -1,8 +1,10 @@
 {
   "shape": "square",
-  "modifier_options" :{
-    "supported_items": "#wotr:socketable",
-    "modifiers": "#wotr:raw_defense_rune"
-  },
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:raw_defense_rune"
+    }
+  ],
   "tier": "raw"
 }
