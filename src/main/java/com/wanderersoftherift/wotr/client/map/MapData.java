@@ -59,6 +59,8 @@ public class MapData {
                     }
                 }
             }
+        } else {
+            room.cells.forEach(cell -> cells.put(new Vector3i((int) cell.pos1.x, (int) cell.pos1.y, (int) cell.pos1.z), cell)); // add all cells to hashmap
         }
         rooms.put(new Vector3i(room.x, room.y, room.z), room); // add the actual room to hashmap
     }
