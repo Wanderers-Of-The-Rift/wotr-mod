@@ -84,6 +84,7 @@ public class MapData {
 
     public static void reset() {
         cells.clear();
+        rooms.clear();
     }
 
     public static void checkRoomConnections(MapRoom room) {
