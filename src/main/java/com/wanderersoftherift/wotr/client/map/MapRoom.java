@@ -137,13 +137,14 @@ public class MapRoom {
         this.cells.stream().filter(this::shouldCheckTunnelPredicate).forEach((cell) -> {
             if (cell.connections.contains(Direction.EAST)) {
                 // draw East tunnel
-                cell.renderEastConnection(this.TWEEN_TUNNEL_SIZE, buffer, camera, new Vector4f(0.2f, 0.2f, 0.2f, .4f), mapPosition, mapSize);
+                cell.renderEastConnection(this.TWEEN_TUNNEL_SIZE, buffer, camera, new Vector4f(0.2f, 0.2f, 0.2f, .5f), mapPosition, mapSize);
             }
             if (cell.connections.contains(Direction.NORTH)) {
                 // draw North tunnel
-                cell.renderNorthConnection(this.TWEEN_TUNNEL_SIZE, buffer, camera, new Vector4f(0.2f, 0.2f, 0.2f, .4f), mapPosition, mapSize);
+                cell.renderNorthConnection(this.TWEEN_TUNNEL_SIZE, buffer, camera, new Vector4f(0.2f, 0.2f, 0.2f, .5f), mapPosition, mapSize);
             }
             if (cell.connections.contains(Direction.UP)) {
+                cell.renderTopConnection(this.TWEEN_TUNNEL_SIZE, buffer, camera, new Vector4f(0.2f, 0.2f, 0.2f, .5f), mapPosition, mapSize);
             }
         });
     }

@@ -218,4 +218,42 @@ public class MapCell {
         }
     }
 
+    public void renderTopConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition, Vector2i mapSize) {
+        float cellSize = 1 - length;
+        // render a connection to the top
+        Vector3f pp1 = new Vector3f(this.pos1.x + cellSize/2 - this.TWEEN_TUNNEL_SIZE, this.pos1.y + cellSize, this.pos1.z + cellSize/2 - this.TWEEN_TUNNEL_SIZE);
+        Vector3f pp2 = new Vector3f(this.pos1.x + cellSize/2 + this.TWEEN_TUNNEL_SIZE, this.pos1.y + cellSize + length, this.pos1.z + cellSize/2 + this.TWEEN_TUNNEL_SIZE);
+
+        float[][] vertices = calculateVertices(pp1, pp2);
+
+        int[][] faces = {
+                {0, 1, 2, 3}, // bottom
+                {7, 6, 5, 4}, // top
+                {4, 5, 1, 0}, // front
+                {6, 7, 3, 2}, // back
+                {0, 3, 7, 4}, // left
+                {5, 6, 2, 1}  // right
+        };
+
+        for (int[] face : faces) {
+            Vector4f v1 = new Vector4f(vertices[face[0]][0], vertices[face[0]][1], vertices[face[0]][2], 1.0f);
+            Vector4f v2 = new Vector4f(vertices[face[1]][0], vertices[face[1]][1], vertices[face[1]][2], 1.0f);
+            Vector4f v3 = new Vector4f(vertices[face[2]][0], vertices[face[2]][1], vertices[face[2]][2], 1.0f);
+            Vector4f v4 = new Vector4f(vertices[face[3]][0], vertices[face[3]][1], vertices[face[3]][2], 1.0f);
+
+            Vector3f p1 = projectPoint(new Vector3f(v1.x, v1.y, v1.z), camera, mapPosition, mapSize);
+            Vector3f p2 = projectPoint(new Vector3f(v2.x, v2.y, v2.z), camera, mapPosition, mapSize);
+            Vector3f p3 = projectPoint(new Vector3f(v3.x, v3.y, v3.z), camera, mapPosition, mapSize);
+            Vector3f p4 = projectPoint(new Vector3f(v4.x, v4.y, v4.z), camera, mapPosition, mapSize);
+
+            buffer.addVertex(p1.x, p1.y, p1.z).setColor(color.x, color.y, color.z, color.w).setUv(0.0f, 0.0f);
+            MapRenderer3D.putEffects(0, buffer);
+            buffer.addVertex(p2.x, p2.y, p2.z).setColor(color.x, color.y, color.z, color.w).setUv(1.0f, 0.0f);
+            MapRenderer3D.putEffects(0, buffer);
+            buffer.addVertex(p3.x, p3.y, p3.z).setColor(color.x, color.y, color.z, color.w).setUv(1.0f, 1.0f);
+            MapRenderer3D.putEffects(0, buffer);
+            buffer.addVertex(p4.x, p4.y, p4.z).setColor(color.x, color.y, color.z, color.w).setUv(0.0f, 1.0f);
+            MapRenderer3D.putEffects(0, buffer);
+        }
+    }
 }
