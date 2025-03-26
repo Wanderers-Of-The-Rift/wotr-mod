@@ -79,9 +79,36 @@ public class MapData {
             room.cells.forEach(cell -> cells.put(new Vector3i((int) cell.pos1.x, (int) cell.pos1.y, (int) cell.pos1.z), cell)); // add all cells to hashmap
         }
         rooms.put(new Vector3i(room.x, room.y, room.z), room); // add the actual room to hashmap
+        checkRoomConnections(room);
     }
 
     public static void reset() {
         cells.clear();
+    }
+
+    public static void checkRoomConnections(MapRoom room) {
+        room.getPotentialTunnels().forEach(cell -> {
+            int x = (int) cell.pos1.x;
+            int y = (int) cell.pos1.y;
+            int z = (int) cell.pos1.z;
+
+            Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.UP, Direction.DOWN};
+            Vector3i[] offsets = {new Vector3i(0, 0, 1), new Vector3i(0, 0, -1), new Vector3i(1, 0, 0), new Vector3i(-1, 0, 0), new Vector3i(0, 1, 0), new Vector3i(0, -1, 0)};
+            Direction[] opposites = {Direction.SOUTH, Direction.NORTH, Direction.WEST, Direction.EAST, Direction.DOWN, Direction.UP};
+
+            for (int i = 0; i < directions.length; i++) {
+                if (cell.openings.contains(directions[i])) {
+                    Vector3i neighborPos = new Vector3i(x, y, z).add(offsets[i]);
+                    MapCell neighbor = cells.get(neighborPos);
+                    if (neighbor != null && neighbor.openings.contains(opposites[i])) {
+                        if (directions[i] == Direction.SOUTH || directions[i] == Direction.WEST || directions[i] == Direction.DOWN) {
+                            neighbor.connections.add(opposites[i]);
+                        } else {
+                            cell.connections.add(directions[i]);
+                        }
+                    }
+                }
+            }
+        });
     }
 }
