@@ -46,6 +46,13 @@ public class MapData {
         ArrayList<MapCell> new_cells2 = new ArrayList<>();
         new_cells2.add(cell2);
         addRoom(new MapRoom(-4, 0, -3, 1, 1, 1, new_cells2));
+
+        MapCell cella = new MapCell(new Vector3f(4, 0, 0), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
+        MapCell cellb = new MapCell(new Vector3f(4, 0, 2), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
+        ArrayList<MapCell> new_cellse = new ArrayList<>();
+        new_cellse.add(cella);
+        new_cellse.add(cellb);
+        addRoom(new MapRoom(4, -1, 0, 3, 3, 3, new_cellse));
     }
 
     /**
