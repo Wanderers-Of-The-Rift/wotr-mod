@@ -22,14 +22,30 @@ public class MapData {
 
     static {
         int size = 6;
+        MapCell cell3 = new MapCell(new Vector3f(-3,1,-3), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
+        ArrayList<MapCell> new_cells3 = new ArrayList<>();
+        new_cells3.add(cell3);
+        addRoom(new MapRoom(-3, 1, -3, 1, 1, 1, new_cells3));
+        MapCell cell4 = new MapCell(new Vector3f(-3,-1,-3), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
+        ArrayList<MapCell> new_cells4 = new ArrayList<>();
+        new_cells4.add(cell4);
+        addRoom(new MapRoom(-3, -1, -3, 1, 1, 1, new_cells4));
         for (int x = -size/2; x <= size/2; x++) {
             for (int y = -size/2; y <= size/2; y++) {
-                MapCell cell = new MapCell(new Vector3f(x,0,y), 1, 0, EnumSet.noneOf(Direction.class), EnumSet.of(Direction.NORTH, Direction.EAST, Direction.UP));
+                MapCell cell = new MapCell(new Vector3f(x,0,y), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
                 ArrayList<MapCell> new_cells = new ArrayList<>();
                 new_cells.add(cell);
                 addRoom(new MapRoom(x, 0, y, 1, 1, 1, new_cells));
             }
         }
+        MapCell cell = new MapCell(new Vector3f(-3,0,-4), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
+        ArrayList<MapCell> new_cells = new ArrayList<>();
+        new_cells.add(cell);
+        addRoom(new MapRoom(-3, 0, -4, 1, 1, 1, new_cells));
+        MapCell cell2 = new MapCell(new Vector3f(-4,0,-3), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
+        ArrayList<MapCell> new_cells2 = new ArrayList<>();
+        new_cells2.add(cell2);
+        addRoom(new MapRoom(-4, 0, -3, 1, 1, 1, new_cells2));
     }
 
     /**
