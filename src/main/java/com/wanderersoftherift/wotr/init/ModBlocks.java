@@ -77,16 +77,6 @@ public class ModBlocks {
             )
     );
 
-    public static final DeferredBlock<RiftPortalBlock> RIFT_PORTAL_BLOCK = registerBlock(
-        "rift_portal",
-        () -> new RiftPortalBlock(BlockBehaviour.Properties.of()
-            .setId(blockId("rift_portal"))
-            .explosionResistance(3600000F)
-            .strength(2.5F)
-            .sound(SoundType.METAL)
-        )
-    );
-
     public static final BlockFamilyHelper PROCESSOR_BLOCK_1 = registerBuildingBlock("processor_block_1", () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_1"))));
     public static final BlockFamilyHelper PROCESSOR_BLOCK_2 = registerBuildingBlock("processor_block_2", () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_2"))));
     public static final BlockFamilyHelper PROCESSOR_BLOCK_3 = registerBuildingBlock("processor_block_3", () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_3"))));
