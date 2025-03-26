@@ -3,11 +3,11 @@
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
 uniform float GameTime;
-uniform float InnerScale;
+uniform vec2 View;
+uniform vec2 ScreenSize;
+uniform float RotationSpeed;
 
 in vec2 texCoord0;
-in vec4 texProj0;
-in vec4 texProj1;
 in float dist;
 
 out vec4 fragColor;
@@ -15,6 +15,84 @@ out vec4 fragColor;
 const float PIXELATE = 64.0;
 const float OPEN_DISTANCE = 3;
 const float CLOSE_DISTANCE = 16;
+const float PI = 3.14159265359;
+
+// #########################################################
+//     INNER CODE TAKEN FROM MY (WH4I3'S) SKYBOX SHADER
+// #########################################################
+vec2 getInnerUV(vec3 t3) {
+    vec2 t2;
+    t3=normalize(t3)/sqrt(2.0);
+    vec3 q3=abs(t3);
+    if ((q3.x>=q3.y)&&(q3.x>=q3.z)) {
+        t2.x=0.5-t3.z/t3.x;
+        t2.y=0.5-t3.y/q3.x;
+    }
+    else if ((q3.y>=q3.x)&&(q3.y>=q3.z)) {
+        t2.x=0.5+t3.x/q3.y;
+        t2.y=0.5+t3.z/t3.y;
+    }
+    else {
+        t2.x=0.5+t3.x/t3.z;
+        t2.y=0.5-t3.y/q3.z;
+    }
+    return t2;
+}
+
+vec2 getInnerUVOffset(vec3 dir1) {
+    dir1=normalize(dir1)/sqrt(2.0);
+    vec3 dir=abs(dir1);
+    // EAST
+    if ((dir.x>=dir.y)&&(dir.x>=dir.z)&&(dir1.x > 0.0)) {
+        return vec2(2.0, 1.0);
+    }
+    // WEST
+    if ((dir.x>=dir.y)&&(dir.x>=dir.z)&&(dir1.x < 0.0)) {
+        return vec2(0.0, 1.0);
+    }
+    // UP
+    if ((dir.y>=dir.x)&&(dir.y>=dir.z)&&(dir1.y > 0.0)) {
+        return vec2(1.0, 0.0);
+    }
+    // DOWN
+    if ((dir.y>=dir.x)&&(dir.y>=dir.z)&&(dir1.y < 0.0)) {
+        return vec2(1.0, 2.0);
+    }
+    // SOUTH
+    if (dir1.z > 0.0) {
+        return vec2(1.0, 1.0);
+    }
+    // NORTH
+    return vec2(3.0, 1.0);
+}
+
+mat2 rotate2d(float theta) {
+    float s = sin(theta), c = cos(theta);
+    return mat2(c, -s, s, c);
+}
+
+mat3 camera(vec3 cameraPos, vec3 lookAtPoint) {
+    vec3 cd = normalize(lookAtPoint - cameraPos);
+    vec3 cr = normalize(cross(vec3(0, 1, 0), cd));
+    vec3 cu = normalize(cross(cd, cr));
+
+    return mat3(-cr, cu, -cd);
+}
+
+vec4 getInner() {
+    float iTime = GameTime * 1000.0;
+    vec2 uv = (gl_FragCoord.xy - 0.5 * ScreenSize.xy) / ScreenSize.yy;
+
+    vec3 lp = vec3(0);
+    vec3 ro = vec3(0, 0, 10);
+    ro.yz *= rotate2d(mix(-PI/2., PI/2., 0.5 - View.x / 180.1));
+    ro.xz *= rotate2d(mix(-PI, PI, (View.y + RotationSpeed * iTime) / 360.0));
+
+    vec3 rd = camera(ro, lp) * normalize(vec3(uv, -0.5));
+
+    return texture(Sampler1, (getInnerUV(rd)/2.0+0.25+getInnerUVOffset(rd))/4.0);
+}
+
 
 void main() {
     float iTime = GameTime * 1000.0;
@@ -57,26 +135,17 @@ void main() {
     if (mask <= 0.0) {
         discard;
     }
+
+    if (color.x <= 0.01) {
+        fragColor = getInner();
+        return;
+    }
     
     vec3 lines = vec3(0.0);
     lines += mix(-1.5, 1.0, texture(Sampler0, (uv + vec2(0.0, iTime * 3.0)) / vec2(0.2, 10.0)).x);
     lines = clamp(lines, vec3(0.0), vec3(1.0));
     lines = vec3(round(lines.x));
     lines *= mask;
-
-    if (color.x <= 0.01) {
-        vec2 centeredCoords = (texProj0.xy / texProj0.w) - 0.5;
-        vec2 texCoord = InnerScale * vec2(centeredCoords.x, centeredCoords.y / texProj0.z) + 0.5;
-        float w = texProj0.w;
-        if (texCoord.x > 1.0 || texCoord.x < 0.0) {
-            centeredCoords = (texProj1.xy / texProj1.w) - 0.5;
-            texCoord = InnerScale * vec2(centeredCoords.x, centeredCoords.y / texProj1.z) + 0.5;
-            w = texProj1.w;
-        }
-        vec2 texCoord1 = clamp(texCoord, 0.0, 1.0);
-        texCoord1.y = 1.0 - sign(w) * texCoord1.y;
-        color = texture(Sampler1, texCoord1).rgb;
-    }
 
     fragColor = vec4(color + lines, mask);
 }

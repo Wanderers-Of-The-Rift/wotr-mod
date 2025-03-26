@@ -1,73 +1,17 @@
 {
   "vertex": "wotr:rift_portal",
   "fragment": "wotr:rift_portal",
-  "defines": {
-    "values": {
-      "ALPHA_CUTOUT": "0.1"
-    }
-  },
+  "defines": { "values": {} },
   "samplers": [
-    {
-      "name": "Sampler0"
-    },
-    {
-      "name": "Sampler1"
-    }
+    { "name": "Sampler0" },
+    { "name": "Sampler1" }
   ],
   "uniforms": [
-    {
-      "name": "ModelViewMat",
-      "type": "matrix4x4",
-      "count": 16,
-      "values": [
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-      ]
-    },
-    {
-      "name": "ProjMat",
-      "type": "matrix4x4",
-      "count": 16,
-      "values": [
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-      ]
-    },
-    {
-      "name": "InnerScale",
-      "type": "float",
-      "count": 1,
-      "values": [
-        1.5
-      ]
-    },
-    {
-      "name": "GameTime",
-      "type": "float",
-      "count": 1,
-      "values": [
-        0
-      ]
-    },
-    {
-      "name": "Frames0",
-      "type": "float",
-      "count": 1,
-      "values": [
-        9
-      ]
-    },
-    {
-      "name": "FrameRate0",
-      "type": "float",
-      "count": 1,
-      "values": [
-        10
-      ]
-    }
+    { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ] },
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ] },
+    { "name": "GameTime", "type": "float", "count": 1, "values": [ 0 ] },
+    { "name": "View", "type": "float", "count": 2, "values": [ 0, 0 ] },
+    { "name": "ScreenSize", "type": "float", "count": 2, "values": [ 0, 0 ] },
+    { "name": "RotationSpeed", "type": "float", "count": 1, "values": [ 4 ] }
   ]
 }

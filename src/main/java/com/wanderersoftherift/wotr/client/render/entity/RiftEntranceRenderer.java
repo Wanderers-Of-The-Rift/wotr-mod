@@ -1,9 +1,14 @@
 package com.wanderersoftherift.wotr.client.render.entity;
 
+import com.mojang.blaze3d.shaders.Uniform;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.client.ModShaders;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -12,6 +17,7 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +55,25 @@ public class RiftEntranceRenderer extends EntityRenderer<RiftPortalEntity, RiftE
         else {
             dir = state.facingDir.getUnitVec3().toVector3f();
         }
+
+
+        CompiledShaderProgram shader = RenderSystem.setShader(ModShaders.RIFT_PORTAL);
+        if (shader != null) {
+            Uniform screenSize = shader.getUniform("ScreenSize");
+            if (screenSize != null) {
+                screenSize.set((float) Minecraft.getInstance().getWindow().getWidth(), (float)Minecraft.getInstance().getWindow().getHeight());
+            }
+
+            Uniform view = shader.getUniform("View");
+            if (view != null) {
+                float x = this.entityRenderDispatcher.camera.getXRot();
+                float y = Mth.wrapDegrees(this.entityRenderDispatcher.camera.getYRot());
+                view.set(x, y);
+            }
+
+            shader.apply();
+        }
+
         poseStack.mulPose(new Quaternionf().lookAlong(dir, new Vector3f(0, -1, 0)));
 
         PoseStack.Pose posestack$pose = poseStack.last();

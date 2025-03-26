@@ -21,5 +21,7 @@
 
   "spawn_overrides": {},
 
-  "pool_aliases": []
+  "pool_aliases": [],
+
+  "start_jigsaw_name": "wotr:portal"
 }
