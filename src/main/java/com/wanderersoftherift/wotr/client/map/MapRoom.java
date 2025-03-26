@@ -13,6 +13,7 @@ import org.lwjgl.system.MemoryUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.wanderersoftherift.wotr.client.map.Utils3D.calculateVertices;
 import static com.wanderersoftherift.wotr.client.map.Utils3D.projectPoint;
@@ -153,6 +154,10 @@ public class MapRoom {
         return cell.pos1.x == this.x + this.sizeX - 1 || // East wall
                 cell.pos1.y == this.y + this.sizeY - 1 || // Top of the room
                 cell.pos1.z == this.z + this.sizeZ - 1;   // North wall
+    }
+
+    public List<MapCell> getPotentialTunnels() {
+        return this.cells.stream().filter(this::shouldCheckTunnelPredicate).toList();
     }
 
 }
