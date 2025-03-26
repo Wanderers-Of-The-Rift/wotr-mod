@@ -135,7 +135,7 @@ public class MapRoom {
         }
 
         // tunnels
-        this.cells.stream().filter(this::shouldCheckTunnelPredicate).forEach((cell) -> {
+        this.cells.stream().filter(this::shouldRenderTunnelPredicate).forEach((cell) -> {
             if (cell.connections.contains(Direction.EAST)) {
                 // draw East tunnel
                 cell.renderEastConnection(this.TWEEN_TUNNEL_SIZE, buffer, camera, new Vector4f(0.2f, 0.2f, 0.2f, .5f), mapPosition, mapSize);
@@ -150,10 +150,19 @@ public class MapRoom {
         });
     }
 
+    private boolean shouldRenderTunnelPredicate(MapCell cell) {
+        return cell.pos1.x == this.x + this.sizeX - 1 || // East wall
+                cell.pos1.y == this.y + this.sizeY - 1 || // Top of the room
+                cell.pos1.z == this.z + this.sizeZ - 1;
+    }
+
     private boolean shouldCheckTunnelPredicate(MapCell cell) {
         return cell.pos1.x == this.x + this.sizeX - 1 || // East wall
                 cell.pos1.y == this.y + this.sizeY - 1 || // Top of the room
-                cell.pos1.z == this.z + this.sizeZ - 1;   // North wall
+                cell.pos1.z == this.z + this.sizeZ - 1 ||   // North wall
+                cell.pos1.x == this.x || // West wall
+                cell.pos1.y == this.y || // Bottom of the room
+                cell.pos1.z == this.z; // South wall
     }
 
     public List<MapCell> getPotentialTunnels() {
