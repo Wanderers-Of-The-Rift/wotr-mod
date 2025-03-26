@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.client.map;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 
 /**
@@ -17,6 +19,19 @@ import java.util.HashMap;
 public class MapData {
     public static HashMap<Vector3i, MapCell> cells = new HashMap<>();
     public static HashMap<Vector3i, MapRoom> rooms = new HashMap<>();
+
+    static {
+        int size = 6;
+        for (int x = -size/2; x <= size/2; x++) {
+            for (int y = -size/2; y <= size/2; y++) {
+                MapCell cell = new MapCell(new Vector3f(x,0,y), 1, 0, EnumSet.noneOf(Direction.class), EnumSet.of(Direction.NORTH, Direction.EAST, Direction.UP));
+                ArrayList<MapCell> new_cells = new ArrayList<>();
+                new_cells.add(cell);
+                addRoom(new MapRoom(x, 0, y, 1, 1, 1, new_cells));
+            }
+        }
+    }
+
     /**
      * Used to add new cell to the map
      * In the future will be used to process cell changes like the small 1wide tunnels between rooms
