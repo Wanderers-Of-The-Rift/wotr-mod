@@ -241,7 +241,7 @@ public class RiftLevelManager {
         riftData.setPortalPos(portalPos);
         var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
         themeData.setTheme(LevelRiftThemeData.getRandomTheme(riftLevel));
-        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("room"), 10, new BlockPos(-23, 3, 0)); //TODO: fix placement
+        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"), 3, new BlockPos(0, 2, 0));
         return riftLevel;
     }
 
