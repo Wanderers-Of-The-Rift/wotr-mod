@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.item.runegem;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
@@ -24,7 +23,7 @@ public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists,
             RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
     ).apply(inst, RunegemData::new));
 
-    public Optional<Holder<Modifier>> getRandomModifier(Level level, ItemStack stack) {
+    public Optional<Holder<Modifier>> getRandomModifierForItem(ItemStack stack, Level level) {
         List<Holder<Modifier>> modifiers = modifierLists.stream()
                 .filter(group -> stack.is(group.supportedItems()))
                 .map(ModifierGroup::modifiers)

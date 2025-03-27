@@ -138,7 +138,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             GearSocket currentSocket = slot.getSocket();
             ItemStack runegem = slot.getItem();
             if (slot.mayPickup(this.playerInventory.player) && !runegem.isEmpty()) {
-                GearSocket newGearSocket = currentSocket.applyRunegem(runegem, this.playerInventory.player.level());
+                GearSocket newGearSocket = currentSocket.applyRunegem(gear, runegem, this.playerInventory.player.level());
                 newSockets.add(newGearSocket);
             } else {
                 newSockets.add(currentSocket);

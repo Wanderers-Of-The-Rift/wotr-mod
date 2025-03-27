@@ -39,12 +39,12 @@ public record GearSocket(
         return isEmpty() && this.shape().equals(runegemData.shape());
     }
 
-    public GearSocket applyRunegem(ItemStack stack, Level level) {
-        RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
+    public GearSocket applyRunegem(ItemStack stack, ItemStack runegem, Level level) {
+        RunegemData runegemData = runegem.get(ModDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) {
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifier(level, stack);
+        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifierForItem(stack, level);
         if (modifierHolder.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
