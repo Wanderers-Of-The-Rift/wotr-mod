@@ -1,5 +1,5 @@
 {
-  "shape": "circle",
+  "shape": "triangle",
   "modifier_options": [
     {
       "supported_items": "#wotr:socketable",

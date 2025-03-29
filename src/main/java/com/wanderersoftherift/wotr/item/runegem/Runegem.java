@@ -23,12 +23,12 @@ import java.util.Optional;
 public class Runegem extends Item {
     public static final Map<RunegemTier, ResourceLocation> TIER_RESOURCE_LOCATION_MAP =
             Map.of(
-                    RunegemTier.RAW, WanderersOfTheRift.id("textures/tooltip/runegem/raw.png"),
-                    RunegemTier.SHAPED, WanderersOfTheRift.id("textures/tooltip/runegem/shaped.png"),
-                    RunegemTier.CUT, WanderersOfTheRift.id("textures/tooltip/runegem/cut.png"),
-                    RunegemTier.POLISHED, WanderersOfTheRift.id("textures/tooltip/runegem/polished.png"),
-                    RunegemTier.FRAMED, WanderersOfTheRift.id("textures/tooltip/runegem/framed.png"),
-                    RunegemTier.UNIQUE, WanderersOfTheRift.id("textures/tooltip/runegem/unique.png")
+                    RunegemTier.RAW, WanderersOfTheRift.id("textures/tooltip/runegem/tier/raw.png"),
+                    RunegemTier.SHAPED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/shaped.png"),
+                    RunegemTier.CUT, WanderersOfTheRift.id("textures/tooltip/runegem/tier/cut.png"),
+                    RunegemTier.POLISHED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/polished.png"),
+                    RunegemTier.FRAMED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/framed.png"),
+                    RunegemTier.UNIQUE, WanderersOfTheRift.id("textures/tooltip/runegem/tier/unique.png")
             );
 
     public Runegem(Properties properties) {

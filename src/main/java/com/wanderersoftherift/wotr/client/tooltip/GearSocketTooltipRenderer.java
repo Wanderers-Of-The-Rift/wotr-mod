@@ -28,12 +28,12 @@ import java.util.Map;
 public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     public static final Map<RunegemShape, ResourceLocation> SHAPE_RESOURCE_LOCATION_MAP =
             Map.of(
-                    RunegemShape.CIRCLE, WanderersOfTheRift.id("textures/tooltip/runegem/circle.png"),
-                    RunegemShape.DIAMOND, WanderersOfTheRift.id("textures/tooltip/runegem/diamond.png"),
-                    RunegemShape.HEART, WanderersOfTheRift.id("textures/tooltip/runegem/heart.png"),
-                    RunegemShape.PENTAGON, WanderersOfTheRift.id("textures/tooltip/runegem/pentagon.png"),
-                    RunegemShape.SQUARE, WanderersOfTheRift.id("textures/tooltip/runegem/square.png"),
-                    RunegemShape.TRIANGLE, WanderersOfTheRift.id("textures/tooltip/runegem/triangle.png")
+                    RunegemShape.CIRCLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/circle.png"),
+                    RunegemShape.DIAMOND, WanderersOfTheRift.id("textures/tooltip/runegem/shape/diamond.png"),
+                    RunegemShape.HEART, WanderersOfTheRift.id("textures/tooltip/runegem/shape/heart.png"),
+                    RunegemShape.PENTAGON, WanderersOfTheRift.id("textures/tooltip/runegem/shape/pentagon.png"),
+                    RunegemShape.SQUARE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/square.png"),
+                    RunegemShape.TRIANGLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/triangle.png")
             );
     private final int spacing = Minecraft.getInstance().font.lineHeight + 2;
     private final GearSocketComponent cmp;

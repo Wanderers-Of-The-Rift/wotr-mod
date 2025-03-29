@@ -1,5 +1,5 @@
 {
-  "shape": "square",
+  "shape": "diamond",
   "modifier_options": [
     {
       "supported_items": "#wotr:socketable",

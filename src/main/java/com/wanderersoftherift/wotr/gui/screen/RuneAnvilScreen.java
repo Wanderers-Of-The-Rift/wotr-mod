@@ -55,7 +55,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
             if (runegemSlot.getShape() == null) return;
             RunegemShape shape = runegemSlot.getShape();
 
-            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape), 18, 18, 18, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape), 0, 18, 18, 256, 256);
         } else {
             guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 0, 0, 18, 18, 256, 256);
         }

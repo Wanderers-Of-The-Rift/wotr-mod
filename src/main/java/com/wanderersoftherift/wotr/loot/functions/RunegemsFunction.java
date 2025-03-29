@@ -54,15 +54,15 @@ public class RunegemsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, ServerLevel level, RandomSource random) {
-        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegemTier.getTagKey());
+        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegemTier.getTagKey(), random);
         randomRunegem.ifPresent(runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
         return itemStack;
     }
 
-    public Optional<Holder<RunegemData>> getRandomRunegem(Level level, TagKey<RunegemData> tag) {
+    public Optional<Holder<RunegemData>> getRandomRunegem(Level level, TagKey<RunegemData> tag, RandomSource random) {
         return level.registryAccess().lookupOrThrow(ModDatapackRegistries.RUNEGEM_DATA_KEY)
                 .get(tag)
-                .flatMap(holders -> holders.getRandomElement(level.random));
+                .flatMap(holders -> holders.getRandomElement(random));
     }
 
     public static LootItemConditionalFunction.Builder<?> setTier(RunegemTier tier) {
