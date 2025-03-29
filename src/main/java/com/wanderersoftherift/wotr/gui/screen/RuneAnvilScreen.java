@@ -55,26 +55,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
             if (runegemSlot.getShape() == null) return;
             RunegemShape shape = runegemSlot.getShape();
 
-            switch (shape) {
-                case DIAMOND:
-                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 18, 0, 18, 18, 256, 256);
-                    break;
-                case TRIANGLE:
-                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 36, 0, 18, 18, 256, 256);
-                    break;
-                case HEART:
-                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 54, 0, 18, 18, 256, 256);
-                    break;
-                case CIRCLE:
-                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 72, 0, 18, 18, 256, 256);
-                    break;
-                case SQUARE:
-                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 90, 0, 18, 18, 256, 256);
-                    break;
-                case PENTAGON:
-                    guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 0, 18, 18, 256, 256);
-                    break;
-            }
+            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape), 18, 18, 18, 256, 256);
         } else {
             guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 0, 0, 18, 18, 256, 256);
         }
@@ -87,25 +68,17 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
         }
 
         RunegemShape shape = runegemSlot.getShape();
-        switch (shape) {
-            case DIAMOND:
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 18, 18, 18, 18, 256, 256);
-                break;
-            case TRIANGLE:
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 36, 18, 18, 18, 256, 256);
-                break;
-            case HEART:
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 54, 18, 18, 18, 256, 256);
-                break;
-            case CIRCLE:
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 72, 18, 18, 18, 256, 256);
-                break;
-            case SQUARE:
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 90, 18, 18, 18, 256, 256);
-                break;
-            case PENTAGON:
-                guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 108, 18, 18, 18, 256, 256);
-                break;
-        }
+        guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape), 18, 18, 18, 256, 256);
+    }
+
+    private int getSlotOffset(RunegemShape shape) {
+        return switch (shape) {
+            case DIAMOND -> 18;
+            case TRIANGLE -> 36;
+            case HEART -> 54;
+            case CIRCLE -> 72;
+            case SQUARE -> 90;
+            case PENTAGON -> 108;
+        };
     }
 }

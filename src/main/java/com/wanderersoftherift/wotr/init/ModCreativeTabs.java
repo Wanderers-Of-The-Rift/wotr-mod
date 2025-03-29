@@ -24,31 +24,6 @@ public class ModCreativeTabs {
                                 output.accept(ModItems.BUILDER_GLASSES);
 
                                 output.accept(ModItems.RUNEGEM_GEODE);
-//
-//                                ItemStack circleGem = ModItems.RUNEGEM.toStack();
-//                                new RunegemData.ModifierGroup(BuiltInRegistries.ITEM.getOrThrow(SOCKETABLE), ModModifiers.MODIFIER_KEY.)
-//                                circleGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.CIRCLE, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));
-//                                output.accept(circleGem);
-//
-//                                ItemStack squareGem = ModItems.RUNEGEM.toStack();
-//                                squareGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.SQUARE, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "cut_health_rune"), RunegemTier.CUT));
-//                                output.accept(squareGem);
-//
-//                                ItemStack triangleGem = ModItems.RUNEGEM.toStack();
-//                                triangleGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.TRIANGLE, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "raw_defense_rune"), RunegemTier.RAW));
-//                                output.accept(triangleGem);
-//
-//                                ItemStack diamondGem = ModItems.RUNEGEM.toStack();
-//                                diamondGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.DIAMOND, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "shaped_defense_rune"), RunegemTier.SHAPED));
-//                                output.accept(diamondGem);
-//
-//                                ItemStack heartGem = ModItems.RUNEGEM.toStack();
-//                                heartGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.HEART, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "cut_health_rune"), RunegemTier.CUT));
-//                                output.accept(heartGem);
-//
-//                                ItemStack pentagonGem = ModItems.RUNEGEM.toStack();
-//                                pentagonGem.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(RunegemShape.PENTAGON, WanderersOfTheRift.tagId(ModDatapackRegistries.MODIFIER_KEY, "raw_attack_rune"), RunegemTier.RAW));
-//                                output.accept(pentagonGem);
                             }).build());
 
 }
