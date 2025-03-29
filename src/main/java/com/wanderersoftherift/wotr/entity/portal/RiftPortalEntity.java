@@ -18,6 +18,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
@@ -34,6 +35,7 @@ import java.util.Set;
 public class RiftPortalEntity extends Entity {
     private static final String BILLBOARD = "billboard";
     private static final EntityDataAccessor<Boolean> DATA_BILLBOARD = SynchedEntityData.defineId(RiftPortalEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> DATA_RIFTKEY = SynchedEntityData.defineId(RiftPortalEntity.class, EntityDataSerializers.ITEM_STACK);
 
     public RiftPortalEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -42,7 +44,7 @@ public class RiftPortalEntity extends Entity {
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        builder.define(DATA_BILLBOARD, true);
+        builder.define(DATA_BILLBOARD, true).define(DATA_RIFTKEY, ItemStack.EMPTY);
     }
 
     @Override
@@ -55,21 +57,21 @@ public class RiftPortalEntity extends Entity {
                         tpHome(serverPlayer, serverLevel);
                         continue;
                     }
-                    tpToRift(serverPlayer, serverLevel, new BlockPos(blockPosition().getX(), blockPosition().getY(), blockPosition().getZ()));
+                    tpToRift(serverPlayer, serverLevel, new BlockPos(blockPosition().getX(), blockPosition().getY(), blockPosition().getZ()), getRiftKey());
                 }
             }
         }
     }
 
 
-    private static InteractionResult tpToRift(ServerPlayer player, ServerLevel level, BlockPos pos) {
+    private static InteractionResult tpToRift(ServerPlayer player, ServerLevel level, BlockPos pos, ItemStack riftKey) {
         ResourceLocation riftId = WanderersOfTheRift.id("rift_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ());
         var plDir = player.getDirection().getOpposite();
         var axis = plDir.getAxis();
         var axisDir = plDir.getAxisDirection().getStep();
 
 
-        ServerLevel lvl = RiftLevelManager.getOrCreateRiftLevel(riftId, level.dimension(), pos.relative(axis, 3 * axisDir));
+        ServerLevel lvl = RiftLevelManager.getOrCreateRiftLevel(riftId, level.dimension(), pos.relative(axis, 3 * axisDir), riftKey);
         if (lvl == null) {
             player.displayClientMessage(Component.literal("Failed to create rift"), true);
             return InteractionResult.FAIL;
@@ -138,4 +140,13 @@ public class RiftPortalEntity extends Entity {
     public boolean isBillboard() {
         return entityData.get(DATA_BILLBOARD);
     }
+
+    public void setRiftkey(ItemStack key) {
+        this.entityData.set(DATA_RIFTKEY, key);
+    }
+
+    public ItemStack getRiftKey() {
+        return entityData.get(DATA_RIFTKEY);
+    }
+
 }

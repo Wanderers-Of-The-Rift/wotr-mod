@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Menu for the Key Forge.
@@ -41,7 +42,10 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     private final static int INPUT_SLOTS_Y = 33;
     private final static int INPUT_SLOT_X_OFFSET = 25;
     private final static int INPUT_SLOT_Y_OFFSET = 25;
-    private static final List<Integer> TIER_COSTS = ImmutableList.of(20, 60, 180, 540, 1620);
+    private static final List<Integer> TIER_COSTS = IntStream.iterate(10, n -> n + 8)
+        .limit(20)
+        .boxed()
+        .toList();
 
     private final ContainerLevelAccess access;
     private final Container inputContainer;

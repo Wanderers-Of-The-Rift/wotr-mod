@@ -132,6 +132,7 @@ dependencies {
     runtimeOnly "curse.maven:huge-structure-blocks-474114:${huge_structure_blocks_version}"
     runtimeOnly "curse.maven:building-wands-363392:${building_wands_version}"
     runtimeOnly "curse.maven:worldedit-225608:${worldedit_version}"
+    runtimeOnly "maven.modrinth:shut-up-rei:1.0"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

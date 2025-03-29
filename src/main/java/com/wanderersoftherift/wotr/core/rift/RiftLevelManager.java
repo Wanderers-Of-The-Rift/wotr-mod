@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
+import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModEntityTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
@@ -9,6 +10,7 @@ import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.PocRiftChunkGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -19,6 +21,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -32,6 +35,7 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -45,7 +49,7 @@ public class RiftLevelManager {
 
     //TODO: unload the dimesnions if all plauers are disconnected, but still in the dimension
     @SuppressWarnings("deprecation")
-    public static ServerLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    public static ServerLevel getOrCreateRiftLevel(ResourceLocation id, ResourceKey<Level> portalDimension, BlockPos portalPos, @Nullable ItemStack riftKey) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var ow = server.overworld();
 
@@ -70,7 +74,7 @@ public class RiftLevelManager {
             return null;
         }
 
-        ServerLevel level = createRift(id, stem, portalDimension, portalPos);
+        ServerLevel level = createRift(id, stem, portalDimension, portalPos, riftKey);
 
         Registry<Level> registry = dimensionRegistry.get();
         if (registry instanceof MappedRegistry<Level> mappedRegistry) {
@@ -205,7 +209,7 @@ public class RiftLevelManager {
         return new PocRiftChunkGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("melon"));
     }
 
-    private static ServerLevel createRift(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos) {
+    private static ServerLevel createRift(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos, @Nullable ItemStack riftKey) {
         AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
         var chunkProgressListener = server.getProgressListenerFactory().create(0);
         var storageSource = server.getStorageSource();
@@ -236,8 +240,25 @@ public class RiftLevelManager {
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
         var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
-        themeData.setTheme(LevelRiftThemeData.getRandomTheme(riftLevel));
-        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"), 3, new BlockPos(0, 2, 0));
+
+        Holder<RiftTheme> riftTheme = null;
+        int maxDepth = 5;
+        if (riftKey != null) {
+            ResourceLocation theme = riftKey.get(ModDataComponentType.RIFT_THEME);
+            if (theme != null) {
+                riftTheme = LevelRiftThemeData.fromId(theme, riftLevel);
+            }
+            Integer tier = riftKey.get(ModDataComponentType.RIFT_TIER);
+            if (tier != null) {
+                maxDepth = tier;
+            }
+        }
+        if (riftTheme == null) {
+            riftTheme = LevelRiftThemeData.getRandomTheme(riftLevel);
+        }
+        themeData.setTheme(riftTheme);
+
+        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"), maxDepth, new BlockPos(0, 2, 0));
         return riftLevel;
     }
 
