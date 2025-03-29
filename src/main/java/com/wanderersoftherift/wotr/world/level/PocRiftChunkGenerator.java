@@ -71,6 +71,13 @@ public class PocRiftChunkGenerator extends ChunkGenerator {
 
     @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunk) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                for (int y = getMinY(); y < getMinY() + getGenDepth() ; y++) {
+                    chunk.setBlockState(new BlockPos(x, y, z), customBlock, false);
+                }
+            }
+        }
         return CompletableFuture.completedFuture(chunk);
     }
 
