@@ -5,10 +5,10 @@
   "respawn_anchor_works": false,
   "bed_works": false,
   "has_raids": false,
-  "has_skylight": true,
+  "has_skylight": false,
   "has_ceiling": false,
   "coordinate_scale": 1,
-  "ambient_light": 1,
+  "ambient_light": 0.05,
   "fixed_time": 0,
   "logical_height": 384,
   "effects": "wotr:rift_dimension_renderer",
@@ -17,7 +17,7 @@
   "height": 384,
   "monster_spawn_light_level": {
     "type": "minecraft:constant",
-    "value": 15
+    "value": 0
   },
   "monster_spawn_block_light_limit": 0
 }

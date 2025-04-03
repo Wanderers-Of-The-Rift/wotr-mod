@@ -13,8 +13,8 @@ public class RiftDimensionSpecialEffects extends DimensionSpecialEffects {
                 Float.NaN,
                 false,
                 DimensionSpecialEffects.SkyType.NONE,
-                true, // idk, might want to change this no clue what it does tbh
-                true // this too
+                false,
+                false
         );
     }
 
