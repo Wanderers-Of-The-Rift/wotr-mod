@@ -89,4 +89,41 @@ public class Utils3D {
                 {maxX, maxY, maxZ}, {minX, maxY, maxZ}
         };
     }
+
+    public static boolean isPointInPolygon(int x, int y, Vector3f[] projectedVertices) {
+        Vector3f[][] faces = new Vector3f[][]{
+                {projectedVertices[0], projectedVertices[1], projectedVertices[2], projectedVertices[3]}, // bottom
+                {projectedVertices[4], projectedVertices[5], projectedVertices[6], projectedVertices[7]}, // top
+                {projectedVertices[0], projectedVertices[1], projectedVertices[5], projectedVertices[4]}, // front
+                {projectedVertices[2], projectedVertices[3], projectedVertices[7], projectedVertices[6]}, // back
+                {projectedVertices[0], projectedVertices[3], projectedVertices[7], projectedVertices[4]}, // left
+                {projectedVertices[1], projectedVertices[2], projectedVertices[6], projectedVertices[5]}  // right
+        };
+
+        // check if mouse position is inside the room (projected vertices)
+
+        for (Vector3f[] face : faces) {
+            if (isPointInFace(x, y, face)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isPointInFace(int x, int y, Vector3f[] faceVertices) {
+        boolean inside = false;
+        int j = faceVertices.length - 1;
+
+        for (int i = 0; i < faceVertices.length; i++) { // fancy maths stuffs
+            if ((faceVertices[i].y > y) != (faceVertices[j].y > y) &&
+                    (x < (faceVertices[j].x - faceVertices[i].x) *
+                            (y - faceVertices[i].y) / (faceVertices[j].y - faceVertices[i].y) +
+                            faceVertices[i].x)) {
+                inside = !inside;
+            }
+            j = i;
+        }
+
+        return inside;
+    }
 }
