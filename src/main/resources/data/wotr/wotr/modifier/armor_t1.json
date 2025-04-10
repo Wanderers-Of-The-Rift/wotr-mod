@@ -1,0 +1,13 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:flat_armor",
+      "attribute": "armor",
+      "min_roll": 2,
+      "max_roll": 5,
+      "operation": "add_value"
+    }
+  ]
+}

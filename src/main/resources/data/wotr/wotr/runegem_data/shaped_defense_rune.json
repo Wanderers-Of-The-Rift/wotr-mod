@@ -1,0 +1,10 @@
+{
+  "shape": "square",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:shaped_defense_rune"
+    }
+  ],
+  "tier": "shaped"
+}

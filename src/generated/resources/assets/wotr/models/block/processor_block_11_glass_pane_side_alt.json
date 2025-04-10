@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_glass_pane_side_alt",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "edge": "wotr:block/processor_block_11_glass_pane_top",
+    "pane": "wotr:block/processor_block_11_glass"
+  }
+}

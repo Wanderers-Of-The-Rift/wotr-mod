@@ -111,6 +111,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 dependencies {
+    compileOnly "maven.modrinth:sophisticated-core:${sophisticated_core_version}"
+    compileOnly "maven.modrinth:sophisticated-backpacks:${sophisticated_backpacks_version}"
     runtimeOnly "curse.maven:cloth-config-348521:${cloth_config_version}"
     runtimeOnly "curse.maven:architectury-api-419699:${architectury_version}"
     runtimeOnly "curse.maven:sodium-394468:${sodium_version}"
@@ -138,7 +140,8 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
                              mod_license            : mod_license,
                              mod_version            : mod_version,
                              mod_authors            : mod_authors,
-                             mod_description        : mod_description]
+                             mod_description        : mod_description,
+                             sophisticated_backpacks_version_range : sophisticated_backpacks_version_range]
     inputs.properties replaceProperties
     expand replaceProperties
     from "src/main/templates"

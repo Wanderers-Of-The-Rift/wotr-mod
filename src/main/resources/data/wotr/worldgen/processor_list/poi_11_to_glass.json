@@ -1,0 +1,63 @@
+{
+    "processors": [
+        {
+            "processor_type": "wotr:spot_gradient",
+            "replacements": [
+                {
+                    "input_state": "wotr:processor_block_11",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:orange_stained_glass",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:magenta_stained_glass",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:light_blue_stained_glass",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:pink_stained_glass",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:cyan_stained_glass",
+                            "step_size": 0.2
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_11_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:magenta_stained_glass_pane",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:pink_stained_glass_pane",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:cyan_stained_glass_pane",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:light_blue_stained_glass_pane",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:pink_stained_glass_pane",
+                            "step_size": 0.2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "processor_type": "wotr:rift_theme",
+            "piece_type": "poi"
+        }
+    ]
+}

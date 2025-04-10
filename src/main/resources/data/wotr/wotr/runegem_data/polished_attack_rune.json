@@ -1,0 +1,10 @@
+{
+  "shape": "triangle",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:polished_attack_rune"
+    }
+  ],
+  "tier": "polished"
+}

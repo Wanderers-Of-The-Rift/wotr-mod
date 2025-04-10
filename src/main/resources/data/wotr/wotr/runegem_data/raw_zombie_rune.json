@@ -1,0 +1,10 @@
+{
+  "shape": "heart",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:raw_zombie_rune"
+    }
+  ],
+  "tier": "raw"
+}

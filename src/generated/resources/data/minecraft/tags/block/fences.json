@@ -13,6 +13,7 @@
     "wotr:processor_block_11_fence",
     "wotr:processor_block_12_fence",
     "wotr:processor_block_13_fence",
-    "wotr:processor_block_14_fence"
+    "wotr:processor_block_14_fence",
+    "wotr:processor_block_15_fence"
   ]
 }

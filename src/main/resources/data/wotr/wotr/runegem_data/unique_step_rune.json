@@ -1,0 +1,10 @@
+{
+  "shape": "pentagon",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:unique_step_rune"
+    }
+  ],
+  "tier": "unique"
+}

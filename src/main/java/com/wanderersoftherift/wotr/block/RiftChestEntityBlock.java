@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.block;
 
+import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BlockGetter;

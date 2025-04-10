@@ -2,11 +2,11 @@
   "processors": [
     {
       "piece_type": "poi",
-      "processors": "wotr:forest_poi"
+      "processors": "wotr:poi_theme_forest"
     },
     {
       "piece_type": "room",
-      "processors": "wotr:forest_room"
+      "processors": "wotr:room_theme_forest"
     }
   ]
 }

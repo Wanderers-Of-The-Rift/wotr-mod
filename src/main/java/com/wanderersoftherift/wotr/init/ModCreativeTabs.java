@@ -23,7 +23,7 @@ public class ModCreativeTabs {
 
                                 output.accept(ModItems.BUILDER_GLASSES);
 
-                                output.accept(ModItems.RUNEGEM);
+                                output.accept(ModItems.RUNEGEM_GEODE);
                             }).build());
 
 }

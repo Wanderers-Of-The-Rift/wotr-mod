@@ -9,7 +9,7 @@
 
         "location": "wotr:rift/passage/ring_portal",
 
-        "processors": "wotr:rift_poi_default",
+        "processors": "wotr:room_theme_default",
 
         "projection": "rigid",
 

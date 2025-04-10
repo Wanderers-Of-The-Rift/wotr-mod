@@ -30,16 +30,25 @@ public class GradientReplaceProcessor extends StructureProcessor {
             builder.group(
                     InputToOutputs.CODEC.listOf().fieldOf("replacements")
                             .xmap(InputToOutputs::toMap, InputToOutputs::toInputToOutputs).forGetter(GradientReplaceProcessor::getReplaceMap),
+                    Codec.DOUBLE.optionalFieldOf("noise_scale_x", 0.075D).forGetter(GradientReplaceProcessor::getNoiseScaleX),
+                    Codec.DOUBLE.optionalFieldOf("noise_scale_y", 0.075D).forGetter(GradientReplaceProcessor::getNoiseScaleY),
+                    Codec.DOUBLE.optionalFieldOf("noise_scale_z", 0.075D).forGetter(GradientReplaceProcessor::getNoiseScaleZ),
                     Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment)
             ).apply(builder, GradientReplaceProcessor::new));
 
     private final Map<InputBlockState, List<OutputStep>> replaceMap;
+    private final double noiseScaleX;
+    private final double noiseScaleY;
+    private final double noiseScaleZ;
     private final int seedAdjustment;
 
     protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
 
-    public GradientReplaceProcessor(Map<InputBlockState, List<OutputStep>> replaceMap, int seedAdjustment) {
-        this.replaceMap = replaceMap;
+    public GradientReplaceProcessor(Map<InputBlockState, List<OutputStep>> replaceMap, double noiseScaleX, double noiseScaleY, double noiseScaleZ, int seedAdjustment) {
+        this.replaceMap = new Object2ObjectLinkedOpenHashMap<>(replaceMap);
+        this.noiseScaleX = noiseScaleX;
+        this.noiseScaleY = noiseScaleY;
+        this.noiseScaleZ = noiseScaleZ;
         this.seedAdjustment = seedAdjustment;
     }
 
@@ -82,7 +91,7 @@ public class GradientReplaceProcessor extends StructureProcessor {
     }
 
     private BlockState getReplacementBlock(List<OutputStep> outputSteps, BlockPos blockPos, OpenSimplex2F noiseGen) {
-        double noiseValue = (noiseGen.noise3_Classic(blockPos.getX() * 0.075D, blockPos.getY() * 0.075D, blockPos.getZ() * 0.075D));
+        double noiseValue = (noiseGen.noise3_Classic(blockPos.getX() * getNoiseScaleX(), blockPos.getY() * getNoiseScaleY(), blockPos.getZ() * getNoiseScaleZ()));
         float stepSize = 0;
         for(OutputStep outputStep: outputSteps){
             stepSize = stepSize+outputStep.stepSize;
@@ -103,6 +112,18 @@ public class GradientReplaceProcessor extends StructureProcessor {
 
     public int getSeedAdjustment() {
         return seedAdjustment;
+    }
+
+    public double getNoiseScaleX() {
+        return noiseScaleX;
+    }
+
+    public double getNoiseScaleY() {
+        return noiseScaleY;
+    }
+
+    public double getNoiseScaleZ() {
+        return noiseScaleZ;
     }
 
     private record InputToOutputs(InputBlockState inputBlockState, List<OutputStep> outputSteps) {

@@ -1,0 +1,13 @@
+{
+  "tier": 3,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:flat_attack_damage",
+      "attribute": "attack_damage",
+      "min_roll": 5,
+      "max_roll": 7,
+      "operation": "add_value"
+    }
+  ]
+}

@@ -5,14 +5,11 @@ import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.init.ModItems;
-import com.wanderersoftherift.wotr.item.runegem.RuneGemShape;
+import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
+import net.minecraft.client.data.models.blockstates.*;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
@@ -20,7 +17,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class ModModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
-        blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_BLOCK.get());
+        blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.DEV_BLOCK.get());
         blockModels.createTrivialCube(ModBlocks.KEY_FORGE.get());
 
@@ -61,6 +61,7 @@ public class ModModelProvider extends ModelProvider {
 
         itemModels.generateFlatItem(ModItems.EXAMPLE_ITEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
 
         this.generateRunegemItem(ModItems.RUNEGEM.get(), itemModels);
 
@@ -68,14 +69,22 @@ public class ModModelProvider extends ModelProvider {
     }
 
     private void createModelsForBuildBlock(BlockFamilyHelper helper, BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-        blockModels.family(helper.getBlock().get()).generateFor(helper.getFamily());
+       if (helper.getModVariants(BlockFamilyHelper.ModBlockFamilyVariant.PANE) != null) {
+           createGlassPane(blockModels, helper.getModVariants(BlockFamilyHelper.ModBlockFamilyVariant.GLASS_BLOCK).get(), helper.getModVariants(BlockFamilyHelper.ModBlockFamilyVariant.PANE).get() );
+       }
+
+       if (helper.getModVariants(BlockFamilyHelper.ModBlockFamilyVariant.DIRECTIONAL_PILLAR) != null) {
+           createDirectionalPillar(blockModels, helper.getModVariants(BlockFamilyHelper.ModBlockFamilyVariant.DIRECTIONAL_PILLAR).get());
+       }
+
+       blockModels.family(helper.getBlock().get()).generateFor(helper.getFamily());
     }
 
     public void generateRunegemItem(Item item, ItemModelGenerators itemModels) {
         ResourceLocation modelLocation = ModelLocationUtils.getModelLocation(item);
         ResourceLocation shapeLocation = ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "item/runegem/shape/");
-        List<SelectItemModel.SwitchCase<RuneGemShape>> list = new ArrayList<>(RuneGemShape.values().length);
-        for (RuneGemShape shape : RuneGemShape.values()) {
+        List<SelectItemModel.SwitchCase<RunegemShape>> list = new ArrayList<>(RunegemShape.values().length);
+        for (RunegemShape shape : RunegemShape.values()) {
             ItemModel.Unbaked model = ItemModelUtils.plainModel(createRuneGemShapeModel(shapeLocation.withSuffix(shape.getName()), ModItems.RUNEGEM.get(), shape.getName(), ModelTemplates.FLAT_ITEM, itemModels));
             list.add(ItemModelUtils.when(shape, model));
         }
@@ -95,4 +104,115 @@ public class ModModelProvider extends ModelProvider {
                 .select(Direction.WEST, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270));
     }
 
+
+    private void createGlassPane(BlockModelGenerators blockModels, Block glassBlock, Block paneBlock) {
+        blockModels.createTrivialBlock(
+                glassBlock,
+                TexturedModel.createDefault(
+                        block -> new TextureMapping().put(TextureSlot.ALL, TextureMapping.getBlockTexture(glassBlock)),
+                        ExtendedModelTemplateBuilder.builder()
+                                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/cube_all"))
+                                .requiredTextureSlot(TextureSlot.ALL)
+                                .renderType("translucent")
+                                .build()
+                )
+        );
+
+        ExtendedModelTemplate panePostTemplate = ExtendedModelTemplateBuilder.builder()
+                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_glass_pane_post"))
+                .suffix("_post")
+                .requiredTextureSlot(TextureSlot.EDGE)
+                .requiredTextureSlot(TextureSlot.PANE)
+                .renderType("translucent")
+                .build();
+
+        ExtendedModelTemplate paneSideTemplate = ExtendedModelTemplateBuilder.builder()
+                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_glass_pane_side"))
+                .suffix("_side")
+                .requiredTextureSlot(TextureSlot.EDGE)
+                .requiredTextureSlot(TextureSlot.PANE)
+                .renderType("translucent")
+                .build();
+
+        ExtendedModelTemplate paneSideAltTemplate = ExtendedModelTemplateBuilder.builder()
+                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_glass_pane_side_alt"))
+                .suffix("_side_alt")
+                .requiredTextureSlot(TextureSlot.EDGE)
+                .requiredTextureSlot(TextureSlot.PANE)
+                .renderType("translucent")
+                .build();
+
+        ExtendedModelTemplate paneNoSideTemplate = ExtendedModelTemplateBuilder.builder()
+                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_glass_pane_noside"))
+                .suffix("_noside")
+                .requiredTextureSlot(TextureSlot.EDGE)
+                .requiredTextureSlot(TextureSlot.PANE)
+                .renderType("translucent")
+                .build();
+
+        ExtendedModelTemplate paneNoSideAltTemplate = ExtendedModelTemplateBuilder.builder()
+                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_glass_pane_noside_alt"))
+                .suffix("_noside_alt")
+                .requiredTextureSlot(TextureSlot.EDGE)
+                .requiredTextureSlot(TextureSlot.PANE)
+                .renderType("translucent")
+                .build();
+
+        TextureMapping texturemapping = TextureMapping.pane(glassBlock, paneBlock);
+        ResourceLocation resourceLocationPanePost = panePostTemplate.create(paneBlock, texturemapping, blockModels.modelOutput);
+        ResourceLocation resourceLocationPaneSide = paneSideTemplate.create(paneBlock, texturemapping, blockModels.modelOutput);
+        ResourceLocation resourceLocationPaneSideAlt = paneSideAltTemplate.create(paneBlock, texturemapping, blockModels.modelOutput);
+        ResourceLocation resourceLocationNoSide = paneNoSideTemplate.create(paneBlock, texturemapping, blockModels.modelOutput);
+        ResourceLocation resourceLocationNoSideAlt = paneNoSideAltTemplate.create(paneBlock, texturemapping, blockModels.modelOutput);
+        Item item = paneBlock.asItem();
+
+        blockModels.registerSimpleItemModel(item, blockModels.createFlatItemModelWithBlockTexture(item, glassBlock));
+        blockModels.blockStateOutput
+                .accept(
+                        MultiPartGenerator.multiPart(paneBlock)
+                                .with(Variant.variant().with(VariantProperties.MODEL, resourceLocationPanePost))
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.NORTH, true),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationPaneSide)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.EAST, true),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationPaneSide)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.SOUTH, true),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationPaneSideAlt)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.WEST, true),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationPaneSideAlt)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.NORTH, false),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationNoSide)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.EAST, false),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationNoSideAlt)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.SOUTH, false),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationNoSideAlt)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
+                                )
+                                .with(
+                                        Condition.condition().term(BlockStateProperties.WEST, false),
+                                        Variant.variant().with(VariantProperties.MODEL, resourceLocationNoSide)
+                                                .with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
+                                )
+                );
+    }
+
+
+    private void createDirectionalPillar(BlockModelGenerators blockModels, Block directionalPillarBlock) {
+        blockModels.createRotatedPillarWithHorizontalVariant(directionalPillarBlock,
+                TexturedModel.COLUMN_ALT, TexturedModel.COLUMN_HORIZONTAL_ALT);
+    }
 }

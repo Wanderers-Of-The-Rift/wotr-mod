@@ -1,0 +1,117 @@
+{
+    "processors": [
+        {
+            "processor_type": "wotr:spot_gradient",
+            "replacements": [
+                {
+                    "input_state": "wotr:processor_block_13",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_planks",
+                            "step_size": 0.75
+                        },
+                        {
+                            "output_state": "minecraft:jungle_planks",
+                            "step_size": 0.25
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_13_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_slab",
+                            "step_size": 0.75
+                        },
+                        {
+                            "output_state": "minecraft:jungle_slab",
+                            "step_size": 0.25
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_13_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_stairs",
+                            "step_size": 0.75
+                        },
+                        {
+                            "output_state": "minecraft:jungle_stairs",
+                            "step_size": 0.25
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_13_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:jungle_fence",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:air",
+                            "step_size": 0.1
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_13_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:spruce_trapdoor",
+                            "step_size": 0.7
+                        },
+                        {
+                            "output_state": "minecraft:air",
+                            "step_size": 0.3
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_14",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:stone_bricks",
+                            "step_size": 1
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_14_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:stone_brick_slab",
+                            "step_size": 1
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_14_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:stone_brick_stairs",
+                            "step_size": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "processor_type": "minecraft:block_age",
+            "mossiness": 0.1
+        },
+        {
+            "processor_type": "wotr:rift_theme",
+            "piece_type": "room"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.server.inventorySnapshot;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;

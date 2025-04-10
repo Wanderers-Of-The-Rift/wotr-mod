@@ -1,10 +1,5 @@
 package com.wanderersoftherift.wotr.client.render;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -17,6 +12,8 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3f;
+
+import java.util.*;
 
 /**
  * Utility class for extracting wireframe outlines from a {@link BakedModel}.

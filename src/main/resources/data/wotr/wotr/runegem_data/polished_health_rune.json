@@ -1,0 +1,10 @@
+{
+  "shape": "diamond",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:polished_health_rune"
+    }
+  ],
+  "tier": "polished"
+}

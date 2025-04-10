@@ -8,7 +8,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
-import static com.mojang.text2speech.Narrator.LOGGER;
+import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
 
 public class LevelRiftObjectiveData extends SavedData {

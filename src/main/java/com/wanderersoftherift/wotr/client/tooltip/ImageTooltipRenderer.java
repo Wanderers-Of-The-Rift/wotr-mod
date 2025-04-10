@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.client.tooltip;
 
 import com.wanderersoftherift.wotr.util.TextureUtils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -34,7 +33,7 @@ public class ImageTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics guiGraphics) {
-        guiGraphics.blit(RenderType::guiTextured, this.component.asset, x, y+ 1, 0F, 0F,
+        guiGraphics.blit(RenderType::guiTextured, this.component.asset, x, y - 1, 0F, 0F,
                 this.textureWidth,
                 this.textureHeight,
                 this.textureWidth,
@@ -49,7 +48,7 @@ public class ImageTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public int getHeight(Font font) {
-        return Math.max(textureHeight, Minecraft.getInstance().font.lineHeight + 2);
+        return Math.max(textureHeight, Minecraft.getInstance().font.lineHeight);
     }
 
     @Override

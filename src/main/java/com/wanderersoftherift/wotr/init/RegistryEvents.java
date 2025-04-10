@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -27,7 +29,7 @@ public class RegistryEvents {
                 AbstractModifierEffect.DIRECT_CODEC
         );
         event.dataPackRegistry(
-                ModModifiers.MODIFIER_KEY,
+                ModDatapackRegistries.MODIFIER_KEY,
                 Modifier.DIRECT_CODEC,
                 Modifier.DIRECT_CODEC
         );
@@ -35,6 +37,16 @@ public class RegistryEvents {
                 ModRiftThemes.RIFT_THEME_KEY,
                 RiftTheme.DIRECT_CODEC,
                 RiftTheme.DIRECT_SYNC_CODEC
+        );
+        event.dataPackRegistry(
+                ModDatapackRegistries.RUNEGEM_DATA_KEY,
+                RunegemData.CODEC,
+                RunegemData.CODEC
+        );
+        event.dataPackRegistry(
+                ModDatapackRegistries.GEAR_IMPLICITS_CONFIG,
+                ImplicitConfig.CODEC,
+                ImplicitConfig.CODEC
         );
     }
 }

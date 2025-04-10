@@ -1,0 +1,13 @@
+{
+    "tier": 1,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:step_height_t1",
+        "attribute": "step_height",
+        "min_roll": 0.5,
+        "max_roll": 0.5,
+        "operation": "add_value"
+      }
+    ]
+  }

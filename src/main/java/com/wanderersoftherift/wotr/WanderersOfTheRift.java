@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
+import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.InventorySnapshotCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
@@ -13,12 +14,15 @@ import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModEntityTypes;
 import com.wanderersoftherift.wotr.init.ModInputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.ModLootModifiers;
 import com.wanderersoftherift.wotr.init.ModMenuTypes;
 import com.wanderersoftherift.wotr.init.ModModifierEffects;
 import com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.ModOutputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.ModProcessors;
+import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
+import com.wanderersoftherift.wotr.init.ModSoundEvents;
 import com.wanderersoftherift.wotr.server.inventorySnapshot.InventorySnapshotSystem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,6 +34,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -65,6 +70,8 @@ public class WanderersOfTheRift {
         ModModifierEffects.MODIFIER_EFFECT_TYPES.register(modEventBus);
         ModOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
         ModEntityTypes.ENTITIES.register(modEventBus);
+        ModLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
+        ModSoundEvents.SOUND_EVENTS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (Wotr) to respond directly to events.
@@ -72,6 +79,7 @@ public class WanderersOfTheRift {
         NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative); // Register the item to a creative tab
+        modEventBus.addListener(this::modInterop);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
@@ -109,6 +117,10 @@ public class WanderersOfTheRift {
         // Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
+    private void modInterop(final FMLCommonSetupEvent event) {
+        ModList.get().getModContainerById("sophisticatedbackpacks").ifPresent(x -> SophisticatedBackpackInterop.load());
+    }
+
     @SubscribeEvent
     private void registerCommands(RegisterCommandsEvent event) {
         InventorySnapshotCommands.register(event.getDispatcher(), event.getBuildContext());
@@ -116,6 +128,7 @@ public class WanderersOfTheRift {
         if (FMLEnvironment.dist.isClient()) {
             RiftMapCommands.register(event.getDispatcher(), event.getBuildContext());
         }
+        new DebugCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent

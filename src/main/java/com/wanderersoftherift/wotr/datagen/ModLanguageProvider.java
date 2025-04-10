@@ -30,7 +30,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // Adds a block translation.
         addBlock(ModBlocks.DEV_BLOCK, "Dev Block");
-        addBlock(ModBlocks.RUNE_ANVIL_BLOCK, "Rune Anvil");
+        addBlock(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK, "Rune Anvil");
         addBlock(ModBlocks.RIFT_CHEST, "Rift Chest");
         addBlock(ModBlocks.RIFT_SPAWNER, "Rift Spawner");
         addBlock(ModBlocks.KEY_FORGE, "Key Forge");
@@ -40,6 +40,7 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(ModItems.RUNEGEM, "Runegem");
         addItem(ModItems.RIFT_KEY, "Rift Key");
+        addItem(ModItems.RUNEGEM_GEODE, "Runegem Geode");
 
         addEntityType(ModEntityTypes.RIFT_ENTRANCE, "Rift Entrance");
 
@@ -51,6 +52,7 @@ public class ModLanguageProvider extends LanguageProvider {
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
             //addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));
             helper.getVariants().forEach((variant, block) -> addBlock(block, getTranslationString(block.get())));
+            helper.getModVariants().forEach((variant, block) -> addBlock(block, getTranslationString(block.get())));
         });
 
         add("block." + WanderersOfTheRift.MODID + ".processor_block_1", "Processor Block 1 [Wall]");
@@ -70,13 +72,19 @@ public class ModLanguageProvider extends LanguageProvider {
 
 
         // Adds a generic translation
-        add("itemGroup." + WanderersOfTheRift.MODID, "Dimension Delvers");
+        add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
 
         add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
 
         add("container." + WanderersOfTheRift.MODID + ".rune_anvil", "Rune Anvil");
+        add("container." + WanderersOfTheRift.MODID + ".rune_anvil.apply", "Apply");
         add("container." + WanderersOfTheRift.MODID + ".rift_chest", "Rift Chest");
         add("container." + WanderersOfTheRift.MODID + ".key_forge", "Key Forge");
+
+        add("command." + WanderersOfTheRift.MODID + ".dev_world_set", "Dev World settings applied:\n - %1$s: Disabled\n - %2$s: Disabled\n - %3$s: Disabled\n - %4$s: Disabled\n - %5$s: Disabled\n - %6$s: Disabled");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_item", "Held item is empty!");
+        add("command." + WanderersOfTheRift.MODID + ".get_item_stack_components.invalid_player", "Player is null!");
+        add("command." + WanderersOfTheRift.MODID + ".get_item_stack_components.success", "Item Components available for '%1$s'");
 
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.title", "Dimension Delvers: Accessibility Settings");
         add("accessibility." + WanderersOfTheRift.MODID + ".menubutton", "DimDelvers Accessibility (tmp)");
@@ -100,6 +108,10 @@ public class ModLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Rift Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
+        add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
+
+        add("subtitles." + WanderersOfTheRift.MODID + ".rift_open", "Rift Opens");
+
     }
 
     private void addEssenceType(String id, String value) {

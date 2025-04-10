@@ -27,7 +27,7 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.St
 public class WeightedReplaceProcessor extends StructureProcessor {
     public static final MapCodec<WeightedReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
-                    WeightedBlockstateEntry.CODEC.listOf().fieldOf("gradient_list").forGetter(WeightedReplaceProcessor::getWeightList),
+                    WeightedBlockstateEntry.CODEC.listOf().fieldOf("output_list").forGetter(WeightedReplaceProcessor::getWeightList),
                     InputBlockState.DIRECT_CODEC.fieldOf("input_state").forGetter(WeightedReplaceProcessor::getInputBlockState),
                     RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK).forGetter(WeightedReplaceProcessor::getStructureRandomType),
                     Codec.LONG.optionalFieldOf("seed_adjustment", 6551687435L).forGetter(WeightedReplaceProcessor::getSeedAdjustment)

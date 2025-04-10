@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModEntityTypes;
+import com.wanderersoftherift.wotr.init.ModSoundEvents;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -61,6 +62,7 @@ public class RiftKey extends Item {
                 }
 
                 spawnRift(level, loc.position(), loc.direction());
+
                 context.getItemInHand().shrink(1);
                 return InteractionResult.SUCCESS;
             }
@@ -96,5 +98,6 @@ public class RiftKey extends Item {
         rift.setYRot(dir.toYRot());
         rift.setBillboard(dir.getAxis().isVertical());
         level.addFreshEntity(rift);
+        rift.playSound(ModSoundEvents.RIFT_OPEN.value());
     }
 }

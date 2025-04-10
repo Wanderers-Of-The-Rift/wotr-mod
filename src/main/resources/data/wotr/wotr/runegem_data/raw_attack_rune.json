@@ -1,0 +1,10 @@
+{
+  "shape": "circle",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable",
+      "modifiers": "#wotr:raw_attack_rune"
+    }
+  ],
+  "tier": "raw"
+}

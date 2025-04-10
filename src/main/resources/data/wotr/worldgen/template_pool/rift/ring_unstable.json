@@ -4,12 +4,12 @@
   "elements": [
     {
 
-      "weight": 80,
+      "weight": 40,
       "element": {
 
         "location": "wotr:rift/passage/ring_unstable",
 
-        "processors": "wotr:rift_poi_default",
+        "processors": "wotr:room_theme_default",
 
         "projection": "rigid",
 
@@ -18,12 +18,12 @@
     },
     {
 
-      "weight": 20,
+      "weight": 60,
       "element": {
 
         "location": "wotr:rift/passage/ring_chaos",
 
-        "processors": "wotr:rift_poi_default",
+        "processors": "wotr:room_theme_default",
 
         "projection": "rigid",
 

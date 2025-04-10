@@ -1,0 +1,98 @@
+{
+  "processors": [
+    {
+      "processor_type": "wotr:spot_gradient",
+      "noise_scale_x":  0.02,
+      "noise_scale_y":  0.05,
+      "noise_scale_z":  0.02,
+      "replacements": [
+        {
+          "input_state": "wotr:processor_block_1",
+          "output_steps": [
+            {
+              "output_state": "minecraft:stone",
+              "step_size": 0.45
+            },
+            {
+              "output_state": "minecraft:air",
+              "step_size": 0.55
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "processor_type": "wotr:mushrooms",
+      "rarity": 0.05
+    },
+    {
+      "processor_type": "wotr:vines",
+      "rarity": 0.1
+    },
+    {
+      "processor_type": "wotr:attachment",
+      "requires_sides": 0,
+      "requires_up": true,
+      "rarity": 0.01,
+      "blockstate": {
+        "Name": "minecraft:lantern",
+        "Properties": {
+          "hanging": "true"
+        }
+      }
+    },
+    {
+      "processor_type": "wotr:attachment",
+      "requires_sides": 0,
+      "requires_down": true,
+      "rarity": 0.01,
+      "blockstate": {
+        "Name": "minecraft:rail",
+        "Properties": {
+        }
+      }
+    },
+    {
+      "processor_type": "wotr:spot_gradient",
+      "noise_scale_x":  0.08,
+      "noise_scale_y":  0.08,
+      "noise_scale_z":  0.08,
+      "replacements": [
+        {
+          "input_state": "minecraft:stone",
+          "output_steps": [
+            {
+              "output_state": "minecraft:stone",
+              "step_size": 0.8
+            },
+            {
+              "output_state": "minecraft:iron_ore",
+              "step_size": 0.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "processor_type": "wotr:spot_gradient",
+      "noise_scale_x": 0.05,
+      "noise_scale_y": 0.05,
+      "noise_scale_z": 0.05,
+      "replacements": [
+        {
+          "input_state": "minecraft:stone",
+          "output_steps": [
+            {
+              "output_state": "minecraft:stone",
+              "step_size": 0.95
+            },
+            {
+              "output_state": "minecraft:diamond_ore",
+              "step_size": 0.05
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

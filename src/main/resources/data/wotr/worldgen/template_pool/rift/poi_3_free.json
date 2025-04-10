@@ -9,7 +9,7 @@
 
         "location": "wotr:rift/poi/3/free/chest_test",
 
-        "processors": "wotr:rift_poi_default",
+        "processors": "wotr:poi_theme_default",
 
         "projection": "rigid",
 

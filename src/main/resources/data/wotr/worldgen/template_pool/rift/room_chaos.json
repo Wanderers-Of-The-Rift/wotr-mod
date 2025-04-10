@@ -1,62 +1,59 @@
 {
-  "fallback": "wotr:rift/room_terminator",
-
-  "elements": [
-    {
-
-      "weight": 150,
-      "element": {
-
-        "location": "wotr:rift/room/chaos/333/winding_pat-1-team",
-
-        "processors": "wotr:rift_room_default",
-
-        "projection": "rigid",
-
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-
-      "weight": 1,
-      "element": {
-
-        "location": "wotr:rift/room/chaos/111/filler_pat",
-
-        "processors": "wotr:rift_room_default",
-
-        "projection": "rigid",
-
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-
-      "weight": 1,
-      "element": {
-
-        "location": "wotr:rift/room/chaos/111/tavern",
-
-        "processors": "wotr:rift_room_default",
-
-        "projection": "rigid",
-
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-
-      "weight": 10,
-      "element": {
-
-        "location": "wotr:rift/room/chaos/131/spiraling_snake",
-
-        "processors": "wotr:rift_room_default",
-
-        "projection": "rigid",
-
-        "element_type": "minecraft:single_pool_element"
-      }
-    }
-  ]
+    "fallback": "wotr:rift/room_terminator",
+    "elements": [
+        {
+            "weight": 36,
+            "element": {
+                "location": "wotr:rift/room/chaos/221/twist-1-wout",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 36,
+            "element": {
+                "location": "wotr:rift/room/chaos/212/fountain-1-pat",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 12,
+            "element": {
+                "location": "wotr:rift/room/chaos/111/tavern-1-warren",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 12,
+            "element": {
+                "location": "wotr:rift/room/chaos/111/filler-1-pat",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 44,
+            "element": {
+                "location": "wotr:rift/room/chaos/131/spiraling_snake-1-warren",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 108,
+            "element": {
+                "location": "wotr:rift/room/chaos/333/winding_path-1-mal",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        }
+    ]
 }

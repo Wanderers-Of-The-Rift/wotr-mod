@@ -9,7 +9,7 @@
 
         "location": "wotr:rift/room/portal/333/portal_flat",
 
-        "processors": "wotr:rift_room_default",
+        "processors": "wotr:room_theme_default",
 
         "projection": "rigid",
 

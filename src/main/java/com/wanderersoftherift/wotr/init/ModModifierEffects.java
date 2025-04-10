@@ -1,14 +1,15 @@
 package com.wanderersoftherift.wotr.init;
 
 
+import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import com.mojang.serialization.MapCodec;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
+
 import java.util.function.Supplier;
 
 
@@ -27,6 +28,6 @@ public class ModModifierEffects {
     );
 
     public static final Supplier<MapCodec<? extends AbstractModifierEffect>> ATTRIBUTE_MODIFIER = MODIFIER_EFFECT_TYPES.register(
-            "attribute_modifier", () -> AttributeModifierEffect.MODIFIER_CODEC
+            "attribute", () -> AttributeModifierEffect.MODIFIER_CODEC
     );
 }
