@@ -98,6 +98,43 @@ public class MapRoom {
             i++;
         }
 
+        // TODO: merge the hover outline code with regular wire frame, since thats already done
+        boolean isHovered = isHovered(mouseX, mouseY, camera, mapPosition, mapSize);
+
+        List<Vector3f> outlinePoints = getOutlinePoints(camera, mapPosition, mapSize);
+
+        // Draw the outline
+        for (int e = 0; e < outlinePoints.size(); e++) {
+            Vector3f start = outlinePoints.get(e);
+            Vector3f end = outlinePoints.get((e + 1) % outlinePoints.size()); // Wrap around to the first point
+
+            buffer.addVertex(start.x, start.y, start.z)
+                    .setColor(isHovered ? 0f : 1f, isHovered ? 1f : 0f, 0f, 1f)
+                    .setUv(0.0f, 0.0f)
+                    .misc(MapRenderer3D.EFFECTS, 0);
+            MapRenderer3D.putEffects(this.effectFlags, buffer);
+
+            buffer.addVertex(end.x, end.y, end.z)
+                    .setColor(isHovered ? 0f : 1f, isHovered ? 1f : 0f, 0f, 1f)
+                    .setUv(1.0f, 0.0f)
+                    .misc(MapRenderer3D.EFFECTS, 0);
+            MapRenderer3D.putEffects(this.effectFlags, buffer);
+        }
+    }
+
+    // used to determine if the mouse is hovering over the room TODO: optimize, since were in the render loop, we dont have to project the vertices again
+    private boolean isHovered(int mouseX, int mouseY, VirtualCamera camera, Vector2i mapPosition, Vector2i mapSize) {
+        // Get the projected vertices of the room
+        Vector3f pos2_sub = new Vector3f(this.pos2.x - this.TWEEN_TUNNEL_SIZE, this.pos2.y - this.TWEEN_TUNNEL_SIZE, this.pos2.z - this.TWEEN_TUNNEL_SIZE);
+        float[][] vertices = Utils3D.calculateVertices(this.pos1, pos2_sub);
+
+        Vector3f[] projectedVertices = new Vector3f[8];
+        for (int i = 0; i < vertices.length; i++) {
+            projectedVertices[i] = Utils3D.projectPoint(vertices[i][0], vertices[i][1], vertices[i][2], camera, mapPosition, mapSize);
+        }
+
+        // check if mouse position is inside the room
+        return Utils3D.isPointInPolygon(mouseX, mouseY, projectedVertices);
     }
 
     private final int [][] cubeFaces = {
@@ -167,6 +204,24 @@ public class MapRoom {
 
     public List<MapCell> getPotentialTunnels() {
         return this.cells.stream().filter(this::shouldCheckTunnelPredicate).toList();
+    }
+
+    // returns the outline points of the room TODO: optimize, since were in the render loop, we dont have to project the vertices again
+    public List<Vector3f> getOutlinePoints(VirtualCamera camera, Vector2i mapPosition, Vector2i mapSize) {
+        // calculate the 3D vertices of the room
+        Vector3f pos2_sub = new Vector3f(this.pos2.x - this.TWEEN_TUNNEL_SIZE, this.pos2.y - this.TWEEN_TUNNEL_SIZE, this.pos2.z - this.TWEEN_TUNNEL_SIZE);
+        float[][] vertices = Utils3D.calculateVertices(this.pos1, pos2_sub);
+
+        // Project the vertices to 2D screen space
+        List<Vector3f> outlinePoints = new ArrayList<>();
+        for (int[] edge : this.wireEdges) {
+            Vector3f start = Utils3D.projectPoint(vertices[edge[0]][0], vertices[edge[0]][1], vertices[edge[0]][2], camera, mapPosition, mapSize);
+            Vector3f end = Utils3D.projectPoint(vertices[edge[1]][0], vertices[edge[1]][1], vertices[edge[1]][2], camera, mapPosition, mapSize);
+            outlinePoints.add(start);
+            outlinePoints.add(end);
+        }
+
+        return outlinePoints;
     }
 
 }
