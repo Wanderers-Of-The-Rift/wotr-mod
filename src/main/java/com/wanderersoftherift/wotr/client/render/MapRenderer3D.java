@@ -73,7 +73,7 @@ public class MapRenderer3D {
         return pos.distance(camPos) < renderDistance;
     }
 
-    public void renderMap(long tick, float partialTick) {
+    public void renderMap(long tick, float partialTick, int mouseX, int mouseY) {
         // sets both position and rotation
         camera.orbitAroundOrigin(camPitch, camYaw, distance, camPos.x, camPos.y, camPos.z);
 
@@ -118,7 +118,7 @@ public class MapRenderer3D {
         }));
 
         rooms.forEach((pos, room) -> {
-            if (isInRenderDistance(room.pos1)) room.renderWireframe(lineBuffer, camera, mapPosition, mapSize);
+            if (isInRenderDistance(room.pos1)) room.renderWireframe(lineBuffer, camera, mapPosition, mapSize, mouseX, mouseY);
         });
         /*cells.forEach((pos, cell) -> {
             cell.renderWireframe(lineBuffer, camera, mapPosition, mapSize);
