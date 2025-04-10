@@ -205,4 +205,8 @@ public class MapRenderer3D {
         // update aspect ratio of the virtual camera
         camera.setAspectRatio((float) width / height);
     }
+
+    public VirtualCamera getCamera() {
+        return this.camera;
+    }
 }
