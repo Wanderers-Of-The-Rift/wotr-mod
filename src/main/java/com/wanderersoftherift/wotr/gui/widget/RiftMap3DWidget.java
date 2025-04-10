@@ -31,6 +31,8 @@ public class RiftMap3DWidget extends AbstractWidget {
 
     private MapRenderer3D mapRenderer;
 
+    private int currentMouseX, currentMouseY;
+
     public RiftMap3DWidget(int x, int y, int width, int height, float renderDistance) {
         super(x, y, width, height, Component.literal("mapRenderer"));
         this.mapRenderer = new MapRenderer3D(x, y, width, height, renderDistance);
@@ -68,7 +70,7 @@ public class RiftMap3DWidget extends AbstractWidget {
             this.mapRenderer.distance = targetDistance;
         }
         
-        this.mapRenderer.renderMap(this.ticks, partialTick);
+        this.mapRenderer.renderMap(this.ticks, partialTick, this.currentMouseX, this.currentMouseY);
     }
 
     @Override
@@ -79,6 +81,13 @@ public class RiftMap3DWidget extends AbstractWidget {
     public void tick() {
         this.ticks += 1;
     }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) { // need this to get mouse coords to the rendering for highlighting purposes
+        this.currentMouseX = (int) mouseX;
+        this.currentMouseY = (int) mouseY;
+    }
+
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
