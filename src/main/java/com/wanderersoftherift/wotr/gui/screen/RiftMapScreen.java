@@ -84,6 +84,14 @@ public class RiftMapScreen extends Screen {
     }
 
     @Override
+    public void mouseMoved(double mouseX, double mouseY) { // needed to pass mouseMoved to the map widget for highlighting
+        super.mouseMoved(mouseX, mouseY);
+        if (this.mapWidget.isMouseOver(mouseX, mouseY)) {
+            this.mapWidget.mouseMoved(mouseX, mouseY);
+        }
+    }
+
+    @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
     }
