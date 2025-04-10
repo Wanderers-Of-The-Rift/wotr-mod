@@ -1,5 +1,9 @@
 package com.wanderersoftherift.wotr.gui.widget;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.client.map.MapData;
+import com.wanderersoftherift.wotr.client.map.MapRoom;
+import com.wanderersoftherift.wotr.client.map.Utils3D;
 import com.wanderersoftherift.wotr.client.render.MapRenderer3D;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 
@@ -137,6 +141,49 @@ public class RiftMap3DWidget extends AbstractWidget {
 
             pressingButton = true;
         }
+
+        // find the closest room to the mouse
+        float closestZ = Float.MIN_VALUE;
+        MapRoom selectedRoom = null;
+
+        for (var entry : MapData.rooms.entrySet()) { // iterate over rooms, foreach not used because I need to change closestZ and selectedCell, and don't like atomic references
+            MapRoom room = entry.getValue();
+            // get projected vertices of the room
+            Vector3f pos2_sub = new Vector3f(room.pos2.x - 0.3f, room.pos2.y - 0.3f, room.pos2.z - 0.3f);
+            float[][] vertices = Utils3D.calculateVertices(room.pos1, pos2_sub);
+
+            // project vertices to screen space
+            // I dont mind doing this twice (once for rendering as well) because this is only done on click, worst case there will be a little hitch on larger rifts
+            Vector3f[] projectedVertices = new Vector3f[8];
+            for (int i = 0; i < vertices.length; i++) {
+                projectedVertices[i] = Utils3D.projectPoint(vertices[i][0], vertices[i][1], vertices[i][2],
+                        this.mapRenderer.getCamera(), this.mapRenderer.mapPosition, this.mapRenderer.mapSize);
+            }
+
+            // check if mouse is inside room area
+            if (Utils3D.isPointInPolygon((int)mouseX, (int)mouseY, projectedVertices)) {
+                // get average z for finding closest room
+                float avgZ = 0;
+                int count = 0;
+                for (Vector3f vertex : projectedVertices) {
+                    avgZ += vertex.z;
+                    count++;
+                }
+                avgZ /= count;
+
+                // track closest
+                if (avgZ > closestZ) {
+                    closestZ = avgZ;
+                    selectedRoom = room;
+                }
+            }
+        }
+
+        if (selectedRoom != null) {
+            // Handle selection
+            WanderersOfTheRift.LOGGER.info("Selected cube at position: " + selectedRoom.pos1);
+        }
+
         return true;
     }
 
