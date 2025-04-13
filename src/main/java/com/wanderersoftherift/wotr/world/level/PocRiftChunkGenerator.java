@@ -66,7 +66,7 @@ public class PocRiftChunkGenerator extends ChunkGenerator {
     }
 
     @Override public int getGenDepth() {
-        return 384;
+        return 192;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class PocRiftChunkGenerator extends ChunkGenerator {
     }
 
     @Override public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
-        return 384;
+        return 192;
     }
 
     @Override public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {

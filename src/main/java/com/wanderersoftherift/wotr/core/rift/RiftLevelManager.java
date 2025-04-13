@@ -242,16 +242,14 @@ public class RiftLevelManager {
         var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
 
         Holder<RiftTheme> riftTheme = null;
-        int maxDepth = 5;
+        int maxDepth = RiftLevelManager.getRiftSize(null);
         if (riftKey != null) {
             ResourceLocation theme = riftKey.get(ModDataComponentType.RIFT_THEME);
             if (theme != null) {
                 riftTheme = LevelRiftThemeData.fromId(theme, riftLevel);
             }
             Integer tier = riftKey.get(ModDataComponentType.RIFT_TIER);
-            if (tier != null) {
-                maxDepth = tier;
-            }
+            maxDepth = RiftLevelManager.getRiftSize(tier);
         }
         if (riftTheme == null) {
             riftTheme = LevelRiftThemeData.getRandomTheme(riftLevel);
@@ -262,7 +260,6 @@ public class RiftLevelManager {
         return riftLevel;
     }
 
-
     private static void placeInitialJigsaw(ServerLevel level, ResourceLocation templatePoolKey, ResourceLocation target, int maxDepth, BlockPos pos) {
         var templatePool = level.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(templatePoolKey).orElse(null);
         if (templatePool == null) {
@@ -271,4 +268,21 @@ public class RiftLevelManager {
         }
         JigsawPlacement.generateJigsaw(level, templatePool, target, maxDepth, pos, false);
     }
+
+    private static int getRiftSize(Integer tier){
+        if (tier == null) {
+            return 5;
+        }
+        return switch (tier) {
+            case 0, 1 -> 5; // no chaos
+            case 2 -> 7;
+            case 3 -> 9;
+            case 4 -> 11;
+            case 5 -> 13;
+            case 6 -> 15;
+            case 7 -> 17;
+            default -> 19; // structures are capped at 20 and it has to be odd for POIs to spawn
+        };
+    }
+
 }
