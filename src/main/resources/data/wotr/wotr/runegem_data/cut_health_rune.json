@@ -2,8 +2,28 @@
   "shape": "square",
   "modifier_options": [
     {
-      "supported_items": "#wotr:socketable",
-      "modifiers": "#wotr:cut_health_rune"
+      "supported_items": "#wotr:helmet_slot",
+      "modifiers": "#wotr:cut_health_rune_helmet"
+    },
+    {
+      "supported_items": "#wotr:chestplate_slot",
+      "modifiers": "#wotr:cut_health_rune_chestplate"
+    },
+    {
+      "supported_items": "#wotr:leggings_slot",
+      "modifiers": "#wotr:cut_health_rune_leggings"
+    },
+    {
+      "supported_items": "#wotr:boots_slot",
+      "modifiers": "#wotr:cut_health_rune_boots"
+    },
+    {
+      "supported_items": "#wotr:main_hand_slot",
+      "modifiers": "#wotr:cut_health_rune_main_hand"
+    },
+    {
+      "supported_items": "#wotr:off_hand_slot",
+      "modifiers": "#wotr:cut_health_rune_off_hand"
     }
   ],
   "tier": "cut"
