@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapData;
 import com.wanderersoftherift.wotr.client.map.MapRoom;
 import com.wanderersoftherift.wotr.client.render.blockentity.JigsawBlockEntityRenderer;
+import com.wanderersoftherift.wotr.client.render.entity.AltSpiderRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.RiftEntranceRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.RiftExitRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
@@ -25,12 +26,20 @@ import com.wanderersoftherift.wotr.world.level.RiftDimensionSpecialEffects;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterSelectItemModelPropertyEvent;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -82,6 +91,8 @@ public final class ClientRegistryEvents {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntityTypes.RIFT_ENTRANCE.get(), RiftEntranceRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.RIFT_EXIT.get(), RiftExitRenderer::new);
+        event.registerEntityRenderer(EntityType.SPIDER, (context) -> new AltSpiderRenderer<>(context, WanderersOfTheRift.id("textures/entity/alt_spider.png"), 1.0f));
+        event.registerEntityRenderer(EntityType.CAVE_SPIDER, (context) -> new AltSpiderRenderer<>(context, WanderersOfTheRift.id("textures/entity/alt_cave_spider.png"), 0.75f));
         event.registerBlockEntityRenderer(
                 BlockEntityType.JIGSAW,
                 JigsawBlockEntityRenderer::new

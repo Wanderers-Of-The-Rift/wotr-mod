@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "wotr.refmap.json",
   "mixins": [
-    "TrialSpawnerAccessor",
     "AccessorMappedRegistry",
     "AccessorMinecraftServer",
     "InvokerAbstractContainerMenu",
@@ -15,8 +14,10 @@
     "MixinLivingEntity",
     "MixinServerPlayer",
     "MixinSetItemDamageFunction",
+    "MixinSpider",
     "MixinStructureTemplate",
-    "MixinWorldDimensions"
+    "MixinWorldDimensions",
+    "TrialSpawnerAccessor"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",
