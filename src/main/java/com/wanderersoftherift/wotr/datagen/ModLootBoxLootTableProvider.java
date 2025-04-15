@@ -24,8 +24,8 @@ public record ModLootBoxLootTableProvider(HolderLookup.Provider registries) impl
                 LootTable.lootTable().
                         withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                                 .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(70).apply(RunegemsFunction.setTier(RunegemTier.RAW)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(40).apply(RunegemsFunction.setTier(RunegemTier.SHAPED)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(20).apply(RunegemsFunction.setTier(RunegemTier.CUT)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(40).apply(RunegemsFunction.setTier(RunegemTier.CUT)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(20).apply(RunegemsFunction.setTier(RunegemTier.SHAPED)))
                                 .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(10).apply(RunegemsFunction.setTier(RunegemTier.POLISHED)))
                                 .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(5).apply(RunegemsFunction.setTier(RunegemTier.FRAMED)))
                                 .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(1).apply(RunegemsFunction.setTier(RunegemTier.UNIQUE)))

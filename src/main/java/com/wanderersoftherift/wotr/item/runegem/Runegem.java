@@ -24,8 +24,8 @@ public class Runegem extends Item {
     public static final Map<RunegemTier, ResourceLocation> TIER_RESOURCE_LOCATION_MAP =
             Map.of(
                     RunegemTier.RAW, WanderersOfTheRift.id("textures/tooltip/runegem/tier/raw.png"),
-                    RunegemTier.SHAPED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/shaped.png"),
                     RunegemTier.CUT, WanderersOfTheRift.id("textures/tooltip/runegem/tier/cut.png"),
+                    RunegemTier.SHAPED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/shaped.png"),
                     RunegemTier.POLISHED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/polished.png"),
                     RunegemTier.FRAMED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/framed.png"),
                     RunegemTier.UNIQUE, WanderersOfTheRift.id("textures/tooltip/runegem/tier/unique.png")

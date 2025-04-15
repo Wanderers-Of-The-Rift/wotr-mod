@@ -20,7 +20,7 @@
           "functions": [
             {
               "function": "wotr:runegems",
-              "tier": "shaped"
+              "tier": "cut"
             }
           ],
           "name": "wotr:runegem",
@@ -31,7 +31,7 @@
           "functions": [
             {
               "function": "wotr:runegems",
-              "tier": "cut"
+              "tier": "shaped"
             }
           ],
           "name": "wotr:runegem",

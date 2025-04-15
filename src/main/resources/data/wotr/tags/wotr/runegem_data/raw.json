@@ -2,6 +2,7 @@
   "values": [
     "wotr:raw_attack_rune",
     "wotr:raw_defense_rune",
-    "wotr:raw_zombie_rune"
+    "wotr:raw_zombie_rune",
+    "wotr:raw_health_rune"
   ]
 }
