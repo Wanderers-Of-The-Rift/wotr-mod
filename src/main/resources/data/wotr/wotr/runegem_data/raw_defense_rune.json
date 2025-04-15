@@ -2,27 +2,27 @@
   "shape": "pentagon",
   "modifier_options": [
     {
-      "supported_items": "#wotr:helmet_slot",
+      "supported_items": "#wotr:socketable_helmet_slot",
       "modifiers": "#wotr:raw_defense_rune_helmet"
     },
     {
-      "supported_items": "#wotr:chestplate_slot",
+      "supported_items": "#wotr:socketable_chestplate_slot",
       "modifiers": "#wotr:raw_defense_rune_chestplate"
     },
     {
-      "supported_items": "#wotr:leggings_slot",
+      "supported_items": "#wotr:socketable_leggings_slot",
       "modifiers": "#wotr:raw_defense_rune_leggings"
     },
     {
-      "supported_items": "#wotr:boots_slot",
+      "supported_items": "#wotr:socketable_boots_slot",
       "modifiers": "#wotr:raw_defense_rune_boots"
     },
     {
-      "supported_items": "#wotr:main_hand_slot",
+      "supported_items": "#wotr:socketable_main_hand_slot",
       "modifiers": "#wotr:raw_defense_rune_main_hand"
     },
     {
-      "supported_items": "#wotr:off_hand_slot",
+      "supported_items": "#wotr:socketable_off_hand_slot",
       "modifiers": "#wotr:raw_defense_rune_off_hand"
     }
   ],
