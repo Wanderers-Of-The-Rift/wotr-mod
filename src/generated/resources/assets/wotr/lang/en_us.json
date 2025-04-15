@@ -227,7 +227,7 @@
   "subtitles.wotr.rift_open": "Rift Opens",
   "tooltip.wotr.essence_header": "Essence:",
   "tooltip.wotr.essence_value": "Essence: %s %s",
-  "tooltip.wotr.implicit": "Implicit: ",
+  "tooltip.wotr.implicit-": "Implicit: ",
   "tooltip.wotr.rift_key_tier": "Rift Tier: %s",
   "tooltip.wotr.socket": "Sockets: "
 }
