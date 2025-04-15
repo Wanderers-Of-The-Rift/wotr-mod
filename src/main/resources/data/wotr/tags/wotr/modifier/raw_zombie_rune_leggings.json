@@ -1,0 +1,9 @@
+{
+  "values": [
+    "wotr:flat_attack_t1",
+    "wotr:flat_heavy_attack_t1",
+    "wotr:percent_attack_t1",
+    "wotr:heavy_knockback_t1",
+    "wotr:knockback_t1"
+  ]
+}
