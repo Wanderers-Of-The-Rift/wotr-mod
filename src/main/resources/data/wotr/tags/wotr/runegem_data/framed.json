@@ -1,6 +1,7 @@
 {
     "values": [
       "wotr:framed_attack_rune",
-      "wotr:framed_health_rune"
+      "wotr:framed_health_rune",
+      "wotr:framed_defense_rune"
     ]
   }

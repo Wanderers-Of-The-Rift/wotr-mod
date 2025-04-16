@@ -1,6 +1,7 @@
 {
     "values": [
       "wotr:polished_health_rune",
-      "wotr:polished_attack_rune"
+      "wotr:polished_attack_rune",
+      "wotr:polished_defense_rune"
     ]
   }
