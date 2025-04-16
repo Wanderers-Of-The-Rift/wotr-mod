@@ -1,6 +1,7 @@
 {
     "values": [
       "wotr:unique_step_rune",
-      "wotr:unique_health_rune"
+      "wotr:unique_health_rune",
+      "wotr:unique_attack_rune"
     ]
   }

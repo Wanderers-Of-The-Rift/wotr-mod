@@ -1,5 +1,6 @@
 {
     "values": [
-      "wotr:cut_health_rune"
+      "wotr:cut_health_rune",
+      "wotr:cut_attack_rune"
     ]
   }
