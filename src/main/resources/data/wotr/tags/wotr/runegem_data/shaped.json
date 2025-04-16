@@ -2,6 +2,7 @@
     "values": [
       "wotr:shaped_defense_rune",
       "wotr:shaped_health_rune",
-      "wotr:shaped_attack_rune"
+      "wotr:shaped_attack_rune",
+      "wotr:shaped_speed_rune"
     ]
   }
