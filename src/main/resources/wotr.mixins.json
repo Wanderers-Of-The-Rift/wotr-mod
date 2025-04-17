@@ -1,28 +1,29 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "com.wanderersoftherift.wotr.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "wotr.refmap.json",
-  "mixins": [
-    "TrialSpawnerAccessor",
-    "AccessorMappedRegistry",
-    "AccessorMinecraftServer",
-    "InvokerAbstractContainerMenu",
-    "InvokerBlockBehaviour",
-    "MixinEnchantingTableBlock",
-    "MixinItemStack",
-    "MixinLivingEntity",
-    "MixinServerPlayer",
-    "MixinSetItemDamageFunction",
-    "MixinStructureTemplate",
-    "MixinWorldDimensions"
-  ],
-  "client": [
-    "MixinAccessibilityOptionsScreen",
-    "MixinMinecraft"
-  ],
-  "injectors": {
-    "defaultRequire": 1
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.wanderersoftherift.wotr.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "wotr.refmap.json",
+    "mixins": [
+        "AccessorMappedRegistry",
+        "AccessorMinecraftServer",
+        "InvokerAbstractContainerMenu",
+        "InvokerBlockBehaviour",
+        "MixinChunkMap",
+        "MixinEnchantingTableBlock",
+        "MixinItemStack",
+        "MixinLivingEntity",
+        "MixinServerPlayer",
+        "MixinSetItemDamageFunction",
+        "MixinStructureTemplate",
+        "MixinWorldDimensions",
+        "TrialSpawnerAccessor"
+    ],
+    "client": [
+        "MixinAccessibilityOptionsScreen",
+        "MixinMinecraft"
+    ],
+    "injectors": {
+        "defaultRequire": 1
   }
 }
