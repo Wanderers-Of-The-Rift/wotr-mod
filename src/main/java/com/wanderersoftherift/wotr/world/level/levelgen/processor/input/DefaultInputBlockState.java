@@ -33,4 +33,7 @@ public class DefaultInputBlockState extends InputBlockState {
         return blockState.is(block);
     }
 
+    @Override
+    public Block block() { return getBlock(); }
+
 }

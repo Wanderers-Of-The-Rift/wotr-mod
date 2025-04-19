@@ -12,16 +12,18 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.ref.PhantomReference;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.GRADIENT_SPOT_REPLACE;
 
@@ -36,16 +38,25 @@ public class GradientReplaceProcessor extends StructureProcessor {
                     Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment)
             ).apply(builder, GradientReplaceProcessor::new));
 
+    protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new ConcurrentHashMap<>();
+
     private final Map<InputBlockState, List<OutputStep>> replaceMap;
+    private final Map<Block,List<Pair<InputBlockState, List<OutputStep>>>> betterReplaceMap;
     private final double noiseScaleX;
     private final double noiseScaleY;
     private final double noiseScaleZ;
     private final int seedAdjustment;
 
-    protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
+    private Pair<PhantomReference<LevelReader>,OpenSimplex2F> lastNoiseCache = null;
 
     public GradientReplaceProcessor(Map<InputBlockState, List<OutputStep>> replaceMap, double noiseScaleX, double noiseScaleY, double noiseScaleZ, int seedAdjustment) {
         this.replaceMap = new Object2ObjectLinkedOpenHashMap<>(replaceMap);
+        var betterReplaceMap=new IdentityHashMap<Block,List<Pair<InputBlockState, List<OutputStep>>>>();
+        replaceMap.forEach((inputState,outputStates)->{
+            var list = betterReplaceMap.computeIfAbsent(inputState.block(),(block)->new ArrayList<>());
+            list.add(new Pair<>(inputState, new ArrayList<>(outputStates)));
+        });
+        this.betterReplaceMap=betterReplaceMap;
         this.noiseScaleX = noiseScaleX;
         this.noiseScaleY = noiseScaleY;
         this.noiseScaleZ = noiseScaleZ;
@@ -61,9 +72,10 @@ public class GradientReplaceProcessor extends StructureProcessor {
 
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
-        for (Map.Entry<InputBlockState, List<OutputStep>> entry : replaceMap.entrySet()) {
-            if (entry.getKey().matchesBlockstate(blockstate)) {
-                return getOutputBlockInfo(entry.getValue(), world, structurePos, blockInfo, blockPos, blockstate);
+        for (var entry : Objects.requireNonNullElseGet(betterReplaceMap.get(blockstate.getBlock()),()->Collections.<Pair<InputBlockState, List<OutputStep>>>emptyList())) {
+
+            if (entry.getA().matchesBlockstate(blockstate)) {
+                return getOutputBlockInfo(entry.getB(), world, structurePos, blockInfo, blockPos, blockstate);
             }
         }
         return blockInfo;
@@ -81,9 +93,12 @@ public class GradientReplaceProcessor extends StructureProcessor {
     }
 
     private OpenSimplex2F getNoiseGen(LevelReader world, BlockPos structurePos) {
+        var currentCache = lastNoiseCache;
+        if(world!=null && currentCache!=null && currentCache.getA().refersTo(world))return currentCache.getB();
         OpenSimplex2F noiseGen = null;
         if(world instanceof WorldGenLevel) {
             noiseGen = getNoiseGen(((WorldGenLevel) world).getSeed()+seedAdjustment);
+            lastNoiseCache = new Pair(new PhantomReference<>(world,null),noiseGen);
         }else{
             noiseGen = getNoiseGen(structurePos.asLong()+seedAdjustment);
         }
