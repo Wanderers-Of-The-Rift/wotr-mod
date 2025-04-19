@@ -16,6 +16,7 @@
         "MixinOctahedralGroup",
         "MixinServerPlayer",
         "MixinSetItemDamageFunction",
+        "MixinStairBlock",
         "MixinStructureTemplate",
         "MixinWorldDimensions",
         "TrialSpawnerAccessor"
