@@ -18,6 +18,7 @@
         "MixinSetItemDamageFunction",
         "MixinStairBlock",
         "MixinStructureTemplate",
+        "MixinStructureTemplateManager",
         "MixinWorldDimensions",
         "TrialSpawnerAccessor"
     ],
