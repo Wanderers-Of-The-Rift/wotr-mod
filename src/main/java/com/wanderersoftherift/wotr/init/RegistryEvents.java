@@ -21,9 +21,12 @@ public class RegistryEvents {
 
     /// Datapack registries
 
-    public static final ResourceKey<Registry<AbstractAbility>> ABILITY_REGISTRY = ResourceKey.createRegistryKey(WanderersOfTheRift.id("abilities"));
-    public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADE_REGISTRY = ResourceKey.createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
-    public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKER_REGISTRY = ResourceKey.createRegistryKey(WanderersOfTheRift.id("effect_marker"));
+    public static final ResourceKey<Registry<AbstractAbility>> ABILITY_REGISTRY = ResourceKey
+            .createRegistryKey(WanderersOfTheRift.id("abilities"));
+    public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADE_REGISTRY = ResourceKey
+            .createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
+    public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKER_REGISTRY = ResourceKey
+            .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
 
     @SubscribeEvent
     static void registerRegistries(NewRegistryEvent event) {
@@ -38,45 +41,14 @@ public class RegistryEvents {
 
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(
-                ModModifierEffects.MODIFIER_EFFECT_KEY,
-                AbstractModifierEffect.DIRECT_CODEC,
-                AbstractModifierEffect.DIRECT_CODEC
-        );
-        event.dataPackRegistry(
-                ModDatapackRegistries.MODIFIER_KEY,
-                Modifier.DIRECT_CODEC,
-                Modifier.DIRECT_CODEC
-        );
-        event.dataPackRegistry(
-                ModRiftThemes.RIFT_THEME_KEY,
-                RiftTheme.DIRECT_CODEC,
-                RiftTheme.DIRECT_SYNC_CODEC
-        );
-        event.dataPackRegistry(
-                ModDatapackRegistries.RUNEGEM_DATA_KEY,
-                RunegemData.CODEC,
-                RunegemData.CODEC
-        );
-        event.dataPackRegistry(
-                ModDatapackRegistries.GEAR_IMPLICITS_CONFIG,
-                ImplicitConfig.CODEC,
-                ImplicitConfig.CODEC
-        );
-        event.dataPackRegistry(
-                ABILITY_UPGRADE_REGISTRY,
-                AbilityUpgrade.CODEC,
-                AbilityUpgrade.CODEC
-        );
-        event.dataPackRegistry(
-                EFFECT_MARKER_REGISTRY,
-                EffectMarker.CODEC,
-                EffectMarker.CODEC
-        );
-        event.dataPackRegistry(
-                ABILITY_REGISTRY,
-                AbstractAbility.DIRECT_CODEC,
-                AbstractAbility.DIRECT_CODEC
-        );
+        event.dataPackRegistry(ModModifierEffects.MODIFIER_EFFECT_KEY, AbstractModifierEffect.DIRECT_CODEC,
+                AbstractModifierEffect.DIRECT_CODEC);
+        event.dataPackRegistry(ModDatapackRegistries.MODIFIER_KEY, Modifier.DIRECT_CODEC, Modifier.DIRECT_CODEC);
+        event.dataPackRegistry(ModRiftThemes.RIFT_THEME_KEY, RiftTheme.DIRECT_CODEC, RiftTheme.DIRECT_SYNC_CODEC);
+        event.dataPackRegistry(ModDatapackRegistries.RUNEGEM_DATA_KEY, RunegemData.CODEC, RunegemData.CODEC);
+        event.dataPackRegistry(ModDatapackRegistries.GEAR_IMPLICITS_CONFIG, ImplicitConfig.CODEC, ImplicitConfig.CODEC);
+        event.dataPackRegistry(ABILITY_UPGRADE_REGISTRY, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);
+        event.dataPackRegistry(EFFECT_MARKER_REGISTRY, EffectMarker.CODEC, EffectMarker.CODEC);
+        event.dataPackRegistry(ABILITY_REGISTRY, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
     }
 }

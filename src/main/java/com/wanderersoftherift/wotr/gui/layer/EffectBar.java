@@ -57,7 +57,8 @@ public final class EffectBar implements LayeredDraw.Layer {
                 index++;
                 continue;
             }
-            graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(entry.getKey().value().getLabel()), x, y + 8);
+            graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(entry.getKey().value().getLabel()), x,
+                    y + 8);
             return;
         }
     }
@@ -75,7 +76,8 @@ public final class EffectBar implements LayeredDraw.Layer {
                 show = ((int) entry.getFloatValue()) % 16 != 0;
             }
             if (show) {
-                graphics.blit(RenderType::guiTextured, marker.icon(), BAR_OFFSET_X, effectCount * ICON_SIZE, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+                graphics.blit(RenderType::guiTextured, marker.icon(), BAR_OFFSET_X, effectCount * ICON_SIZE, 0, 0,
+                        ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
             }
 
             effectCount++;

@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.gui.menu.slot.EssenceInputSlot;
 import com.wanderersoftherift.wotr.gui.menu.slot.KeyOutputSlot;
 import com.wanderersoftherift.wotr.init.ModBlocks;
@@ -31,23 +30,19 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * Menu for the Key Forge.
- * This menu totals the essence value of inputs and uses it to produce a key. The total essence determines the tier,
- * the essence type distribution determines the theme.
+ * Menu for the Key Forge. This menu totals the essence value of inputs and uses it to produce a key. The total essence
+ * determines the tier, the essence type distribution determines the theme.
  */
 public class KeyForgeMenu extends AbstractContainerMenu {
-    public final static int INPUT_SLOTS = 4;
-    private final static int OUTPUT_SLOTS = 1;
-    private final static int PLAYER_INVENTORY_SLOTS = 3 * 9;
-    private final static int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
-    private final static int INPUT_SLOTS_X = 31;
-    private final static int INPUT_SLOTS_Y = 33;
-    private final static int INPUT_SLOT_X_OFFSET = 25;
-    private final static int INPUT_SLOT_Y_OFFSET = 25;
-    private static final List<Integer> TIER_COSTS = IntStream.iterate(10, n -> n + 8)
-        .limit(20)
-        .boxed()
-        .toList();
+    public static final int INPUT_SLOTS = 4;
+    private static final int OUTPUT_SLOTS = 1;
+    private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
+    private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
+    private static final int INPUT_SLOTS_X = 31;
+    private static final int INPUT_SLOTS_Y = 33;
+    private static final int INPUT_SLOT_X_OFFSET = 25;
+    private static final int INPUT_SLOT_Y_OFFSET = 25;
+    private static final List<Integer> TIER_COSTS = IntStream.iterate(10, n -> n + 8).limit(20).boxed().toList();
 
     private final ContainerLevelAccess access;
     private final Container inputContainer;
@@ -72,7 +67,8 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         this.resultContainer = new ResultContainer();
         for (int slotY = 0; slotY < 2; slotY++) {
             for (int slotX = 0; slotX < 2; slotX++) {
-                addSlot(new EssenceInputSlot(inputContainer, slotY * 2 + slotX, INPUT_SLOTS_X + INPUT_SLOT_X_OFFSET * slotX, INPUT_SLOTS_Y + INPUT_SLOT_Y_OFFSET * slotY));
+                addSlot(new EssenceInputSlot(inputContainer, slotY * 2 + slotX,
+                        INPUT_SLOTS_X + INPUT_SLOT_X_OFFSET * slotX, INPUT_SLOTS_Y + INPUT_SLOT_Y_OFFSET * slotY));
             }
         }
         addSlot(new KeyOutputSlot(resultContainer, 4, 148, 78, inputContainer));
@@ -104,24 +100,28 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         ItemStack slotStack = slot.getItem();
         ItemStack resultStack = slotStack.copy();
         if (slot instanceof KeyOutputSlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS, true)) {
+            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS,
+                    true)) {
                 return ItemStack.EMPTY;
             }
             slot.onQuickCraft(slotStack, resultStack);
         } else if (slot instanceof EssenceInputSlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS, true)) {
+            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS,
+                    true)) {
                 return ItemStack.EMPTY;
             }
         } else {
             if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false)) {
                 // Move from player inventory to hotbar
                 if (index < INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS) {
-                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS, false)) {
+                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS,
+                            INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 // Move from hotbar to player inventory
-                else if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS, false)) {
+                else if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS,
+                        INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS, false)) {
                     return ItemStack.EMPTY;
                 }
             }

@@ -10,12 +10,11 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
-
 public class LevelRiftObjectiveData extends SavedData {
 
-    public static Codec<LevelRiftObjectiveData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            AbstractObjective.DIRECT_CODEC.fieldOf("objective").forGetter(LevelRiftObjectiveData::getObjective)
-    ).apply(inst, LevelRiftObjectiveData::new));
+    public static Codec<LevelRiftObjectiveData> CODEC = RecordCodecBuilder.create(inst -> inst
+            .group(AbstractObjective.DIRECT_CODEC.fieldOf("objective").forGetter(LevelRiftObjectiveData::getObjective))
+            .apply(inst, LevelRiftObjectiveData::new));
 
     private AbstractObjective objective;
 
@@ -32,14 +31,15 @@ public class LevelRiftObjectiveData extends SavedData {
     }
 
     public static LevelRiftObjectiveData getFromLevel(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(new Factory<>(LevelRiftObjectiveData::create, LevelRiftObjectiveData::load), "rift_objective");
+        return level.getDataStorage()
+                .computeIfAbsent(new Factory<>(LevelRiftObjectiveData::create, LevelRiftObjectiveData::load),
+                        "rift_objective");
     }
 
     @Override
     public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         if (objective != null) {
-            AbstractObjective.DIRECT_CODEC
-                    .encodeStart(NbtOps.INSTANCE, this.getObjective())
+            AbstractObjective.DIRECT_CODEC.encodeStart(NbtOps.INSTANCE, this.getObjective())
                     .resultOrPartial(LOGGER::error)
                     .ifPresent(compound -> compoundTag.put("objective", compound));
         }
@@ -51,8 +51,7 @@ public class LevelRiftObjectiveData extends SavedData {
     }
 
     public static LevelRiftObjectiveData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-        AbstractObjective objective = AbstractObjective.DIRECT_CODEC
-                .parse(NbtOps.INSTANCE, tag.get("objective"))
+        AbstractObjective objective = AbstractObjective.DIRECT_CODEC.parse(NbtOps.INSTANCE, tag.get("objective"))
                 .resultOrPartial(LOGGER::error)
                 .orElse(null);
         return new LevelRiftObjectiveData(objective);

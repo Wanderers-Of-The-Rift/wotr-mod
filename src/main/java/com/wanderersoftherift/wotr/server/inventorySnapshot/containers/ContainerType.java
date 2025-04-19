@@ -3,7 +3,8 @@ package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * A container type provides the ability to identify and work with containers of that type, for the Inventory Snapshot system
+ * A container type provides the ability to identify and work with containers of that type, for the Inventory Snapshot
+ * system
  */
 public interface ContainerType {
 
@@ -16,6 +17,5 @@ public interface ContainerType {
      * @return A container wrapper for working with the given container item
      */
     ContainerWrapper getWrapper(ItemStack item);
-
 
 }

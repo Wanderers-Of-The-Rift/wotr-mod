@@ -18,44 +18,38 @@ import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class DittoBlockEntityRenderer implements BlockEntityRenderer<DittoBlockEntity> {
-	private final BlockRenderDispatcher dispatcher;
+    private final BlockRenderDispatcher dispatcher;
 
-	public DittoBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-		this.dispatcher = context.getBlockRenderDispatcher();
-	}
+    public DittoBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+        this.dispatcher = context.getBlockRenderDispatcher();
+    }
 
-	@Override
-	public int getViewDistance() {
-		return 256;
-	}
+    @Override
+    public int getViewDistance() {
+        return 256;
+    }
 
-	@Override
-	public void render(@NotNull DittoBlockEntity blockEntity, float partialTick, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-		DittoBlock dittoBlock = (DittoBlock)blockEntity.getBlockState().getBlock();
-		if (!dittoBlock.shouldRender(blockEntity.getBlockState())) {
-			return;
-		}
-		if ((blockEntity.getTheItem().getItem() instanceof BlockItem) && blockEntity.getTheItem().getItem() != dittoBlock.getBlock().asItem()) {
-			BlockState blockstate = ((BlockItem)blockEntity.getTheItem().getItem()).getBlock().defaultBlockState();
-			if (blockEntity.getLevel() == null) return;
-			int i;
-			i = OverlayTexture.pack(OverlayTexture.u(0.15F), 10);
-			this.dispatcher.renderSingleBlock(blockstate, stack, bufferSource, packedLight, i);
-		} else {
-			this.dispatcher.getModelRenderer().tesselateBlock(
-					blockEntity.getLevel(),
-					dispatcher.getBlockModel(blockEntity.getBlockState()),
-					blockEntity.getBlockState(),
-					blockEntity.getBlockPos(),
-					stack,
-					bufferSource.getBuffer(RenderType.CUTOUT),
-					false,
-					RandomSource.create(),
-					blockEntity.getBlockState().getSeed(blockEntity.getBlockPos()),
-					packedOverlay,
-					ModelData.EMPTY,
-					RenderType.CUTOUT
-			);
-		}
-	}
+    @Override
+    public void render(@NotNull DittoBlockEntity blockEntity, float partialTick, PoseStack stack,
+            MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+        DittoBlock dittoBlock = (DittoBlock) blockEntity.getBlockState().getBlock();
+        if (!dittoBlock.shouldRender(blockEntity.getBlockState())) {
+            return;
+        }
+        if ((blockEntity.getTheItem().getItem() instanceof BlockItem)
+                && blockEntity.getTheItem().getItem() != dittoBlock.getBlock().asItem()) {
+            BlockState blockstate = ((BlockItem) blockEntity.getTheItem().getItem()).getBlock().defaultBlockState();
+            if (blockEntity.getLevel() == null) return;
+            int i;
+            i = OverlayTexture.pack(OverlayTexture.u(0.15F), 10);
+            this.dispatcher.renderSingleBlock(blockstate, stack, bufferSource, packedLight, i);
+        } else {
+            this.dispatcher.getModelRenderer()
+                    .tesselateBlock(blockEntity.getLevel(), dispatcher.getBlockModel(blockEntity.getBlockState()),
+                            blockEntity.getBlockState(), blockEntity.getBlockPos(), stack,
+                            bufferSource.getBuffer(RenderType.CUTOUT), false, RandomSource.create(),
+                            blockEntity.getBlockState().getSeed(blockEntity.getBlockPos()), packedOverlay,
+                            ModelData.EMPTY, RenderType.CUTOUT);
+        }
+    }
 }

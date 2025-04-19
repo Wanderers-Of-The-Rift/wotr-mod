@@ -11,6 +11,6 @@ public class AbilityUpgradeModifierSource implements ModifierSource {
 
     @Override
     public @NotNull String getSerializedName() {
-        return "ability_upgrade_" +selection;
+        return "ability_upgrade_" + selection;
     }
 }

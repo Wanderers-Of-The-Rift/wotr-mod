@@ -1,32 +1,30 @@
 package com.wanderersoftherift.wotr.client.render;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.mojang.blaze3d.shaders.Uniform;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.MeshData;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.wanderersoftherift.wotr.client.ModShaders;
 import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapRoomEffects;
 import com.wanderersoftherift.wotr.client.map.VirtualCamera;
-import com.mojang.blaze3d.shaders.Uniform;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
-import net.minecraft.client.renderer.CoreShaders;
-import net.minecraft.resources.ResourceLocation;
-
-import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import static com.wanderersoftherift.wotr.client.map.MapData.rooms;
 
 public class MapRenderer3D {
-    public static final VertexFormatElement EFFECTS = VertexFormatElement.register(6, 0, VertexFormatElement.Type.FLOAT, VertexFormatElement.Usage.GENERIC, 1);
+    public static final VertexFormatElement EFFECTS = VertexFormatElement.register(6, 0, VertexFormatElement.Type.FLOAT,
+            VertexFormatElement.Usage.GENERIC, 1);
 
     private static final VertexFormat VERTEX_FORMAT = VertexFormat.builder()
             .add("Position", VertexFormatElement.POSITION)
@@ -36,11 +34,12 @@ public class MapRenderer3D {
             .build();
 
     public Vector2i mapPosition = new Vector2i(0, 0);
-    public Vector2i mapSize = new Vector2i(Minecraft.getInstance().getWindow().getGuiScaledWidth(), Minecraft.getInstance().getWindow().getGuiScaledHeight());
+    public Vector2i mapSize = new Vector2i(Minecraft.getInstance().getWindow().getGuiScaledWidth(),
+            Minecraft.getInstance().getWindow().getGuiScaledHeight());
     private Vector2i scissorCoords = new Vector2i(0, 0);
     private Vector2i scissorSize = new Vector2i(0, 0);
 
-    private VirtualCamera camera = new VirtualCamera(70.0f, 16f/9f, 0.1f, 1000.0f);
+    private VirtualCamera camera = new VirtualCamera(70.0f, 16f / 9f, 0.1f, 1000.0f);
 
     public float camPitch = 35;
     public float camYaw = -25;
@@ -62,10 +61,10 @@ public class MapRenderer3D {
     // I used reflection here before but I've learned from my sins and repented.
     // Now I have commited another sin by doing an access transformer.
     public static void putEffects(int effectFlags, BufferBuilder builder) {
-		long i = builder.beginElement(EFFECTS);;
-		MemoryUtil.memPutFloat(i, (float)effectFlags);
+        long i = builder.beginElement(EFFECTS);
+        ;
+        MemoryUtil.memPutFloat(i, (float) effectFlags);
     }
-
 
     private float renderDistance = 10;
 
@@ -84,13 +83,15 @@ public class MapRenderer3D {
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
         RenderSystem.disableCull();
 
-        // !!! Scissor coords are from bottom left and not scaled with gui scale !!! the below code renders top left quadrant
+        // !!! Scissor coords are from bottom left and not scaled with gui scale !!! the below code renders top left
+        // quadrant
         // the RenderSystem is from top left instead because yes
         RenderSystem.enableScissor(scissorCoords.x, scissorCoords.y, scissorSize.x, scissorSize.y);
 
-
         RenderSystem.lineWidth(10.0f);
-        BufferBuilder lineBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.DEBUG_LINES, VERTEX_FORMAT); // prep the buffer
+        BufferBuilder lineBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.DEBUG_LINES, VERTEX_FORMAT); // prep
+                                                                                                                 // the
+                                                                                                                 // buffer
 
         float screenWidth = Minecraft.getInstance().getWindow().getWidth();
         float screenHeight = Minecraft.getInstance().getWindow().getHeight();
@@ -106,23 +107,23 @@ public class MapRenderer3D {
         RenderSystem.setShaderGameTime(tick, partialTick);
 
         // just some testing cubes to render
-        //Cube cube1 = new Cube(new Vector3d(0,0,0), new Vector3d(1, 1, 1));
-        MapCell centerCube = new MapCell(new Vector3f((float) (camPos.x-0.01), (float) (camPos.y-0.01), (float) (camPos.z-0.01)), 0.02f, 0);
+        // Cube cube1 = new Cube(new Vector3d(0,0,0), new Vector3d(1, 1, 1));
+        MapCell centerCube = new MapCell(
+                new Vector3f((float) (camPos.x - 0.01), (float) (camPos.y - 0.01), (float) (camPos.z - 0.01)), 0.02f,
+                0);
 
-        //MapCell player = new MapCell(new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(0.75f, 0.75f, 0.75f), 0);
+        // MapCell player = new MapCell(new Vector3f(0.25f, 0.25f, 0.25f), new Vector3f(0.75f, 0.75f, 0.75f), 0);
 
-        float pos1 = (float) (0.35f - (0.35/2f));
-        MapCell player = new MapCell(new Vector3f(pos1, pos1, pos1), 0.35F, 0).setEffects(MapRoomEffects.getFlags(new MapRoomEffects.Flag[]{
-                MapRoomEffects.Flag.DOTS,
-                MapRoomEffects.Flag.EDGE_HIGHLIGHT,
-        }));
+        float pos1 = (float) (0.35f - (0.35 / 2f));
+        MapCell player = new MapCell(new Vector3f(pos1, pos1, pos1), 0.35F, 0).setEffects(MapRoomEffects
+                .getFlags(new MapRoomEffects.Flag[] { MapRoomEffects.Flag.DOTS, MapRoomEffects.Flag.EDGE_HIGHLIGHT, }));
 
         rooms.forEach((pos, room) -> {
             if (isInRenderDistance(room.pos1)) room.renderWireframe(lineBuffer, camera, mapPosition, mapSize);
         });
-        /*cells.forEach((pos, cell) -> {
-            cell.renderWireframe(lineBuffer, camera, mapPosition, mapSize);
-        });*/
+        /*
+         * cells.forEach((pos, cell) -> { cell.renderWireframe(lineBuffer, camera, mapPosition, mapSize); });
+         */
         // prepare the buffer for rendering and draw it
         MeshData bufferData = lineBuffer.build();
         ;
@@ -131,16 +132,19 @@ public class MapRenderer3D {
         }
 
         // render transparents
-        BufferBuilder quadBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, VERTEX_FORMAT); // prep the buffer
+        BufferBuilder quadBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, VERTEX_FORMAT); // prep the
+                                                                                                           // buffer
 
         RenderSystem.depthMask(false);
 
         rooms.forEach((pos, room) -> {
-            if (isInRenderDistance(room.pos1)) room.renderCube(quadBuffer, camera, new Vector4f(0f, 1f, 0f, 0.2f), mapPosition, mapSize);
+            if (isInRenderDistance(room.pos1))
+                room.renderCube(quadBuffer, camera, new Vector4f(0f, 1f, 0f, 0.2f), mapPosition, mapSize);
         });
-        /*cells.forEach((pos, cell) -> {
-            cell.renderCube(quadBuffer, camera, new Vector4f(0f, 0f, 1f, 0.2f), mapPosition, mapSize);
-        });*/
+        /*
+         * cells.forEach((pos, cell) -> { cell.renderCube(quadBuffer, camera, new Vector4f(0f, 0f, 1f, 0.2f),
+         * mapPosition, mapSize); });
+         */
 
         MeshData quadBufferData = quadBuffer.build();
         if (quadBufferData != null) {
@@ -148,7 +152,8 @@ public class MapRenderer3D {
         }
 
         // render non-transparents with proper occlusion
-        BufferBuilder quadBuffer2 = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, VERTEX_FORMAT); // prep the buffer
+        BufferBuilder quadBuffer2 = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, VERTEX_FORMAT); // prep the
+                                                                                                            // buffer
 
         RenderSystem.depthMask(true);
 
@@ -162,7 +167,9 @@ public class MapRenderer3D {
 
         RenderSystem.depthMask(true);
 
-        BufferBuilder line2Buffer = Tesselator.getInstance().begin(VertexFormat.Mode.DEBUG_LINES, VERTEX_FORMAT); // prep the buffer
+        BufferBuilder line2Buffer = Tesselator.getInstance().begin(VertexFormat.Mode.DEBUG_LINES, VERTEX_FORMAT); // prep
+                                                                                                                  // the
+                                                                                                                  // buffer
 
         player.renderWireframe(line2Buffer, camera, mapPosition, mapSize);
 
@@ -176,9 +183,11 @@ public class MapRenderer3D {
         RenderSystem.disableScissor();
         RenderSystem.disableBlend();
     }
+
     /**
-     * Sets the position and size of the map and calculates the proper scissor coords and size + virtual camera aspect ratio
-     * Uses the usual top left corner origin coords and width, height (unlike scissor)
+     * Sets the position and size of the map and calculates the proper scissor coords and size + virtual camera aspect
+     * ratio Uses the usual top left corner origin coords and width, height (unlike scissor)
+     * 
      * @param x
      * @param y
      * @param width
@@ -191,12 +200,14 @@ public class MapRenderer3D {
         mapSize.y = height;
 
         // calculate coefficients for scaling
-        float widthCoef = (float) Minecraft.getInstance().getWindow().getWidth() / Minecraft.getInstance().getWindow().getGuiScaledWidth();
-        float heightCoef = (float) Minecraft.getInstance().getWindow().getHeight() / Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        float widthCoef = (float) Minecraft.getInstance().getWindow().getWidth()
+                / Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        float heightCoef = (float) Minecraft.getInstance().getWindow().getHeight()
+                / Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
         // calculate the scissor coords - pos is from top left, scissors are from bottom left
-        scissorCoords.x = (int) (x*widthCoef);
-        scissorCoords.y = (int) (Minecraft.getInstance().getWindow().getHeight()-(y+height)*heightCoef);
+        scissorCoords.x = (int) (x * widthCoef);
+        scissorCoords.y = (int) (Minecraft.getInstance().getWindow().getHeight() - (y + height) * heightCoef);
 
         // calculate the scissor size - width, height are scaled to gui, scissor is not so it has to be scaled back
         scissorSize.x = (int) (width * widthCoef);

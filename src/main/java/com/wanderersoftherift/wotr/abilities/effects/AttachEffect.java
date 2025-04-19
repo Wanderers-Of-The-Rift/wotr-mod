@@ -24,22 +24,30 @@ import java.util.Optional;
  */
 public class AttachEffect extends AbstractEffect {
 
-    public static final MapCodec<AttachEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbstractEffect
-            .commonFields(instance)
-            .and(TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate()).forGetter(AttachEffect::getTriggerPredicate))
-            .and(ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate()).forGetter(AttachEffect::getContinuePredicate))
-            .and(RegistryFixedCodec.create(RegistryEvents.EFFECT_MARKER_REGISTRY).optionalFieldOf("display").forGetter(AttachEffect::getDisplay))
-            .apply(instance, AttachEffect::new));
+    public static final MapCodec<AttachEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate())
+                            .forGetter(AttachEffect::getTriggerPredicate))
+                    .and(ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
+                            .forGetter(AttachEffect::getContinuePredicate))
+                    .and(RegistryFixedCodec.create(RegistryEvents.EFFECT_MARKER_REGISTRY)
+                            .optionalFieldOf("display")
+                            .forGetter(AttachEffect::getDisplay))
+                    .apply(instance, AttachEffect::new));
 
     private final TriggerPredicate triggerPredicate;
     private final ContinueEffectPredicate continuePredicate;
     private final Holder<EffectMarker> display;
 
-    public AttachEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate, Optional<Holder<EffectMarker>> display) {
+    public AttachEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate,
+            Optional<Holder<EffectMarker>> display) {
         this(targeting, effects, particles, triggerPredicate, continuePredicate, display.orElse(null));
     }
 
-    public AttachEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate, Holder<EffectMarker> display) {
+    public AttachEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate,
+            Holder<EffectMarker> display) {
         super(targeting, effects, particles);
         this.triggerPredicate = triggerPredicate;
         this.continuePredicate = continuePredicate;

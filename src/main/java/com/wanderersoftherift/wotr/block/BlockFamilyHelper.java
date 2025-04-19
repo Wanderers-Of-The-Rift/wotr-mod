@@ -10,8 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static net.minecraft.data.BlockFamily.Variant.*;
-
+import static net.minecraft.data.BlockFamily.Variant.BUTTON;
+import static net.minecraft.data.BlockFamily.Variant.FENCE;
+import static net.minecraft.data.BlockFamily.Variant.FENCE_GATE;
+import static net.minecraft.data.BlockFamily.Variant.PRESSURE_PLATE;
+import static net.minecraft.data.BlockFamily.Variant.SLAB;
+import static net.minecraft.data.BlockFamily.Variant.STAIRS;
+import static net.minecraft.data.BlockFamily.Variant.TRAPDOOR;
+import static net.minecraft.data.BlockFamily.Variant.WALL;
 
 public class BlockFamilyHelper {
     public static final String SLAB_SUFFIX = "_slab";
@@ -32,26 +38,26 @@ public class BlockFamilyHelper {
     private final Map<ModBlockFamilyVariant, Supplier<Block>> modVariants = Maps.newHashMap();
     private BlockFamily blockFamily;
 
-    //additional variants that Mojang does not support yet
+    // additional variants that Mojang does not support yet
     public enum ModBlockFamilyVariant {
         GLASS_BLOCK("glass_block"),
         PANE("pane"),
-        DIRECTIONAL_PILLAR("directional_pillar")
-        ;
+        DIRECTIONAL_PILLAR("directional_pillar");
 
         private final String variantName;
 
-        ModBlockFamilyVariant(String variantName){
+        ModBlockFamilyVariant(String variantName) {
             this.variantName = variantName;
         }
 
-        public String getVariantName(){
+        public String getVariantName() {
             return variantName;
         }
     }
 
-    public BlockFamilyHelper(String blockId, Supplier<Block> baseBlock, Map<BlockFamily.Variant, Supplier<Block>> variants,
-                             Map<ModBlockFamilyVariant, Supplier<Block>> modVariants) {
+    public BlockFamilyHelper(String blockId, Supplier<Block> baseBlock,
+            Map<BlockFamily.Variant, Supplier<Block>> variants,
+            Map<ModBlockFamilyVariant, Supplier<Block>> modVariants) {
         this.blockId = blockId;
         this.baseBlock = baseBlock;
         this.variants.putAll(variants);
@@ -71,14 +77,14 @@ public class BlockFamilyHelper {
 
     private BlockFamily generateBlockFamily() {
         BlockFamily.Builder blockFamilyBuilder = new BlockFamily.Builder(baseBlock.get());
-        if (variants.containsKey(SLAB))           blockFamilyBuilder.slab(variants.get(SLAB).get());
-        if (variants.containsKey(STAIRS))         blockFamilyBuilder.stairs(variants.get(STAIRS).get());
-        if (variants.containsKey(BUTTON))         blockFamilyBuilder.button(variants.get(BUTTON).get());
+        if (variants.containsKey(SLAB)) blockFamilyBuilder.slab(variants.get(SLAB).get());
+        if (variants.containsKey(STAIRS)) blockFamilyBuilder.stairs(variants.get(STAIRS).get());
+        if (variants.containsKey(BUTTON)) blockFamilyBuilder.button(variants.get(BUTTON).get());
         if (variants.containsKey(PRESSURE_PLATE)) blockFamilyBuilder.pressurePlate(variants.get(PRESSURE_PLATE).get());
-        if (variants.containsKey(WALL))           blockFamilyBuilder.wall(variants.get(WALL).get());
-        if (variants.containsKey(FENCE))          blockFamilyBuilder.fence(variants.get(FENCE).get());
-        if (variants.containsKey(FENCE_GATE))     blockFamilyBuilder.fenceGate(variants.get(FENCE_GATE).get());
-        if (variants.containsKey(TRAPDOOR))       blockFamilyBuilder.trapdoor(variants.get(TRAPDOOR).get());
+        if (variants.containsKey(WALL)) blockFamilyBuilder.wall(variants.get(WALL).get());
+        if (variants.containsKey(FENCE)) blockFamilyBuilder.fence(variants.get(FENCE).get());
+        if (variants.containsKey(FENCE_GATE)) blockFamilyBuilder.fenceGate(variants.get(FENCE_GATE).get());
+        if (variants.containsKey(TRAPDOOR)) blockFamilyBuilder.trapdoor(variants.get(TRAPDOOR).get());
         return blockFamilyBuilder.getFamily();
     }
 
@@ -90,7 +96,7 @@ public class BlockFamilyHelper {
         return new HashMap<>(variants);
     }
 
-    public  Supplier<Block> getVariant(BlockFamily.Variant variant) {
+    public Supplier<Block> getVariant(BlockFamily.Variant variant) {
         return getVariants().get(variant);
     }
 
@@ -98,7 +104,7 @@ public class BlockFamilyHelper {
         return new HashMap<>(modVariants);
     }
 
-    public  Supplier<Block> getModVariants(ModBlockFamilyVariant variant) {
+    public Supplier<Block> getModVariants(ModBlockFamilyVariant variant) {
         return getModVariants().get(variant);
     }
 

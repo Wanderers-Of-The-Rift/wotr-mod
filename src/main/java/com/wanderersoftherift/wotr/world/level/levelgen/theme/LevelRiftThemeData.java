@@ -19,14 +19,15 @@ import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
 public class LevelRiftThemeData extends SavedData {
 
-    public static Codec<LevelRiftThemeData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            RiftTheme.CODEC.fieldOf("theme").forGetter(LevelRiftThemeData::getTheme)
-    ).apply(inst, LevelRiftThemeData::new));
+    public static Codec<LevelRiftThemeData> CODEC = RecordCodecBuilder
+            .create(inst -> inst.group(RiftTheme.CODEC.fieldOf("theme").forGetter(LevelRiftThemeData::getTheme))
+                    .apply(inst, LevelRiftThemeData::new));
 
     private Holder<RiftTheme> theme;
 
     public static LevelRiftThemeData getFromLevel(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
+        return level.getDataStorage()
+                .computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
     }
 
     public LevelRiftThemeData(Holder<RiftTheme> theme) {
@@ -38,8 +39,7 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     public static LevelRiftThemeData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-        Holder<RiftTheme> theme = RiftTheme.CODEC
-                .parse(NbtOps.INSTANCE, tag.get("theme"))
+        Holder<RiftTheme> theme = RiftTheme.CODEC.parse(NbtOps.INSTANCE, tag.get("theme"))
                 .resultOrPartial(LOGGER::error)
                 .orElse(null);
         return new LevelRiftThemeData(theme);
@@ -47,8 +47,7 @@ public class LevelRiftThemeData extends SavedData {
 
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
-        RiftTheme.CODEC
-                .encodeStart(NbtOps.INSTANCE, this.getTheme())
+        RiftTheme.CODEC.encodeStart(NbtOps.INSTANCE, this.getTheme())
                 .resultOrPartial(LOGGER::error)
                 .ifPresent(compound -> tag.put("theme", compound));
         return tag;
@@ -65,7 +64,7 @@ public class LevelRiftThemeData extends SavedData {
 
     public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
         Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme =  registryReference.flatMap(x -> x.getRandom(level.getRandom())).orElse(null);
+        var riftTheme = registryReference.flatMap(x -> x.getRandom(level.getRandom())).orElse(null);
         if (riftTheme == null) {
             WanderersOfTheRift.LOGGER.error("Failed to get random rift theme");
         }
@@ -74,19 +73,18 @@ public class LevelRiftThemeData extends SavedData {
 
     public static Holder<RiftTheme> fromId(ResourceLocation id, ServerLevel level) {
         // temp theme mapping
-        if (id.equals(WanderersOfTheRift.id("life"))){
+        if (id.equals(WanderersOfTheRift.id("life"))) {
             id = WanderersOfTheRift.id("forest");
             LOGGER.warn("Hardcoded theme: wotr:life -> wotr:forest");
         }
-        if (id.equals(WanderersOfTheRift.id("earth"))){
+        if (id.equals(WanderersOfTheRift.id("earth"))) {
             id = WanderersOfTheRift.id("cave");
             LOGGER.warn("Hardcoded theme: wotr:earth -> wotr:cave");
         }
         ResourceLocation finalId = id;
 
-
         Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme =  registryReference.flatMap(x -> x.get(finalId)).orElse(null);
+        var riftTheme = registryReference.flatMap(x -> x.get(finalId)).orElse(null);
         if (riftTheme == null) {
             WanderersOfTheRift.LOGGER.error("Failed to get rift theme from id: {}", id);
         }

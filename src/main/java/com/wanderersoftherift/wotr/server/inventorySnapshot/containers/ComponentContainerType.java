@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 
 /**
- * This is the container type for any minecraft item using the CONTAINER data component for item storage (e.g. Shulker Boxes)
+ * This is the container type for any minecraft item using the CONTAINER data component for item storage (e.g. Shulker
+ * Boxes)
  */
 public class ComponentContainerType implements ContainerType {
     @Override
@@ -38,7 +39,10 @@ public class ComponentContainerType implements ContainerType {
 
         @Override
         public @NotNull Iterator<ContainerItemWrapper> iterator() {
-            return Streams.stream(component.nonEmptyItems()).<ContainerItemWrapper>map(DirectContainerItemWrapper::new).toList().iterator();
+            return Streams.stream(component.nonEmptyItems())
+                    .<ContainerItemWrapper>map(DirectContainerItemWrapper::new)
+                    .toList()
+                    .iterator();
         }
     }
 

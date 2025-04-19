@@ -6,7 +6,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 /**
- * Interface for working with items from containers in a player's inventory. This is tailored specifically for Inventory Snapshot usage.
+ * Interface for working with items from containers in a player's inventory. This is tailored specifically for Inventory
+ * Snapshot usage.
  */
 public interface ContainerItemWrapper {
 
@@ -17,8 +18,10 @@ public interface ContainerItemWrapper {
 
     /**
      * Splits an amount out of the container item, up to and including the full amount
+     * 
      * @param amount The amount to split out
-     * @return The one or more item stacks split out of the container's item stack, each with size up to maxItemStackSize
+     * @return The one or more item stacks split out of the container's item stack, each with size up to
+     *         maxItemStackSize
      */
     List<ItemStack> split(int amount);
 
@@ -29,6 +32,7 @@ public interface ContainerItemWrapper {
 
     /**
      * Applies a component patch to the container item
+     * 
      * @param patch A data component change (addition/removal/combination)
      */
     void applyComponents(DataComponentPatch patch);

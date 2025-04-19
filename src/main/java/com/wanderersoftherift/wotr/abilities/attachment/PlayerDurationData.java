@@ -14,7 +14,8 @@ import java.util.Set;
 
 public class PlayerDurationData {
 
-    public static final Codec<PlayerDurationData> CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).xmap(PlayerDurationData::new, x -> x.map);
+    public static final Codec<PlayerDurationData> CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
+            .xmap(PlayerDurationData::new, x -> x.map);
 
     private final Map<ResourceLocation, Integer> map = new LinkedHashMap<>();
 

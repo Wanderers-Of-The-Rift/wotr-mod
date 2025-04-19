@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.gui.tooltip;
 
-
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
@@ -23,14 +22,10 @@ import java.util.Map;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class GearSocketTooltipEvent {
-    private static final Map<RunegemShape, ChatFormatting> colorMap = Map.of(
-            RunegemShape.CIRCLE, ChatFormatting.BLUE,
-            RunegemShape.SQUARE, ChatFormatting.YELLOW,
-            RunegemShape.TRIANGLE, ChatFormatting.GREEN,
-            RunegemShape.DIAMOND, ChatFormatting.RED,
-            RunegemShape.HEART, ChatFormatting.LIGHT_PURPLE,
-            RunegemShape.PENTAGON, ChatFormatting.DARK_PURPLE
-    );
+    private static final Map<RunegemShape, ChatFormatting> colorMap = Map.of(RunegemShape.CIRCLE, ChatFormatting.BLUE,
+            RunegemShape.SQUARE, ChatFormatting.YELLOW, RunegemShape.TRIANGLE, ChatFormatting.GREEN,
+            RunegemShape.DIAMOND, ChatFormatting.RED, RunegemShape.HEART, ChatFormatting.LIGHT_PURPLE,
+            RunegemShape.PENTAGON, ChatFormatting.DARK_PURPLE);
 
     @SubscribeEvent
     public static void on(RenderTooltipEvent.GatherComponents event) {
@@ -48,11 +43,12 @@ public class GearSocketTooltipEvent {
         for (GearSocket socket : socketList) {
 
             if (!socket.isEmpty()) {
-                List<TooltipComponent> tooltipComponents = socket.modifier().get().getTooltipComponent(stack, ChatFormatting.RED);
+                List<TooltipComponent> tooltipComponents = socket.modifier()
+                        .get()
+                        .getTooltipComponent(stack, ChatFormatting.RED);
                 toAdd.addAll(tooltipComponents);
             }
         }
-
 
         for (int i = 0; i < toAdd.size(); i++) {
             list.add(i + 1, Either.right(toAdd.get(i)));

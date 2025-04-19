@@ -18,20 +18,18 @@ public class DataGenerators {
     public static void gatherData(GatherDataEvent.Client event) {
         event.createProvider(ModLanguageProvider::new);
         event.createProvider(ModModelProvider::new);
-        event.createProvider((output, lookupProvider) -> new LootTableProvider(
-                output, Set.of(), List.of(
+        event.createProvider((output, lookupProvider) -> new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK),
                 new LootTableProvider.SubProviderEntry(ModChestLootTableProvider::new, LootContextParamSets.CHEST),
-                new LootTableProvider.SubProviderEntry(ModLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)
-        ), lookupProvider
-        ));
+                new LootTableProvider.SubProviderEntry(ModLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)),
+                lookupProvider));
 
         event.createProvider(ModRecipeProvider.Runner::new);
 
         ModBlockTagProvider modBlockTagProvider = event.createProvider(ModBlockTagProvider::new);
 
-        event.createProvider((output, lookupProvider)
-                -> new ModItemTagProvider(output, lookupProvider, modBlockTagProvider.contentsGetter()));
+        event.createProvider((output, lookupProvider) -> new ModItemTagProvider(output, lookupProvider,
+                modBlockTagProvider.contentsGetter()));
 
         event.createProvider(ModDataMapProvider::new);
         event.createProvider(ModSoundsProvider::new);

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(MappedRegistry.class)
-public interface AccessorMappedRegistry<T>  {
+public interface AccessorMappedRegistry<T> {
     @Accessor
     Map<ResourceLocation, Holder.Reference<T>> getByLocation();
 

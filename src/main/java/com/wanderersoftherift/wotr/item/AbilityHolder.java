@@ -24,5 +24,4 @@ public class AbilityHolder extends Item {
         return super.getName(stack);
     }
 
-
 }

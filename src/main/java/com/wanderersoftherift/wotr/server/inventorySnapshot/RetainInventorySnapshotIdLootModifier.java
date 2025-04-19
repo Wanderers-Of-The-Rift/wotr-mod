@@ -17,23 +17,29 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * This Loot Modifier ensures that the inventory snapshot id is retained when an item is placed as a block and then destroyed.
+ * This Loot Modifier ensures that the inventory snapshot id is retained when an item is placed as a block and then
+ * destroyed.
  */
 public class RetainInventorySnapshotIdLootModifier extends LootModifier {
 
-    public static final MapCodec<RetainInventorySnapshotIdLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            LootModifier.codecStart(inst).apply(inst, RetainInventorySnapshotIdLootModifier::new));
+    public static final MapCodec<RetainInventorySnapshotIdLootModifier> CODEC = RecordCodecBuilder
+            .mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, RetainInventorySnapshotIdLootModifier::new));
 
     protected RetainInventorySnapshotIdLootModifier(LootItemCondition[] conditions) {
         super(conditions);
     }
 
     @Override
-    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
+            LootContext context) {
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (generatedLoot.size() == 1 && blockEntity != null && blockEntity.components().has(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get())) {
+        if (generatedLoot.size() == 1 && blockEntity != null
+                && blockEntity.components().has(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get())) {
             UUID blockId = blockEntity.components().get(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get());
-            generatedLoot.getFirst().applyComponents(DataComponentPatch.builder().set(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get(), blockId).build());
+            generatedLoot.getFirst()
+                    .applyComponents(DataComponentPatch.builder()
+                            .set(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get(), blockId)
+                            .build());
         }
         return generatedLoot;
     }

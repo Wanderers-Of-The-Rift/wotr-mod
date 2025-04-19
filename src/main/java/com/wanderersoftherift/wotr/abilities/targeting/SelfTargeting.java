@@ -11,7 +11,8 @@ import java.util.List;
 
 public class SelfTargeting extends AbstractTargeting {
 
-    public static final MapCodec<SelfTargeting> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).apply(instance, SelfTargeting::new));
+    public static final MapCodec<SelfTargeting> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> commonFields(instance).apply(instance, SelfTargeting::new));
 
     public SelfTargeting(TargetPredicate targetPredicate) {
         super(targetPredicate);

@@ -6,9 +6,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public record RolledGearImplicits(
-        List<ModifierInstance> modifierInstances
-) implements GearImplicits{
+public record RolledGearImplicits(List<ModifierInstance> modifierInstances) implements GearImplicits {
 
     @Override
     public List<ModifierInstance> modifierInstances(ItemStack stack, Level level) {

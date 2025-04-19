@@ -13,8 +13,8 @@ import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModAttributes;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
 import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModCommands;
 import com.wanderersoftherift.wotr.init.ModChunkGenerators;
+import com.wanderersoftherift.wotr.init.ModCommands;
 import com.wanderersoftherift.wotr.init.ModCreativeTabs;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModEffects;
@@ -99,7 +99,8 @@ public class WanderersOfTheRift {
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (Wotr) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like
+        // onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative); // Register the item to a creative tab
@@ -123,9 +124,11 @@ public class WanderersOfTheRift {
 
     /**
      * Helper method to get a translationId string containing our mod id.
+     * 
      * @param category The category of the translationId (becomes a prefix)
-     * @param item The translationId item
-     * @return A combination of category, our mod id and the item. e.g. if category is "item" and item is "nosering.description" the result is "item.wotr.nosering.description"
+     * @param item     The translationId item
+     * @return A combination of category, our mod id and the item. e.g. if category is "item" and item is
+     *         "nosering.description" the result is "item.wotr.nosering.description"
      */
     public static String translationId(String category, String item) {
         return category + "." + MODID + "." + item;
@@ -173,7 +176,7 @@ public class WanderersOfTheRift {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        //if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) event.accept(ModBlocks.EXAMPLE_BLOCK);
+        // if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) event.accept(ModBlocks.EXAMPLE_BLOCK);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

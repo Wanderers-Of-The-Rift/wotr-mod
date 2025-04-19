@@ -16,9 +16,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A spider renderer with an alternative renderer when arachnophobia
+ * 
  * @param <T>
  */
-public class AltSpiderRenderer<T extends Spider> extends MobRenderer<T, TurtleRenderState, EntityModel<? super TurtleRenderState>> {
+public class AltSpiderRenderer<T extends Spider>
+        extends MobRenderer<T, TurtleRenderState, EntityModel<? super TurtleRenderState>> {
 
     private final ResourceLocation altTexture;
     private final float altScale;
@@ -32,7 +34,8 @@ public class AltSpiderRenderer<T extends Spider> extends MobRenderer<T, TurtleRe
         this.altScale = scale;
     }
 
-    public void render(@NotNull TurtleRenderState renderState, @NotNull PoseStack pose, @NotNull MultiBufferSource source, int packedLight) {
+    public void render(@NotNull TurtleRenderState renderState, @NotNull PoseStack pose,
+            @NotNull MultiBufferSource source, int packedLight) {
         if (!ClientConfig.ACCESSIBILITY_ARACHNOPHOBIA.getAsBoolean()) {
             spiderRenderer.render(renderState, pose, source, packedLight);
             return;

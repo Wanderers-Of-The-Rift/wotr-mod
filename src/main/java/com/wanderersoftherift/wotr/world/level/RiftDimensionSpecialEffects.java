@@ -9,13 +9,7 @@ import org.joml.Matrix4f;
 
 public class RiftDimensionSpecialEffects extends DimensionSpecialEffects {
     public RiftDimensionSpecialEffects() {
-        super(
-                Float.NaN,
-                false,
-                DimensionSpecialEffects.SkyType.NONE,
-                false,
-                false
-        );
+        super(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false);
     }
 
     @Override
@@ -29,17 +23,21 @@ public class RiftDimensionSpecialEffects extends DimensionSpecialEffects {
     }
 
     @Override
-    public boolean renderClouds(@NotNull ClientLevel level, int ticks, float partialTick, double camX, double camY, double camZ, @NotNull Matrix4f modelViewMatrix, @NotNull Matrix4f projectionMatrix) {
+    public boolean renderClouds(@NotNull ClientLevel level, int ticks, float partialTick, double camX, double camY,
+            double camZ, @NotNull Matrix4f modelViewMatrix, @NotNull Matrix4f projectionMatrix) {
         return false;
     }
 
     @Override
-    public boolean renderSky(@NotNull ClientLevel level, int ticks, float partialTick, @NotNull Matrix4f modelViewMatrix, @NotNull Camera camera, @NotNull Matrix4f projectionMatrix, @NotNull Runnable setupFog) {
+    public boolean renderSky(@NotNull ClientLevel level, int ticks, float partialTick,
+            @NotNull Matrix4f modelViewMatrix, @NotNull Camera camera, @NotNull Matrix4f projectionMatrix,
+            @NotNull Runnable setupFog) {
         return false;
     }
 
     @Override
-    public boolean renderSnowAndRain(@NotNull ClientLevel level, int ticks, float partialTick, double camX, double camY, double camZ) {
+    public boolean renderSnowAndRain(@NotNull ClientLevel level, int ticks, float partialTick, double camX, double camY,
+            double camZ) {
         return false;
     }
 

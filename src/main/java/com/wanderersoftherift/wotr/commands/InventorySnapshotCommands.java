@@ -15,11 +15,8 @@ import net.minecraft.server.level.ServerPlayer;
 public class InventorySnapshotCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-        dispatcher.register(
-                Commands.literal("wotr:createInventorySnapshot").executes(
-                    (ctx) -> createInventorySnapshot(ctx.getSource()
-                )
-        ));
+        dispatcher.register(Commands.literal("wotr:createInventorySnapshot")
+                .executes((ctx) -> createInventorySnapshot(ctx.getSource())));
 
     }
 

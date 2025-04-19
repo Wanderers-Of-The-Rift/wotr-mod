@@ -29,13 +29,8 @@ import java.util.Optional;
 
 public class RuneAnvilMenu extends AbstractContainerMenu {
     public static final List<Vector2i> RUNE_SLOT_POSITIONS = List.of( // CLOCKWISE FROM TOP CENTER
-            new Vector2i(80, 26),
-            new Vector2i(127, 51),
-            new Vector2i(127, 101),
-            new Vector2i(80, 126),
-            new Vector2i(33, 101),
-            new Vector2i(33, 51)
-    );
+            new Vector2i(80, 26), new Vector2i(127, 51), new Vector2i(127, 101), new Vector2i(80, 126),
+            new Vector2i(33, 101), new Vector2i(33, 51));
     private static final Vector2i GEAR_SLOT_POSITION = new Vector2i(80, 76);
     private final List<Slot> playerInventorySlots = new ArrayList<>();
     private final List<RunegemSlot> socketSlots = new ArrayList<>();
@@ -52,7 +47,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     }
 
     // Server
-    public RuneAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, boolean isServer, Container container) {
+    public RuneAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, boolean isServer,
+            Container container) {
         super(ModMenuTypes.RUNE_ANVIL_MENU.get(), containerId);
         this.playerInventory = playerInventory;
         this.access = access;
@@ -71,7 +67,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     private void createInventorySlots(Inventory inventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.playerInventorySlots.add(this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 166 + i * 18)));
+                this.playerInventorySlots
+                        .add(this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 166 + i * 18)));
             }
         }
 
@@ -99,17 +96,19 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         for (int i = 0; i < 6; i++) {
             Vector2i position = RUNE_SLOT_POSITIONS.get(i);
             int finalI = i;
-            socketSlots.add((RunegemSlot) this.addSlot(new RunegemSlot(this.container, finalI + 1, position.x, position.y) {
-                @Override
-                public boolean mayPlace(@NotNull ItemStack stack) {
-                    return container.canPlaceItem(finalI + 1, stack);
-                }
+            socketSlots.add(
+                    (RunegemSlot) this.addSlot(new RunegemSlot(this.container, finalI + 1, position.x, position.y) {
+                        @Override
+                        public boolean mayPlace(@NotNull ItemStack stack) {
+                            return container.canPlaceItem(finalI + 1, stack);
+                        }
 
-                @Override
-                public boolean mayPickup(@NotNull Player player) {
-                    return container.canTakeItem(RuneAnvilMenu.this.playerInventory, finalI + 1, this.getItem());
-                }
-            }));
+                        @Override
+                        public boolean mayPickup(@NotNull Player player) {
+                            return container.canTakeItem(RuneAnvilMenu.this.playerInventory, finalI + 1,
+                                    this.getItem());
+                        }
+                    }));
         }
     }
 
@@ -139,7 +138,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             GearSocket currentSocket = slot.getSocket();
             ItemStack runegem = slot.getItem();
             if (slot.mayPickup(this.playerInventory.player) && !runegem.isEmpty()) {
-                GearSocket newGearSocket = currentSocket.applyRunegem(gear, runegem, this.playerInventory.player.level());
+                GearSocket newGearSocket = currentSocket.applyRunegem(gear, runegem,
+                        this.playerInventory.player.level());
                 newSockets.add(newGearSocket);
             } else {
                 newSockets.add(currentSocket);
@@ -194,7 +194,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     public void returnRunegems(@Nullable Player player) {
         // have to figure out how to do this properly without just duping the runegems
         // i think its because mayPickup is returning true since by the time this is called the gear is already changed
-
 
         if (player == null) player = this.playerInventory.player;
 

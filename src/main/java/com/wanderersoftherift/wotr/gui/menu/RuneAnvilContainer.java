@@ -56,8 +56,10 @@ public interface RuneAnvilContainer extends Container {
             ItemStack gear = this.getItem(0);
             GearSockets gearSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
             RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA.get());
-            if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null)
-                return true; // i'm not sure this is right
+            if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null) return true; // i'm not
+                                                                                                              // sure
+                                                                                                              // this is
+                                                                                                              // right
 
             List<GearSocket> sockets = gearSockets.sockets();
             if (sockets.size() <= runegemSlotIndex) return false;

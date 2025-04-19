@@ -34,8 +34,10 @@ import static com.wanderersoftherift.wotr.core.rift.RiftLevelManager.isRiftExist
  */
 public class RiftPortalEntranceEntity extends Entity {
     private static final String BILLBOARD = "billboard";
-    private static final EntityDataAccessor<Boolean> DATA_BILLBOARD = SynchedEntityData.defineId(RiftPortalEntranceEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<ItemStack> DATA_RIFTKEY = SynchedEntityData.defineId(RiftPortalEntranceEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Boolean> DATA_BILLBOARD = SynchedEntityData
+            .defineId(RiftPortalEntranceEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> DATA_RIFTKEY = SynchedEntityData
+            .defineId(RiftPortalEntranceEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private boolean generated = false;
     private ResourceLocation riftDimensionID = WanderersOfTheRift.id("rift_" + UUID.randomUUID());
@@ -72,17 +74,16 @@ public class RiftPortalEntranceEntity extends Entity {
         if (level() instanceof ServerLevel serverLevel) {
             for (Entity player : serverLevel.getEntities(this, makeBoundingBox(), x -> x instanceof ServerPlayer)) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                        tpToRift(serverPlayer, serverLevel, blockPosition(), getRiftKey());
+                    tpToRift(serverPlayer, serverLevel, blockPosition(), getRiftKey());
                 }
             }
-            if(generated){
-                if(!isRiftExists(getRiftDimensionID())){
+            if (generated) {
+                if (!isRiftExists(getRiftDimensionID())) {
                     this.remove(RemovalReason.DISCARDED);
                 }
             }
         }
     }
-
 
     private InteractionResult tpToRift(ServerPlayer player, ServerLevel level, BlockPos pos, ItemStack riftKey) {
         ResourceLocation riftId = this.getRiftDimensionID();
@@ -90,9 +91,10 @@ public class RiftPortalEntranceEntity extends Entity {
         var axis = plDir.getAxis();
         var axisDir = plDir.getAxisDirection().getStep();
 
-        ServerLevel lvl = RiftLevelManager.getOrCreateRiftLevel(riftId, level.dimension(), pos.relative(axis, 3 * axisDir), riftKey);
+        ServerLevel lvl = RiftLevelManager.getOrCreateRiftLevel(riftId, level.dimension(),
+                pos.relative(axis, 3 * axisDir), riftKey);
         if (lvl == null) {
-            player.displayClientMessage(Component.translatable(WanderersOfTheRift.MODID +".rift.create.failed"), true);
+            player.displayClientMessage(Component.translatable(WanderersOfTheRift.MODID + ".rift.create.failed"), true);
             return InteractionResult.FAIL;
         }
         this.setGenerated(true);
@@ -100,16 +102,18 @@ public class RiftPortalEntranceEntity extends Entity {
 
         var riftSpawnCoords = getRiftSpawnCoords();
 
-        player.teleportTo(lvl, riftSpawnCoords.x, riftSpawnCoords.y, riftSpawnCoords.z, Set.of(), player.getYRot(), 0, false);
-        NeoForge.EVENT_BUS.post(new PlayerEvent.PlayerChangedDimensionEvent(player, level.dimension(), lvl.dimension()));
+        player.teleportTo(lvl, riftSpawnCoords.x, riftSpawnCoords.y, riftSpawnCoords.z, Set.of(), player.getYRot(), 0,
+                false);
+        NeoForge.EVENT_BUS
+                .post(new PlayerEvent.PlayerChangedDimensionEvent(player, level.dimension(), lvl.dimension()));
         return InteractionResult.SUCCESS;
     }
 
-    private static Vec3 getRiftSpawnCoords(){
+    private static Vec3 getRiftSpawnCoords() {
         var random = new Random();
-        double x = random.nextDouble(2,4);
+        double x = random.nextDouble(2, 4);
         double y = 0;
-        double z = random.nextDouble(2,4);
+        double z = random.nextDouble(2, 4);
         if (random.nextBoolean()) {
             x = -x;
         }
@@ -136,7 +140,7 @@ public class RiftPortalEntranceEntity extends Entity {
         if (tag.contains("riftDimensionID")) {
             setRiftDimensionID(ResourceLocation.parse(tag.getString("riftDimensionID")));
         }
-        if(tag.contains("generated")){
+        if (tag.contains("generated")) {
             generated = tag.getBoolean("generated");
         }
     }

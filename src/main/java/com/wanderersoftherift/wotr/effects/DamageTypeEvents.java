@@ -13,7 +13,7 @@ public class DamageTypeEvents {
 
     @SubscribeEvent
     public static void onLivingDamageEventPost(LivingDamageEvent.Post event) {
-        if (event.getSource().typeHolder().getKey().equals(ModDamageTypes.FIRE_DAMAGE)) {
+        if (ModDamageTypes.FIRE_DAMAGE.equals(event.getSource().typeHolder().getKey())) {
             event.getEntity().addEffect(new MobEffectInstance(ModMobEffects.FIRE_BURN_EFFECT, 20 * 30));
         }
     }

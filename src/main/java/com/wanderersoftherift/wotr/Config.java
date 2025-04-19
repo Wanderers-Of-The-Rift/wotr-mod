@@ -13,10 +13,13 @@ import java.util.List;
 public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    private static final ModConfigSpec.BooleanValue ALLOW_PVP = BUILDER.comment("Whether player vs player is allowed").define("allowPvP", false);
+    private static final ModConfigSpec.BooleanValue ALLOW_PVP = BUILDER.comment("Whether player vs player is allowed")
+            .define("allowPvP", false);
 
     // a list of strings that are treated as resource locations for items
-    private static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER.comment("A list of items to log on common setup.").defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
+            .comment("A list of items to log on common setup.")
+            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 
@@ -26,14 +29,13 @@ public class Config {
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
     }
 
-    // This was being called upon Client Config load as well, causing it to query config values before the common-config was loaded.
-    /*@SubscribeEvent
-    static void onLoad(final ModConfigEvent event) {
-        logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
-
-        //convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream().map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName))).collect(Collectors.toSet());
-    }*/
+    // This was being called upon Client Config load as well, causing it to query config values before the common-config
+    // was loaded.
+    /*
+     * @SubscribeEvent static void onLoad(final ModConfigEvent event) { logDirtBlock = LOG_DIRT_BLOCK.get(); magicNumber
+     * = MAGIC_NUMBER.get(); magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
+     * 
+     * //convert the list of strings into a set of items items = ITEM_STRINGS.get().stream().map(itemName ->
+     * BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName))).collect(Collectors.toSet()); }
+     */
 }

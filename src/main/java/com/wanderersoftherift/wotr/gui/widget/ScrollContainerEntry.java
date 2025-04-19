@@ -13,6 +13,7 @@ public interface ScrollContainerEntry extends GuiEventListener, Renderable, Layo
 
     /**
      * To allow for elements that can flow or resize based on available width
+     * 
      * @param width The width available to render the entry
      * @return The height of the entry, given the specified width
      */

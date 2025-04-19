@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface TrialSpawnerAccessor {
 
     @Accessor("normalConfig")
-    public void setNormalConfig(Holder<TrialSpawnerConfig> spawnerConfig);
+    void setNormalConfig(Holder<TrialSpawnerConfig> spawnerConfig);
 
     @Accessor("ominousConfig")
-    public void setOminousConfig(Holder<TrialSpawnerConfig> spawnerConfig);
+    void setOminousConfig(Holder<TrialSpawnerConfig> spawnerConfig);
 }

@@ -28,23 +28,25 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RiftData extends SavedData { //TODO: split this
+public class RiftData extends SavedData { // TODO: split this
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
     private final List<UUID> players;
 
-
     public static boolean isRift(ServerLevel level) {
         Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
         Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
-        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType()).isPresent();
+        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType())
+                .isPresent();
     }
 
     public static RiftData get(ServerLevel level) {
         if (!isRift(level)) {
             throw new IllegalArgumentException("Not a rift level");
         }
-        return level.getDataStorage().computeIfAbsent(factory(level.getServer().overworld().dimension(), level.getServer().overworld().getSharedSpawnPos()), "rift_data");
+        return level.getDataStorage()
+                .computeIfAbsent(factory(level.getServer().overworld().dimension(),
+                        level.getServer().overworld().getSharedSpawnPos()), "rift_data");
     }
 
     private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
@@ -61,7 +63,7 @@ public class RiftData extends SavedData { //TODO: split this
         ResourceLocation portalDimensionLocation = ResourceLocation.parse(tag.getString("PortalDimension"));
         ResourceKey<Level> portalDimension = ResourceKey.create(Registries.DIMENSION, portalDimensionLocation);
         List<UUID> players = new ArrayList<>();
-        tag.getList("Players", Tag.TAG_STRING).forEach( player -> players.add(UUID.fromString(player.getAsString())));
+        tag.getList("Players", Tag.TAG_STRING).forEach(player -> players.add(UUID.fromString(player.getAsString())));
         return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players);
     }
 

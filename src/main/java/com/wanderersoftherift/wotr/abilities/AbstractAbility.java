@@ -36,9 +36,11 @@ public abstract class AbstractAbility {
 
     public abstract MapCodec<? extends AbstractAbility> getCodec();
 
-    public static final Codec<AbstractAbility> DIRECT_CODEC = ModAbilityTypes.ABILITY_TYPES_REGISTRY.byNameCodec().dispatch(AbstractAbility::getCodec, Function.identity());
+    public static final Codec<AbstractAbility> DIRECT_CODEC = ModAbilityTypes.ABILITY_TYPES_REGISTRY.byNameCodec()
+            .dispatch(AbstractAbility::getCodec, Function.identity());
     public static final Codec<Holder<AbstractAbility>> CODEC = DeferrableRegistryCodec.create(ABILITY_REGISTRY);
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs.holderRegistry(ABILITY_REGISTRY);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs
+            .holderRegistry(ABILITY_REGISTRY);
     private final ResourceLocation name;
     private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
     protected float baseCooldown = 0;
@@ -93,16 +95,17 @@ public abstract class AbstractAbility {
     }
 
     /*
-    COOL DOWN RELATED STUFF HERE
-    */
+     * COOL DOWN RELATED STUFF HERE
+     */
 
     public boolean isOnCooldown(Player player, int slot) {
-        //If we registered this ability as one that has a cooldown and the player has a cooldown active for this ability.
+        // If we registered this ability as one that has a cooldown and the player has a cooldown active for this
+        // ability.
         return player.getData(ModAttachments.ABILITY_COOLDOWNS).isOnCooldown(slot);
 //        return ModAbilities.COOL_DOWN_ATTACHMENTS.containsKey(this.getName()) && p.getData(ModAbilities.COOL_DOWN_ATTACHMENTS.get(this.getName())) > 0;
     }
 
-    //TODO refactor this because I dont think we need to pass in this attribute anymore?
+    // TODO refactor this because I dont think we need to pass in this attribute anymore?
     public void setCooldown(Player player, int slot, float amount) {
         if (this.hasCooldown()) {
             WanderersOfTheRift.LOGGER.info("Setting cooldown for: " + this.getName() + " length: " + amount);
@@ -110,7 +113,8 @@ public abstract class AbstractAbility {
             cooldowns.setCooldown(slot, (int) amount);
             player.setData(ModAttachments.ABILITY_COOLDOWNS, cooldowns);
 
-            PacketDistributor.sendToPlayer((ServerPlayer) player, new AbilityCooldownUpdatePayload(slot, (int) amount, (int) amount));
+            PacketDistributor.sendToPlayer((ServerPlayer) player,
+                    new AbilityCooldownUpdatePayload(slot, (int) amount, (int) amount));
         }
     }
 
@@ -127,8 +131,8 @@ public abstract class AbstractAbility {
     }
 
     /*
-        DURATION RELATED STUFF BELOW
-        */
+     * DURATION RELATED STUFF BELOW
+     */
     public boolean hasDuration() {
         return durationAttribute != null;
     }
@@ -138,7 +142,7 @@ public abstract class AbstractAbility {
     }
 
     public void setDuration(Player player, Holder<Attribute> attribute) {
-        //TODO look into combining this and the cooldown
+        // TODO look into combining this and the cooldown
         if (this.hasDuration()) {
             WanderersOfTheRift.LOGGER.info("Setting duration for: " + this.getName());
             PlayerDurationData durations = player.getData(ModAttachments.DURATIONS);
@@ -154,7 +158,7 @@ public abstract class AbstractAbility {
     public abstract void tick(Player player);
 
     /*
-    TOGGLE STUFF BELOW
+     * TOGGLE STUFF BELOW
      */
     public boolean isToggle() {
         return this.isToggle;
@@ -170,7 +174,7 @@ public abstract class AbstractAbility {
     }
 
     public void toggle(Player player) {
-        //Change the toggle to opposite and then tell the player
+        // Change the toggle to opposite and then tell the player
 //        if(TOGGLE_ATTACHMENTS.containsKey(this.getName())) p.setData(TOGGLE_ATTACHMENTS.get(this.getName()), !IsToggled(p));
 //        PacketDistributor.sendToPlayer((ServerPlayer) p, new ToggleState(this.getName().toString(), IsToggled(p)));
     }

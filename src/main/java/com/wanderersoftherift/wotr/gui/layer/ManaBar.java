@@ -76,13 +76,15 @@ public class ManaBar implements LayeredDraw.Layer {
         if (x < BAR_OFFSET_X || x >= BAR_OFFSET_X + BAR_WIDTH || y < BAR_OFFSET_Y || y >= BAR_OFFSET_Y + barHeight) {
             return;
         }
-        graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(Component.translatable(WanderersOfTheRift.translationId("tooltip", "mana_bar"), amount, maxMana)), x, y + 8);
+        graphics.renderComponentTooltip(
+                Minecraft.getInstance().font, List.of(Component
+                        .translatable(WanderersOfTheRift.translationId("tooltip", "mana_bar"), amount, maxMana)),
+                x, y + 8);
     }
 
     private int renderBar(GuiGraphics graphics, int amount, int maxMana, int frame) {
         float rawSectionCount = (float) maxMana / MANA_PER_SECTION;
         int sectionCount = (int) rawSectionCount;
-
 
         int yOffset = BAR_OFFSET_Y;
         int topSectionSize;
@@ -93,29 +95,41 @@ public class ManaBar implements LayeredDraw.Layer {
             topSectionSize = (int) ((rawSectionCount - Math.floor(rawSectionCount)) * (SECTION_HEIGHT - 1));
         }
 
-        int topSectionFill = topSectionSize * Math.max(0, amount - (sectionCount * MANA_PER_SECTION)) / (maxMana - sectionCount * MANA_PER_SECTION);
-        yOffset += renderTopSection(graphics, frame, sectionCount % FILL_VARIANTS, yOffset, topSectionSize, topSectionFill);
+        int topSectionFill = topSectionSize * Math.max(0, amount - (sectionCount * MANA_PER_SECTION))
+                / (maxMana - sectionCount * MANA_PER_SECTION);
+        yOffset += renderTopSection(graphics, frame, sectionCount % FILL_VARIANTS, yOffset, topSectionSize,
+                topSectionFill);
 
         for (int i = 0; i < sectionCount; i++) {
-            int fill = SECTION_HEIGHT * Math.clamp(0, MANA_PER_SECTION, amount - (sectionCount - i - 1) * MANA_PER_SECTION ) / MANA_PER_SECTION;
-            yOffset += renderSection(graphics, frame, (sectionCount - 1 - i) % FILL_VARIANTS, yOffset , fill);
+            int fill = SECTION_HEIGHT
+                    * Math.clamp(0, MANA_PER_SECTION, amount - (sectionCount - i - 1) * MANA_PER_SECTION)
+                    / MANA_PER_SECTION;
+            yOffset += renderSection(graphics, frame, (sectionCount - 1 - i) % FILL_VARIANTS, yOffset, fill);
         }
-        graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X, yOffset, 0, TEXTURE_HEIGHT - BOTTOM_HEIGHT, BAR_WIDTH, BOTTOM_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X, yOffset, 0, TEXTURE_HEIGHT - BOTTOM_HEIGHT,
+                BAR_WIDTH, BOTTOM_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
         return yOffset - BAR_OFFSET_Y;
     }
 
     private int renderSection(GuiGraphics graphics, int frame, int variant, int yOffset, int fill) {
-        graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X, yOffset, 0, SECTION_HEIGHT, BAR_WIDTH, SECTION_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X, yOffset, 0, SECTION_HEIGHT, BAR_WIDTH,
+                SECTION_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
         if (fill > 0) {
-            graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X + FILL_X_OFFSET, yOffset + SECTION_HEIGHT - fill, BAR_WIDTH + frame * FILL_WIDTH, SECTION_HEIGHT - fill + SECTION_HEIGHT * variant, FILL_WIDTH, fill, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+            graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X + FILL_X_OFFSET,
+                    yOffset + SECTION_HEIGHT - fill, BAR_WIDTH + frame * FILL_WIDTH,
+                    SECTION_HEIGHT - fill + SECTION_HEIGHT * variant, FILL_WIDTH, fill, TEXTURE_WIDTH, TEXTURE_HEIGHT);
         }
         return SECTION_HEIGHT;
     }
 
     private int renderTopSection(GuiGraphics graphics, int frame, int variant, int yOffset, int size, int fill) {
-        graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X, yOffset, 0, 0, BAR_WIDTH, 1 + size, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X, yOffset, 0, 0, BAR_WIDTH, 1 + size, TEXTURE_WIDTH,
+                TEXTURE_HEIGHT);
         if (fill > 0) {
-            graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X + FILL_X_OFFSET, yOffset + TOP_HEIGHT + size - fill, BAR_WIDTH + frame * FILL_WIDTH, TOP_HEIGHT + size - fill + SECTION_HEIGHT * variant, FILL_WIDTH, fill, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+            graphics.blit(RenderType::guiTextured, TEXTURE, BAR_OFFSET_X + FILL_X_OFFSET,
+                    yOffset + TOP_HEIGHT + size - fill, BAR_WIDTH + frame * FILL_WIDTH,
+                    TOP_HEIGHT + size - fill + SECTION_HEIGHT * variant, FILL_WIDTH, fill, TEXTURE_WIDTH,
+                    TEXTURE_HEIGHT);
         }
         return size + TOP_HEIGHT;
     }

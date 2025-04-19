@@ -13,16 +13,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Payload that updates the contents of a single ability slot for a client
- * @param slot The slot to update
+ * 
+ * @param slot  The slot to update
  * @param stack The new contents of the slot - may be {@link ItemStack#EMPTY}
  */
 public record AbilitySlotsUpdatePayload(int slot, ItemStack stack) implements CustomPacketPayload {
-    public static final Type<AbilitySlotsUpdatePayload> TYPE = new Type<>(WanderersOfTheRift.id("ability_slots_update"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, AbilitySlotsUpdatePayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, AbilitySlotsUpdatePayload::slot,
-            ItemStack.OPTIONAL_STREAM_CODEC, AbilitySlotsUpdatePayload::stack,
-            AbilitySlotsUpdatePayload::new
-    );
+    public static final Type<AbilitySlotsUpdatePayload> TYPE = new Type<>(
+            WanderersOfTheRift.id("ability_slots_update"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, AbilitySlotsUpdatePayload> STREAM_CODEC = StreamCodec
+            .composite(ByteBufCodecs.INT, AbilitySlotsUpdatePayload::slot, ItemStack.OPTIONAL_STREAM_CODEC,
+                    AbilitySlotsUpdatePayload::stack, AbilitySlotsUpdatePayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

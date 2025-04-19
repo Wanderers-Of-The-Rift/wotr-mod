@@ -31,9 +31,12 @@ import static com.wanderersoftherift.wotr.init.ModAttachments.ABILITY_COOLDOWNS;
  */
 public final class AbilityBar implements LayeredDraw.Layer {
 
-    private static final ResourceLocation BACKGROUND = WanderersOfTheRift.id("textures/gui/hud/ability_bar/background.png");
-    private static final ResourceLocation COOLDOWN_OVERLAY = WanderersOfTheRift.id("textures/gui/hud/ability_bar/cooldown_overlay.png");
-    private static final ResourceLocation SELECTED_OVERLAY = WanderersOfTheRift.id("textures/gui/hud/ability_bar/select.png");
+    private static final ResourceLocation BACKGROUND = WanderersOfTheRift
+            .id("textures/gui/hud/ability_bar/background.png");
+    private static final ResourceLocation COOLDOWN_OVERLAY = WanderersOfTheRift
+            .id("textures/gui/hud/ability_bar/cooldown_overlay.png");
+    private static final ResourceLocation SELECTED_OVERLAY = WanderersOfTheRift
+            .id("textures/gui/hud/ability_bar/select.png");
 
     private static final int BACKGROUND_WIDTH = 24;
     private static final int BACKGROUND_HEIGHT = 60;
@@ -70,7 +73,8 @@ public final class AbilityBar implements LayeredDraw.Layer {
         }
     }
 
-    private void renderTooltips(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker, AbilitySlots abilitySlots, int x, int y) {
+    private void renderTooltips(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker,
+            AbilitySlots abilitySlots, int x, int y) {
         if (x < BAR_OFFSET_X + ABILITY_OFFSET_X || x >= BAR_OFFSET_X + ABILITY_OFFSET_X + ICON_SIZE) {
             return;
         }
@@ -95,16 +99,21 @@ public final class AbilityBar implements LayeredDraw.Layer {
         for (int slot = 0; slot < abilitySlots.getSlots(); slot++) {
             AbstractAbility ability = abilitySlots.getAbilityInSlot(slot);
             if (ability != null) {
-                graphics.blit(RenderType::guiTextured, ability.getIcon(), BAR_OFFSET_X + ABILITY_OFFSET_X, yOffset + slot * SLOT_HEIGHT, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+                graphics.blit(RenderType::guiTextured, ability.getIcon(), BAR_OFFSET_X + ABILITY_OFFSET_X,
+                        yOffset + slot * SLOT_HEIGHT, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
             }
 
             if (cooldowns.isOnCooldown(slot) && cooldowns.getLastCooldownValue(slot) > 0) {
-                int overlayHeight = Math.clamp((int) (Math.ceil((float) ICON_SIZE * cooldowns.getCooldownRemaining(slot) / cooldowns.getLastCooldownValue(slot))), 1, ICON_SIZE);
-                graphics.blit(RenderType::guiTextured, COOLDOWN_OVERLAY, BAR_OFFSET_X + ABILITY_OFFSET_X, yOffset + slot * SLOT_HEIGHT + ICON_SIZE - overlayHeight, 0, 0, ICON_SIZE, overlayHeight, ICON_SIZE, ICON_SIZE);
+                int overlayHeight = Math.clamp((int) (Math.ceil((float) ICON_SIZE * cooldowns.getCooldownRemaining(slot)
+                        / cooldowns.getLastCooldownValue(slot))), 1, ICON_SIZE);
+                graphics.blit(RenderType::guiTextured, COOLDOWN_OVERLAY, BAR_OFFSET_X + ABILITY_OFFSET_X,
+                        yOffset + slot * SLOT_HEIGHT + ICON_SIZE - overlayHeight, 0, 0, ICON_SIZE, overlayHeight,
+                        ICON_SIZE, ICON_SIZE);
             }
         }
         int selected = abilitySlots.getSelectedSlot();
-        graphics.blit(RenderType::guiTextured, SELECTED_OVERLAY, BAR_OFFSET_X + ABILITY_OFFSET_X - 6, yOffset + selected * SLOT_HEIGHT - 3, 0, 0, 28, 22, 28, 22);
+        graphics.blit(RenderType::guiTextured, SELECTED_OVERLAY, BAR_OFFSET_X + ABILITY_OFFSET_X - 6,
+                yOffset + selected * SLOT_HEIGHT - 3, 0, 0, 28, 22, 28, 22);
     }
 
     private void renderAbilityKeyBinds(GuiGraphics graphics) {
@@ -122,19 +131,22 @@ public final class AbilityBar implements LayeredDraw.Layer {
                 keyText = Component.literal("...");
                 keyTextWidth = font.width(keyText);
             }
-            graphics.drawString(font, keyText, (int) (inverseScale * (BAR_OFFSET_X + ABILITY_OFFSET_X + ICON_SIZE)) - keyTextWidth, (int) (inverseScale * (yOffset + (slot + 1) * SLOT_HEIGHT - 1)) - font.lineHeight, ChatFormatting.WHITE.getColor());
+            graphics.drawString(font, keyText,
+                    (int) (inverseScale * (BAR_OFFSET_X + ABILITY_OFFSET_X + ICON_SIZE)) - keyTextWidth,
+                    (int) (inverseScale * (yOffset + (slot + 1) * SLOT_HEIGHT - 1)) - font.lineHeight,
+                    ChatFormatting.WHITE.getColor());
         }
         graphics.pose().popPose();
     }
 
     private Component getShortKeyDescription(KeyMapping keyMapping) {
         return switch (keyMapping.getKeyModifier()) {
-            case ALT ->
-                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "mod_alt")).append(getUnmodifiedKeyDescription(keyMapping));
-            case SHIFT ->
-                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "mod_shift")).append(getUnmodifiedKeyDescription(keyMapping));
-            case CONTROL ->
-                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "mod_ctrl")).append(getUnmodifiedKeyDescription(keyMapping));
+            case ALT -> Component.translatable(WanderersOfTheRift.translationId("keybinds", "mod_alt"))
+                    .append(getUnmodifiedKeyDescription(keyMapping));
+            case SHIFT -> Component.translatable(WanderersOfTheRift.translationId("keybinds", "mod_shift"))
+                    .append(getUnmodifiedKeyDescription(keyMapping));
+            case CONTROL -> Component.translatable(WanderersOfTheRift.translationId("keybinds", "mod_ctrl"))
+                    .append(getUnmodifiedKeyDescription(keyMapping));
             case NONE -> getUnmodifiedKeyDescription(keyMapping);
         };
     }
@@ -146,13 +158,13 @@ public final class AbilityBar implements LayeredDraw.Layer {
         if (keyMapping.getKey().getType() == InputConstants.Type.KEYSYM) {
             return switch (keyMapping.getKey().getValue()) {
                 case InputConstants.KEY_LALT ->
-                        Component.translatable(WanderersOfTheRift.translationId("keybinds", "l_alt"));
+                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "l_alt"));
                 case InputConstants.KEY_RALT ->
-                        Component.translatable(WanderersOfTheRift.translationId("keybinds", "r_alt"));
+                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "r_alt"));
                 case InputConstants.KEY_LCONTROL ->
-                        Component.translatable(WanderersOfTheRift.translationId("keybinds", "l_ctrl"));
+                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "l_ctrl"));
                 case InputConstants.KEY_RCONTROL ->
-                        Component.translatable(WanderersOfTheRift.translationId("keybinds", "r_ctrl"));
+                    Component.translatable(WanderersOfTheRift.translationId("keybinds", "r_ctrl"));
                 default -> keyMapping.getKey().getDisplayName();
             };
         }
@@ -163,14 +175,17 @@ public final class AbilityBar implements LayeredDraw.Layer {
         int yOffset = BAR_OFFSET_Y;
         for (int i = 0; i < abilitySlots.getSlots(); i++) {
             if (i == 0) {
-                graphics.blit(RenderType::guiTextured, BACKGROUND, BAR_OFFSET_X, yOffset, 0, 0, 24, 20, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+                graphics.blit(RenderType::guiTextured, BACKGROUND, BAR_OFFSET_X, yOffset, 0, 0, 24, 20,
+                        BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
                 yOffset += 20;
             } else {
-                graphics.blit(RenderType::guiTextured, BACKGROUND, BAR_OFFSET_X, yOffset, 0, 20, 24, 18, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+                graphics.blit(RenderType::guiTextured, BACKGROUND, BAR_OFFSET_X, yOffset, 0, 20, 24, 18,
+                        BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
                 yOffset += 18;
             }
         }
-        graphics.blit(RenderType::guiTextured, BACKGROUND, BAR_OFFSET_X, yOffset, 0, 56, 24, 4, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+        graphics.blit(RenderType::guiTextured, BACKGROUND, BAR_OFFSET_X, yOffset, 0, 56, 24, 4, BACKGROUND_WIDTH,
+                BACKGROUND_HEIGHT);
     }
 
 }

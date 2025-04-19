@@ -14,11 +14,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * Data tracking the state of a player's mana pool
  */
 public class ManaData {
-    public static final Codec<ManaData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.INT.fieldOf("amount").forGetter(ManaData::getAmount),
-            Codec.DOUBLE.fieldOf("fractionalRegen").forGetter(x -> x.fractionalRegen),
-            Codec.DOUBLE.fieldOf("fractionalDegen").forGetter(x -> x.fractionalDegen)
-    ).apply(instance, ManaData::new));
+    public static final Codec<ManaData> CODEC = RecordCodecBuilder.create(instance -> instance
+            .group(Codec.INT.fieldOf("amount").forGetter(ManaData::getAmount),
+                    Codec.DOUBLE.fieldOf("fractionalRegen").forGetter(x -> x.fractionalRegen),
+                    Codec.DOUBLE.fieldOf("fractionalDegen").forGetter(x -> x.fractionalDegen))
+            .apply(instance, ManaData::new));
 
     private int amount = 0;
     private double fractionalRegen = 0;
@@ -43,7 +43,8 @@ public class ManaData {
 
     /**
      * Consumes an amount of mana (will not consume past 0). This will be replicated to the player if on the server.
-     * @param owner The owner of the mana pool
+     * 
+     * @param owner    The owner of the mana pool
      * @param quantity The quantity of mana to consume
      */
     public void useAmount(Player owner, int quantity) {
@@ -52,6 +53,7 @@ public class ManaData {
 
     /**
      * Sets the amount of mana in the pool. This will be replicated to the player if on the server.
+     * 
      * @param owner The owner of the mana pool
      * @param value The new value of mana
      */

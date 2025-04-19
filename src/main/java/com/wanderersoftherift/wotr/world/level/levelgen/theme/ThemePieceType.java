@@ -8,7 +8,8 @@ public enum ThemePieceType {
     POI("poi"),
     ROOM("room");
 
-    public static final Codec<ThemePieceType> CODEC = Codec.STRING.flatComapMap(s -> ThemePieceType.byName(s, null), d -> DataResult.success(d.getName()));
+    public static final Codec<ThemePieceType> CODEC = Codec.STRING.flatComapMap(s -> ThemePieceType.byName(s, null),
+            d -> DataResult.success(d.getName()));
 
     private final String name;
 

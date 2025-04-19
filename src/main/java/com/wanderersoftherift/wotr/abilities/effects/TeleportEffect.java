@@ -13,24 +13,24 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 import java.util.Optional;
 
-public class TeleportEffect extends AbstractEffect{
+public class TeleportEffect extends AbstractEffect {
     TeleportInfo teleInfo;
 
-    //TODO look into handling different types of teleports and better handle relative motion
-    //TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
+    // TODO look into handling different types of teleports and better handle relative motion
+    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
-    public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance).and(
-                    TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::getTeleportInfo)
-            ).apply(instance, TeleportEffect::new)
-    );
+    public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::getTeleportInfo))
+                    .apply(instance, TeleportEffect::new));
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
     }
 
-    public TeleportEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, TeleportInfo teleInfo) {
+    public TeleportEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            TeleportInfo teleInfo) {
         super(targeting, effects, particles);
         this.teleInfo = teleInfo;
     }
@@ -43,37 +43,35 @@ public class TeleportEffect extends AbstractEffect{
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
         applyParticlesToUser(user);
-        for(Entity target: targets) {
+        for (Entity target : targets) {
             applyParticlesToTarget(target);
 
-            switch(teleInfo.getTarget()) {
+            switch (teleInfo.getTarget()) {
                 case USER -> {
                     WanderersOfTheRift.LOGGER.info("Teleporting Self");
                     Entity random = targets.get(user.getRandom().nextIntBetweenInclusive(0, targets.size() - 1));
-                    user.teleportTo(random.getX() + teleInfo.getPosition().x, random.getY() + teleInfo.getPosition().y, random.getZ() + teleInfo.getPosition().z);
+                    user.teleportTo(random.getX() + teleInfo.getPosition().x, random.getY() + teleInfo.getPosition().y,
+                            random.getZ() + teleInfo.getPosition().z);
 
                 }
 
                 case TARGET -> {
                     WanderersOfTheRift.LOGGER.info("Teleporting Target");
-                    if(teleInfo.isRelative().isEmpty() || (teleInfo.isRelative().isPresent() && teleInfo.isRelative().get()))
-                    {
-                        target.teleportRelative(teleInfo.getPosition().x, teleInfo.getPosition().y, teleInfo.getPosition().z);
-                    }
-                    else
-                    {
+                    if (teleInfo.isRelative().isEmpty()
+                            || (teleInfo.isRelative().isPresent() && teleInfo.isRelative().get())) {
+                        target.teleportRelative(teleInfo.getPosition().x, teleInfo.getPosition().y,
+                                teleInfo.getPosition().z);
+                    } else {
                         target.teleportTo(teleInfo.getPosition().x, teleInfo.getPosition().y, teleInfo.getPosition().z);
                     }
                 }
             }
 
-            //Then apply children affects to targets
+            // Then apply children affects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 
-
-        if(targets.isEmpty())
-        {
+        if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
         }
     }

@@ -9,15 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import java.util.UUID;
 
 /**
- * A serializable form of an {@link AbilityContext} - this largely deals with the caster being stored as a UUID and needing to be
- * looked up in the level
+ * A serializable form of an {@link AbilityContext} - this largely deals with the caster being stored as a UUID and
+ * needing to be looked up in the level
  */
 public class StoredAbilityContext {
-    public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
-            ItemStack.OPTIONAL_CODEC.fieldOf("abilityItem").forGetter(x -> x.abilityItem)
+    public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder
+            .create(instance -> instance.group(UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
+                    ItemStack.OPTIONAL_CODEC.fieldOf("abilityItem").forGetter(x -> x.abilityItem)
 
-    ).apply(instance, StoredAbilityContext::new));
+            ).apply(instance, StoredAbilityContext::new));
 
     private final UUID casterId;
     private final ItemStack abilityItem;

@@ -3,7 +3,11 @@ package com.wanderersoftherift.wotr.gui.screen;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.*;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.components.FocusableTextWidget;
+import net.minecraft.client.gui.components.LogoRenderer;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -45,57 +49,50 @@ public class AccessibilityOptionsScreen extends Screen {
 
         gridLayout$rowHelper.addChild(new SpacerElement(0, 25), 2); // Seperating the textWidget with the ConfigButtons
 
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.trypophobia"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.trypophobia"),
+                        ClientConfig.ACCESSIBILITY_TRYPOPHOBIA));
 
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.trypophobia"),
-                Component.translatable("accessibility.wotr.screen.tooltip.trypophobia"),
-                ClientConfig.ACCESSIBILITY_TRYPOPHOBIA
-        ));
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.arachnophobia"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.arachnophobia"),
+                        ClientConfig.ACCESSIBILITY_ARACHNOPHOBIA));
 
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.arachnophobia"),
-                Component.translatable("accessibility.wotr.screen.tooltip.arachnophobia"),
-                ClientConfig.ACCESSIBILITY_ARACHNOPHOBIA
-        ));
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.flashing_lights"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.flashing_lights"),
+                        ClientConfig.ACCESSIBILITY_FLASHING_LIGHTS));
 
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.flashing_lights"),
-                Component.translatable("accessibility.wotr.screen.tooltip.flashing_lights"),
-                ClientConfig.ACCESSIBILITY_FLASHING_LIGHTS
-        ));
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.misophonia"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.misophonia"),
+                        ClientConfig.ACCESSIBILITY_MISOPHONIA));
 
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.misophonia"),
-                Component.translatable("accessibility.wotr.screen.tooltip.misophonia"),
-                ClientConfig.ACCESSIBILITY_MISOPHONIA
-        ));
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.high_contrast"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.high_contrast"),
+                        ClientConfig.ACCESSIBILITY_HIGH_CONTRAST));
 
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.high_contrast"),
-                Component.translatable("accessibility.wotr.screen.tooltip.high_contrast"),
-                ClientConfig.ACCESSIBILITY_HIGH_CONTRAST
-        ));
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.hard_of_hearing"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.hard_of_hearing"),
+                        ClientConfig.ACCESSIBILITY_HARD_OF_HEARING));
 
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.hard_of_hearing"),
-                Component.translatable("accessibility.wotr.screen.tooltip.hard_of_hearing"),
-                ClientConfig.ACCESSIBILITY_HARD_OF_HEARING
-        ));
-
-        gridLayout$rowHelper.addChild(this.createConfigButton(
-                Component.translatable("accessibility.wotr.screen.reduced_motion"),
-                Component.translatable("accessibility.wotr.screen.tooltip.reduced_motion"),
-                ClientConfig.ACCESSIBILITY_REDUCED_MOTION
-        ));
-
+        gridLayout$rowHelper
+                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.reduced_motion"),
+                        Component.translatable("accessibility.wotr.screen.tooltip.reduced_motion"),
+                        ClientConfig.ACCESSIBILITY_REDUCED_MOTION));
 
         this.layout.addToContents(gridlayout);
-        this.layout.addToFooter(Button.builder(lastScreen instanceof TitleScreen ? CommonComponents.GUI_CONTINUE : CommonComponents.GUI_BACK, (button) -> this.onClose()).build());
+        this.layout.addToFooter(Button
+                .builder(lastScreen instanceof TitleScreen ? CommonComponents.GUI_CONTINUE : CommonComponents.GUI_BACK,
+                        (button) -> this.onClose())
+                .build());
         this.layout.visitWidgets(this::addRenderableWidget);
         this.repositionElements();
 
     }
-
 
     @Override
     protected void repositionElements() {
@@ -117,16 +114,17 @@ public class AccessibilityOptionsScreen extends Screen {
     }
 
     // Helper for creating a cycle-button based off of a boolean
-    private CycleButton<Boolean> createBooleanButton(Component name, Component tooltip, CycleButton.OnValueChange<Boolean> onChange, boolean initialValue) {
-        return CycleButton.booleanBuilder(
-                Component.translatable("options.off"),
-                Component.translatable("options.on"))
+    private CycleButton<Boolean> createBooleanButton(Component name, Component tooltip,
+            CycleButton.OnValueChange<Boolean> onChange, boolean initialValue) {
+        return CycleButton.booleanBuilder(Component.translatable("options.off"), Component.translatable("options.on"))
                 .withInitialValue(initialValue)
-                .withTooltip(p_321371_ -> Tooltip.create(tooltip)).create(name, onChange);
+                .withTooltip(p_321371_ -> Tooltip.create(tooltip))
+                .create(name, onChange);
     }
 
     // Helper for creating a cycle-button based off of a config boolean value, which is modified upon click
-    private CycleButton<Boolean> createConfigButton(Component name, Component tooltip, ModConfigSpec.BooleanValue booleanValue) {
+    private CycleButton<Boolean> createConfigButton(Component name, Component tooltip,
+            ModConfigSpec.BooleanValue booleanValue) {
         return createBooleanButton(name, tooltip, ((cycleButton, aBoolean) -> {
             booleanValue.set(!booleanValue.getAsBoolean());
         }), booleanValue.getAsBoolean());

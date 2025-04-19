@@ -22,11 +22,9 @@ import java.util.List;
 public class RaycastTargeting extends AbstractTargeting {
     private final double range;
 
-    public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            commonFields(instance).and(
-                    Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange)
-            ).apply(instance, RaycastTargeting::new)
-    );
+    public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> commonFields(instance).and(Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange))
+                    .apply(instance, RaycastTargeting::new));
 
     public RaycastTargeting(TargetPredicate targetPredicate, double range) {
         super(targetPredicate);
@@ -46,18 +44,16 @@ public class RaycastTargeting extends AbstractTargeting {
     public List<Entity> getTargetsFromEntity(Entity entity, AbilityContext context) {
         WanderersOfTheRift.LOGGER.debug("Targeting Raycast");
 
-        //TODO optimize AABB to not look behind player
-        List<LivingEntity> lookedAtEntities = entity.level().getEntities(
-                EntityTypeTest.forClass(LivingEntity.class),
-                new AABB(
-                        entity.position().x - (range / 2),
-                        entity.position().y - (range / 2),
-                        entity.position().z - (range / 2),
-                        entity.position().x + (range / 2),
-                        entity.position().y + (range / 2),
-                        entity.position().z + (range / 2)
-                ),
-                livingEntity -> !livingEntity.is(entity) && getTargetPredicate().matches(livingEntity, context.caster()) && livingEntity.isLookingAtMe((LivingEntity) entity, 0.025, true, false, livingEntity.getEyeY()));
+        // TODO optimize AABB to not look behind player
+        List<LivingEntity> lookedAtEntities = entity.level()
+                .getEntities(EntityTypeTest.forClass(LivingEntity.class),
+                        new AABB(entity.position().x - (range / 2), entity.position().y - (range / 2),
+                                entity.position().z - (range / 2), entity.position().x + (range / 2),
+                                entity.position().y + (range / 2), entity.position().z + (range / 2)),
+                        livingEntity -> !livingEntity.is(entity)
+                                && getTargetPredicate().matches(livingEntity, context.caster())
+                                && livingEntity.isLookingAtMe((LivingEntity) entity, 0.025, true, false,
+                                        livingEntity.getEyeY()));
 
         return new ArrayList<>(lookedAtEntities);
     }
@@ -92,6 +88,7 @@ public class RaycastTargeting extends AbstractTargeting {
         Level level = entity.level();
         Vec3 eyePosition = entity.getEyePosition();
         Vec3 rayVector = eyePosition.add(entity.calculateViewVector(entity.getXRot(), entity.getYRot()).scale(range));
-        return level.clip(new ClipContext(eyePosition, rayVector, net.minecraft.world.level.ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity));
+        return level.clip(new ClipContext(eyePosition, rayVector, net.minecraft.world.level.ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE, entity));
     }
 }

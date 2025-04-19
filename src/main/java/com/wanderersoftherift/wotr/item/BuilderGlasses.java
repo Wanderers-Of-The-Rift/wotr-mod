@@ -20,12 +20,7 @@ import java.util.List;
 
 public class BuilderGlasses extends Item {
     public BuilderGlasses() {
-        super(
-                new Properties()
-                        .setId(ModItems.BUILDER_GLASSES.getKey())
-                        .equippable(EquipmentSlot.HEAD)
-                        .stacksTo(1)
-        );
+        super(new Properties().setId(ModItems.BUILDER_GLASSES.getKey()).equippable(EquipmentSlot.HEAD).stacksTo(1));
     }
 
     @Override
@@ -33,17 +28,15 @@ public class BuilderGlasses extends Item {
         Player player = context.getPlayer();
         Level level = context.getLevel();
         BlockPos clickedPos = context.getClickedPos();
-        if (level.isClientSide() ||
-                player == null ||
-                !player.isCrouching() ||
-                !level.getBlockState(clickedPos).is(Blocks.STRUCTURE_BLOCK)) {
+        if (level.isClientSide() || player == null || !player.isCrouching()
+                || !level.getBlockState(clickedPos).is(Blocks.STRUCTURE_BLOCK)) {
             return InteractionResult.PASS;
         }
 
         ItemStack stack = context.getItemInHand();
         // temporary while im too lazy to make a proper data component
         CompoundTag tag = new CompoundTag();
-        tag.putIntArray("structurePos", new int[]{clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()});
+        tag.putIntArray("structurePos", new int[] { clickedPos.getX(), clickedPos.getY(), clickedPos.getZ() });
         tag.putString("structureDim", level.dimension().location().toString());
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         player.displayClientMessage(Component.literal("Structure linked!"), true);
@@ -51,7 +44,8 @@ public class BuilderGlasses extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
+            TooltipFlag tooltipFlag) {
         if (!stack.is(ModItems.BUILDER_GLASSES.get()) || !stack.has(DataComponents.CUSTOM_DATA)) {
             return;
         }

@@ -31,23 +31,28 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
- * A data component providing a pool of upgrades for an ability. This is composed of a list of choices, each of which grants a number of options that can be switched between.
- * Each choice is only composed of different upgrades. The upgrade selection is selected fromm all upgrades that are relevant for the ability.
- * As a data component the AbilityUpgradePool is immutable, but can be converted to and from {@link AbilityUpgradePool.Mutable}
+ * A data component providing a pool of upgrades for an ability. This is composed of a list of choices, each of which
+ * grants a number of options that can be switched between. Each choice is only composed of different upgrades. The
+ * upgrade selection is selected fromm all upgrades that are relevant for the ability. As a data component the
+ * AbilityUpgradePool is immutable, but can be converted to and from {@link AbilityUpgradePool.Mutable}
  */
 public class AbilityUpgradePool {
     public static final int UNSELECTED = -1;
-    public static final Codec<AbilityUpgradePool> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            AbilityUpgrade.REGISTRY_CODEC.listOf().listOf().fieldOf("choices").forGetter(x -> x.choices),
-            Codec.INT.listOf().<IntList>xmap(IntArrayList::new, FastUtils::toList).fieldOf("selected_upgrades").forGetter(x -> x.selectedUpgrades)
-    ).apply(instance, AbilityUpgradePool::new));
+    public static final Codec<AbilityUpgradePool> CODEC = RecordCodecBuilder
+            .create(instance -> instance
+                    .group(AbilityUpgrade.REGISTRY_CODEC.listOf().listOf().fieldOf("choices").forGetter(x -> x.choices),
+                            Codec.INT.listOf()
+                                    .<IntList>xmap(IntArrayList::new, FastUtils::toList)
+                                    .fieldOf("selected_upgrades")
+                                    .forGetter(x -> x.selectedUpgrades))
+                    .apply(instance, AbilityUpgradePool::new));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, AbilityUpgradePool> STREAM_CODEC = StreamCodec
-            .composite(
-                    ByteBufCodecs.holderRegistry(RegistryEvents.ABILITY_UPGRADE_REGISTRY).apply(ByteBufCodecs.list()).apply(ByteBufCodecs.list()), x -> x.choices,
-                    ByteBufCodecs.INT.apply(ByteBufCodecs.list()).map(IntArrayList::new, FastUtils::toList), x -> x.selectedUpgrades,
-                    AbilityUpgradePool::new
-            );
+    public static final StreamCodec<RegistryFriendlyByteBuf, AbilityUpgradePool> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.holderRegistry(RegistryEvents.ABILITY_UPGRADE_REGISTRY)
+                    .apply(ByteBufCodecs.list())
+                    .apply(ByteBufCodecs.list()),
+            x -> x.choices, ByteBufCodecs.INT.apply(ByteBufCodecs.list()).map(IntArrayList::new, FastUtils::toList),
+            x -> x.selectedUpgrades, AbilityUpgradePool::new);
     /**
      * The number of selections available per choice
      */
@@ -56,7 +61,8 @@ public class AbilityUpgradePool {
     /**
      * The cost for unlocking each level
      */
-    public static final IntList COST_PER_LEVEL = new IntArrayList(new int[]{0, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28});
+    public static final IntList COST_PER_LEVEL = new IntArrayList(
+            new int[] { 0, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28 });
 
     protected final List<List<Holder<AbilityUpgrade>>> choices;
     protected final IntList selectedUpgrades;
@@ -161,7 +167,8 @@ public class AbilityUpgradePool {
     }
 
     /**
-     * A mutable AbilityUpgradePool, to allow modification before being converted back to an immutable pool for use as a DataComponent
+     * A mutable AbilityUpgradePool, to allow modification before being converted back to an immutable pool for use as a
+     * DataComponent
      */
     public static final class Mutable extends AbilityUpgradePool {
 
@@ -205,7 +212,8 @@ public class AbilityUpgradePool {
          * @param optionCount    How many options to include in the choice
          * @return This object for method chaining
          */
-        public Mutable generateChoice(RegistryAccess registryAccess, AbstractAbility ability, RandomSource random, int optionCount) {
+        public Mutable generateChoice(RegistryAccess registryAccess, AbstractAbility ability, RandomSource random,
+                int optionCount) {
             generateChoices(registryAccess, ability, 1, random, optionCount);
             return this;
         }
@@ -220,7 +228,8 @@ public class AbilityUpgradePool {
          * @param optionCount    How many options to include in each choice
          * @return This object for method chaining
          */
-        public Mutable generateChoices(RegistryAccess registryAccess, AbstractAbility ability, int count, RandomSource random, int optionCount) {
+        public Mutable generateChoices(RegistryAccess registryAccess, AbstractAbility ability, int count,
+                RandomSource random, int optionCount) {
             Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability);
 
             for (int i = 0; i < count; i++) {
@@ -239,10 +248,16 @@ public class AbilityUpgradePool {
             return this;
         }
 
-        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(RegistryAccess registryAccess, AbstractAbility ability) {
+        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(RegistryAccess registryAccess,
+                AbstractAbility ability) {
             Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
-            Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream().filter(x -> isRelevant(x, ability)).map(upgrades::wrapAsHolder).collect(Collectors.toMap(x -> x, x -> x.value().maxCount(), Integer::sum, Object2IntArrayMap::new));
-            choices.forEach(options -> options.forEach((item) -> availableUpgrades.mergeInt(item, 0, (a, b) -> a + b - 1)));
+            Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
+                    .filter(x -> isRelevant(x, ability))
+                    .map(upgrades::wrapAsHolder)
+                    .collect(
+                            Collectors.toMap(x -> x, x -> x.value().maxCount(), Integer::sum, Object2IntArrayMap::new));
+            choices.forEach(
+                    options -> options.forEach((item) -> availableUpgrades.mergeInt(item, 0, (a, b) -> a + b - 1)));
             return availableUpgrades;
         }
 

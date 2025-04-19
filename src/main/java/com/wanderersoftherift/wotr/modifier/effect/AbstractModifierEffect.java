@@ -18,21 +18,22 @@ import java.util.function.Function;
 import static com.wanderersoftherift.wotr.init.ModModifierEffects.MODIFIER_EFFECT_KEY;
 import static com.wanderersoftherift.wotr.init.ModModifierEffects.MODIFIER_TYPE_REGISTRY;
 
-
 public abstract class AbstractModifierEffect {
     public abstract MapCodec<? extends AbstractModifierEffect> getCodec();
 
-    public abstract void enableModifier(double roll, Entity entity,  ModifierSource source);
+    public abstract void enableModifier(double roll, Entity entity, ModifierSource source);
 
     public abstract void disableModifier(double roll, Entity entity, ModifierSource source);
 
     public abstract void applyModifier();
 
-    public static final Codec<AbstractModifierEffect> DIRECT_CODEC = MODIFIER_TYPE_REGISTRY.byNameCodec().dispatch(AbstractModifierEffect::getCodec, Function.identity());
+    public static final Codec<AbstractModifierEffect> DIRECT_CODEC = MODIFIER_TYPE_REGISTRY.byNameCodec()
+            .dispatch(AbstractModifierEffect::getCodec, Function.identity());
 
     public static final Codec<Holder<AbstractModifierEffect>> CODEC = RegistryFixedCodec.create(MODIFIER_EFFECT_KEY);
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractModifierEffect>> STREAM_CODEC = ByteBufCodecs.holderRegistry(MODIFIER_EFFECT_KEY);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractModifierEffect>> STREAM_CODEC = ByteBufCodecs
+            .holderRegistry(MODIFIER_EFFECT_KEY);
 
     public abstract TooltipComponent getTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting);
 }

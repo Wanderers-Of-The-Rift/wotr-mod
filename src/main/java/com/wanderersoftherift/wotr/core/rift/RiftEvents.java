@@ -14,9 +14,11 @@ public class RiftEvents {
     @SubscribeEvent
     public static void onRiftTick(LevelTickEvent.Post event) {
         if (event.getLevel() instanceof ServerLevel serverLevel) {
-            if (!RiftData.isRift(serverLevel)) {return;}
+            if (!RiftData.isRift(serverLevel)) {
+                return;
+            }
             var data = RiftData.get(serverLevel);
-             var toRemove = new HashSet<UUID>();
+            var toRemove = new HashSet<UUID>();
             for (var playerID : data.getPlayers()) {
                 var player = serverLevel.getServer().getPlayerList().getPlayer(playerID);
                 if (player == null) {

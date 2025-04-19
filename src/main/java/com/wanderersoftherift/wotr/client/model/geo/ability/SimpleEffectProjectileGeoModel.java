@@ -10,12 +10,14 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 public class SimpleEffectProjectileGeoModel extends GeoModel<SimpleEffectProjectile> {
 
     @Override
-    public ResourceLocation getModelResource(SimpleEffectProjectile animatable, @Nullable GeoRenderer<SimpleEffectProjectile> renderer) {
+    public ResourceLocation getModelResource(SimpleEffectProjectile animatable,
+            @Nullable GeoRenderer<SimpleEffectProjectile> renderer) {
         return animatable.getRenderConfig().modelResource();
     }
 
     @Override
-    public ResourceLocation getTextureResource(SimpleEffectProjectile animatable, @Nullable GeoRenderer<SimpleEffectProjectile> renderer) {
+    public ResourceLocation getTextureResource(SimpleEffectProjectile animatable,
+            @Nullable GeoRenderer<SimpleEffectProjectile> renderer) {
         return animatable.getRenderConfig().textureResource();
     }
 
@@ -25,7 +27,8 @@ public class SimpleEffectProjectileGeoModel extends GeoModel<SimpleEffectProject
     }
 
     @Override
-    public void setCustomAnimations(SimpleEffectProjectile animatable, long instanceId, AnimationState<SimpleEffectProjectile> animationState) {
+    public void setCustomAnimations(SimpleEffectProjectile animatable, long instanceId,
+            AnimationState<SimpleEffectProjectile> animationState) {
         super.setCustomAnimations(animatable, instanceId, animationState);
 
     }

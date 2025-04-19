@@ -11,7 +11,9 @@ import static com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes.ONGOING_
 
 public abstract class AbstractObjective {
     public abstract MapCodec<? extends AbstractObjective> getCodec();
-    public static final Codec<AbstractObjective> DIRECT_CODEC = ONGOING_OBJECTIVE_TYPE_REGISTRY.byNameCodec().dispatch(AbstractObjective::getCodec, Function.identity());
+
+    public static final Codec<AbstractObjective> DIRECT_CODEC = ONGOING_OBJECTIVE_TYPE_REGISTRY.byNameCodec()
+            .dispatch(AbstractObjective::getCodec, Function.identity());
 
     public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, LevelRiftObjectiveData data) {
         return false;

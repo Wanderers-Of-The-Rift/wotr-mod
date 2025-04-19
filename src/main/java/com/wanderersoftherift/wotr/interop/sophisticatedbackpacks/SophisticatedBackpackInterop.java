@@ -53,7 +53,8 @@ public final class SophisticatedBackpackInterop {
             public @NotNull Iterator<ContainerItemWrapper> iterator() {
                 InventoryHandler inventory = backpackWrapper.getInventoryHandler();
                 UpgradeHandler upgrades = backpackWrapper.getUpgradeHandler();
-                return Iterators.concat(ItemStackHandlerContainers.iterateNonEmpty(inventory), ItemStackHandlerContainers.iterateNonEmpty(upgrades));
+                return Iterators.concat(ItemStackHandlerContainers.iterateNonEmpty(inventory),
+                        ItemStackHandlerContainers.iterateNonEmpty(upgrades));
             }
         }
 

@@ -67,7 +67,8 @@ public class ModRecipeProvider extends RecipeProvider {
 
         ItemStack dodgeSkillGem = ModItems.ABILITY_HOLDER.toStack();
         dodgeSkillGem.applyComponents(DataComponentPatch.builder()
-                .set(ModDataComponentType.ABILITY.get(), DeferredHolder.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("dash")))
+                .set(ModDataComponentType.ABILITY.get(),
+                        DeferredHolder.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("dash")))
                 .build());
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, dodgeSkillGem)
                 .pattern("ggg")
@@ -80,7 +81,8 @@ public class ModRecipeProvider extends RecipeProvider {
 
         ItemStack fireballSkillGem = ModItems.ABILITY_HOLDER.toStack();
         fireballSkillGem.applyComponents(DataComponentPatch.builder()
-                .set(ModDataComponentType.ABILITY.get(), DeferredHolder.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("fireball")))
+                .set(ModDataComponentType.ABILITY.get(),
+                        DeferredHolder.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("fireball")))
                 .build());
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, fireballSkillGem)
                 .pattern("ggg")
@@ -93,7 +95,8 @@ public class ModRecipeProvider extends RecipeProvider {
 
         ItemStack healSkillGem = ModItems.ABILITY_HOLDER.toStack();
         healSkillGem.applyComponents(DataComponentPatch.builder()
-                .set(ModDataComponentType.ABILITY.get(), DeferredHolder.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("heal")))
+                .set(ModDataComponentType.ABILITY.get(),
+                        DeferredHolder.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("heal")))
                 .build());
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, healSkillGem)
                 .pattern("ggg")
@@ -113,7 +116,8 @@ public class ModRecipeProvider extends RecipeProvider {
         }
 
         @Override
-        protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.@NotNull Provider provider, @NotNull RecipeOutput output) {
+        protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.@NotNull Provider provider,
+                @NotNull RecipeOutput output) {
             return new ModRecipeProvider(provider, output);
         }
 

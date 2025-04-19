@@ -10,29 +10,26 @@ import java.util.Optional;
 
 /**
  * Predicate for determining when an effect should trigger
+ * 
  * @param targetPredicate Sub-predicate for checking if the target is in a state to trigger the effect
  * @param casterPredicate Sub-predicate for checking if the caster is in a state to trigger the effect
- * @param frequency How many ticks between moments the effect might trigger
- * @param initialDelay How many ticks before the effect can first trigger
+ * @param frequency       How many ticks between moments the effect might trigger
+ * @param initialDelay    How many ticks before the effect can first trigger
  */
-public record TriggerPredicate(
-        Optional<EntityPredicate> targetPredicate,
-        Optional<EntityPredicate> casterPredicate,
-        int frequency,
-        int initialDelay) {
+public record TriggerPredicate(Optional<EntityPredicate> targetPredicate, Optional<EntityPredicate> casterPredicate,
+        int frequency, int initialDelay) {
 
-    public static final Codec<TriggerPredicate> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                            EntityPredicate.CODEC.optionalFieldOf("target").forGetter(TriggerPredicate::targetPredicate),
-                            EntityPredicate.CODEC.optionalFieldOf("caster").forGetter(TriggerPredicate::casterPredicate),
+    public static final Codec<TriggerPredicate> CODEC = RecordCodecBuilder
+            .create(instance -> instance
+                    .group(EntityPredicate.CODEC.optionalFieldOf("target").forGetter(TriggerPredicate::targetPredicate),
+                            EntityPredicate.CODEC.optionalFieldOf("caster")
+                                    .forGetter(TriggerPredicate::casterPredicate),
                             Codec.INT.optionalFieldOf("frequency", 1).forGetter(TriggerPredicate::frequency),
-                            Codec.INT.optionalFieldOf("initial_delay", 0).forGetter(TriggerPredicate::initialDelay)
-                    )
-                    .apply(instance, TriggerPredicate::new)
-    );
+                            Codec.INT.optionalFieldOf("initial_delay", 0).forGetter(TriggerPredicate::initialDelay))
+                    .apply(instance, TriggerPredicate::new));
 
     public TriggerPredicate() {
-        this(Optional.empty(), Optional.empty(), 1,0);
+        this(Optional.empty(), Optional.empty(), 1, 0);
     }
 
     public boolean matches(Entity target, int tick, Entity caster) {

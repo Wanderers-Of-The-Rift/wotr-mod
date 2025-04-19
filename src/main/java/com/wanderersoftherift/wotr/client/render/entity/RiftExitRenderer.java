@@ -29,14 +29,16 @@ public class RiftExitRenderer extends EntityRenderer<RiftPortalExitEntity, RiftE
 
     private static final ResourceLocation OUTER_RIFT_LOCATION = WanderersOfTheRift.id("textures/entity/outer_rift.png");
     private static final ResourceLocation INNER_RIFT_LOCATION = WanderersOfTheRift.id("textures/entity/inner_rift.png");
-    private static final RenderType RENDER_TYPE = RiftPortalRenderType.riftPortal(OUTER_RIFT_LOCATION, INNER_RIFT_LOCATION);
+    private static final RenderType RENDER_TYPE = RiftPortalRenderType.riftPortal(OUTER_RIFT_LOCATION,
+            INNER_RIFT_LOCATION);
 
     public RiftExitRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    public void render(RiftRendererEntityState state, PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+    public void render(RiftRendererEntityState state, PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
+            int packedLight) {
         poseStack.pushPose();
 
         poseStack.translate(0, 0.5f * state.boundingBoxHeight, 0);
@@ -51,17 +53,16 @@ public class RiftExitRenderer extends EntityRenderer<RiftPortalExitEntity, RiftE
             if (dir.lengthSquared() < 0.001f) {
                 dir = new Vector3f(1, 0, 0);
             }
-        }
-        else {
+        } else {
             dir = state.facingDir.getUnitVec3().toVector3f();
         }
-
 
         CompiledShaderProgram shader = RenderSystem.setShader(ModShaders.RIFT_PORTAL);
         if (shader != null) {
             Uniform screenSize = shader.getUniform("ScreenSize");
             if (screenSize != null) {
-                screenSize.set((float) Minecraft.getInstance().getWindow().getWidth(), (float)Minecraft.getInstance().getWindow().getHeight());
+                screenSize.set((float) Minecraft.getInstance().getWindow().getWidth(),
+                        (float) Minecraft.getInstance().getWindow().getHeight());
             }
 
             Uniform view = shader.getUniform("View");
@@ -86,7 +87,8 @@ public class RiftExitRenderer extends EntityRenderer<RiftPortalExitEntity, RiftE
         super.render(state, poseStack, bufferSource, packedLight);
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z, int u, int v) {
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z,
+            int u, int v) {
         consumer.addVertex(pose, x, y, z)
                 .setColor(-1)
                 .setUv((float) u, (float) v)
@@ -100,7 +102,8 @@ public class RiftExitRenderer extends EntityRenderer<RiftPortalExitEntity, RiftE
         return new RiftRendererEntityState();
     }
 
-    public void extractRenderState(@NotNull RiftPortalExitEntity entity, @NotNull RiftRendererEntityState state, float delta) {
+    public void extractRenderState(@NotNull RiftPortalExitEntity entity, @NotNull RiftRendererEntityState state,
+            float delta) {
         super.extractRenderState(entity, state, delta);
         state.facingDir = entity.getDirection();
         state.billboard = entity.isBillboard();

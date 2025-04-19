@@ -18,8 +18,9 @@ public final class FastUtils {
     }
 
     public static List<Integer> toList(IntList list) {
-         return list.intStream().boxed().toList();
+        return list.intStream().boxed().toList();
     }
 
-    private FastUtils() {}
+    private FastUtils() {
+    }
 }

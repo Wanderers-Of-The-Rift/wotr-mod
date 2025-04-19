@@ -15,9 +15,11 @@ public class ObjectiveRenderers {
 
     public static Map<ResourceLocation, Function<AbstractObjective, ObjectiveRenderer>> RENDERERS = new HashMap<>();
 
-    public static final Function<AbstractObjective, ObjectiveRenderer> STEALTH = register(WanderersOfTheRift.id("stealth"), StealthObjectiveRenderer::create);
+    public static final Function<AbstractObjective, ObjectiveRenderer> STEALTH = register(
+            WanderersOfTheRift.id("stealth"), StealthObjectiveRenderer::create);
 
-    public static Function<AbstractObjective, ObjectiveRenderer> register(ResourceLocation id, Function<AbstractObjective, ObjectiveRenderer> renderer) {
+    public static Function<AbstractObjective, ObjectiveRenderer> register(ResourceLocation id,
+            Function<AbstractObjective, ObjectiveRenderer> renderer) {
         RENDERERS.put(id, renderer);
         return renderer;
     }
@@ -26,18 +28,17 @@ public class ObjectiveRenderers {
         return RENDERERS.get(id);
     }
 
-
     public static void handleObjectiveStatus(S2CRiftObjectiveStatusPacket packet) {
-        if(packet.objective().isPresent()) {
+        if (packet.objective().isPresent()) {
             AbstractObjective objective = packet.objective().get();
             ResourceLocation key = ONGOING_OBJECTIVE_TYPE_REGISTRY.getKey(objective.getCodec());
             Function<AbstractObjective, ObjectiveRenderer> renderer = get(key);
-            if(renderer != null) {
+            if (renderer != null) {
                 ObjectiveRenderer.CURRENT = renderer.apply(objective);
-            }else{
+            } else {
                 ObjectiveRenderer.CURRENT = null;
             }
-        }else{
+        } else {
             ObjectiveRenderer.CURRENT = null;
         }
     }

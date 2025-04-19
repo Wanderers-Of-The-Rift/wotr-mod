@@ -12,16 +12,10 @@ public final class GuiUtil {
      */
     public static Vector2i getMouseScreenPosition() {
         Minecraft minecraft = Minecraft.getInstance();
-        int x = (int) (
-                minecraft.mouseHandler.xpos()
-                        * minecraft.getWindow().getGuiScaledWidth()
-                        / minecraft.getWindow().getScreenWidth()
-        );
-        int y = (int) (
-                minecraft.mouseHandler.ypos()
-                        * minecraft.getWindow().getGuiScaledHeight()
-                        / minecraft.getWindow().getScreenHeight()
-        );
+        int x = (int) (minecraft.mouseHandler.xpos() * minecraft.getWindow().getGuiScaledWidth()
+                / minecraft.getWindow().getScreenWidth());
+        int y = (int) (minecraft.mouseHandler.ypos() * minecraft.getWindow().getGuiScaledHeight()
+                / minecraft.getWindow().getScreenHeight());
         return new Vector2i(x, y);
     }
 }

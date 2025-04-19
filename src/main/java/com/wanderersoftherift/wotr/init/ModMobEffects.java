@@ -8,7 +8,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModMobEffects {
-    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, WanderersOfTheRift.MODID);
+    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT,
+            WanderersOfTheRift.MODID);
 
-    public static final DeferredHolder<MobEffect, FireBurnEffect> FIRE_BURN_EFFECT = MOB_EFFECTS.register("fire_burn", FireBurnEffect::new);
+    public static final DeferredHolder<MobEffect, FireBurnEffect> FIRE_BURN_EFFECT = MOB_EFFECTS.register("fire_burn",
+            FireBurnEffect::new);
 }

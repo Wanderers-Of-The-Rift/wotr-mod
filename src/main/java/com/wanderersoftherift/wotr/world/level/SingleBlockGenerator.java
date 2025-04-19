@@ -33,47 +33,58 @@ import static net.minecraft.world.level.block.Blocks.AIR;
 @MethodsReturnNonnullByDefault
 public class SingleBlockGenerator extends ChunkGenerator {
 
-    public static final MapCodec<SingleBlockGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
-        instance.group(
-            BiomeSource.CODEC.fieldOf("biome_source").forGetter(SingleBlockGenerator::getBiomeSource),
-            ResourceLocation.CODEC.fieldOf("custom_block").forGetter(SingleBlockGenerator::getCustomBlockID)
-                ).apply(instance, SingleBlockGenerator::new));
+    public static final MapCodec<SingleBlockGenerator> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance
+                    .group(BiomeSource.CODEC.fieldOf("biome_source").forGetter(SingleBlockGenerator::getBiomeSource),
+                            ResourceLocation.CODEC.fieldOf("custom_block")
+                                    .forGetter(SingleBlockGenerator::getCustomBlockID))
+                    .apply(instance, SingleBlockGenerator::new));
 
     private final ResourceLocation customBlockID;
     private final BlockState customBlock;
 
     public SingleBlockGenerator(BiomeSource biomeSource, ResourceLocation defaultBlock) {
         super(biomeSource);
-        this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock).map(Holder.Reference::value).map(Block::defaultBlockState).orElse(AIR.defaultBlockState());
+        this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock)
+                .map(Holder.Reference::value)
+                .map(Block::defaultBlockState)
+                .orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
     }
 
-    @Override protected MapCodec<? extends ChunkGenerator> codec() {
+    @Override
+    protected MapCodec<? extends ChunkGenerator> codec() {
         return CODEC;
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk) {
+    public void applyCarvers(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager,
+            StructureManager structureManager, ChunkAccess chunk) {
 
     }
 
-    @Override public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random, ChunkAccess chunk) {
+    @Override
+    public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random,
+            ChunkAccess chunk) {
 
     }
 
-    @Override public void spawnOriginalMobs(WorldGenRegion level) {
+    @Override
+    public void spawnOriginalMobs(WorldGenRegion level) {
 
     }
 
-    @Override public int getGenDepth() {
+    @Override
+    public int getGenDepth() {
         return 192;
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunk) {
+    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState,
+            StructureManager structureManager, ChunkAccess chunk) {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = getMinY(); y < getMinY() + getGenDepth() ; y++) {
+                for (int y = getMinY(); y < getMinY() + getGenDepth(); y++) {
                     chunk.setBlockState(new BlockPos(x, y, z), customBlock, false);
                 }
             }
@@ -81,25 +92,31 @@ public class SingleBlockGenerator extends ChunkGenerator {
         return CompletableFuture.completedFuture(chunk);
     }
 
-    @Override public int getSeaLevel() {
+    @Override
+    public int getSeaLevel() {
         return -64;
     }
 
-    @Override public int getMinY() {
+    @Override
+    public int getMinY() {
         return -64;
     }
 
-    @Override public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
+    @Override
+    public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
         return 192;
     }
 
-    @Override public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
-        return new NoiseColumn(0, new BlockState[]{AIR.defaultBlockState()});
+    @Override
+    public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
+        return new NoiseColumn(0, new BlockState[] { AIR.defaultBlockState() });
     }
 
-    @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
+    @Override
+    public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
         info.add(customBlockID + " generator");
     }
+
     public ResourceLocation getCustomBlockID() {
         return customBlockID;
     }

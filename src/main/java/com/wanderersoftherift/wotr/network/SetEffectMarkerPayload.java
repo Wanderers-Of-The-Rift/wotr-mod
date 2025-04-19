@@ -15,16 +15,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Sends an effect marker to a player
+ * 
  * @param marker
  * @param durationTicks
  */
 public record SetEffectMarkerPayload(Holder<EffectMarker> marker, int durationTicks) implements CustomPacketPayload {
     public static final Type<SetEffectMarkerPayload> TYPE = new Type<>(WanderersOfTheRift.id("set_effect_marker"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, SetEffectMarkerPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(RegistryEvents.EFFECT_MARKER_REGISTRY), SetEffectMarkerPayload::marker,
-            ByteBufCodecs.INT, SetEffectMarkerPayload::durationTicks,
-            SetEffectMarkerPayload::new
-    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, SetEffectMarkerPayload> STREAM_CODEC = StreamCodec
+            .composite(ByteBufCodecs.holderRegistry(RegistryEvents.EFFECT_MARKER_REGISTRY),
+                    SetEffectMarkerPayload::marker, ByteBufCodecs.INT, SetEffectMarkerPayload::durationTicks,
+                    SetEffectMarkerPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

@@ -11,9 +11,11 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class ModCommands {
-    public static final DeferredRegister<ArgumentTypeInfo<?,?>> COMMAND_ARGUMENT_TYPES =
-            DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, WanderersOfTheRift.MODID);
+    public static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister
+            .create(Registries.COMMAND_ARGUMENT_TYPE, WanderersOfTheRift.MODID);
 
-    public static final Supplier<ArgumentTypeInfo<?,?>> ABILITY_ARGUMENT = COMMAND_ARGUMENT_TYPES.register("ability", () -> ArgumentTypeInfos.registerByClass(AbilityArgument.class, SingletonArgumentInfo.contextFree(AbilityArgument::new)));
+    public static final Supplier<ArgumentTypeInfo<?, ?>> ABILITY_ARGUMENT = COMMAND_ARGUMENT_TYPES.register("ability",
+            () -> ArgumentTypeInfos.registerByClass(AbilityArgument.class,
+                    SingletonArgumentInfo.contextFree(AbilityArgument::new)));
 
 }

@@ -69,7 +69,8 @@ public enum EntitySentiment implements StringRepresentable {
         }
     };
 
-    public static final StringRepresentable.StringRepresentableCodec<EntitySentiment> CODEC = StringRepresentable.fromEnum(EntitySentiment::values);
+    public static final StringRepresentable.StringRepresentableCodec<EntitySentiment> CODEC = StringRepresentable
+            .fromEnum(EntitySentiment::values);
 
     private final String name;
 
@@ -96,7 +97,7 @@ public enum EntitySentiment implements StringRepresentable {
     }
 
     public static boolean isEnemyOfPlayer(Player playerA, Entity b) {
-        if (b.getClassification(false).equals(MobCategory.MONSTER)) {
+        if (MobCategory.MONSTER.equals(b.getClassification(false))) {
             return true;
         }
         // Check actively attacking player

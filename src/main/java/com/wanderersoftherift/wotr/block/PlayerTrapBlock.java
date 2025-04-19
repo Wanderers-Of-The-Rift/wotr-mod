@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.block;
 
-
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

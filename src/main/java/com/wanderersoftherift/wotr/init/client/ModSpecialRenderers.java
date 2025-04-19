@@ -16,7 +16,6 @@ public class ModSpecialRenderers {
                 // The name to reference as the type
                 WanderersOfTheRift.id("ability_item"),
                 // The map codec
-                AbilitySpecialRenderer.Unbaked.MAP_CODEC
-        );
+                AbilitySpecialRenderer.Unbaked.MAP_CODEC);
     }
 }

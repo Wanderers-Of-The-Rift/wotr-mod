@@ -37,7 +37,11 @@ public class BundleContainerType implements ContainerType {
 
         @Override
         public void recordChanges() {
-            containerItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(contents.stream().map(ContainerItemWrapper::getReadOnlyItemStack).filter(x -> !x.isEmpty()).toList()));
+            containerItem.set(DataComponents.BUNDLE_CONTENTS,
+                    new BundleContents(contents.stream()
+                            .map(ContainerItemWrapper::getReadOnlyItemStack)
+                            .filter(x -> !x.isEmpty())
+                            .toList()));
         }
 
         @Override

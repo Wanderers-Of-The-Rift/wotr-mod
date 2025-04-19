@@ -23,18 +23,13 @@ public class AbilityCommands {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-        dispatcher.register(
-                Commands.literal(WanderersOfTheRift.MODID + ":makeAbilityItem")
-                        .requires(sender -> sender.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .then(Commands.argument("ability", AbilityArgument.ability())
-                                .then(Commands.argument("choices", IntegerArgumentType.integer(1))
-                                        .executes(
-                                                (ctx) -> addAbilityToCurrentItem(
-                                                        ctx.getSource(),
-                                                        AbilityArgument.getAbility(ctx, "ability"),
-                                                        IntegerArgumentType.getInteger(ctx, "choices")
-                                                )
-                                        ))));
+        dispatcher.register(Commands.literal(WanderersOfTheRift.MODID + ":makeAbilityItem")
+                .requires(sender -> sender.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .then(Commands.argument("ability", AbilityArgument.ability())
+                        .then(Commands.argument("choices", IntegerArgumentType.integer(1))
+                                .executes((ctx) -> addAbilityToCurrentItem(ctx.getSource(),
+                                        AbilityArgument.getAbility(ctx, "ability"),
+                                        IntegerArgumentType.getInteger(ctx, "choices"))))));
     }
 
     private static int addAbilityToCurrentItem(CommandSourceStack source, AbstractAbility ability, int choices) {
@@ -44,16 +39,22 @@ public class AbilityCommands {
             if (!item.isEmpty()) {
 
                 AbilityUpgradePool.Mutable upgradePool = new AbilityUpgradePool.Mutable();
-                upgradePool.generateChoices(source.getLevel().registryAccess(), ability, choices, source.getLevel().random, 3);
+                upgradePool.generateChoices(source.getLevel().registryAccess(), ability, choices,
+                        source.getLevel().random, 3);
 
-                Registry<AbstractAbility> abilities = source.getLevel().registryAccess().lookupOrThrow(RegistryEvents.ABILITY_REGISTRY);
+                Registry<AbstractAbility> abilities = source.getLevel()
+                        .registryAccess()
+                        .lookupOrThrow(RegistryEvents.ABILITY_REGISTRY);
 
                 DataComponentPatch patch = DataComponentPatch.builder()
                         .set(ModDataComponentType.ABILITY.get(), abilities.wrapAsHolder(ability))
                         .set(ModDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool.toImmutable())
                         .build();
                 item.applyComponents(patch);
-                source.sendSuccess(() -> Component.translatable(WanderersOfTheRift.translationId("command", "make_ability_item.success")), true);
+                source.sendSuccess(
+                        () -> Component
+                                .translatable(WanderersOfTheRift.translationId("command", "make_ability_item.success")),
+                        true);
             }
             return 1;
         } catch (CommandSyntaxException e) {

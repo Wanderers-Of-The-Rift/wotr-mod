@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class VoxelShapeUtils {
-    protected static final Direction[] HORIZONTAL_DIRECTIONS = {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+    protected static final Direction[] HORIZONTAL_DIRECTIONS = { Direction.NORTH, Direction.SOUTH, Direction.WEST,
+            Direction.EAST };
     private static final Direction[] DIRECTIONS = Direction.values();
-
 
     /**
      * Rotates an {@link AABB} to a given direction
      *
-     * @param box The {@link AABB} to rotate
+     * @param box  The {@link AABB} to rotate
      * @param side The side to rotate it to.
      *
      * @return The rotated {@link AABB}
@@ -40,7 +40,7 @@ public class VoxelShapeUtils {
     /**
      * Rotates an {@link AABB} according to a specific rotation.
      *
-     * @param box The {@link AABB} to rotate
+     * @param box      The {@link AABB} to rotate
      * @param rotation The rotation we are performing.
      *
      * @return The rotated {@link AABB}
@@ -57,8 +57,8 @@ public class VoxelShapeUtils {
     /**
      * Rotates a {@link VoxelShape} by applying a transformation function to each {@link AABB} it contains.
      *
-     * @param shape The {@link VoxelShape} to be rotated.
-     * @param data Additional data to be passed to the transformation function.
+     * @param shape          The {@link VoxelShape} to be rotated.
+     * @param data           Additional data to be passed to the transformation function.
      * @param rotateFunction A function that defines how each {@link AABB} should be transformed.
      *
      * @return A new {@link VoxelShape} with all bounding boxes rotated accordingly.
@@ -71,8 +71,9 @@ public class VoxelShapeUtils {
 
         for (AABB boundingBox : boundingBoxes) {
             // Shift the bounding box to be centered at the origin, apply the rotation, then move it back
-            rotatedPieces.add(Shapes.create(rotateFunction.apply(boundingBox.move(fromOrigin.x, fromOrigin.y, fromOrigin.z), data)
-                    .move(-fromOrigin.x, -fromOrigin.y, -fromOrigin.z)));
+            rotatedPieces.add(
+                    Shapes.create(rotateFunction.apply(boundingBox.move(fromOrigin.x, fromOrigin.y, fromOrigin.z), data)
+                            .move(-fromOrigin.x, -fromOrigin.y, -fromOrigin.z)));
         }
 
         return combine(rotatedPieces); // Combine rotated bounding boxes into a single VoxelShape
@@ -81,7 +82,7 @@ public class VoxelShapeUtils {
     /**
      * Rotates an {@link AABB} to a specific horizontal direction.
      *
-     * @param box The {@link AABB} to rotate
+     * @param box  The {@link AABB} to rotate
      * @param side The direction to rotate it to.
      *
      * @return The rotated {@link AABB}
@@ -100,7 +101,7 @@ public class VoxelShapeUtils {
      * Rotates a {@link VoxelShape} to a specific side
      *
      * @param shape The {@link VoxelShape} to rotate
-     * @param side The side to rotate it to.
+     * @param side  The side to rotate it to.
      *
      * @return The rotated {@link VoxelShape}
      */
@@ -108,13 +109,11 @@ public class VoxelShapeUtils {
         return rotate(shape, side, VoxelShapeUtils::rotate);
     }
 
-
-
     /**
      * Rotates a {@link VoxelShape} to a specific side horizontally.
      *
      * @param shape The {@link VoxelShape} to rotate
-     * @param side The side to rotate it to.
+     * @param side  The side to rotate it to.
      *
      * @return The rotated {@link VoxelShape}
      */
@@ -147,28 +146,33 @@ public class VoxelShapeUtils {
     /**
      * Used for mass combining shapes using a specific {@link BooleanOp} and a given start shape.
      *
-     * @param base  The {@link VoxelShape} to start with
+     * @param base     The {@link VoxelShape} to start with
      * @param function The {@link BooleanOp} to perform
      * @param simplify If true, the shape will be optimized via {@link VoxelShape#optimize()},
-     * @param shapes  The collection of {@link VoxelShape}s to include
+     * @param shapes   The collection of {@link VoxelShape}s to include
      *
      * @return A combined {@link VoxelShape} based on the input parameters.
      */
-    public static VoxelShape batchCombine(VoxelShape base, BooleanOp function, boolean simplify, Collection<VoxelShape> shapes) {
+    public static VoxelShape batchCombine(VoxelShape base, BooleanOp function, boolean simplify,
+            Collection<VoxelShape> shapes) {
         VoxelShape combinedShape = base;
         for (VoxelShape shape : shapes) {
             combinedShape = Shapes.joinUnoptimized(combinedShape, shape, function);
         }
-        return simplify ? combinedShape.optimize() : combinedShape;
+        if (simplify) {
+            return combinedShape.optimize();
+        } else {
+            return combinedShape;
+        }
     }
 
     /**
      * Used for mass combining shapes using a specific {@link BooleanOp} and a given start shape.
      *
-     * @param base  The {@link VoxelShape} to start with
+     * @param base     The {@link VoxelShape} to start with
      * @param function The {@link BooleanOp} to perform
      * @param simplify If true, the shape will be optimized via {@link VoxelShape#optimize()},
-     * @param shapes The list of {@link VoxelShape}s to include
+     * @param shapes   The list of {@link VoxelShape}s to include
      *
      * @return A {@link VoxelShape} based on the input parameters.
      */
@@ -177,23 +181,33 @@ public class VoxelShapeUtils {
         for (VoxelShape shape : shapes) {
             combinedShape = Shapes.joinUnoptimized(combinedShape, shape, function);
         }
-        return simplify ? combinedShape.optimize() : combinedShape;
+        if (simplify) {
+            return combinedShape.optimize();
+        } else {
+            return combinedShape;
+        }
     }
 
-
-
     /**
-     * Populates an array with rotated versions of a given {@link VoxelShape}, adjusting for either vertical or horizontal orientation.
+     * Populates an array with rotated versions of a given {@link VoxelShape}, adjusting for either vertical or
+     * horizontal orientation.
      *
-     * @param shape The base {@link VoxelShape} to rotate.
-     * @param dest The destination array to store the rotated shapes.
+     * @param shape        The base {@link VoxelShape} to rotate.
+     * @param dest         The destination array to store the rotated shapes.
      * @param verticalAxis If true, rotates the shape along all directions, otherwise, rotates it horizontally.
-     * @param invert If true, reverses the rotation direction by using the opposite side.
+     * @param invert       If true, reverses the rotation direction by using the opposite side.
      */
     public static void setShape(VoxelShape shape, VoxelShape[] dest, boolean verticalAxis, boolean invert) {
-        Direction[] dirs = verticalAxis ? DIRECTIONS : HORIZONTAL_DIRECTIONS;
+        Direction[] dirs;
+        if (verticalAxis) {
+            dirs = DIRECTIONS;
+        } else {
+            dirs = HORIZONTAL_DIRECTIONS;
+        }
         for (Direction side : dirs) {
-            dest[verticalAxis ? side.ordinal() : side.ordinal() - 2] = verticalAxis ? VoxelShapeUtils.rotate(shape, invert ? side.getOpposite() : side) : VoxelShapeUtils.rotateHorizontal(shape, side);
+            dest[verticalAxis ? side.ordinal() : side.ordinal() - 2] = verticalAxis
+                    ? VoxelShapeUtils.rotate(shape, invert ? side.getOpposite() : side)
+                    : VoxelShapeUtils.rotateHorizontal(shape, side);
         }
     }
 
@@ -201,7 +215,7 @@ public class VoxelShapeUtils {
      * Populates an array with horizontally rotated versions of a given {@link VoxelShape}.
      *
      * @param shape The base {@link VoxelShape} to rotate.
-     * @param dest The destination array to store the rotated shapes.
+     * @param dest  The destination array to store the rotated shapes.
      */
     public static void setShape(VoxelShape shape, VoxelShape[] dest) {
         setShape(shape, dest, false, false);

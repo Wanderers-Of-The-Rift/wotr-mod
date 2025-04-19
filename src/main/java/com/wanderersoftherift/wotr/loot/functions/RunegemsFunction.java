@@ -23,14 +23,10 @@ import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS_FUNCTION;
 
-
 public class RunegemsFunction extends LootItemConditionalFunction {
-    public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> commonFields(inst).and(
-                            RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemsFunction::getRunegemTier)
-                    )
-                    .apply(inst, RunegemsFunction::new)
-    );
+    public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst)
+            .and(RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemsFunction::getRunegemTier))
+            .apply(inst, RunegemsFunction::new));
 
     private RunegemTier runegemTier;
 
@@ -55,12 +51,14 @@ public class RunegemsFunction extends LootItemConditionalFunction {
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, ServerLevel level, RandomSource random) {
         Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegemTier.getTagKey(), random);
-        randomRunegem.ifPresent(runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
+        randomRunegem.ifPresent(
+                runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
         return itemStack;
     }
 
     public Optional<Holder<RunegemData>> getRandomRunegem(Level level, TagKey<RunegemData> tag, RandomSource random) {
-        return level.registryAccess().lookupOrThrow(ModDatapackRegistries.RUNEGEM_DATA_KEY)
+        return level.registryAccess()
+                .lookupOrThrow(ModDatapackRegistries.RUNEGEM_DATA_KEY)
                 .get(tag)
                 .flatMap(holders -> holders.getRandomElement(random));
     }

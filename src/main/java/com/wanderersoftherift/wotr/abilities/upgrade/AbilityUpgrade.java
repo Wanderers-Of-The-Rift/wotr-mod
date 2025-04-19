@@ -19,14 +19,18 @@ import java.util.Objects;
  */
 public final class AbilityUpgrade {
 
-    public static final Codec<Holder<AbilityUpgrade>> REGISTRY_CODEC = RegistryFixedCodec.create(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
+    public static final Codec<Holder<AbilityUpgrade>> REGISTRY_CODEC = RegistryFixedCodec
+            .create(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
 
-    public static final Codec<AbilityUpgrade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("id").forGetter(AbilityUpgrade::id),
-            ResourceLocation.CODEC.fieldOf("icon").forGetter(AbilityUpgrade::icon),
-            Codec.INT.fieldOf("maxCount").forGetter(AbilityUpgrade::maxCount),
-            AbstractModifierEffect.DIRECT_CODEC.listOf().optionalFieldOf("effects", Collections.emptyList()).forGetter(AbilityUpgrade::modifierEffects)
-    ).apply(instance, AbilityUpgrade::new));
+    public static final Codec<AbilityUpgrade> CODEC = RecordCodecBuilder
+            .create(instance -> instance
+                    .group(ResourceLocation.CODEC.fieldOf("id").forGetter(AbilityUpgrade::id),
+                            ResourceLocation.CODEC.fieldOf("icon").forGetter(AbilityUpgrade::icon),
+                            Codec.INT.fieldOf("maxCount").forGetter(AbilityUpgrade::maxCount),
+                            AbstractModifierEffect.DIRECT_CODEC.listOf()
+                                    .optionalFieldOf("effects", Collections.emptyList())
+                                    .forGetter(AbilityUpgrade::modifierEffects))
+                    .apply(instance, AbilityUpgrade::new));
 
     private final ResourceLocation id;
     private final ResourceLocation icon;
@@ -42,13 +46,14 @@ public final class AbilityUpgrade {
      * @param modifierEffects A list of modifier effects this upgrade applies
      */
     public AbilityUpgrade(ResourceLocation id, ResourceLocation icon, int maxCount,
-                          List<AbstractModifierEffect> modifierEffects) {
+            List<AbstractModifierEffect> modifierEffects) {
         this.id = id;
         this.icon = icon;
         this.maxCount = maxCount;
         this.modifierEffects = ImmutableList.copyOf(modifierEffects);
         this.name = Component.translatable("ability_upgrade." + id.getNamespace() + "." + id.getPath() + ".name");
-        this.description = Component.translatable("ability_upgrade." + id.getNamespace() + "." + id.getPath() + ".description");
+        this.description = Component
+                .translatable("ability_upgrade." + id.getNamespace() + "." + id.getPath() + ".description");
     }
 
     /**
@@ -110,6 +115,5 @@ public final class AbilityUpgrade {
     public String toString() {
         return "AbilityUpgrade[" + "id='" + id + "']";
     }
-
 
 }
