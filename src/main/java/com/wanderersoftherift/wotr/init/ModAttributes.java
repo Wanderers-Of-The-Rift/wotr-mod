@@ -17,9 +17,12 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("checkstyle:DeclarationOrder")
 public class ModAttributes {
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE,
             WanderersOfTheRift.MODID);
+
+    private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
     /* Ability Attributes */
     public static final DeferredHolder<Attribute, RangedAttribute> ABILITY_AOE = registerPlayerAttribute("ability_aoe",
@@ -65,8 +68,6 @@ public class ModAttributes {
             "mana_degen_rate",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0,
                     Integer.MAX_VALUE));
-
-    private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
     public static List<DeferredHolder<Attribute, RangedAttribute>> getPlayerAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
