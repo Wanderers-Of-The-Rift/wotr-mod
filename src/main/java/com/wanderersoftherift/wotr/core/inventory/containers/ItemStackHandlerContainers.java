@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
+package com.wanderersoftherift.wotr.core.inventory.containers;
 
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Interop for working with containers that use Neoforge's ItemStackHandler interface. For use in producing
- * container types for mods
+ * Interop for working with containers that use Neoforge's ItemStackHandler interface. For use in producing container
+ * types for mods
  */
 public final class ItemStackHandlerContainers {
 
@@ -123,5 +123,3 @@ public final class ItemStackHandlerContainers {
         }
     }
 }
-
-

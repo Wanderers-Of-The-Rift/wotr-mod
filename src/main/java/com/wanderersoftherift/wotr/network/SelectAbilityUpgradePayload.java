@@ -11,16 +11,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Request to server to select which upgrade out of a choice to use for an ability
+ * 
  * @param choice
  * @param selection
  */
 public record SelectAbilityUpgradePayload(int choice, int selection) implements CustomPacketPayload {
-    public static final Type<SelectAbilityUpgradePayload> TYPE = new Type<>(WanderersOfTheRift.id("select_ability_upgrade_request"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, SelectAbilityUpgradePayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, SelectAbilityUpgradePayload::choice,
-            ByteBufCodecs.INT, SelectAbilityUpgradePayload::selection,
-            SelectAbilityUpgradePayload::new
-    );
+    public static final Type<SelectAbilityUpgradePayload> TYPE = new Type<>(
+            WanderersOfTheRift.id("select_ability_upgrade_request"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SelectAbilityUpgradePayload> STREAM_CODEC = StreamCodec
+            .composite(ByteBufCodecs.INT, SelectAbilityUpgradePayload::choice, ByteBufCodecs.INT,
+                    SelectAbilityUpgradePayload::selection, SelectAbilityUpgradePayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

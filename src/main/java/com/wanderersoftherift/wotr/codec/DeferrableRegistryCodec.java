@@ -25,13 +25,13 @@ public class DeferrableRegistryCodec<E> implements Codec<Holder<E>> {
     private final ResourceKey<? extends Registry<E>> registryKey;
     private final RegistryFixedCodec<E> registryCodec;
 
-    public static <T> DeferrableRegistryCodec<T> create(ResourceKey<? extends Registry<T>> registryKey) {
-        return new DeferrableRegistryCodec<>(registryKey);
-    }
-
     private DeferrableRegistryCodec(ResourceKey<? extends Registry<E>> registryKey) {
         this.registryKey = registryKey;
         this.registryCodec = RegistryFixedCodec.create(registryKey);
+    }
+
+    public static <T> DeferrableRegistryCodec<T> create(ResourceKey<? extends Registry<T>> registryKey) {
+        return new DeferrableRegistryCodec<>(registryKey);
     }
 
     public <T> DataResult<T> encode(Holder<E> holder, DynamicOps<T> ops, T value) {
@@ -39,10 +39,9 @@ public class DeferrableRegistryCodec<E> implements Codec<Holder<E>> {
             Optional<HolderOwner<E>> optional = registryops.owner(this.registryKey);
             if (optional.isEmpty()) {
                 return holder.unwrap()
-                        .map(
-                                key -> ResourceLocation.CODEC.encode(key.location(), ops, value),
-                                item -> DataResult.error(() -> "Resource location not available for " + this.registryKey + " so cannot be serialized")
-                        );
+                        .map(key -> ResourceLocation.CODEC.encode(key.location(), ops, value),
+                                item -> DataResult.error(() -> "Resource location not available for " + this.registryKey
+                                        + " so cannot be serialized"));
             }
         }
 
@@ -54,12 +53,9 @@ public class DeferrableRegistryCodec<E> implements Codec<Holder<E>> {
         if (ops instanceof RegistryOps<?> registryops) {
             Optional<HolderGetter<E>> optional = registryops.getter(this.registryKey);
             if (optional.isEmpty()) {
-                return ResourceLocation.CODEC
-                        .decode(ops, value)
-                        .flatMap(
-                                pair ->
-                                        DataResult.success(Pair.of(DeferredHolder.create(registryKey, pair.getFirst()), null))
-                        );
+                return ResourceLocation.CODEC.decode(ops, value)
+                        .flatMap(pair -> DataResult
+                                .success(Pair.of(DeferredHolder.create(registryKey, pair.getFirst()), null)));
             }
         }
 

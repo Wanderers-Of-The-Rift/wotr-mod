@@ -16,16 +16,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ScrollContainerWidget provides a vertically scrollable area for entries of potentially variable height.
- * <br/>
+ * ScrollContainerWidget provides a vertically scrollable area for entries of potentially variable height. <br/>
  * To enable scrolling the containing screen/widget will need to forward:
  * <ul>
- *     <li>{@link net.minecraft.client.gui.components.AbstractWidget#mouseScrolled(double, double, double, double)}</li>
- *     <li>{@link net.minecraft.client.gui.components.AbstractWidget#mouseDragged(double, double, int, double, double)}</li>
- *     <li>{@link net.minecraft.client.gui.components.AbstractWidget#keyPressed(int, int, int)}</li>
+ * <li>{@link net.minecraft.client.gui.components.AbstractWidget#mouseScrolled(double, double, double, double)}</li>
+ * <li>{@link net.minecraft.client.gui.components.AbstractWidget#mouseDragged(double, double, int, double, double)}</li>
+ * <li>{@link net.minecraft.client.gui.components.AbstractWidget#keyPressed(int, int, int)}</li>
  * </ul>
  */
-public class ScrollContainerWidget<T extends ScrollContainerEntry> extends AbstractContainerWidget implements Renderable, GuiEventListener, NarratableEntry {
+public class ScrollContainerWidget<T extends ScrollContainerEntry> extends AbstractContainerWidget
+        implements Renderable, GuiEventListener, NarratableEntry {
 
     public static final int SCROLLBAR_SPACE = SCROLLBAR_WIDTH + 2;
 

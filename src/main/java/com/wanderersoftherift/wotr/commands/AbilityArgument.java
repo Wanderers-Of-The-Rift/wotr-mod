@@ -25,12 +25,12 @@ import java.util.stream.Stream;
  * Argument for specifying an ability
  */
 public class AbilityArgument implements ArgumentType<ResourceLocation> {
-    private static final Collection<String> EXAMPLES = Stream.of(WanderersOfTheRift.id("fireball"), WanderersOfTheRift.id("mega_boost"))
+    private static final Collection<String> EXAMPLES = Stream
+            .of(WanderersOfTheRift.id("fireball"), WanderersOfTheRift.id("mega_boost"))
             .map(ResourceLocation::toString)
             .collect(Collectors.toList());
     private static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType(
-            argument -> Component.translatableEscape("argument.wotr.ability.invalid", argument)
-    );
+            argument -> Component.translatableEscape("argument.wotr.ability.invalid", argument));
 
     public ResourceLocation parse(StringReader reader) throws CommandSyntaxException {
         return ResourceLocation.read(reader);
@@ -38,9 +38,14 @@ public class AbilityArgument implements ArgumentType<ResourceLocation> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return context.getSource() instanceof SharedSuggestionProvider
-                ? SharedSuggestionProvider.suggestResource(((SharedSuggestionProvider)context.getSource()).registryAccess().lookupOrThrow(RegistryEvents.ABILITY_REGISTRY).keySet(), builder)
-                : Suggestions.empty();
+        if (context.getSource() instanceof SharedSuggestionProvider) {
+            return SharedSuggestionProvider
+                    .suggestResource(((SharedSuggestionProvider) context.getSource()).registryAccess()
+                            .lookupOrThrow(RegistryEvents.ABILITY_REGISTRY)
+                            .keySet(), builder);
+        } else {
+            return Suggestions.empty();
+        }
     }
 
     @Override
@@ -52,11 +57,14 @@ public class AbilityArgument implements ArgumentType<ResourceLocation> {
         return new AbilityArgument();
     }
 
-    public static AbstractAbility getAbility(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
+    public static AbstractAbility getAbility(CommandContext<CommandSourceStack> context, String name)
+            throws CommandSyntaxException {
         ResourceLocation resourcelocation = context.getArgument(name, ResourceLocation.class);
-        Optional<AbstractAbility> result = context.getSource().getLevel().registryAccess().lookup(RegistryEvents.ABILITY_REGISTRY).flatMap(
-                registry -> Optional.ofNullable(registry.getValue(resourcelocation))
-        );
+        Optional<AbstractAbility> result = context.getSource()
+                .getLevel()
+                .registryAccess()
+                .lookup(RegistryEvents.ABILITY_REGISTRY)
+                .flatMap(registry -> Optional.ofNullable(registry.getValue(resourcelocation)));
         if (result.isPresent()) {
             return result.get();
         } else {

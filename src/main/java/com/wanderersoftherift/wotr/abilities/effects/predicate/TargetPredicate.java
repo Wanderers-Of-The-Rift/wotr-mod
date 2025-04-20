@@ -8,19 +8,15 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Optional;
 
-public record TargetPredicate(
-        Optional<EntityPredicate> entityPredicate,
-        EntitySentiment sentiment,
-        boolean excludeCaster
-) {
-    public static final Codec<TargetPredicate> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                            EntityPredicate.CODEC.optionalFieldOf("entity").forGetter(TargetPredicate::entityPredicate),
-                            EntitySentiment.CODEC.optionalFieldOf("sentiment", EntitySentiment.ANY).forGetter(TargetPredicate::sentiment),
-                            Codec.BOOL.optionalFieldOf("exclude_caster", false).forGetter(TargetPredicate::excludeCaster)
-                    )
-                    .apply(instance, TargetPredicate::new)
-    );
+public record TargetPredicate(Optional<EntityPredicate> entityPredicate, EntitySentiment sentiment,
+        boolean excludeCaster) {
+
+    public static final Codec<TargetPredicate> CODEC = RecordCodecBuilder.create(instance -> instance
+            .group(EntityPredicate.CODEC.optionalFieldOf("entity").forGetter(TargetPredicate::entityPredicate),
+                    EntitySentiment.CODEC.optionalFieldOf("sentiment", EntitySentiment.ANY)
+                            .forGetter(TargetPredicate::sentiment),
+                    Codec.BOOL.optionalFieldOf("exclude_caster", false).forGetter(TargetPredicate::excludeCaster))
+            .apply(instance, TargetPredicate::new));
 
     public TargetPredicate() {
         this(Optional.empty(), EntitySentiment.ANY, false);
@@ -67,6 +63,7 @@ public record TargetPredicate(
 
         /**
          * Excludes the caster from being a valid target
+         * 
          * @return
          */
         public Builder excludeCaster() {

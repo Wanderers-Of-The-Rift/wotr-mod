@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
+import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -37,6 +39,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     RunegemShape.SQUARE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/square.png"),
                     RunegemShape.TRIANGLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/triangle.png")
             );
+    private final int spacing = Minecraft.getInstance().font.lineHeight + 2;
     private final GearSocketComponent cmp;
     private static final int SOCKET_LINE_HEIGHT = 20;
 
@@ -44,6 +47,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     public GearSocketTooltipRenderer(GearSocketComponent cmp) {
         this.cmp = cmp;
     }
+
 
     @Override
     public int getHeight(@NotNull Font font) {
@@ -127,10 +131,9 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
 
     public static Component getSocketDesc() {
-        return Component.translatable("tooltip."+ WanderersOfTheRift.MODID +".socket");
+        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket");
     }
 
-
-
-    public record GearSocketComponent(ItemStack socketed, List<GearSocket> gearSocket) implements TooltipComponent {}
+    public record GearSocketComponent(ItemStack socketed, List<GearSocket> gearSocket) implements TooltipComponent {
+    }
 }

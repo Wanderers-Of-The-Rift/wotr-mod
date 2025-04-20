@@ -23,10 +23,10 @@ import java.util.List;
  */
 public final class EffectBar implements LayeredDraw.Layer {
 
-    private static final int BAR_OFFSET_X = 27;
-    private static final int ICON_SIZE = 16;
     public static final float FAST_PULSE_THRESHOLD = 40.0f;
     public static final float SLOW_PULSE_THRESHOLD = 100.0f;
+    private static final int BAR_OFFSET_X = 27;
+    private static final int ICON_SIZE = 16;
 
     @Override
     public void render(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker) {
@@ -57,7 +57,8 @@ public final class EffectBar implements LayeredDraw.Layer {
                 index++;
                 continue;
             }
-            graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(entry.getKey().value().getLabel()), x, y + 8);
+            graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(entry.getKey().value().getLabel()), x,
+                    y + 8);
             return;
         }
     }
@@ -75,7 +76,8 @@ public final class EffectBar implements LayeredDraw.Layer {
                 show = ((int) entry.getFloatValue()) % 16 != 0;
             }
             if (show) {
-                graphics.blit(RenderType::guiTextured, marker.icon(), BAR_OFFSET_X, effectCount * ICON_SIZE, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+                graphics.blit(RenderType::guiTextured, marker.icon(), BAR_OFFSET_X, effectCount * ICON_SIZE, 0, 0,
+                        ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
             }
 
             effectCount++;

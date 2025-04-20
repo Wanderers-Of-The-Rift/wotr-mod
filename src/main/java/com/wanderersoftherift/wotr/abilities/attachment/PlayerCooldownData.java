@@ -8,12 +8,16 @@ import it.unimi.dsi.fastutil.ints.IntList;
 
 public class PlayerCooldownData {
 
-    public static final Codec<PlayerCooldownData> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                    Codec.INT.listOf().<IntList>xmap(IntArrayList::new, FastUtils::toList).fieldOf("cooldowns").forGetter(x -> x.currentCooldowns),
-                    Codec.INT.listOf().<IntList>xmap(IntArrayList::new, FastUtils::toList).fieldOf("lastCooldowns").forGetter(x -> x.lastCooldowns)
-            ).apply(instance, PlayerCooldownData::new)
-    );
+    public static final Codec<PlayerCooldownData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.listOf()
+                    .<IntList>xmap(IntArrayList::new, FastUtils::toList)
+                    .fieldOf("cooldowns")
+                    .forGetter(x -> x.currentCooldowns),
+            Codec.INT.listOf()
+                    .<IntList>xmap(IntArrayList::new, FastUtils::toList)
+                    .fieldOf("lastCooldowns")
+                    .forGetter(x -> x.lastCooldowns))
+            .apply(instance, PlayerCooldownData::new));
 
     private final IntList lastCooldowns;
     private final IntList currentCooldowns;
@@ -46,8 +50,7 @@ public class PlayerCooldownData {
         currentCooldowns.set(slot, remaining);
     }
 
-    public int getCooldownRemaining(int slot)
-    {
+    public int getCooldownRemaining(int slot) {
         if (slot >= 0 && slot < currentCooldowns.size()) {
             return currentCooldowns.getInt(slot);
         }
@@ -61,13 +64,11 @@ public class PlayerCooldownData {
         return 0;
     }
 
-    public boolean isOnCooldown(int slot)
-    {
+    public boolean isOnCooldown(int slot) {
         return getCooldownRemaining(slot) > 0;
     }
 
-    public void reduceCooldowns()
-    {
+    public void reduceCooldowns() {
         currentCooldowns.replaceAll(ticksRemaining -> ticksRemaining > 0 ? ticksRemaining - 1 : 0);
     }
 

@@ -14,21 +14,18 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record UseAbilityPayload(int slot) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<UseAbilityPayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "ability_type"));
+    public static final CustomPacketPayload.Type<UseAbilityPayload> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "ability_type"));
 
-    public static final StreamCodec<ByteBuf, UseAbilityPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT,
-            UseAbilityPayload::slot,
-            UseAbilityPayload::new
-    );
+    public static final StreamCodec<ByteBuf, UseAbilityPayload> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.INT,
+            UseAbilityPayload::slot, UseAbilityPayload::new);
 
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
-    public void handleOnServer(final IPayloadContext context)
-    {
+    public void handleOnServer(final IPayloadContext context) {
         AbilitySlots abilitySlots = context.player().getData(ModAttachments.ABILITY_SLOTS);
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
         if (abilityItem.isEmpty() || !abilityItem.has(ModDataComponentType.ABILITY)) {

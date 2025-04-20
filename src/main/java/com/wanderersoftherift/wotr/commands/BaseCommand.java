@@ -10,8 +10,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
 
 /**
- * Abstract base class for all commands in the mod.
- * Provides common functionality for command registration and permission handling.
+ * Abstract base class for all commands in the mod. Provides common functionality for command registration and
+ * permission handling.
+ * 
  * @see Commands Possible Permission Levels
  */
 public abstract class BaseCommand {
@@ -22,9 +23,10 @@ public abstract class BaseCommand {
         this.name = name;
         this.permissionLevel = permissionLevel;
     }
+
     /**
-     * Registers this command with the provided dispatcher.
-     * The command is automatically added under the mod's namespace.
+     * Registers this command with the provided dispatcher. The command is automatically added under the mod's
+     * namespace.
      *
      * @param dispatcher The command dispatcher handling command registration.
      * @param context    The command build context (used for parameter parsing).
@@ -40,7 +42,8 @@ public abstract class BaseCommand {
                 .requires(sender -> sender.hasPermission(permissionLevel));
 
         this.buildCommand(argumentBuilder, context); // Build subcommands
-        dispatcher.register(Commands.literal(WanderersOfTheRift.MODID).then(argumentBuilder)); // Register under the mod's namespace
+        dispatcher.register(Commands.literal(WanderersOfTheRift.MODID).then(argumentBuilder)); // Register under the
+                                                                                               // mod's namespace
     }
 
     /**
@@ -58,5 +61,6 @@ public abstract class BaseCommand {
      *
      * @param builder The command builder to which subcommands should be added.
      */
-    protected abstract void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context);
+    protected abstract void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder,
+            CommandBuildContext context);
 }

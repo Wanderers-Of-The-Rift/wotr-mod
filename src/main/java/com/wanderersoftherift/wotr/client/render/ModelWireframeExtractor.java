@@ -13,11 +13,14 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3f;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
- * Utility class for extracting wireframe outlines from a {@link BakedModel}.
- * This is used to generate visual outlines.
+ * Utility class for extracting wireframe outlines from a {@link BakedModel}. This is used to generate visual outlines.
  */
 public class ModelWireframeExtractor {
 
@@ -31,7 +34,8 @@ public class ModelWireframeExtractor {
      * @param renderType The render type (nullable).
      * @return A list of {@link RenderLine} objects representing the wireframe.
      */
-    public static List<RenderLine> extract(BakedModel model, @Nullable BlockState state, RandomSource rand, ModelData modelData, @Nullable RenderType renderType) {
+    public static List<RenderLine> extract(BakedModel model, @Nullable BlockState state, RandomSource rand,
+            ModelData modelData, @Nullable RenderType renderType) {
         Set<RenderLine> lines = new HashSet<>();
         QuadVertexProcessor extractor = new QuadVertexProcessor(lines);
         for (Direction direction : Direction.values()) {
@@ -64,7 +68,7 @@ public class ModelWireframeExtractor {
          * @param pY Y coordinate of the vertex.
          * @param pZ Z coordinate of the vertex.
          */
-         public void vertex(float pX, float pY, float pZ) {
+        public void vertex(float pX, float pY, float pZ) {
             vertices[vertexIndex++] = new Vector3f(pX, pY, pZ);
             if (vertexIndex == 4) {
                 vertexIndex = 0;
@@ -96,18 +100,19 @@ public class ModelWireframeExtractor {
     /**
      * Represents a line segment in 3D space, used for wireframe rendering.
      *
-     * @param x1  X coordinate of the first point.
-     * @param y1  Y coordinate of the first point.
-     * @param z1  Z coordinate of the first point.
-     * @param x2  X coordinate of the second point.
-     * @param y2  Y coordinate of the second point.
-     * @param z2  Z coordinate of the second point.
-     * @param nX  Normalized X direction of the line.
-     * @param nY  Normalized Y direction of the line.
-     * @param nZ  Normalized Z direction of the line.
+     * @param x1   X coordinate of the first point.
+     * @param y1   Y coordinate of the first point.
+     * @param z1   Z coordinate of the first point.
+     * @param x2   X coordinate of the second point.
+     * @param y2   Y coordinate of the second point.
+     * @param z2   Z coordinate of the second point.
+     * @param nX   Normalized X direction of the line.
+     * @param nY   Normalized Y direction of the line.
+     * @param nZ   Normalized Z direction of the line.
      * @param hash Precomputed hash code for faster lookup.
      */
-    public record RenderLine(float x1, float y1, float z1, float x2, float y2, float z2, float nX, float nY, float nZ, int hash) {
+    public record RenderLine(float x1, float y1, float z1, float x2, float y2, float z2, float nX, float nY, float nZ,
+            int hash) {
 
         /**
          * Creates a new {@link RenderLine} from two 3D points.
@@ -122,11 +127,12 @@ public class ModelWireframeExtractor {
             float nZ = v2.z - v1.z;
             float scalar = Math.invsqrt(Math.fma(nX, nX, Math.fma(nY, nY, nZ * nZ)));
 
-            nX = nX * scalar;
-            nY = nY * scalar;
-            nZ = nZ * scalar;
+            nX *= scalar;
+            nY *= scalar;
+            nZ *= scalar;
 
-            return new RenderLine(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, nX, nY, nZ, calculateHash(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z));
+            return new RenderLine(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, nX, nY, nZ,
+                    calculateHash(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z));
         }
 
         private static int calculateHash(float x1, float y1, float z1, float x2, float y2, float z2) {
@@ -145,4 +151,3 @@ public class ModelWireframeExtractor {
         }
     }
 }
-

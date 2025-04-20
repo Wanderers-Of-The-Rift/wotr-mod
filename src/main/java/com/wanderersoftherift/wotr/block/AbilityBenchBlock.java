@@ -36,12 +36,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AbilityBenchBlock extends Block {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
-    private static final Component CONTAINER_TITLE = Component.translatable("container." + WanderersOfTheRift.MODID + ".ability_bench");
-    private static final VoxelShape SHAPE = VoxelShapeUtils.combine(
-            Block.box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0),
-            Block.box(2.0, 1.0, 2.0, 14.0, 12.0, 14.0),
-            Block.box(0.0, 12.0, 0.0, 16.0, 15.0, 16.0)
-            );
+    private static final Component CONTAINER_TITLE = Component
+            .translatable("container." + WanderersOfTheRift.MODID + ".ability_bench");
+    private static final VoxelShape SHAPE = VoxelShapeUtils.combine(Block.box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0),
+            Block.box(2.0, 1.0, 2.0, 14.0, 12.0, 14.0), Block.box(0.0, 12.0, 0.0, 16.0, 15.0, 16.0));
 
     public AbilityBenchBlock(Properties properties) {
         super(properties);
@@ -54,15 +52,15 @@ public class AbilityBenchBlock extends Block {
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext context) {
         return SHAPE;
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getHorizontalDirection().getOpposite();
-        return this.defaultBlockState()
-                .setValue(FACING, direction);
+        return this.defaultBlockState().setValue(FACING, direction);
     }
 
     protected MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
@@ -71,14 +69,17 @@ public class AbilityBenchBlock extends Block {
             IItemHandler replicatedSlots = new ChangeAwareItemHandler(slots) {
                 @Override
                 public void onSlotChanged(int slot) {
-                    PacketDistributor.sendToPlayer((ServerPlayer) player, new AbilitySlotsUpdatePayload(slot, slots.getStackInSlot(slot)));
+                    PacketDistributor.sendToPlayer((ServerPlayer) player,
+                            new AbilitySlotsUpdatePayload(slot, slots.getStackInSlot(slot)));
                 }
             };
-            return new AbilityBenchMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos), replicatedSlots);
+            return new AbilityBenchMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos),
+                    replicatedSlots);
         }, CONTAINER_TITLE);
     }
 
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
+            @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

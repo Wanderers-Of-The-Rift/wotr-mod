@@ -27,8 +27,10 @@ import java.util.UUID;
  */
 public class RiftPortalExitEntity extends Entity {
     private static final String BILLBOARD = "billboard";
-    private static final EntityDataAccessor<Boolean> DATA_BILLBOARD = SynchedEntityData.defineId(RiftPortalExitEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<ItemStack> DATA_RIFTKEY = SynchedEntityData.defineId(RiftPortalExitEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Boolean> DATA_BILLBOARD = SynchedEntityData
+            .defineId(RiftPortalExitEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> DATA_RIFTKEY = SynchedEntityData
+            .defineId(RiftPortalExitEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private boolean generated = false;
     private ResourceLocation riftDimensionID = WanderersOfTheRift.id("rift_" + UUID.randomUUID());
@@ -61,12 +63,11 @@ public class RiftPortalExitEntity extends Entity {
         if (level() instanceof ServerLevel serverLevel) {
             for (Entity player : serverLevel.getEntities(this, makeBoundingBox(), x -> x instanceof ServerPlayer)) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                        tpHome(serverPlayer, serverLevel);
+                    tpHome(serverPlayer, serverLevel);
                 }
             }
         }
     }
-
 
     private static InteractionResult tpHome(ServerPlayer serverPlayer, ServerLevel riftLevel) {
         ResourceKey<Level> respawnKey = RiftData.get(riftLevel).getPortalDimension();
@@ -78,7 +79,8 @@ public class RiftPortalExitEntity extends Entity {
             respawnDimension = riftLevel.getServer().overworld();
         }
         var respawnPos = RiftData.get(riftLevel).getPortalPos().above();
-        serverPlayer.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
+        serverPlayer.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(),
+                respawnPos.getCenter().z(), Set.of(), serverPlayer.getRespawnAngle(), 0, true);
         RiftData.get(riftLevel).removePlayer(serverPlayer.getUUID());
         RiftLevelManager.unregisterAndDeleteLevel(riftLevel);
         return InteractionResult.SUCCESS;
@@ -100,7 +102,7 @@ public class RiftPortalExitEntity extends Entity {
         if (tag.contains("riftDimensionID")) {
             setRiftDimensionID(ResourceLocation.parse(tag.getString("riftDimensionID")));
         }
-        if(tag.contains("generated")){
+        if (tag.contains("generated")) {
             generated = tag.getBoolean("generated");
         }
     }

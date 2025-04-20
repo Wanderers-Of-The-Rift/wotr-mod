@@ -21,26 +21,26 @@ import java.util.List;
 
 public class StandardAbility extends AbstractAbility {
 
+    public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance
+                    .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
+                            ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
+                            Codec.INT.fieldOf("cooldown").forGetter(ability -> (int) ability.getBaseCooldown()),
+                            Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
+                            Codec.list(AbstractEffect.DIRECT_CODEC)
+                                    .optionalFieldOf("effects", Collections.emptyList())
+                                    .forGetter(StandardAbility::getEffects))
+                    .apply(instance, StandardAbility::new));
+
+    public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
+            List<AbstractEffect> effects) {
+        super(resourceLocation, icon, effects, baseCooldown);
+        setBaseManaCost(manaCost);
+    }
 
     @Override
     public MapCodec<? extends AbstractAbility> getCodec() {
         return CODEC;
-    }
-
-    public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            instance.group(
-                    ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
-                    ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
-                    Codec.INT.fieldOf("cooldown").forGetter(ability -> (int) ability.getBaseCooldown()),
-                    Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
-                    Codec.list(AbstractEffect.DIRECT_CODEC).optionalFieldOf("effects", Collections.emptyList()).forGetter(StandardAbility::getEffects)
-            ).apply(instance, StandardAbility::new)
-    );
-
-    public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost, List<AbstractEffect> effects) {
-        super(resourceLocation, icon, effects);
-        this.baseCooldown = baseCooldown;
-        setBaseManaCost(manaCost);
     }
 
     @Override
@@ -65,7 +65,8 @@ public class StandardAbility extends AbstractAbility {
             if (player instanceof ServerPlayer) {
                 manaData.useAmount(player, manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-                this.setCooldown(player, slot, abilityContext.getAbilityAttribute(ModAttributes.COOLDOWN, baseCooldown));
+                this.setCooldown(player, slot,
+                        abilityContext.getAbilityAttribute(ModAttributes.COOLDOWN, getBaseCooldown()));
             } else {
                 PacketDistributor.sendToServer(new UseAbilityPayload(slot));
             }
@@ -73,7 +74,6 @@ public class StandardAbility extends AbstractAbility {
             abilityContext.disableModifiers();
         }
     }
-
 
     @Override
     public void onDeactivate(Player player, int slot) {

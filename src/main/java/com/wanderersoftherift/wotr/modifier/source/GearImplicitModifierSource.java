@@ -15,7 +15,6 @@ public class GearImplicitModifierSource implements ModifierSource {
         this.entity = entity;
     }
 
-
     @Override
     public String getSerializedName() {
         return "implicits_" + slot.getSerializedName();

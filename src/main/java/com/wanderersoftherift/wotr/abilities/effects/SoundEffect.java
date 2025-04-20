@@ -20,15 +20,15 @@ import java.util.Optional;
  */
 public class SoundEffect extends AbstractEffect {
 
-    public static final MapCodec<SoundEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance).and(
-                    SoundEvent.CODEC.fieldOf("sound").forGetter(SoundEffect::getSound)
-            ).apply(instance, SoundEffect::new)
-    );
+    public static final MapCodec<SoundEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(SoundEvent.CODEC.fieldOf("sound").forGetter(SoundEffect::getSound))
+                    .apply(instance, SoundEffect::new));
 
     private final Holder<SoundEvent> sound;
 
-    public SoundEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, Holder<SoundEvent> sound) {
+    public SoundEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            Holder<SoundEvent> sound) {
         super(targeting, effects, particles);
         this.sound = sound;
     }
@@ -38,7 +38,7 @@ public class SoundEffect extends AbstractEffect {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
         applyParticlesToUser(user);
 
-        for(Entity target: targets) {
+        for (Entity target : targets) {
             applyParticlesToTarget(target);
 
             SoundSource source;
@@ -49,7 +49,7 @@ public class SoundEffect extends AbstractEffect {
             }
             target.level().playSound(null, target, sound.value(), source, 1.0f, 1.0f);
 
-            //Then apply children affects to targets
+            // Then apply children affects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 
@@ -57,8 +57,7 @@ public class SoundEffect extends AbstractEffect {
             context.level().playSound(null, pos, sound.value(), SoundSource.BLOCKS);
         }
 
-        if(targets.isEmpty())
-        {
+        if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
         }
     }

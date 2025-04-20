@@ -7,15 +7,18 @@ import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.Nullable;
 
 public class RunegemSlot extends Slot {
-    @Nullable
-    private GearSocket socket = null;
+    @Nullable private GearSocket socket = null;
 
     public RunegemSlot(Container container, int slot, int x, int y) {
         super(container, slot, x, y);
     }
 
     public @Nullable RunegemShape getShape() {
-        return socket != null ? socket.shape() : null;
+        if (socket != null) {
+            return socket.shape();
+        } else {
+            return null;
+        }
     }
 
     public @Nullable GearSocket getSocket() {

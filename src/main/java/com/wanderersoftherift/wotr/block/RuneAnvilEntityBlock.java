@@ -32,11 +32,16 @@ public class RuneAnvilEntityBlock extends BaseEntityBlock {
     protected MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
         return new SimpleMenuProvider((containerId, playerInventory, player) -> {
             RuneAnvilBlockEntity blockEntity = (RuneAnvilBlockEntity) level.getBlockEntity(pos);
-            return blockEntity == null ? null : blockEntity.createMenu(containerId, playerInventory, player);
+            if (blockEntity == null) {
+                return null;
+            } else {
+                return blockEntity.createMenu(containerId, playerInventory, player);
+            }
         }, CONTAINER_TITLE);
     }
 
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
+            @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

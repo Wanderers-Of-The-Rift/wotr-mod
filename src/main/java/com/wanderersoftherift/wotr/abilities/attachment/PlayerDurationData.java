@@ -14,7 +14,8 @@ import java.util.Set;
 
 public class PlayerDurationData {
 
-    public static final Codec<PlayerDurationData> CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).xmap(PlayerDurationData::new, x -> x.map);
+    public static final Codec<PlayerDurationData> CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
+            .xmap(PlayerDurationData::new, x -> x.map);
 
     private final Map<ResourceLocation, Integer> map = new LinkedHashMap<>();
 
@@ -84,7 +85,9 @@ public class PlayerDurationData {
         List<ResourceLocation> toRemove = new ArrayList<>();
         for (ResourceLocation loc : this.getKeys()) {
             this.set(loc, Math.max(this.get(loc) - amount, 0));
-            if (this.get(loc) == 0) toRemove.add(loc);
+            if (this.get(loc) == 0) {
+                toRemove.add(loc);
+            }
         }
 
         toRemove.forEach(this::remove);

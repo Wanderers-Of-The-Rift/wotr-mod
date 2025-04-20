@@ -8,10 +8,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class DefaultInputBlockState extends InputBlockState {
 
-    public static final MapCodec<DefaultInputBlockState> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(DefaultInputBlockState::getBlock)
-            ).apply(instance, DefaultInputBlockState::new)
-    );
+    public static final MapCodec<DefaultInputBlockState> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+            .group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(DefaultInputBlockState::getBlock))
+            .apply(instance, DefaultInputBlockState::new));
 
     public Block block;
 

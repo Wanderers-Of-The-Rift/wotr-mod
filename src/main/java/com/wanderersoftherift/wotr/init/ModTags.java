@@ -38,7 +38,8 @@ public class ModTags {
         public static final TagKey<RunegemData> UNIQUE = createTag("unique");
 
         private static TagKey<RunegemData> createTag(String name) {
-            return TagKey.create(ModDatapackRegistries.RUNEGEM_DATA_KEY, ResourceLocation.fromNamespaceAndPath("wotr", name));
+            return TagKey.create(ModDatapackRegistries.RUNEGEM_DATA_KEY,
+                    ResourceLocation.fromNamespaceAndPath("wotr", name));
         }
     }
 }

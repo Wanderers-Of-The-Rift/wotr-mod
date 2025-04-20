@@ -36,20 +36,32 @@ public class ModPayloadHandlers {
     public static void registerPayloadHandlers(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(WanderersOfTheRift.MODID).versioned(PROTOCOL_VERSION);
 
-        registrar.playToServer(SelectAbilityUpgradePayload.TYPE, SelectAbilityUpgradePayload.STREAM_CODEC, SelectAbilityUpgradePayload::handleOnServer);
-        registrar.playToServer(LevelUpAbilityPayload.TYPE, LevelUpAbilityPayload.STREAM_CODEC, LevelUpAbilityPayload::handleOnServer);
-        registrar.playToServer(SelectAbilitySlotPayload.TYPE, SelectAbilitySlotPayload.STREAM_CODEC, SelectAbilitySlotPayload::handleOnServer);
-        registrar.playToClient(AbilitySlotsContentPayload.TYPE, AbilitySlotsContentPayload.STREAM_CODEC, AbilitySlotsContentPayload::handleOnClient);
-        registrar.playToClient(AbilitySlotsUpdatePayload.TYPE, AbilitySlotsUpdatePayload.STREAM_CODEC, AbilitySlotsUpdatePayload::handleOnClient);
-        registrar.playToClient(AbilitySlotsCooldownsPayload.TYPE, AbilitySlotsCooldownsPayload.STREAM_CODEC, AbilitySlotsCooldownsPayload::handleOnClient);
+        registrar.playToServer(SelectAbilityUpgradePayload.TYPE, SelectAbilityUpgradePayload.STREAM_CODEC,
+                SelectAbilityUpgradePayload::handleOnServer);
+        registrar.playToServer(LevelUpAbilityPayload.TYPE, LevelUpAbilityPayload.STREAM_CODEC,
+                LevelUpAbilityPayload::handleOnServer);
+        registrar.playToServer(SelectAbilitySlotPayload.TYPE, SelectAbilitySlotPayload.STREAM_CODEC,
+                SelectAbilitySlotPayload::handleOnServer);
+        registrar.playToClient(AbilitySlotsContentPayload.TYPE, AbilitySlotsContentPayload.STREAM_CODEC,
+                AbilitySlotsContentPayload::handleOnClient);
+        registrar.playToClient(AbilitySlotsUpdatePayload.TYPE, AbilitySlotsUpdatePayload.STREAM_CODEC,
+                AbilitySlotsUpdatePayload::handleOnClient);
+        registrar.playToClient(AbilitySlotsCooldownsPayload.TYPE, AbilitySlotsCooldownsPayload.STREAM_CODEC,
+                AbilitySlotsCooldownsPayload::handleOnClient);
 
-        registrar.playToClient(SetEffectMarkerPayload.TYPE, SetEffectMarkerPayload.STREAM_CODEC, SetEffectMarkerPayload::handleOnClient);
-        registrar.playToClient(UpdateEffectMarkersPayload.TYPE, UpdateEffectMarkersPayload.STREAM_CODEC, UpdateEffectMarkersPayload::handleOnClient);
+        registrar.playToClient(SetEffectMarkerPayload.TYPE, SetEffectMarkerPayload.STREAM_CODEC,
+                SetEffectMarkerPayload::handleOnClient);
+        registrar.playToClient(UpdateEffectMarkersPayload.TYPE, UpdateEffectMarkersPayload.STREAM_CODEC,
+                UpdateEffectMarkersPayload::handleOnClient);
 
-        registrar.playToServer(UseAbilityPayload.TYPE, UseAbilityPayload.STREAM_CODEC, UseAbilityPayload::handleOnServer);
-        registrar.playToClient(AbilityCooldownUpdatePayload.TYPE, AbilityCooldownUpdatePayload.STREAM_CODEC, AbilityCooldownUpdatePayload::handleOnClient);
-        registrar.playToClient(AbilityToggleStatePayload.TYPE, AbilityToggleStatePayload.STREAM_CODEC, AbilityToggleStatePayload::handleOnClient);
-        registrar.playToClient(ManaChangePayload.TYPE, ManaChangePayload.STREAM_CODEC, ManaChangePayload::handleOnClient);
+        registrar.playToServer(UseAbilityPayload.TYPE, UseAbilityPayload.STREAM_CODEC,
+                UseAbilityPayload::handleOnServer);
+        registrar.playToClient(AbilityCooldownUpdatePayload.TYPE, AbilityCooldownUpdatePayload.STREAM_CODEC,
+                AbilityCooldownUpdatePayload::handleOnClient);
+        registrar.playToClient(AbilityToggleStatePayload.TYPE, AbilityToggleStatePayload.STREAM_CODEC,
+                AbilityToggleStatePayload::handleOnClient);
+        registrar.playToClient(ManaChangePayload.TYPE, ManaChangePayload.STREAM_CODEC,
+                ManaChangePayload::handleOnClient);
     }
 
     @SubscribeEvent
@@ -76,7 +88,8 @@ public class ModPayloadHandlers {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
-        PacketDistributor.sendToPlayer(serverPlayer, new ManaChangePayload(serverPlayer.getData(ModAttachments.MANA).getAmount()));
+        PacketDistributor.sendToPlayer(serverPlayer,
+                new ManaChangePayload(serverPlayer.getData(ModAttachments.MANA).getAmount()));
     }
 
     private static void replicateAbilities(Player player) {
@@ -85,8 +98,10 @@ public class ModPayloadHandlers {
         }
 
         AbilitySlots abilitySlots = serverPlayer.getData(ModAttachments.ABILITY_SLOTS);
-        PacketDistributor.sendToPlayer(serverPlayer, new AbilitySlotsContentPayload(abilitySlots.getAbilitySlots(), abilitySlots.getSelectedSlot()));
-        PacketDistributor.sendToPlayer(serverPlayer, new AbilitySlotsCooldownsPayload(player.getData(ModAttachments.ABILITY_COOLDOWNS)));
+        PacketDistributor.sendToPlayer(serverPlayer,
+                new AbilitySlotsContentPayload(abilitySlots.getAbilitySlots(), abilitySlots.getSelectedSlot()));
+        PacketDistributor.sendToPlayer(serverPlayer,
+                new AbilitySlotsCooldownsPayload(player.getData(ModAttachments.ABILITY_COOLDOWNS)));
     }
 
     private static void replicateEffectMarkers(Player player) {
@@ -97,7 +112,8 @@ public class ModPayloadHandlers {
         AttachedEffectData data = serverPlayer.getData(ModAttachments.ATTACHED_EFFECTS);
         Map<Holder<EffectMarker>, Integer> displayData = data.getDisplayData();
         if (!displayData.isEmpty()) {
-            PacketDistributor.sendToPlayer(serverPlayer, new UpdateEffectMarkersPayload(displayData, Collections.emptyList()));
+            PacketDistributor.sendToPlayer(serverPlayer,
+                    new UpdateEffectMarkersPayload(displayData, Collections.emptyList()));
         }
     }
 

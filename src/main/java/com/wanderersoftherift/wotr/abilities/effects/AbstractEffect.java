@@ -26,18 +26,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class AbstractEffect {
+    public static final Codec<AbstractEffect> DIRECT_CODEC = ModEffects.EFFECTS_REGISTRY.byNameCodec()
+            .dispatch(AbstractEffect::getCodec, Function.identity());
 
-    protected static <T extends AbstractEffect> Products.P3<RecordCodecBuilder.Mu<T>, AbstractTargeting, List<AbstractEffect>, Optional<ParticleInfo>> commonFields(RecordCodecBuilder.Instance<T> instance) {
-        return instance.group(
-                AbstractTargeting.DIRECT_CODEC.fieldOf("targeting").forGetter(AbstractEffect::getTargeting),
-                Codec.list(AbstractEffect.DIRECT_CODEC).optionalFieldOf("effects", Collections.emptyList()).forGetter(AbstractEffect::getEffects),
-                Codec.optionalField("particles", ParticleInfo.CODEC.codec(), true).forGetter(AbstractEffect::getParticles)
-        );
-    }
-
-    public abstract MapCodec<? extends AbstractEffect> getCodec();
-
-    public static final Codec<AbstractEffect> DIRECT_CODEC = ModEffects.EFFECTS_REGISTRY.byNameCodec().dispatch(AbstractEffect::getCodec, Function.identity());
     private final AbstractTargeting targeting;
     private final List<AbstractEffect> effects;
     private final Optional<ParticleInfo> particles;
@@ -48,13 +39,26 @@ public abstract class AbstractEffect {
         this.particles = particles;
     }
 
+    protected static <T extends AbstractEffect> Products.P3<RecordCodecBuilder.Mu<T>, AbstractTargeting, List<AbstractEffect>, Optional<ParticleInfo>> commonFields(
+            RecordCodecBuilder.Instance<T> instance) {
+        return instance.group(
+                AbstractTargeting.DIRECT_CODEC.fieldOf("targeting").forGetter(AbstractEffect::getTargeting),
+                Codec.list(AbstractEffect.DIRECT_CODEC)
+                        .optionalFieldOf("effects", Collections.emptyList())
+                        .forGetter(AbstractEffect::getEffects),
+                Codec.optionalField("particles", ParticleInfo.CODEC.codec(), true)
+                        .forGetter(AbstractEffect::getParticles));
+    }
+
+    public abstract MapCodec<? extends AbstractEffect> getCodec();
+
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         for (AbstractEffect effect : getEffects()) {
             effect.apply(user, blocks, context);
         }
     }
 
-    //TODO consolidate this code below
+    // TODO consolidate this code below
     public void applyParticlesToUser(Entity user) {
         if (user != null && particles.isPresent() && particles.get().userParticle().isPresent()) {
             if (!user.level().isClientSide()) {
@@ -74,18 +78,21 @@ public abstract class AbstractEffect {
     }
 
     protected void applyParticlesToTargetBlocks(Level level, List<BlockPos> blocks) {
-        if (blocks != null && !blocks.isEmpty() && particles.isPresent() && particles.get().targetBlockParticle().isPresent()) {
+        if (blocks != null && !blocks.isEmpty() && particles.isPresent()
+                && particles.get().targetBlockParticle().isPresent()) {
             if (!level.isClientSide()) {
                 ServerLevel serverLevel = (ServerLevel) level;
                 for (BlockPos pos : blocks) {
-                    applyParticlesToPos(serverLevel, new Vec3(pos.getX(), pos.getY(), pos.getZ()), particles.get().targetBlockParticle().get());
+                    applyParticlesToPos(serverLevel, new Vec3(pos.getX(), pos.getY(), pos.getZ()),
+                            particles.get().targetBlockParticle().get());
                 }
             }
         }
     }
 
     public void applyParticlesToPos(ServerLevel level, Vec3 position, ParticleOptions particleOptions) {
-        level.sendParticles(particleOptions, false, true, position.x, position.y + 1.5, position.z, 10, Math.random(), Math.random(), Math.random(), 2);
+        level.sendParticles(particleOptions, false, true, position.x, position.y + 1.5, position.z, 10, Math.random(),
+                Math.random(), Math.random(), 2);
     }
 
     public AbstractTargeting getTargeting() {
@@ -101,7 +108,10 @@ public abstract class AbstractEffect {
     }
 
     public Set<Holder<Attribute>> getApplicableAttributes() {
-        return getEffects().stream().map(AbstractEffect::getApplicableAttributes).flatMap(Set::stream).collect(Collectors.toSet());
+        return getEffects().stream()
+                .map(AbstractEffect::getApplicableAttributes)
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -126,6 +136,7 @@ public abstract class AbstractEffect {
     /**
      * Determines whether a given modifier effect is relevant to this effect. Used to determine what upgrades can apply
      * to abilities that include this effect.
+     * 
      * @param modifierEffect
      * @return Whether the modifier is relevant to this effect
      */

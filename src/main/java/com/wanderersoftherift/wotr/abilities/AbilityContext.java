@@ -85,7 +85,8 @@ public record AbilityContext(LivingEntity caster, ItemStack abilityItem) {
             return 0;
         }
 
-        AttributeModifier baseModifier = new AttributeModifier(WanderersOfTheRift.id("base_value"), baseValue, AttributeModifier.Operation.ADD_VALUE);
+        AttributeModifier baseModifier = new AttributeModifier(WanderersOfTheRift.id("base_value"), baseValue,
+                AttributeModifier.Operation.ADD_VALUE);
         attribute.addTransientModifier(baseModifier);
         float value = (float) attribute.getValue();
         attribute.removeModifier(baseModifier);

@@ -18,13 +18,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = EnchantingTableBlock.class, priority = 100)
 public class MixinEnchantingTableBlock {
 
-    @Inject(method = "useWithoutItem" , at = @At("HEAD"), cancellable = true)
-    private void cancelMenu(BlockState pBlockState, Level pLevel, BlockPos pBlockPos, Player pPlayer, BlockHitResult pBlockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        if(pPlayer.level().isClientSide()) {
+    @Inject(method = "useWithoutItem", at = @At("HEAD"), cancellable = true)
+    private void cancelMenu(BlockState pBlockState, Level pLevel, BlockPos pBlockPos, Player pPlayer,
+            BlockHitResult pBlockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+        if (pPlayer.level().isClientSide()) {
             // Currently a literal because we likely want to change this at some point.
             pPlayer.displayClientMessage(Component.literal(
-                    "This Block has been disabled! (We can change this to one of our custom menus potentially too)").withStyle(ChatFormatting.RED),
-                    false);
+                    "This Block has been disabled! (We can change this to one of our custom menus potentially too)")
+                    .withStyle(ChatFormatting.RED), false);
         }
         cir.setReturnValue(InteractionResult.FAIL);
     }

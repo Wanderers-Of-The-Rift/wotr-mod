@@ -15,9 +15,11 @@ import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 
 public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
-    private static final ResourceLocation BACKGROUND = WanderersOfTheRift.id("textures/gui/container/rune_anvil/background.png");
+    private static final ResourceLocation BACKGROUND = WanderersOfTheRift
+            .id("textures/gui/container/rune_anvil/background.png");
     private static final ResourceLocation SLOTS = WanderersOfTheRift.id("textures/gui/container/rune_anvil/slots.png");
-    //TODO: Make sure blit is passed correct texture size for all calls.
+
+    // TODO: Make sure blit is passed correct texture size for all calls.
     public RuneAnvilScreen(RuneAnvilMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageHeight = 248;
@@ -44,7 +46,8 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth,
+                this.imageHeight, 256, 256);
     }
 
     @Override
@@ -52,7 +55,9 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
         int x = slot.x - 1;
         int y = slot.y - 1;
         if (slot instanceof RunegemSlot runegemSlot) {
-            if (runegemSlot.getShape() == null) return;
+            if (runegemSlot.getShape() == null) {
+                return;
+            }
             RunegemShape shape = runegemSlot.getShape();
 
             guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape), 0, 18, 18, 256, 256);

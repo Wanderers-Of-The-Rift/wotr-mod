@@ -15,20 +15,18 @@ import java.util.Optional;
 
 public class ApplyStatusEffect extends AbstractEffect {
 
-    MobEffectInstance statusEffect;
+    public static final MapCodec<ApplyStatusEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(MobEffectInstance.CODEC.fieldOf("status_effect").forGetter(ApplyStatusEffect::getStatusEffect))
+                    .apply(instance, ApplyStatusEffect::new));
 
-    public ApplyStatusEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, MobEffectInstance status) {
+    private MobEffectInstance statusEffect;
+
+    public ApplyStatusEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
+            Optional<ParticleInfo> particles, MobEffectInstance status) {
         super(targeting, effects, particles);
         this.statusEffect = status;
     }
-
-    public static final MapCodec<ApplyStatusEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance)
-                    .and(
-                            MobEffectInstance.CODEC.fieldOf("status_effect").forGetter(ApplyStatusEffect::getStatusEffect)
-                    )
-                    .apply(instance, ApplyStatusEffect::new)
-    );
 
     public MobEffectInstance getStatusEffect() {
         return this.statusEffect;
@@ -47,11 +45,11 @@ public class ApplyStatusEffect extends AbstractEffect {
         for (Entity target : targets) {
             applyParticlesToTarget(target);
             if (target instanceof LivingEntity livingTarget) {
-                //TODO look into creating our own mob effect wrapper that can also call an effect list
+                // TODO look into creating our own mob effect wrapper that can also call an effect list
                 livingTarget.addEffect(new MobEffectInstance(getStatusEffect()));
             }
 
-            //Then apply children effects to targets
+            // Then apply children effects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 

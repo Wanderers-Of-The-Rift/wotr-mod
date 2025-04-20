@@ -19,17 +19,20 @@ import org.jetbrains.annotations.NotNull;
  * A crafting bench for Rift Keys
  */
 public class KeyForgeBlock extends Block {
-    private static final Component CONTAINER_TITLE = Component.translatable("container." + WanderersOfTheRift.MODID + ".key_forge");
+    private static final Component CONTAINER_TITLE = Component
+            .translatable("container." + WanderersOfTheRift.MODID + ".key_forge");
 
     public KeyForgeBlock(Properties properties) {
         super(properties);
     }
 
     protected MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
-        return new SimpleMenuProvider((containerId, playerInventory, player) -> new KeyForgeMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE);
+        return new SimpleMenuProvider((containerId, playerInventory, player) -> new KeyForgeMenu(containerId,
+                playerInventory, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE);
     }
 
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
+            @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

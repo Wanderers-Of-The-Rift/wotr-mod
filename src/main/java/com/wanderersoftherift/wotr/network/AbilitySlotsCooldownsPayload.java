@@ -15,17 +15,18 @@ import java.util.List;
 
 /**
  * Payload for transmitting ability cooldown slot information to a client
+ * 
  * @param cooldowns The initial length of each cooldown (in ticks)
  * @param remaining The remaining length of each cooldown
  */
-public record AbilitySlotsCooldownsPayload(List<Integer> cooldowns,
-                                           List<Integer> remaining) implements CustomPacketPayload {
-    public static final Type<AbilitySlotsCooldownsPayload> TYPE = new Type<>(WanderersOfTheRift.id("ability_slots_cooldowns"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, AbilitySlotsCooldownsPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT.apply(ByteBufCodecs.list()), AbilitySlotsCooldownsPayload::cooldowns,
-            ByteBufCodecs.INT.apply(ByteBufCodecs.list()), AbilitySlotsCooldownsPayload::remaining,
-            AbilitySlotsCooldownsPayload::new
-    );
+public record AbilitySlotsCooldownsPayload(List<Integer> cooldowns, List<Integer> remaining)
+        implements CustomPacketPayload {
+    public static final Type<AbilitySlotsCooldownsPayload> TYPE = new Type<>(
+            WanderersOfTheRift.id("ability_slots_cooldowns"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, AbilitySlotsCooldownsPayload> STREAM_CODEC = StreamCodec
+            .composite(ByteBufCodecs.INT.apply(ByteBufCodecs.list()), AbilitySlotsCooldownsPayload::cooldowns,
+                    ByteBufCodecs.INT.apply(ByteBufCodecs.list()), AbilitySlotsCooldownsPayload::remaining,
+                    AbilitySlotsCooldownsPayload::new);
 
     public AbilitySlotsCooldownsPayload(PlayerCooldownData data) {
         this(new ArrayList<>(), new ArrayList<>());

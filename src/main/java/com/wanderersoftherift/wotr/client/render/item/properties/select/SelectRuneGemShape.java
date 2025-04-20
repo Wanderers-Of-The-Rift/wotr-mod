@@ -13,12 +13,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SelectRuneGemShape implements SelectItemModelProperty<RunegemShape> {
-    public static final SelectItemModelProperty.Type<SelectRuneGemShape, RunegemShape> TYPE = Type.create(MapCodec.unit(new SelectRuneGemShape()), RunegemShape.CODEC);
+    public static final SelectItemModelProperty.Type<SelectRuneGemShape, RunegemShape> TYPE = Type
+            .create(MapCodec.unit(new SelectRuneGemShape()), RunegemShape.CODEC);
 
     @Override
-    public @Nullable RunegemShape get(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity, int i, ItemDisplayContext itemDisplayContext) {
+    public @Nullable RunegemShape get(ItemStack itemStack, @Nullable ClientLevel clientLevel,
+            @Nullable LivingEntity livingEntity, int i, ItemDisplayContext itemDisplayContext) {
         RunegemData data = itemStack.get(ModDataComponentType.RUNEGEM_DATA);
-        return (data != null && data.shape() != null) ? data.shape() : RunegemShape.CIRCLE;
+        if (data != null && data.shape() != null) {
+            return data.shape();
+        } else {
+            return RunegemShape.CIRCLE;
+        }
     }
 
     @Override
@@ -26,4 +32,3 @@ public class SelectRuneGemShape implements SelectItemModelProperty<RunegemShape>
         return TYPE;
     }
 }
-

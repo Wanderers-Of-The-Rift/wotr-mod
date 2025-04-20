@@ -18,31 +18,22 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Set;
 
-public class RiftKeyCommands extends BaseCommand{
+public class RiftKeyCommands extends BaseCommand {
     public RiftKeyCommands() {
         super("riftKey", Commands.LEVEL_GAMEMASTERS);
     }
 
-    @Override protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
+    @Override
+    protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("tier")
-            .then(Commands.argument("tier", IntegerArgumentType.integer())
-                .executes(this::setTier)
-            )
-        );
+                .then(Commands.argument("tier", IntegerArgumentType.integer()).executes(this::setTier)));
         builder.then(Commands.literal("theme")
-            .then(Commands.argument("theme", ResourceLocationArgument.id())
-                .suggests((ctx, sb) ->
-                    SharedSuggestionProvider.suggestResource(
-                        Set.of(WanderersOfTheRift.id("cave"), WanderersOfTheRift.id("forest"))
-                        , sb))
-                .executes(this::setTheme)
-            )
-        );
+                .then(Commands.argument("theme", ResourceLocationArgument.id())
+                        .suggests((ctx, sb) -> SharedSuggestionProvider.suggestResource(
+                                Set.of(WanderersOfTheRift.id("cave"), WanderersOfTheRift.id("forest")), sb))
+                        .executes(this::setTheme)));
         builder.then(Commands.literal("seed")
-            .then(Commands.argument("seed", IntegerArgumentType.integer())
-                .executes(this::setSeed)
-            )
-        );
+                .then(Commands.argument("seed", IntegerArgumentType.integer()).executes(this::setSeed)));
     }
 
     private int setTier(CommandContext<CommandSourceStack> stack) {
@@ -51,14 +42,15 @@ public class RiftKeyCommands extends BaseCommand{
         if (player != null) {
             ItemStack heldItem = player.getMainHandItem();
 
-            if(heldItem.getItem() != ModItems.RIFT_KEY.asItem()) {
+            if (heldItem.getItem() != ModItems.RIFT_KEY.asItem()) {
                 stack.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));
                 return 0;
             }
 
             Integer tier = stack.getArgument("tier", Integer.class);
             heldItem.set(ModDataComponentType.RIFT_TIER, tier);
-            stack.getSource().sendSuccess(() -> Component.translatable("command.wotr.rift_key.tier.success", tier), true);
+            stack.getSource()
+                    .sendSuccess(() -> Component.translatable("command.wotr.rift_key.tier.success", tier), true);
             return 1;
         }
 
@@ -72,14 +64,16 @@ public class RiftKeyCommands extends BaseCommand{
         if (player != null) {
             ItemStack heldItem = player.getMainHandItem();
 
-            if(heldItem.getItem() != ModItems.RIFT_KEY.asItem()) {
+            if (heldItem.getItem() != ModItems.RIFT_KEY.asItem()) {
                 stack.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));
                 return 0;
             }
 
             ResourceLocation theme = ResourceLocationArgument.getId(stack, "theme");
             heldItem.set(ModDataComponentType.RIFT_THEME, theme);
-            stack.getSource().sendSuccess(() -> Component.translatable("command.wotr.rift_key.theme.success", theme.toString()), true);
+            stack.getSource()
+                    .sendSuccess(() -> Component.translatable("command.wotr.rift_key.theme.success", theme.toString()),
+                            true);
             return 1;
         }
 
@@ -93,14 +87,15 @@ public class RiftKeyCommands extends BaseCommand{
         if (player != null) {
             ItemStack heldItem = player.getMainHandItem();
 
-            if(heldItem.getItem() != ModItems.RIFT_KEY.asItem()) {
+            if (heldItem.getItem() != ModItems.RIFT_KEY.asItem()) {
                 stack.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));
                 return 0;
             }
 
             Integer seed = stack.getArgument("seed", Integer.class);
             heldItem.set(ModDataComponentType.RIFT_SEED, seed);
-            stack.getSource().sendSuccess(() -> Component.translatable("command.wotr.rift_key.seed.success", seed), true);
+            stack.getSource()
+                    .sendSuccess(() -> Component.translatable("command.wotr.rift_key.seed.success", seed), true);
             return 1;
         }
 

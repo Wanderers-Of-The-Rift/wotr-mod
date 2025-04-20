@@ -26,32 +26,35 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Special renderer for rendering the icon of an ability within another item
+ * 
  * @param baseItem An item that is rendered for the non-ability portion
  */
 public record AbilitySpecialRenderer(Holder<Item> baseItem) implements SpecialModelRenderer<AbstractAbility> {
     @Override
-    public void render(AbstractAbility ability, @NotNull ItemDisplayContext displayContext, PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight, int packedOverlay, boolean hasFoilType) {
+    public void render(AbstractAbility ability, @NotNull ItemDisplayContext displayContext, PoseStack poseStack,
+            @NotNull MultiBufferSource bufferSource, int packedLight, int packedOverlay, boolean hasFoilType) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
 
-        // We render the base item with the FIXED content, because this item is already being rendered with the display context
+        // We render the base item with the FIXED content, because this item is already being rendered with the display
+        // context
         ItemStackRenderState renderState = new ItemStackRenderState();
-        Minecraft.getInstance().getItemModelResolver().updateForTopItem(renderState, baseItem.value().getDefaultInstance(), ItemDisplayContext.FIXED, false, null, null, 0);
+        Minecraft.getInstance()
+                .getItemModelResolver()
+                .updateForTopItem(renderState, baseItem.value().getDefaultInstance(), ItemDisplayContext.FIXED, false,
+                        null, null, 0);
         renderState.render(poseStack, bufferSource, packedLight, packedOverlay);
 
         if (ability != null && ability.getIcon() != null) {
             poseStack.translate(0.03F, 0.04F, 0);
             // TODO: Cache
-            RenderType renderType = RenderType.create("ability_icon",
-                    DefaultVertexFormat.BLOCK,
-                    VertexFormat.Mode.QUADS,
-                    786432,
-                    true,
-                    false,
+            RenderType renderType = RenderType.create("ability_icon", DefaultVertexFormat.BLOCK,
+                    VertexFormat.Mode.QUADS, 786_432, true, false,
                     RenderType.CompositeState.builder()
                             .setLightmapState(RenderStateShard.LIGHTMAP)
                             .setShaderState(RenderStateShard.RENDERTYPE_CUTOUT_SHADER)
-                            .setTextureState(new RenderStateShard.TextureStateShard(ability.getIcon(), TriState.FALSE, false))
+                            .setTextureState(
+                                    new RenderStateShard.TextureStateShard(ability.getIcon(), TriState.FALSE, false))
                             .setCullState(RenderStateShard.NO_CULL)
                             .createCompositeState(true));
             VertexConsumer consumer = bufferSource.getBuffer(renderType);
@@ -65,7 +68,8 @@ public record AbilitySpecialRenderer(Holder<Item> baseItem) implements SpecialMo
         poseStack.popPose();
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z, int u, int v) {
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z,
+            int u, int v) {
         consumer.addVertex(pose, x, y, z)
                 .setColor(-1)
                 .setUv((float) u, (float) v)
@@ -84,9 +88,10 @@ public record AbilitySpecialRenderer(Holder<Item> baseItem) implements SpecialMo
     }
 
     public record Unbaked(Holder<Item> item) implements SpecialModelRenderer.Unbaked {
-        public static final MapCodec<AbilitySpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Item.CODEC.fieldOf("base_item").forGetter(AbilitySpecialRenderer.Unbaked::item)
-        ).apply(instance, AbilitySpecialRenderer.Unbaked::new));
+        public static final MapCodec<AbilitySpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder
+                .mapCodec(instance -> instance
+                        .group(Item.CODEC.fieldOf("base_item").forGetter(AbilitySpecialRenderer.Unbaked::item))
+                        .apply(instance, AbilitySpecialRenderer.Unbaked::new));
 
         @Override
         public @NotNull MapCodec<? extends SpecialModelRenderer.Unbaked> type() {

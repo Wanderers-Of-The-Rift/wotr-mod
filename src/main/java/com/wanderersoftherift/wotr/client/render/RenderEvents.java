@@ -36,14 +36,16 @@ public class RenderEvents {
     private static final Minecraft minecraft = Minecraft.getInstance();
     private static final Map<BlockState, List<ModelWireframeExtractor.RenderLine>> cachedWireFrames = new Reference2ObjectOpenHashMap<>();
 
-
     public static void resetCached() {
         cachedWireFrames.clear();
     }
 
     @SubscribeEvent
     public static void onBlockHover(RenderHighlightEvent.Block event) {
-        if(true) return; // TODO: Temporary instant return until we have block models that should be accurate to their BakedModel
+        // TODO: Temporary instant return until we have block models that should be accurate to their BakedModel
+        if (true) {
+            return;
+        }
 
         Player player = minecraft.player;
         if (player == null) {
@@ -60,8 +62,11 @@ public class RenderEvents {
 
             BlockState blockState = world.getBlockState(pos);
 
-
-            if (!blockState.isAir() && world.getWorldBorder().isWithinBounds(pos) /* && TODO: Each custom model that we want to accurately display needs to be checked here */) {
+            if (!blockState.isAir()
+                    && world.getWorldBorder().isWithinBounds(pos) /*
+                                                                   * && TODO: Each custom model that we want to
+                                                                   * accurately display needs to be checked here
+                                                                   */) {
                 matrix.pushPose();
                 Vec3 viewPosition = info.getPosition();
                 matrix.translate(pos.getX() - viewPosition.x, pos.getY() - viewPosition.y, pos.getZ() - viewPosition.z);
@@ -73,10 +78,8 @@ public class RenderEvents {
         }
     }
 
-
-
-
-    private static void renderBlockWireFrame(BlockState state, VertexConsumer buffer, PoseStack matrix, RandomSource rand) {
+    private static void renderBlockWireFrame(BlockState state, VertexConsumer buffer, PoseStack matrix,
+            RandomSource rand) {
         List<ModelWireframeExtractor.RenderLine> lines = cachedWireFrames.computeIfAbsent(state, key -> {
             BakedModel bakedModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
             return ModelWireframeExtractor.extract(bakedModel, state, rand, ModelData.EMPTY, null);
@@ -86,7 +89,8 @@ public class RenderEvents {
         renderVertexWireFrame(lines, buffer, pose.pose(), pose.normal());
     }
 
-    public static void renderVertexWireFrame(Collection<ModelWireframeExtractor.RenderLine> lines, VertexConsumer buffer, Matrix4f pose, Matrix3f poseNormal) {
+    public static void renderVertexWireFrame(Collection<ModelWireframeExtractor.RenderLine> lines,
+            VertexConsumer buffer, Matrix4f pose, Matrix3f poseNormal) {
         Vector4f pos = new Vector4f();
         Vector3f normal = new Vector3f();
 
@@ -94,14 +98,10 @@ public class RenderEvents {
             poseNormal.transform(line.nX(), line.nY(), line.nZ(), normal);
 
             pose.transform(line.x1(), line.y1(), line.z1(), 1F, pos);
-            buffer.addVertex(pos.x, pos.y, pos.z)
-                    .setColor(0, 0, 0, 102)
-                    .setNormal(normal.x, normal.y, normal.z);
+            buffer.addVertex(pos.x, pos.y, pos.z).setColor(0, 0, 0, 102).setNormal(normal.x, normal.y, normal.z);
 
             pose.transform(line.x2(), line.y2(), line.z2(), 1F, pos);
-            buffer.addVertex(pos.x, pos.y, pos.z)
-                    .setColor(0, 0, 0, 102)
-                    .setNormal(normal.x, normal.y, normal.z);
+            buffer.addVertex(pos.x, pos.y, pos.z).setColor(0, 0, 0, 102).setNormal(normal.x, normal.y, normal.z);
         }
     }
 

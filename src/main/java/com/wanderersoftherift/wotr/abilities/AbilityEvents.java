@@ -32,18 +32,21 @@ public class AbilityEvents {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent respawnEvent) {
         AttributeInstance maxManaAttribute = respawnEvent.getEntity().getAttribute(ModAttributes.MAX_MANA);
         if (maxManaAttribute != null) {
-            respawnEvent.getEntity().getData(ModAttachments.MANA).setAmount(respawnEvent.getEntity(), (int) maxManaAttribute.getValue());
+            respawnEvent.getEntity()
+                    .getData(ModAttachments.MANA)
+                    .setAmount(respawnEvent.getEntity(), (int) maxManaAttribute.getValue());
         }
     }
 
     public static void tickAttachedEffects(ServerLevel level) {
-        level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity -> entity.hasData(ModAttachments.ATTACHED_EFFECTS)).forEach(entity -> {
-            AttachedEffectData data = entity.getData(ModAttachments.ATTACHED_EFFECTS);
-            data.tick(entity, level);
-            if (data.isEmpty()) {
-                entity.removeData(ModAttachments.ATTACHED_EFFECTS);
-            }
-        });
+        level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
+                entity -> entity.hasData(ModAttachments.ATTACHED_EFFECTS)).forEach(entity -> {
+                    AttachedEffectData data = entity.getData(ModAttachments.ATTACHED_EFFECTS);
+                    data.tick(entity, level);
+                    if (data.isEmpty()) {
+                        entity.removeData(ModAttachments.ATTACHED_EFFECTS);
+                    }
+                });
     }
 
     public static void tickMana(ServerLevel level) {

@@ -17,9 +17,13 @@ public class FireBurnEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) {
-        if (level.isClientSide()) return true;
+        if (level.isClientSide()) {
+            return true;
+        }
 
-        Holder<DamageType> damageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.FIRE_BURN_DAMAGE);
+        Holder<DamageType> damageType = level.registryAccess()
+                .lookupOrThrow(Registries.DAMAGE_TYPE)
+                .getOrThrow(ModDamageTypes.FIRE_BURN_DAMAGE);
         DamageSource damageSource = new DamageSource(damageType);
 
         entity.hurtServer(level, damageSource, 2);

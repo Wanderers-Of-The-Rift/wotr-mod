@@ -24,13 +24,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class SimpleProjectileEffect extends AbstractEffect {
+    public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::getConfig))
+                    .apply(instance, SimpleProjectileEffect::new));
+
     private SimpleProjectileConfig config;
 
-    public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance).and(
-                    SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::getConfig)
-            ).apply(instance, SimpleProjectileEffect::new)
-    );
+    public SimpleProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
+            Optional<ParticleInfo> particles, SimpleProjectileConfig config) {
+        super(targeting, effects, particles);
+        this.config = config;
+    }
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
@@ -41,32 +46,33 @@ public class SimpleProjectileEffect extends AbstractEffect {
         return config;
     }
 
-    public SimpleProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, SimpleProjectileConfig config) {
-        super(targeting, effects, particles);
-        this.config = config;
-    }
-
     @Override
     public void apply(Entity source, List<BlockPos> blocks, AbilityContext context) {
         List<BlockPos> targets = getTargeting().getBlocks(source);
-        List<Entity> target_entities = getTargeting().getTargets(source, blocks, context);
+        List<Entity> targetEntities = getTargeting().getTargets(source, blocks, context);
 
         applyParticlesToUser(source);
-        if (!target_entities.isEmpty()) {
+        if (!targetEntities.isEmpty()) {
 
-            //NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it inline with the other effects
-            //Target to me has always been more of a frame of reference for the effect not what the effect actually "targets" but we can change this later if we want to make the change towards it being the actual target.
-            for(Entity target: target_entities)
-            {
+            // NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it
+            // inline with the other effects
+            // Target to me has always been more of a frame of reference for the effect not what the effect actually
+            // "targets" but we can change this later if we want to make the change towards it being the actual target.
+            for (Entity target : targetEntities) {
                 EntityType<?> type = ModEntities.SIMPLE_EFFECT_PROJECTILE.get();
                 int numberOfProjectiles = getNumberOfProjectiles(context);
 
                 float spread = getSpread(context);
-                float f1 = numberOfProjectiles == 1 ? 0.0F : 2.0F * spread / (float) (numberOfProjectiles - 1);
+                float f1;
+                if (numberOfProjectiles == 1) {
+                    f1 = 0.0F;
+                } else {
+                    f1 = 2.0F * spread / (float) (numberOfProjectiles - 1);
+                }
                 float f2 = (float) ((numberOfProjectiles - 1) % 2) * f1 / 2.0F;
                 float f3 = 1.0F;
                 for (int i = 0; i < numberOfProjectiles; i++) {
-                    float angle = f2 + f3 * (float)((i + 1) / 2) * f1;
+                    float angle = f2 + f3 * (float) ((i + 1) / 2) * f1;
                     f3 = -f3;
                     spawnProjectile(target, type, angle, context);
                 }
@@ -84,14 +90,16 @@ public class SimpleProjectileEffect extends AbstractEffect {
     }
 
     private void spawnProjectile(Entity user, EntityType<?> type, float angle, AbilityContext context) {
-        Entity simpleProjectile = type.create((ServerLevel) context.level(), null, user.getOnPos(), EntitySpawnReason.MOB_SUMMONED, false, false);
+        Entity simpleProjectile = type.create((ServerLevel) context.level(), null, user.getOnPos(),
+                EntitySpawnReason.MOB_SUMMONED, false, false);
         if (simpleProjectile instanceof SimpleEffectProjectile projectileEntity) {
             projectileEntity.setPos(user.getEyePosition());
             projectileEntity.setOwner(context.caster());
             projectileEntity.setEffect(this);
             projectileEntity.configure(config);
 
-            projectileEntity.shootFromRotation(user, user.getXRot(), user.getYRot() + angle, 0, context.getAbilityAttribute(ModAttributes.PROJECTILE_SPEED, config.velocity()), 0);
+            projectileEntity.shootFromRotation(user, user.getXRot(), user.getYRot() + angle, 0,
+                    context.getAbilityAttribute(ModAttributes.PROJECTILE_SPEED, config.velocity()), 0);
 
             context.level().addFreshEntity(simpleProjectile);
         }
@@ -112,7 +120,8 @@ public class SimpleProjectileEffect extends AbstractEffect {
     protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
             Holder<Attribute> attribute = attributeModifier.getAttribute();
-            return ModAttributes.PROJECTILE_SPREAD.equals(attribute) || ModAttributes.PROJECTILE_COUNT.equals(attribute) || ModAttributes.PROJECTILE_SPEED.equals(attribute);
+            return ModAttributes.PROJECTILE_SPREAD.equals(attribute) || ModAttributes.PROJECTILE_COUNT.equals(attribute)
+                    || ModAttributes.PROJECTILE_SPEED.equals(attribute);
         }
         return false;
     }

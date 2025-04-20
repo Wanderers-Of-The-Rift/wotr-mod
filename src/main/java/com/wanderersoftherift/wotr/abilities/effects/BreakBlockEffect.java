@@ -11,15 +11,15 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 import java.util.Optional;
 
-public class BreakBlockEffect extends AbstractEffect{
+public class BreakBlockEffect extends AbstractEffect {
 
-    public BreakBlockEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+    public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, BreakBlockEffect::new));
+
+    public BreakBlockEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
+            Optional<ParticleInfo> particles) {
         super(targeting, effects, particles);
     }
-
-    public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance).apply(instance, BreakBlockEffect::new)
-    );
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
@@ -33,16 +33,15 @@ public class BreakBlockEffect extends AbstractEffect{
 
         List<BlockPos> areaBlocks = getTargeting().getBlocksInArea(user, blocks, context);
 
-        for(BlockPos pos: areaBlocks)
-        {
-            //TODO: Make fortune work maybe? (Apply tool enchants etc)
-           if(context.level().getBlockState(pos).canEntityDestroy(context.level(), pos, context.caster()) && context.level().getBlockState(pos).getBlock().defaultDestroyTime() > -1) {
-               context.level().destroyBlock(pos, true, context.caster());
-           }
+        for (BlockPos pos : areaBlocks) {
+            // TODO: Make fortune work maybe? (Apply tool enchants etc)
+            if (context.level().getBlockState(pos).canEntityDestroy(context.level(), pos, context.caster())
+                    && context.level().getBlockState(pos).getBlock().defaultDestroyTime() > -1) {
+                context.level().destroyBlock(pos, true, context.caster());
+            }
         }
 
-        if(targets.isEmpty())
-        {
+        if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
         }
     }

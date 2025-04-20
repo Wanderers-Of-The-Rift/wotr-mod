@@ -11,14 +11,12 @@ public class ModSoundsProvider extends SoundDefinitionsProvider {
         super(output, WanderersOfTheRift.MODID);
     }
 
-
     @Override
     public void registerSounds() {
-        add(ModSoundEvents.RIFT_OPEN.value(), SoundDefinition.definition()
-                .with(
-                        sound(WanderersOfTheRift.id("rift_open"), SoundDefinition.SoundType.SOUND)
-                ).subtitle("subtitles." + WanderersOfTheRift.MODID + ".rift_open")
-                .replace(false)
-        );
+        add(ModSoundEvents.RIFT_OPEN.value(),
+                SoundDefinition.definition()
+                        .with(sound(WanderersOfTheRift.id("rift_open"), SoundDefinition.SoundType.SOUND))
+                        .subtitle("subtitles." + WanderersOfTheRift.MODID + ".rift_open")
+                        .replace(false));
     }
 }

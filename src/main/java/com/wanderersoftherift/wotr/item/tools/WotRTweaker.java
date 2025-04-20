@@ -16,6 +16,7 @@ public class WotRTweaker extends Item {
     public WotRTweaker(Properties properties) {
         super(properties);
     }
+
     @Override
     public @NotNull InteractionResult useOn(@NotNull UseOnContext context) {
         BlockPos pos = context.getClickedPos();
@@ -35,7 +36,9 @@ public class WotRTweaker extends Item {
             }
 
             level.setBlockAndUpdate(pos, state.setValue(SpringBlock.STRENGTH, strength));
-            if (player != null) { message(player, Component.literal("strength = " + strength)); }
+            if (player != null) {
+                message(player, Component.literal("strength = " + strength));
+            }
             return InteractionResult.SUCCESS;
         }
 

@@ -19,11 +19,12 @@ public record UnrolledGearImplicits() implements GearImplicits {
 
     @Override
     public List<ModifierInstance> modifierInstances(ItemStack stack, Level level) {
-        if(level.isClientSide()) {
+        if (level.isClientSide()) {
             return List.of();
         }
         Registry<ImplicitConfig> implicitConfigs = level.registryAccess().lookupOrThrow(GEAR_IMPLICITS_CONFIG);
-        ImplicitConfig config = implicitConfigs.getOptional(stack.getItemHolder().getKey().location()).orElse(ImplicitConfig.DEFAULT);
+        ImplicitConfig config = implicitConfigs.getOptional(stack.getItemHolder().getKey().location())
+                .orElse(ImplicitConfig.DEFAULT);
         if (config.implicitModifiers().size() == 0) {
             return List.of();
         }
@@ -31,7 +32,7 @@ public record UnrolledGearImplicits() implements GearImplicits {
         Iterator<Holder<Modifier>> iterator = config.implicitModifiers().iterator();
         RandomSource randomSource = RandomSource.create();
         randomSource.consumeCount(1);
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Holder<Modifier> holder = iterator.next();
             instances.add(ModifierInstance.of(holder, randomSource));
         }

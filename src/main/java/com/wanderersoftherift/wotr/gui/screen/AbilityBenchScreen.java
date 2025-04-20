@@ -35,7 +35,8 @@ import java.util.function.Supplier;
  * A UI for viewing ability details and manage their upgrades
  */
 public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu> {
-    private static final ResourceLocation BACKGROUND = WanderersOfTheRift.id("textures/gui/container/ability_bench/background.png");
+    private static final ResourceLocation BACKGROUND = WanderersOfTheRift
+            .id("textures/gui/container/ability_bench/background.png");
 
     private static final int BACKGROUND_WIDTH = 320;
     private static final int BACKGROUND_HEIGHT = 236;
@@ -48,9 +49,10 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
     private static final int UPGRADE_WIDTH = 20;
     private static final int UPGRADE_SPACING = 8;
     private static final int BORDER_X = 24;
-    public static final int ICON_SIZE = 16;
+    private static final int ICON_SIZE = 16;
 
-    private final Component upgradeLabel = Component.translatable(WanderersOfTheRift.translationId("container", "ability_bench.upgrade"));
+    private final Component upgradeLabel = Component
+            .translatable(WanderersOfTheRift.translationId("container", "ability_bench.upgrade"));
     private ScrollContainerWidget<ScrollContainerEntry> upgradeChoices;
 
     public AbilityBenchScreen(AbilityBenchMenu menu, Inventory playerInventory, Component title) {
@@ -65,7 +67,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
     @Override
     protected void init() {
         super.init();
-        upgradeChoices = new ScrollContainerWidget<>(leftPos + SELECTION_AREA_X, topPos + SELECTION_AREA_Y, SELECTION_AREA_WIDTH, SELECTION_AREA_HEIGHT);
+        upgradeChoices = new ScrollContainerWidget<>(leftPos + SELECTION_AREA_X, topPos + SELECTION_AREA_Y,
+                SELECTION_AREA_WIDTH, SELECTION_AREA_HEIGHT);
         addRenderableWidget(upgradeChoices);
         upgradeChoices.setFocused(true);
     }
@@ -112,19 +115,25 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
         if (pool != null) {
             int count = pool.getChoiceCount();
             boolean needsUnlock = menu.canLevelUp();
-            boolean hasUnlock = !upgradeChoices.children().isEmpty() && upgradeChoices.children().getLast() instanceof LockedBar;
+            boolean hasUnlock = !upgradeChoices.children().isEmpty()
+                    && upgradeChoices.children().getLast() instanceof LockedBar;
 
             int currentSkills = upgradeChoices.children().size() - (hasUnlock ? 1 : 0);
             while (currentSkills > count) {
                 upgradeChoices.children().remove(--currentSkills);
             }
             while (currentSkills < count) {
-                upgradeChoices.children().add(currentSkills, new ChoiceBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, currentSkills, menu::getUpgradePool));
+                upgradeChoices.children()
+                        .add(currentSkills,
+                                new ChoiceBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE,
+                                        currentSkills, menu::getUpgradePool));
                 currentSkills++;
             }
 
             if (needsUnlock && !hasUnlock) {
-                upgradeChoices.children().add(new LockedBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, font, menu));
+                upgradeChoices.children()
+                        .add(new LockedBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, font,
+                                menu));
             } else if (hasUnlock && !needsUnlock) {
                 upgradeChoices.children().removeLast();
             }
@@ -136,21 +145,25 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
     private void renderSelection(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         if (menu.isAbilityItemPresent()) {
             ItemStack skillItem = menu.getAbilityItem();
-            guiGraphics.drawString(font, skillItem.getDisplayName(), this.leftPos + 52, this.topPos + 21, ChatFormatting.BLACK.getColor(), true);
-            guiGraphics.drawString(this.font, this.upgradeLabel, leftPos + UPGRADE_LABEL_X, topPos + UPGRADE_LABEL_Y, ChatFormatting.DARK_GRAY.getColor(), false);
+            guiGraphics.drawString(font, skillItem.getDisplayName(), this.leftPos + 52, this.topPos + 21,
+                    ChatFormatting.BLACK.getColor(), true);
+            guiGraphics.drawString(this.font, this.upgradeLabel, leftPos + UPGRADE_LABEL_X, topPos + UPGRADE_LABEL_Y,
+                    ChatFormatting.DARK_GRAY.getColor(), false);
         }
     }
 
     @Override
     protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+        guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth,
+                this.imageHeight, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
     }
 
     /**
      * Locked bar that can be unlocked
      */
     private static class LockedBar extends AbstractContainerWidget implements ScrollContainerEntry {
-        private static final ResourceLocation BAR_TEXTURE = WanderersOfTheRift.id("textures/gui/container/ability_bench/choice_bar.png");
+        private static final ResourceLocation BAR_TEXTURE = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/choice_bar.png");
         private static final int BORDER_Y = 4;
 
         private final UnlockButton button;
@@ -163,7 +176,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
 
         @Override
         protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            guiGraphics.blit(RenderType::guiTextured, BAR_TEXTURE, this.getX(), this.getY(), 0, 0, this.width, this.height, this.width, this.height);
+            guiGraphics.blit(RenderType::guiTextured, BAR_TEXTURE, this.getX(), this.getY(), 0, 0, this.width,
+                    this.height, this.width, this.height);
             button.setX(getX());
             button.setY(getY() + 4);
             button.render(guiGraphics, mouseX, mouseY, partialTick);
@@ -199,7 +213,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
      * A bar of N choices
      */
     private static class ChoiceBar extends AbstractContainerWidget implements ScrollContainerEntry {
-        private static final ResourceLocation BAR_TEXTURE = WanderersOfTheRift.id("textures/gui/container/ability_bench/choice_bar.png");
+        private static final ResourceLocation BAR_TEXTURE = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/choice_bar.png");
         private static final int BORDER_Y = 4;
 
         private final Supplier<AbilityUpgradePool> upgradePool;
@@ -216,7 +231,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
             int offset = (width - choices * UPGRADE_WIDTH - (choices - 1) * UPGRADE_SPACING) / 2;
 
             for (int i = 0; i < choices; i++) {
-                ChoiceButton button = new ChoiceButton(x + offset + i * (UPGRADE_WIDTH + UPGRADE_SPACING), y + BORDER_Y, choice, i, upgradePool);
+                ChoiceButton button = new ChoiceButton(x + offset + i * (UPGRADE_WIDTH + UPGRADE_SPACING), y + BORDER_Y,
+                        choice, i, upgradePool);
                 options.add(button);
             }
         }
@@ -230,7 +246,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
             while (pool.getChoiceOptions(choice).size() < options.size()) {
                 options.removeLast();
             }
-            guiGraphics.blit(RenderType::guiTextured, BAR_TEXTURE, this.getX(), this.getY(), 0, 0, this.width, this.height, this.width, this.height);
+            guiGraphics.blit(RenderType::guiTextured, BAR_TEXTURE, this.getX(), this.getY(), 0, 0, this.width,
+                    this.height, this.width, this.height);
             int offset = (width - options.size() * UPGRADE_WIDTH - (options.size() - 1) * UPGRADE_SPACING) / 2;
             for (int i = 0; i < options.size(); i++) {
                 ChoiceButton option = options.get(i);
@@ -270,10 +287,14 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
      * Button for unlocking an ability level
      */
     private static class UnlockButton extends AbstractButton {
-        private static final ResourceLocation LOCK = WanderersOfTheRift.id("textures/gui/container/ability_bench/lock.png");
-        private static final ResourceLocation LOCKED_BUTTON = WanderersOfTheRift.id("textures/gui/container/ability_bench/locked_button.png");
-        private static final ResourceLocation CHOICE_BUTTON = WanderersOfTheRift.id("textures/gui/container/ability_bench/choice_button.png");
-        private static final ResourceLocation HOVERED_CHOICE_BUTTON = WanderersOfTheRift.id("textures/gui/container/ability_bench/hovered_choice_button.png");
+        private static final ResourceLocation LOCK = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/lock.png");
+        private static final ResourceLocation LOCKED_BUTTON = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/locked_button.png");
+        private static final ResourceLocation CHOICE_BUTTON = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/choice_button.png");
+        private static final ResourceLocation HOVERED_CHOICE_BUTTON = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/hovered_choice_button.png");
 
         private final Font font;
         private final AbilityBenchMenu menu;
@@ -282,7 +303,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
             super(x, y, 20, 20, Component.empty());
             this.font = font;
             this.menu = menu;
-            this.setTooltip(Tooltip.create(Component.translatable(WanderersOfTheRift.translationId("container", "ability_bench.unlock"))));
+            this.setTooltip(Tooltip.create(
+                    Component.translatable(WanderersOfTheRift.translationId("container", "ability_bench.unlock"))));
         }
 
         @Override
@@ -309,13 +331,16 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
                 active = true;
             }
 
-            graphics.blit(RenderType::guiTextured, buttonTexture, this.getX(), this.getY(), 0, 0, this.width, this.height, this.width, this.height);
-            graphics.blit(RenderType::guiTextured, LOCK, this.getX() + 2, this.getY() + 2, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            graphics.blit(RenderType::guiTextured, buttonTexture, this.getX(), this.getY(), 0, 0, this.width,
+                    this.height, this.width, this.height);
+            graphics.blit(RenderType::guiTextured, LOCK, this.getX() + 2, this.getY() + 2, 0, 0, ICON_SIZE, ICON_SIZE,
+                    ICON_SIZE, ICON_SIZE);
 
             Component costString = Component.literal(Integer.toString(cost));
             int costX = (this.width - font.width(costString)) / 2;
             int costY = this.height - font.lineHeight - 2;
-            graphics.drawString(font, costString, this.getX() + costX, this.getY() + costY, ChatFormatting.WHITE.getColor(), true);
+            graphics.drawString(font, costString, this.getX() + costX, this.getY() + costY,
+                    ChatFormatting.WHITE.getColor(), true);
         }
 
         @Override
@@ -324,14 +349,16 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
         }
     }
 
-
     /**
      * Button for selecting a choice option
      */
     private static class ChoiceButton extends AbstractButton {
-        private static final ResourceLocation CHOICE_BUTTON = WanderersOfTheRift.id("textures/gui/container/ability_bench/choice_button.png");
-        private static final ResourceLocation SELECTED_CHOICE_BUTTON = WanderersOfTheRift.id("textures/gui/container/ability_bench/selected_choice_button.png");
-        private static final ResourceLocation HOVERED_CHOICE_BUTTON = WanderersOfTheRift.id("textures/gui/container/ability_bench/hovered_choice_button.png");
+        private static final ResourceLocation CHOICE_BUTTON = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/choice_button.png");
+        private static final ResourceLocation SELECTED_CHOICE_BUTTON = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/selected_choice_button.png");
+        private static final ResourceLocation HOVERED_CHOICE_BUTTON = WanderersOfTheRift
+                .id("textures/gui/container/ability_bench/hovered_choice_button.png");
 
         private final int choice;
         private final int selection;
@@ -366,7 +393,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
                 active = true;
             }
 
-            graphics.blit(RenderType::guiTextured, resourcelocation, this.getX(), this.getY(), 0, 0, this.width, this.height, this.width, this.height);
+            graphics.blit(RenderType::guiTextured, resourcelocation, this.getX(), this.getY(), 0, 0, this.width,
+                    this.height, this.width, this.height);
             renderIcon(graphics);
             updateTooltip();
         }
@@ -374,14 +402,18 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
         private void updateTooltip() {
             AbilityUpgradePool pool = upgradePool.get();
             AbilityUpgrade upgrade = pool.getChoiceOptions(choice).get(selection).value();
-            MutableComponent tooltipComp = Component.empty().append(upgrade.name()).append("\n").append(upgrade.description());
+            MutableComponent tooltipComp = Component.empty()
+                    .append(upgrade.name())
+                    .append("\n")
+                    .append(upgrade.description());
             this.setTooltip(Tooltip.create(tooltipComp));
         }
 
         private void renderIcon(GuiGraphics guiGraphics) {
             AbilityUpgradePool pool = upgradePool.get();
             AbilityUpgrade upgrade = pool.getChoiceOptions(choice).get(selection).value();
-            guiGraphics.blit(RenderType::guiTextured, upgrade.icon(), this.getX() + (width - ICON_SIZE) / 2, this.getY() + (height - ICON_SIZE) / 2, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            guiGraphics.blit(RenderType::guiTextured, upgrade.icon(), this.getX() + (width - ICON_SIZE) / 2,
+                    this.getY() + (height - ICON_SIZE) / 2, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
 
         public boolean isSelected() {

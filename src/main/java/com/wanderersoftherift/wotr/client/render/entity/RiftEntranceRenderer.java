@@ -25,18 +25,21 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 @OnlyIn(Dist.CLIENT)
-public class RiftEntranceRenderer extends EntityRenderer<RiftPortalEntranceEntity, RiftEntranceRenderer.RiftRendererEntityState> {
+public class RiftEntranceRenderer
+        extends EntityRenderer<RiftPortalEntranceEntity, RiftEntranceRenderer.RiftRendererEntityState> {
 
     private static final ResourceLocation OUTER_RIFT_LOCATION = WanderersOfTheRift.id("textures/entity/outer_rift.png");
     private static final ResourceLocation INNER_RIFT_LOCATION = WanderersOfTheRift.id("textures/entity/inner_rift.png");
-    private static final RenderType RENDER_TYPE = RiftPortalRenderType.riftPortal(OUTER_RIFT_LOCATION, INNER_RIFT_LOCATION);
+    private static final RenderType RENDER_TYPE = RiftPortalRenderType.riftPortal(OUTER_RIFT_LOCATION,
+            INNER_RIFT_LOCATION);
 
     public RiftEntranceRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    public void render(RiftRendererEntityState state, PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+    public void render(RiftRendererEntityState state, PoseStack poseStack, @NotNull MultiBufferSource bufferSource,
+            int packedLight) {
         poseStack.pushPose();
 
         poseStack.translate(0, 0.5f * state.boundingBoxHeight, 0);
@@ -51,17 +54,16 @@ public class RiftEntranceRenderer extends EntityRenderer<RiftPortalEntranceEntit
             if (dir.lengthSquared() < 0.001f) {
                 dir = new Vector3f(1, 0, 0);
             }
-        }
-        else {
+        } else {
             dir = state.facingDir.getUnitVec3().toVector3f();
         }
-
 
         CompiledShaderProgram shader = RenderSystem.setShader(ModShaders.RIFT_PORTAL);
         if (shader != null) {
             Uniform screenSize = shader.getUniform("ScreenSize");
             if (screenSize != null) {
-                screenSize.set((float) Minecraft.getInstance().getWindow().getWidth(), (float)Minecraft.getInstance().getWindow().getHeight());
+                screenSize.set((float) Minecraft.getInstance().getWindow().getWidth(),
+                        (float) Minecraft.getInstance().getWindow().getHeight());
             }
 
             Uniform view = shader.getUniform("View");
@@ -76,17 +78,18 @@ public class RiftEntranceRenderer extends EntityRenderer<RiftPortalEntranceEntit
 
         poseStack.mulPose(new Quaternionf().lookAlong(dir, new Vector3f(0, -1, 0)));
 
-        PoseStack.Pose posestack$pose = poseStack.last();
+        PoseStack.Pose pose = poseStack.last();
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RENDER_TYPE);
-        vertex(vertexconsumer, posestack$pose, packedLight, -0.5f, -0.5f, 0.0f, 0, 1);
-        vertex(vertexconsumer, posestack$pose, packedLight, 0.5f, -0.5f, 0.0f, 1, 1);
-        vertex(vertexconsumer, posestack$pose, packedLight, 0.5f, 0.5f, 0.0f, 1, 0);
-        vertex(vertexconsumer, posestack$pose, packedLight, -0.5f, 0.5f, 0.0f, 0, 0);
+        vertex(vertexconsumer, pose, packedLight, -0.5f, -0.5f, 0.0f, 0, 1);
+        vertex(vertexconsumer, pose, packedLight, 0.5f, -0.5f, 0.0f, 1, 1);
+        vertex(vertexconsumer, pose, packedLight, 0.5f, 0.5f, 0.0f, 1, 0);
+        vertex(vertexconsumer, pose, packedLight, -0.5f, 0.5f, 0.0f, 0, 0);
         poseStack.popPose();
         super.render(state, poseStack, bufferSource, packedLight);
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z, int u, int v) {
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z,
+            int u, int v) {
         consumer.addVertex(pose, x, y, z)
                 .setColor(-1)
                 .setUv((float) u, (float) v)
@@ -100,7 +103,8 @@ public class RiftEntranceRenderer extends EntityRenderer<RiftPortalEntranceEntit
         return new RiftRendererEntityState();
     }
 
-    public void extractRenderState(@NotNull RiftPortalEntranceEntity entity, @NotNull RiftRendererEntityState state, float delta) {
+    public void extractRenderState(@NotNull RiftPortalEntranceEntity entity, @NotNull RiftRendererEntityState state,
+            float delta) {
         super.extractRenderState(entity, state, delta);
         state.facingDir = entity.getDirection();
         state.billboard = entity.isBillboard();

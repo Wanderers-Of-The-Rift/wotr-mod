@@ -29,18 +29,14 @@ public class ModAbilityProvider extends AbilityProvider {
 
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<AbstractAbility> writer) {
-        writer.accept(new StandardAbility(WanderersOfTheRift.id("heal"), ResourceLocation.parse("minecraft:textures/mob_effect/regeneration.png"), 200, 10, List.of(
-                new HealEffect(
-                        new CubeAreaTargeting(new TargetPredicate.Builder().withSentiment(EntitySentiment.NOT_FOE).build(), 2, true),
-                        Collections.emptyList(),
-                        Optional.empty(),
-                        2),
-                new SoundEffect(
-                        new SelfTargeting(new TargetPredicate.Builder().build()),
-                        Collections.emptyList(),
-                        Optional.empty(),
-                        Holder.direct(SoundEvents.SPLASH_POTION_BREAK)
-                        )
-                )));
+        writer.accept(
+                new StandardAbility(WanderersOfTheRift.id("heal"),
+                        ResourceLocation.parse("minecraft:textures/mob_effect/regeneration.png"), 200, 10,
+                        List.of(new HealEffect(new CubeAreaTargeting(
+                                new TargetPredicate.Builder().withSentiment(EntitySentiment.NOT_FOE).build(), 2, true),
+                                Collections.emptyList(), Optional.empty(), 2),
+                                new SoundEffect(new SelfTargeting(new TargetPredicate.Builder().build()),
+                                        Collections.emptyList(), Optional.empty(),
+                                        Holder.direct(SoundEvents.SPLASH_POTION_BREAK)))));
     }
 }

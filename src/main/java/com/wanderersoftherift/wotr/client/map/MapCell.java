@@ -1,8 +1,6 @@
 package com.wanderersoftherift.wotr.client.map;
 
-
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.render.MapRenderer3D;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -14,18 +12,21 @@ import static com.wanderersoftherift.wotr.client.map.Utils3D.calculateVertices;
 import static com.wanderersoftherift.wotr.client.map.Utils3D.projectPoint;
 
 /**
- * Represents a single cell in the map
- * Contains the position and type of the cell
+ * Represents a single cell in the map Contains the position and type of the cell
  */
 public class MapCell {
+    private static final float TWEEN_TUNNEL_SIZE = 0.1f;
+
     public Vector3f pos1; // should only be used for rendering,
-    private Vector3f pos2;
     // connection is 1wide tunnel between rooms
-    public EnumSet<Direction> connections = EnumSet.noneOf(Direction.class); // used for rendering, only takes action on North, East, Top
+    public EnumSet<Direction> connections = EnumSet.noneOf(Direction.class); // used for rendering, only takes action on
+    // North, East, Top
     public EnumSet<Direction> openings = EnumSet.noneOf(Direction.class); // used for cell connection solver
+
+    private Vector3f pos2;
+
     // for solver: on horizontals only one opening creates a connection regardless of the other room acceptance
     // on verticals, both rooms need to "accept" the connection
-    int x, y, z;
     private int type;
     // add rendering for connections inside here (probably), might be inside MapRoom as well
     private int effectFlags;
@@ -61,17 +62,16 @@ public class MapCell {
 
     /**
      * Adds the cube to the buffer for rendering, assumes DEBUG_LINES renderer is active
+     * 
      * @param buffer
      * @param camera
      */
-    public void renderWireframe(BufferBuilder buffer, com.wanderersoftherift.wotr.client.map.VirtualCamera camera, Vector2i mapPosition, Vector2i mapSize) {
+    public void renderWireframe(BufferBuilder buffer, com.wanderersoftherift.wotr.client.map.VirtualCamera camera,
+            Vector2i mapPosition, Vector2i mapSize) {
         float[][] vertices = calculateVertices(pos1, pos2);
 
-        int[][] edges = {
-                { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 0 },
-                { 4, 5 }, { 5, 6 }, { 6, 7 }, { 7, 4 },
-                { 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 }
-        };
+        int[][] edges = { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 0 }, { 4, 5 }, { 5, 6 }, { 6, 7 }, { 7, 4 }, { 0, 4 },
+                { 1, 5 }, { 2, 6 }, { 3, 7 } };
 
         int i = 0; // i is there to just color one edge so we can maintain direction better
         for (int[] edge : edges) {
@@ -81,19 +81,15 @@ public class MapCell {
             Vector3f sProj = projectPoint(new Vector3f(start.x, start.y, start.z), camera, mapPosition, mapSize);
             Vector3f eProj = projectPoint(new Vector3f(end.x, end.y, end.z), camera, mapPosition, mapSize);
 
-            if (i==69) { // color one edge
-                buffer.addVertex(sProj.x, sProj.y, sProj.z)
-                        .setColor(1f, 0f, 0f, 1f).setUv(0.0f, 0.0f);
+            if (i == 69) { // color one edge
+                buffer.addVertex(sProj.x, sProj.y, sProj.z).setColor(1f, 0f, 0f, 1f).setUv(0.0f, 0.0f);
                 MapRenderer3D.putEffects(this.effectFlags, buffer);
-                buffer.addVertex(eProj.x, eProj.y, eProj.z)
-                        .setColor(1f, 0f, 0f, 1f).setUv(1.0f, 0.0f);
+                buffer.addVertex(eProj.x, eProj.y, eProj.z).setColor(1f, 0f, 0f, 1f).setUv(1.0f, 0.0f);
                 MapRenderer3D.putEffects(this.effectFlags, buffer);
             } else {
-                buffer.addVertex(sProj.x, sProj.y, sProj.z)
-                        .setColor(1f, 1f, 1f, 1f).setUv(0.0f, 0.0f);
+                buffer.addVertex(sProj.x, sProj.y, sProj.z).setColor(1f, 1f, 1f, 1f).setUv(0.0f, 0.0f);
                 MapRenderer3D.putEffects(this.effectFlags, buffer);
-                buffer.addVertex(eProj.x, eProj.y, eProj.z)
-                        .setColor(1f, 1f, 1f, 1f).setUv(1.0f, 0.0f);
+                buffer.addVertex(eProj.x, eProj.y, eProj.z).setColor(1f, 1f, 1f, 1f).setUv(1.0f, 0.0f);
                 MapRenderer3D.putEffects(this.effectFlags, buffer);
             }
             i++;
@@ -102,19 +98,20 @@ public class MapCell {
 
     /**
      * Adds the cube to the buffer for rendering, assumes QUADS renderer is active
+     * 
      * @param buffer
      * @param camera
      */
-    public void renderCube(BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition, Vector2i mapSize) {
+    public void renderCube(BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition,
+            Vector2i mapSize) {
         float[][] vertices = calculateVertices(pos1, pos2);
 
-        int[][] faces = {
-                {0, 1, 2, 3}, // bottom
-                {7, 6, 5, 4}, // top
-                {4, 5, 1, 0}, // front
-                {6, 7, 3, 2}, // back
-                {0, 3, 7, 4}, // left
-                {5, 6, 2, 1}  // right
+        int[][] faces = { { 0, 1, 2, 3 }, // bottom
+                { 7, 6, 5, 4 }, // top
+                { 4, 5, 1, 0 }, // front
+                { 6, 7, 3, 2 }, // back
+                { 0, 3, 7, 4 }, // left
+                { 5, 6, 2, 1 } // right
         };
 
         for (int[] face : faces) {
@@ -139,22 +136,24 @@ public class MapCell {
         }
     }
 
-    private final float TWEEN_TUNNEL_SIZE = 0.1f;
-    public void renderEastConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition, Vector2i mapSize) {
+    public void renderEastConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color,
+            Vector2i mapPosition, Vector2i mapSize) {
         float cellSize = 1 - length;
         // render a connection to the north
-        Vector3f pp1 = new Vector3f(this.pos1.x + cellSize, this.pos1.y + cellSize/2- this.TWEEN_TUNNEL_SIZE, this.pos1.z+cellSize/2-this.TWEEN_TUNNEL_SIZE);
-        Vector3f pp2 = new Vector3f(this.pos1.x + cellSize + length, this.pos1.y + cellSize/2 + this.TWEEN_TUNNEL_SIZE, this.pos1.z + cellSize/2 + this.TWEEN_TUNNEL_SIZE);
+        Vector3f pp1 = new Vector3f(this.pos1.x + cellSize, this.pos1.y + cellSize / 2 - this.TWEEN_TUNNEL_SIZE,
+                this.pos1.z + cellSize / 2 - this.TWEEN_TUNNEL_SIZE);
+        Vector3f pp2 = new Vector3f(this.pos1.x + cellSize + length,
+                this.pos1.y + cellSize / 2 + this.TWEEN_TUNNEL_SIZE,
+                this.pos1.z + cellSize / 2 + this.TWEEN_TUNNEL_SIZE);
 
         float[][] vertices = calculateVertices(pp1, pp2);
 
-        int[][] faces = {
-                {0, 1, 2, 3}, // bottom
-                {7, 6, 5, 4}, // top
-                {4, 5, 1, 0}, // front
-                {6, 7, 3, 2}, // back
-                {0, 3, 7, 4}, // left
-                {5, 6, 2, 1}  // right
+        int[][] faces = { { 0, 1, 2, 3 }, // bottom
+                { 7, 6, 5, 4 }, // top
+                { 4, 5, 1, 0 }, // front
+                { 6, 7, 3, 2 }, // back
+                { 0, 3, 7, 4 }, // left
+                { 5, 6, 2, 1 } // right
         };
 
         for (int[] face : faces) {
@@ -179,21 +178,23 @@ public class MapCell {
         }
     }
 
-    public void renderNorthConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition, Vector2i mapSize) {
+    public void renderNorthConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color,
+            Vector2i mapPosition, Vector2i mapSize) {
         float cellSize = 1 - length;
         // render a connection to the north
-        Vector3f pp1 = new Vector3f(this.pos1.x + cellSize/2 - this.TWEEN_TUNNEL_SIZE, this.pos1.y + cellSize/2- this.TWEEN_TUNNEL_SIZE, this.pos1.z+cellSize);
-        Vector3f pp2 = new Vector3f(this.pos1.x + cellSize/2 + this.TWEEN_TUNNEL_SIZE, this.pos1.y + cellSize/2 + this.TWEEN_TUNNEL_SIZE, this.pos1.z + cellSize + length);
+        Vector3f pp1 = new Vector3f(this.pos1.x + cellSize / 2 - this.TWEEN_TUNNEL_SIZE,
+                this.pos1.y + cellSize / 2 - this.TWEEN_TUNNEL_SIZE, this.pos1.z + cellSize);
+        Vector3f pp2 = new Vector3f(this.pos1.x + cellSize / 2 + this.TWEEN_TUNNEL_SIZE,
+                this.pos1.y + cellSize / 2 + this.TWEEN_TUNNEL_SIZE, this.pos1.z + cellSize + length);
 
         float[][] vertices = calculateVertices(pp1, pp2);
 
-        int[][] faces = {
-                {0, 1, 2, 3}, // bottom
-                {7, 6, 5, 4}, // top
-                {4, 5, 1, 0}, // front
-                {6, 7, 3, 2}, // back
-                {0, 3, 7, 4}, // left
-                {5, 6, 2, 1}  // right
+        int[][] faces = { { 0, 1, 2, 3 }, // bottom
+                { 7, 6, 5, 4 }, // top
+                { 4, 5, 1, 0 }, // front
+                { 6, 7, 3, 2 }, // back
+                { 0, 3, 7, 4 }, // left
+                { 5, 6, 2, 1 } // right
         };
 
         for (int[] face : faces) {

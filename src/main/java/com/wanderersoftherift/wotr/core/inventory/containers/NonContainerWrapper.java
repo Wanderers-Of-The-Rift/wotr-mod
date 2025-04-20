@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
+package com.wanderersoftherift.wotr.core.inventory.containers;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,8 @@ import java.util.Iterator;
 public final class NonContainerWrapper implements ContainerWrapper {
     public static final ContainerWrapper INSTANCE = new NonContainerWrapper();
 
-    private NonContainerWrapper() {}
+    private NonContainerWrapper() {
+    }
 
     @Override
     public void recordChanges() {

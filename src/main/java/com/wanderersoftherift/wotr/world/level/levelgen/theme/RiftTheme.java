@@ -10,17 +10,19 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> processors) {
-    public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder ->
-            builder.group(
-                    Codec.mapPair(ThemePieceType.CODEC.fieldOf("piece_type"), StructureProcessorType.LIST_CODEC.fieldOf("processors")).codec().listOf()
-                            .xmap(RiftTheme::fromPairList, RiftTheme::fromMap).fieldOf("processors").forGetter(RiftTheme::processors)
-            ).apply(builder, RiftTheme::new));
+    public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder -> builder.group(Codec
+            .mapPair(ThemePieceType.CODEC.fieldOf("piece_type"),
+                    StructureProcessorType.LIST_CODEC.fieldOf("processors"))
+            .codec()
+            .listOf()
+            .xmap(RiftTheme::fromPairList, RiftTheme::fromMap)
+            .fieldOf("processors")
+            .forGetter(RiftTheme::processors)).apply(builder, RiftTheme::new));
 
     public static final Codec<RiftTheme> DIRECT_SYNC_CODEC = Codec.unit(RiftTheme::new);
 
@@ -30,19 +32,21 @@ public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> proc
         this(Map.of());
     }
 
-    public List<StructureProcessor> getProcessors(ThemePieceType pieceType){
-        if(processors.containsKey(pieceType)) {
+    public List<StructureProcessor> getProcessors(ThemePieceType pieceType) {
+        if (processors.containsKey(pieceType)) {
             return processors.get(pieceType).value().list();
-        }else{
+        } else {
             return List.of();
         }
     }
 
-    private static Map<ThemePieceType, Holder<StructureProcessorList>> fromPairList(List<Pair<ThemePieceType, Holder<StructureProcessorList>>> pairList){
+    private static Map<ThemePieceType, Holder<StructureProcessorList>> fromPairList(
+            List<Pair<ThemePieceType, Holder<StructureProcessorList>>> pairList) {
         return pairList.stream().collect(Collectors.toUnmodifiableMap(Pair::getFirst, Pair::getSecond));
     }
 
-    private static List<Pair<ThemePieceType, Holder<StructureProcessorList>>> fromMap(Map<ThemePieceType, Holder<StructureProcessorList>> map){
+    private static List<Pair<ThemePieceType, Holder<StructureProcessorList>>> fromMap(
+            Map<ThemePieceType, Holder<StructureProcessorList>> map) {
         return map.entrySet().stream().map(entry -> new Pair<>(entry.getKey(), entry.getValue())).toList();
     }
 }

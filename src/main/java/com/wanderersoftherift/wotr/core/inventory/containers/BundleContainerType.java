@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
+package com.wanderersoftherift.wotr.core.inventory.containers;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +37,11 @@ public class BundleContainerType implements ContainerType {
 
         @Override
         public void recordChanges() {
-            containerItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(contents.stream().map(ContainerItemWrapper::getReadOnlyItemStack).filter(x -> !x.isEmpty()).toList()));
+            containerItem.set(DataComponents.BUNDLE_CONTENTS,
+                    new BundleContents(contents.stream()
+                            .map(ContainerItemWrapper::getReadOnlyItemStack)
+                            .filter(x -> !x.isEmpty())
+                            .toList()));
         }
 
         @Override

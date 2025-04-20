@@ -11,20 +11,19 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 import java.util.Optional;
 
-public class BlankEffect extends AbstractEffect{
+public class BlankEffect extends AbstractEffect {
 
-    //TODO setup healing amount as part of the codec
-    public static final MapCodec<BlankEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance).apply(instance, BlankEffect::new)
-    );
+    // TODO setup healing amount as part of the codec
+    public static final MapCodec<BlankEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, BlankEffect::new));
+
+    public BlankEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+        super(targeting, effects, particles);
+    }
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
-    }
-
-    public BlankEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
-        super(targeting, effects, particles);
     }
 
     @Override
@@ -32,15 +31,13 @@ public class BlankEffect extends AbstractEffect{
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
         applyParticlesToUser(user);
 
-        for(Entity target: targets) {
+        for (Entity target : targets) {
             applyParticlesToTarget(target);
-            //Then apply children affects to targets
+            // Then apply children affects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 
-
-        if(targets.isEmpty())
-        {
+        if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
         }
     }

@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Rift key is an item that when used on a rift spawner will generate a rift portal. It also can close an existing rift without being consumed.
+ * Rift key is an item that when used on a rift spawner will generate a rift portal. It also can close an existing rift
+ * without being consumed.
  */
 public class RiftKey extends Item {
     private static final String NAME = "item." + WanderersOfTheRift.MODID + ".rift_key.themed";
@@ -50,7 +51,8 @@ public class RiftKey extends Item {
         } else if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         } else {
-            Optional<PortalSpawnLocation> spawnLocation = spawnerBlock.getSpawnLocation(level, blockpos, context.getClickedFace());
+            Optional<PortalSpawnLocation> spawnLocation = spawnerBlock.getSpawnLocation(level, blockpos,
+                    context.getClickedFace());
             if (spawnLocation.isPresent()) {
                 PortalSpawnLocation loc = spawnLocation.get();
                 List<RiftPortalEntranceEntity> existingRifts = getExistingRifts(level, loc.position());
@@ -73,14 +75,16 @@ public class RiftKey extends Item {
     public @NotNull Component getName(ItemStack stack) {
         ResourceLocation theme = stack.get(ModDataComponentType.RIFT_THEME);
         if (theme != null) {
-            return Component.translatable(NAME, Component.translatable(EssenceValue.ESSENCE_TYPE_PREFIX + "." + theme.getNamespace() + "." + theme.getPath()));
+            return Component.translatable(NAME, Component.translatable(
+                    EssenceValue.ESSENCE_TYPE_PREFIX + "." + theme.getNamespace() + "." + theme.getPath()));
         } else {
             return super.getName(stack);
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.@NotNull TooltipContext context, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.@NotNull TooltipContext context,
+            @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         int tier = stack.getOrDefault(ModDataComponentType.RIFT_TIER, 0);
         if (tier > 0) {
             components.add(Component.translatable(TIER_TOOLTIP, tier).withColor(ChatFormatting.GRAY.getColor()));
@@ -88,7 +92,8 @@ public class RiftKey extends Item {
     }
 
     private List<RiftPortalEntranceEntity> getExistingRifts(Level level, Vec3 pos) {
-        return level.getEntities(EntityTypeTest.forClass(RiftPortalEntranceEntity.class), new AABB(BlockPos.containing(pos)), x -> true);
+        return level.getEntities(EntityTypeTest.forClass(RiftPortalEntranceEntity.class),
+                new AABB(BlockPos.containing(pos)), x -> true);
     }
 
     private void spawnRift(Level level, Vec3 pos, Direction dir, ItemStack riftKey) {

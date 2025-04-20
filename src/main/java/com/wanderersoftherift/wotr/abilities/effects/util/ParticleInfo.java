@@ -7,16 +7,14 @@ import net.minecraft.core.particles.ParticleTypes;
 
 import java.util.Optional;
 
-public record ParticleInfo(
-        Optional<ParticleOptions> userParticle,
-        Optional<ParticleOptions> targetParticle,
+public record ParticleInfo(Optional<ParticleOptions> userParticle, Optional<ParticleOptions> targetParticle,
         Optional<ParticleOptions> targetBlockParticle) {
 
-    public static final MapCodec<ParticleInfo> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            instance.group(
-                    ParticleTypes.CODEC.optionalFieldOf("user").forGetter(ParticleInfo::userParticle),
-                    ParticleTypes.CODEC.optionalFieldOf("target").forGetter(ParticleInfo::targetParticle),
-                    ParticleTypes.CODEC.optionalFieldOf("target_block").forGetter(ParticleInfo::targetBlockParticle)
-            ).apply(instance, ParticleInfo::new)
-    );
+    public static final MapCodec<ParticleInfo> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance
+                    .group(ParticleTypes.CODEC.optionalFieldOf("user").forGetter(ParticleInfo::userParticle),
+                            ParticleTypes.CODEC.optionalFieldOf("target").forGetter(ParticleInfo::targetParticle),
+                            ParticleTypes.CODEC.optionalFieldOf("target_block")
+                                    .forGetter(ParticleInfo::targetBlockParticle))
+                    .apply(instance, ParticleInfo::new));
 }

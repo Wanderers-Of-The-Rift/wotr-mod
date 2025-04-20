@@ -34,17 +34,19 @@ import java.util.List;
  */
 public class AbilityBenchMenu extends AbstractContainerMenu {
     private static final int INPUT_SLOTS = 2;
-    private final static int PLAYER_INVENTORY_SLOTS = 3 * 9;
-    private final static int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
+    private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
+    private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
 
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, new ItemStackHandler(AbilitySlots.ABILITY_BAR_SIZE));
+        this(containerId, playerInventory, ContainerLevelAccess.NULL,
+                new ItemStackHandler(AbilitySlots.ABILITY_BAR_SIZE));
     }
 
-    public AbilityBenchMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, IItemHandler abilities) {
+    public AbilityBenchMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
+            IItemHandler abilities) {
         super(ModMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
         this.access = access;
         this.inputContainer = new SimpleContainer(INPUT_SLOTS);
@@ -76,7 +78,8 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 RegistryAccess registryAccess = level.registryAccess();
 
                 AbilityUpgradePool upgradePool = new AbilityUpgradePool.Mutable()
-                        .generateChoices(registryAccess, ability.value(), 3, level.random, AbilityUpgradePool.SELECTION_PER_LEVEL)
+                        .generateChoices(registryAccess, ability.value(), 3, level.random,
+                                AbilityUpgradePool.SELECTION_PER_LEVEL)
                         .toImmutable();
                 item.set(ModDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
             }
@@ -163,7 +166,11 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 return;
             }
             inputContainer.getItem(1).shrink(cost);
-            getAbilityItem().set(ModDataComponentType.ABILITY_UPGRADE_POOL, pool.getMutable().generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(), AbilityUpgradePool.SELECTION_PER_LEVEL).toImmutable());
+            getAbilityItem().set(ModDataComponentType.ABILITY_UPGRADE_POOL,
+                    pool.getMutable()
+                            .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
+                                    AbilityUpgradePool.SELECTION_PER_LEVEL)
+                            .toImmutable());
         });
     }
 
@@ -198,7 +205,9 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
                 AbilityUpgradePool.Mutable mutable = pool.getMutable();
                 mutable.selectChoice(choice, selection);
-                DataComponentPatch patch = DataComponentPatch.builder().set(ModDataComponentType.ABILITY_UPGRADE_POOL.get(), mutable.toImmutable()).build();
+                DataComponentPatch patch = DataComponentPatch.builder()
+                        .set(ModDataComponentType.ABILITY_UPGRADE_POOL.get(), mutable.toImmutable())
+                        .build();
                 getAbilityItem().applyComponents(patch);
             }
         });
@@ -227,7 +236,8 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
         ItemStack slotStack = slot.getItem();
         ItemStack resultStack = slotStack.copy();
         if (slot instanceof AbilitySlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_SLOTS, INPUT_SLOTS + PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, false)) {
+            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_SLOTS,
+                    INPUT_SLOTS + PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, false)) {
                 if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, true)) {
                     return ItemStack.EMPTY;
                 }
@@ -239,11 +249,12 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             }
             slot.onQuickCraft(slotStack, resultStack);
         } else if (index < INPUT_SLOTS + PLAYER_SLOTS) {
-            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false)
-                    && !this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_SLOTS, PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, true)) {
+            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false) && !this.moveItemStackTo(slotStack,
+                    INPUT_SLOTS + PLAYER_SLOTS, PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, true)) {
                 // Move from player inventory to hotbar
                 if (index < INPUT_SLOTS + PLAYER_INVENTORY_SLOTS) {
-                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_INVENTORY_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, false)) {
+                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_INVENTORY_SLOTS,
+                            INPUT_SLOTS + PLAYER_SLOTS, false)) {
                         return ItemStack.EMPTY;
                     }
                 }

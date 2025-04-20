@@ -3,6 +3,8 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'net.neoforged.moddev' version '2.0.77'
+    id 'com.diffplug.spotless' version '7.0.2'
+    id 'checkstyle'
 }
 
 version = mod_version
@@ -171,6 +173,40 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 // To avoid having to run "generateModMetadata" manually, make it run on every project reload
 neoForge.ideSyncTask generateModMetadata
+
+spotless {
+    java {
+        toggleOffOn()
+        cleanthat()
+                .sourceCompatibility('1.21.0')
+                .addMutator('SafeAndConsensual')
+                .addMutator('SafeButNotConsensual')
+        importOrder('', 'javax|java', '\\#')
+        removeUnusedImports()
+        // apply a specific flavor of google-java-format
+        eclipse('4.35')
+                .configFile("config/spotless/formatter.xml")
+        // fix formatting of type annotations
+        formatAnnotations()
+        // make sure every file has the following copyright header.
+        // optionally, Spotless can set copyright years by digging
+        // through git history (see "license" section below)
+        // licenseHeader '/* (C)$YEAR */'
+    }
+    format 'misc', {
+        // define the files to apply `misc` to
+        target '*.gradle', '.gitattributes', '.gitignore'
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        leadingTabsToSpaces()
+        endWithNewline()
+    }
+}
+
+checkstyle {
+    toolVersion = '10.23.0'
+}
 
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {

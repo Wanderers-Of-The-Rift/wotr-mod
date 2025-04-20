@@ -21,19 +21,32 @@ public record ModLootBoxLootTableProvider(HolderLookup.Provider registries) impl
 
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
         consumer.accept(getResourceKey("loot_box/runegem_geode"),
-                LootTable.lootTable().
-                        withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(70).apply(RunegemsFunction.setTier(RunegemTier.RAW)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(40).apply(RunegemsFunction.setTier(RunegemTier.SHAPED)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(20).apply(RunegemsFunction.setTier(RunegemTier.CUT)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(10).apply(RunegemsFunction.setTier(RunegemTier.POLISHED)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(5).apply(RunegemsFunction.setTier(RunegemTier.FRAMED)))
-                                .add(LootItem.lootTableItem(ModItems.RUNEGEM).setWeight(1).apply(RunegemsFunction.setTier(RunegemTier.UNIQUE)))
-                        ));
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM)
+                                        .setWeight(70)
+                                        .apply(RunegemsFunction.setTier(RunegemTier.RAW)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM)
+                                        .setWeight(40)
+                                        .apply(RunegemsFunction.setTier(RunegemTier.SHAPED)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM)
+                                        .setWeight(20)
+                                        .apply(RunegemsFunction.setTier(RunegemTier.CUT)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM)
+                                        .setWeight(10)
+                                        .apply(RunegemsFunction.setTier(RunegemTier.POLISHED)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM)
+                                        .setWeight(5)
+                                        .apply(RunegemsFunction.setTier(RunegemTier.FRAMED)))
+                                .add(LootItem.lootTableItem(ModItems.RUNEGEM)
+                                        .setWeight(1)
+                                        .apply(RunegemsFunction.setTier(RunegemTier.UNIQUE)))));
     }
 
     private static @NotNull ResourceKey<LootTable> getResourceKey(String path) {
-        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, path));
+        return ResourceKey.create(Registries.LOOT_TABLE,
+                ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, path));
     }
 
     public HolderLookup.Provider registries() {

@@ -17,17 +17,16 @@ import java.util.Set;
 
 public class TargetEffect extends AbstractEffect {
 
-    public static final MapCodec<TargetEffect> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            AbstractEffect.commonFields(instance).apply(instance, TargetEffect::new)
-    );
+    public static final MapCodec<TargetEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, TargetEffect::new));
+
+    public TargetEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+        super(targeting, effects, particles);
+    }
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
-    }
-
-    public TargetEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
-        super(targeting, effects, particles);
     }
 
     @Override
@@ -36,15 +35,13 @@ public class TargetEffect extends AbstractEffect {
         applyParticlesToUser(user);
 
         WanderersOfTheRift.LOGGER.info("Targetting: " + targets.size());
-        for(Entity target: targets) {
+        for (Entity target : targets) {
             applyParticlesToTarget(target);
-            //Then apply children effects to targets
+            // Then apply children effects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 
-
-        if(targets.isEmpty())
-        {
+        if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
         }
     }

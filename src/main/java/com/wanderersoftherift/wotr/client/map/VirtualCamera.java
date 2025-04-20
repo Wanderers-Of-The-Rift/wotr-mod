@@ -4,8 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 /**
- * Virtual Camera class for RiftMap 3D renderer
- * Holds position and rotation of the camera and provides view and projection matrix for rendering
+ * Virtual Camera class for RiftMap 3D renderer Holds position and rotation of the camera and provides view and
+ * projection matrix for rendering
  */
 public class VirtualCamera {
     private Vector3f position, originPos;
@@ -50,22 +50,26 @@ public class VirtualCamera {
     }
 
     /**
-     * Positions the camera on a sphere of radius around the origin
-     * and orients it so that it always looks at (0,0,0).
+     * Positions the camera on a sphere of radius around the origin and orients it so that it always looks at (0,0,0).
      *
-     * @param orbitPitch  the vertical orbit angle in degrees (elevation)
-     * @param orbitYaw    the horizontal orbit angle in degrees (azimuth)
-     * @param distance    the distance from the origin
+     * @param orbitPitch the vertical orbit angle in degrees (elevation)
+     * @param orbitYaw   the horizontal orbit angle in degrees (azimuth)
+     * @param distance   the distance from the origin
      */
-    public void orbitAroundOrigin(float orbitPitch, float orbitYaw, float distance, float targetX, float targetY, float targetZ) {
+    public void orbitAroundOrigin(float orbitPitch, float orbitYaw, float distance, float targetX, float targetY,
+            float targetZ) {
         // convert degrees to radians for computing stuffs
-        float radOrbitPitch = (float) Math.toRadians(Math.clamp(orbitPitch, -89.99, 89.99)); // float math sometimes results in parameters slightly beyond -90 and 90 which leads to weird behavior
-        float radOrbitYaw   = (float) Math.toRadians(orbitYaw);
+        float radOrbitPitch = (float) Math.toRadians(Math.clamp(orbitPitch, -89.99, 89.99)); // float math sometimes
+                                                                                             // results in parameters
+                                                                                             // slightly beyond -90 and
+                                                                                             // 90 which leads to weird
+                                                                                             // behavior
+        float radOrbitYaw = (float) Math.toRadians(orbitYaw);
 
         // calculate the camera's position on the sphere.
-        float x = targetX + distance * (float)(Math.cos(radOrbitPitch) * Math.sin(radOrbitYaw));
-        float y = targetY + distance * (float)Math.sin(radOrbitPitch);
-        float z = targetZ + distance * (float)(Math.cos(radOrbitPitch) * Math.cos(radOrbitYaw));
+        float x = targetX + distance * (float) (Math.cos(radOrbitPitch) * Math.sin(radOrbitYaw));
+        float y = targetY + distance * (float) Math.sin(radOrbitPitch);
+        float z = targetZ + distance * (float) (Math.cos(radOrbitPitch) * Math.cos(radOrbitYaw));
 
         // update the position
         setPosition(x, y, z);
@@ -100,14 +104,16 @@ public class VirtualCamera {
 
     /**
      * Prepares and returns the View Matrix of the virtual camera
+     * 
      * @return
      */
     public Matrix4f getViewMatrix() {
-       return this.viewMatrix;
+        return this.viewMatrix;
     }
 
     /**
      * Prepares and returns the Projection Matrix of the virtual camera
+     * 
      * @return
      */
     public Matrix4f getProjectionMatrix() {

@@ -24,12 +24,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * AttachedEffectData is an attachment that allows effects to be attached to an entity.
- * They persist until their caster is no longer available or their ContinueEffectPredicate returns false.
- * They will trigger whenever their TriggerPredicate is true. *
+ * AttachedEffectData is an attachment that allows effects to be attached to an entity. They persist until their caster
+ * is no longer available or their ContinueEffectPredicate returns false. They will trigger whenever their
+ * TriggerPredicate is true. *
  */
 public class AttachedEffectData {
-    public static final Codec<AttachedEffectData> CODEC = AttachedEffect.CODEC.listOf().xmap(AttachedEffectData::new, x -> x.effects);
+    public static final Codec<AttachedEffectData> CODEC = AttachedEffect.CODEC.listOf()
+            .xmap(AttachedEffectData::new, x -> x.effects);
 
     private final List<AttachedEffect> effects;
 
@@ -43,8 +44,9 @@ public class AttachedEffectData {
 
     /**
      * Ticks all effects, and removes expired effect markers.
+     * 
      * @param attachedTo The entity this data is attached to
-     * @param level The level the entity is within
+     * @param level      The level the entity is within
      */
     public void tick(LivingEntity attachedTo, ServerLevel level) {
         List<AttachedEffect> removedEffects = tickEffects(attachedTo, level);
@@ -84,14 +86,19 @@ public class AttachedEffectData {
     }
 
     private int getRemainingDuration(Holder<EffectMarker> display) {
-        return effects.stream().filter(x -> display.equals(x.attachEffect.getDisplay().orElse(null))).mapToInt(AttachedEffect::getRemainingDuration).max().orElse(0);
+        return effects.stream()
+                .filter(x -> display.equals(x.attachEffect.getDisplay().orElse(null)))
+                .mapToInt(AttachedEffect::getRemainingDuration)
+                .max()
+                .orElse(0);
     }
 
     /**
      * Adds an AttachEffect.
-     * @param attachedTo The owner of this attachment
+     * 
+     * @param attachedTo   The owner of this attachment
      * @param attachEffect The effect to attach
-     * @param context The context of the effect being attached
+     * @param context      The context of the effect being attached
      */
     public void attach(LivingEntity attachedTo, AttachEffect attachEffect, AbilityContext context) {
         AttachedEffect newEffect = new AttachedEffect(attachEffect, context);
@@ -130,13 +137,13 @@ public class AttachedEffectData {
     }
 
     private static class AttachedEffect {
-        private static final Codec<AttachedEffect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                        AttachEffect.CODEC.fieldOf("attachEffect").forGetter(x -> x.attachEffect),
-                        StoredAbilityContext.CODEC.fieldOf("context").forGetter(x -> x.context),
-                        Codec.INT.fieldOf("triggeredTimes").forGetter(x -> x.triggeredTimes),
-                        Codec.INT.fieldOf("ticks").forGetter(x -> x.ticks)
-                ).apply(instance, AttachedEffect::new)
-        );
+        private static final Codec<AttachedEffect> CODEC = RecordCodecBuilder
+                .create(instance -> instance
+                        .group(AttachEffect.CODEC.fieldOf("attachEffect").forGetter(x -> x.attachEffect),
+                                StoredAbilityContext.CODEC.fieldOf("context").forGetter(x -> x.context),
+                                Codec.INT.fieldOf("triggeredTimes").forGetter(x -> x.triggeredTimes),
+                                Codec.INT.fieldOf("ticks").forGetter(x -> x.ticks))
+                        .apply(instance, AttachedEffect::new));
 
         private final AttachEffect attachEffect;
         private final StoredAbilityContext context;
@@ -159,8 +166,9 @@ public class AttachedEffectData {
 
         /**
          * Ticks this attached effect
+         * 
          * @param attachedTo The entity it is attached to
-         * @param level The level it is within
+         * @param level      The level it is within
          * @return Whether this effect has expired and should be removed
          */
         public boolean tick(Entity attachedTo, ServerLevel level) {
@@ -172,7 +180,8 @@ public class AttachedEffectData {
                 AbilityContext triggerContext = context.toContext(getCaster(level));
                 triggerContext.enableModifiers();
                 try {
-                    attachEffect.getEffects().forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
+                    attachEffect.getEffects()
+                            .forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
                 } finally {
                     triggerContext.disableModifiers();
                 }
@@ -184,7 +193,11 @@ public class AttachedEffectData {
 
         public LivingEntity getCaster(ServerLevel level) {
             if (cachedCaster != null) {
-                return cachedCaster.isRemoved() ? null : cachedCaster;
+                if (cachedCaster.isRemoved()) {
+                    return null;
+                } else {
+                    return cachedCaster;
+                }
             }
             if (level.getEntity(context.getCasterId()) instanceof LivingEntity casterEntity) {
                 cachedCaster = casterEntity;

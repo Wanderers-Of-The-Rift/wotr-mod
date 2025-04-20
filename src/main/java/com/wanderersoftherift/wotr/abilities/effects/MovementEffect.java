@@ -18,20 +18,22 @@ import java.util.List;
 import java.util.Optional;
 
 public class MovementEffect extends AbstractEffect {
+    public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity))
+                    .and(RelativeFrame.CODEC.optionalFieldOf("relativeFrame", RelativeFrame.TARGET_FACING)
+                            .forGetter(MovementEffect::getRelativeFrame))
+                    .apply(instance, MovementEffect::new));
+
     private final Vec3 velocity;
     private final RelativeFrame relativeFrame;
 
-    public MovementEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles, Vec3 velocity, RelativeFrame relativeFrame) {
+    public MovementEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            Vec3 velocity, RelativeFrame relativeFrame) {
         super(targeting, effects, particles);
         this.velocity = velocity;
         this.relativeFrame = relativeFrame;
     }
-
-    public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbstractEffect
-            .commonFields(instance)
-            .and(Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity))
-            .and(RelativeFrame.CODEC.optionalFieldOf("relativeFrame", RelativeFrame.TARGET_FACING).forGetter(MovementEffect::getRelativeFrame))
-            .apply(instance, MovementEffect::new));
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
@@ -46,9 +48,9 @@ public class MovementEffect extends AbstractEffect {
 
         for (Entity target : targets) {
             applyParticlesToTarget(target);
-            //TODO look into implementing scaling still
+            // TODO look into implementing scaling still
 
-            //TODO look into relative vs directional
+            // TODO look into relative vs directional
             Vec3 relativeVelocity = relativeFrame.apply(velocity, user, target);
             target.setDeltaMovement(target.getDeltaMovement().add(relativeVelocity));
 
@@ -58,14 +60,13 @@ public class MovementEffect extends AbstractEffect {
             }
 
             if (target instanceof Player player) {
-                //This is the secret sauce to making the movement work for players
+                // This is the secret sauce to making the movement work for players
                 ((ServerPlayer) player).connection.send(new ClientboundSetEntityMotionPacket(player));
             }
 
-            //Then apply children affects to targets
+            // Then apply children affects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
         }
-
 
         if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
