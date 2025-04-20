@@ -39,10 +39,11 @@ public class DittoBlockEntityRenderer implements BlockEntityRenderer<DittoBlockE
         if ((blockEntity.getTheItem().getItem() instanceof BlockItem)
                 && blockEntity.getTheItem().getItem() != dittoBlock.getBlock().asItem()) {
             BlockState blockstate = ((BlockItem) blockEntity.getTheItem().getItem()).getBlock().defaultBlockState();
-            if (blockEntity.getLevel() == null) return;
-            int i;
-            i = OverlayTexture.pack(OverlayTexture.u(0.15F), 10);
-            this.dispatcher.renderSingleBlock(blockstate, stack, bufferSource, packedLight, i);
+            if (blockEntity.getLevel() == null) {
+                return;
+            }
+            int packedUV = OverlayTexture.pack(OverlayTexture.u(0.15F), 10);
+            this.dispatcher.renderSingleBlock(blockstate, stack, bufferSource, packedLight, packedUV);
         } else {
             this.dispatcher.getModelRenderer()
                     .tesselateBlock(blockEntity.getLevel(), dispatcher.getBlockModel(blockEntity.getBlockState()),

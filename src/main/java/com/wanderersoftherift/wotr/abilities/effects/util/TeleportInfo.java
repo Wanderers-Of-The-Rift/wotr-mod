@@ -14,14 +14,21 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 
 public class TeleportInfo {
-    private final TeleportTarget target;
-    private final Vec3 position;
-    private final Optional<Boolean> isRelative;
     public static final MapCodec<TeleportInfo> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(TeleportTarget.CODEC.fieldOf("teleport_target").forGetter(TeleportInfo::getTarget),
                     Vec3.CODEC.fieldOf("position").forGetter(TeleportInfo::getPosition),
                     Codec.BOOL.optionalFieldOf("relative").forGetter(TeleportInfo::isRelative))
             .apply(instance, TeleportInfo::new));
+
+    private final TeleportTarget target;
+    private final Vec3 position;
+    private final Optional<Boolean> isRelative;
+
+    public TeleportInfo(TeleportTarget target, Vec3 position, Optional<Boolean> isRelative) {
+        this.target = target;
+        this.position = position;
+        this.isRelative = isRelative;
+    }
 
     public Optional<Boolean> isRelative() {
         return this.isRelative;
@@ -33,12 +40,6 @@ public class TeleportInfo {
 
     public TeleportTarget getTarget() {
         return this.target;
-    }
-
-    public TeleportInfo(TeleportTarget target, Vec3 position, Optional<Boolean> isRelative) {
-        this.target = target;
-        this.position = position;
-        this.isRelative = isRelative;
     }
 
     public enum TeleportTarget implements StringRepresentable {

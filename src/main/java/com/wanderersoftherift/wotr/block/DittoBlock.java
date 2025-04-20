@@ -34,13 +34,13 @@ public class DittoBlock extends BaseEntityBlock {
     public static final MapCodec<DittoBlock> CODEC = simpleCodec(DittoBlock::new);
     public static final BooleanProperty HAS_ITEM = BooleanProperty.create("has_item");
 
-    public MapCodec<DittoBlock> codec() {
-        return CODEC;
-    }
-
     public DittoBlock(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(HAS_ITEM, false));
+    }
+
+    public MapCodec<DittoBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -51,9 +51,13 @@ public class DittoBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hitResult) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (!(blockEntity instanceof DittoBlockEntity dittoBlockEntity)) return InteractionResult.PASS;
+        if (!(blockEntity instanceof DittoBlockEntity dittoBlockEntity)) {
+            return InteractionResult.PASS;
+        }
 
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
 
         ItemStack itemInBlock = dittoBlockEntity.getTheItem();
         if (itemInBlock.isEmpty()) {

@@ -25,13 +25,13 @@ public class DeferrableRegistryCodec<E> implements Codec<Holder<E>> {
     private final ResourceKey<? extends Registry<E>> registryKey;
     private final RegistryFixedCodec<E> registryCodec;
 
-    public static <T> DeferrableRegistryCodec<T> create(ResourceKey<? extends Registry<T>> registryKey) {
-        return new DeferrableRegistryCodec<>(registryKey);
-    }
-
     private DeferrableRegistryCodec(ResourceKey<? extends Registry<E>> registryKey) {
         this.registryKey = registryKey;
         this.registryCodec = RegistryFixedCodec.create(registryKey);
+    }
+
+    public static <T> DeferrableRegistryCodec<T> create(ResourceKey<? extends Registry<T>> registryKey) {
+        return new DeferrableRegistryCodec<>(registryKey);
     }
 
     public <T> DataResult<T> encode(Holder<E> holder, DynamicOps<T> ops, T value) {

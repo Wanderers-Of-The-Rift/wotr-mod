@@ -33,6 +33,12 @@ public class RiftData extends SavedData { // TODO: split this
     private BlockPos portalPos;
     private final List<UUID> players;
 
+    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
+        this.portalDimension = Objects.requireNonNull(portalDimension);
+        this.portalPos = Objects.requireNonNull(portalPos);
+        this.players = new ArrayList<>(Objects.requireNonNull(players));
+    }
+
     public static boolean isRift(ServerLevel level) {
         Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
         Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
@@ -51,12 +57,6 @@ public class RiftData extends SavedData { // TODO: split this
 
     private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of()), RiftData::load);
-    }
-
-    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
-        this.portalDimension = Objects.requireNonNull(portalDimension);
-        this.portalPos = Objects.requireNonNull(portalPos);
-        this.players = new ArrayList<>(Objects.requireNonNull(players));
     }
 
     private static RiftData load(CompoundTag tag, HolderLookup.Provider registries) {

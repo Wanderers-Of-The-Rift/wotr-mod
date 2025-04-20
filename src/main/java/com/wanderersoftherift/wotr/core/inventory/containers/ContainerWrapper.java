@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
+package com.wanderersoftherift.wotr.core.inventory.containers;
 
 /**
  * Wrapper for a container. Provides iteration over its contents and any direct methods. For some containers, changes

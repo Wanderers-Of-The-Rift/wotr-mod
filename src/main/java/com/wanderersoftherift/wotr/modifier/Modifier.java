@@ -20,7 +20,7 @@ import java.util.List;
 import static com.wanderersoftherift.wotr.init.ModModifiers.MODIFIER_KEY;
 
 public class Modifier {
-    public static Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.INT.fieldOf("tier").forGetter(Modifier::getTier),
             AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects))
             .apply(inst, Modifier::new));

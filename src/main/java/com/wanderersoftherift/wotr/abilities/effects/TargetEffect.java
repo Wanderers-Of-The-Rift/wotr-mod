@@ -20,13 +20,13 @@ public class TargetEffect extends AbstractEffect {
     public static final MapCodec<TargetEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, TargetEffect::new));
 
+    public TargetEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+        super(targeting, effects, particles);
+    }
+
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
-    }
-
-    public TargetEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
-        super(targeting, effects, particles);
     }
 
     @Override

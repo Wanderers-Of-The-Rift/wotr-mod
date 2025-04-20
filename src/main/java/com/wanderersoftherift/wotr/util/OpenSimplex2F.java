@@ -9,6 +9,7 @@ package com.wanderersoftherift.wotr.util;
  *
  * Multiple versions of each function are provided. See the documentation above each, for more info.
  */
+@SuppressWarnings({ "checkstyle:NeedBraces", "checkstyle:MethodName", "checkstyle:DeclarationOrder" })
 public class OpenSimplex2F {
 
     private static final int PSIZE = 2048;

@@ -34,12 +34,12 @@ public record SimpleProjectileConfig(SimpleProjectileConfigRenderConfig renderCo
                                 ResourceLocation.CODEC.fieldOf("animations")
                                         .forGetter(SimpleProjectileConfigRenderConfig::animationResource))
                         .apply(instance, SimpleProjectileConfigRenderConfig::new));
-        public static StreamCodec<RegistryFriendlyByteBuf, SimpleProjectileConfigRenderConfig> STREAM_CODEC = StreamCodec
+        public static final StreamCodec<RegistryFriendlyByteBuf, SimpleProjectileConfigRenderConfig> STREAM_CODEC = StreamCodec
                 .composite(ResourceLocation.STREAM_CODEC, SimpleProjectileConfigRenderConfig::modelResource,
                         ResourceLocation.STREAM_CODEC, SimpleProjectileConfigRenderConfig::textureResource,
                         ResourceLocation.STREAM_CODEC, SimpleProjectileConfigRenderConfig::animationResource,
                         SimpleProjectileConfigRenderConfig::new);
-        public static SimpleProjectileConfigRenderConfig DEFAULT = new SimpleProjectileConfigRenderConfig(
+        public static final SimpleProjectileConfigRenderConfig DEFAULT = new SimpleProjectileConfigRenderConfig(
                 WanderersOfTheRift.id("geo/ability/fireball.geo.json"),
                 WanderersOfTheRift.id("textures/ability/fireball.png"),
                 WanderersOfTheRift.id("animations/ability/fireball.animations.json"));

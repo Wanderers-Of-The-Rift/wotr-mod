@@ -14,25 +14,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class TeleportEffect extends AbstractEffect {
-    TeleportInfo teleInfo;
-
-    // TODO look into handling different types of teleports and better handle relative motion
-    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
-
     public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbstractEffect.commonFields(instance)
                     .and(TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::getTeleportInfo))
                     .apply(instance, TeleportEffect::new));
 
-    @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
-        return CODEC;
-    }
+    private TeleportInfo teleInfo;
+
+    // TODO look into handling different types of teleports and better handle relative motion
+    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
     public TeleportEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
             TeleportInfo teleInfo) {
         super(targeting, effects, particles);
         this.teleInfo = teleInfo;
+    }
+
+    @Override
+    public MapCodec<? extends AbstractEffect> getCodec() {
+        return CODEC;
     }
 
     public TeleportInfo getTeleportInfo() {

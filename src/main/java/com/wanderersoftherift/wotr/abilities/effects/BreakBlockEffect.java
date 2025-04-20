@@ -13,13 +13,13 @@ import java.util.Optional;
 
 public class BreakBlockEffect extends AbstractEffect {
 
+    public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, BreakBlockEffect::new));
+
     public BreakBlockEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
             Optional<ParticleInfo> particles) {
         super(targeting, effects, particles);
     }
-
-    public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, BreakBlockEffect::new));
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {

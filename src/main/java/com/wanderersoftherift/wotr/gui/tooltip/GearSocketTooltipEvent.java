@@ -31,10 +31,14 @@ public class GearSocketTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.GEAR_SOCKETS)) return;
+        if (!stack.has(ModDataComponentType.GEAR_SOCKETS)) {
+            return;
+        }
 
         GearSockets sockets = stack.get(ModDataComponentType.GEAR_SOCKETS);
-        if (sockets == null) return;
+        if (sockets == null) {
+            return;
+        }
         List<GearSocket> socketList = sockets.sockets();
 
         List<TooltipComponent> toAdd = new ArrayList<>();

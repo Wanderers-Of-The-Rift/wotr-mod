@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.RetainInventorySnapshotIdLootModifier;
+import com.wanderersoftherift.wotr.core.inventory.snapshot.RetainInventorySnapshotIdLootModifier;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;

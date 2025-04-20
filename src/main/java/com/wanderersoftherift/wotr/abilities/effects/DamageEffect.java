@@ -22,6 +22,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class DamageEffect extends AbstractEffect {
+    public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(instance.group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),
+                            DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::getDamageTypeKey)))
+                    .apply(instance, DamageEffect::new));
+
     private float damageAmount = 0;
     private final Holder<DamageType> damageTypeKey;
 
@@ -31,12 +37,6 @@ public class DamageEffect extends AbstractEffect {
         this.damageAmount = amount;
         this.damageTypeKey = damageTypeKey;
     }
-
-    public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
-                    .and(instance.group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),
-                            DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::getDamageTypeKey)))
-                    .apply(instance, DamageEffect::new));
 
     private Holder<DamageType> getDamageTypeKey() {
         return damageTypeKey;

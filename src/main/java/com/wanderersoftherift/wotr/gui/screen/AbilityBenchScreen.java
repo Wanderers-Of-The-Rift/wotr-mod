@@ -49,7 +49,7 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
     private static final int UPGRADE_WIDTH = 20;
     private static final int UPGRADE_SPACING = 8;
     private static final int BORDER_X = 24;
-    public static final int ICON_SIZE = 16;
+    private static final int ICON_SIZE = 16;
 
     private final Component upgradeLabel = Component
             .translatable(WanderersOfTheRift.translationId("container", "ability_bench.upgrade"));

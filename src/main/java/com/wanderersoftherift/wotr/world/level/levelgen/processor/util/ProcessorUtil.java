@@ -43,6 +43,26 @@ import static net.minecraft.world.level.block.Blocks.JIGSAW;
 public class ProcessorUtil {
     public static final String NBT_FINAL_STATE = "final_state";
 
+    private static final LoadingCache<TagKey<Item>, List<Block>> ITEM_TAG_BLOCK_CACHE = CacheBuilder.newBuilder()
+            .maximumSize(5)
+            .build(new CacheLoader<>() {
+                @Override
+                public List<Block> load(TagKey<Item> tagKey) {
+                    return getBlocksFromItemTag(tagKey);
+                }
+            });
+
+    private static final LoadingCache<TagKey<Block>, List<Block>> BLOCK_TAG_BLOCK_CACHE = CacheBuilder.newBuilder()
+            .maximumSize(5)
+            .build(new CacheLoader<>() {
+                @Override
+                public List<Block> load(TagKey<Block> tagKey) {
+                    return getBlocksFromBlockTag(tagKey);
+                }
+            });
+
+    private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
+
     public static RandomSource getRandom(StructureRandomType type, BlockPos blockPos, BlockPos piecePos,
             BlockPos structurePos, LevelReader world, long processorSeed) {
         RandomSource randomSource = RandomSource
@@ -68,8 +88,6 @@ public class ProcessorUtil {
             return Mth.getSeed(pos) + processorSeed;
         }
     }
-
-    private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
 
     public static RandomSource getRandom(StructureRandomType type, BlockPos blockPos, BlockPos piecePos,
             BlockPos structurePos, LevelReader world, Optional<Long> processorSeed) {
@@ -108,15 +126,6 @@ public class ProcessorUtil {
         return Blocks.AIR;
     }
 
-    private static final LoadingCache<TagKey<Item>, List<Block>> ITEM_TAG_BLOCK_CACHE = CacheBuilder.newBuilder()
-            .maximumSize(5)
-            .build(new CacheLoader<>() {
-                @Override
-                public List<Block> load(TagKey<Item> tagKey) {
-                    return getBlocksFromItemTag(tagKey);
-                }
-            });
-
     public static List<Block> getBlocksFromItemTag(TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.get(tag)
                 .map(it -> it.stream()
@@ -126,15 +135,6 @@ public class ProcessorUtil {
                         .toList())
                 .orElseGet(List::of);
     }
-
-    private static final LoadingCache<TagKey<Block>, List<Block>> BLOCK_TAG_BLOCK_CACHE = CacheBuilder.newBuilder()
-            .maximumSize(5)
-            .build(new CacheLoader<>() {
-                @Override
-                public List<Block> load(TagKey<Block> tagKey) {
-                    return getBlocksFromBlockTag(tagKey);
-                }
-            });
 
     public static List<Block> getBlocksFromBlockTag(TagKey<Block> tag) {
         return BuiltInRegistries.BLOCK.get(tag).map(it -> it.stream().map(Holder::value).toList()).orElseGet(List::of);
@@ -209,7 +209,9 @@ public class ProcessorUtil {
     }
 
     public static boolean isFaceFull(StructureTemplate.StructureBlockInfo blockinfo, Direction direction) {
-        if (blockinfo == null) return false;
+        if (blockinfo == null) {
+            return false;
+        }
         if (blockinfo.state().is(JIGSAW)) {
             Block block = BuiltInRegistries.BLOCK
                     .getValue(ResourceLocation.parse(blockinfo.nbt().getString(NBT_FINAL_STATE)));

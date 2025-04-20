@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.config;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SPEC;
 
     // Accessibility Settings
@@ -20,6 +19,8 @@ public class ClientConfig {
     // Rift Map Settings
     public static final ModConfigSpec.BooleanValue MOUSE_MODE;
     public static final ModConfigSpec.DoubleValue LERP_SPEED;
+
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     static {
         BUILDER.comment(" == Wotr Client Configs ==");

@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CubeAreaTargeting extends AbstractTargeting {
-    private float range = 0;
-    private boolean includeSelf = true;
-
     public static final MapCodec<CubeAreaTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).and(Codec.FLOAT.fieldOf("range").forGetter(CubeAreaTargeting::getRange))
                     .and(Codec.BOOL.optionalFieldOf("include_self", true).forGetter(CubeAreaTargeting::getIncludeSelf))
                     .apply(instance, CubeAreaTargeting::new));
+
+    private float range = 0;
+    private boolean includeSelf = true;
 
     public CubeAreaTargeting(TargetPredicate predicate, float range, boolean includeSelf) {
         super(predicate);

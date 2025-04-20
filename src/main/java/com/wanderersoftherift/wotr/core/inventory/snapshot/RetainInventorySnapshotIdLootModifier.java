@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot;
+package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

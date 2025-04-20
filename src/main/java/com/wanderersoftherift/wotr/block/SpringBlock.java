@@ -29,7 +29,9 @@ public class SpringBlock extends DittoBlock {
 
     public void launch(@NotNull Entity entity, @NotNull BlockState state) {
         entity.resetFallDistance();
-        if (entity.isShiftKeyDown()) return;
+        if (entity.isShiftKeyDown()) {
+            return;
+        }
         double delta = state.getValue(STRENGTH) * 0.1 + 0.62;
 
         entity.setDeltaMovement(entity.getDeltaMovement().add(0, delta, 0));

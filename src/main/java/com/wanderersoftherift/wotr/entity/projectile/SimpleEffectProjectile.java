@@ -74,10 +74,14 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
             .defineId(SimpleEffectProjectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<SimpleProjectileConfig.SimpleProjectileConfigRenderConfig> RENDER_CONFIG = SynchedEntityData
             .defineId(SimpleEffectProjectile.class, ModEntityDataSerializers.SIMPLE_PROJECTILE_RENDER_CONFIG.get());
-    @Nullable private BlockState lastState;
-    protected int inGroundTime;
+
     public AbstractArrow.Pickup pickup = AbstractArrow.Pickup.DISALLOWED;
     public int shakeTime;
+
+    protected int inGroundTime;
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    @Nullable private BlockState lastState;
     private int life;
     private double baseDamage = 2.0;
     private SoundEvent soundEvent = this.getDefaultHitGroundSoundEvent();
@@ -89,8 +93,8 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     private SimpleProjectileEffect effect;
     private SimpleProjectileConfig config;
 
-    public SimpleEffectProjectile(EntityType<SimpleEffectProjectile> p_331098_, Level p_331626_) {
-        super(p_331098_, p_331626_);
+    public SimpleEffectProjectile(EntityType<SimpleEffectProjectile> type, Level level) {
+        super(type, level);
     }
 
     public void setAbility(AbstractAbility ability) {
@@ -124,11 +128,11 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder p_325945_) {
-        p_325945_.define(ID_FLAGS, (byte) 0);
-        p_325945_.define(PIERCE_LEVEL, (byte) 0);
-        p_325945_.define(IN_GROUND, false);
-        p_325945_.define(RENDER_CONFIG, SimpleProjectileConfig.SimpleProjectileConfigRenderConfig.DEFAULT);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(ID_FLAGS, (byte) 0);
+        builder.define(PIERCE_LEVEL, (byte) 0);
+        builder.define(IN_GROUND, false);
+        builder.define(RENDER_CONFIG, SimpleProjectileConfig.SimpleProjectileConfigRenderConfig.DEFAULT);
     }
 
     /**
@@ -141,10 +145,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     }
 
     @Override
-    public void lerpTo(double p_36728_, double p_36729_, double p_36730_, float p_36731_, float p_36732_,
-            int p_36733_) {
-        this.setPos(p_36728_, p_36729_, p_36730_);
-        this.setRot(p_36731_, p_36732_);
+    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+        this.setPos(x, y, z);
+        this.setRot(yRot, xRot);
     }
 
     /**
@@ -160,9 +163,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> p_381707_) {
-        super.onSyncedDataUpdated(p_381707_);
-        if (!this.firstTick && this.shakeTime <= 0 && IN_GROUND.equals(p_381707_) && this.isInGround()) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> accessor) {
+        super.onSyncedDataUpdated(accessor);
+        if (!this.firstTick && this.shakeTime <= 0 && IN_GROUND.equals(accessor) && this.isInGround()) {
             this.shakeTime = SHAKE_TIME;
         }
     }
@@ -262,13 +265,17 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
 
             if (entityhitresult == null) {
                 if (this.isAlive() && hitResult.getType() != HitResult.Type.MISS) {
-                    if (net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitResult)) break;
+                    if (net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitResult)) {
+                        break;
+                    }
                     this.hitTargetOrDeflectSelf(hitResult);
                     this.hasImpulse = true;
                 }
                 break;
             } else if (this.isAlive() && !this.noPhysics && entityhitresult.getType() != HitResult.Type.MISS) {
-                if (net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, entityhitresult)) break;
+                if (net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, entityhitresult)) {
+                    break;
+                }
                 ProjectileDeflection projectiledeflection = this.hitTargetOrDeflectSelf(entityhitresult);
                 this.hasImpulse = true;
                 if (this.getPierceLevel() > 0 && projectiledeflection == ProjectileDeflection.NONE) {
@@ -346,21 +353,21 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     }
 
     @Override
-    protected void onItemBreak(Item p_365372_) {
+    protected void onItemBreak(Item item) {
         this.firedFromWeapon = null;
     }
 
     @Override
-    public void onInsideBubbleColumn(boolean p_382819_) {
+    public void onInsideBubbleColumn(boolean downwards) {
         if (!this.isInGround()) {
-            super.onInsideBubbleColumn(p_382819_);
+            super.onInsideBubbleColumn(downwards);
         }
     }
 
     @Override
-    public void push(double p_383096_, double p_383174_, double p_383161_) {
+    public void push(double x, double y, double z) {
         if (!this.isInGround()) {
-            super.push(p_383096_, p_383174_, p_383161_);
+            super.push(x, y, z);
         }
     }
 
@@ -493,13 +500,13 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     }
 
     @Override
-    protected boolean canHitEntity(Entity p_36743_) {
-        if (p_36743_ instanceof Player && this.getOwner() instanceof Player player
-                && !player.canHarmPlayer((Player) p_36743_)) {
+    protected boolean canHitEntity(Entity entity) {
+        if (entity instanceof Player && this.getOwner() instanceof Player player
+                && !player.canHarmPlayer((Player) entity)) {
             return false;
         } else {
-            return super.canHitEntity(p_36743_) && (this.piercingIgnoreEntityIds == null
-                    || !this.piercingIgnoreEntityIds.contains(p_36743_.getId()));
+            return super.canHitEntity(entity)
+                    && (this.piercingIgnoreEntityIds == null || !this.piercingIgnoreEntityIds.contains(entity.getId()));
         }
     }
 
@@ -693,11 +700,11 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     }
 
     @Override
-    public SlotAccess getSlot(int p_341328_) {
-        if (p_341328_ == 0) {
+    public SlotAccess getSlot(int slot) {
+        if (slot == 0) {
             return SlotAccess.of(this::getPickupItemStackOrigin, this::setPickupItemStack);
         } else {
-            return super.getSlot(p_341328_);
+            return super.getSlot(slot);
         }
     }
 
@@ -725,8 +732,6 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
             return values()[ordinal];
         }
     }
-
-    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     @Override
     public void registerControllers(final AnimatableManager.ControllerRegistrar controllers) {

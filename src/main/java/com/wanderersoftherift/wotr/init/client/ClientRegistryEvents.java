@@ -45,6 +45,10 @@ import java.util.EnumSet;
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientRegistryEvents {
 
+    public static final KeyMapping JIGSAW_NAME_TOGGLE_KEY = new KeyMapping(
+            "key." + WanderersOfTheRift.id("jigsaw_name_toggle"), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
+            "key.categories.misc");
+
     private ClientRegistryEvents() {
         initDemoMap();
     }
@@ -109,10 +113,6 @@ public final class ClientRegistryEvents {
     public static void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAboveAll(WanderersOfTheRift.id("objective"), new ObjectiveLayer());
     }
-
-    public static final KeyMapping JIGSAW_NAME_TOGGLE_KEY = new KeyMapping(
-            "key." + WanderersOfTheRift.id("jigsaw_name_toggle"), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
-            "key.categories.misc");
 
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {

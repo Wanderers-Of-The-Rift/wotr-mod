@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 
 public record LootBox(ResourceKey<LootTable> lootTable) implements ConsumableListener {
 
-    public static Codec<LootBox> CODEC = RecordCodecBuilder.create(inst -> inst
+    public static final Codec<LootBox> CODEC = RecordCodecBuilder.create(inst -> inst
             .group(ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(LootBox::lootTable))
             .apply(inst, LootBox::new));
 

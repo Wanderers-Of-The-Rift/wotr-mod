@@ -19,20 +19,27 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProjectileEffect extends AbstractEffect {
-    ResourceLocation entityType;
-    Vec3 velocity;
-
-    /*
-     * For now just handle any projectile given, but we will look into handling a dynamic projectile that can handle
-     * effects attached to it
-     */
-
     public static final MapCodec<ProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbstractEffect
             .commonFields(instance)
             .and(instance.group(
                     ResourceLocation.CODEC.fieldOf("projectile_type").forGetter(ProjectileEffect::getEntityType),
                     Vec3.CODEC.fieldOf("velocity").forGetter(ProjectileEffect::getVelocity)))
             .apply(instance, ProjectileEffect::new));
+
+    private ResourceLocation entityType;
+    private Vec3 velocity;
+
+    /*
+     * For now just handle any projectile given, but we will look into handling a dynamic projectile that can handle
+     * effects attached to it
+     */
+
+    public ProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            ResourceLocation entityType, Vec3 velocity) {
+        super(targeting, effects, particles);
+        this.entityType = entityType;
+        this.velocity = velocity;
+    }
 
     public Vec3 getVelocity() {
         return this.velocity;
@@ -45,13 +52,6 @@ public class ProjectileEffect extends AbstractEffect {
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
-    }
-
-    public ProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
-            ResourceLocation entityType, Vec3 velocity) {
-        super(targeting, effects, particles);
-        this.entityType = entityType;
-        this.velocity = velocity;
     }
 
     @Override

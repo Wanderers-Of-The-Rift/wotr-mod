@@ -15,18 +15,18 @@ import java.util.Optional;
 
 public class ApplyStatusEffect extends AbstractEffect {
 
-    MobEffectInstance statusEffect;
+    public static final MapCodec<ApplyStatusEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(MobEffectInstance.CODEC.fieldOf("status_effect").forGetter(ApplyStatusEffect::getStatusEffect))
+                    .apply(instance, ApplyStatusEffect::new));
+
+    private MobEffectInstance statusEffect;
 
     public ApplyStatusEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
             Optional<ParticleInfo> particles, MobEffectInstance status) {
         super(targeting, effects, particles);
         this.statusEffect = status;
     }
-
-    public static final MapCodec<ApplyStatusEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
-                    .and(MobEffectInstance.CODEC.fieldOf("status_effect").forGetter(ApplyStatusEffect::getStatusEffect))
-                    .apply(instance, ApplyStatusEffect::new));
 
     public MobEffectInstance getStatusEffect() {
         return this.statusEffect;

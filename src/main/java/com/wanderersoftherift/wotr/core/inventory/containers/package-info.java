@@ -6,4 +6,4 @@
  * supported.
  * </p>
  */
-package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
+package com.wanderersoftherift.wotr.core.inventory.containers;

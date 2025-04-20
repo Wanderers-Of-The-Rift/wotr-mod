@@ -78,12 +78,12 @@ public class RiftEntranceRenderer
 
         poseStack.mulPose(new Quaternionf().lookAlong(dir, new Vector3f(0, -1, 0)));
 
-        PoseStack.Pose posestack$pose = poseStack.last();
+        PoseStack.Pose pose = poseStack.last();
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RENDER_TYPE);
-        vertex(vertexconsumer, posestack$pose, packedLight, -0.5f, -0.5f, 0.0f, 0, 1);
-        vertex(vertexconsumer, posestack$pose, packedLight, 0.5f, -0.5f, 0.0f, 1, 1);
-        vertex(vertexconsumer, posestack$pose, packedLight, 0.5f, 0.5f, 0.0f, 1, 0);
-        vertex(vertexconsumer, posestack$pose, packedLight, -0.5f, 0.5f, 0.0f, 0, 0);
+        vertex(vertexconsumer, pose, packedLight, -0.5f, -0.5f, 0.0f, 0, 1);
+        vertex(vertexconsumer, pose, packedLight, 0.5f, -0.5f, 0.0f, 1, 1);
+        vertex(vertexconsumer, pose, packedLight, 0.5f, 0.5f, 0.0f, 1, 0);
+        vertex(vertexconsumer, pose, packedLight, -0.5f, 0.5f, 0.0f, 0, 0);
         poseStack.popPose();
         super.render(state, poseStack, bufferSource, packedLight);
     }

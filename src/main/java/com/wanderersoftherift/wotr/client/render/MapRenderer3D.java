@@ -36,15 +36,17 @@ public class MapRenderer3D {
     public Vector2i mapPosition = new Vector2i(0, 0);
     public Vector2i mapSize = new Vector2i(Minecraft.getInstance().getWindow().getGuiScaledWidth(),
             Minecraft.getInstance().getWindow().getGuiScaledHeight());
-    private Vector2i scissorCoords = new Vector2i(0, 0);
-    private Vector2i scissorSize = new Vector2i(0, 0);
-
-    private VirtualCamera camera = new VirtualCamera(70.0f, 16f / 9f, 0.1f, 1000.0f);
 
     public float camPitch = 35;
     public float camYaw = -25;
     public Vector3f camPos = new Vector3f(0.5f);
     public float distance = 10;
+
+    private Vector2i scissorCoords = new Vector2i(0, 0);
+    private Vector2i scissorSize = new Vector2i(0, 0);
+    private float renderDistance = 10;
+
+    private VirtualCamera camera = new VirtualCamera(70.0f, 16f / 9f, 0.1f, 1000.0f);
 
     public MapRenderer3D(int x, int y, int width, int height, float renderDistance) {
         setMapSize(x, y, width, height);
@@ -62,11 +64,9 @@ public class MapRenderer3D {
     // Now I have commited another sin by doing an access transformer.
     public static void putEffects(int effectFlags, BufferBuilder builder) {
         long i = builder.beginElement(EFFECTS);
-        ;
+
         MemoryUtil.memPutFloat(i, (float) effectFlags);
     }
-
-    private float renderDistance = 10;
 
     private boolean isInRenderDistance(Vector3f pos) {
         return pos.distance(camPos) < renderDistance;
@@ -84,14 +84,12 @@ public class MapRenderer3D {
         RenderSystem.disableCull();
 
         // !!! Scissor coords are from bottom left and not scaled with gui scale !!! the below code renders top left
-        // quadrant
-        // the RenderSystem is from top left instead because yes
+        // quadrant the RenderSystem is from top left instead because yes
         RenderSystem.enableScissor(scissorCoords.x, scissorCoords.y, scissorSize.x, scissorSize.y);
 
         RenderSystem.lineWidth(10.0f);
-        BufferBuilder lineBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.DEBUG_LINES, VERTEX_FORMAT); // prep
-                                                                                                                 // the
-                                                                                                                 // buffer
+        // prep the buffer
+        BufferBuilder lineBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.DEBUG_LINES, VERTEX_FORMAT);
 
         float screenWidth = Minecraft.getInstance().getWindow().getWidth();
         float screenHeight = Minecraft.getInstance().getWindow().getHeight();
@@ -119,14 +117,16 @@ public class MapRenderer3D {
                 .getFlags(new MapRoomEffects.Flag[] { MapRoomEffects.Flag.DOTS, MapRoomEffects.Flag.EDGE_HIGHLIGHT, }));
 
         rooms.forEach((pos, room) -> {
-            if (isInRenderDistance(room.pos1)) room.renderWireframe(lineBuffer, camera, mapPosition, mapSize);
+            if (isInRenderDistance(room.pos1)) {
+                room.renderWireframe(lineBuffer, camera, mapPosition, mapSize);
+            }
         });
         /*
          * cells.forEach((pos, cell) -> { cell.renderWireframe(lineBuffer, camera, mapPosition, mapSize); });
          */
         // prepare the buffer for rendering and draw it
         MeshData bufferData = lineBuffer.build();
-        ;
+
         if (bufferData != null) {
             BufferUploader.drawWithShader(bufferData);
         }
@@ -138,8 +138,9 @@ public class MapRenderer3D {
         RenderSystem.depthMask(false);
 
         rooms.forEach((pos, room) -> {
-            if (isInRenderDistance(room.pos1))
+            if (isInRenderDistance(room.pos1)) {
                 room.renderCube(quadBuffer, camera, new Vector4f(0f, 1f, 0f, 0.2f), mapPosition, mapSize);
+            }
         });
         /*
          * cells.forEach((pos, cell) -> { cell.renderCube(quadBuffer, camera, new Vector4f(0f, 0f, 1f, 0.2f),
@@ -175,7 +176,7 @@ public class MapRenderer3D {
 
         // prepare the buffer for rendering and draw it
         MeshData buffer2Data = line2Buffer.build();
-        ;
+
         if (buffer2Data != null) {
             BufferUploader.drawWithShader(buffer2Data);
         }

@@ -195,7 +195,9 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         // have to figure out how to do this properly without just duping the runegems
         // i think its because mayPickup is returning true since by the time this is called the gear is already changed
 
-        if (player == null) player = this.playerInventory.player;
+        if (player == null) {
+            player = this.playerInventory.player;
+        }
 
         for (RunegemSlot socketSlot : this.socketSlots) {
             ItemStack stack = socketSlot.getItem();

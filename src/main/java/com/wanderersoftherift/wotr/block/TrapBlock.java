@@ -24,12 +24,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class TrapBlock extends DittoBlock {
-    private static final int DEACTIVATION_TIME = 60;
-    private static final int TICK_DELAY = 4;
-    private static final int STAGES = 2;
+    public static final int STAGES = 2;
+
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, STAGES);
     public static final BooleanProperty WAITING_FOR_TICK = BooleanProperty.create("waiting_for_tick");
     public static final BooleanProperty DEACTIVATED = BooleanProperty.create("deactivated");
+
+    private static final int DEACTIVATION_TIME = 60;
+    private static final int TICK_DELAY = 4;
 
     public TrapBlock(Properties properties) {
         super(properties);

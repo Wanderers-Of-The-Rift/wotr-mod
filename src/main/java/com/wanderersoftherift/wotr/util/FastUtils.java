@@ -9,6 +9,9 @@ import java.util.Map;
 
 public final class FastUtils {
 
+    private FastUtils() {
+    }
+
     public static <T> Map<T, Integer> toMap(Object2IntMap<T> source) {
         ImmutableMap.Builder<T, Integer> builder = ImmutableMap.builder();
         for (Object2IntMap.Entry<T> entry : source.object2IntEntrySet()) {
@@ -21,6 +24,4 @@ public final class FastUtils {
         return list.intStream().boxed().toList();
     }
 
-    private FastUtils() {
-    }
 }

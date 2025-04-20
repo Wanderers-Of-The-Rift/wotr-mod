@@ -42,8 +42,10 @@ public class RenderEvents {
 
     @SubscribeEvent
     public static void onBlockHover(RenderHighlightEvent.Block event) {
-        if (true) return; // TODO: Temporary instant return until we have block models that should be accurate to their
-                          // BakedModel
+        // TODO: Temporary instant return until we have block models that should be accurate to their BakedModel
+        if (true) {
+            return;
+        }
 
         Player player = minecraft.player;
         if (player == null) {

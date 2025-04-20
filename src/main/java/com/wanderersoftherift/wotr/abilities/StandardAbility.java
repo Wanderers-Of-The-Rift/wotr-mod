@@ -21,11 +21,6 @@ import java.util.List;
 
 public class StandardAbility extends AbstractAbility {
 
-    @Override
-    public MapCodec<? extends AbstractAbility> getCodec() {
-        return CODEC;
-    }
-
     public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
                     .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
@@ -39,9 +34,13 @@ public class StandardAbility extends AbstractAbility {
 
     public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
             List<AbstractEffect> effects) {
-        super(resourceLocation, icon, effects);
-        this.baseCooldown = baseCooldown;
+        super(resourceLocation, icon, effects, baseCooldown);
         setBaseManaCost(manaCost);
+    }
+
+    @Override
+    public MapCodec<? extends AbstractAbility> getCodec() {
+        return CODEC;
     }
 
     @Override
@@ -67,7 +66,7 @@ public class StandardAbility extends AbstractAbility {
                 manaData.useAmount(player, manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
                 this.setCooldown(player, slot,
-                        abilityContext.getAbilityAttribute(ModAttributes.COOLDOWN, baseCooldown));
+                        abilityContext.getAbilityAttribute(ModAttributes.COOLDOWN, getBaseCooldown()));
             } else {
                 PacketDistributor.sendToServer(new UseAbilityPayload(slot));
             }

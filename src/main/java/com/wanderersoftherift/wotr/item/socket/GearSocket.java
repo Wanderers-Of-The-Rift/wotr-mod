@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier, Optional<RunegemData> runegem) {
 
-    public static Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst
+    public static final Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst
             .group(RunegemShape.CODEC.fieldOf("shape").forGetter(GearSocket::shape),
                     ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
                     RunegemData.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem))

@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RaycastTargeting extends AbstractTargeting {
-    private final double range;
-
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).and(Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange))
                     .apply(instance, RaycastTargeting::new));
+
+    private final double range;
 
     public RaycastTargeting(TargetPredicate targetPredicate, double range) {
         super(targetPredicate);
@@ -63,7 +63,9 @@ public class RaycastTargeting extends AbstractTargeting {
         WanderersOfTheRift.LOGGER.debug("Raycasting blocks");
 
         List<BlockPos> blocks = new ArrayList<>();
-        if (entity == null) return blocks;
+        if (entity == null) {
+            return blocks;
+        }
 
         BlockHitResult hitBlock = getEntityPOVHitResult(entity, this.range);
         blocks.add(hitBlock.getBlockPos());
@@ -76,7 +78,9 @@ public class RaycastTargeting extends AbstractTargeting {
         WanderersOfTheRift.LOGGER.debug("Raycasting blocks in area");
 
         List<BlockPos> blocks = new ArrayList<>();
-        if (entity == null || targetPos.isEmpty()) return blocks;
+        if (entity == null || targetPos.isEmpty()) {
+            return blocks;
+        }
 
         BlockHitResult hitBlock = getEntityPOVHitResult(entity, this.range);
         blocks.add(hitBlock.getBlockPos());

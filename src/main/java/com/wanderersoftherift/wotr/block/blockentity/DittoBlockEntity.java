@@ -23,10 +23,11 @@ import java.util.List;
 
 public class DittoBlockEntity extends BlockEntity
         implements RandomizableContainer, ContainerSingleItem.BlockContainerSingleItem {
-    private ItemStack item;
 
     @Nullable protected ResourceKey<LootTable> lootTable;
     protected long lootTableSeed;
+
+    private ItemStack item;
 
     public DittoBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DITTO_BLOCK_ENTITY.get(), pos, state);

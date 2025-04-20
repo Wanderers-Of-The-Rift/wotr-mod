@@ -14,7 +14,7 @@ import java.util.List;
 import static com.wanderersoftherift.wotr.init.ModTags.Items.SOCKETABLE;
 
 public record GearSockets(List<GearSocket> sockets) {
-    public static Codec<GearSockets> CODEC = RecordCodecBuilder
+    public static final Codec<GearSockets> CODEC = RecordCodecBuilder
             .create(inst -> inst.group(GearSocket.CODEC.listOf().fieldOf("sockets").forGetter(GearSockets::sockets))
                     .apply(inst, GearSockets::new));
 
@@ -37,7 +37,9 @@ public record GearSockets(List<GearSocket> sockets) {
     }
 
     public static void generateForItem(ItemStack itemStack, Level level, Player player) {
-        if (level.isClientSide() || !itemStack.is(SOCKETABLE)) return;
+        if (level.isClientSide() || !itemStack.is(SOCKETABLE)) {
+            return;
+        }
         GearSockets sockets = GearSockets.randomSockets(3, level.random);
         itemStack.set(ModDataComponentType.GEAR_SOCKETS, sockets);
     }

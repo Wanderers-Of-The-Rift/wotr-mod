@@ -85,7 +85,9 @@ public class PlayerDurationData {
         List<ResourceLocation> toRemove = new ArrayList<>();
         for (ResourceLocation loc : this.getKeys()) {
             this.set(loc, Math.max(this.get(loc) - amount, 0));
-            if (this.get(loc) == 0) toRemove.add(loc);
+            if (this.get(loc) == 0) {
+                toRemove.add(loc);
+            }
         }
 
         toRemove.forEach(this::remove);

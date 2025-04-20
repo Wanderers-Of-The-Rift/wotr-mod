@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public abstract class AbstractTargeting {
-    public abstract MapCodec<? extends AbstractTargeting> getCodec();
 
     public static final Codec<AbstractTargeting> DIRECT_CODEC = ModTargetingTypes.EFFECT_TARGETING_REGISTRY
             .byNameCodec()
@@ -27,6 +26,8 @@ public abstract class AbstractTargeting {
     public AbstractTargeting(TargetPredicate targetPredicate) {
         this.targetPredicate = targetPredicate;
     }
+
+    public abstract MapCodec<? extends AbstractTargeting> getCodec();
 
     /**
      * @param currentEntity This is the entity which is using the effect, this can be any entity down a chain based on

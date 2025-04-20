@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot.containers;
+package com.wanderersoftherift.wotr.core.inventory.containers;
 
 import com.google.common.collect.Streams;
 import net.minecraft.core.component.DataComponents;

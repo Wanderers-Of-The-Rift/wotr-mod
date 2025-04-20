@@ -204,6 +204,10 @@ spotless {
     }
 }
 
+checkstyle {
+    toolVersion = '10.23.0'
+}
+
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {

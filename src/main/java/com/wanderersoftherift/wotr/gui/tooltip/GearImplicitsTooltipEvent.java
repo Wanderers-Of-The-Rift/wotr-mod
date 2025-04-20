@@ -26,10 +26,14 @@ public class GearImplicitsTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.GEAR_IMPLICITS)) return;
+        if (!stack.has(ModDataComponentType.GEAR_IMPLICITS)) {
+            return;
+        }
 
         GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
-        if (implicits == null) return;
+        if (implicits == null) {
+            return;
+        }
         List<ModifierInstance> modifierInstances = implicits.modifierInstances(stack, Minecraft.getInstance().level);
 
         list.add(1, Either.left(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".implicit")

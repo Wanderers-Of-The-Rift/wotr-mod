@@ -45,44 +45,37 @@ public class AccessibilityOptionsScreen extends Screen {
 
         GridLayout gridlayout = new GridLayout();
         gridlayout.defaultCellSetting().paddingHorizontal(4).paddingBottom(4).alignHorizontallyCenter();
-        GridLayout.RowHelper gridLayout$rowHelper = gridlayout.createRowHelper(2);
+        GridLayout.RowHelper rowHelper = gridlayout.createRowHelper(2);
 
-        gridLayout$rowHelper.addChild(new SpacerElement(0, 25), 2); // Seperating the textWidget with the ConfigButtons
+        rowHelper.addChild(new SpacerElement(0, 25), 2); // Seperating the textWidget with the ConfigButtons
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.trypophobia"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.trypophobia"),
-                        ClientConfig.ACCESSIBILITY_TRYPOPHOBIA));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.trypophobia"),
+                Component.translatable("accessibility.wotr.screen.tooltip.trypophobia"),
+                ClientConfig.ACCESSIBILITY_TRYPOPHOBIA));
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.arachnophobia"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.arachnophobia"),
-                        ClientConfig.ACCESSIBILITY_ARACHNOPHOBIA));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.arachnophobia"),
+                Component.translatable("accessibility.wotr.screen.tooltip.arachnophobia"),
+                ClientConfig.ACCESSIBILITY_ARACHNOPHOBIA));
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.flashing_lights"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.flashing_lights"),
-                        ClientConfig.ACCESSIBILITY_FLASHING_LIGHTS));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.flashing_lights"),
+                Component.translatable("accessibility.wotr.screen.tooltip.flashing_lights"),
+                ClientConfig.ACCESSIBILITY_FLASHING_LIGHTS));
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.misophonia"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.misophonia"),
-                        ClientConfig.ACCESSIBILITY_MISOPHONIA));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.misophonia"),
+                Component.translatable("accessibility.wotr.screen.tooltip.misophonia"),
+                ClientConfig.ACCESSIBILITY_MISOPHONIA));
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.high_contrast"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.high_contrast"),
-                        ClientConfig.ACCESSIBILITY_HIGH_CONTRAST));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.high_contrast"),
+                Component.translatable("accessibility.wotr.screen.tooltip.high_contrast"),
+                ClientConfig.ACCESSIBILITY_HIGH_CONTRAST));
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.hard_of_hearing"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.hard_of_hearing"),
-                        ClientConfig.ACCESSIBILITY_HARD_OF_HEARING));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.hard_of_hearing"),
+                Component.translatable("accessibility.wotr.screen.tooltip.hard_of_hearing"),
+                ClientConfig.ACCESSIBILITY_HARD_OF_HEARING));
 
-        gridLayout$rowHelper
-                .addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.reduced_motion"),
-                        Component.translatable("accessibility.wotr.screen.tooltip.reduced_motion"),
-                        ClientConfig.ACCESSIBILITY_REDUCED_MOTION));
+        rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.reduced_motion"),
+                Component.translatable("accessibility.wotr.screen.tooltip.reduced_motion"),
+                ClientConfig.ACCESSIBILITY_REDUCED_MOTION));
 
         this.layout.addToContents(gridlayout);
         this.layout.addToFooter(Button

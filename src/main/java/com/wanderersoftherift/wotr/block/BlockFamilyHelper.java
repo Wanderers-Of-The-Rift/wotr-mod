@@ -77,14 +77,30 @@ public class BlockFamilyHelper {
 
     private BlockFamily generateBlockFamily() {
         BlockFamily.Builder blockFamilyBuilder = new BlockFamily.Builder(baseBlock.get());
-        if (variants.containsKey(SLAB)) blockFamilyBuilder.slab(variants.get(SLAB).get());
-        if (variants.containsKey(STAIRS)) blockFamilyBuilder.stairs(variants.get(STAIRS).get());
-        if (variants.containsKey(BUTTON)) blockFamilyBuilder.button(variants.get(BUTTON).get());
-        if (variants.containsKey(PRESSURE_PLATE)) blockFamilyBuilder.pressurePlate(variants.get(PRESSURE_PLATE).get());
-        if (variants.containsKey(WALL)) blockFamilyBuilder.wall(variants.get(WALL).get());
-        if (variants.containsKey(FENCE)) blockFamilyBuilder.fence(variants.get(FENCE).get());
-        if (variants.containsKey(FENCE_GATE)) blockFamilyBuilder.fenceGate(variants.get(FENCE_GATE).get());
-        if (variants.containsKey(TRAPDOOR)) blockFamilyBuilder.trapdoor(variants.get(TRAPDOOR).get());
+        if (variants.containsKey(SLAB)) {
+            blockFamilyBuilder.slab(variants.get(SLAB).get());
+        }
+        if (variants.containsKey(STAIRS)) {
+            blockFamilyBuilder.stairs(variants.get(STAIRS).get());
+        }
+        if (variants.containsKey(BUTTON)) {
+            blockFamilyBuilder.button(variants.get(BUTTON).get());
+        }
+        if (variants.containsKey(PRESSURE_PLATE)) {
+            blockFamilyBuilder.pressurePlate(variants.get(PRESSURE_PLATE).get());
+        }
+        if (variants.containsKey(WALL)) {
+            blockFamilyBuilder.wall(variants.get(WALL).get());
+        }
+        if (variants.containsKey(FENCE)) {
+            blockFamilyBuilder.fence(variants.get(FENCE).get());
+        }
+        if (variants.containsKey(FENCE_GATE)) {
+            blockFamilyBuilder.fenceGate(variants.get(FENCE_GATE).get());
+        }
+        if (variants.containsKey(TRAPDOOR)) {
+            blockFamilyBuilder.trapdoor(variants.get(TRAPDOOR).get());
+        }
         return blockFamilyBuilder.getFamily();
     }
 

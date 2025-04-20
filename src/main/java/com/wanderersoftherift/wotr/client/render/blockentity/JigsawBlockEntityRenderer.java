@@ -21,7 +21,9 @@ public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBloc
     @Override
     public void render(JigsawBlockEntity jigsawBlockEntity, float v, PoseStack poseStack,
             MultiBufferSource multiBufferSource, int i, int i1) {
-        if (!JIGSAW_NAME_TOGGLE_KEY.isDown()) return;
+        if (!JIGSAW_NAME_TOGGLE_KEY.isDown()) {
+            return;
+        }
         MutableComponent name = Component.literal(jigsawBlockEntity.getPool().location().toString());
         renderNameTag(name, poseStack, multiBufferSource, i);
     }

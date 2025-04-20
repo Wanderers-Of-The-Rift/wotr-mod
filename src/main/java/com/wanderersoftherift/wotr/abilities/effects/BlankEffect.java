@@ -17,13 +17,13 @@ public class BlankEffect extends AbstractEffect {
     public static final MapCodec<BlankEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, BlankEffect::new));
 
+    public BlankEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+        super(targeting, effects, particles);
+    }
+
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
-    }
-
-    public BlankEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
-        super(targeting, effects, particles);
     }
 
     @Override

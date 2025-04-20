@@ -18,6 +18,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class MovementEffect extends AbstractEffect {
+    public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+                    .and(Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity))
+                    .and(RelativeFrame.CODEC.optionalFieldOf("relativeFrame", RelativeFrame.TARGET_FACING)
+                            .forGetter(MovementEffect::getRelativeFrame))
+                    .apply(instance, MovementEffect::new));
+
     private final Vec3 velocity;
     private final RelativeFrame relativeFrame;
 
@@ -27,13 +34,6 @@ public class MovementEffect extends AbstractEffect {
         this.velocity = velocity;
         this.relativeFrame = relativeFrame;
     }
-
-    public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
-                    .and(Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity))
-                    .and(RelativeFrame.CODEC.optionalFieldOf("relativeFrame", RelativeFrame.TARGET_FACING)
-                            .forGetter(MovementEffect::getRelativeFrame))
-                    .apply(instance, MovementEffect::new));
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {

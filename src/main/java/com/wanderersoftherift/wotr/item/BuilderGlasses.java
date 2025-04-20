@@ -54,7 +54,9 @@ public class BuilderGlasses extends Item {
             return;
         }
         CompoundTag tag = data.copyTag();
-        if (!tag.contains("structureDim") || !tag.contains("structurePos")) return;
+        if (!tag.contains("structureDim") || !tag.contains("structurePos")) {
+            return;
+        }
         String dim = tag.getString("structureDim");
         int[] pos = tag.getIntArray("structurePos");
         tooltipComponents.add(Component.literal("Structure: " + dim + " " + pos[0] + " " + pos[1] + " " + pos[2]));

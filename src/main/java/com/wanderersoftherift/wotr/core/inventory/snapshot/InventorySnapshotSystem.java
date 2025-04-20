@@ -1,14 +1,14 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot;
+package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
+import com.wanderersoftherift.wotr.core.inventory.containers.BundleContainerType;
+import com.wanderersoftherift.wotr.core.inventory.containers.ComponentContainerType;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.DirectContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.NonContainerWrapper;
 import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.BundleContainerType;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ComponentContainerType;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerItemWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerType;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.DirectContainerItemWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.NonContainerWrapper;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -47,13 +47,13 @@ public class InventorySnapshotSystem {
 
     private final List<ContainerType> containerStrategies = new ArrayList<>();
 
-    public static InventorySnapshotSystem getInstance() {
-        return instance;
-    }
-
     private InventorySnapshotSystem() {
         containerStrategies.add(new ComponentContainerType());
         containerStrategies.add(new BundleContainerType());
+    }
+
+    public static InventorySnapshotSystem getInstance() {
+        return instance;
     }
 
     public void registerContainerStrategy(ContainerType strategy) {

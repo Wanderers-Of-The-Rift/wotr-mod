@@ -19,19 +19,19 @@ import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
 public class LevelRiftThemeData extends SavedData {
 
-    public static Codec<LevelRiftThemeData> CODEC = RecordCodecBuilder
+    public static final Codec<LevelRiftThemeData> CODEC = RecordCodecBuilder
             .create(inst -> inst.group(RiftTheme.CODEC.fieldOf("theme").forGetter(LevelRiftThemeData::getTheme))
                     .apply(inst, LevelRiftThemeData::new));
 
     private Holder<RiftTheme> theme;
 
+    public LevelRiftThemeData(Holder<RiftTheme> theme) {
+        this.theme = theme;
+    }
+
     public static LevelRiftThemeData getFromLevel(ServerLevel level) {
         return level.getDataStorage()
                 .computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
-    }
-
-    public LevelRiftThemeData(Holder<RiftTheme> theme) {
-        this.theme = theme;
     }
 
     public static LevelRiftThemeData create() {

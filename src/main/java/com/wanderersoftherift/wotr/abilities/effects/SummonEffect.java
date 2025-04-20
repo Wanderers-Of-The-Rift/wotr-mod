@@ -19,17 +19,24 @@ import java.util.List;
 import java.util.Optional;
 
 public class SummonEffect extends AbstractEffect {
-    ResourceLocation entityType;
-    int summonAmount = 1;
-
-    // TODO look into handling different types of teleports and better handle relative motion
-    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
-
     public static final MapCodec<SummonEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbstractEffect
             .commonFields(instance)
             .and(instance.group(ResourceLocation.CODEC.fieldOf("entity_type").forGetter(SummonEffect::getEntityType),
                     Codec.INT.fieldOf("amount").forGetter(SummonEffect::getAmount)))
             .apply(instance, SummonEffect::new));
+
+    private ResourceLocation entityType;
+    private int summonAmount = 1;
+
+    // TODO look into handling different types of teleports and better handle relative motion
+    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
+
+    public SummonEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+            ResourceLocation entityType, int amount) {
+        super(targeting, effects, particles);
+        this.entityType = entityType;
+        this.summonAmount = amount;
+    }
 
     private Integer getAmount() {
         return this.summonAmount;
@@ -42,13 +49,6 @@ public class SummonEffect extends AbstractEffect {
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
         return CODEC;
-    }
-
-    public SummonEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
-            ResourceLocation entityType, int amount) {
-        super(targeting, effects, particles);
-        this.entityType = entityType;
-        this.summonAmount = amount;
     }
 
     @Override

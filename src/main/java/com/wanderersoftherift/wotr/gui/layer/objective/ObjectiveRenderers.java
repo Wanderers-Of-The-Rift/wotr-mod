@@ -13,7 +13,7 @@ import static com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes.ONGOING_
 
 public class ObjectiveRenderers {
 
-    public static Map<ResourceLocation, Function<AbstractObjective, ObjectiveRenderer>> RENDERERS = new HashMap<>();
+    public static final Map<ResourceLocation, Function<AbstractObjective, ObjectiveRenderer>> RENDERERS = new HashMap<>();
 
     public static final Function<AbstractObjective, ObjectiveRenderer> STEALTH = register(
             WanderersOfTheRift.id("stealth"), StealthObjectiveRenderer::create);
@@ -34,12 +34,12 @@ public class ObjectiveRenderers {
             ResourceLocation key = ONGOING_OBJECTIVE_TYPE_REGISTRY.getKey(objective.getCodec());
             Function<AbstractObjective, ObjectiveRenderer> renderer = get(key);
             if (renderer != null) {
-                ObjectiveRenderer.CURRENT = renderer.apply(objective);
+                ObjectiveRenderer.current = renderer.apply(objective);
             } else {
-                ObjectiveRenderer.CURRENT = null;
+                ObjectiveRenderer.current = null;
             }
         } else {
-            ObjectiveRenderer.CURRENT = null;
+            ObjectiveRenderer.current = null;
         }
     }
 }

@@ -37,13 +37,13 @@ public class GradientReplaceProcessor extends StructureProcessor {
             Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment))
             .apply(builder, GradientReplaceProcessor::new));
 
+    protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
+
     private final Map<InputBlockState, List<OutputStep>> replaceMap;
     private final double noiseScaleX;
     private final double noiseScaleY;
     private final double noiseScaleZ;
     private final int seedAdjustment;
-
-    protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
 
     public GradientReplaceProcessor(Map<InputBlockState, List<OutputStep>> replaceMap, double noiseScaleX,
             double noiseScaleY, double noiseScaleZ, int seedAdjustment) {

@@ -21,7 +21,7 @@ public final class RiftPortalRenderType {
 
     public static final BiFunction<ResourceLocation, ResourceLocation, RenderType> RIFT_PORTAL = Util
             .memoize((tex1, tex2) -> {
-                RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
+                RenderType.CompositeState state = RenderType.CompositeState.builder()
                         .setShaderState(RIFT_PORTAL_SHADER_STATE)
                         .setTextureState(new RenderStateShard.MultiTextureStateShard.Builder().add(tex1, false, false)
                                 .add(tex2, false, false)
@@ -32,13 +32,14 @@ public final class RiftPortalRenderType {
                         .setOverlayState(RenderStateShard.NO_OVERLAY)
                         .createCompositeState(false);
                 return RenderType.create("rift_portal", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536,
-                        true, false, rendertype$compositestate);
+                        true, false, state);
             });
+
+    private RiftPortalRenderType() {
+    }
 
     public static RenderType riftPortal(ResourceLocation outerTexture, ResourceLocation innerTexture) {
         return RIFT_PORTAL.apply(outerTexture, innerTexture);
     }
 
-    private RiftPortalRenderType() {
-    }
 }

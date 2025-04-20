@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.server.inventorySnapshot;
+package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -25,9 +25,6 @@ import java.util.UUID;
  */
 public class InventorySnapshot {
 
-    private final UUID id;
-    private final List<ItemStack> items;
-
     public static final Codec<ItemStack> NONSTRICT_ITEMSTACK_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder
             .create(instance -> instance.group(Item.CODEC.fieldOf("id").forGetter(ItemStack::getItemHolder),
                     ExtraCodecs.POSITIVE_INT.fieldOf("count").forGetter(ItemStack::getCount),
@@ -42,6 +39,9 @@ public class InventorySnapshot {
             .group(UUIDUtil.CODEC.fieldOf("snapshotId").forGetter(x -> x.id),
                     NONSTRICT_ITEMSTACK_CODEC.listOf().fieldOf("items").forGetter(x -> x.items))
             .apply(instance, InventorySnapshot::new));
+
+    private final UUID id;
+    private final List<ItemStack> items;
 
     public InventorySnapshot() {
         this(new UUID(0, 0), Collections.emptyList());

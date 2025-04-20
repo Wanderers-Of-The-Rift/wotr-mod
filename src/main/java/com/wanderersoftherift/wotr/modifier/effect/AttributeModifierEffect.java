@@ -32,11 +32,6 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
                                     .forGetter(AttributeModifierEffect::getOperation))
                     .apply(instance, AttributeModifierEffect::new));
 
-    @Override
-    public MapCodec<? extends AbstractModifierEffect> getCodec() {
-        return MODIFIER_CODEC;
-    }
-
     private final ResourceLocation id;
     private final Holder<Attribute> attribute;
     private final double minRoll;
@@ -50,6 +45,11 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         this.minRoll = minRoll;
         this.maxRoll = maxRoll;
         this.operation = operation;
+    }
+
+    @Override
+    public MapCodec<? extends AbstractModifierEffect> getCodec() {
+        return MODIFIER_CODEC;
     }
 
     public ResourceLocation getId() {

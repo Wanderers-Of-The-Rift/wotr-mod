@@ -1,11 +1,11 @@
 package com.wanderersoftherift.wotr.interop.sophisticatedbackpacks;
 
 import com.google.common.collect.Iterators;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.InventorySnapshotSystem;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerItemWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerType;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ItemStackHandlerContainers;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.ItemStackHandlerContainers;
+import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshotSystem;
 import net.minecraft.world.item.ItemStack;
 import net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackItem;
 import net.p3pp3rf1y.sophisticatedbackpacks.backpack.wrapper.BackpackWrapper;

@@ -91,12 +91,16 @@ public class AttachmentProcessor extends StructureProcessor {
     }
 
     private boolean validSides(BlockPos blockpos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
-        if (requiresSides == 0) return true;
+        if (requiresSides == 0) {
+            return true;
+        }
         int sides = 0;
         for (Direction direction : Plane.HORIZONTAL) {
             if (hasDirection(processedBlockInfos, blockpos, direction)) {
                 sides++;
-                if (sides >= requiresSides) return true;
+                if (sides >= requiresSides) {
+                    return true;
+                }
             }
         }
         return false;

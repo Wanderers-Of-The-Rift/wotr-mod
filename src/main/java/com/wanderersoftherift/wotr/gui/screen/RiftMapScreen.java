@@ -14,14 +14,13 @@ import java.util.Optional;
 
 public class RiftMapScreen extends Screen {
     private RiftMap3DWidget mapWidget;
+    private float renderDistance = 10;
 
     public RiftMapScreen(Component title, float renderDistance) {
         super(title);
 
         this.renderDistance = renderDistance;
     }
-
-    private float renderDistance = 10;
 
     @Override
     protected void init() {

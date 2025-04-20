@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists, RunegemTier tier) {
 
-    public static Codec<RunegemData> CODEC = RecordCodecBuilder
+    public static final Codec<RunegemData> CODEC = RecordCodecBuilder
             .create(inst -> inst.group(RunegemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
                     ModifierGroup.CODEC.listOf().fieldOf("modifier_options").forGetter(RunegemData::modifierLists),
                     RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)).apply(inst, RunegemData::new));
@@ -36,7 +36,7 @@ public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists,
     }
 
     public record ModifierGroup(HolderSet<Item> supportedItems, HolderSet<Modifier> modifiers) {
-        public static Codec<ModifierGroup> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+        public static final Codec<ModifierGroup> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                 RegistryCodecs.homogeneousList(Registries.ITEM)
                         .fieldOf("supported_items")
                         .forGetter(ModifierGroup::supportedItems),

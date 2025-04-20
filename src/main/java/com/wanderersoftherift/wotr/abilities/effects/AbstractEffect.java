@@ -26,6 +26,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class AbstractEffect {
+    public static final Codec<AbstractEffect> DIRECT_CODEC = ModEffects.EFFECTS_REGISTRY.byNameCodec()
+            .dispatch(AbstractEffect::getCodec, Function.identity());
+
+    private final AbstractTargeting targeting;
+    private final List<AbstractEffect> effects;
+    private final Optional<ParticleInfo> particles;
+
+    public AbstractEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+        this.targeting = targeting;
+        this.effects = effects;
+        this.particles = particles;
+    }
 
     protected static <T extends AbstractEffect> Products.P3<RecordCodecBuilder.Mu<T>, AbstractTargeting, List<AbstractEffect>, Optional<ParticleInfo>> commonFields(
             RecordCodecBuilder.Instance<T> instance) {
@@ -39,18 +51,6 @@ public abstract class AbstractEffect {
     }
 
     public abstract MapCodec<? extends AbstractEffect> getCodec();
-
-    public static final Codec<AbstractEffect> DIRECT_CODEC = ModEffects.EFFECTS_REGISTRY.byNameCodec()
-            .dispatch(AbstractEffect::getCodec, Function.identity());
-    private final AbstractTargeting targeting;
-    private final List<AbstractEffect> effects;
-    private final Optional<ParticleInfo> particles;
-
-    public AbstractEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
-        this.targeting = targeting;
-        this.effects = effects;
-        this.particles = particles;
-    }
 
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         for (AbstractEffect effect : getEffects()) {

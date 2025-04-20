@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.InventorySnapshotSystem;
+import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshotSystem;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

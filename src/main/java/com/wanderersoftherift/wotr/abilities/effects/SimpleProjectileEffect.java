@@ -24,12 +24,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class SimpleProjectileEffect extends AbstractEffect {
-    private SimpleProjectileConfig config;
-
     public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbstractEffect.commonFields(instance)
                     .and(SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::getConfig))
                     .apply(instance, SimpleProjectileEffect::new));
+
+    private SimpleProjectileConfig config;
+
+    public SimpleProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
+            Optional<ParticleInfo> particles, SimpleProjectileConfig config) {
+        super(targeting, effects, particles);
+        this.config = config;
+    }
 
     @Override
     public MapCodec<? extends AbstractEffect> getCodec() {
@@ -40,25 +46,19 @@ public class SimpleProjectileEffect extends AbstractEffect {
         return config;
     }
 
-    public SimpleProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
-            Optional<ParticleInfo> particles, SimpleProjectileConfig config) {
-        super(targeting, effects, particles);
-        this.config = config;
-    }
-
     @Override
     public void apply(Entity source, List<BlockPos> blocks, AbilityContext context) {
         List<BlockPos> targets = getTargeting().getBlocks(source);
-        List<Entity> target_entities = getTargeting().getTargets(source, blocks, context);
+        List<Entity> targetEntities = getTargeting().getTargets(source, blocks, context);
 
         applyParticlesToUser(source);
-        if (!target_entities.isEmpty()) {
+        if (!targetEntities.isEmpty()) {
 
             // NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it
             // inline with the other effects
             // Target to me has always been more of a frame of reference for the effect not what the effect actually
             // "targets" but we can change this later if we want to make the change towards it being the actual target.
-            for (Entity target : target_entities) {
+            for (Entity target : targetEntities) {
                 EntityType<?> type = ModEntities.SIMPLE_EFFECT_PROJECTILE.get();
                 int numberOfProjectiles = getNumberOfProjectiles(context);
 

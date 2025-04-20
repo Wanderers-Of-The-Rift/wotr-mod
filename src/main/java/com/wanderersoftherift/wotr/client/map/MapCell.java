@@ -15,15 +15,18 @@ import static com.wanderersoftherift.wotr.client.map.Utils3D.projectPoint;
  * Represents a single cell in the map Contains the position and type of the cell
  */
 public class MapCell {
+    private static final float TWEEN_TUNNEL_SIZE = 0.1f;
+
     public Vector3f pos1; // should only be used for rendering,
-    private Vector3f pos2;
     // connection is 1wide tunnel between rooms
     public EnumSet<Direction> connections = EnumSet.noneOf(Direction.class); // used for rendering, only takes action on
-                                                                             // North, East, Top
+    // North, East, Top
     public EnumSet<Direction> openings = EnumSet.noneOf(Direction.class); // used for cell connection solver
+
+    private Vector3f pos2;
+
     // for solver: on horizontals only one opening creates a connection regardless of the other room acceptance
     // on verticals, both rooms need to "accept" the connection
-    int x, y, z;
     private int type;
     // add rendering for connections inside here (probably), might be inside MapRoom as well
     private int effectFlags;
@@ -132,8 +135,6 @@ public class MapCell {
             MapRenderer3D.putEffects(this.effectFlags, buffer);
         }
     }
-
-    private final float TWEEN_TUNNEL_SIZE = 0.1f;
 
     public void renderEastConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color,
             Vector2i mapPosition, Vector2i mapSize) {

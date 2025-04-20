@@ -8,8 +8,8 @@ public class ObjectiveLayer implements LayeredDraw.Layer {
 
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        if (ObjectiveRenderer.CURRENT != null) {
-            ObjectiveRenderer.CURRENT.render(guiGraphics, deltaTracker);
+        if (ObjectiveRenderer.current != null) {
+            ObjectiveRenderer.current.render(guiGraphics, deltaTracker);
         }
     }
 }

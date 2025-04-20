@@ -32,30 +32,33 @@ import static com.wanderersoftherift.wotr.init.RegistryEvents.ABILITY_REGISTRY;
 
 public abstract class AbstractAbility {
 
-    private final List<AbstractEffect> effects;
-
-    public abstract MapCodec<? extends AbstractAbility> getCodec();
-
     public static final Codec<AbstractAbility> DIRECT_CODEC = ModAbilityTypes.ABILITY_TYPES_REGISTRY.byNameCodec()
             .dispatch(AbstractAbility::getCodec, Function.identity());
     public static final Codec<Holder<AbstractAbility>> CODEC = DeferrableRegistryCodec.create(ABILITY_REGISTRY);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITY_REGISTRY);
+
     private final ResourceLocation name;
     private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
-    protected float baseCooldown = 0;
-    private int baseManaCost;
     private Component displayName;
 
-    public Holder<Attribute> durationAttribute = null;
+    private final List<AbstractEffect> effects;
+    private float baseCooldown = 0;
+    private int baseManaCost;
+
+    private Holder<Attribute> durationAttribute = null;
     private boolean isToggle = false;
 
-    public AbstractAbility(ResourceLocation abilityName, ResourceLocation icon, List<AbstractEffect> effects) {
+    public AbstractAbility(ResourceLocation abilityName, ResourceLocation icon, List<AbstractEffect> effects,
+            int baseCooldown) {
         this.name = abilityName;
         this.effects = effects;
         this.icon = icon;
         this.displayName = Component.translatable("ability." + getName().getNamespace() + "." + getName().getPath());
+        this.baseCooldown = baseCooldown;
     }
+
+    public abstract MapCodec<? extends AbstractAbility> getCodec();
 
     public void setIcon(ResourceLocation location) {
         icon = location;
