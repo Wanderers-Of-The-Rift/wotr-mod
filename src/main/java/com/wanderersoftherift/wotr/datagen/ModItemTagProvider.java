@@ -5,7 +5,6 @@ import com.wanderersoftherift.wotr.init.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
@@ -22,34 +21,28 @@ public class ModItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
 
-        tag(ModTags.Items.SOCKETABLE)
-                .addTag(Tags.Items.ARMORS)
-                .addTag(Tags.Items.TOOLS);
+        tag(ModTags.Items.SOCKETABLE).addTag(Tags.Items.ARMORS).addTag(Tags.Items.TOOLS);
 
         /* Handles all the socketable rrmor */
-        tag(ModTags.Items.SOCKETABLE_HELMET_SLOT)
-                .add(Items.LEATHER_HELMET)
+        tag(ModTags.Items.SOCKETABLE_HELMET_SLOT).add(Items.LEATHER_HELMET)
                 .add(Items.CHAINMAIL_HELMET)
                 .add(Items.IRON_HELMET)
                 .add(Items.GOLDEN_HELMET)
                 .add(Items.DIAMOND_HELMET)
                 .add(Items.NETHERITE_HELMET);
-        tag(ModTags.Items.SOCKETABLE_CHESTPLATE_SLOT)
-                .add(Items.LEATHER_CHESTPLATE)
+        tag(ModTags.Items.SOCKETABLE_CHESTPLATE_SLOT).add(Items.LEATHER_CHESTPLATE)
                 .add(Items.CHAINMAIL_CHESTPLATE)
                 .add(Items.IRON_CHESTPLATE)
                 .add(Items.GOLDEN_CHESTPLATE)
                 .add(Items.DIAMOND_CHESTPLATE)
                 .add(Items.NETHERITE_CHESTPLATE);
-        tag(ModTags.Items.SOCKETABLE_LEGGINGS_SLOT)
-                .add(Items.LEATHER_LEGGINGS)
+        tag(ModTags.Items.SOCKETABLE_LEGGINGS_SLOT).add(Items.LEATHER_LEGGINGS)
                 .add(Items.CHAINMAIL_LEGGINGS)
                 .add(Items.IRON_LEGGINGS)
                 .add(Items.GOLDEN_LEGGINGS)
                 .add(Items.DIAMOND_LEGGINGS)
                 .add(Items.NETHERITE_LEGGINGS);
-        tag(ModTags.Items.SOCKETABLE_BOOTS_SLOT)
-                .add(Items.LEATHER_BOOTS)
+        tag(ModTags.Items.SOCKETABLE_BOOTS_SLOT).add(Items.LEATHER_BOOTS)
                 .add(Items.CHAINMAIL_BOOTS)
                 .add(Items.IRON_BOOTS)
                 .add(Items.GOLDEN_BOOTS)
@@ -57,8 +50,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.NETHERITE_BOOTS);
 
         /* Handles all the socketable main/off hand items */
-        tag(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT)
-                .add(Items.WOODEN_AXE)
+        tag(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT).add(Items.WOODEN_AXE)
                 .add(Items.WOODEN_PICKAXE)
                 .add(Items.WOODEN_HOE)
                 .add(Items.WOODEN_SHOVEL)

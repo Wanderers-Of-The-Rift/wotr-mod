@@ -29,7 +29,6 @@ public class ModTags {
         public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT = createTag("socketable_main_hand_slot");
         public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
 
-
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(WanderersOfTheRift.id(name));
         }
@@ -38,8 +37,8 @@ public class ModTags {
     public static class Runegems {
 
         public static final TagKey<RunegemData> RAW = createTag("raw");
-        public static final TagKey<RunegemData> SHAPED = createTag("shaped");
         public static final TagKey<RunegemData> CUT = createTag("cut");
+        public static final TagKey<RunegemData> SHAPED = createTag("shaped");
         public static final TagKey<RunegemData> POLISHED = createTag("polished");
         public static final TagKey<RunegemData> FRAMED = createTag("framed");
         public static final TagKey<RunegemData> UNIQUE = createTag("unique");
