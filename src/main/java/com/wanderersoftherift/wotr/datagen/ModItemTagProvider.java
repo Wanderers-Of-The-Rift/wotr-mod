@@ -22,7 +22,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         tag(ModTags.Items.SOCKETABLE).addTag(Tags.Items.ARMORS).addTag(Tags.Items.TOOLS);
 
-        //potentailly look at changing this tag to 'item tier' instead of tying to max sockets
+        // potentailly look at changing this tag to 'item tier' instead of tying to max sockets
 
         // Add Tier 1 items (wood & leather)
         tag(ModTags.Items.ITEM_TIER_ONE).add(Items.WOODEN_SWORD);

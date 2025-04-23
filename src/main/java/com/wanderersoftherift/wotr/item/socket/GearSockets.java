@@ -3,9 +3,7 @@ package com.wanderersoftherift.wotr.item.socket;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -39,7 +37,7 @@ public record GearSockets(List<GearSocket> sockets) {
         return new GearSockets(new ArrayList<>());
     }
 
-    public static void generateForItem(ItemStack itemStack){
+    public static void generateForItem(ItemStack itemStack) {
 
     }
 
@@ -50,39 +48,39 @@ public record GearSockets(List<GearSocket> sockets) {
 
         GearSockets sockets = emptySockets();
 
-        if(itemStack.is(ITEM_TIER_ONE)) {
+        if (itemStack.is(ITEM_TIER_ONE)) {
             GearSocket socket = GearSocket.getRandomSocket(level.random);
             sockets = new GearSockets(List.of(socket));
         }
 
-        if(itemStack.is(ITEM_TIER_TWO)) {
+        if (itemStack.is(ITEM_TIER_TWO)) {
             sockets = GearSockets.randomSockets(2, level.random);
         }
 
-        if(itemStack.is(ITEM_TIER_THREE)) {
+        if (itemStack.is(ITEM_TIER_THREE)) {
             sockets = GearSockets.randomSockets(3, level.random);
         }
 
-        if(itemStack.is(ITEM_TIER_FOUR)) {
+        if (itemStack.is(ITEM_TIER_FOUR)) {
             sockets = GearSockets.randomSockets(4, level.random);
         }
 
-        if(itemStack.is(ITEM_TIER_FIVE)) {
+        if (itemStack.is(ITEM_TIER_FIVE)) {
             sockets = GearSockets.randomSockets(5, level.random);
         }
 
-        if(itemStack.is(ITEM_TIER_SIX)) {
+        if (itemStack.is(ITEM_TIER_SIX)) {
             sockets = GearSockets.randomSockets(6, level.random);
         }
 
-        if(itemStack.is(UPGRADEABLE_ITEM_TIER_SIX)) {
+        if (itemStack.is(UPGRADEABLE_ITEM_TIER_SIX)) {
             // Check if the item already has sockets
             sockets = (GearSockets) itemStack.get(ModDataComponentType.GEAR_SOCKETS);
             if (sockets == null || sockets.isEmpty()) {
                 // If not, generate new sockets
                 sockets = GearSockets.randomSockets(6, level.random);
             } else {
-                if(sockets.sockets().size() >= 6) {
+                if (sockets.sockets().size() >= 6) {
                     // If it already has 6 sockets, do not add more
                     return;
                 }
