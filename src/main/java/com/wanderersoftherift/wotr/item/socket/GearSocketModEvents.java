@@ -19,17 +19,14 @@ public class GearSocketModEvents {
 
     @SubscribeEvent
     public static void modifyComponents(ModifyDefaultComponentsEvent event) {
-        event.modify(Items.IRON_SWORD, builder ->
-                builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets1()))
-        );
+        event.modify(Items.IRON_SWORD,
+                builder -> builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets1())));
 
-        event.modify(Items.DIAMOND_SWORD, builder ->
-                builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets2()))
-        );
+        event.modify(Items.DIAMOND_SWORD,
+                builder -> builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets2())));
 
-        event.modify(Items.NETHERITE_SWORD, builder ->
-                builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets3()))
-        );
+        event.modify(Items.NETHERITE_SWORD,
+                builder -> builder.set(ModDataComponentType.GEAR_SOCKETS.get(), new GearSockets(getExampleSockets3())));
     }
 
     private static @NotNull ArrayList<GearSocket> getExampleSockets1() {

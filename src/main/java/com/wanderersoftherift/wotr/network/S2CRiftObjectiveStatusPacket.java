@@ -15,13 +15,12 @@ import java.util.Optional;
 
 public record S2CRiftObjectiveStatusPacket(Optional<AbstractObjective> objective) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<S2CRiftObjectiveStatusPacket> TYPE = new CustomPacketPayload.Type<>((WanderersOfTheRift.id("s2c_rift_objective_status")));
+    public static final CustomPacketPayload.Type<S2CRiftObjectiveStatusPacket> TYPE = new CustomPacketPayload.Type<>(
+            (WanderersOfTheRift.id("s2c_rift_objective_status")));
 
     public static final StreamCodec<ByteBuf, S2CRiftObjectiveStatusPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.optional(ByteBufCodecs.fromCodec(AbstractObjective.DIRECT_CODEC)),
-            S2CRiftObjectiveStatusPacket::objective,
-            S2CRiftObjectiveStatusPacket::new
-    );
+            S2CRiftObjectiveStatusPacket::objective, S2CRiftObjectiveStatusPacket::new);
 
     @Override
     public CustomPacketPayload.@NotNull Type<? extends CustomPacketPayload> type() {

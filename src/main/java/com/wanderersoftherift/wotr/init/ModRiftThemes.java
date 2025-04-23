@@ -7,5 +7,6 @@ import net.minecraft.resources.ResourceKey;
 
 public class ModRiftThemes {
 
-    public static final ResourceKey<Registry<RiftTheme>> RIFT_THEME_KEY = ResourceKey.createRegistryKey(WanderersOfTheRift.id("rift_theme"));
+    public static final ResourceKey<Registry<RiftTheme>> RIFT_THEME_KEY = ResourceKey
+            .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
 }

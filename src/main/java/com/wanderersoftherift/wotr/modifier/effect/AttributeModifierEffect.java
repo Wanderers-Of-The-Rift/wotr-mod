@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.modifier.effect;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -21,27 +22,24 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 public class AttributeModifierEffect extends AbstractModifierEffect {
-    public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifierEffect::getId),
-                    Attribute.CODEC.fieldOf("attribute").forGetter(AttributeModifierEffect::getAttribute),
-                    Codec.FLOAT.fieldOf("min_roll").forGetter(AttributeModifierEffect::getMinimumRoll),
-                    Codec.FLOAT.fieldOf("max_roll").forGetter(AttributeModifierEffect::getMaximumRoll),
-                    AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(AttributeModifierEffect::getOperation)
-            ).apply(instance, AttributeModifierEffect::new)
-    );
-
-    @Override
-    public MapCodec<? extends AbstractModifierEffect> getCodec() {
-        return MODIFIER_CODEC;
-    }
+    public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance
+                    .group(ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifierEffect::getId),
+                            Attribute.CODEC.fieldOf("attribute").forGetter(AttributeModifierEffect::getAttribute),
+                            Codec.DOUBLE.fieldOf("min_roll").forGetter(AttributeModifierEffect::getMinimumRoll),
+                            Codec.DOUBLE.fieldOf("max_roll").forGetter(AttributeModifierEffect::getMaximumRoll),
+                            AttributeModifier.Operation.CODEC.fieldOf("operation")
+                                    .forGetter(AttributeModifierEffect::getOperation))
+                    .apply(instance, AttributeModifierEffect::new));
 
     private final ResourceLocation id;
     private final Holder<Attribute> attribute;
-    private final float minRoll;
-    private final float maxRoll;
+    private final double minRoll;
+    private final double maxRoll;
     private final AttributeModifier.Operation operation;
 
-    public AttributeModifierEffect(ResourceLocation id, Holder<Attribute> attribute, float minRoll, float maxRoll, AttributeModifier.Operation operation) {
+    public AttributeModifierEffect(ResourceLocation id, Holder<Attribute> attribute, double minRoll, double maxRoll,
+            AttributeModifier.Operation operation) {
         this.id = id;
         this.attribute = attribute;
         this.minRoll = minRoll;
@@ -49,19 +47,24 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         this.operation = operation;
     }
 
+    @Override
+    public MapCodec<? extends AbstractModifierEffect> getCodec() {
+        return MODIFIER_CODEC;
+    }
+
     public ResourceLocation getId() {
         return id;
     }
 
-    public Holder<Attribute> getAttribute(){
+    public Holder<Attribute> getAttribute() {
         return attribute;
     }
 
-    public float getMinimumRoll(){
+    public double getMinimumRoll() {
         return minRoll;
     }
 
-    public float getMaximumRoll(){
+    public double getMaximumRoll() {
         return maxRoll;
     }
 
@@ -73,23 +76,23 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         return this.id.withSuffix("/" + source.getSerializedName());
     }
 
-    public AttributeModifier getModifier(float roll, StringRepresentable source) {
-        return new AttributeModifier(this.idForSlot(source), calculateModifier(roll) , this.getOperation());
+    public AttributeModifier getModifier(double roll, StringRepresentable source) {
+        return new AttributeModifier(this.idForSlot(source), calculateModifier(roll), this.getOperation());
     }
 
-    public double calculateModifier(float roll) {
+    public double calculateModifier(double roll) {
         return (roll * (maxRoll - minRoll)) + minRoll;
     }
 
     @Override
-    public void enableModifier(float roll, Entity entity, ModifierSource source) {
+    public void enableModifier(double roll, Entity entity, ModifierSource source) {
         if (entity instanceof LivingEntity livingentity) {
             livingentity.getAttributes().addTransientAttributeModifiers(this.makeAttributeMap(roll, source));
         }
     }
 
     @Override
-    public void disableModifier(float roll, Entity entity, ModifierSource source) {
+    public void disableModifier(double roll, Entity entity, ModifierSource source) {
         if (entity instanceof LivingEntity livingentity) {
             livingentity.getAttributes().removeAttributeModifiers(this.makeAttributeMap(roll, source));
         }
@@ -100,10 +103,9 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         // NOOP
     }
 
-    private HashMultimap<Holder<Attribute>, AttributeModifier> makeAttributeMap(float roll, ModifierSource source) {
-        HashMultimap<Holder<Attribute>, AttributeModifier> hashmultimap = HashMultimap.create();
-        hashmultimap.put(this.attribute, this.getModifier(roll, source));
-        return hashmultimap;
+    private Multimap<Holder<Attribute>, AttributeModifier> makeAttributeMap(double roll, ModifierSource source) {
+        return ImmutableMultimap.of(this.attribute, this.getModifier(roll, source));
+
     }
 
     @Override
@@ -117,18 +119,34 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
         double calculatedRoll = calculateModifier(roll);
         float roundedValue = (float) (Math.ceil(calculatedRoll * 100) / 100);
-        String sign = (roundedValue > 0) ? "positive" : "negative";
+        String sign;
+        if (roundedValue > 0) {
+            sign = "positive";
+        } else {
+            sign = "negative";
+        }
 
-        MutableComponent cmp = Component.translatable("modifier."+ WanderersOfTheRift.MODID + ".attribute.add." +sign, roundedValue, Component.translatable(attribute.value().getDescriptionId())).withStyle(chatFormatting);
+        MutableComponent cmp = Component
+                .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign, roundedValue,
+                        Component.translatable(attribute.value().getDescriptionId()))
+                .withStyle(chatFormatting);
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
     private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
         double calculatedRoll = calculateModifier(roll);
         int roundedValue = (int) Math.ceil(calculatedRoll * 100);
-        String sign = (roundedValue > 0) ? "positive" : "negative";
+        String sign;
+        if (roundedValue > 0) {
+            sign = "positive";
+        } else {
+            sign = "negative";
+        }
 
-        MutableComponent cmp = Component.translatable("modifier."+ WanderersOfTheRift.MODID + ".attribute.multiply."+sign, roundedValue, Component.translatable(attribute.value().getDescriptionId())).withStyle(chatFormatting);
+        MutableComponent cmp = Component
+                .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
+                        Component.translatable(attribute.value().getDescriptionId()))
+                .withStyle(chatFormatting);
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 }

@@ -15,13 +15,11 @@ import org.jetbrains.annotations.NotNull;
 
 public record C2SRuneAnvilApplyPacket(int containerId) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<C2SRuneAnvilApplyPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "c2s_rune_anvil_apply"));
+    public static final CustomPacketPayload.Type<C2SRuneAnvilApplyPacket> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "c2s_rune_anvil_apply"));
 
-    public static final StreamCodec<ByteBuf, C2SRuneAnvilApplyPacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.VAR_INT,
-            C2SRuneAnvilApplyPacket::containerId,
-            C2SRuneAnvilApplyPacket::new
-    );
+    public static final StreamCodec<ByteBuf, C2SRuneAnvilApplyPacket> STREAM_CODEC = StreamCodec
+            .composite(ByteBufCodecs.VAR_INT, C2SRuneAnvilApplyPacket::containerId, C2SRuneAnvilApplyPacket::new);
 
     @Override
     public CustomPacketPayload.@NotNull Type<? extends CustomPacketPayload> type() {

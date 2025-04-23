@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "g": "minecraft:glass",
+    "w": "#minecraft:planks"
+  },
+  "pattern": [
+    "ggg",
+    "w w",
+    "w w"
+  ],
+  "result": {
+    "count": 1,
+    "id": "wotr:ability_bench"
+  }
+}

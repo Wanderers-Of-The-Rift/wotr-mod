@@ -27,22 +27,11 @@ import java.util.Optional;
  */
 public class RiftSpawnerBlock extends Block {
     public static final MapCodec<RiftSpawnerBlock> CODEC = simpleCodec(RiftSpawnerBlock::new);
-    private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(
-            ImmutableMap.of(
-                    Direction.UP,
-                    Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0),
-                    Direction.DOWN,
-                    Block.box(0.0, 3.0, 0.0, 16.0, 16.0, 16.0),
-                    Direction.NORTH,
-                    Block.box(0.0, 0.0, 3.0, 16.0, 16.0, 16.0),
-                    Direction.SOUTH,
-                    Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 13.0),
-                    Direction.WEST,
-                    Block.box(3.0, 0.0, 0.0, 16.0, 16.0, 16.0),
-                    Direction.EAST,
-                    Block.box(0.0, 0.0, 0.0, 13.0, 16.0, 16.0)
-            )
-    );
+    private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(Direction.UP,
+            Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0), Direction.DOWN, Block.box(0.0, 3.0, 0.0, 16.0, 16.0, 16.0),
+            Direction.NORTH, Block.box(0.0, 0.0, 3.0, 16.0, 16.0, 16.0), Direction.SOUTH,
+            Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 13.0), Direction.WEST, Block.box(3.0, 0.0, 0.0, 16.0, 16.0, 16.0),
+            Direction.EAST, Block.box(0.0, 0.0, 0.0, 13.0, 16.0, 16.0)));
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
@@ -56,7 +45,8 @@ public class RiftSpawnerBlock extends Block {
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext context) {
         return SHAPES.get(state.getValue(BlockStateProperties.FACING));
     }
 
@@ -72,6 +62,7 @@ public class RiftSpawnerBlock extends Block {
 
     /**
      * Provides the location to create the rift, if a valid location exists
+     * 
      * @param level
      * @param pos
      * @param dir
@@ -96,8 +87,10 @@ public class RiftSpawnerBlock extends Block {
         }
 
         BlockPos adjacentPos = pos.relative(facing);
-        if (allowsPortal(level, adjacentPos) && allowsPortal(level, adjacentPos.above()) && allowsPortal(level, adjacentPos.below())) {
-            return Optional.of(new PortalSpawnLocation(adjacentPos.below().getBottomCenter().subtract(facing.getUnitVec3().scale(0.475)), facing));
+        if (allowsPortal(level, adjacentPos) && allowsPortal(level, adjacentPos.above())
+                && allowsPortal(level, adjacentPos.below())) {
+            return Optional.of(new PortalSpawnLocation(
+                    adjacentPos.below().getBottomCenter().subtract(facing.getUnitVec3().scale(0.475)), facing));
         }
         return Optional.empty();
     }

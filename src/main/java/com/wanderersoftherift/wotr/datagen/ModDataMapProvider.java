@@ -36,9 +36,11 @@ public class ModDataMapProvider extends DataMapProvider {
                 .add(Tags.Items.STONES, new EssenceValue(earth, 2), false)
                 .add(Tags.Items.STRIPPED_LOGS, new EssenceValue(life, 8), false)
                 .add(Tags.Items.CROPS, new EssenceValue(life, 1), false)
-                .add(Items.POTATO.builtInRegistryHolder(), new EssenceValue(ImmutableMap.<ResourceLocation, Integer>builder().put(life, 2).put(earth, 1).build()), false)
+                .add(Items.POTATO.builtInRegistryHolder(),
+                        new EssenceValue(
+                                ImmutableMap.<ResourceLocation, Integer>builder().put(life, 2).put(earth, 1).build()),
+                        false)
                 .build();
-
 
     }
 }

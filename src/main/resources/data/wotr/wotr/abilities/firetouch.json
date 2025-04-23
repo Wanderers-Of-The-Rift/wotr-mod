@@ -1,0 +1,55 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:firetouch",
+  "icon": "minecraft:textures/mob_effect/fire_resistance.png",
+  "cooldown": 200,
+  "effects": [
+    {
+      "type": "wotr:attach_effect",
+      "targeting": {
+        "type": "wotr:self_targeting"
+      },
+      "continue": {
+        "duration": 200
+      },
+      "display": "wotr:fireshield",
+      "trigger": {
+        "frequency": 40
+      },
+      "effects": [
+        {
+          "type": "wotr:attach_effect",
+          "targeting": {
+            "type": "wotr:self_targeting"
+          },
+          "continue": {
+            "duration": 200
+          },
+          "trigger": {
+            "frequency": 1,
+            "initial_delay": 0
+          },
+          "effects": [
+            {
+              "type": "wotr:movement_effect",
+              "targeting": {
+                "type": "wotr:area_targeting",
+                "range": 0,
+                "include_self": false,
+                "target": {
+                  "sentiment": "any"
+                }
+              },
+              "velocity": [
+                0,
+                0,
+                -1
+              ],
+              "relativeFrame": "source_from_target"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

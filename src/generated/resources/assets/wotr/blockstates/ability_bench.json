@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "wotr:block/ability_bench",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "wotr:block/ability_bench"
+    },
+    "facing=south": {
+      "model": "wotr:block/ability_bench",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "wotr:block/ability_bench",
+      "y": 270
+    }
+  }
+}

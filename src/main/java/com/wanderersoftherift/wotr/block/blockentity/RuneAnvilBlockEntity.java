@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilContainer;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+@MethodsReturnNonnullByDefault
 public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements RuneAnvilContainer {
     private static final Component CONTAINER_TITLE = Component.translatable("container.wotr.rune_anvil");
     private NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
@@ -24,12 +26,12 @@ public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements Ru
     }
 
     @Override
-    protected @NotNull Component getDefaultName() {
+    protected Component getDefaultName() {
         return CONTAINER_TITLE;
     }
 
     @Override
-    protected @NotNull NonNullList<ItemStack> getItems() {
+    protected NonNullList<ItemStack> getItems() {
         return this.items;
     }
 
@@ -39,9 +41,10 @@ public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements Ru
     }
 
     @Override
-    protected @NotNull AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
+    protected AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
         Preconditions.checkState(this.level != null, "Attempted to create a menu for a block entity without a level");
 
-        return new RuneAnvilMenu(containerId, inventory, ContainerLevelAccess.create(this.level, this.worldPosition), true, this);
+        return new RuneAnvilMenu(containerId, inventory, ContainerLevelAccess.create(this.level, this.worldPosition),
+                true, this);
     }
 }

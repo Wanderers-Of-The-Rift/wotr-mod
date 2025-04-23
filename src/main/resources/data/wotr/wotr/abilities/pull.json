@@ -1,0 +1,18 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:pull",
+  "icon": "minecraft:textures/mob_effect/darkness.png",
+  "cooldown": 10,
+  "effects": [
+    {
+      "type": "wotr:movement_effect",
+      "targeting": {
+        "type": "wotr:area_targeting",
+        "range": 20,
+        "include_self": false
+      },
+      "velocity": [0, 0, 5],
+      "relativeFrame": "source_from_target"
+    }
+  ]
+}

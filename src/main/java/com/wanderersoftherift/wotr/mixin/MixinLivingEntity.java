@@ -26,16 +26,17 @@ public class MixinLivingEntity {
     }
 
     @Inject(method = "collectEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;runLocationChangedEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V"))
-    private void collectEquipmentChangesRunLocationChangedEffects(CallbackInfoReturnable<Map> cir, @Local EquipmentSlot equipmentslot1, @Local ItemStack itemstack2) {
+    private void collectEquipmentChangesRunLocationChangedEffects(CallbackInfoReturnable<Map> cir,
+            @Local EquipmentSlot equipmentslot1, @Local ItemStack itemstack2) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         ModifierHelper.enableModifier(itemstack2, livingEntity, equipmentslot1);
     }
 
     @Inject(method = "stopLocationBasedEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;stopLocationBasedEffects(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V"))
-    private void stopLocationBasedEffectsStopLocationBasedEffects(ItemStack stack, EquipmentSlot slot, AttributeMap attributeMap, CallbackInfo ci) {
+    private void stopLocationBasedEffectsStopLocationBasedEffects(ItemStack stack, EquipmentSlot slot,
+            AttributeMap attributeMap, CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         ModifierHelper.disableModifier(stack, livingEntity, slot);
     }
-
 
 }

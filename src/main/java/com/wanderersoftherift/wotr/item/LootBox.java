@@ -20,13 +20,13 @@ import net.minecraft.world.phys.Vec3;
 
 public record LootBox(ResourceKey<LootTable> lootTable) implements ConsumableListener {
 
-    public static Codec<LootBox> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(LootBox::lootTable)
-    ).apply(inst, LootBox::new));
+    public static final Codec<LootBox> CODEC = RecordCodecBuilder.create(inst -> inst
+            .group(ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(LootBox::lootTable))
+            .apply(inst, LootBox::new));
 
     @Override
     public void onConsume(Level level, LivingEntity livingEntity, ItemStack itemStack, Consumable consumable) {
-        if(level.isClientSide()){
+        if (level.isClientSide()) {
             return;
         }
         ServerLevel serverLevel = (ServerLevel) level;
@@ -35,11 +35,12 @@ public record LootBox(ResourceKey<LootTable> lootTable) implements ConsumableLis
         ObjectArrayList<ItemStack> objectarraylist = loottable.getRandomItems(lootparams);
         if (!objectarraylist.isEmpty()) {
             for (ItemStack itemstack : objectarraylist) {
-                DefaultDispenseItemBehavior.spawnItem(serverLevel, itemstack, 2, Direction.UP, Vec3.atBottomCenterOf(livingEntity.blockPosition()).relative(Direction.UP, 1.2));
+                DefaultDispenseItemBehavior.spawnItem(serverLevel, itemstack, 2, Direction.UP,
+                        Vec3.atBottomCenterOf(livingEntity.blockPosition()).relative(Direction.UP, 1.2));
             }
 
             serverLevel.levelEvent(3014, livingEntity.blockPosition(), 0);
         }
-        //itemStack.shrink(1);
+        // itemStack.shrink(1);
     }
 }

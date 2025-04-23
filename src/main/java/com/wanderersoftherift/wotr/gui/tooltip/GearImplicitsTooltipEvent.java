@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.gui.tooltip;
 
-
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
@@ -27,20 +26,24 @@ public class GearImplicitsTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.GEAR_IMPLICITS)) return;
+        if (!stack.has(ModDataComponentType.GEAR_IMPLICITS)) {
+            return;
+        }
 
         GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
-        if (implicits == null) return;
+        if (implicits == null) {
+            return;
+        }
         List<ModifierInstance> modifierInstances = implicits.modifierInstances(stack, Minecraft.getInstance().level);
 
-        list.add(1, Either.left(Component.translatable("tooltip."+ WanderersOfTheRift.MODID +".implicit").withStyle(ChatFormatting.GRAY)));
+        list.add(1, Either.left(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".implicit")
+                .withStyle(ChatFormatting.GRAY)));
 
         List<TooltipComponent> toAdd = new ArrayList<>();
         for (ModifierInstance modifierInstance : modifierInstances) {
             List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack, ChatFormatting.AQUA);
             toAdd.addAll(tooltipComponents);
         }
-
 
         for (int i = 0; i < toAdd.size(); i++) {
             list.add(i + 2, Either.right(toAdd.get(i)));

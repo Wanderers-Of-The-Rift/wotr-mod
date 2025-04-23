@@ -15,16 +15,13 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public record GearSocket(
-        RunegemShape shape,
-        Optional<ModifierInstance> modifier,
-        Optional<RunegemData> runegem
-) {
-    public static Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            RunegemShape.CODEC.fieldOf("shape").forGetter(GearSocket::shape),
-            ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
-            RunegemData.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem)
-    ).apply(inst, GearSocket::new));
+public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier, Optional<RunegemData> runegem) {
+
+    public static final Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst
+            .group(RunegemShape.CODEC.fieldOf("shape").forGetter(GearSocket::shape),
+                    ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
+                    RunegemData.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem))
+            .apply(inst, GearSocket::new));
 
     public static GearSocket getRandomSocket(RandomSource random) {
         RunegemShape shape = RunegemShape.getRandomShape(random);
@@ -49,6 +46,7 @@ public record GearSocket(
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), level.random)), Optional.of(runegemData));
+        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), level.random)),
+                Optional.of(runegemData));
     }
 }

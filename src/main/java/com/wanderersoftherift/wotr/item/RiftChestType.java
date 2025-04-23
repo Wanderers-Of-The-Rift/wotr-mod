@@ -7,7 +7,8 @@ public enum RiftChestType {
 
     WOODEN("wooden");
 
-    public static final Codec<RiftChestType> CODEC = Codec.STRING.flatComapMap(s -> RiftChestType.byName(s, null), d -> DataResult.success(d.getName()));
+    public static final Codec<RiftChestType> CODEC = Codec.STRING.flatComapMap(s -> RiftChestType.byName(s, null),
+            d -> DataResult.success(d.getName()));
 
     private final String name;
 
@@ -29,4 +30,3 @@ public enum RiftChestType {
     }
 
 }
-

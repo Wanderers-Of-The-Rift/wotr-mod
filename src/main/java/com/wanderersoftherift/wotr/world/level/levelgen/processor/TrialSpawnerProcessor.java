@@ -21,10 +21,9 @@ import org.jetbrains.annotations.Nullable;
 import static com.wanderersoftherift.wotr.init.ModProcessors.TRIAL_SPAWNER;
 
 public class TrialSpawnerProcessor extends StructureProcessor {
-    public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->
-            builder.group(
-                    TrialSpawnerConfig.CODEC.fieldOf("config").forGetter(TrialSpawnerProcessor::getSpawnerConfig)
-            ).apply(builder, TrialSpawnerProcessor::new));
+    public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
+            .group(TrialSpawnerConfig.CODEC.fieldOf("config").forGetter(TrialSpawnerProcessor::getSpawnerConfig))
+            .apply(builder, TrialSpawnerProcessor::new));
 
     private final Holder<TrialSpawnerConfig> spawnerConfig;
 
@@ -36,14 +35,15 @@ public class TrialSpawnerProcessor extends StructureProcessor {
         return spawnerConfig;
     }
 
-    @Nullable
-    @Override
-    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, @javax.annotation.Nullable StructureTemplate template) {
+    @Nullable @Override
+    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings, @javax.annotation.Nullable StructureTemplate template) {
         if (blockInfo.state().getBlock() instanceof TrialSpawnerBlock) {
-            BlockEntity blockEntity = ((TrialSpawnerBlock) blockInfo.state().getBlock()).newBlockEntity(blockInfo.pos(), blockInfo.state());
-            if(blockEntity instanceof TrialSpawnerBlockEntity trialSpawnerBlockEntity && blockInfo.nbt() != null) {
-                return new StructureTemplate.StructureBlockInfo(
-                        blockInfo.pos(),
+            BlockEntity blockEntity = ((TrialSpawnerBlock) blockInfo.state().getBlock()).newBlockEntity(blockInfo.pos(),
+                    blockInfo.state());
+            if (blockEntity instanceof TrialSpawnerBlockEntity trialSpawnerBlockEntity && blockInfo.nbt() != null) {
+                return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
                         blockInfo.state().setValue(TrialSpawnerBlock.STATE, TrialSpawnerState.INACTIVE),
                         getBlockEntity(world, blockInfo, trialSpawnerBlockEntity));
             }
@@ -51,7 +51,8 @@ public class TrialSpawnerProcessor extends StructureProcessor {
         return blockInfo;
     }
 
-    private CompoundTag getBlockEntity(LevelReader world, StructureTemplate.StructureBlockInfo blockInfo, TrialSpawnerBlockEntity blockEntity) {
+    private CompoundTag getBlockEntity(LevelReader world, StructureTemplate.StructureBlockInfo blockInfo,
+            TrialSpawnerBlockEntity blockEntity) {
         CompoundTag nbt = blockInfo.nbt();
         blockEntity.loadWithComponents(nbt, world.registryAccess());
         blockEntity.getTrialSpawner().getData().reset();

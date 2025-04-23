@@ -1,0 +1,15 @@
+{
+  "id" : "wotr:damage",
+  "icon" : "wotr:textures/item/runegem/shape/diamond.png",
+  "maxCount" : 5,
+  "effects": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:ability_upgrade_damage",
+      "attribute": "wotr:ability_raw_damage",
+      "min_roll": 0.1,
+      "max_roll": 0.1,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

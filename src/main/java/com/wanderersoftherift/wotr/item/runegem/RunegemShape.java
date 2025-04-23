@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.item.runegem;
 
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import io.netty.buffer.ByteBuf;
@@ -20,9 +19,12 @@ public enum RunegemShape {
     HEART(4, "heart"),
     PENTAGON(5, "pentagon");
 
-    public static final Codec<RunegemShape> CODEC = Codec.STRING.flatComapMap(s -> RunegemShape.byName(s, null), d -> DataResult.success(d.getName()));
-    public static final IntFunction<RunegemShape> BY_ID = ByIdMap.continuous(RunegemShape::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
-    public static final StreamCodec<ByteBuf, RunegemShape> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, RunegemShape::getId);
+    public static final Codec<RunegemShape> CODEC = Codec.STRING.flatComapMap(s -> RunegemShape.byName(s, null),
+            d -> DataResult.success(d.getName()));
+    public static final IntFunction<RunegemShape> BY_ID = ByIdMap.continuous(RunegemShape::getId, values(),
+            ByIdMap.OutOfBoundsStrategy.WRAP);
+    public static final StreamCodec<ByteBuf, RunegemShape> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID,
+            RunegemShape::getId);
 
     private final int id;
     private final String name;

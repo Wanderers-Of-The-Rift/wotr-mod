@@ -26,23 +26,19 @@ import java.util.List;
 import java.util.Map;
 
 public class GearSocketTooltipRenderer implements ClientTooltipComponent {
-    public static final Map<RunegemShape, ResourceLocation> SHAPE_RESOURCE_LOCATION_MAP =
-            Map.of(
-                    RunegemShape.CIRCLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/circle.png"),
-                    RunegemShape.DIAMOND, WanderersOfTheRift.id("textures/tooltip/runegem/shape/diamond.png"),
-                    RunegemShape.HEART, WanderersOfTheRift.id("textures/tooltip/runegem/shape/heart.png"),
-                    RunegemShape.PENTAGON, WanderersOfTheRift.id("textures/tooltip/runegem/shape/pentagon.png"),
-                    RunegemShape.SQUARE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/square.png"),
-                    RunegemShape.TRIANGLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/triangle.png")
-            );
+    public static final Map<RunegemShape, ResourceLocation> SHAPE_RESOURCE_LOCATION_MAP = Map.of(RunegemShape.CIRCLE,
+            WanderersOfTheRift.id("textures/tooltip/runegem/shape/circle.png"), RunegemShape.DIAMOND,
+            WanderersOfTheRift.id("textures/tooltip/runegem/shape/diamond.png"), RunegemShape.HEART,
+            WanderersOfTheRift.id("textures/tooltip/runegem/shape/heart.png"), RunegemShape.PENTAGON,
+            WanderersOfTheRift.id("textures/tooltip/runegem/shape/pentagon.png"), RunegemShape.SQUARE,
+            WanderersOfTheRift.id("textures/tooltip/runegem/shape/square.png"), RunegemShape.TRIANGLE,
+            WanderersOfTheRift.id("textures/tooltip/runegem/shape/triangle.png"));
     private final int spacing = Minecraft.getInstance().font.lineHeight + 2;
     private final GearSocketComponent cmp;
-
 
     public GearSocketTooltipRenderer(GearSocketComponent cmp) {
         this.cmp = cmp;
     }
-
 
     @Override
     public int getHeight(@NotNull Font font) {
@@ -59,8 +55,10 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(Font pFont, int pX, int pY, @NotNull Matrix4f pMatrix4f, MultiBufferSource.@NotNull BufferSource pBufferSource) {
-        pFont.drawInBatch(getSocketDesc(), pX, pY, ChatFormatting.GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+    public void renderText(Font pFont, int pX, int pY, @NotNull Matrix4f pMatrix4f,
+            MultiBufferSource.@NotNull BufferSource pBufferSource) {
+        pFont.drawInBatch(getSocketDesc(), pX, pY, ChatFormatting.GRAY.getColor(), true, pMatrix4f, pBufferSource,
+                Font.DisplayMode.NORMAL, 0, 15_728_880);
     }
 
     @Override
@@ -81,15 +79,10 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 ItemStack fakeStack = new ItemStack(ModItems.RUNEGEM.get());
                 fakeStack.set(ModDataComponentType.RUNEGEM_DATA, data);
 
-                guiGraphics.renderFakeItem(fakeStack, scaledX, scaledY -1);
+                guiGraphics.renderFakeItem(fakeStack, scaledX, scaledY - 1);
             } else {
-                guiGraphics.blit(RenderType.GUI_TEXTURED,
-                        SHAPE_RESOURCE_LOCATION_MAP.get(socket.shape()),
-                        scaledX, scaledY - 1,
-                        0, 0,
-                        16, 16,
-                        16, 16
-                );
+                guiGraphics.blit(RenderType.GUI_TEXTURED, SHAPE_RESOURCE_LOCATION_MAP.get(socket.shape()), scaledX,
+                        scaledY - 1, 0, 0, 16, 16, 16, 16);
             }
 
             pose.popPose(); // Restore position
@@ -99,13 +92,10 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         }
     }
 
-
-
     public static Component getSocketDesc() {
-        return Component.translatable("tooltip."+ WanderersOfTheRift.MODID +".socket");
+        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket");
     }
 
-
-
-    public record GearSocketComponent(ItemStack socketed, List<GearSocket> gearSocket) implements TooltipComponent {}
+    public record GearSocketComponent(ItemStack socketed, List<GearSocket> gearSocket) implements TooltipComponent {
+    }
 }

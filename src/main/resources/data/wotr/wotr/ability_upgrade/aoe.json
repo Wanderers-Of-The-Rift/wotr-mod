@@ -1,0 +1,15 @@
+{
+  "id" : "wotr:aoe",
+  "icon" : "wotr:textures/item/runegem/shape/circle.png",
+  "maxCount" : 3,
+  "effects": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:ability_upgrade_aoe",
+      "attribute": "wotr:ability_aoe",
+      "min_roll": 1,
+      "max_roll": 1,
+      "operation": "add_value"
+    }
+  ]
+}

@@ -25,20 +25,24 @@ import static com.wanderersoftherift.wotr.init.ModProcessors.WEIGHTED_REPLACE;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 
 public class WeightedReplaceProcessor extends StructureProcessor {
-    public static final MapCodec<WeightedReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder ->
-            builder.group(
-                    WeightedBlockstateEntry.CODEC.listOf().fieldOf("output_list").forGetter(WeightedReplaceProcessor::getWeightList),
-                    InputBlockState.DIRECT_CODEC.fieldOf("input_state").forGetter(WeightedReplaceProcessor::getInputBlockState),
-                    RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK).forGetter(WeightedReplaceProcessor::getStructureRandomType),
-                    Codec.LONG.optionalFieldOf("seed_adjustment", 6551687435L).forGetter(WeightedReplaceProcessor::getSeedAdjustment)
-            ).apply(builder, WeightedReplaceProcessor::new));
+    public static final MapCodec<WeightedReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+            WeightedBlockstateEntry.CODEC.listOf()
+                    .fieldOf("output_list")
+                    .forGetter(WeightedReplaceProcessor::getWeightList),
+            InputBlockState.DIRECT_CODEC.fieldOf("input_state").forGetter(WeightedReplaceProcessor::getInputBlockState),
+            RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
+                    .forGetter(WeightedReplaceProcessor::getStructureRandomType),
+            Codec.LONG.optionalFieldOf("seed_adjustment", 6551687435L)
+                    .forGetter(WeightedReplaceProcessor::getSeedAdjustment))
+            .apply(builder, WeightedReplaceProcessor::new));
 
     private final List<WeightedBlockstateEntry> weightList;
     private final InputBlockState inputBlockState;
     private final StructureRandomType structureRandomType;
     private final long seedAdjustment;
 
-    public WeightedReplaceProcessor(List<WeightedBlockstateEntry> weightList, InputBlockState inputBlockState, StructureRandomType structureRandomType, long seedAdjustment) {
+    public WeightedReplaceProcessor(List<WeightedBlockstateEntry> weightList, InputBlockState inputBlockState,
+            StructureRandomType structureRandomType, long seedAdjustment) {
         this.weightList = weightList;
         this.inputBlockState = inputBlockState;
         this.structureRandomType = structureRandomType;
@@ -46,7 +50,9 @@ public class WeightedReplaceProcessor extends StructureProcessor {
     }
 
     @Override
-    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings, @Nullable StructureTemplate template) {
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
         ProcessorUtil.getRandom(structureRandomType, blockPos, piecePos, structurePos, world, seedAdjustment);
@@ -65,15 +71,13 @@ public class WeightedReplaceProcessor extends StructureProcessor {
 
     private BlockState getReplacementBlock(LevelReader world) {
         if (world instanceof WorldGenLevel worldGenLevel) {
-            return WeightedRandom
-                    .getRandomItem(worldGenLevel.getRandom(), weightList)
+            return WeightedRandom.getRandomItem(worldGenLevel.getRandom(), weightList)
                     .orElse(new WeightedBlockstateEntry(null, Weight.of(1)))
                     .outputBlockState()
                     .convertBlockState();
         }
         return null;
     }
-
 
     protected StructureProcessorType<?> getType() {
         return WEIGHTED_REPLACE.get();

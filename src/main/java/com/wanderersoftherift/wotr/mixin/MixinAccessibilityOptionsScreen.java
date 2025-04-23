@@ -20,13 +20,15 @@ public class MixinAccessibilityOptionsScreen extends Screen {
         AccessibilityOptionsScreen screen = ((AccessibilityOptionsScreen) (Object) this);
         Button accessibilityButton = Button
                 .builder(Component.translatable("accessibility.wotr.menubutton"), (button) -> {
-                    if(this.minecraft != null) {
-                        this.minecraft.setScreen(new com.wanderersoftherift.wotr.gui.screen.AccessibilityOptionsScreen(screen));
+                    if (this.minecraft != null) {
+                        this.minecraft.setScreen(
+                                new com.wanderersoftherift.wotr.gui.screen.AccessibilityOptionsScreen(screen));
                     }
                 })
-                .pos(5 , 5)
+                .pos(5, 5)
                 .size(125, 20)
                 .build();
-        this.addRenderableWidget(accessibilityButton); // using 'this' here feels dangerous but it works so im not complaining
+        this.addRenderableWidget(accessibilityButton); // using 'this' here feels dangerous but it works so im not
+                                                       // complaining
     }
 }

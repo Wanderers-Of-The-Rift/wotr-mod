@@ -1,0 +1,15 @@
+{
+  "id" : "wotr:projectile_count",
+  "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "maxCount" : 4,
+  "effects": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:ability_upgrade_projectile_count",
+      "attribute": "wotr:projectile_count",
+      "min_roll": 1,
+      "max_roll": 1,
+      "operation": "add_value"
+    }
+  ]
+}
