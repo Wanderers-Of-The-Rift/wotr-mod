@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:wooden_sword",
+    "minecraft:wooden_pickaxe",
+    "minecraft:wooden_axe",
+    "minecraft:wooden_shovel",
+    "minecraft:wooden_hoe",
+    "minecraft:leather_helmet",
+    "minecraft:leather_chestplate",
+    "minecraft:leather_leggings",
+    "minecraft:leather_boots"
+  ]
+}

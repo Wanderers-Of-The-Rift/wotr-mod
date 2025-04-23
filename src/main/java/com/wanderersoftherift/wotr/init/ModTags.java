@@ -22,6 +22,13 @@ public class ModTags {
         public static final TagKey<Item> DEV_TOOLS = createTag("dev_tools");
         public static final TagKey<Item> UNBREAKABLE_EXCLUSIONS = createTag("unbreakable_exclusions");
         public static final TagKey<Item> SOCKETABLE = createTag("socketable");
+        public static final TagKey<Item> ITEM_TIER_ONE = createTag("item_tier_one");
+        public static final TagKey<Item> ITEM_TIER_TWO = createTag("item_tier_two");
+        public static final TagKey<Item> ITEM_TIER_THREE = createTag("item_tier_three");
+        public static final TagKey<Item> ITEM_TIER_FOUR = createTag("item_tier_four");
+        public static final TagKey<Item> ITEM_TIER_FIVE = createTag("item_tier_five");
+        public static final TagKey<Item> ITEM_TIER_SIX = createTag("item_tier_six");
+        public static final TagKey<Item> UPGRADEABLE_ITEM_TIER_SIX = createTag("upgradeable_item_tier_six");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(WanderersOfTheRift.id(name));
