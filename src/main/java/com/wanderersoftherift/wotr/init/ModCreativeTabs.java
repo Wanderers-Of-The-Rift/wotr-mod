@@ -23,7 +23,11 @@ public class ModCreativeTabs {
                         output.accept(ModItems.RIFT_KEY);
                         output.accept(ModItems.ABILITY_HOLDER);
                         output.accept(ModItems.SKILL_THREAD);
-                        output.accept(ModItems.RUNEGEM_GEODE);
+                        output.accept(ModItems.RAW_RUNEGEM_GEODE);
+                        output.accept(ModItems.SHAPED_RUNEGEM_GEODE);
+                        output.accept(ModItems.CUT_RUNEGEM_GEODE);
+                        output.accept(ModItems.POLISHED_RUNEGEM_GEODE);
+                        output.accept(ModItems.FRAMED_RUNEGEM_GEODE);
                         ModItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                         output.accept(ModItems.BUILDER_GLASSES);
                     })

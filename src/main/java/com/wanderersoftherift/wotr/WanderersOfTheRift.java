@@ -9,31 +9,7 @@ import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshotSystem;
-import com.wanderersoftherift.wotr.init.ModAbilityTypes;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModAttributes;
-import com.wanderersoftherift.wotr.init.ModBlockEntities;
-import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModChunkGenerators;
-import com.wanderersoftherift.wotr.init.ModCommands;
-import com.wanderersoftherift.wotr.init.ModCreativeTabs;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModEffects;
-import com.wanderersoftherift.wotr.init.ModEntities;
-import com.wanderersoftherift.wotr.init.ModEntityDataSerializers;
-import com.wanderersoftherift.wotr.init.ModInputBlockStateTypes;
-import com.wanderersoftherift.wotr.init.ModItems;
-import com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes;
-import com.wanderersoftherift.wotr.init.ModLootModifiers;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
-import com.wanderersoftherift.wotr.init.ModMobEffects;
-import com.wanderersoftherift.wotr.init.ModModifierEffects;
-import com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes;
-import com.wanderersoftherift.wotr.init.ModOutputBlockStateTypes;
-import com.wanderersoftherift.wotr.init.ModPayloadHandlers;
-import com.wanderersoftherift.wotr.init.ModProcessors;
-import com.wanderersoftherift.wotr.init.ModSoundEvents;
-import com.wanderersoftherift.wotr.init.ModTargetingTypes;
+import com.wanderersoftherift.wotr.init.*;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -78,6 +54,7 @@ public class WanderersOfTheRift {
         // Loot
         ModLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         ModLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
+        ModLootItemConditionTypes.LOOT_ITEM_CONDITION_TYPES.register(modEventBus);
 
         // Attachments and components
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);

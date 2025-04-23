@@ -47,7 +47,11 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(ModItems.RUNEGEM, "Runegem");
         addItem(ModItems.RIFT_KEY, "Rift Key");
-        addItem(ModItems.RUNEGEM_GEODE, "Runegem Geode");
+        addItem(ModItems.RAW_RUNEGEM_GEODE, "Runegem Geode (Raw)");
+        addItem(ModItems.SHAPED_RUNEGEM_GEODE, "Runegem Geode (Shaped)");
+        addItem(ModItems.CUT_RUNEGEM_GEODE, "Runegem Geode (Cut)");
+        addItem(ModItems.POLISHED_RUNEGEM_GEODE, "Runegem Geode (Polished)");
+        addItem(ModItems.FRAMED_RUNEGEM_GEODE, "Runegem Geode (Framed)");
         addItem(ModItems.ABILITY_HOLDER, "Empty Ability");
         addItem(ModItems.SKILL_THREAD, "Skill Thread");
 

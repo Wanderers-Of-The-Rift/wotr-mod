@@ -247,7 +247,8 @@ public class RiftLevelManager {
             if (theme != null) {
                 riftTheme = LevelRiftThemeData.fromId(theme, riftLevel);
             }
-            Integer tier = riftKey.get(ModDataComponentType.RIFT_TIER);
+            Integer tier = riftKey.getOrDefault(ModDataComponentType.RIFT_TIER, 0);
+            riftData.setTier(tier);
             maxDepth = RiftLevelManager.getRiftSize(tier);
         }
         if (riftTheme == null) {

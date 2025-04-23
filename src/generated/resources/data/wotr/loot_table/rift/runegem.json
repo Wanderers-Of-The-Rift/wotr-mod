@@ -1,0 +1,71 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "name": "wotr:raw_runegem_geode",
+          "weight": 16
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 4,
+              "min_tier": 1
+            }
+          ],
+          "name": "wotr:shaped_runegem_geode",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "name": "wotr:cut_runegem_geode",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 3
+            }
+          ],
+          "name": "wotr:polished_runegem_geode",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 4
+            }
+          ],
+          "name": "wotr:framed_runegem_geode"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:rift/runegem"
+}

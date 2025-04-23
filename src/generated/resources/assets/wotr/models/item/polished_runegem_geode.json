@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "wotr:item/runegem_geode"
+    "layer0": "wotr:item/polished_runegem_geode"
   }
 }

@@ -87,7 +87,11 @@ public class ModModelProvider extends ModelProvider {
 
         itemModels.generateFlatItem(ModItems.EXAMPLE_ITEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.RAW_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SHAPED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CUT_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.POLISHED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FRAMED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BASE_ABILITY_HOLDER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.SKILL_THREAD.get(), ModelTemplates.FLAT_ITEM);
 

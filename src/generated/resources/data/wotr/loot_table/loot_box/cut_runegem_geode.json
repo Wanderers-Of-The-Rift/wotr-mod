@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "wotr:runegems",
+              "tier": "cut"
+            }
+          ],
+          "name": "wotr:runegem"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:loot_box/cut_runegem_geode"
+}

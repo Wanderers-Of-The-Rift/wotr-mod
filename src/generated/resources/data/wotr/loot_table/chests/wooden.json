@@ -21,6 +21,11 @@
           "weight": 40
         },
         {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/runegem",
+          "weight": 20
+        },
+        {
           "type": "minecraft:item",
           "name": "minecraft:emerald",
           "weight": 20
@@ -47,7 +52,7 @@
           "weight": 10
         }
       ],
-      "rolls": 3.0
+      "rolls": 6.0
     }
   ],
   "random_sequence": "wotr:chests/wooden"
