@@ -22,6 +22,13 @@ public class ModTags {
         public static final TagKey<Item> DEV_TOOLS = createTag("dev_tools");
         public static final TagKey<Item> UNBREAKABLE_EXCLUSIONS = createTag("unbreakable_exclusions");
         public static final TagKey<Item> SOCKETABLE = createTag("socketable");
+        public static final TagKey<Item> SOCKETABLE_HELMET_SLOT = createTag("socketable_helmet_slot");
+        public static final TagKey<Item> SOCKETABLE_CHESTPLATE_SLOT = createTag("socketable_chestplate_slot");
+        public static final TagKey<Item> SOCKETABLE_LEGGINGS_SLOT = createTag("socketable_leggings_slot");
+        public static final TagKey<Item> SOCKETABLE_BOOTS_SLOT = createTag("socketable_boots_slot");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT = createTag("socketable_main_hand_slot");
+        public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
+
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(WanderersOfTheRift.id(name));
