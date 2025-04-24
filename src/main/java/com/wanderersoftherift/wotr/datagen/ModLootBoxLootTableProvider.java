@@ -27,8 +27,9 @@ public record ModLootBoxLootTableProvider(HolderLookup.Provider registries) impl
         generateRunegemGeodeTable(consumer, RunegemTier.FRAMED);
     }
 
-    private static void generateRunegemGeodeTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer, RunegemTier tier) {
-        consumer.accept(getResourceKey("loot_box/"+ tier.getName() +"_runegem_geode"),
+    private static void generateRunegemGeodeTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer,
+            RunegemTier tier) {
+        consumer.accept(getResourceKey("loot_box/" + tier.getName() + "_runegem_geode"),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))

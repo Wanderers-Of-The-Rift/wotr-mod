@@ -34,8 +34,7 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                                 .add(LootItem.lootTableItem(Items.IRON_INGOT)
                                         .setWeight(40)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/runegem"))
-                                        .setWeight(20))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/runegem")).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.EMERALD).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.POTION)
                                         .setWeight(20)
@@ -45,16 +44,14 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
     }
 
     private void generateRunegemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        consumer.accept(getResourceKey("rift/runegem"),
-                LootTable.lootTable()
-                        .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_GEODE).when(riftTier(0, 2)).setWeight(16))
-                                .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_GEODE).when(riftTier(1, 4)).setWeight(8))
-                                .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_GEODE).when(riftTier(2, 5)).setWeight(4))
-                                .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_GEODE).when(riftTier(3, 7)).setWeight(2))
-                                .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_GEODE).when(riftTier(4, 7)).setWeight(1))
-                        ));
+        consumer.accept(getResourceKey("rift/runegem"), LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_GEODE).when(riftTier(0, 2)).setWeight(16))
+                        .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_GEODE).when(riftTier(1, 4)).setWeight(8))
+                        .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_GEODE).when(riftTier(2, 5)).setWeight(4))
+                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_GEODE).when(riftTier(3, 7)).setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_GEODE).when(riftTier(4, 7)).setWeight(1))));
     }
 
     private static @NotNull ResourceKey<LootTable> getResourceKey(String path) {
