@@ -14,10 +14,10 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
  * A LootItemCondition that checks if the current rift level is between the min (inc) and max (inc) values.
  */
 public record RiftLevelCheck(int minTier, int maxTier) implements LootItemCondition {
-    public static final MapCodec<RiftLevelCheck> CODEC = RecordCodecBuilder.mapCodec(p_338174_ -> p_338174_
+    public static final MapCodec<RiftLevelCheck> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(Codec.INT.fieldOf("min_tier").forGetter(RiftLevelCheck::minTier),
                     Codec.INT.fieldOf("max_tier").forGetter(RiftLevelCheck::maxTier))
-            .apply(p_338174_, RiftLevelCheck::new));
+            .apply(instance, RiftLevelCheck::new));
 
     @Override
     public LootItemConditionType getType() {
