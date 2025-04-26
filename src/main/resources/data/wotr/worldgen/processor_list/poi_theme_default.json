@@ -3,6 +3,10 @@
     {
       "processor_type": "wotr:rift_theme",
       "piece_type": "poi"
+    },
+    {
+      "processor_type": "wotr:trial_spawner",
+      "config": "wotr:test"
     }
   ]
 }

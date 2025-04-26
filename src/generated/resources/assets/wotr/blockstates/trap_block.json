@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "wotr:block/trap_block/0"
+    },
+    "stage=1": {
+      "model": "wotr:block/trap_block/1"
+    },
+    "stage=2": {
+      "model": "wotr:block/trap_block/2"
+    }
+  }
+}

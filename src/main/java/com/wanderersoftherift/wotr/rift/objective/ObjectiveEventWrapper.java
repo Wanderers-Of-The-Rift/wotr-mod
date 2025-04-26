@@ -28,6 +28,7 @@ public class ObjectiveEventWrapper {
     }
 
     private static void broadcastObjectiveStatus(ServerLevel serverLevel, LevelRiftObjectiveData data) {
-        PacketDistributor.sendToPlayersInDimension(serverLevel, new S2CRiftObjectiveStatusPacket(Optional.ofNullable(data.getObjective())));
+        PacketDistributor.sendToPlayersInDimension(serverLevel,
+                new S2CRiftObjectiveStatusPacket(Optional.ofNullable(data.getObjective())));
     }
 }

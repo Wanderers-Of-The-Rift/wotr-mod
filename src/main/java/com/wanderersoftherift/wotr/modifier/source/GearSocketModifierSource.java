@@ -18,7 +18,6 @@ public class GearSocketModifierSource implements ModifierSource {
         this.entity = entity;
     }
 
-
     @Override
     public String getSerializedName() {
         return slot.getSerializedName() + "_" + sockets.sockets().indexOf(socket);

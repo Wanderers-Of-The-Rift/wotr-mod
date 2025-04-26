@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "wotr:block/spring_block"
+    }
+  }
+}

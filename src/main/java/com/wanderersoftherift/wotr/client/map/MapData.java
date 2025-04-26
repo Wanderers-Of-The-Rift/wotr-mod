@@ -8,13 +8,11 @@ import java.util.EnumSet;
 import java.util.HashMap;
 
 /**
- * This class contains all map data and methods for manipulating it
- * Rendering is separated into client.render package
+ * This class contains all map data and methods for manipulating it Rendering is separated into client.render package
  * Mostly empty for now, will contain player data as well
  *
- * MapCells are stored in two lists/arrays/hashmaps/whatever is decided:
- * 1. a list of all cells for easier granular processing (mainly for 1wide tunnels between rooms)
- * 2. a list inside each MapRoom for rendering
+ * MapCells are stored in two lists/arrays/hashmaps/whatever is decided: 1. a list of all cells for easier granular
+ * processing (mainly for 1wide tunnels between rooms) 2. a list inside each MapRoom for rendering
  */
 public class MapData {
     public static HashMap<Vector3i, MapCell> cells = new HashMap<>();
@@ -56,8 +54,9 @@ public class MapData {
     }
 
     /**
-     * Used to add new cell to the map
-     * In the future will be used to process cell changes like the small 1wide tunnels between rooms
+     * Used to add new cell to the map In the future will be used to process cell changes like the small 1wide tunnels
+     * between rooms
+     *
      * @param cell
      */
     public static void addCell(MapCell cell) {
@@ -65,9 +64,9 @@ public class MapData {
     }
 
     /**
-     * Used to add new room
-     * if the room cells are empty, generates all cells for the room
-     * otherwise the cells should be defined in their entirity, otherwise the 1wide tunnel autoprocessing will not work properly
+     * Used to add new room if the room cells are empty, generates all cells for the room otherwise the cells should be
+     * defined in their entirity, otherwise the 1wide tunnel autoprocessing will not work properly
+     *
      * @param room
      */
     public static void addRoom(MapRoom room) {

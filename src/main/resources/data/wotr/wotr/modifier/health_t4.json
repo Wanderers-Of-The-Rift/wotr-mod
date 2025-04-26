@@ -1,0 +1,13 @@
+{
+    "tier": 4,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:flat_max_health",
+        "attribute": "max_health",
+        "min_roll": 7,
+        "max_roll": 8,
+        "operation": "add_value"
+      }
+    ]
+  }

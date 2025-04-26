@@ -1,12 +1,14 @@
 package com.wanderersoftherift.wotr.interop.sophisticatedbackpacks;
 
 import com.google.common.collect.Iterators;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.InventorySnapshotSystem;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerItemWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerType;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ContainerWrapper;
-import com.wanderersoftherift.wotr.server.inventorySnapshot.containers.ItemStackHandlerContainers;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.ItemStackHandlerContainers;
+import com.wanderersoftherift.wotr.init.ModContainerTypes;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackItem;
 import net.p3pp3rf1y.sophisticatedbackpacks.backpack.wrapper.BackpackWrapper;
 import net.p3pp3rf1y.sophisticatedbackpacks.backpack.wrapper.IBackpackWrapper;
@@ -21,7 +23,12 @@ public final class SophisticatedBackpackInterop {
     }
 
     public static void load() {
-        InventorySnapshotSystem.getInstance().registerContainerStrategy(new SophisticatedBackpackType());
+
+    }
+
+    public static void register(RegisterEvent event) {
+        event.register(ModContainerTypes.CONTAINER_TYPE_KEY, registry -> registry
+                .register(WanderersOfTheRift.id("sophisticated_storage_backpack"), new SophisticatedBackpackType()));
     }
 
     private static class SophisticatedBackpackType implements ContainerType {
@@ -38,7 +45,7 @@ public final class SophisticatedBackpackInterop {
 
         private static class SophisticatedBackpackWrapper implements ContainerWrapper {
 
-            private IBackpackWrapper backpackWrapper;
+            private final IBackpackWrapper backpackWrapper;
 
             public SophisticatedBackpackWrapper(ItemStack item) {
                 this.backpackWrapper = BackpackWrapper.fromStack(item);
@@ -53,7 +60,8 @@ public final class SophisticatedBackpackInterop {
             public @NotNull Iterator<ContainerItemWrapper> iterator() {
                 InventoryHandler inventory = backpackWrapper.getInventoryHandler();
                 UpgradeHandler upgrades = backpackWrapper.getUpgradeHandler();
-                return Iterators.concat(ItemStackHandlerContainers.iterateNonEmpty(inventory), ItemStackHandlerContainers.iterateNonEmpty(upgrades));
+                return Iterators.concat(ItemStackHandlerContainers.iterateNonEmpty(inventory),
+                        ItemStackHandlerContainers.iterateNonEmpty(upgrades));
             }
         }
 

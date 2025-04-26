@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:flint_and_steel",
+    "g": "minecraft:glass_pane"
+  },
+  "pattern": [
+    "ggg",
+    "gIg",
+    "ggg"
+  ],
+  "result": {
+    "components": {
+      "wotr:ability": "wotr:fireball"
+    },
+    "count": 1,
+    "id": "wotr:ability_holder"
+  }
+}

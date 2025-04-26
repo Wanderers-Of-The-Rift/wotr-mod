@@ -1,0 +1,29 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:heal",
+  "cooldown": 200,
+  "effects": [
+    {
+      "type": "wotr:heal_effect",
+      "amount": 2.0,
+      "targeting": {
+        "type": "wotr:area_targeting",
+        "range": 2.0,
+        "target": {
+          "sentiment": "not_foe"
+        }
+      }
+    },
+    {
+      "type": "wotr:sound_effect",
+      "sound": {
+        "sound_id": "minecraft:entity.splash_potion.break"
+      },
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    }
+  ],
+  "icon": "minecraft:textures/mob_effect/regeneration.png",
+  "mana_cost": 10
+}

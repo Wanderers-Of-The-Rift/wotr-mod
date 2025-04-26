@@ -12,15 +12,13 @@ import net.minecraft.network.chat.Component;
 
 public class RiftMapCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-        dispatcher.register(
-                Commands.literal(WanderersOfTheRift.MODID + ":riftmap")
-                        .then(Commands.argument("rd", IntegerArgumentType.integer())
-                        .executes(
-                        (ctx) -> {
-                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new RiftMapScreen(Component.literal("test"), IntegerArgumentType.getInteger(ctx, "rd") )));
-                            return 1;
-                        }
-                ))
-        );
+        dispatcher.register(Commands.literal(WanderersOfTheRift.MODID + ":riftmap")
+                .then(Commands.argument("rd", IntegerArgumentType.integer()).executes((ctx) -> {
+                    Minecraft.getInstance()
+                            .execute(() -> Minecraft.getInstance()
+                                    .setScreen(new RiftMapScreen(Component.literal("test"),
+                                            IntegerArgumentType.getInteger(ctx, "rd"))));
+                    return 1;
+                })));
     }
 }

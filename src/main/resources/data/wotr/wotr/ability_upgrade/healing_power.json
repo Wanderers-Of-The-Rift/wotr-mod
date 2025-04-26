@@ -1,0 +1,15 @@
+{
+  "id" : "wotr:healing_power",
+  "icon" : "wotr:textures/item/runegem/shape/heart.png",
+  "maxCount" : 5,
+  "effects": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:ability_upgrade_healing_power",
+      "attribute": "wotr:ability_heal_power",
+      "min_roll": 2,
+      "max_roll": 2,
+      "operation": "add_value"
+    }
+  ]
+}

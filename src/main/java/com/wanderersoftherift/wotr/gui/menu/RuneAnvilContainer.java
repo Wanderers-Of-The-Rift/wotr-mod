@@ -31,15 +31,21 @@ public interface RuneAnvilContainer extends Container {
         } else {
             int runegemSlotIndex = slot - 1;
 
-            if (!stack.is(ModItems.RUNEGEM)) return false;
+            if (!stack.is(ModItems.RUNEGEM)) {
+                return false;
+            }
 
             ItemStack gear = this.getItem(0);
             GearSockets gearSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
             RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA.get());
-            if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null) return false;
+            if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null) {
+                return false;
+            }
 
             List<GearSocket> sockets = gearSockets.sockets();
-            if (sockets.size() <= runegemSlotIndex) return false;
+            if (sockets.size() <= runegemSlotIndex) {
+                return false;
+            }
 
             GearSocket socket = sockets.get(runegemSlotIndex);
             return socket.canBeApplied(runegemData);
@@ -56,15 +62,21 @@ public interface RuneAnvilContainer extends Container {
             ItemStack gear = this.getItem(0);
             GearSockets gearSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
             RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA.get());
-            if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null)
-                return true; // i'm not sure this is right
+            // i'm not sure this is right
+            if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null) {
+                return true;
+            }
 
             List<GearSocket> sockets = gearSockets.sockets();
-            if (sockets.size() <= runegemSlotIndex) return false;
+            if (sockets.size() <= runegemSlotIndex) {
+                return false;
+            }
 
             GearSocket socket = sockets.get(runegemSlotIndex);
             RunegemData appliedRunegem = socket.runegem().orElse(null);
-            if (appliedRunegem == null) return true;
+            if (appliedRunegem == null) {
+                return true;
+            }
             return !appliedRunegem.equals(runegemData);
         }
     }

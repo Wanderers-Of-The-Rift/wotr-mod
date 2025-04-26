@@ -1,0 +1,15 @@
+{
+  "id" : "wotr:projectile_spread",
+  "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "maxCount" : 5,
+  "effects": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:ability_upgrade_projectile_spread",
+      "attribute": "wotr:projectile_spread",
+      "min_roll": -0.1,
+      "max_roll": -0.1,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

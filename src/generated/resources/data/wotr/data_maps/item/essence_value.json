@@ -1,26 +1,2702 @@
 {
   "values": {
-    "#c:cobblestones": {
+    "#c:barrels/wooden": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#c:bricks/nether": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "#c:bricks/normal": {
       "wotr:earth": 1
     },
-    "#c:crops": {
+    "#c:chests/ender": {
+      "wotr:order": 1,
+      "wotr:space": 1
+    },
+    "#c:chests/wooden": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#c:cobblestones/deepslate": {
+      "wotr:earth": 1
+    },
+    "#c:cobblestones/mossy": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "#c:cobblestones/normal": {
+      "wotr:earth": 1
+    },
+    "#c:concrete_powders": {
+      "wotr:earth": 1
+    },
+    "#c:concretes": {
+      "wotr:earth": 1
+    },
+    "#c:dyes": {
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "#c:fence_gates/wooden": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#c:fences/nether_brick": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "#c:flowers/tall": {
+      "wotr:plant": 1
+    },
+    "#c:foods/cooked_fish": {
+      "wotr:animal": 1,
       "wotr:life": 1
     },
     "#c:foods/cooked_meat": {
-      "wotr:meat": 2
+      "wotr:animal": 1,
+      "wotr:life": 1
+    },
+    "#c:foods/raw_fish": {
+      "wotr:animal": 1,
+      "wotr:water": 1
     },
     "#c:foods/raw_meat": {
-      "wotr:meat": 1
+      "wotr:animal": 1
+    },
+    "#c:glass_blocks/cheap": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "#c:glass_panes": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "#c:glazed_terracottas": {
+      "wotr:earth": 1
+    },
+    "#c:ingots/copper": {
+      "wotr:metal": 1
+    },
+    "#c:ingots/gold": {
+      "wotr:metal": 1
+    },
+    "#c:ingots/iron": {
+      "wotr:metal": 1
+    },
+    "#c:ingots/netherite": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "#c:mushrooms": {
+      "wotr:life": 1
+    },
+    "#c:music_discs": {
+      "wotr:knowledge": 1,
+      "wotr:order": 1
+    },
+    "#c:ores/quartz": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "#c:ores/redstone": {
+      "wotr:earth": 1,
+      "wotr:power": 1
+    },
+    "#c:potions": {
+      "wotr:knowledge": 1,
+      "wotr:water": 1
+    },
+    "#c:sandstone/blocks": {
+      "wotr:earth": 1
+    },
+    "#c:sandstone/slabs": {
+      "wotr:earth": 1
+    },
+    "#c:sandstone/stairs": {
+      "wotr:earth": 1
+    },
+    "#c:seeds": {
+      "wotr:life": 1,
+      "wotr:plant": 1
     },
     "#c:stones": {
-      "wotr:earth": 2
+      "wotr:earth": 1
     },
-    "#c:stripped_logs": {
-      "wotr:life": 8
+    "#c:tools/shield": {
+      "wotr:chaos": 1
+    },
+    "#minecraft:acacia_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:anvil": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "#minecraft:bamboo_blocks": {
+      "wotr:plant": 1
+    },
+    "#minecraft:banners": {
+      "wotr:fabric": 1,
+      "wotr:order": 1
+    },
+    "#minecraft:beds": {
+      "wotr:fabric": 1,
+      "wotr:order": 1
+    },
+    "#minecraft:birch_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:boats": {
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "#minecraft:bundles": {
+      "wotr:animal": 1,
+      "wotr:order": 1
+    },
+    "#minecraft:candles": {
+      "wotr:animal": 1,
+      "wotr:light": 1
+    },
+    "#minecraft:cherry_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:chest_boats": {
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "#minecraft:coal_ores": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "#minecraft:copper_ores": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "#minecraft:crimson_stems": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:dark_oak_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:decorated_pot_sherds": {
+      "wotr:earth": 1,
+      "wotr:order": 1
+    },
+    "#minecraft:diamond_ores": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "#minecraft:emerald_ores": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "#minecraft:hanging_signs": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:iron_ores": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "#minecraft:jungle_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:lapis_ores": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "#minecraft:leaves": {
+      "wotr:plant": 1
+    },
+    "#minecraft:mangrove_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:oak_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:pale_oak_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:planks": {
+      "wotr:plant": 1
+    },
+    "#minecraft:sand": {
+      "wotr:earth": 1
+    },
+    "#minecraft:saplings": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:shulker_boxes": {
+      "wotr:end": 1,
+      "wotr:order": 1
+    },
+    "#minecraft:signs": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:skulls": {
+      "wotr:death": 1
+    },
+    "#minecraft:spruce_logs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:stone_bricks": {
+      "wotr:earth": 1
+    },
+    "#minecraft:stone_buttons": {
+      "wotr:earth": 1
+    },
+    "#minecraft:terracotta": {
+      "wotr:earth": 1
+    },
+    "#minecraft:warped_stems": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wart_blocks": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_buttons": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_doors": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_fences": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_pressure_plates": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_slabs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_stairs": {
+      "wotr:plant": 1
+    },
+    "#minecraft:wooden_trapdoors": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "#minecraft:wool": {
+      "wotr:fabric": 1
+    },
+    "#minecraft:wool_carpets": {
+      "wotr:fabric": 1
+    },
+    "minecraft:activator_rail": {
+      "wotr:order": 1,
+      "wotr:power": 1
+    },
+    "minecraft:allium": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:amethyst_block": {
+      "wotr:crystal": 1
+    },
+    "minecraft:amethyst_cluster": {
+      "wotr:crystal": 1
+    },
+    "minecraft:amethyst_shard": {
+      "wotr:crystal": 1
+    },
+    "minecraft:ancient_debris": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:andesite_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:andesite_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:andesite_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:apple": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:armadillo_scute": {
+      "wotr:animal": 1
+    },
+    "minecraft:armor_stand": {
+      "wotr:order": 1
+    },
+    "minecraft:arrow": {
+      "wotr:air": 1,
+      "wotr:chaos": 1
+    },
+    "minecraft:axolotl_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:azure_bluet": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:baked_potato": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:bamboo": {
+      "wotr:plant": 1
+    },
+    "minecraft:bamboo_mosaic": {
+      "wotr:plant": 1
+    },
+    "minecraft:bamboo_mosaic_slab": {
+      "wotr:plant": 1
+    },
+    "minecraft:bamboo_mosaic_stairs": {
+      "wotr:plant": 1
+    },
+    "minecraft:basalt": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:beacon": {
+      "wotr:crystal": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:bee_nest": {
+      "wotr:animal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:beehive": {
+      "wotr:animal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:beetroot": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:beetroot_soup": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:bell": {
+      "wotr:metal": 1
+    },
+    "minecraft:big_dripleaf": {
+      "wotr:plant": 1
+    },
+    "minecraft:blackstone": {
+      "wotr:earth": 1
+    },
+    "minecraft:blackstone_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:blackstone_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:blackstone_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:blast_furnace": {
+      "wotr:fire": 1
+    },
+    "minecraft:blaze_powder": {
+      "wotr:fire": 1
+    },
+    "minecraft:blaze_rod": {
+      "wotr:fire": 1
+    },
+    "minecraft:blue_ice": {
+      "wotr:water": 1
+    },
+    "minecraft:blue_orchid": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:bolt_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:bone": {
+      "wotr:animal": 1,
+      "wotr:death": 1
+    },
+    "minecraft:bone_block": {
+      "wotr:animal": 1,
+      "wotr:death": 1
+    },
+    "minecraft:bone_meal": {
+      "wotr:animal": 1,
+      "wotr:death": 1
+    },
+    "minecraft:book": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:bookshelf": {
+      "wotr:knowledge": 1,
+      "wotr:order": 1
+    },
+    "minecraft:bordure_indented_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:bow": {
+      "wotr:air": 1,
+      "wotr:chaos": 1
+    },
+    "minecraft:bowl": {
+      "wotr:plant": 1
+    },
+    "minecraft:brain_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:brain_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:brain_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:bread": {
+      "wotr:life": 1
+    },
+    "minecraft:breeze_rod": {
+      "wotr:air": 1
+    },
+    "minecraft:brewing_stand": {
+      "wotr:knowledge": 1,
+      "wotr:order": 1
+    },
+    "minecraft:brick_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:brick_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:brick_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:brown_mushroom_block": {
+      "wotr:life": 1
+    },
+    "minecraft:brush": {
+      "wotr:order": 1
+    },
+    "minecraft:bubble_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:bubble_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:bubble_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:bucket": {
+      "wotr:metal": 1
+    },
+    "minecraft:cactus": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:cake": {
+      "wotr:life": 1
+    },
+    "minecraft:calcite": {
+      "wotr:earth": 1
+    },
+    "minecraft:calibrated_sculk_sensor": {
+      "wotr:crystal": 1,
+      "wotr:dark": 1
+    },
+    "minecraft:campfire": {
+      "wotr:fire": 1,
+      "wotr:light": 1
+    },
+    "minecraft:carrot": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:carrot_on_a_stick": {
+      "wotr:plant": 1
+    },
+    "minecraft:cartography_table": {
+      "wotr:order": 1,
+      "wotr:space": 1
+    },
+    "minecraft:carved_pumpkin": {
+      "wotr:plant": 1
+    },
+    "minecraft:cauldron": {
+      "wotr:metal": 1
+    },
+    "minecraft:chain": {
+      "wotr:metal": 1
+    },
+    "minecraft:chainmail_boots": {
+      "wotr:metal": 1
+    },
+    "minecraft:chainmail_chestplate": {
+      "wotr:metal": 1
+    },
+    "minecraft:chainmail_helmet": {
+      "wotr:metal": 1
+    },
+    "minecraft:chainmail_leggings": {
+      "wotr:metal": 1
+    },
+    "minecraft:charcoal": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:chest_minecart": {
+      "wotr:order": 1
+    },
+    "minecraft:chiseled_bookshelf": {
+      "wotr:knowledge": 1,
+      "wotr:order": 1
+    },
+    "minecraft:chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:chiseled_deepslate": {
+      "wotr:earth": 1
+    },
+    "minecraft:chiseled_nether_bricks": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:chiseled_polished_blackstone": {
+      "wotr:earth": 1
+    },
+    "minecraft:chiseled_quartz_block": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:chiseled_resin_bricks": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:chiseled_tuff": {
+      "wotr:earth": 1
+    },
+    "minecraft:chiseled_tuff_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:chorus_flower": {
+      "wotr:end": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:chorus_fruit": {
+      "wotr:end": 1,
+      "wotr:plant": 1,
+      "wotr:space": 1
+    },
+    "minecraft:chorus_plant": {
+      "wotr:end": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:clay": {
+      "wotr:earth": 1
+    },
+    "minecraft:clay_ball": {
+      "wotr:earth": 1
+    },
+    "minecraft:clock": {
+      "wotr:time": 1
+    },
+    "minecraft:closed_eyeblossom": {
+      "wotr:dark": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:coal": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:coal_block": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:coarse_dirt": {
+      "wotr:earth": 1
+    },
+    "minecraft:coast_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:cobbled_deepslate_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:cobbled_deepslate_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:cobbled_deepslate_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:cobblestone_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:cobblestone_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:cobblestone_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:cobweb": {
+      "wotr:animal": 1,
+      "wotr:fabric": 1
+    },
+    "minecraft:cocoa_beans": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:cod_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:comparator": {
+      "wotr:power": 1
+    },
+    "minecraft:compass": {
+      "wotr:power": 1,
+      "wotr:space": 1
+    },
+    "minecraft:composter": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:conduit": {
+      "wotr:knowledge": 1,
+      "wotr:water": 1
+    },
+    "minecraft:cookie": {
+      "wotr:life": 1
+    },
+    "minecraft:copper_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:cornflower": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:cracked_deepslate_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:cracked_deepslate_tiles": {
+      "wotr:earth": 1
+    },
+    "minecraft:cracked_nether_bricks": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:cracked_polished_blackstone_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:crafter": {
+      "wotr:order": 1,
+      "wotr:power": 1
+    },
+    "minecraft:crafting_table": {
+      "wotr:order": 1
+    },
+    "minecraft:creaking_heart": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:creeper_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:crimson_fungus": {
+      "wotr:life": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:crimson_nylium": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:crimson_roots": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:crossbow": {
+      "wotr:air": 1,
+      "wotr:chaos": 1
+    },
+    "minecraft:crying_obsidian": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:dandelion": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:dark_prismarine": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dark_prismarine_slab": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dark_prismarine_stairs": {
+      "wotr:crystal": 1,
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "minecraft:daylight_detector": {
+      "wotr:power": 1
+    },
+    "minecraft:dead_brain_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_brain_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_brain_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_bubble_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_bubble_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_bubble_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_bush": {
+      "wotr:plant": 1
+    },
+    "minecraft:dead_fire_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_fire_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_fire_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_horn_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_horn_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_horn_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_tube_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_tube_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:dead_tube_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:decorated_pot": {
+      "wotr:earth": 1,
+      "wotr:order": 1
+    },
+    "minecraft:deepslate_brick_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_brick_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_brick_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_gold_ore": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:deepslate_tile_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_tile_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_tile_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:deepslate_tiles": {
+      "wotr:earth": 1
+    },
+    "minecraft:detector_rail": {
+      "wotr:order": 1,
+      "wotr:power": 1
+    },
+    "minecraft:diamond": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_axe": {
+      "wotr:chaos": 1,
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_block": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_boots": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_chestplate": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_helmet": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_hoe": {
+      "wotr:crystal": 1,
+      "wotr:life": 1
+    },
+    "minecraft:diamond_horse_armor": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_leggings": {
+      "wotr:crystal": 1
+    },
+    "minecraft:diamond_pickaxe": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:diamond_shovel": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:diamond_sword": {
+      "wotr:chaos": 1,
+      "wotr:crystal": 1
+    },
+    "minecraft:diorite_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:diorite_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:diorite_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:dirt": {
+      "wotr:earth": 1
+    },
+    "minecraft:disc_fragment_5": {
+      "wotr:knowledge": 1,
+      "wotr:order": 1
+    },
+    "minecraft:dispenser": {
+      "wotr:power": 1
+    },
+    "minecraft:dragon_breath": {
+      "wotr:end": 1
+    },
+    "minecraft:dragon_egg": {
+      "wotr:end": 1,
+      "wotr:life": 1
+    },
+    "minecraft:dried_kelp": {
+      "wotr:plant": 1
+    },
+    "minecraft:dried_kelp_block": {
+      "wotr:plant": 1
+    },
+    "minecraft:dripstone_block": {
+      "wotr:earth": 1
+    },
+    "minecraft:dropper": {
+      "wotr:power": 1
+    },
+    "minecraft:dune_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:echo_shard": {
+      "wotr:crystal": 1,
+      "wotr:dark": 1
+    },
+    "minecraft:egg": {
+      "wotr:animal": 1,
+      "wotr:life": 1
+    },
+    "minecraft:elytra": {
+      "wotr:air": 1
+    },
+    "minecraft:emerald": {
+      "wotr:crystal": 1
+    },
+    "minecraft:emerald_block": {
+      "wotr:crystal": 1
+    },
+    "minecraft:enchanted_book": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:enchanted_golden_apple": {
+      "wotr:knowledge": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:enchanting_table": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:end_crystal": {
+      "wotr:crystal": 1,
+      "wotr:end": 1
+    },
+    "minecraft:end_rod": {
+      "wotr:end": 1
+    },
+    "minecraft:end_stone": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:end_stone_brick_slab": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:end_stone_brick_stairs": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:end_stone_brick_wall": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:end_stone_bricks": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:ender_eye": {
+      "wotr:knowledge": 1,
+      "wotr:space": 1
+    },
+    "minecraft:ender_pearl": {
+      "wotr:end": 1,
+      "wotr:space": 1
+    },
+    "minecraft:experience_bottle": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:exposed_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:exposed_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:exposed_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:exposed_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:exposed_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:exposed_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:exposed_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:exposed_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:exposed_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:eye_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:feather": {
+      "wotr:air": 1,
+      "wotr:animal": 1
+    },
+    "minecraft:fermented_spider_eye": {
+      "wotr:animal": 1
+    },
+    "minecraft:fern": {
+      "wotr:plant": 1
+    },
+    "minecraft:field_masoned_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:filled_map": {
+      "wotr:knowledge": 1,
+      "wotr:space": 1
+    },
+    "minecraft:fire_charge": {
+      "wotr:fire": 1
+    },
+    "minecraft:fire_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:fire_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:fire_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:firework_rocket": {
+      "wotr:fire": 1
+    },
+    "minecraft:firework_star": {
+      "wotr:fire": 1
+    },
+    "minecraft:fishing_rod": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:fletching_table": {
+      "wotr:air": 1,
+      "wotr:order": 1
+    },
+    "minecraft:flint": {
+      "wotr:earth": 1
+    },
+    "minecraft:flint_and_steel": {
+      "wotr:fire": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:flow_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:flow_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:flower_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:flower_pot": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:furnace": {
+      "wotr:fire": 1
+    },
+    "minecraft:furnace_minecart": {
+      "wotr:fire": 1,
+      "wotr:order": 1
+    },
+    "minecraft:ghast_tear": {
+      "wotr:death": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:gilded_blackstone": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:glass_bottle": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:glistering_melon_slice": {
+      "wotr:life": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:globe_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:glow_berries": {
+      "wotr:light": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:glow_ink_sac": {
+      "wotr:animal": 1,
+      "wotr:light": 1
+    },
+    "minecraft:glow_item_frame": {
+      "wotr:light": 1,
+      "wotr:order": 1
+    },
+    "minecraft:glow_lichen": {
+      "wotr:life": 1,
+      "wotr:light": 1
+    },
+    "minecraft:glowstone": {
+      "wotr:light": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:glowstone_dust": {
+      "wotr:light": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:goat_horn": {
+      "wotr:animal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:gold_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:gold_nugget": {
+      "wotr:metal": 1
+    },
+    "minecraft:gold_ore": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_apple": {
+      "wotr:life": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_axe": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_boots": {
+      "wotr:metal": 1
+    },
+    "minecraft:golden_carrot": {
+      "wotr:life": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_chestplate": {
+      "wotr:metal": 1
+    },
+    "minecraft:golden_helmet": {
+      "wotr:metal": 1
+    },
+    "minecraft:golden_hoe": {
+      "wotr:life": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_horse_armor": {
+      "wotr:metal": 1
+    },
+    "minecraft:golden_leggings": {
+      "wotr:metal": 1
+    },
+    "minecraft:golden_pickaxe": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_shovel": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:golden_sword": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:granite_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:granite_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:granite_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:grass_block": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:gravel": {
+      "wotr:earth": 1
+    },
+    "minecraft:grindstone": {
+      "wotr:chaos": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:gunpowder": {
+      "wotr:fire": 1
+    },
+    "minecraft:guster_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:hanging_roots": {
+      "wotr:plant": 1
+    },
+    "minecraft:hay_block": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:heart_of_the_sea": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:heavy_core": {
+      "wotr:metal": 1
+    },
+    "minecraft:heavy_weighted_pressure_plate": {
+      "wotr:earth": 1
+    },
+    "minecraft:honey_block": {
+      "wotr:life": 1,
+      "wotr:water": 1
+    },
+    "minecraft:honey_bottle": {
+      "wotr:life": 1,
+      "wotr:water": 1
+    },
+    "minecraft:honeycomb": {
+      "wotr:life": 1,
+      "wotr:order": 1
+    },
+    "minecraft:honeycomb_block": {
+      "wotr:life": 1,
+      "wotr:order": 1
+    },
+    "minecraft:hopper": {
+      "wotr:metal": 1
+    },
+    "minecraft:hopper_minecart": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:horn_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:horn_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:horn_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:host_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:ice": {
+      "wotr:water": 1
+    },
+    "minecraft:ink_sac": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:iron_axe": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:iron_bars": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_boots": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_chestplate": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:iron_helmet": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_hoe": {
+      "wotr:life": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:iron_horse_armor": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_leggings": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_nugget": {
+      "wotr:metal": 1
+    },
+    "minecraft:iron_pickaxe": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:iron_shovel": {
+      "wotr:earth": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:iron_sword": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:iron_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:item_frame": {
+      "wotr:order": 1
+    },
+    "minecraft:jack_o_lantern": {
+      "wotr:light": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:jukebox": {
+      "wotr:order": 1,
+      "wotr:power": 1
+    },
+    "minecraft:kelp": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:ladder": {
+      "wotr:plant": 1
+    },
+    "minecraft:lantern": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:lapis_block": {
+      "wotr:crystal": 1
+    },
+    "minecraft:lapis_lazuli": {
+      "wotr:crystal": 1
+    },
+    "minecraft:large_amethyst_bud": {
+      "wotr:crystal": 1
+    },
+    "minecraft:large_fern": {
+      "wotr:plant": 1
+    },
+    "minecraft:lava_bucket": {
+      "wotr:fire": 1
+    },
+    "minecraft:lead": {
+      "wotr:animal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:leather": {
+      "wotr:animal": 1
+    },
+    "minecraft:leather_boots": {
+      "wotr:animal": 1
+    },
+    "minecraft:leather_chestplate": {
+      "wotr:animal": 1
+    },
+    "minecraft:leather_helmet": {
+      "wotr:animal": 1
+    },
+    "minecraft:leather_horse_armor": {
+      "wotr:animal": 1
+    },
+    "minecraft:leather_leggings": {
+      "wotr:animal": 1
+    },
+    "minecraft:lectern": {
+      "wotr:plant": 1
+    },
+    "minecraft:lever": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:light_weighted_pressure_plate": {
+      "wotr:earth": 1
+    },
+    "minecraft:lightning_rod": {
+      "wotr:air": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:lily_of_the_valley": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:lily_pad": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:lodestone": {
+      "wotr:space": 1
+    },
+    "minecraft:loom": {
+      "wotr:fabric": 1,
+      "wotr:order": 1
+    },
+    "minecraft:mace": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:magma_block": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:magma_cream": {
+      "wotr:fire": 1,
+      "wotr:life": 1
+    },
+    "minecraft:mangrove_roots": {
+      "wotr:plant": 1
+    },
+    "minecraft:map": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:medium_amethyst_bud": {
+      "wotr:crystal": 1
+    },
+    "minecraft:melon": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:melon_slice": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:milk_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:minecart": {
+      "wotr:order": 1
+    },
+    "minecraft:mojang_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:moss_block": {
+      "wotr:plant": 1
+    },
+    "minecraft:moss_carpet": {
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_cobblestone_slab": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_cobblestone_stairs": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_cobblestone_wall": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_stone_brick_slab": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_stone_brick_stairs": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_stone_brick_wall": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mossy_stone_bricks": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mud": {
+      "wotr:earth": 1,
+      "wotr:water": 1
+    },
+    "minecraft:mud_brick_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:mud_brick_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:mud_brick_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:mud_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:muddy_mangrove_roots": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:mushroom_stem": {
+      "wotr:life": 1
+    },
+    "minecraft:mushroom_stew": {
+      "wotr:life": 1
+    },
+    "minecraft:mycelium": {
+      "wotr:earth": 1,
+      "wotr:life": 1
+    },
+    "minecraft:name_tag": {
+      "wotr:order": 1
+    },
+    "minecraft:nautilus_shell": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:nether_brick_slab": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:nether_brick_stairs": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:nether_brick_wall": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:nether_bricks": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:nether_gold_ore": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:nether_sprouts": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:nether_star": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:nether_wart": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:netherite_axe": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_block": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_boots": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_chestplate": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_helmet": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_hoe": {
+      "wotr:life": 1,
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_leggings": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_pickaxe": {
+      "wotr:earth": 1,
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_scrap": {
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_shovel": {
+      "wotr:earth": 1,
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_sword": {
+      "wotr:chaos": 1,
+      "wotr:metal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:netherite_upgrade_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:netherrack": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:note_block": {
+      "wotr:order": 1,
+      "wotr:power": 1
+    },
+    "minecraft:observer": {
+      "wotr:power": 1
+    },
+    "minecraft:obsidian": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:ochre_froglight": {
+      "wotr:life": 1,
+      "wotr:light": 1,
+      "wotr:water": 1
+    },
+    "minecraft:ominous_bottle": {
+      "wotr:chaos": 1,
+      "wotr:water": 1
+    },
+    "minecraft:ominous_trial_key": {
+      "wotr:chaos": 1
+    },
+    "minecraft:open_eyeblossom": {
+      "wotr:light": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:orange_tulip": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:oxeye_daisy": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:oxidized_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:oxidized_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:oxidized_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:oxidized_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:oxidized_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:oxidized_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:oxidized_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:oxidized_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:oxidized_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:packed_ice": {
+      "wotr:water": 1
+    },
+    "minecraft:packed_mud": {
+      "wotr:earth": 1
+    },
+    "minecraft:painting": {
+      "wotr:order": 1
+    },
+    "minecraft:pale_hanging_moss": {
+      "wotr:plant": 1
+    },
+    "minecraft:pale_moss_block": {
+      "wotr:plant": 1
+    },
+    "minecraft:pale_moss_carpet": {
+      "wotr:plant": 1
+    },
+    "minecraft:pale_oak_fence_gate": {
+      "wotr:order": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:paper": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:pearlescent_froglight": {
+      "wotr:life": 1,
+      "wotr:light": 1,
+      "wotr:water": 1
+    },
+    "minecraft:phantom_membrane": {
+      "wotr:chaos": 1
+    },
+    "minecraft:piglin_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:pink_petals": {
+      "wotr:plant": 1
+    },
+    "minecraft:pink_tulip": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:piston": {
+      "wotr:power": 1
+    },
+    "minecraft:podzol": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:pointed_dripstone": {
+      "wotr:earth": 1
+    },
+    "minecraft:poisonous_potato": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:polished_andesite": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_andesite_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_andesite_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_basalt": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:polished_blackstone": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_brick_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_brick_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_brick_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_pressure_plate": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_blackstone_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_deepslate": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_deepslate_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_deepslate_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_deepslate_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_diorite": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_diorite_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_diorite_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_granite": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_granite_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_granite_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_tuff": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_tuff_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_tuff_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:polished_tuff_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:popped_chorus_fruit": {
+      "wotr:end": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:poppy": {
+      "wotr:life": 1,
+      "wotr:plant": 1
     },
     "minecraft:potato": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:powder_snow_bucket": {
+      "wotr:water": 1
+    },
+    "minecraft:powered_rail": {
+      "wotr:order": 1,
+      "wotr:power": 1
+    },
+    "minecraft:prismarine": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_brick_slab": {
+      "wotr:crystal": 1,
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_brick_stairs": {
+      "wotr:crystal": 1,
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_bricks": {
+      "wotr:crystal": 1,
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_crystals": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_shard": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_slab": {
+      "wotr:crystal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_stairs": {
+      "wotr:crystal": 1,
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "minecraft:prismarine_wall": {
+      "wotr:crystal": 1,
+      "wotr:order": 1,
+      "wotr:water": 1
+    },
+    "minecraft:pufferfish_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:pumpkin": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:pumpkin_pie": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:purpur_block": {
       "wotr:earth": 1,
-      "wotr:life": 2
+      "wotr:end": 1
+    },
+    "minecraft:purpur_pillar": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:purpur_slab": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:purpur_stairs": {
+      "wotr:earth": 1,
+      "wotr:end": 1
+    },
+    "minecraft:quartz": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:quartz_block": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:quartz_bricks": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:quartz_pillar": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:quartz_slab": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:quartz_stairs": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:rabbit_foot": {
+      "wotr:animal": 1,
+      "wotr:chaos": 1
+    },
+    "minecraft:rabbit_hide": {
+      "wotr:animal": 1
+    },
+    "minecraft:rabbit_stew": {
+      "wotr:animal": 1,
+      "wotr:life": 1
+    },
+    "minecraft:rail": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:raiser_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:raw_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:raw_copper_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:raw_gold": {
+      "wotr:metal": 1
+    },
+    "minecraft:raw_gold_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:raw_iron": {
+      "wotr:metal": 1
+    },
+    "minecraft:raw_iron_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:recovery_compass": {
+      "wotr:death": 1,
+      "wotr:space": 1
+    },
+    "minecraft:red_mushroom_block": {
+      "wotr:life": 1
+    },
+    "minecraft:red_nether_brick_slab": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:red_nether_brick_stairs": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:red_nether_brick_wall": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:red_nether_bricks": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:red_sandstone_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:red_tulip": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:redstone": {
+      "wotr:power": 1
+    },
+    "minecraft:redstone_block": {
+      "wotr:power": 1
+    },
+    "minecraft:redstone_lamp": {
+      "wotr:light": 1,
+      "wotr:power": 1
+    },
+    "minecraft:redstone_torch": {
+      "wotr:light": 1,
+      "wotr:power": 1
+    },
+    "minecraft:repeater": {
+      "wotr:power": 1
+    },
+    "minecraft:resin_block": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:resin_brick": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:resin_brick_slab": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:resin_brick_stairs": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:resin_brick_wall": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:resin_bricks": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:resin_clump": {
+      "wotr:crystal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:respawn_anchor": {
+      "wotr:death": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:rib_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:rooted_dirt": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:rotten_flesh": {
+      "wotr:animal": 1,
+      "wotr:death": 1
+    },
+    "minecraft:saddle": {
+      "wotr:animal": 1
+    },
+    "minecraft:salmon_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:sandstone_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:scaffolding": {
+      "wotr:plant": 1
+    },
+    "minecraft:sculk": {
+      "wotr:dark": 1,
+      "wotr:life": 1
+    },
+    "minecraft:sculk_catalyst": {
+      "wotr:dark": 1,
+      "wotr:life": 1
+    },
+    "minecraft:sculk_sensor": {
+      "wotr:dark": 1,
+      "wotr:life": 1
+    },
+    "minecraft:sculk_shrieker": {
+      "wotr:dark": 1,
+      "wotr:life": 1
+    },
+    "minecraft:sculk_vein": {
+      "wotr:dark": 1,
+      "wotr:life": 1
+    },
+    "minecraft:sea_lantern": {
+      "wotr:light": 1,
+      "wotr:water": 1
+    },
+    "minecraft:sea_pickle": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:seagrass": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:sentry_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:shaper_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:shears": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:short_grass": {
+      "wotr:plant": 1
+    },
+    "minecraft:shroomlight": {
+      "wotr:life": 1,
+      "wotr:light": 1
+    },
+    "minecraft:shulker_shell": {
+      "wotr:animal": 1,
+      "wotr:end": 1
+    },
+    "minecraft:silence_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:skull_banner_pattern": {
+      "wotr:fabric": 1,
+      "wotr:knowledge": 1
+    },
+    "minecraft:slime_ball": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:slime_block": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:small_amethyst_bud": {
+      "wotr:crystal": 1
+    },
+    "minecraft:small_dripleaf": {
+      "wotr:plant": 1
+    },
+    "minecraft:smithing_table": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:smoker": {
+      "wotr:fire": 1
+    },
+    "minecraft:smooth_basalt": {
+      "wotr:earth": 1,
+      "wotr:fire": 1
+    },
+    "minecraft:smooth_quartz": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:smooth_quartz_slab": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:smooth_quartz_stairs": {
+      "wotr:crystal": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:smooth_stone": {
+      "wotr:earth": 1
+    },
+    "minecraft:smooth_stone_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:sniffer_egg": {
+      "wotr:animal": 1,
+      "wotr:life": 1
+    },
+    "minecraft:snout_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:snow": {
+      "wotr:water": 1
+    },
+    "minecraft:snow_block": {
+      "wotr:water": 1
+    },
+    "minecraft:snowball": {
+      "wotr:water": 1
+    },
+    "minecraft:soul_campfire": {
+      "wotr:light": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:soul_lantern": {
+      "wotr:light": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:soul_sand": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:soul_soil": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:soul_torch": {
+      "wotr:light": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:spectral_arrow": {
+      "wotr:chaos": 1,
+      "wotr:death": 1
+    },
+    "minecraft:spider_eye": {
+      "wotr:animal": 1
+    },
+    "minecraft:spire_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:sponge": {
+      "wotr:water": 1
+    },
+    "minecraft:spore_blossom": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:spyglass": {
+      "wotr:space": 1
+    },
+    "minecraft:stick": {
+      "wotr:plant": 1
+    },
+    "minecraft:sticky_piston": {
+      "wotr:power": 1
+    },
+    "minecraft:stone_axe": {
+      "wotr:chaos": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:stone_brick_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_brick_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_brick_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_hoe": {
+      "wotr:earth": 1,
+      "wotr:life": 1
+    },
+    "minecraft:stone_pickaxe": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_pressure_plate": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_shovel": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:stone_sword": {
+      "wotr:chaos": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:stonecutter": {
+      "wotr:earth": 1,
+      "wotr:order": 1
+    },
+    "minecraft:string": {
+      "wotr:fabric": 1
+    },
+    "minecraft:sugar": {
+      "wotr:life": 1
+    },
+    "minecraft:sugar_cane": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:suspicious_gravel": {
+      "wotr:earth": 1
+    },
+    "minecraft:suspicious_stew": {
+      "wotr:chaos": 1
+    },
+    "minecraft:sweet_berries": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:tadpole_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:tall_grass": {
+      "wotr:plant": 1
+    },
+    "minecraft:target": {
+      "wotr:plant": 1
+    },
+    "minecraft:tide_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:tinted_glass": {
+      "wotr:crystal": 1,
+      "wotr:earth": 1
+    },
+    "minecraft:tipped_arrow": {
+      "wotr:chaos": 1
+    },
+    "minecraft:tnt": {
+      "wotr:fire": 1
+    },
+    "minecraft:tnt_minecart": {
+      "wotr:fire": 1,
+      "wotr:order": 1
+    },
+    "minecraft:torch": {
+      "wotr:fire": 1,
+      "wotr:light": 1
+    },
+    "minecraft:torchflower": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:totem_of_undying": {
+      "wotr:death": 1,
+      "wotr:life": 1
+    },
+    "minecraft:trial_key": {
+      "wotr:chaos": 1
+    },
+    "minecraft:trident": {
+      "wotr:chaos": 1,
+      "wotr:water": 1
+    },
+    "minecraft:tripwire_hook": {
+      "wotr:metal": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:tropical_fish_bucket": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:tube_coral": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:tube_coral_block": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:tube_coral_fan": {
+      "wotr:plant": 1,
+      "wotr:water": 1
+    },
+    "minecraft:tuff_brick_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:tuff_brick_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:tuff_brick_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:tuff_bricks": {
+      "wotr:earth": 1
+    },
+    "minecraft:tuff_slab": {
+      "wotr:earth": 1
+    },
+    "minecraft:tuff_stairs": {
+      "wotr:earth": 1
+    },
+    "minecraft:tuff_wall": {
+      "wotr:earth": 1
+    },
+    "minecraft:turtle_egg": {
+      "wotr:animal": 1,
+      "wotr:life": 1
+    },
+    "minecraft:turtle_helmet": {
+      "wotr:water": 1
+    },
+    "minecraft:turtle_scute": {
+      "wotr:animal": 1,
+      "wotr:water": 1
+    },
+    "minecraft:twisting_vines": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:verdant_froglight": {
+      "wotr:life": 1,
+      "wotr:light": 1,
+      "wotr:water": 1
+    },
+    "minecraft:vex_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:vine": {
+      "wotr:plant": 1
+    },
+    "minecraft:ward_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:warped_fungus": {
+      "wotr:life": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:warped_fungus_on_a_stick": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:warped_nylium": {
+      "wotr:earth": 1,
+      "wotr:nether": 1
+    },
+    "minecraft:warped_roots": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:water_bucket": {
+      "wotr:water": 1
+    },
+    "minecraft:waxed_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_copper_block": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_exposed_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_exposed_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_exposed_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_exposed_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_exposed_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_exposed_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_exposed_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_exposed_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_exposed_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_oxidized_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_oxidized_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_oxidized_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_oxidized_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_oxidized_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_oxidized_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_oxidized_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_oxidized_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_oxidized_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_weathered_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_weathered_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_weathered_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_weathered_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_weathered_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_weathered_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:waxed_weathered_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_weathered_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:waxed_weathered_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:wayfinder_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:weathered_chiseled_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:weathered_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:weathered_copper_bulb": {
+      "wotr:light": 1,
+      "wotr:metal": 1
+    },
+    "minecraft:weathered_copper_door": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:weathered_copper_grate": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:weathered_copper_trapdoor": {
+      "wotr:metal": 1,
+      "wotr:order": 1
+    },
+    "minecraft:weathered_cut_copper": {
+      "wotr:metal": 1
+    },
+    "minecraft:weathered_cut_copper_slab": {
+      "wotr:metal": 1
+    },
+    "minecraft:weathered_cut_copper_stairs": {
+      "wotr:metal": 1
+    },
+    "minecraft:weeping_vines": {
+      "wotr:nether": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wet_sponge": {
+      "wotr:water": 1
+    },
+    "minecraft:wheat": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:white_tulip": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wild_armor_trim_smithing_template": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:wind_charge": {
+      "wotr:air": 1
+    },
+    "minecraft:wither_rose": {
+      "wotr:death": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wolf_armor": {
+      "wotr:animal": 1
+    },
+    "minecraft:wooden_axe": {
+      "wotr:chaos": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wooden_hoe": {
+      "wotr:life": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wooden_pickaxe": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wooden_shovel": {
+      "wotr:earth": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:wooden_sword": {
+      "wotr:chaos": 1,
+      "wotr:plant": 1
+    },
+    "minecraft:writable_book": {
+      "wotr:knowledge": 1
+    },
+    "minecraft:written_book": {
+      "wotr:knowledge": 1
     }
   }
 }
