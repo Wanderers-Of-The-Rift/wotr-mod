@@ -86,7 +86,7 @@ public class RiftChestProcessor extends StructureProcessor {
                 tileEntity.loadWithComponents(blockInfo.nbt(), world.registryAccess());
                 ServerLevel serverWorld = ((ServerLevelAccessor) world).getLevel();
                 //if (!blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
-                    ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType), serverWorld.random.nextLong());
+                    ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType), /*serverWorld.random.nextLong()*/random.nextLong());
                // }
                 return new StructureTemplate.StructureBlockInfo(
                         pos,
