@@ -15,6 +15,8 @@ public class ModChunkGenerators {
 
     public static final Supplier<MapCodec<SingleBlockGenerator>>
         SINGLE_BLOCK_GENERATOR = CHUNK_GENERATORS.register("single_block_generator", () -> SingleBlockGenerator.CODEC);
+    public static final Supplier<MapCodec<FastRiftGenerator>>
+        FAST_RIFT_GENERATOR = CHUNK_GENERATORS.register("fast_rift_generator", () -> FastRiftGenerator.CODEC);
 
 
 }

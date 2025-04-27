@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.init.ModEntityTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
+import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
-import com.wanderersoftherift.wotr.world.level.SingleBlockGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.*;
@@ -190,7 +190,7 @@ public class RiftLevelManager {
         if (voidBiome == null){
             return null;
         }
-        return new SingleBlockGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("bedrock"));
+        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("bedrock"));
     }
 
     private static ServerLevel createRift(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos, @Nullable ItemStack riftKey) {
