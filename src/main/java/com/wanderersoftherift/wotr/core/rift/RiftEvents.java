@@ -27,7 +27,7 @@ public class RiftEvents {
                 }
                 if (player.level() instanceof ServerLevel pLevel && !RiftData.isRift(pLevel) && pLevel != serverLevel) {
                     // prevent tp out of the rift, only allow exiting though portal
-                    player.teleportTo(serverLevel, 5, 0, 5, Set.of(), player.getYRot(), player.getXRot(), false);
+                    player.teleportTo(serverLevel, 10, 6, 10, Set.of(), player.getYRot(), player.getXRot(), false);
                 }
             }
             for (var playerID : toRemove) {

@@ -117,7 +117,7 @@ public class RiftPortalEntranceEntity extends Entity {
             z = -z;
         }
 
-        return new Vec3(x, y, z);
+        return new Vec3(x+8, y+6, z+8);
     }
 
     @Override

@@ -90,7 +90,7 @@ public class RiftLevelManager {
         level.getServer().markWorldsDirty();
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
-        spawnRift(id, riftKey, level, new BlockPos(0,0,0).above().getBottomCenter(), Direction.UP);
+        spawnRift(id, riftKey, level, new BlockPos(8,6,8).above().getBottomCenter(), Direction.UP);
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
     }
