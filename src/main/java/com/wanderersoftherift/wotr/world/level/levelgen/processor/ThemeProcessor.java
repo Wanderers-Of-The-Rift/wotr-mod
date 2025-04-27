@@ -17,8 +17,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
+import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +35,7 @@ public class ThemeProcessor extends StructureProcessor {
             ).apply(builder, ThemeProcessor::new));
 
     private ThemePieceType themePieceType;
+    private Pair<PhantomReference<LevelReader>,List<StructureProcessor>> lastThemeProcessorCache = null;
 
     public ThemeProcessor(ThemePieceType themePieceType) {
         this.themePieceType = themePieceType;
@@ -66,12 +69,15 @@ public class ThemeProcessor extends StructureProcessor {
     }
 
     private List<StructureProcessor> getThemeProcessors(LevelReader world, BlockPos structurePos) {
+        var currentCache = lastThemeProcessorCache;
+        if(world!=null && currentCache!=null && currentCache.getA().refersTo(world)) return currentCache.getB();
         if(world instanceof ServerLevel serverLevel) {
             LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-            if(riftThemeData.getTheme() != null) {
-                return riftThemeData.getTheme().value().getProcessors(themePieceType);
-            }
-            return defaultThemeProcessors(serverLevel, structurePos);
+            var result = (riftThemeData.getTheme() != null)?
+                    riftThemeData.getTheme().value().getProcessors(themePieceType)
+                    : defaultThemeProcessors(serverLevel, structurePos);
+            lastThemeProcessorCache=new Pair<>(new PhantomReference<>(world,null),result);
+            return result;
         }
         return new ArrayList<>();
     }
