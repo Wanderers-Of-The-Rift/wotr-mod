@@ -248,7 +248,7 @@ public class RiftLevelManager {
         }
         themeData.setTheme(riftTheme);
 
-        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"), maxDepth, new BlockPos(0, 2, 0));
+        //placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"), maxDepth, new BlockPos(0, 2, 0));
         return riftLevel;
     }
 
