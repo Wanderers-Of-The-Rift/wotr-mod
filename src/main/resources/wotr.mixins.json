@@ -12,6 +12,7 @@
         "AccessorStructureTemplate",
         "InvokerAbstractContainerMenu",
         "InvokerBlockBehaviour",
+        "MixinChunkAccess",
         "MixinChunkMap",
         "MixinEnchantingTableBlock",
         "MixinItemStack",
