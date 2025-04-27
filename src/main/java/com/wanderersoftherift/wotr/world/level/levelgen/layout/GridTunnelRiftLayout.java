@@ -1,0 +1,41 @@
+package com.wanderersoftherift.wotr.world.level.levelgen.layout;
+
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.RandomState;
+import org.joml.Vector2i;
+
+import java.util.List;
+
+public class GridTunnelRiftLayout implements RiftLayout {
+    private final Vector2i period;
+    private final Vector2i split;
+
+    public GridTunnelRiftLayout(Vector2i period, Vector2i split) {
+        this.period = period;
+        this.split = split;
+    }
+
+    @Override
+    public List<RiftSpace> getChunkSpaces(ChunkPos chunkPos, RandomState randomState) {
+        var gridX = Math.floorDiv(chunkPos.x,3);
+        var gridZ = Math.floorDiv(chunkPos.z,3);
+
+        var isTunnelX = Math.floorMod(gridX,period.x)>=split.x;
+        var isTunnelZ = Math.floorMod(gridZ,period.y)>=split.y;
+
+        if (isTunnelX && isTunnelZ){
+            return List.of(null,null,null);
+        } else if (isTunnelX){
+            var s = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(1,1,3));
+            return List.of(s,s,s);
+        } else if (isTunnelZ){
+            var s = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(3,1,1));
+            return List.of(s,s,s);
+        }
+        var s = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),3,1, RoomRiftSpace.RoomType.STABLE);
+        return List.of(s,s,s);
+    }
+}
