@@ -106,11 +106,20 @@ public class GradientReplaceProcessor extends StructureProcessor {
     }
 
     private BlockState getReplacementBlock(List<OutputStep> outputSteps, BlockPos blockPos, OpenSimplex2F noiseGen) {
-        double noiseValue = (noiseGen.noise3_Classic(blockPos.getX() * getNoiseScaleX(), blockPos.getY() * getNoiseScaleY(), blockPos.getZ() * getNoiseScaleZ()));
+        if (outputSteps.isEmpty()){
+            return null;
+        }
+        if(outputSteps.size()==1){
+            var outputStep = outputSteps.getFirst();
+            if (outputStep.stepSize>=0.99999f) {
+                return outputStep.outputBlockState.convertBlockState();
+            }
+        }
+        double noiseValue = Math.abs(noiseGen.noise3_Classic(blockPos.getX() * getNoiseScaleX(), blockPos.getY() * getNoiseScaleY(), blockPos.getZ() * getNoiseScaleZ()));
         float stepSize = 0;
         for(OutputStep outputStep: outputSteps){
-            stepSize = stepSize+outputStep.stepSize;
-            if (noiseValue < stepSize && noiseValue > (stepSize * -1)) {
+            stepSize += outputStep.stepSize;
+            if (noiseValue < stepSize) {
                 return outputStep.outputBlockState.convertBlockState();
             }
         }
