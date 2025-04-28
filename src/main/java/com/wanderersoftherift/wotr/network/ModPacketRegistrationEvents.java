@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.network.map.S2CRiftMapperPlayerRemove;
+import com.wanderersoftherift.wotr.network.map.S2CRiftMapperPlayerUpdatePacket;
 import com.wanderersoftherift.wotr.network.map.S2CRiftMapperRoomPacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,5 +24,7 @@ public class ModPacketRegistrationEvents {
 
         registrar.playToClient(S2CRiftMapperRoomPacket.TYPE, S2CRiftMapperRoomPacket.STREAM_CODEC,
                 new S2CRiftMapperRoomPacket.S2CRiftMapperRoomPacketHandler());
+        registrar.playToClient(S2CRiftMapperPlayerUpdatePacket.TYPE, S2CRiftMapperPlayerUpdatePacket.STREAM_CODEC,
+                new S2CRiftMapperPlayerUpdatePacket.S2CRiftMapperPlayerUpdatePacketHandler());
     }
 }

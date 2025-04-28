@@ -17,6 +17,8 @@ import java.util.HashMap;
 public class MapData {
     public static HashMap<Vector3i, MapCell> cells = new HashMap<>();
     public static HashMap<Vector3i, MapRoom> rooms = new HashMap<>();
+    public static HashMap<String, Player> playersByUUID = new HashMap<>();
+    public static HashMap<Vector3i, Player> players = new HashMap<>();
 
     static {
         int size = 6;
@@ -52,6 +54,32 @@ public class MapData {
         new_cellse.add(cellb);
         addRoom(new MapRoom(4, -1, 0, 3, 3, 3, new_cellse));
     }
+
+    /**
+     * Used to add/update new player to the map
+     *
+     * @param player
+     */
+    public static void updatePlayer(Player player) {
+        // check if the player is already in the map
+        if (players.containsKey(new Vector3i(player.x, player.y, player.z))) { // remove player if already exists to properly update everything
+            Player oldPlayer = players.get(new Vector3i(player.x, player.y, player.z));
+            removePlayer(oldPlayer);
+        }
+        players.put(new Vector3i(player.x, player.y, player.z), player);
+        playersByUUID.put(player.uuid, player);
+    }
+
+    /**
+     * Used to remove player from the map
+     *
+     * @param player
+     */
+    public static void removePlayer(Player player) {
+        players.remove(new Vector3i(player.x, player.y, player.z));
+        playersByUUID.remove(player.uuid);
+    }
+
 
     /**
      * Used to add new cell to the map In the future will be used to process cell changes like the small 1wide tunnels
