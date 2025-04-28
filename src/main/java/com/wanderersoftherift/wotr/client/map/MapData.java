@@ -72,7 +72,7 @@ public class MapData {
     public static void addRoom(MapRoom room) {
         // check if the room is already in the map
         if (rooms.containsKey(new Vector3i(room.x, room.y, room.z))) { // remove room if already exists to properly update everything
-            oldRoom = rooms.get(new Vector3i(room.x, room.y, room.z));
+            MapRoom oldRoom = rooms.get(new Vector3i(room.x, room.y, room.z));
             removeRoom(oldRoom);
         }
         if (room.cells == null) { // if there are no cells, create them
