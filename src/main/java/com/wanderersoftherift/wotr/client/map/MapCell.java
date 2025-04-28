@@ -2,6 +2,9 @@ package com.wanderersoftherift.wotr.client.map;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.wanderersoftherift.wotr.client.render.MapRenderer3D;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -16,6 +19,33 @@ import static com.wanderersoftherift.wotr.client.map.Utils3D.projectPoint;
  */
 public class MapCell {
     private static final float TWEEN_TUNNEL_SIZE = 0.1f;
+
+    public static final StreamCodec<ByteBuf, MapCell> MAP_CELL_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VECTOR3F, mapCell -> mapCell.pos1, // Serialize/Deserialize pos1
+            ByteBufCodecs.VECTOR3F, mapCell -> mapCell.pos2, // Serialize/Deserialize pos2
+            ByteBufCodecs.VAR_INT, MapCell::getType, // Serialize/Deserialize type
+            StreamCodec.of(
+                    (buf, enumSet) -> {
+                        int bitmask = 0;
+                        for (Direction direction : enumSet) {
+                            bitmask |= (1 << direction.ordinal());
+                        }
+                        buf.writeInt(bitmask);
+                    },
+                    buf -> {
+                        int bitmask = buf.readInt();
+                        EnumSet<Direction> enumSet = EnumSet.noneOf(Direction.class);
+                        for (Direction direction : Direction.values()) {
+                            if ((bitmask & (1 << direction.ordinal())) != 0) {
+                                enumSet.add(direction);
+                            }
+                        }
+                        return enumSet;
+                    }
+            ), mapCell -> mapCell.openings, // Serialize/Deserialize openings
+            ByteBufCodecs.VAR_INT, mapCell -> mapCell.effectFlags, // Serialize/Deserialize effectFlags
+            MapCell::new // Constructor for deserialization
+    );
 
     public Vector3f pos1; // should only be used for rendering,
     // connection is 1wide tunnel between rooms
@@ -49,6 +79,14 @@ public class MapCell {
     public MapCell(Vector3f pos1, Vector3f pos2, int type) {
         this.pos1 = pos1;
         this.pos2 = pos2;
+    }
+
+    public MapCell(Vector3f pos1, Vector3f pos2, Integer type, EnumSet<Direction> directions, Integer flags) {
+        this.pos1 = pos1;
+        this.pos2 = pos2;
+        this.type = type;
+        this.openings = directions;
+        this.effectFlags = flags;
     }
 
     public int getType() {

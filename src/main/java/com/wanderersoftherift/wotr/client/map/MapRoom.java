@@ -2,6 +2,9 @@ package com.wanderersoftherift.wotr.client.map;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.wanderersoftherift.wotr.client.render.MapRenderer3D;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -33,6 +36,33 @@ public class MapRoom {
             { 0, 3, 7, 4 }, // left
             { 5, 6, 2, 1 } // right
     };
+    public static final StreamCodec<ByteBuf, MapRoom> MAP_ROOM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.x, // Serialize/Deserialize x
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.y, // Serialize/Deserialize y
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.z, // Serialize/Deserialize z
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.sizeX, // Serialize/Deserialize sizeX
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.sizeY, // Serialize/Deserialize sizeY
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.sizeZ, // Serialize/Deserialize sizeZ
+            StreamCodec.of(
+                    (buf, cells) -> {
+                        buf.writeInt(cells.size());
+                        for (MapCell cell : cells) {
+                            MapCell.MAP_CELL_CODEC.encode(buf, cell);
+                        }
+                    },
+                    buf -> {
+                        int size = buf.readInt();
+                        List<MapCell> cells = new ArrayList<>();
+                        for (int i = 0; i < size; i++) {
+                            cells.add(MapCell.MAP_CELL_CODEC.decode(buf));
+                        }
+                        return cells;
+                    }
+            ), mapRoom -> mapRoom.cells, // Serialize/Deserialize cells
+            ByteBufCodecs.VAR_INT, mapRoom -> mapRoom.effectFlags, // Serialize/Deserialize effectFlags
+            MapRoom::new // Constructor for deserialization
+    );
+
     // spotless:on
 
     public int x, y, z;
@@ -64,6 +94,21 @@ public class MapRoom {
         this.pos2 = new Vector3f(x + sizeX, y + sizeY, z + sizeZ);
         if (cells != null) {
             this.cells.addAll(cells);
+        }
+        this.effectFlags = effectFlags;
+    }
+
+    public MapRoom(Integer x, Integer y, Integer z, Integer sizeX, Integer sizeY, Integer sizeZ, List<MapCell> mapCells, Integer effectFlags) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.sizeZ = sizeZ;
+        this.pos1 = new Vector3f(x, y, z);
+        this.pos2 = new Vector3f(x + sizeX, y + sizeY, z + sizeZ);
+        if (mapCells != null) {
+            this.cells.addAll(mapCells);
         }
         this.effectFlags = effectFlags;
     }

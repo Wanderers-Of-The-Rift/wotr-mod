@@ -70,6 +70,11 @@ public class MapData {
      * @param room
      */
     public static void addRoom(MapRoom room) {
+        // check if the room is already in the map
+        if (rooms.containsKey(new Vector3i(room.x, room.y, room.z))) { // remove room if already exists to properly update everything
+            oldRoom = rooms.get(new Vector3i(room.x, room.y, room.z));
+            removeRoom(oldRoom);
+        }
         if (room.cells == null) { // if there are no cells, create them
             room.cells = new java.util.ArrayList<>();
             for (int x = room.x; x < room.x + room.sizeX; x++) {
@@ -86,6 +91,16 @@ public class MapData {
         }
         rooms.put(new Vector3i(room.x, room.y, room.z), room); // add the actual room to hashmap
         checkRoomConnections(room);
+    }
+
+    /**
+     * Used to remove a room from the map, including cells from the cell list
+     *
+     * @param room
+     */
+    public static void removeRoom(MapRoom room) {
+        rooms.remove(new Vector3i(room.x, room.y, room.z));
+        room.cells.forEach(cell -> cells.remove(new Vector3i((int) cell.pos1.x, (int) cell.pos1.y, (int) cell.pos1.z)));
     }
 
     public static void reset() {
