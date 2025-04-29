@@ -6,12 +6,15 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Unit;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRiftLayout
@@ -25,6 +28,7 @@ public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRift
 
     public final Vec3i origin;
     private final AtomicReference<Thread> generatorThread = new AtomicReference<>(null);
+    private final CompletableFuture<Unit> generationCompletion = new CompletableFuture<>();
 
     public ChaoticLayoutRegion(Vec3i origin) {
         this.origin = origin;
@@ -47,6 +51,8 @@ public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRift
                 }
             }
         }
+
+        generationCompletion.complete(Unit.INSTANCE);
     }
 
     private List<RiftSpace> generateNonChaotic(RandomSource random) {
@@ -164,15 +170,15 @@ public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRift
         return true;
     }
 
-    public void tryGenerate(RandomSource random) {//todo don't launch a separate thread because of this
-        if(generatorThread.get()==null && random!=null)generatorThread.compareAndSet(null, Thread.startVirtualThread(()-> {
-            while (generatorThread.get()==null);
-            if(generatorThread.get()!=Thread.currentThread())return;
-            generate(random);
-        }));
+    public void tryGenerate(RandomSource random) {
+        if(generatorThread.get()==null && random!=null){
+            if(generatorThread.compareAndSet(null,Thread.currentThread())){
+                generate(random);
+            }
+        }
         try {
-            generatorThread.get().join();
-        } catch (InterruptedException e) {
+            generationCompletion.get();
+        } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
