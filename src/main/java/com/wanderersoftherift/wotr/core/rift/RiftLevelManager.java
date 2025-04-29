@@ -65,12 +65,14 @@ public class RiftLevelManager {
             return null;
         }
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(ow);
+        int typeHeight = 5;
+
+        ChunkGenerator chunkGen = getRiftChunkGenerator(ow,(typeHeight+1)*4);
         if (chunkGen == null){
             return null;
         }
 
-        var stem = getLevelStem(server, id, chunkGen);
+        var stem = getLevelStem(server, id, chunkGen, typeHeight);
         if (stem == null) {
             return null;
         }
@@ -108,14 +110,14 @@ public class RiftLevelManager {
     }
 
     @SuppressWarnings("deprecation")
-    private static LevelStem getLevelStem(MinecraftServer server, ResourceLocation id, ChunkGenerator chunkGen) {
+    private static LevelStem getLevelStem(MinecraftServer server, ResourceLocation id, ChunkGenerator chunkGen, int type) {
         Optional<Registry<LevelStem>> levelStemRegistry = server.overworld().registryAccess().lookup(Registries.LEVEL_STEM);
         if (levelStemRegistry.isEmpty()) {
             return null;
         }
 
         var riftType = server.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE)
-            .get(RiftDimensionType.RIFT_DIMENSION_TYPE).orElse(null);
+            .get(RiftDimensionType.RIFT_DIMENSION_TYPES.get(type/*todo read from key or something*/)).orElse(null);
         if (riftType == null){
             WanderersOfTheRift.LOGGER.error("Failed to get rift dimension type");
             return null;
@@ -185,12 +187,12 @@ public class RiftLevelManager {
         level.getServer().overworld().save(null, true, false);
     }
 
-    private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld) {
+    private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld, int layerCount) {
         var voidBiome = overworld.registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).orElse(null);
         if (voidBiome == null){
             return null;
         }
-        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), ResourceLocation.withDefaultNamespace("bedrock"));
+        return new FastRiftGenerator(new FixedBiomeSource(voidBiome),layerCount, ResourceLocation.withDefaultNamespace("bedrock"));
     }
 
     private static ServerLevel createRift(ResourceLocation id, LevelStem stem, ResourceKey<Level> portalDimension, BlockPos portalPos, @Nullable ItemStack riftKey) {

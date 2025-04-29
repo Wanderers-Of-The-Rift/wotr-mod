@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -36,8 +37,8 @@ public class RiftData extends SavedData { //TODO: split this
 
     public static boolean isRift(ServerLevel level) {
         Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
-        Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
-        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType()).isPresent();
+        Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPES.stream().map(dimTypes::get).filter(Optional::isPresent).map(Optional::get);
+        return riftTypes.anyMatch(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType());
     }
 
     public static RiftData get(ServerLevel level) {

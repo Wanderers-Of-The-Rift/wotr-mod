@@ -1,11 +1,11 @@
 package com.wanderersoftherift.wotr.world.level;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.ChaoticLayoutRegion;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.ChaoticRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
@@ -50,8 +50,11 @@ public class FastRiftGenerator extends ChunkGenerator {
     public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
+                Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
             ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID)
                 ).apply(instance, FastRiftGenerator::new));
+
+    private final int layerCount;
 
     private final ResourceLocation customBlockID;
     private final BlockState customBlock;
@@ -64,9 +67,9 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     private RiftLayout layout = null;
     private RiftRoomGenerator roomGenerator = null;
-
-    public FastRiftGenerator(BiomeSource biomeSource, ResourceLocation defaultBlock) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock) {
         super(biomeSource);
+        this.layerCount = layerCount;
         this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock).map(Holder.Reference::value).map(Block::defaultBlockState).orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
     }
@@ -80,6 +83,10 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     }
 
+    private int layersCount() {
+        return layerCount;
+    }
+
     @Override public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random, ChunkAccess chunk) {
 
     }
@@ -89,7 +96,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     @Override public int getGenDepth() {
-        return ChaoticLayoutRegion.LAYERS*16;
+        return layerCount *16;
     }
 
     @Override
@@ -127,17 +134,17 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         if (layout==null || roomGenerator==null) {
-            layout = new ChaoticRiftLayout();
+            layout = new ChaoticRiftLayout(layerCount);
             roomGenerator = new RiftRoomGenerator();
         }
         var spaces = layout.getChunkSpaces(chunk.getPos(),randomState);
-        RiftSpace.placeInChunk(chunk,null,spaces.size()- ChaoticLayoutRegion.LAYERS/2);
-        RiftSpace.placeInChunk(chunk,null,-1-ChaoticLayoutRegion.LAYERS/2);
+        RiftSpace.placeInChunk(chunk,null,spaces.size()- layerCount /2);
+        RiftSpace.placeInChunk(chunk,null,-1- layerCount /2);
         Future<RiftProcessedChunk>[] chunkFutures = new Future[spaces.size()];
         for (int i = 0; i < spaces.size(); i++) {
             var space = spaces.get(i);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(new Vec3i(chunk.getPos().x, i-ChaoticLayoutRegion.LAYERS/2, chunk.getPos().z), roomSpace, serverLevel, randomState);
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(new Vec3i(chunk.getPos().x, i- layerCount /2, chunk.getPos().z), roomSpace, serverLevel, randomState);
             }
         }
         for (int i = 0; i < spaces.size(); i++) {
@@ -145,7 +152,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
             var space = spaces.get(i);
             if(space == null || space instanceof VoidRiftSpace){
-                RiftSpace.placeInChunk(chunk,space,i-ChaoticLayoutRegion.LAYERS/2);
+                RiftSpace.placeInChunk(chunk,space,i- layerCount /2);
             }else if(generatedRoomChunkFuture!=null) {
                 try {
                     RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
@@ -156,7 +163,7 @@ public class FastRiftGenerator extends ChunkGenerator {
                             generatedRoomChunk.placeInWorld(chunk, level);
                         }));
                     }else {
-                        RiftSpace.placeInChunk(chunk,space,i-ChaoticLayoutRegion.LAYERS/2);
+                        RiftSpace.placeInChunk(chunk,space,i- layerCount /2);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
@@ -178,15 +185,15 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     @Override public int getSeaLevel() {
-        return -ChaoticLayoutRegion.LAYERS*8;
+        return -layerCount *8;
     }
 
     @Override public int getMinY() {
-        return -ChaoticLayoutRegion.LAYERS*8;
+        return -layerCount *8;
     }
 
     @Override public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
-        return ChaoticLayoutRegion.LAYERS*16;
+        return layerCount *16;
     }
 
     @Override public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
@@ -195,7 +202,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {//todo more debug info: used template and placement, performance, etc.
         if (layout!=null){
-            var currentSpace = ((pos.getY()+8*ChaoticLayoutRegion.LAYERS)>=0 && (pos.getY()+8*ChaoticLayoutRegion.LAYERS)<16*ChaoticLayoutRegion.LAYERS)?layout.getChunkSpaces(new ChunkPos(pos), null).get((pos.getY()+ChaoticLayoutRegion.LAYERS*8)/16):null;
+            var currentSpace = ((pos.getY()+8* layerCount)>=0 && (pos.getY()+8* layerCount)<16* layerCount)?layout.getChunkSpaces(new ChunkPos(pos), null).get((pos.getY()+ layerCount *8)/16):null;
             info.add("current space");
             if(currentSpace==null || currentSpace instanceof VoidRiftSpace){
                 info.add("void");

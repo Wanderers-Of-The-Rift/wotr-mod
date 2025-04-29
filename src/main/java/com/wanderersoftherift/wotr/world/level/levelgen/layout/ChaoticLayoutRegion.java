@@ -19,12 +19,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRiftLayout
 
-    /*todo make layers non-static and STOP USING IT EVERYWHERE*/
-    public static final int LAYERS = 24;
+    public final int layerCount;
 
     private static final RiftSpace VOID_SPACE = new VoidRiftSpace();
 
-    private final RiftSpace[] spaces = new RiftSpace[15*15*LAYERS];
+    private final RiftSpace[] spaces;
 
     public final Vec3i origin;
     private final AtomicReference<Thread> generatorThread = new AtomicReference<>(null);
@@ -32,6 +31,8 @@ public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRift
 
     public ChaoticLayoutRegion(Vec3i origin) {
         this.origin = origin;
+        layerCount = -2*origin.getY();
+        spaces = new RiftSpace[15*15* layerCount];
     }
 
     public void generate(RandomSource random){
@@ -138,7 +139,7 @@ public class ChaoticLayoutRegion { //todo make a private subclass of ChaoticRift
 
     private boolean isOutsideThisRegion(int x, int y, int z){
         return x<origin.getX() || x>=origin.getX()+15 ||
-                y<origin.getY() || y>=origin.getY()+LAYERS ||
+                y<origin.getY() || y>=origin.getY()+ layerCount ||
                 z<origin.getZ() || z>=origin.getZ()+15;
     }
 
