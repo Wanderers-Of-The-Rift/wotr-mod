@@ -134,17 +134,17 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         if (layout==null || roomGenerator==null) {
-            layout = new ChaoticRiftLayout(layerCount);
+            layout = new ChaoticRiftLayout(layerCount-2);
             roomGenerator = new RiftRoomGenerator();
         }
         var spaces = layout.getChunkSpaces(chunk.getPos(),randomState);
-        RiftSpace.placeInChunk(chunk,null,spaces.size()- layerCount /2);
-        RiftSpace.placeInChunk(chunk,null,-1- layerCount /2);
+        RiftSpace.placeInChunk(chunk,null,1+spaces.size()- layerCount /2);
+        RiftSpace.placeInChunk(chunk,null,- layerCount /2);
         Future<RiftProcessedChunk>[] chunkFutures = new Future[spaces.size()];
         for (int i = 0; i < spaces.size(); i++) {
             var space = spaces.get(i);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(new Vec3i(chunk.getPos().x, i- layerCount /2, chunk.getPos().z), roomSpace, serverLevel, randomState);
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(new Vec3i(chunk.getPos().x, 1+i- layerCount /2, chunk.getPos().z), roomSpace, serverLevel, randomState);
             }
         }
         for (int i = 0; i < spaces.size(); i++) {
@@ -152,7 +152,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
             var space = spaces.get(i);
             if(space == null || space instanceof VoidRiftSpace){
-                RiftSpace.placeInChunk(chunk,space,i- layerCount /2);
+                RiftSpace.placeInChunk(chunk,space,1+i- layerCount /2);
             }else if(generatedRoomChunkFuture!=null) {
                 try {
                     RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
@@ -163,7 +163,7 @@ public class FastRiftGenerator extends ChunkGenerator {
                             generatedRoomChunk.placeInWorld(chunk, level);
                         }));
                     }else {
-                        RiftSpace.placeInChunk(chunk,space,i- layerCount /2);
+                        RiftSpace.placeInChunk(chunk,space,1+i- layerCount /2);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
@@ -202,7 +202,9 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {//todo more debug info: used template and placement, performance, etc.
         if (layout!=null){
-            var currentSpace = ((pos.getY()+8* layerCount)>=0 && (pos.getY()+8* layerCount)<16* layerCount)?layout.getChunkSpaces(new ChunkPos(pos), null).get((pos.getY()+ layerCount *8)/16):null;
+            var spaces = layout.getChunkSpaces(new ChunkPos(pos), null);
+            var idx = -1+(pos.getY()+ layerCount *8)/16;
+            var currentSpace = (idx>=0 && idx<spaces.size())?spaces.get(idx):null;
             info.add("current space");
             if(currentSpace==null || currentSpace instanceof VoidRiftSpace){
                 info.add("void");
