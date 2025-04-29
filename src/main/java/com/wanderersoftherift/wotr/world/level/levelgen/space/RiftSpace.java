@@ -16,50 +16,13 @@ import java.util.List;
  */
 public interface RiftSpace {
 
-    public static void placeInChunk(ChunkAccess chunk,RiftSpace spaceAt, int level) {//todo simplify using temporary RiftProcessedChunk
-        if(spaceAt==null || spaceAt instanceof VoidRiftSpace){
-            var position = new BlockPos.MutableBlockPos();
-            for (int y = level*16; y < level*16+16; y++) {
-                position.setY(y);
-                for (int xz = 0; xz < 256; xz++) {
-                    position.setZ((xz >>> 4)&0xf);
-                    position.setX(xz&0xf);
-                    chunk.setBlockState(position, Blocks.BEDROCK.defaultBlockState(),false);
-                }
-            }
-            return;
-        }
-        if(level>=spaceAt.origin().getY() && level<spaceAt.origin().getY()+spaceAt.size().getY()){
 
-            var originRelativeX = chunk.getPos().x-spaceAt.origin().getX();
-            var originRelativeY = level-spaceAt.origin().getY();
-            var originRelativeZ = chunk.getPos().z-spaceAt.origin().getZ();
-            var position = new BlockPos.MutableBlockPos();
-            var corridors = spaceAt.corridors().stream().filter((corridor)->corridor.position().getX()+spaceAt.origin().getX()==chunk.getPos().x && corridor.position().getZ()+spaceAt.origin().getZ()==chunk.getPos().z && corridor.position().getY()+spaceAt.origin().getY()==level).toList();
-            var hasCorridorNorth = corridors.stream().anyMatch((it)->it.direction()== Direction.NORTH);
-            var hasCorridorWest = corridors.stream().anyMatch((it)->it.direction()== Direction.WEST);
-            for (int y = level*16; y < level*16+16; y++) {
-                position.setY(y);
-                position.setZ(0);
-                for (int x = 0; x < 16 && originRelativeZ<=0; x++) {
-                    position.setX(x);
-                    if(!(hasCorridorNorth && x>6 && x<10 && y>5+level*16 && y<11+level*16))chunk.setBlockState(position, Blocks.BEDROCK.defaultBlockState(),false);
-                }
-                position.setX(0);
-                for (int z = 0; z < 16 && originRelativeX<=0; z++) {
-                    position.setZ(z);
-                    if(!(hasCorridorWest && z>6 && z<10 && y>5+level*16 && y<11+level*16))chunk.setBlockState(position, Blocks.BEDROCK.defaultBlockState(),false);
-                }
-                for (int xz = 0; xz < 256 && (originRelativeY<=0 && y<=level*16); xz++) {
-                    position.setZ((xz >>> 4)&0xf);
-                    position.setX(xz&0xf);
-                    chunk.setBlockState(position, Blocks.BEDROCK.defaultBlockState(),false);
-                }
+    public static void placeInChunk(ChunkAccess chunk, RiftSpace space, int level) {
+        var processedChunk = new RiftProcessedChunk(new Vec3i(chunk.getPos().x, level, chunk.getPos().z),null);
+        placeInRiftChunk(processedChunk,space);
+        processedChunk.placeInWorld(chunk,null);
 
-            }
-        }
     }
-
 
     public static void placeInRiftChunk(RiftProcessedChunk chunk, RiftSpace space) {
         var level = chunk.origin.getY();
