@@ -14,48 +14,51 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @OnlyIn(Dist.CLIENT)
+@ParametersAreNonnullByDefault
 public class DittoBlockEntityRenderer implements BlockEntityRenderer<DittoBlockEntity> {
-	private final BlockRenderDispatcher dispatcher;
+    private final BlockRenderDispatcher dispatcher;
 
-	public DittoBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-		this.dispatcher = context.getBlockRenderDispatcher();
-	}
+    public DittoBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+        this.dispatcher = context.getBlockRenderDispatcher();
+    }
 
-	@Override
-	public int getViewDistance() {
-		return 256;
-	}
+    @Override
+    public int getViewDistance() {
+        return 256;
+    }
 
-	@Override
-	public void render(@NotNull DittoBlockEntity blockEntity, float partialTick, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-		DittoBlock dittoBlock = (DittoBlock)blockEntity.getBlockState().getBlock();
-		if (!dittoBlock.shouldRender(blockEntity.getBlockState())) {
-			return;
-		}
-		if ((blockEntity.getTheItem().getItem() instanceof BlockItem) && blockEntity.getTheItem().getItem() != dittoBlock.getBlock().asItem()) {
-			BlockState blockstate = ((BlockItem)blockEntity.getTheItem().getItem()).getBlock().defaultBlockState();
-			if (blockEntity.getLevel() == null) return;
-			int i;
-			i = OverlayTexture.pack(OverlayTexture.u(0.15F), 10);
-			this.dispatcher.renderSingleBlock(blockstate, stack, bufferSource, packedLight, i);
-		} else {
-			this.dispatcher.getModelRenderer().tesselateBlock(
-					blockEntity.getLevel(),
-					dispatcher.getBlockModel(blockEntity.getBlockState()),
-					blockEntity.getBlockState(),
-					blockEntity.getBlockPos(),
-					stack,
-					bufferSource.getBuffer(RenderType.CUTOUT),
-					false,
-					RandomSource.create(),
-					blockEntity.getBlockState().getSeed(blockEntity.getBlockPos()),
-					packedOverlay,
-					ModelData.EMPTY,
-					RenderType.CUTOUT
-			);
-		}
-	}
+    @Override
+    @SuppressWarnings("deprecation")
+    public void render(
+            DittoBlockEntity blockEntity,
+            float partialTick,
+            PoseStack stack,
+            MultiBufferSource bufferSource,
+            int packedLight,
+            int packedOverlay) {
+        DittoBlock dittoBlock = (DittoBlock) blockEntity.getBlockState().getBlock();
+        if (!dittoBlock.shouldRender(blockEntity.getBlockState())) {
+            return;
+        }
+        if ((blockEntity.getTheItem().getItem() instanceof BlockItem)
+                && blockEntity.getTheItem().getItem() != dittoBlock.getBlock().asItem()) {
+            BlockState blockstate = ((BlockItem) blockEntity.getTheItem().getItem()).getBlock().defaultBlockState();
+            if (blockEntity.getLevel() == null) {
+                return;
+            }
+            int packedUV = OverlayTexture.pack(OverlayTexture.u(0.15F), 10);
+            this.dispatcher.renderSingleBlock(blockstate, stack, bufferSource, packedLight, packedUV);
+        } else {
+            this.dispatcher.getModelRenderer()
+                    .tesselateBlock(blockEntity.getLevel(), dispatcher.getBlockModel(blockEntity.getBlockState()),
+                            blockEntity.getBlockState(), blockEntity.getBlockPos(), stack,
+                            bufferSource.getBuffer(RenderType.CUTOUT), false, RandomSource.create(),
+                            blockEntity.getBlockState().getSeed(blockEntity.getBlockPos()), packedOverlay,
+                            ModelData.EMPTY, RenderType.CUTOUT);
+        }
+    }
 }

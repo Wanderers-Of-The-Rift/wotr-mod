@@ -1,0 +1,23 @@
+{
+    "fallback": "wotr:rift/poi/terminator",
+    "elements": [
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/halfway/5/fence_cross-1-team",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/halfway/5/rest_stop-4-mal",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        }
+    ]
+}

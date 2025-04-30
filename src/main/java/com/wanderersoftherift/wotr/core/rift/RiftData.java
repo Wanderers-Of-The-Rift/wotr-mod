@@ -29,28 +29,11 @@ import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RiftData extends SavedData { //TODO: split this
+public class RiftData extends SavedData { // TODO: split this
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
     private final List<UUID> players;
-
-
-    public static boolean isRift(ServerLevel level) {
-        Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
-        Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPES.stream().map(dimTypes::get).filter(Optional::isPresent).map(Optional::get);
-        return riftTypes.anyMatch(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType());
-    }
-
-    public static RiftData get(ServerLevel level) {
-        if (!isRift(level)) {
-            throw new IllegalArgumentException("Not a rift level");
-        }
-        return level.getDataStorage().computeIfAbsent(factory(level.getServer().overworld().dimension(), level.getServer().overworld().getSharedSpawnPos()), "rift_data");
-    }
-
-    private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
-        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of()), RiftData::load);
-    }
+    private int tier = 0;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
@@ -58,11 +41,33 @@ public class RiftData extends SavedData { //TODO: split this
         this.players = new ArrayList<>(Objects.requireNonNull(players));
     }
 
+    public static boolean isRift(ServerLevel level) {
+        Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
+        Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPES.stream()
+                .map(dimTypes::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+        return riftTypes.anyMatch(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType());
+    }
+
+    public static RiftData get(ServerLevel level) {
+        if (!isRift(level)) {
+            throw new IllegalArgumentException("Not a rift level");
+        }
+        return level.getDataStorage()
+                .computeIfAbsent(factory(level.getServer().overworld().dimension(),
+                        level.getServer().overworld().getSharedSpawnPos()), "rift_data");
+    }
+
+    private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
+        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of()), RiftData::load);
+    }
+
     private static RiftData load(CompoundTag tag, HolderLookup.Provider registries) {
         ResourceLocation portalDimensionLocation = ResourceLocation.parse(tag.getString("PortalDimension"));
         ResourceKey<Level> portalDimension = ResourceKey.create(Registries.DIMENSION, portalDimensionLocation);
         List<UUID> players = new ArrayList<>();
-        tag.getList("Players", Tag.TAG_STRING).forEach( player -> players.add(UUID.fromString(player.getAsString())));
+        tag.getList("Players", Tag.TAG_STRING).forEach(player -> players.add(UUID.fromString(player.getAsString())));
         return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players);
     }
 
@@ -111,4 +116,12 @@ public class RiftData extends SavedData { //TODO: split this
         this.setDirty();
     }
 
+    public int getTier() {
+        return tier;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
+        this.setDirty();
+    }
 }

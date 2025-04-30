@@ -1,0 +1,20 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:mega_boost",
+  "icon" : "minecraft:textures/item/leather_boots.png",
+  "cooldown": 1,
+  "strength": "wotr:large_boost_strength",
+  "effects":
+  [
+    {
+      "type": "wotr:projectile_effect",
+      "targeting": {
+        "type": "wotr:raycast_targeting",
+        "range": 200
+      },
+      "projectile_type": "minecraft:arrow",
+      "velocity": [0,0,0]
+    }
+
+  ]
+}

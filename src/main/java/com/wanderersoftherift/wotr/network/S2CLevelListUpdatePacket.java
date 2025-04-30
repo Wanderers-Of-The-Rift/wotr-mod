@@ -14,19 +14,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import org.jetbrains.annotations.NotNull;
 
-public record S2CLevelListUpdatePacket(
-        ResourceLocation resourceLocation,
-        boolean removal
-) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<S2CLevelListUpdatePacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "s2c_dimension_types_update"));
+public record S2CLevelListUpdatePacket(ResourceLocation resourceLocation, boolean removal)
+        implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<S2CLevelListUpdatePacket> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "s2c_dimension_types_update"));
 
     public static final StreamCodec<ByteBuf, S2CLevelListUpdatePacket> STREAM_CODEC = StreamCodec.composite(
-            ResourceLocation.STREAM_CODEC,
-            S2CLevelListUpdatePacket::resourceLocation,
-            ByteBufCodecs.BOOL,
-            S2CLevelListUpdatePacket::removal,
-            S2CLevelListUpdatePacket::new
-    );
+            ResourceLocation.STREAM_CODEC, S2CLevelListUpdatePacket::resourceLocation, ByteBufCodecs.BOOL,
+            S2CLevelListUpdatePacket::removal, S2CLevelListUpdatePacket::new);
 
     @Override
     public CustomPacketPayload.@NotNull Type<S2CLevelListUpdatePacket> type() {
@@ -43,7 +38,8 @@ public record S2CLevelListUpdatePacket(
             if (packet.removal()) {
                 localPlayer.connection.levels().removeIf(key -> key.location().equals(packet.resourceLocation()));
             } else {
-                localPlayer.connection.levels().add(ResourceKey.create(Registries.DIMENSION, packet.resourceLocation()));
+                localPlayer.connection.levels()
+                        .add(ResourceKey.create(Registries.DIMENSION, packet.resourceLocation()));
             }
         }
     }

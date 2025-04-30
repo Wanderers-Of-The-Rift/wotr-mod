@@ -2,14 +2,12 @@ package com.wanderersoftherift.wotr.gui.widget;
 
 import com.wanderersoftherift.wotr.client.render.MapRenderer3D;
 import com.wanderersoftherift.wotr.config.ClientConfig;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -48,26 +46,27 @@ public class RiftMap3DWidget extends AbstractWidget {
         this.targetPos = mapRenderer.camPos;
         this.targetDistance = mapRenderer.distance;
     }
-    
+
     @Override
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int x, int y, float partialTick) {
         guiGraphics.renderOutline(this.getX() - 1, this.getY(), this.getWidth() + 1, this.getHeight(), 0xFFFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, Minecraft.getInstance().fpsString, this.getX(), this.getY(), 0xFFFFFFFF);
+        guiGraphics.drawString(Minecraft.getInstance().font, Minecraft.getInstance().fpsString, this.getX(),
+                this.getY(), 0xFFFFFFFF);
 
         double lerpSpeed = ClientConfig.LERP_SPEED.get();
         if (lerpSpeed > 0) {
-            this.mapRenderer.camPitch = Mth.lerp((float)lerpSpeed * partialTick, mapRenderer.camPitch, targetPitch);
-            this.mapRenderer.camYaw = Mth.lerp((float)lerpSpeed * partialTick, mapRenderer.camYaw, targetYaw);
-            this.mapRenderer.camPos.x = Mth.lerp((float)lerpSpeed * partialTick, mapRenderer.camPos.x, targetPos.x);
-            this.mapRenderer.camPos.z = Mth.lerp((float)lerpSpeed * partialTick, mapRenderer.camPos.z, targetPos.z);
-            this.mapRenderer.distance = Mth.lerp((float)lerpSpeed * partialTick, mapRenderer.distance, targetDistance);
+            this.mapRenderer.camPitch = Mth.lerp((float) lerpSpeed * partialTick, mapRenderer.camPitch, targetPitch);
+            this.mapRenderer.camYaw = Mth.lerp((float) lerpSpeed * partialTick, mapRenderer.camYaw, targetYaw);
+            this.mapRenderer.camPos.x = Mth.lerp((float) lerpSpeed * partialTick, mapRenderer.camPos.x, targetPos.x);
+            this.mapRenderer.camPos.z = Mth.lerp((float) lerpSpeed * partialTick, mapRenderer.camPos.z, targetPos.z);
+            this.mapRenderer.distance = Mth.lerp((float) lerpSpeed * partialTick, mapRenderer.distance, targetDistance);
         } else {
             this.mapRenderer.camPitch = targetPitch;
             this.mapRenderer.camYaw = targetYaw;
             this.mapRenderer.camPos = targetPos;
             this.mapRenderer.distance = targetDistance;
         }
-        
+
         this.mapRenderer.renderMap(this.ticks, partialTick);
     }
 
@@ -87,7 +86,12 @@ public class RiftMap3DWidget extends AbstractWidget {
                 justPressed = false;
                 return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
             }
-            int invertY = Minecraft.getInstance().options.invertYMouse().get() ? -1 : 1;
+            int invertY;
+            if (Minecraft.getInstance().options.invertYMouse().get()) {
+                invertY = -1;
+            } else {
+                invertY = 1;
+            }
 
             if (button == 0) {
                 targetPitch += (float) dragY * invertY;
@@ -111,8 +115,8 @@ public class RiftMap3DWidget extends AbstractWidget {
             } else if (button == 1) {
                 float yawRad = (float) Math.toRadians(mapRenderer.camYaw);
 
-                targetPos.z += (float) (-dragY * Math.cos(yawRad) - dragX * Math.sin(yawRad))/20;
-                targetPos.x += (float) (-dragY * Math.sin(yawRad) + dragX * Math.cos(yawRad))/20;
+                targetPos.z += (float) (-dragY * Math.cos(yawRad) - dragX * Math.sin(yawRad)) / 20;
+                targetPos.x += (float) (-dragY * Math.sin(yawRad) + dragX * Math.cos(yawRad)) / 20;
             }
             return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
         }
@@ -122,7 +126,8 @@ public class RiftMap3DWidget extends AbstractWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (ClientConfig.MOUSE_MODE.get()) {
             if (!pressingButton) {
-                GLFW.glfwSetInputMode(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+                GLFW.glfwSetInputMode(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_CURSOR,
+                        GLFW.GLFW_CURSOR_DISABLED);
                 justPressed = true;
             }
 
@@ -136,13 +141,14 @@ public class RiftMap3DWidget extends AbstractWidget {
         if (ClientConfig.MOUSE_MODE.get()) {
             pressingButton = false;
 
-            GLFW.glfwSetInputMode(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+            GLFW.glfwSetInputMode(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_CURSOR,
+                    GLFW.GLFW_CURSOR_NORMAL);
         }
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseScrolled(double a, double b, double c , double d) {
+    public boolean mouseScrolled(double a, double b, double c, double d) {
         targetDistance -= (float) d;
         targetDistance = Math.clamp(targetDistance, MIN_DISTANCE, MAX_DISTANCE);
 

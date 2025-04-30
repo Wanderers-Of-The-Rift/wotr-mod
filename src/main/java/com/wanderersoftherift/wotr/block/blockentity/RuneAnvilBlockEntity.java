@@ -44,6 +44,7 @@ public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements Ru
     protected AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
         Preconditions.checkState(this.level != null, "Attempted to create a menu for a block entity without a level");
 
-        return new RuneAnvilMenu(containerId, inventory, ContainerLevelAccess.create(this.level, this.worldPosition), true, this);
+        return new RuneAnvilMenu(containerId, inventory, ContainerLevelAccess.create(this.level, this.worldPosition),
+                true, this);
     }
 }

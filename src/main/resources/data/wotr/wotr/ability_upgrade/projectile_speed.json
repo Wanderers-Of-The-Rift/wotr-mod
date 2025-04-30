@@ -1,0 +1,15 @@
+{
+  "id" : "wotr:projectile_speed",
+  "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "maxCount" : 10,
+  "effects": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:ability_upgrade_projectile_speed",
+      "attribute": "wotr:projectile_speed",
+      "min_roll": 0.1,
+      "max_roll": 0.1,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

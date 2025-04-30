@@ -15,7 +15,7 @@ public class MixinSetItemDamageFunction {
     // Prevents the log from being spammed whenever this runs
     @Inject(method = "run", at = @At("HEAD"), cancellable = true)
     private void preventConsoleSpam(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
-        if(!stack.is(ModTags.Items.UNBREAKABLE_EXCLUSIONS)) {
+        if (!stack.is(ModTags.Items.UNBREAKABLE_EXCLUSIONS)) {
             cir.setReturnValue(stack);
         }
     }

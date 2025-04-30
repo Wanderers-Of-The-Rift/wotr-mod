@@ -5,7 +5,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class StateOutputBlockState extends OutputBlockState {
 
-    public static final MapCodec<StateOutputBlockState> CODEC = MapCodec.assumeMapUnsafe(BlockState.CODEC).xmap(StateOutputBlockState::new, StateOutputBlockState::getState);
+    public static final MapCodec<StateOutputBlockState> CODEC = MapCodec.assumeMapUnsafe(BlockState.CODEC)
+            .xmap(StateOutputBlockState::new, StateOutputBlockState::getState);
 
     public BlockState state;
 

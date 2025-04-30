@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.block;
 
-
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -10,8 +9,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.neoforged.neoforge.registries.DeferredBlock;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class SpringBlock extends DittoBlock {
     public static final int MAX_STRENGTH = 9;
     public static final int MIN_STRENGTH = 0;
@@ -24,13 +25,15 @@ public class SpringBlock extends DittoBlock {
     }
 
     @Override
-    public void stepOn(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Entity entity) {
+    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
         launch(entity, state);
     }
 
-    public void launch(@NotNull Entity entity, @NotNull BlockState state) {
+    public void launch(Entity entity, BlockState state) {
         entity.resetFallDistance();
-        if (entity.isShiftKeyDown()) return;
+        if (entity.isShiftKeyDown()) {
+            return;
+        }
         double delta = state.getValue(STRENGTH) * 0.1 + 0.62;
 
         entity.setDeltaMovement(entity.getDeltaMovement().add(0, delta, 0));

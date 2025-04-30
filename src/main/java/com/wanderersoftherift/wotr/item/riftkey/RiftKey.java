@@ -5,14 +5,11 @@ import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModEntityTypes;
+import com.wanderersoftherift.wotr.init.ModEntities;
 import com.wanderersoftherift.wotr.init.ModSoundEvents;
-import com.wanderersoftherift.wotr.item.essence.EssenceValue;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -30,11 +27,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Rift key is an item that when used on a rift spawner will generate a rift portal. It also can close an existing rift without being consumed.
+ * Rift key is an item that when used on a rift spawner will generate a rift portal. It also can close an existing rift
+ * without being consumed.
  */
 public class RiftKey extends Item {
     private static final String NAME = "item." + WanderersOfTheRift.MODID + ".rift_key.themed";
-    private static final String TIER_TOOLTIP = "tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier";
 
     public RiftKey(Properties properties) {
         super(properties);
@@ -50,7 +47,8 @@ public class RiftKey extends Item {
         } else if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         } else {
-            Optional<PortalSpawnLocation> spawnLocation = spawnerBlock.getSpawnLocation(level, blockpos, context.getClickedFace());
+            Optional<PortalSpawnLocation> spawnLocation = spawnerBlock.getSpawnLocation(level, blockpos,
+                    context.getClickedFace());
             if (spawnLocation.isPresent()) {
                 PortalSpawnLocation loc = spawnLocation.get();
                 List<RiftPortalEntranceEntity> existingRifts = getExistingRifts(level, loc.position());
@@ -70,33 +68,30 @@ public class RiftKey extends Item {
     }
 
     @Override
-    public @NotNull Component getName(ItemStack stack) {
-        ResourceLocation theme = stack.get(ModDataComponentType.RIFT_THEME);
-        if (theme != null) {
-            return Component.translatable(NAME, Component.translatable(EssenceValue.ESSENCE_TYPE_PREFIX + "." + theme.getNamespace() + "." + theme.getPath()));
-        } else {
-            return super.getName(stack);
-        }
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Item.@NotNull TooltipContext context, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        int tier = stack.getOrDefault(ModDataComponentType.RIFT_TIER, 0);
-        if (tier > 0) {
-            components.add(Component.translatable(TIER_TOOLTIP, tier).withColor(ChatFormatting.GRAY.getColor()));
+    public void appendHoverText(
+            ItemStack stack,
+            Item.@NotNull TooltipContext context,
+            @NotNull List<Component> components,
+            @NotNull TooltipFlag flag) {
+        RiftConfig riftConfig = stack.get(ModDataComponentType.RIFT_CONFIG);
+        if (riftConfig != null) {
+            components.addAll(riftConfig.getTooltips());
         }
     }
 
     private List<RiftPortalEntranceEntity> getExistingRifts(Level level, Vec3 pos) {
-        return level.getEntities(EntityTypeTest.forClass(RiftPortalEntranceEntity.class), new AABB(BlockPos.containing(pos)), x -> true);
+        return level.getEntities(EntityTypeTest.forClass(RiftPortalEntranceEntity.class),
+                new AABB(BlockPos.containing(pos)), x -> true);
     }
 
     private void spawnRift(Level level, Vec3 pos, Direction dir, ItemStack riftKey) {
-        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(ModEntityTypes.RIFT_ENTRANCE.get(), level);
+        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(ModEntities.RIFT_ENTRANCE.get(), level);
         rift.setPos(pos);
         rift.setYRot(dir.toYRot());
         rift.setBillboard(dir.getAxis().isVertical());
-        rift.setRiftkey(riftKey);
+        if (riftKey.has(ModDataComponentType.RIFT_CONFIG)) {
+            rift.setRiftConfig(riftKey.get(ModDataComponentType.RIFT_CONFIG));
+        }
         level.addFreshEntity(rift);
         rift.playSound(ModSoundEvents.RIFT_OPEN.value());
     }

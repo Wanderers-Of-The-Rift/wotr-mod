@@ -14,11 +14,9 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModDataMaps {
-    public static final DataMapType<Item, EssenceValue> ESSENCE_VALUE_DATA = DataMapType.builder(
-                    WanderersOfTheRift.id("essence_value"),
-                    Registries.ITEM,
-                    EssenceValue.CODEC
-            ).synced(EssenceValue.CODEC, true)
+    public static final DataMapType<Item, EssenceValue> ESSENCE_VALUE_DATA = DataMapType
+            .builder(WanderersOfTheRift.id("essence_value"), Registries.ITEM, EssenceValue.CODEC)
+            .synced(EssenceValue.CODEC, true)
             .build();
 
     @SubscribeEvent

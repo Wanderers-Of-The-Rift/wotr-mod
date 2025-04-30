@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "#minecraft:foot_armor",
+    "g": "minecraft:glass_pane"
+  },
+  "pattern": [
+    "ggg",
+    "gIg",
+    "ggg"
+  ],
+  "result": {
+    "components": {
+      "wotr:ability": "wotr:dash"
+    },
+    "count": 1,
+    "id": "wotr:ability_holder"
+  }
+}

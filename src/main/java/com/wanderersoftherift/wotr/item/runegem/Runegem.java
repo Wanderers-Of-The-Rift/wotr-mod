@@ -19,24 +19,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-
 public class Runegem extends Item {
-    public static final Map<RunegemTier, ResourceLocation> TIER_RESOURCE_LOCATION_MAP =
-            Map.of(
-                    RunegemTier.RAW, WanderersOfTheRift.id("textures/tooltip/runegem/tier/raw.png"),
-                    RunegemTier.SHAPED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/shaped.png"),
-                    RunegemTier.CUT, WanderersOfTheRift.id("textures/tooltip/runegem/tier/cut.png"),
-                    RunegemTier.POLISHED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/polished.png"),
-                    RunegemTier.FRAMED, WanderersOfTheRift.id("textures/tooltip/runegem/tier/framed.png"),
-                    RunegemTier.UNIQUE, WanderersOfTheRift.id("textures/tooltip/runegem/tier/unique.png")
-            );
+    public static final Map<RunegemTier, ResourceLocation> TIER_RESOURCE_LOCATION_MAP = Map.of(RunegemTier.RAW,
+            WanderersOfTheRift.id("textures/tooltip/runegem/tier/raw.png"), RunegemTier.SHAPED,
+            WanderersOfTheRift.id("textures/tooltip/runegem/tier/shaped.png"), RunegemTier.CUT,
+            WanderersOfTheRift.id("textures/tooltip/runegem/tier/cut.png"), RunegemTier.POLISHED,
+            WanderersOfTheRift.id("textures/tooltip/runegem/tier/polished.png"), RunegemTier.FRAMED,
+            WanderersOfTheRift.id("textures/tooltip/runegem/tier/framed.png"), RunegemTier.UNIQUE,
+            WanderersOfTheRift.id("textures/tooltip/runegem/tier/unique.png"));
 
     public Runegem(Properties properties) {
         super(properties);
     }
 
     private Holder<Enchantment> getRandomModifier(ServerLevel serverLevel, TagKey<Enchantment> tag) {
-        return serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+        return serverLevel.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
                 .get(tag)
                 .flatMap(holders -> holders.getRandomElement(serverLevel.random))
                 .orElse(null);
@@ -44,10 +42,10 @@ public class Runegem extends Item {
 
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        if(stack.has(ModDataComponentType.RUNEGEM_DATA)) {
+        if (stack.has(ModDataComponentType.RUNEGEM_DATA)) {
             RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
-            ImageComponent fancyComponent =
-                    new ImageComponent(stack, Component.empty(), TIER_RESOURCE_LOCATION_MAP.get(Objects.requireNonNull(gemData).tier()));
+            ImageComponent fancyComponent = new ImageComponent(stack, Component.empty(),
+                    TIER_RESOURCE_LOCATION_MAP.get(Objects.requireNonNull(gemData).tier()));
             return Optional.of(fancyComponent);
         }
 

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "wotr:item/base_ability_holder",
+    "model": {
+      "type": "wotr:ability_item",
+      "base_item": "wotr:base_ability_holder"
+    }
+  }
+}
