@@ -19,23 +19,25 @@ public class GridTunnelRiftLayout implements RiftLayout {
     }
 
     @Override
-    public List<RiftSpace> getChunkSpaces(ChunkPos chunkPos, RandomState randomState) {
-        var gridX = Math.floorDiv(chunkPos.x,3);
-        var gridZ = Math.floorDiv(chunkPos.z,3);
+    public RiftSpace getChunkSpace(Vec3i chunkPos, RandomState randomState) {
+        var gridX = Math.floorDiv(chunkPos.getX(),3);
+        var gridZ = Math.floorDiv(chunkPos.getZ(),3);
 
         var isTunnelX = Math.floorMod(gridX,period.x)>=split.x;
         var isTunnelZ = Math.floorMod(gridZ,period.y)>=split.y;
 
-        if (isTunnelX && isTunnelZ){
-            return List.of(null,null,null);
-        } else if (isTunnelX){
-            var s = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(1,1,3));
-            return List.of(s,s,s);
-        } else if (isTunnelZ){
-            var s = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(3,1,1));
-            return List.of(s,s,s);
+        RiftSpace space;
+
+        if (isTunnelX && isTunnelZ) {
+            space=null;
+        } else if (isTunnelX) {
+            space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(1,1,3));
+
+        } else if (isTunnelZ) {
+            space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(3,1,1));
+        } else {
+            space = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), 3, 1, RoomRiftSpace.RoomType.STABLE);
         }
-        var s = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),3,1, RoomRiftSpace.RoomType.STABLE);
-        return List.of(s,s,s);
+        return chunkPos.getY()>=-1 && chunkPos.getY()<=1 ? space : null;
     }
 }

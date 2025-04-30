@@ -30,22 +30,18 @@ public class ChaoticRiftLayout implements RiftLayout{
         this.layerCount = layerCount;
     }
 
-    private Region getOrCreateRegion(ChunkPos position){
-        var regionX = Math.floorDiv(position.x+7,15);
-        var regionZ = Math.floorDiv(position.z+7,15);
+    private Region getOrCreateRegion(int x, int z){
+        var regionX = Math.floorDiv(x+7,15);
+        var regionZ = Math.floorDiv(z+7,15);
 
         return regions.computeIfAbsent(new Vector2i(regionX,regionZ),(unused)->new Region(new Vec3i(regionX*15-7,-layerCount /2,regionZ*15-7)));
     }
 
     @Override
-    public List<RiftSpace> getChunkSpaces(ChunkPos chunkPos, RandomState randomState) {
-        var region = getOrCreateRegion(chunkPos);
+    public RiftSpace getChunkSpace(Vec3i chunkPos, RandomState randomState) {
+        var region = getOrCreateRegion(chunkPos.getX(), chunkPos.getZ());
         if(randomState!=null)region.tryGenerate(randomState.getOrCreateRandomFactory(WanderersOfTheRift.id("rift_layout")).at(region.origin.getX(),0,region.origin.getZ()));
-        var result = new ArrayList<RiftSpace>(layerCount);
-        for (int i = 0; i < layerCount; i++) {
-            result.add(region.getSpaceAt(new Vec3i(chunkPos.x,i- layerCount /2,chunkPos.z)));
-        }
-        return result;
+        return region.getSpaceAt(chunkPos);
     }
 
     private class Region {

@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -137,20 +138,22 @@ public class FastRiftGenerator extends ChunkGenerator {
             layout = new ChaoticRiftLayout(layerCount-2);
             roomGenerator = new RiftRoomGenerator();
         }
-        var spaces = layout.getChunkSpaces(chunk.getPos(),randomState);
-        RiftSpace.placeInChunk(chunk,null,1+spaces.size()- layerCount /2);
+        RiftSpace.placeInChunk(chunk,null, -1+layerCount /2);
         RiftSpace.placeInChunk(chunk,null,- layerCount /2);
-        Future<RiftProcessedChunk>[] chunkFutures = new Future[spaces.size()];
-        for (int i = 0; i < spaces.size(); i++) {
-            var space = spaces.get(i);
+        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount-2];
+        RiftSpace[] spaces = new RiftSpace[layerCount-2];
+        for (int i = 0; i < layerCount-2; i++) {
+            var position = new Vec3i(chunk.getPos().x, 1+i- layerCount /2, chunk.getPos().z);
+            var space = layout.getChunkSpace(position,randomState);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(new Vec3i(chunk.getPos().x, 1+i- layerCount /2, chunk.getPos().z), roomSpace, serverLevel, randomState);
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, serverLevel, randomState);
+                spaces[i] = space;
             }
         }
-        for (int i = 0; i < spaces.size(); i++) {
+        for (int i = 0; i < chunkFutures.length; i++) {
             var generatedRoomChunkFuture = chunkFutures[i];
 
-            var space = spaces.get(i);
+            var space = spaces[i];
             if(space == null || space instanceof VoidRiftSpace){
                 RiftSpace.placeInChunk(chunk,space,1+i- layerCount /2);
             }else if(generatedRoomChunkFuture!=null) {
@@ -202,9 +205,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {//todo more debug info: used template and placement, performance, etc.
         if (layout!=null){
-            var spaces = layout.getChunkSpaces(new ChunkPos(pos), null);
-            var idx = -1+(pos.getY()+ layerCount *8)/16;
-            var currentSpace = (idx>=0 && idx<spaces.size())?spaces.get(idx):null;
+            var currentSpace = layout.getChunkSpace(SectionPos.of(pos), null);
             info.add("current space");
             if(currentSpace==null || currentSpace instanceof VoidRiftSpace){
                 info.add("void");

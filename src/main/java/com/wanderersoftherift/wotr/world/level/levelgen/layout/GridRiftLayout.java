@@ -11,10 +11,10 @@ import java.util.List;
 public class GridRiftLayout implements RiftLayout {
 
     @Override
-    public List<RiftSpace> getChunkSpaces(ChunkPos chunkPos, RandomState randomState) {
-        var gridX = chunkPos.x/3;
-        var gridZ = chunkPos.z/3;
+    public RiftSpace getChunkSpace(Vec3i chunkPos, RandomState randomState) {
+        var gridX = chunkPos.getX()/3;
+        var gridZ = chunkPos.getZ()/3;
         var s = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),3,1, RoomRiftSpace.RoomType.STABLE);
-        return List.of(s,s,s);
+        return chunkPos.getY()>=-1 && chunkPos.getY()<=1 ? s : null;
     }
 }
