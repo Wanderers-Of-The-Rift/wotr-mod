@@ -22,8 +22,12 @@ import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.lang.ref.PhantomReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.GRADIENT_SPOT_REPLACE;
