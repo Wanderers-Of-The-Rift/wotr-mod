@@ -3,8 +3,6 @@ package com.wanderersoftherift.wotr.client.tooltip;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
@@ -17,7 +15,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 //TODO: Get rid of literals
@@ -36,7 +35,7 @@ import java.util.stream.Collectors;
 //TODO: Icons for modifiers
 @SuppressWarnings("DataFlowIssue")
 public class GearSocketTooltipRenderer implements ClientTooltipComponent {
-    private static final int SOCKET_LINE_HEIGHT = 20;
+    private static final int SOCKET_LINE_HEIGHT = 10;
     private static final Map<RunegemShape, ResourceLocation> SHAPE_RESOURCE_LOCATION_MAP =
             Map.of(
                     RunegemShape.CIRCLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/circle.png"),
@@ -59,7 +58,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         int height = font.lineHeight + 2 + (this.cmp.gearSocket.size() * SOCKET_LINE_HEIGHT);
 
         for (GearSocket s : this.cmp.gearSocket) {
-            if(s.modifier().isPresent()) {
+            if (s.modifier().isPresent()) {
                 height += SOCKET_LINE_HEIGHT * (getModifierEffects(s).size() - 1);
             }
         }
@@ -68,12 +67,25 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public int getWidth(@NotNull Font font) {
-        int maxWidth = 0;
-        for (GearSocket ignored : this.cmp.gearSocket) {
-            maxWidth += 20; // For each available socket +16 w/ 4px between each
+        boolean isShiftDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT);
+        boolean isAltDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT);
 
+        // go through all lines and get the max width
+        int maxWidth = 0;
+        maxWidth = Math.max(maxWidth, font.width(getSocketDesc()));
+        if (isShiftDown) {
+            maxWidth = Math.max(maxWidth, font.width("[" + (int) this.cmp.gearSocket().stream().filter(socket -> socket.runegem().isPresent()).count() + "/" + this.cmp.gearSocket().size() + "]"));
         }
-        return maxWidth + font.width(getSocketDesc()) + 90;
+        for (GearSocket socket : this.cmp.gearSocket) {
+            List<AbstractModifierEffect> effects = getModifierEffects(socket);
+            for (AbstractModifierEffect effect : effects) {
+                TooltipComponent c = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().map(ModifierInstance::roll).orElse(0.0F), ChatFormatting.AQUA);
+                if (c instanceof ImageComponent img) {
+                    maxWidth = Math.max(maxWidth, font.width(img.base()));
+                }
+            }
+        }
+        return maxWidth;
     }
 
     @Override
@@ -83,9 +95,16 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         int usedSockets = (int) this.cmp.gearSocket().stream().filter(socket -> socket.runegem().isPresent()).count();
         int totalSockets = this.cmp.gearSocket().size();
-        pFont.drawInBatch(getSocketDesc().copy().withStyle(ChatFormatting.GRAY).append(Component.literal("[" + usedSockets + "/" + totalSockets + "]").withStyle(ChatFormatting.DARK_GRAY)), pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+        MutableComponent comp = getSocketDesc().copy().withStyle(ChatFormatting.GRAY);
+        pFont.drawInBatch(comp, pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
-        pY += 15;
+        if (isShiftDown) {
+            MutableComponent comp1 = Component.literal("[" + usedSockets + "/" + totalSockets + "]").withStyle(ChatFormatting.DARK_GRAY);
+            int comp1w = pFont.width(comp1);
+            pFont.drawInBatch(comp1, pX + pFont.width(getSocketDesc()) + totalSockets * 10, pY, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+        }
+
+        pY += 12;
 
         // Sort by modifiers applied/not
         Map<Boolean, List<GearSocket>> partitioned = this.cmp.gearSocket().stream()
@@ -100,8 +119,6 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
             for (int i = 0; i < effects.size(); i++) {
                 AbstractModifierEffect eff = effects.get(i);
-
-                pFont.drawInBatch(Component.literal(">"), pX + 20, pY - 1, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
                 MutableComponent cmp = Component.literal("");
                 TooltipComponent c = eff.getTooltipComponent(ItemStack.EMPTY, socket.modifier().map(ModifierInstance::roll).orElse(0.0F), ChatFormatting.AQUA);
@@ -118,25 +135,54 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     }
                 }
 
-                pFont.drawInBatch(cmp, pX + 30, pY - 1, ChatFormatting.GREEN.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+                pFont.drawInBatch(cmp, pX + 10, pY - 1, ChatFormatting.GREEN.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
                 boolean isLast = (i == effects.size() - 1);
-                pY += isLast ? 20 : 12;
+                pY += 10;
             }
         }
 
 
         for (GearSocket ignored : partitioned.get(false)) {
-            pFont.drawInBatch(Component.literal(">"), pX + 20, pY - 1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-
-            pFont.drawInBatch(Component.literal("(Empty slot)"), pX + 30, pY-1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-            pY+= 20;
+            pFont.drawInBatch(Component.literal("(Empty slot)"), pX + 10, pY - 1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+            pY += 10;
         }
     }
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphics guiGraphics) {
+        boolean isShiftDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT);
+        boolean isAltDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT);
+
         PoseStack pose = guiGraphics.pose();
-        y+= 10;
+
+        int startX = x;
+        x += font.width(getSocketDesc());
+        for (GearSocket socket : this.cmp.gearSocket) {
+            pose.pushPose();
+            pose.translate(x, y, 0);
+
+            if (socket.modifier().isPresent()) {
+                guiGraphics.blit(RenderType.GUI_TEXTURED,
+                        WanderersOfTheRift.id("textures/tooltip/runegem/shape/small" + socket.shape().getName() + ".png"),
+                        0, 0,
+                        0, 0,
+                        8, 8,
+                        8, 8
+                );
+            } else {
+                pose.scale(0.5F, 0.5F, 1); // Apply scaling
+                guiGraphics.blit(RenderType.GUI_TEXTURED, SHAPE_RESOURCE_LOCATION_MAP.get(socket.shape()), 0,
+                        0, 0, 0, 16, 16, 16, 16);
+            }
+
+            pose.popPose(); // Restore position
+
+            // Move x forward (accounting for the scaling)
+            x += 10; // Adjust spacing to fit the scaled size
+        }
+        x = startX; // Reset x to the original position
+
+        y += 10;
 
         Map<Boolean, List<GearSocket>> partitioned = this.cmp.gearSocket().stream()
                 .collect(Collectors.partitioningBy(socket -> socket.modifier().isPresent() && socket.runegem().isPresent()));
@@ -149,17 +195,19 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
             pose.pushPose();
             pose.translate(x, y, 0);
-
-            ItemStack fakeStack = new ItemStack(ModItems.RUNEGEM.get());
-            fakeStack.set(ModDataComponentType.RUNEGEM_DATA, socket.runegem().isPresent() ? socket.runegem().get() : null); // why ij, it's always present
-            fakeStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
-            guiGraphics.renderFakeItem(fakeStack, 0,0);
+            guiGraphics.blit(RenderType.GUI_TEXTURED,
+                    WanderersOfTheRift.id("textures/tooltip/runegem/shape/small" + socket.shape().getName() + ".png"),
+                    0, 0,
+                    0, 0,
+                    8, 8,
+                    8, 8
+            );
             pose.popPose();
 
-            y+= SOCKET_LINE_HEIGHT;
+            y += SOCKET_LINE_HEIGHT;
 
             for (int i = 1; i < val; i++) {
-                y+= 12;
+                y += 10;
             }
         }
 
@@ -171,7 +219,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     16, 16,
                     16, 16
             );
-            y+= SOCKET_LINE_HEIGHT;
+            y += SOCKET_LINE_HEIGHT;
         }
     }
 
