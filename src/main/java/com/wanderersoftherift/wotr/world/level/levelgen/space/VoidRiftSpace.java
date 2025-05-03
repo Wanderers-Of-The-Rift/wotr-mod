@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.space;
 
+import com.wanderersoftherift.wotr.util.TripleMirror;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.core.Vec3i;
 
 import java.util.List;
@@ -18,6 +20,16 @@ public class VoidRiftSpace implements RiftSpace {
     @Override
     public List<RiftSpaceCorridor> corridors() {
         return List.of();
+    }
+
+    @Override
+    public TripleMirror templateTransform() {
+        return TripleMirror.NONE;
+    }
+
+    @Override
+    public RiftGeneratable template() {
+        return null;
     }
 
 }

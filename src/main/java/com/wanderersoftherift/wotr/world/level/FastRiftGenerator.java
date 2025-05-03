@@ -135,7 +135,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         if (layout==null || roomGenerator==null) {
-            layout = new ChaoticRiftLayout(layerCount-2);
+            layout = new ChaoticRiftLayout(layerCount-2, new RoomRandomizerImpl());
             roomGenerator = new RiftRoomGenerator();
         }
         var perimeterBlock = customBlock;
