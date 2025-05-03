@@ -1,0 +1,13 @@
+{
+    "tier": 4,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:attack_speed",
+        "attribute": "attack_speed",
+        "min_roll": 0.7,
+        "max_roll": 0.8,
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }

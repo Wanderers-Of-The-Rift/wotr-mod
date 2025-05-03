@@ -10,10 +10,10 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 public class StealthObjective extends AbstractObjective {
 
-    public static final MapCodec<StealthObjective> CODEC = RecordCodecBuilder.mapCodec(inst -> inst
-            .group(Codec.INT.fieldOf("alarm_progress").forGetter(StealthObjective::getAlarmProgress),
-                    Codec.BOOL.fieldOf("is_complete").forGetter(StealthObjective::isComplete))
-            .apply(inst, StealthObjective::new));
+    public static final MapCodec<StealthObjective> CODEC = RecordCodecBuilder.mapCodec(
+            inst -> inst.group(Codec.INT.fieldOf("alarm_progress").forGetter(StealthObjective::getAlarmProgress),
+                    Codec.BOOL.fieldOf("is_complete").forGetter(StealthObjective::isComplete)
+            ).apply(inst, StealthObjective::new));
 
     private int alarmProgress;
     private final int maxProgress = 20_000;

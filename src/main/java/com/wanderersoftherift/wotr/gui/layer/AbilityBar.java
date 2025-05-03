@@ -73,8 +73,12 @@ public final class AbilityBar implements LayeredDraw.Layer {
         }
     }
 
-    private void renderTooltips(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker,
-            AbilitySlots abilitySlots, int x, int y) {
+    private void renderTooltips(
+            @NotNull GuiGraphics graphics,
+            @NotNull DeltaTracker deltaTracker,
+            AbilitySlots abilitySlots,
+            int x,
+            int y) {
         if (x < BAR_OFFSET_X + ABILITY_OFFSET_X || x >= BAR_OFFSET_X + ABILITY_OFFSET_X + ICON_SIZE) {
             return;
         }

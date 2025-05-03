@@ -1,0 +1,10 @@
+{
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:life",
+      "minPercent": 50.0
+    }
+  ],
+  "priority": 0,
+  "theme": "wotr:forest"
+}

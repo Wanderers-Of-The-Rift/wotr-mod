@@ -19,14 +19,21 @@ import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.GEAR_SOC
 
 public class GearSocketsFunction extends LootItemConditionalFunction {
     public static final MapCodec<GearSocketsFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst)
+            .and(Codec.INT.fieldOf("min_sockets").forGetter(GearSocketsFunction::getMinSockets))
             .and(Codec.INT.fieldOf("max_sockets").forGetter(GearSocketsFunction::getMaxSockets))
             .apply(inst, GearSocketsFunction::new));
 
+    private final int minSockets;
     private final int maxSockets;
 
-    protected GearSocketsFunction(List<LootItemCondition> predicates, int maxSockets) {
+    protected GearSocketsFunction(List<LootItemCondition> predicates, int minSockets, int maxSockets) {
         super(predicates);
+        this.minSockets = minSockets;
         this.maxSockets = maxSockets;
+    }
+
+    public int getMinSockets() {
+        return minSockets;
     }
 
     public int getMaxSockets() {
@@ -44,7 +51,13 @@ public class GearSocketsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, RandomSource random) {
-        itemStack.set(ModDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(maxSockets, random));
+        itemStack.set(ModDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
         return itemStack;
+    }
+
+    public static LootItemConditionalFunction.Builder<?> setGearSockets(int minSockets, int maxSockets) {
+        return simpleBuilder((lootItemConditions) -> {
+            return new GearSocketsFunction(lootItemConditions, minSockets, maxSockets);
+        });
     }
 }

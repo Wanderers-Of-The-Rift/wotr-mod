@@ -29,8 +29,8 @@ public class StandardAbility extends AbstractAbility {
                             Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
                             Codec.list(AbstractEffect.DIRECT_CODEC)
                                     .optionalFieldOf("effects", Collections.emptyList())
-                                    .forGetter(StandardAbility::getEffects))
-                    .apply(instance, StandardAbility::new));
+                                    .forGetter(StandardAbility::getEffects)
+                    ).apply(instance, StandardAbility::new));
 
     public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
             List<AbstractEffect> effects) {

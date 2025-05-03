@@ -24,9 +24,9 @@ import java.util.Optional;
 import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS_FUNCTION;
 
 public class RunegemsFunction extends LootItemConditionalFunction {
-    public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst)
-            .and(RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemsFunction::getRunegemTier))
-            .apply(inst, RunegemsFunction::new));
+    public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(
+            inst -> commonFields(inst).and(RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemsFunction::getRunegemTier)
+            ).apply(inst, RunegemsFunction::new));
 
     private RunegemTier runegemTier;
 
@@ -64,8 +64,8 @@ public class RunegemsFunction extends LootItemConditionalFunction {
     }
 
     public static LootItemConditionalFunction.Builder<?> setTier(RunegemTier tier) {
-        return simpleBuilder((p_298130_) -> {
-            return new RunegemsFunction(p_298130_, tier);
+        return simpleBuilder((conditions) -> {
+            return new RunegemsFunction(conditions, tier);
         });
     }
 }

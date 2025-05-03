@@ -20,7 +20,8 @@ public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists,
     public static final Codec<RunegemData> CODEC = RecordCodecBuilder
             .create(inst -> inst.group(RunegemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
                     ModifierGroup.CODEC.listOf().fieldOf("modifier_options").forGetter(RunegemData::modifierLists),
-                    RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)).apply(inst, RunegemData::new));
+                    RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
+            ).apply(inst, RunegemData::new));
 
     public Optional<Holder<Modifier>> getRandomModifierForItem(ItemStack stack, Level level) {
         List<Holder<Modifier>> modifiers = modifierLists.stream()

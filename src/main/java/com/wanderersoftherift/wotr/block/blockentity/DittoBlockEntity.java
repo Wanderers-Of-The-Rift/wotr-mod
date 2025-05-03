@@ -17,10 +17,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.ticks.ContainerSingleItem;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class DittoBlockEntity extends BlockEntity
         implements RandomizableContainer, ContainerSingleItem.BlockContainerSingleItem {
 
@@ -34,6 +37,7 @@ public class DittoBlockEntity extends BlockEntity
         this.item = new ItemStack(ModBlocks.DITTO_BLOCK);
     }
 
+    @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
         if (!this.trySaveLootTable(tag) && !this.item.isEmpty()) {
@@ -42,10 +46,12 @@ public class DittoBlockEntity extends BlockEntity
 
     }
 
+    @Override
     public boolean canTakeItem(Container target, int slot, ItemStack stack) {
         return false;
     }
 
+    @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
         if (!this.tryLoadLootTable(tag)) {
@@ -57,57 +63,69 @@ public class DittoBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+    @Override
+    @NotNull public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         return this.saveCustomOnly(provider);
     }
 
-    @Nullable public ResourceKey<LootTable> getLootTable() {
+    @Override
+    public ResourceKey<LootTable> getLootTable() {
         return this.lootTable;
     }
 
+    @Override
     public void setLootTable(@Nullable ResourceKey<LootTable> lootTable) {
         this.lootTable = lootTable;
     }
 
+    @Override
     public long getLootTableSeed() {
         return this.lootTableSeed;
     }
 
+    @Override
     public void setLootTableSeed(long seed) {
         this.lootTableSeed = seed;
     }
 
+    @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
         builder.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(List.of(this.item)));
     }
 
+    @Override
     protected void applyImplicitComponents(BlockEntity.DataComponentInput input) {
         super.applyImplicitComponents(input);
-        this.item = ((ItemContainerContents) input.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY))
-                .copyOne();
+        this.item = input.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyOne();
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public void removeComponentsFromTag(CompoundTag tag) {
         super.removeComponentsFromTag(tag);
         tag.remove("item");
     }
 
-    public ItemStack getTheItem() {
+    @Override
+    @NotNull public ItemStack getTheItem() {
         this.unpackLootTable(null);
         return this.item;
     }
 
+    @Override
     public void setTheItem(ItemStack item) {
         this.unpackLootTable(null);
         this.item = item;
     }
 
-    public BlockEntity getContainerBlockEntity() {
+    @Override
+    @NotNull public BlockEntity getContainerBlockEntity() {
         return this;
     }
 }

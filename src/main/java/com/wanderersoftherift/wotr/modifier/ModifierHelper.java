@@ -16,7 +16,10 @@ import java.util.List;
 
 public class ModifierHelper {
 
-    public static void runIterationOnItem(ItemStack stack, EquipmentSlot slot, LivingEntity entity,
+    public static void runIterationOnItem(
+            ItemStack stack,
+            EquipmentSlot slot,
+            LivingEntity entity,
             ModifierHelper.ModifierInSlotVisitor visitor) {
         if (!stack.isEmpty()) {
             runOnImplicits(stack, slot, entity, visitor);
@@ -24,7 +27,10 @@ public class ModifierHelper {
         }
     }
 
-    private static void runOnGearSockets(ItemStack stack, EquipmentSlot slot, LivingEntity entity,
+    private static void runOnGearSockets(
+            ItemStack stack,
+            EquipmentSlot slot,
+            LivingEntity entity,
             ModifierInSlotVisitor visitor) {
         GearSockets gearSockets = stack.get(ModDataComponentType.GEAR_SOCKETS);
         if (gearSockets != null && !gearSockets.isEmpty()) {
@@ -41,7 +47,10 @@ public class ModifierHelper {
         }
     }
 
-    private static void runOnImplicits(ItemStack stack, EquipmentSlot slot, LivingEntity entity,
+    private static void runOnImplicits(
+            ItemStack stack,
+            EquipmentSlot slot,
+            LivingEntity entity,
             ModifierInSlotVisitor visitor) {
         GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
         if (implicits != null) {

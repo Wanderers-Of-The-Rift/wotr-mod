@@ -73,8 +73,11 @@ public class MapRoom {
      * @param buffer
      * @param camera
      */
-    public void renderWireframe(BufferBuilder buffer, com.wanderersoftherift.wotr.client.map.VirtualCamera camera,
-            Vector2i mapPosition, Vector2i mapSize) {
+    public void renderWireframe(
+            BufferBuilder buffer,
+            com.wanderersoftherift.wotr.client.map.VirtualCamera camera,
+            Vector2i mapPosition,
+            Vector2i mapSize) {
         Vector3f pos2sub = new Vector3f(pos2.x - TWEEN_TUNNEL_SIZE, pos2.y - TWEEN_TUNNEL_SIZE,
                 pos2.z - TWEEN_TUNNEL_SIZE);
         float[][] vertices = calculateVertices(pos1, pos2sub);
@@ -120,7 +123,11 @@ public class MapRoom {
      * @param buffer
      * @param camera
      */
-    public void renderCube(BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition,
+    public void renderCube(
+            BufferBuilder buffer,
+            VirtualCamera camera,
+            Vector4f color,
+            Vector2i mapPosition,
             Vector2i mapSize) {
         Vector3f pos2sub = new Vector3f(this.pos2.x - this.TWEEN_TUNNEL_SIZE, this.pos2.y - this.TWEEN_TUNNEL_SIZE,
                 this.pos2.z - this.TWEEN_TUNNEL_SIZE);

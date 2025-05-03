@@ -34,8 +34,12 @@ public class ModelWireframeExtractor {
      * @param renderType The render type (nullable).
      * @return A list of {@link RenderLine} objects representing the wireframe.
      */
-    public static List<RenderLine> extract(BakedModel model, @Nullable BlockState state, RandomSource rand,
-            ModelData modelData, @Nullable RenderType renderType) {
+    public static List<RenderLine> extract(
+            BakedModel model,
+            @Nullable BlockState state,
+            RandomSource rand,
+            ModelData modelData,
+            @Nullable RenderType renderType) {
         Set<RenderLine> lines = new HashSet<>();
         QuadVertexProcessor extractor = new QuadVertexProcessor(lines);
         for (Direction direction : Direction.values()) {

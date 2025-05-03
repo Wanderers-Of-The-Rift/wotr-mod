@@ -14,10 +14,10 @@
     "MixinLivingEntity",
     "MixinServerPlayer",
     "MixinSetItemDamageFunction",
-    "MixinSpider",
     "MixinStructureTemplate",
     "MixinWorldDimensions",
-    "TrialSpawnerAccessor"
+    "TrialSpawnerAccessor",
+    "TrialSpawnerBlockEntityAccessor"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",

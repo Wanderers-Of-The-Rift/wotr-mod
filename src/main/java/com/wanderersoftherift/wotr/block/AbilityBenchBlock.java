@@ -52,7 +52,10 @@ public class AbilityBenchBlock extends Block {
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+    protected @NotNull VoxelShape getShape(
+            BlockState state,
+            @NotNull BlockGetter level,
+            @NotNull BlockPos pos,
             @NotNull CollisionContext context) {
         return SHAPE;
     }
@@ -78,8 +81,12 @@ public class AbilityBenchBlock extends Block {
         }, CONTAINER_TITLE);
     }
 
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
-            @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(
+            @NotNull BlockState state,
+            Level level,
+            @NotNull BlockPos pos,
+            @NotNull Player player,
+            @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

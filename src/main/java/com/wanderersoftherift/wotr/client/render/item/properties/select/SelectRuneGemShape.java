@@ -17,8 +17,12 @@ public class SelectRuneGemShape implements SelectItemModelProperty<RunegemShape>
             .create(MapCodec.unit(new SelectRuneGemShape()), RunegemShape.CODEC);
 
     @Override
-    public @Nullable RunegemShape get(ItemStack itemStack, @Nullable ClientLevel clientLevel,
-            @Nullable LivingEntity livingEntity, int i, ItemDisplayContext itemDisplayContext) {
+    public @Nullable RunegemShape get(
+            ItemStack itemStack,
+            @Nullable ClientLevel clientLevel,
+            @Nullable LivingEntity livingEntity,
+            int i,
+            ItemDisplayContext itemDisplayContext) {
         RunegemData data = itemStack.get(ModDataComponentType.RUNEGEM_DATA);
         if (data != null && data.shape() != null) {
             return data.shape();

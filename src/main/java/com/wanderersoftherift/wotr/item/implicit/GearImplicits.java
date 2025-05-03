@@ -9,9 +9,11 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public interface GearImplicits {
-    Codec<GearImplicits> CODEC = RecordCodecBuilder.create(inst -> inst.group(ModifierInstance.CODEC.listOf()
-            .optionalFieldOf("instances", List.of())
-            .forGetter(GearImplicits::modifierInstances)).apply(inst, GearImplicits::of));
+    Codec<GearImplicits> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+            ModifierInstance.CODEC.listOf()
+                    .optionalFieldOf("instances", List.of())
+                    .forGetter(GearImplicits::modifierInstances)
+    ).apply(inst, GearImplicits::of));
 
     static GearImplicits of(List<ModifierInstance> modifierInstances) {
         if (modifierInstances.isEmpty()) {

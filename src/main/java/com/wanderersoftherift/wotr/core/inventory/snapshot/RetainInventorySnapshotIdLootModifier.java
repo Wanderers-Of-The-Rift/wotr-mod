@@ -30,7 +30,8 @@ public class RetainInventorySnapshotIdLootModifier extends LootModifier {
     }
 
     @Override
-    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
+    protected @NotNull ObjectArrayList<ItemStack> doApply(
+            ObjectArrayList<ItemStack> generatedLoot,
             LootContext context) {
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (generatedLoot.size() == 1 && blockEntity != null

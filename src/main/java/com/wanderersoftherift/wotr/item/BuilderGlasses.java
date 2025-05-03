@@ -44,7 +44,10 @@ public class BuilderGlasses extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            List<Component> tooltipComponents,
             TooltipFlag tooltipFlag) {
         if (!stack.is(ModItems.BUILDER_GLASSES.get()) || !stack.has(DataComponents.CUSTOM_DATA)) {
             return;

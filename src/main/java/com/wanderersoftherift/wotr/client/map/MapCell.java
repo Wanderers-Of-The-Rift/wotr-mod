@@ -66,8 +66,11 @@ public class MapCell {
      * @param buffer
      * @param camera
      */
-    public void renderWireframe(BufferBuilder buffer, com.wanderersoftherift.wotr.client.map.VirtualCamera camera,
-            Vector2i mapPosition, Vector2i mapSize) {
+    public void renderWireframe(
+            BufferBuilder buffer,
+            com.wanderersoftherift.wotr.client.map.VirtualCamera camera,
+            Vector2i mapPosition,
+            Vector2i mapSize) {
         float[][] vertices = calculateVertices(pos1, pos2);
 
         int[][] edges = { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 0 }, { 4, 5 }, { 5, 6 }, { 6, 7 }, { 7, 4 }, { 0, 4 },
@@ -102,7 +105,11 @@ public class MapCell {
      * @param buffer
      * @param camera
      */
-    public void renderCube(BufferBuilder buffer, VirtualCamera camera, Vector4f color, Vector2i mapPosition,
+    public void renderCube(
+            BufferBuilder buffer,
+            VirtualCamera camera,
+            Vector4f color,
+            Vector2i mapPosition,
             Vector2i mapSize) {
         float[][] vertices = calculateVertices(pos1, pos2);
 
@@ -136,8 +143,13 @@ public class MapCell {
         }
     }
 
-    public void renderEastConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color,
-            Vector2i mapPosition, Vector2i mapSize) {
+    public void renderEastConnection(
+            float length,
+            BufferBuilder buffer,
+            VirtualCamera camera,
+            Vector4f color,
+            Vector2i mapPosition,
+            Vector2i mapSize) {
         float cellSize = 1 - length;
         // render a connection to the north
         Vector3f pp1 = new Vector3f(this.pos1.x + cellSize, this.pos1.y + cellSize / 2 - this.TWEEN_TUNNEL_SIZE,
@@ -178,8 +190,13 @@ public class MapCell {
         }
     }
 
-    public void renderNorthConnection(float length, BufferBuilder buffer, VirtualCamera camera, Vector4f color,
-            Vector2i mapPosition, Vector2i mapSize) {
+    public void renderNorthConnection(
+            float length,
+            BufferBuilder buffer,
+            VirtualCamera camera,
+            Vector4f color,
+            Vector2i mapPosition,
+            Vector2i mapSize) {
         float cellSize = 1 - length;
         // render a connection to the north
         Vector3f pp1 = new Vector3f(this.pos1.x + cellSize / 2 - this.TWEEN_TUNNEL_SIZE,

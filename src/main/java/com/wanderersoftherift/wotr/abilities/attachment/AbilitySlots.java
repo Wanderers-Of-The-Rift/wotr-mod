@@ -20,10 +20,10 @@ import java.util.Objects;
 public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
-    public static final Codec<AbilitySlots> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
-                    Codec.INT.fieldOf("selected").forGetter(x -> x.selected))
-            .apply(instance, AbilitySlots::new));
+    public static final Codec<AbilitySlots> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
+            Codec.INT.fieldOf("selected").forGetter(x -> x.selected)
+    ).apply(instance, AbilitySlots::new));
 
     private final NonNullList<ItemStack> abilities = NonNullList.withSize(ABILITY_BAR_SIZE, ItemStack.EMPTY);
     private int selected = 0;

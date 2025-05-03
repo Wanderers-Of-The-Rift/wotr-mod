@@ -31,8 +31,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public record AbilitySpecialRenderer(Holder<Item> baseItem) implements SpecialModelRenderer<AbstractAbility> {
     @Override
-    public void render(AbstractAbility ability, @NotNull ItemDisplayContext displayContext, PoseStack poseStack,
-            @NotNull MultiBufferSource bufferSource, int packedLight, int packedOverlay, boolean hasFoilType) {
+    public void render(
+            AbstractAbility ability,
+            @NotNull ItemDisplayContext displayContext,
+            PoseStack poseStack,
+            @NotNull MultiBufferSource bufferSource,
+            int packedLight,
+            int packedOverlay,
+            boolean hasFoilType) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
 
@@ -68,8 +74,15 @@ public record AbilitySpecialRenderer(Holder<Item> baseItem) implements SpecialMo
         poseStack.popPose();
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int packedLight, float x, float y, float z,
-            int u, int v) {
+    private static void vertex(
+            VertexConsumer consumer,
+            PoseStack.Pose pose,
+            int packedLight,
+            float x,
+            float y,
+            float z,
+            int u,
+            int v) {
         consumer.addVertex(pose, x, y, z)
                 .setColor(-1)
                 .setUv((float) u, (float) v)

@@ -8,12 +8,10 @@ import net.minecraft.util.random.WeightedEntry;
 
 public class WeightedRiftChestTypeEntry implements WeightedEntry {
 
-    public static final Codec<WeightedRiftChestTypeEntry> CODEC = RecordCodecBuilder.create(builder -> builder
-            .group(RiftChestType.CODEC.fieldOf("chest_type").forGetter(WeightedRiftChestTypeEntry::getRiftChestType),
-                    Codec.INT.fieldOf("weight")
-                            .xmap(Weight::of, Weight::asInt)
-                            .forGetter(WeightedRiftChestTypeEntry::getWeight))
-            .apply(builder, WeightedRiftChestTypeEntry::new));
+    public static final Codec<WeightedRiftChestTypeEntry> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+            RiftChestType.CODEC.fieldOf("chest_type").forGetter(WeightedRiftChestTypeEntry::getRiftChestType),
+            Codec.INT.fieldOf("weight").xmap(Weight::of, Weight::asInt).forGetter(WeightedRiftChestTypeEntry::getWeight)
+    ).apply(builder, WeightedRiftChestTypeEntry::new));
 
     private final RiftChestType riftChestType;
     private final Weight weight;

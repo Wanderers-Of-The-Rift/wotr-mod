@@ -14,11 +14,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * Data tracking the state of a player's mana pool
  */
 public class ManaData {
-    public static final Codec<ManaData> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(Codec.INT.fieldOf("amount").forGetter(ManaData::getAmount),
+    public static final Codec<ManaData> CODEC = RecordCodecBuilder
+            .create(instance -> instance.group(Codec.INT.fieldOf("amount").forGetter(ManaData::getAmount),
                     Codec.DOUBLE.fieldOf("fractionalRegen").forGetter(x -> x.fractionalRegen),
-                    Codec.DOUBLE.fieldOf("fractionalDegen").forGetter(x -> x.fractionalDegen))
-            .apply(instance, ManaData::new));
+                    Codec.DOUBLE.fieldOf("fractionalDegen").forGetter(x -> x.fractionalDegen)
+            ).apply(instance, ManaData::new));
 
     private int amount = 0;
     private double fractionalRegen = 0;

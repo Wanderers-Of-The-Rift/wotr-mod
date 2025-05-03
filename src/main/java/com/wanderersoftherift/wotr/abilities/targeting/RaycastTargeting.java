@@ -21,8 +21,8 @@ import java.util.List;
 
 public class RaycastTargeting extends AbstractTargeting {
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> commonFields(instance).and(Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange))
-                    .apply(instance, RaycastTargeting::new));
+            instance -> commonFields(instance).and(Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange)
+            ).apply(instance, RaycastTargeting::new));
 
     private final double range;
 

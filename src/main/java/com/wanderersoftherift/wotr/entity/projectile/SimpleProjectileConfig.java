@@ -19,8 +19,8 @@ public record SimpleProjectileConfig(SimpleProjectileConfigRenderConfig renderCo
             Codec.FLOAT.fieldOf("velocity").forGetter(SimpleProjectileConfig::velocity),
             Codec.BOOL.optionalFieldOf("gravity_affected", true).forGetter(SimpleProjectileConfig::gravityAffected),
             Codec.FLOAT.optionalFieldOf("gravity", 0.05F).forGetter(SimpleProjectileConfig::gravity),
-            Codec.INT.optionalFieldOf("ground_persist_ticks", 0).forGetter(SimpleProjectileConfig::groundPersistTicks))
-            .apply(instance, SimpleProjectileConfig::new));
+            Codec.INT.optionalFieldOf("ground_persist_ticks", 0).forGetter(SimpleProjectileConfig::groundPersistTicks)
+    ).apply(instance, SimpleProjectileConfig::new));
 
     public record SimpleProjectileConfigRenderConfig(ResourceLocation modelResource, ResourceLocation textureResource,
             ResourceLocation animationResource) {

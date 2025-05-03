@@ -1,0 +1,9 @@
+{
+  "values": [
+    "wotr:flat_attack_t2",
+    "wotr:flat_heavy_attack_t2",
+    "wotr:knockback_t1",
+    "wotr:heavy_knockback_t1",
+    "wotr:sweeping_attack_damage_t1"
+  ]
+}

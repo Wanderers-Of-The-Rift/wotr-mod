@@ -18,7 +18,8 @@ public class ObjectiveRenderers {
     public static final Function<AbstractObjective, ObjectiveRenderer> STEALTH = register(
             WanderersOfTheRift.id("stealth"), StealthObjectiveRenderer::create);
 
-    public static Function<AbstractObjective, ObjectiveRenderer> register(ResourceLocation id,
+    public static Function<AbstractObjective, ObjectiveRenderer> register(
+            ResourceLocation id,
             Function<AbstractObjective, ObjectiveRenderer> renderer) {
         RENDERERS.put(id, renderer);
         return renderer;

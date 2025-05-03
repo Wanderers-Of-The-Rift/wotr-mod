@@ -15,14 +15,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> processors) {
-    public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder -> builder.group(Codec
-            .mapPair(ThemePieceType.CODEC.fieldOf("piece_type"),
+    public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder -> builder.group(
+            Codec.mapPair(ThemePieceType.CODEC.fieldOf("piece_type"),
                     StructureProcessorType.LIST_CODEC.fieldOf("processors"))
-            .codec()
-            .listOf()
-            .xmap(RiftTheme::fromPairList, RiftTheme::fromMap)
-            .fieldOf("processors")
-            .forGetter(RiftTheme::processors)).apply(builder, RiftTheme::new));
+                    .codec()
+                    .listOf()
+                    .xmap(RiftTheme::fromPairList, RiftTheme::fromMap)
+                    .fieldOf("processors")
+                    .forGetter(RiftTheme::processors)
+    ).apply(builder, RiftTheme::new));
 
     public static final Codec<RiftTheme> DIRECT_SYNC_CODEC = Codec.unit(RiftTheme::new);
 

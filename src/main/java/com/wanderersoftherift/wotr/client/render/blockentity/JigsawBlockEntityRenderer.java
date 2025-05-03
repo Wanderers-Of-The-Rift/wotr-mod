@@ -19,8 +19,13 @@ public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBloc
     }
 
     @Override
-    public void render(JigsawBlockEntity jigsawBlockEntity, float v, PoseStack poseStack,
-            MultiBufferSource multiBufferSource, int i, int i1) {
+    public void render(
+            JigsawBlockEntity jigsawBlockEntity,
+            float v,
+            PoseStack poseStack,
+            MultiBufferSource multiBufferSource,
+            int i,
+            int i1) {
         if (!JIGSAW_NAME_TOGGLE_KEY.isDown()) {
             return;
         }
@@ -28,7 +33,10 @@ public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBloc
         renderNameTag(name, poseStack, multiBufferSource, i);
     }
 
-    private void renderNameTag(Component displayName, PoseStack poseStack, MultiBufferSource bufferSource,
+    private void renderNameTag(
+            Component displayName,
+            PoseStack poseStack,
+            MultiBufferSource bufferSource,
             int packedLight) {
         poseStack.pushPose();
         poseStack.translate(0.5, 2.5, 0.5);

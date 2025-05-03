@@ -33,7 +33,8 @@ public class InventorySnapshot {
                             return patchedMap.asPatch();
                         }
                         return DataComponentPatch.EMPTY;
-                    })).apply(instance, ItemStack::new)));
+                    })
+            ).apply(instance, ItemStack::new)));
 
     public static final Codec<InventorySnapshot> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(UUIDUtil.CODEC.fieldOf("snapshotId").forGetter(x -> x.id),

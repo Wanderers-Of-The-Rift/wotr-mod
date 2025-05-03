@@ -28,17 +28,16 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.St
 import static net.minecraft.core.Direction.Plane;
 
 public class AttachmentProcessor extends StructureProcessor {
-    public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
-            .group(OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate")
-                    .forGetter(AttachmentProcessor::getBlockState),
-                    Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
-                    Codec.BOOL.optionalFieldOf("requires_up", false).forGetter(AttachmentProcessor::isRequiresUp),
-                    Codec.BOOL.optionalFieldOf("requires_down", false).forGetter(AttachmentProcessor::isRequiresDown),
-                    Codec.FLOAT.fieldOf("rarity").forGetter(AttachmentProcessor::getRarity),
-                    RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
-                            .forGetter(AttachmentProcessor::getStructureRandomType),
-                    Codec.LONG.optionalFieldOf("seed").forGetter(AttachmentProcessor::getSeed))
-            .apply(builder, AttachmentProcessor::new));
+    public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+            OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
+            Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
+            Codec.BOOL.optionalFieldOf("requires_up", false).forGetter(AttachmentProcessor::isRequiresUp),
+            Codec.BOOL.optionalFieldOf("requires_down", false).forGetter(AttachmentProcessor::isRequiresDown),
+            Codec.FLOAT.fieldOf("rarity").forGetter(AttachmentProcessor::getRarity),
+            RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
+                    .forGetter(AttachmentProcessor::getStructureRandomType),
+            Codec.LONG.optionalFieldOf("seed").forGetter(AttachmentProcessor::getSeed)
+    ).apply(builder, AttachmentProcessor::new));
 
     private final BlockState blockState;
     private final int requiresSides;
@@ -60,9 +59,13 @@ public class AttachmentProcessor extends StructureProcessor {
     }
 
     @Override
-    public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel,
-            BlockPos offset, BlockPos pos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
-            List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
+    public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(
+            ServerLevelAccessor serverLevel,
+            BlockPos offset,
+            BlockPos pos,
+            List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
             StructureTemplate.StructureBlockInfo newBlockInfo = processFinal(serverLevel, offset, pos, blockInfo,
@@ -72,9 +75,13 @@ public class AttachmentProcessor extends StructureProcessor {
         return newBlockInfos;
     }
 
-    public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos,
-            BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo,
-            StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings,
+    public StructureTemplate.StructureBlockInfo processFinal(
+            LevelReader world,
+            BlockPos piecePos,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings,
             List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
         RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos,
                 world, seed);
@@ -106,7 +113,9 @@ public class AttachmentProcessor extends StructureProcessor {
         return false;
     }
 
-    private boolean hasDirection(List<StructureTemplate.StructureBlockInfo> pieceBlocks, BlockPos pos,
+    private boolean hasDirection(
+            List<StructureTemplate.StructureBlockInfo> pieceBlocks,
+            BlockPos pos,
             Direction direction) {
         StructureTemplate.StructureBlockInfo block = getBlockInfo(pieceBlocks, pos.mutable().move(direction));
         return isFaceFull(block, direction.getOpposite());

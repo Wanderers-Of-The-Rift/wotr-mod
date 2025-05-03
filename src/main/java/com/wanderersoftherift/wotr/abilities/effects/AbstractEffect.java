@@ -47,7 +47,8 @@ public abstract class AbstractEffect {
                         .optionalFieldOf("effects", Collections.emptyList())
                         .forGetter(AbstractEffect::getEffects),
                 Codec.optionalField("particles", ParticleInfo.CODEC.codec(), true)
-                        .forGetter(AbstractEffect::getParticles));
+                        .forGetter(AbstractEffect::getParticles)
+        );
     }
 
     public abstract MapCodec<? extends AbstractEffect> getCodec();

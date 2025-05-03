@@ -107,16 +107,21 @@ public class AccessibilityOptionsScreen extends Screen {
     }
 
     // Helper for creating a cycle-button based off of a boolean
-    private CycleButton<Boolean> createBooleanButton(Component name, Component tooltip,
-            CycleButton.OnValueChange<Boolean> onChange, boolean initialValue) {
+    private CycleButton<Boolean> createBooleanButton(
+            Component name,
+            Component tooltip,
+            CycleButton.OnValueChange<Boolean> onChange,
+            boolean initialValue) {
         return CycleButton.booleanBuilder(Component.translatable("options.off"), Component.translatable("options.on"))
                 .withInitialValue(initialValue)
-                .withTooltip(p_321371_ -> Tooltip.create(tooltip))
+                .withTooltip(value -> Tooltip.create(tooltip))
                 .create(name, onChange);
     }
 
     // Helper for creating a cycle-button based off of a config boolean value, which is modified upon click
-    private CycleButton<Boolean> createConfigButton(Component name, Component tooltip,
+    private CycleButton<Boolean> createConfigButton(
+            Component name,
+            Component tooltip,
             ModConfigSpec.BooleanValue booleanValue) {
         return createBooleanButton(name, tooltip, ((cycleButton, aBoolean) -> {
             booleanValue.set(!booleanValue.getAsBoolean());

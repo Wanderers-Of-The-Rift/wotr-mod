@@ -128,7 +128,10 @@ public class TrapBlock extends DittoBlock {
     }
 
     @Override
-    protected @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+    protected @NotNull VoxelShape getCollisionShape(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
             CollisionContext context) {
         if (state.getValue(DEACTIVATED)) {
             return Shapes.empty();

@@ -46,7 +46,9 @@ public class ModModelProvider extends ModelProvider {
         super(output, WanderersOfTheRift.MODID);
     }
 
-    private static ResourceLocation createRuneGemShapeModel(ResourceLocation location, ModelTemplate modelTemplate,
+    private static ResourceLocation createRuneGemShapeModel(
+            ResourceLocation location,
+            ModelTemplate modelTemplate,
             ItemModelGenerators itemModels) {
         return modelTemplate.create(location, TextureMapping.layer0(location), itemModels.modelOutput);
     }
@@ -54,8 +56,6 @@ public class ModModelProvider extends ModelProvider {
     @Override
     protected void registerModels(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
-        blockModels.createTrivialCube(ModBlocks.DEV_BLOCK.get());
-        blockModels.createTrivialCube(ModBlocks.KEY_FORGE.get());
         blockModels.createTrivialBlock(ModBlocks.DITTO_BLOCK.get(),
                 TexturedModel.CUBE.updateTemplate(template -> template.extend().renderType("cutout").build()));
         blockModels.createTrivialCube(ModBlocks.SPRING_BLOCK.get());
@@ -68,6 +68,11 @@ public class ModModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(ModBlocks.ABILITY_BENCH.get(),
                         Variant.variant().with(VariantProperties.MODEL, abilityBenchModel))
+                .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        ResourceLocation keyForgeModel = WanderersOfTheRift.id("block/key_forge");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator
+                .multiVariant(ModBlocks.KEY_FORGE.get(), Variant.variant().with(VariantProperties.MODEL, keyForgeModel))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
         ResourceLocation baseChestModel = WanderersOfTheRift.id("block/rift_chest");
@@ -85,9 +90,12 @@ public class ModModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(ModItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
 
-        itemModels.generateFlatItem(ModItems.EXAMPLE_ITEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.RAW_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SHAPED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CUT_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.POLISHED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FRAMED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BASE_ABILITY_HOLDER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.SKILL_THREAD.get(), ModelTemplates.FLAT_ITEM);
 
@@ -100,7 +108,8 @@ public class ModModelProvider extends ModelProvider {
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels));
     }
 
-    private void createBlockStatesForTrapBlock(DeferredBlock<? extends Block> trapBlock,
+    private void createBlockStatesForTrapBlock(
+            DeferredBlock<? extends Block> trapBlock,
             BlockModelGenerators generators) {
         ResourceLocation model0 = ModelLocationUtils.getModelLocation(trapBlock.get(), "/0");
         ResourceLocation model1 = ModelLocationUtils.getModelLocation(trapBlock.get(), "/1");
@@ -180,14 +189,13 @@ public class ModModelProvider extends ModelProvider {
     }
 
     private void createGlassPane(BlockModelGenerators blockModels, Block glassBlock, Block paneBlock) {
-        blockModels.createTrivialBlock(glassBlock,
-                TexturedModel.createDefault(
-                        block -> new TextureMapping().put(TextureSlot.ALL, TextureMapping.getBlockTexture(glassBlock)),
-                        ExtendedModelTemplateBuilder.builder()
-                                .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/cube_all"))
-                                .requiredTextureSlot(TextureSlot.ALL)
-                                .renderType("translucent")
-                                .build()));
+        blockModels.createTrivialBlock(glassBlock, TexturedModel.createDefault(
+                block -> new TextureMapping().put(TextureSlot.ALL, TextureMapping.getBlockTexture(glassBlock)),
+                ExtendedModelTemplateBuilder.builder()
+                        .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/cube_all"))
+                        .requiredTextureSlot(TextureSlot.ALL)
+                        .renderType("translucent")
+                        .build()));
 
         ExtendedModelTemplate panePostTemplate = ExtendedModelTemplateBuilder.builder()
                 .parent(ResourceLocation.fromNamespaceAndPath("minecraft", "block/template_glass_pane_post"))

@@ -1,0 +1,30 @@
+{
+  "shape": "heart",
+  "modifier_options": [
+    {
+      "supported_items": "#wotr:socketable_helmet_slot",
+      "modifiers": "#wotr:raw_health_rune_helmet"
+    },
+    {
+      "supported_items": "#wotr:socketable_chestplate_slot",
+      "modifiers": "#wotr:raw_health_rune_chestplate"
+    },
+    {
+      "supported_items": "#wotr:socketable_leggings_slot",
+      "modifiers": "#wotr:raw_health_rune_leggings"
+    },
+    {
+      "supported_items": "#wotr:socketable_boots_slot",
+      "modifiers": "#wotr:raw_health_rune_boots"
+    },
+    {
+      "supported_items": "#wotr:socketable_main_hand_slot",
+      "modifiers": "#wotr:raw_health_rune_main_hand"
+    },
+    {
+      "supported_items": "#wotr:socketable_off_hand_slot",
+      "modifiers": "#wotr:raw_health_rune_off_hand"
+    }
+  ],
+  "tier": "raw"
+}

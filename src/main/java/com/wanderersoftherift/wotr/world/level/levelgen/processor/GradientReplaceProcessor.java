@@ -34,8 +34,8 @@ public class GradientReplaceProcessor extends StructureProcessor {
             Codec.DOUBLE.optionalFieldOf("noise_scale_x", 0.075D).forGetter(GradientReplaceProcessor::getNoiseScaleX),
             Codec.DOUBLE.optionalFieldOf("noise_scale_y", 0.075D).forGetter(GradientReplaceProcessor::getNoiseScaleY),
             Codec.DOUBLE.optionalFieldOf("noise_scale_z", 0.075D).forGetter(GradientReplaceProcessor::getNoiseScaleZ),
-            Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment))
-            .apply(builder, GradientReplaceProcessor::new));
+            Codec.INT.optionalFieldOf("seed_adjustment", 0).forGetter(GradientReplaceProcessor::getSeedAdjustment)
+    ).apply(builder, GradientReplaceProcessor::new));
 
     protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new HashMap<>();
 
@@ -59,9 +59,14 @@ public class GradientReplaceProcessor extends StructureProcessor {
     }
 
     @Override
-    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos,
-            StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo,
-            StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+    public StructureTemplate.StructureBlockInfo process(
+            LevelReader world,
+            BlockPos piecePos,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings,
+            @Nullable StructureTemplate template) {
 
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
@@ -73,8 +78,12 @@ public class GradientReplaceProcessor extends StructureProcessor {
         return blockInfo;
     }
 
-    private StructureTemplate.StructureBlockInfo getOutputBlockInfo(List<OutputStep> outputSteps, LevelReader world,
-            BlockPos structurePos, StructureTemplate.StructureBlockInfo blockInfo, BlockPos blockPos,
+    private StructureTemplate.StructureBlockInfo getOutputBlockInfo(
+            List<OutputStep> outputSteps,
+            LevelReader world,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            BlockPos blockPos,
             BlockState blockstate) {
         OpenSimplex2F noiseGen = getNoiseGen(world, structurePos);
         BlockState newBlockState = getReplacementBlock(outputSteps, blockPos, noiseGen);
@@ -136,8 +145,8 @@ public class GradientReplaceProcessor extends StructureProcessor {
     private record InputToOutputs(InputBlockState inputBlockState, List<OutputStep> outputSteps) {
         public static final Codec<InputToOutputs> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(InputBlockState.DIRECT_CODEC.fieldOf("input_state").forGetter(InputToOutputs::inputBlockState),
-                        OutputStep.CODEC.listOf().fieldOf("output_steps").forGetter(InputToOutputs::outputSteps))
-                .apply(builder, InputToOutputs::new));
+                        OutputStep.CODEC.listOf().fieldOf("output_steps").forGetter(InputToOutputs::outputSteps)
+                ).apply(builder, InputToOutputs::new));
 
         public static Map<InputBlockState, List<OutputStep>> toMap(List<InputToOutputs> inputToOutputs) {
             Map<InputBlockState, List<OutputStep>> map = new Object2ObjectOpenHashMap<>(inputToOutputs.size());
@@ -155,7 +164,7 @@ public class GradientReplaceProcessor extends StructureProcessor {
     private record OutputStep(OutputBlockState outputBlockState, float stepSize) {
         public static final Codec<OutputStep> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(OutputBlockState.DIRECT_CODEC.fieldOf("output_state").forGetter(OutputStep::outputBlockState),
-                        Codec.floatRange(0, 1).fieldOf("step_size").forGetter(OutputStep::stepSize))
-                .apply(builder, OutputStep::new));
+                        Codec.floatRange(0, 1).fieldOf("step_size").forGetter(OutputStep::stepSize)
+                ).apply(builder, OutputStep::new));
     }
 }

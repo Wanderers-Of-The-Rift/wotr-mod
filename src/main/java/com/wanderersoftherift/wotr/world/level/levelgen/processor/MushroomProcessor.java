@@ -63,9 +63,13 @@ public class MushroomProcessor extends StructureProcessor {
     }
 
     @Override
-    public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel,
-            BlockPos offset, BlockPos pos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
-            List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
+    public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(
+            ServerLevelAccessor serverLevel,
+            BlockPos offset,
+            BlockPos pos,
+            List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
             newBlockInfos.add(processFinal(serverLevel, offset, pos, blockInfo, settings, processedBlockInfos));
@@ -73,8 +77,12 @@ public class MushroomProcessor extends StructureProcessor {
         return newBlockInfos;
     }
 
-    public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos,
-            BlockPos structurePos, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings,
+    public StructureTemplate.StructureBlockInfo processFinal(
+            LevelReader world,
+            BlockPos piecePos,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings,
             List<StructureTemplate.StructureBlockInfo> mapByPos) {
         RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos,
                 world, SEED);

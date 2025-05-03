@@ -33,8 +33,8 @@ public class WeightedReplaceProcessor extends StructureProcessor {
             RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
                     .forGetter(WeightedReplaceProcessor::getStructureRandomType),
             Codec.LONG.optionalFieldOf("seed_adjustment", 6551687435L)
-                    .forGetter(WeightedReplaceProcessor::getSeedAdjustment))
-            .apply(builder, WeightedReplaceProcessor::new));
+                    .forGetter(WeightedReplaceProcessor::getSeedAdjustment)
+    ).apply(builder, WeightedReplaceProcessor::new));
 
     private final List<WeightedBlockstateEntry> weightList;
     private final InputBlockState inputBlockState;
@@ -50,9 +50,14 @@ public class WeightedReplaceProcessor extends StructureProcessor {
     }
 
     @Override
-    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos,
-            StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo,
-            StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+    public StructureTemplate.StructureBlockInfo process(
+            LevelReader world,
+            BlockPos piecePos,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings,
+            @Nullable StructureTemplate template) {
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
         ProcessorUtil.getRandom(structureRandomType, blockPos, piecePos, structurePos, world, seedAdjustment);

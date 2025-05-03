@@ -14,4 +14,7 @@ public interface TrialSpawnerAccessor {
 
     @Accessor("ominousConfig")
     void setOminousConfig(Holder<TrialSpawnerConfig> spawnerConfig);
+
+    @Accessor("requiredPlayerRange")
+    void setRequiredPlayerRange(int range);
 }

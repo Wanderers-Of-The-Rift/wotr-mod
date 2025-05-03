@@ -1,0 +1,13 @@
+{
+    "tier": 2,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:armor_toughness",
+        "attribute": "armor_toughness",
+        "min_roll": 3,
+        "max_roll": 4,
+        "operation": "add_value"
+      }
+    ]
+  }

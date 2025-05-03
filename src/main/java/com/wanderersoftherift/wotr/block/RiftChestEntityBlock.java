@@ -38,7 +38,10 @@ public class RiftChestEntityBlock extends ChestBlock {
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos,
+    protected @NotNull VoxelShape getShape(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
             CollisionContext context) {
         return SHAPE;
     }

@@ -5,8 +5,8 @@
       "type": "wotr:attribute",
       "id": "wotr:flat_armor",
       "attribute": "armor",
-      "min_roll": 5,
-      "max_roll": 9,
+      "min_roll": 9,
+      "max_roll": 14,
       "operation": "add_value"
     }
   ]

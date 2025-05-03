@@ -1,10 +1,10 @@
-*.gradle        text eol=crlf
-*.java          text diff=java eol=crlf
-*.json          text eol=crlf
-*.properties    text eol=crlf
-*.toml          text eol=crlf
-*.xml           text eol=crlf
-*.yml           text eol=crlf
+*.gradle        text
+*.java          text diff=java
+*.json          text eol=lf
+*.properties    text
+*.toml          text
+*.xml           text
+*.yml           text
 
 *.bat           text eol=crlf
 *.sh            text eol=lf
@@ -12,3 +12,4 @@ gradlew         text eol=lf
 
 *.jar           binary
 *.png           binary
+*.ogg           binary

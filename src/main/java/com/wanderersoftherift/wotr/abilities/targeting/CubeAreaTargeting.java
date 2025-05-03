@@ -19,7 +19,10 @@ import java.util.List;
 public class CubeAreaTargeting extends AbstractTargeting {
     public static final MapCodec<CubeAreaTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).and(Codec.FLOAT.fieldOf("range").forGetter(CubeAreaTargeting::getRange))
-                    .and(Codec.BOOL.optionalFieldOf("include_self", true).forGetter(CubeAreaTargeting::getIncludeSelf))
+                    .and(
+                            Codec.BOOL.optionalFieldOf("include_self", true)
+                                    .forGetter(CubeAreaTargeting::getIncludeSelf)
+                    )
                     .apply(instance, CubeAreaTargeting::new));
 
     private float range = 0;

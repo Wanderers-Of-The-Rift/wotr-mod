@@ -32,6 +32,17 @@ public record GearSockets(List<GearSocket> sockets) {
         return new GearSockets(sockets);
     }
 
+    public static GearSockets randomSockets(int minSockets, int maxSockets, RandomSource random) {
+        List<GearSocket> sockets = new ArrayList<>();
+        // sort of pulling in random.nextIntBetweenInclusive, but it didn't work exactly the way I needed it to
+        int actualSockets = random.nextIntBetweenInclusive(minSockets, maxSockets);
+        for (int i = 0; i < actualSockets; i++) {
+            GearSocket socket = GearSocket.getRandomSocket(random);
+            sockets.add(socket);
+        }
+        return new GearSockets(sockets);
+    }
+
     public static GearSockets emptySockets() {
         return new GearSockets(new ArrayList<>());
     }

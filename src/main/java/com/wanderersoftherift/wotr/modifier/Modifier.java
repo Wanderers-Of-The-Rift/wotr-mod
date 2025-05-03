@@ -22,8 +22,8 @@ import static com.wanderersoftherift.wotr.init.ModModifiers.MODIFIER_KEY;
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.INT.fieldOf("tier").forGetter(Modifier::getTier),
-            AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects))
-            .apply(inst, Modifier::new));
+            AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects)
+    ).apply(inst, Modifier::new));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(MODIFIER_KEY);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(MODIFIER_KEY);
@@ -56,7 +56,10 @@ public class Modifier {
         }
     }
 
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance,
+    public List<TooltipComponent> getTooltipComponent(
+            ItemStack stack,
+            float roll,
+            ModifierInstance instance,
             ChatFormatting chatFormatting) {
         List<TooltipComponent> tooltipComponents = new ArrayList<>();
         for (AbstractModifierEffect effect : modifierEffects) {

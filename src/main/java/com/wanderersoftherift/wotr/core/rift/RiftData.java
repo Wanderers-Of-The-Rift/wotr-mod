@@ -32,6 +32,7 @@ public class RiftData extends SavedData { // TODO: split this
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
     private final List<UUID> players;
+    private int tier = 0;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
@@ -112,4 +113,12 @@ public class RiftData extends SavedData { // TODO: split this
         this.setDirty();
     }
 
+    public int getTier() {
+        return tier;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
+        this.setDirty();
+    }
 }

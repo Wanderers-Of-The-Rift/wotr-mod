@@ -83,7 +83,8 @@ public class ModAttributes {
         }
     }
 
-    private static DeferredHolder<Attribute, RangedAttribute> registerPlayerAttribute(final String name,
+    private static DeferredHolder<Attribute, RangedAttribute> registerPlayerAttribute(
+            final String name,
             final Supplier<? extends RangedAttribute> sup) {
         DeferredHolder<Attribute, RangedAttribute> result = ATTRIBUTES.register(name, sup);
         PLAYER_ATTRIBUTES.add(result);

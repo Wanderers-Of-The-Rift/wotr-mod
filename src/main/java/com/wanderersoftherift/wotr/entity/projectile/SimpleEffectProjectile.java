@@ -576,8 +576,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
 
         if (compound.contains("config", 10)) {
             this.config = SimpleProjectileConfig.CODEC.parse(NbtOps.INSTANCE, compound.get("config"))
-                    .resultOrPartial(
-                            p_186388_ -> WanderersOfTheRift.LOGGER.warn("Invalid projectile config: {}", p_186388_))
+                    .resultOrPartial(value -> WanderersOfTheRift.LOGGER.warn("Invalid projectile config: {}", value))
                     .orElse(SimpleProjectileConfig.DEFAULT);
         }
     }

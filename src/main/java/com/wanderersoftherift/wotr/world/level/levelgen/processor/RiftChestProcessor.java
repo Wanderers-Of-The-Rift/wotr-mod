@@ -43,18 +43,18 @@ import static net.minecraft.world.level.block.ChestBlock.FACING;
 
 public class RiftChestProcessor extends StructureProcessor {
 
-    public static final MapCodec<RiftChestProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
-            .group(ResourceLocation.CODEC.optionalFieldOf("base_loot_table", ResourceLocation.parse("wotr:empty"))
+    public static final MapCodec<RiftChestProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+            ResourceLocation.CODEC.optionalFieldOf("base_loot_table", ResourceLocation.parse("wotr:empty"))
                     .forGetter(RiftChestProcessor::getBaseLootTable),
-                    OutputBlockState.DIRECT_CODEC.optionalFieldOf("output_state", new DefaultOutputBlockState(AIR))
-                            .forGetter(RiftChestProcessor::getReplaceOutput),
-                    Codec.FLOAT.optionalFieldOf("rarity", 1.0F).forGetter(RiftChestProcessor::getRarity),
-                    WeightedRiftChestTypeEntry.CODEC.listOf()
-                            .fieldOf("chest_types")
-                            .forGetter(RiftChestProcessor::getChestTypes),
-                    RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
-                            .forGetter(RiftChestProcessor::getRandomType))
-            .apply(builder, builder.stable(RiftChestProcessor::new)));
+            OutputBlockState.DIRECT_CODEC.optionalFieldOf("output_state", new DefaultOutputBlockState(AIR))
+                    .forGetter(RiftChestProcessor::getReplaceOutput),
+            Codec.FLOAT.optionalFieldOf("rarity", 1.0F).forGetter(RiftChestProcessor::getRarity),
+            WeightedRiftChestTypeEntry.CODEC.listOf()
+                    .fieldOf("chest_types")
+                    .forGetter(RiftChestProcessor::getChestTypes),
+            RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
+                    .forGetter(RiftChestProcessor::getRandomType)
+    ).apply(builder, builder.stable(RiftChestProcessor::new)));
     private static final long SEED = 2465482L;
 
     private final ResourceLocation baseLootTable;
@@ -73,9 +73,14 @@ public class RiftChestProcessor extends StructureProcessor {
     }
 
     @Override
-    public StructureTemplate.StructureBlockInfo process(LevelReader world, BlockPos piecePos, BlockPos structurePos,
-            StructureTemplate.StructureBlockInfo rawBlockInfo, StructureTemplate.StructureBlockInfo blockInfo,
-            StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+    public StructureTemplate.StructureBlockInfo process(
+            LevelReader world,
+            BlockPos piecePos,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings,
+            @Nullable StructureTemplate template) {
         if ((blockInfo.state().is(RIFT_CHEST.get()) || blockInfo.state().is(CHEST))
                 && blockInfo.state().hasBlockEntity()) {
             RandomSource random;

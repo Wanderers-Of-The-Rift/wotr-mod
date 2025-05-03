@@ -17,11 +17,11 @@ import java.util.Optional;
 
 public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier, Optional<RunegemData> runegem) {
 
-    public static final Codec<GearSocket> CODEC = RecordCodecBuilder.create(inst -> inst
-            .group(RunegemShape.CODEC.fieldOf("shape").forGetter(GearSocket::shape),
+    public static final Codec<GearSocket> CODEC = RecordCodecBuilder
+            .create(inst -> inst.group(RunegemShape.CODEC.fieldOf("shape").forGetter(GearSocket::shape),
                     ModifierInstance.CODEC.optionalFieldOf("modifier").forGetter(GearSocket::modifier),
-                    RunegemData.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem))
-            .apply(inst, GearSocket::new));
+                    RunegemData.CODEC.optionalFieldOf("runegem").forGetter(GearSocket::runegem)
+            ).apply(inst, GearSocket::new));
 
     public static GearSocket getRandomSocket(RandomSource random) {
         RunegemShape shape = RunegemShape.getRandomShape(random);

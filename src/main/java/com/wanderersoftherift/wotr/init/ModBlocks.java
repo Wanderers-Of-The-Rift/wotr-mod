@@ -59,14 +59,6 @@ public class ModBlocks {
     public static final Map<RiftChestType, DeferredBlock<Block>> CHEST_TYPES = new HashMap<>();
     public static final List<BlockFamilyHelper> BLOCK_FAMILY_HELPERS = new ArrayList<>();
 
-    public static final DeferredBlock<Block> DEV_BLOCK = registerBlock("dev_block",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .setId(blockId("dev_block"))
-                    .destroyTime(-1F)
-                    .explosionResistance(3_600_000F)
-                    .sound(SoundType.STONE)
-                    .lightLevel(state -> 7)));
-
     public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlock("rune_anvil",
             () -> new RuneAnvilEntityBlock(
                     BlockBehaviour.Properties.of().setId(blockId("rune_anvil")).strength(2.5F).sound(SoundType.METAL)));
@@ -158,57 +150,54 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_15"))));
 
     private static BlockFamilyHelper registerBuildingBlock(String id, Supplier<Block> sup) {
-        DeferredBlock<Block> block = registerBlock(id, sup);
+        DeferredBlock<Block> block = registerDevBlock(id, sup);
         BlockFamilyHelper buildingBlockHelper = new BlockFamilyHelper.Builder().withBlockId(id)
                 .withBlock(block)
-                .withSlab(registerBlock(id + SLAB_SUFFIX,
-                        () -> new SlabBlock(
-                                BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + SLAB_SUFFIX)))))
-                .withStairs(registerBlock(id + STAIRS_SUFFIX,
+                .withSlab(registerDevBlock(id + SLAB_SUFFIX, () -> new SlabBlock(
+                        BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + SLAB_SUFFIX)))))
+                .withStairs(registerDevBlock(id + STAIRS_SUFFIX,
                         () -> new StairBlock(block.get().defaultBlockState(),
                                 BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + STAIRS_SUFFIX)))))
-                .withButton(registerBlock(id + BUTTON_SUFFIX,
+                .withButton(registerDevBlock(id + BUTTON_SUFFIX,
                         () -> new ButtonBlock(BlockSetType.STONE, 30,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .noCollission()
                                         .strength(0.5F)
                                         .setId(blockId(id + BUTTON_SUFFIX)))))
-                .withPressurePlate(registerBlock(id + PLATE_SUFFIX,
+                .withPressurePlate(registerDevBlock(id + PLATE_SUFFIX,
                         () -> new PressurePlateBlock(BlockSetType.STONE,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .noCollission()
                                         .strength(0.5F)
                                         .setId(blockId(id + PLATE_SUFFIX)))))
-                .withWall(registerBlock(id + WALL_SUFFIX,
-                        () -> new WallBlock(
-                                BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + WALL_SUFFIX)))))
-                .withFence(registerBlock(id + FENCE_SUFFIX,
-                        () -> new FenceBlock(
-                                BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + FENCE_SUFFIX)))))
-                .withFenceGate(registerBlock(id + FENCE_GATE_SUFFIX,
+                .withWall(registerDevBlock(id + WALL_SUFFIX, () -> new WallBlock(
+                        BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + WALL_SUFFIX)))))
+                .withFence(registerDevBlock(id + FENCE_SUFFIX, () -> new FenceBlock(
+                        BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + FENCE_SUFFIX)))))
+                .withFenceGate(registerDevBlock(id + FENCE_GATE_SUFFIX,
                         () -> new FenceGateBlock(OAK,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .setId(blockId(id + FENCE_GATE_SUFFIX)))))
-                .withTrapdoor(registerBlock(id + TRAPDOOR_SUFFIX,
+                .withTrapdoor(registerDevBlock(id + TRAPDOOR_SUFFIX,
                         () -> new TrapDoorBlock(BlockSetType.STONE,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .setId(blockId(id + TRAPDOOR_SUFFIX)))))
                 .withPane(
-                        registerBlock(id + GLASS_BLOCK_SUFFIX,
+                        registerDevBlock(id + GLASS_BLOCK_SUFFIX,
                                 () -> new StainedGlassBlock(DyeColor.WHITE,
                                         BlockBehaviour.Properties.ofFullCopy(block.get())
                                                 .noOcclusion()
                                                 .lightLevel((state) -> 0)
                                                 .sound(SoundType.GLASS)
                                                 .setId(blockId(id + GLASS_BLOCK_SUFFIX)))),
-                        registerBlock(id + PANE_SUFFIX,
+                        registerDevBlock(id + PANE_SUFFIX,
                                 () -> new StainedGlassPaneBlock(DyeColor.WHITE,
                                         BlockBehaviour.Properties.ofFullCopy(block.get())
                                                 .noOcclusion()
                                                 .lightLevel((state) -> 0)
                                                 .sound(SoundType.GLASS)
                                                 .setId(blockId(id + PANE_SUFFIX)))))
-                .withDirectionalPillar(registerBlock(id + DIRECTIONAL_PILLAR_SUFFIX,
+                .withDirectionalPillar(registerDevBlock(id + DIRECTIONAL_PILLAR_SUFFIX,
                         () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(block.get())
                                 .setId(blockId(id + DIRECTIONAL_PILLAR_SUFFIX))) {
                         }))
@@ -217,7 +206,9 @@ public class ModBlocks {
         return buildingBlockHelper;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerChestBlock(String riftChest, Supplier<T> supplier,
+    private static <T extends Block> DeferredBlock<T> registerChestBlock(
+            String riftChest,
+            Supplier<T> supplier,
             RiftChestType riftChestType) {
         DeferredBlock<T> register = registerBlock(riftChest, supplier);
         CHEST_TYPES.put(riftChestType, (DeferredBlock<Block>) register);
@@ -227,6 +218,12 @@ public class ModBlocks {
     private static <T extends Block> DeferredBlock<T> registerBlock(String key, Supplier<T> sup) {
         DeferredBlock<T> register = BLOCKS.register(key, sup);
         ModItems.registerSimpleBlockItem(key, register);
+        return register;
+    }
+
+    private static <T extends Block> DeferredBlock<T> registerDevBlock(String key, Supplier<T> sup) {
+        DeferredBlock<T> register = BLOCKS.register(key, sup);
+        ModItems.registerSimpleDevBlockItem(key, register);
         return register;
     }
 

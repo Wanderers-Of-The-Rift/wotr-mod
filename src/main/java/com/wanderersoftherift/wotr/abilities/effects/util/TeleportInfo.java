@@ -17,8 +17,8 @@ public class TeleportInfo {
     public static final MapCodec<TeleportInfo> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(TeleportTarget.CODEC.fieldOf("teleport_target").forGetter(TeleportInfo::getTarget),
                     Vec3.CODEC.fieldOf("position").forGetter(TeleportInfo::getPosition),
-                    Codec.BOOL.optionalFieldOf("relative").forGetter(TeleportInfo::isRelative))
-            .apply(instance, TeleportInfo::new));
+                    Codec.BOOL.optionalFieldOf("relative").forGetter(TeleportInfo::isRelative)
+            ).apply(instance, TeleportInfo::new));
 
     private final TeleportTarget target;
     private final Vec3 position;

@@ -30,7 +30,6 @@ public class ModLanguageProvider extends LanguageProvider {
         // See https://docs.neoforged.net/docs/1.21.1/resources/client/i18n/ for translation of other types.
 
         // Adds a block translation.
-        addBlock(ModBlocks.DEV_BLOCK, "Dev Block");
         addBlock(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK, "Rune Anvil");
         addBlock(ModBlocks.RIFT_CHEST, "Rift Chest");
         addBlock(ModBlocks.RIFT_SPAWNER, "Rift Spawner");
@@ -43,21 +42,28 @@ public class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.ABILITY_BENCH, "Ability Bench");
 
         // Adds an item translation.
-        addItem(ModItems.EXAMPLE_ITEM, "Example Item");
         addItem(ModItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(ModItems.RUNEGEM, "Runegem");
         addItem(ModItems.RIFT_KEY, "Rift Key");
-        addItem(ModItems.RUNEGEM_GEODE, "Runegem Geode");
+        addItem(ModItems.RAW_RUNEGEM_GEODE, "Runegem Geode (Raw)");
+        addItem(ModItems.SHAPED_RUNEGEM_GEODE, "Runegem Geode (Shaped)");
+        addItem(ModItems.CUT_RUNEGEM_GEODE, "Runegem Geode (Cut)");
+        addItem(ModItems.POLISHED_RUNEGEM_GEODE, "Runegem Geode (Polished)");
+        addItem(ModItems.FRAMED_RUNEGEM_GEODE, "Runegem Geode (Framed)");
         addItem(ModItems.ABILITY_HOLDER, "Empty Ability");
         addItem(ModItems.SKILL_THREAD, "Skill Thread");
 
         addEntityType(ModEntities.RIFT_ENTRANCE, "Rift Entrance");
+        addEntityType(ModEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(ModEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
 
         addEssenceType("earth", "Earth");
         addEssenceType("life", "Life");
         addEssenceType("water", "Water");
         addEssenceType("meat", "Meat");
+
+        addTheme("cave", "Cave");
+        addTheme("forest", "Forest");
 
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
             // addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));
@@ -82,6 +88,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
+        add("itemGroup." + WanderersOfTheRift.MODID + ".dev", "Wanderers of the Rift (Dev only)");
 
         add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
 
@@ -100,9 +107,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".invalid_player", "Player is null!");
         add("command." + WanderersOfTheRift.MODID + ".get_item_stack_components.success",
                 "Item Components available for '%1$s'");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.theme.success", "Rift key theme set to '%1$s'");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.tier.success", "Rift key tier set to '%1$s'");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.seed.success", "Rift key seed set to '%1$s'");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.success", "Rift key configured");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_theme", "Invalid theme '%s'");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
@@ -147,6 +153,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
 
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Rift Tier: %s");
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Rift Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
@@ -213,6 +220,10 @@ public class ModLanguageProvider extends LanguageProvider {
 
     private void addEssenceType(String id, String value) {
         add(EssenceValue.ESSENCE_TYPE_PREFIX + "." + WanderersOfTheRift.MODID + "." + id, value);
+    }
+
+    private void addTheme(String id, String value) {
+        add("rift_theme." + WanderersOfTheRift.MODID + "." + id, value);
     }
 
     private static @NotNull String getTranslationString(Block block) {

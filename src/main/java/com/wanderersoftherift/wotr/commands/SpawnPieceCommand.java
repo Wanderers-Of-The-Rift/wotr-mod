@@ -239,8 +239,13 @@ public class SpawnPieceCommand {
         return rlSet;
     }
 
-    public static void spawnPiece(ResourceLocation path, Coordinates coordinates,
-            Holder.Reference<StructureProcessorList> processorList, Rotation rotation, Mirror mirror, int seed,
+    public static void spawnPiece(
+            ResourceLocation path,
+            Coordinates coordinates,
+            Holder.Reference<StructureProcessorList> processorList,
+            Rotation rotation,
+            Mirror mirror,
+            int seed,
             CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         ServerLevel level = cs.getSource().getLevel();
         Player player;
@@ -255,8 +260,12 @@ public class SpawnPieceCommand {
         generateStructurePiece(level, pos, player, path, processors, rotation, mirror, seed, cs);
     }
 
-    public static void spawnPieceFully(ResourceLocation path, Coordinates coordinates,
-            Holder.Reference<RiftTheme> theme, boolean includeTerminators, int seed,
+    public static void spawnPieceFully(
+            ResourceLocation path,
+            Coordinates coordinates,
+            Holder.Reference<RiftTheme> theme,
+            boolean includeTerminators,
+            int seed,
             CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         if (cs.getSource().getEntity() instanceof Player player) {
             player.displayClientMessage(Component.translatable("command.spawn_piece.generating", path.toString()),
@@ -266,8 +275,15 @@ public class SpawnPieceCommand {
         placeStructure(path, pos.mutable(), theme, includeTerminators, seed, cs);
     }
 
-    private static void generateStructurePiece(ServerLevel world, BlockPos pos, Player player, ResourceLocation nbt,
-            StructureProcessorList processorList, Rotation rotation, Mirror mirror, int seed,
+    private static void generateStructurePiece(
+            ServerLevel world,
+            BlockPos pos,
+            Player player,
+            ResourceLocation nbt,
+            StructureProcessorList processorList,
+            Rotation rotation,
+            Mirror mirror,
+            int seed,
             CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         if (player != null) {
             player.displayClientMessage(Component.translatable("command.spawn_piece.generating", nbt.toString()), true);
@@ -317,8 +333,13 @@ public class SpawnPieceCommand {
         });
     }
 
-    public static int placeStructure(ResourceLocation template, BlockPos pos, Holder<RiftTheme> theme,
-            boolean includeTerminators, int seed, CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
+    public static int placeStructure(
+            ResourceLocation template,
+            BlockPos pos,
+            Holder<RiftTheme> theme,
+            boolean includeTerminators,
+            int seed,
+            CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         ServerLevel serverlevel = cs.getSource().getLevel();
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
@@ -383,9 +404,14 @@ public class SpawnPieceCommand {
         }
     }
 
-    public static int placeTemplate(ResourceLocation template, BlockPos pos, List<StructureProcessor> processorList,
-            Rotation rotation, Mirror mirror, int seed, CommandContext<CommandSourceStack> cs)
-            throws CommandSyntaxException {
+    public static int placeTemplate(
+            ResourceLocation template,
+            BlockPos pos,
+            List<StructureProcessor> processorList,
+            Rotation rotation,
+            Mirror mirror,
+            int seed,
+            CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         ServerLevel serverlevel = cs.getSource().getLevel();
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
@@ -423,10 +449,7 @@ public class SpawnPieceCommand {
     }
 
     private static void checkLoaded(ServerLevel level, ChunkPos start, ChunkPos end) throws CommandSyntaxException {
-        if (ChunkPos.rangeClosed(start, end)
-                .filter(p_313494_ -> !level.isLoaded(p_313494_.getWorldPosition()))
-                .findAny()
-                .isPresent()) {
+        if (ChunkPos.rangeClosed(start, end).anyMatch(pos -> !level.isLoaded(pos.getWorldPosition()))) {
             throw BlockPosArgument.ERROR_NOT_LOADED.create();
         }
     }

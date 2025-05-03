@@ -34,8 +34,11 @@ public class AltSpiderRenderer<T extends Spider>
         this.altScale = scale;
     }
 
-    public void render(@NotNull TurtleRenderState renderState, @NotNull PoseStack pose,
-            @NotNull MultiBufferSource source, int packedLight) {
+    public void render(
+            @NotNull TurtleRenderState renderState,
+            @NotNull PoseStack pose,
+            @NotNull MultiBufferSource source,
+            int packedLight) {
         if (!ClientConfig.ACCESSIBILITY_ARACHNOPHOBIA.getAsBoolean()) {
             spiderRenderer.render(renderState, pose, source, packedLight);
             return;

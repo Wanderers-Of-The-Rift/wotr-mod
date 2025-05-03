@@ -14,8 +14,8 @@ import java.util.function.IntFunction;
 public enum RunegemTier {
 
     RAW(0, "raw", ModTags.Runegems.RAW),
-    SHAPED(1, "shaped", ModTags.Runegems.SHAPED),
-    CUT(2, "cut", ModTags.Runegems.CUT),
+    CUT(1, "cut", ModTags.Runegems.CUT),
+    SHAPED(2, "shaped", ModTags.Runegems.SHAPED),
     POLISHED(3, "polished", ModTags.Runegems.POLISHED),
     FRAMED(4, "framed", ModTags.Runegems.FRAMED),
     UNIQUE(5, "unique", ModTags.Runegems.UNIQUE);

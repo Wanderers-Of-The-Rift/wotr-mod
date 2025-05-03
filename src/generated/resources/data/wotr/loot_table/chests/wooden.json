@@ -21,6 +21,26 @@
           "weight": 40
         },
         {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/runegem",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_armor",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_weapons",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_tools",
+          "weight": 20
+        },
+        {
           "type": "minecraft:item",
           "name": "minecraft:emerald",
           "weight": 20
@@ -45,9 +65,82 @@
           "type": "minecraft:item",
           "name": "minecraft:experience_bottle",
           "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "wotr:skill_thread",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4.0,
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "wotr:skill_thread",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 6.0,
+                "min": 3.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "wotr:skill_thread",
+          "weight": 20
         }
       ],
-      "rolls": 3.0
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 10.0,
+        "min": 6.0
+      }
     }
   ],
   "random_sequence": "wotr:chests/wooden"

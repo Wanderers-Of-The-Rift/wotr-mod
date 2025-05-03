@@ -13,8 +13,8 @@ import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 public class LevelRiftObjectiveData extends SavedData {
 
     public static final Codec<LevelRiftObjectiveData> CODEC = RecordCodecBuilder.create(inst -> inst
-            .group(AbstractObjective.DIRECT_CODEC.fieldOf("objective").forGetter(LevelRiftObjectiveData::getObjective))
-            .apply(inst, LevelRiftObjectiveData::new));
+            .group(AbstractObjective.DIRECT_CODEC.fieldOf("objective").forGetter(LevelRiftObjectiveData::getObjective)
+            ).apply(inst, LevelRiftObjectiveData::new));
 
     private AbstractObjective objective;
 
@@ -51,6 +51,9 @@ public class LevelRiftObjectiveData extends SavedData {
     }
 
     public static LevelRiftObjectiveData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        if (!tag.contains("objective")) {
+            return new LevelRiftObjectiveData(null);
+        }
         AbstractObjective objective = AbstractObjective.DIRECT_CODEC.parse(NbtOps.INSTANCE, tag.get("objective"))
                 .resultOrPartial(LOGGER::error)
                 .orElse(null);

@@ -64,11 +64,9 @@ public class DebugCommands extends BaseCommand {
 
             stack.getSource()
                     .sendSuccess(
-                            () -> Component
-                                    .translatable(
-                                            "command." + WanderersOfTheRift.MODID
-                                                    + ".get_item_stack_components.success",
-                                            heldItem.getDisplayName().getString())
+                            () -> Component.translatable(
+                                    "command." + WanderersOfTheRift.MODID + ".get_item_stack_components.success",
+                                    heldItem.getDisplayName().getString())
                                     .withStyle(ChatFormatting.YELLOW)
                                     .withStyle(ChatFormatting.UNDERLINE),
                             false);

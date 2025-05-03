@@ -1,0 +1,13 @@
+{
+  "tier": 3,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:sweeping_attack_damage",
+      "attribute": "sweeping_damage_ratio",
+      "min_roll": 0.75,
+      "max_roll": 1,
+      "operation": "add_value"
+    }
+  ]
+}

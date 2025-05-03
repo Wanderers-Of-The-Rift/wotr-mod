@@ -212,7 +212,10 @@ public class AbilityUpgradePool {
          * @param optionCount    How many options to include in the choice
          * @return This object for method chaining
          */
-        public Mutable generateChoice(RegistryAccess registryAccess, AbstractAbility ability, RandomSource random,
+        public Mutable generateChoice(
+                RegistryAccess registryAccess,
+                AbstractAbility ability,
+                RandomSource random,
                 int optionCount) {
             generateChoices(registryAccess, ability, 1, random, optionCount);
             return this;
@@ -228,8 +231,12 @@ public class AbilityUpgradePool {
          * @param optionCount    How many options to include in each choice
          * @return This object for method chaining
          */
-        public Mutable generateChoices(RegistryAccess registryAccess, AbstractAbility ability, int count,
-                RandomSource random, int optionCount) {
+        public Mutable generateChoices(
+                RegistryAccess registryAccess,
+                AbstractAbility ability,
+                int count,
+                RandomSource random,
+                int optionCount) {
             Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability);
 
             for (int i = 0; i < count; i++) {
@@ -248,7 +255,8 @@ public class AbilityUpgradePool {
             return this;
         }
 
-        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(RegistryAccess registryAccess,
+        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(
+                RegistryAccess registryAccess,
                 AbstractAbility ability) {
             Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
             Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
