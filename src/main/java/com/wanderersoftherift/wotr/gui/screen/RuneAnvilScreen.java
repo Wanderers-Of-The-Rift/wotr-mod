@@ -11,16 +11,16 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.ClientHooks;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
@@ -52,21 +52,41 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
 
-        ItemStack itemstack = this.menu.getGearSlotItem();
-        if (!itemstack.isEmpty()) {
-            List<Component> tooltip = this.getTooltipFromContainerItem(itemstack);
+        this.renderItemPreview(guiGraphics);
+    }
 
-            // TODO-FIX: does not account for tooltip components (like the runegem stuff)
-            int width = tooltip.stream().map(this.font::width).max(Comparator.naturalOrder()).orElse(0) + 8;
-            int height = tooltip.size() * this.font.lineHeight + (tooltip.size() - 1) + 8;
+    private void renderItemPreview(@NotNull GuiGraphics guiGraphics) {
+        ItemStack gearItemStack = this.menu.getGearSlotItem();
+        renderItemPreviewSingle(guiGraphics, gearItemStack, false);
 
-            int leftX = this.leftPos - width - 25;
-            int rightX = leftX + this.imageWidth + width + 25;
+        ItemStack previewStack = this.menu.createPreviewStack();
+        renderItemPreviewSingle(guiGraphics, previewStack, true);
+    }
+
+    private void renderItemPreviewSingle(@NotNull GuiGraphics guiGraphics, ItemStack itemStack, boolean right) {
+        if (!itemStack.isEmpty()) {
+            List<Component> tooltip = this.getTooltipFromContainerItem(itemStack);
+            List<ClientTooltipComponent> clientTooltip = ClientHooks.gatherTooltipComponents(itemStack, tooltip, 0, this.width, this.height, this.font);
+
+            int width = clientTooltip.stream().map((component) -> component.getWidth(this.font)).max(Integer::compareTo).orElse(0) + 8;
+            int height = clientTooltip.stream().map((component) -> component.getHeight(this.font)).reduce(0, Integer::sum) + 8;
+
+            if (width > this.leftPos) return; // don't show tooltips if they would be wider than the available space
+
+            int leftMiddle = this.leftPos / 2;
+            int rightMiddle = this.leftPos + this.imageWidth + leftMiddle;
+
+            int leftX = leftMiddle - width / 2;
+            int rightX = rightMiddle - width / 2;
+
             int y = this.topPos + this.imageHeight / 2 - height / 2;
-            guiGraphics.renderTooltip(this.font, tooltip, itemstack.getTooltipImage(), itemstack, leftX, y,
-                    itemstack.get(DataComponents.TOOLTIP_STYLE));
-            guiGraphics.renderTooltip(this.font, tooltip, itemstack.getTooltipImage(), itemstack, rightX, y,
-                    itemstack.get(DataComponents.TOOLTIP_STYLE)); // TODO: show the edited item tooltip
+
+            // we have to offset this by x-8 and y+16 because we do not want it to use the mouse offset - thank mojank
+            if (!right) {
+                guiGraphics.renderTooltip(this.font, itemStack, leftX - 8, y + 16);
+            } else {
+                guiGraphics.renderTooltip(this.font, itemStack, rightX - 8, y + 16);
+            }
         }
     }
 

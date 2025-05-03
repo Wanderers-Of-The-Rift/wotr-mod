@@ -5,10 +5,15 @@ import com.wanderersoftherift.wotr.gui.menu.slot.RunegemSlot;
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModMenuTypes;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.mixin.InvokerAbstractContainerMenu;
+import com.wanderersoftherift.wotr.modifier.Modifier;
+import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,12 +28,15 @@ import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RuneAnvilMenu extends AbstractContainerMenu {
     public static final List<Vector2i> RUNE_SLOT_POSITIONS = List.of( // CLOCKWISE FROM TOP CENTER
             new Vector2i(80, 26), new Vector2i(127, 51), new Vector2i(127, 101), new Vector2i(80, 126),
             new Vector2i(33, 101), new Vector2i(33, 51));
     private static final Vector2i GEAR_SLOT_POSITION = new Vector2i(80, 76);
+    private static final Modifier PREVIEW_TOOLTIP_DUMMY_MODIFIER = new Modifier(0, List.of());
+    private static final Holder<Modifier> PREVIEW_TOOLTIP_DUMMY_MODIFIER_HOLDER = Holder.direct(PREVIEW_TOOLTIP_DUMMY_MODIFIER);
     private final List<Slot> playerInventorySlots = new ArrayList<>();
     private final List<RunegemSlot> socketSlots = new ArrayList<>();
     private final Inventory playerInventory;
@@ -45,7 +53,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     // Server
     public RuneAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, boolean isServer,
-            Container container) {
+                         Container container) {
         super(ModMenuTypes.RUNE_ANVIL_MENU.get(), containerId);
         this.playerInventory = playerInventory;
         this.access = access;
@@ -156,6 +164,41 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         }
         GearSockets newGearSockets = new GearSockets(newSockets);
         gear.set(ModDataComponentType.GEAR_SOCKETS.get(), newGearSockets);
+    }
+
+    public ItemStack createPreviewStack() {
+        ItemStack itemStack = this.gearSlot.getItem().copy();
+        if (itemStack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        GearSockets currentSockets = itemStack.get(ModDataComponentType.GEAR_SOCKETS.get());
+        if (currentSockets == null) {
+            return ItemStack.EMPTY;
+        }
+
+        List<GearSocket> previewSockets = new ArrayList<>();
+        for (int i = 0; i < this.activeSocketSlots; i++) {
+            RunegemSlot slot = this.socketSlots.get(i);
+            GearSocket currentSocket = currentSockets.sockets().get(i);
+            ItemStack runegem = slot.getItem();
+            if (runegem.isEmpty()) {
+                previewSockets.add(currentSocket);
+            } else {
+                RunegemData runegemData = runegem.get(ModDataComponentType.RUNEGEM_DATA);
+                if (runegemData == null) {
+                    return ItemStack.EMPTY;
+                }
+
+                GearSocket newSocket = new GearSocket(runegemData.shape(), Optional.of(ModifierInstance.of(PREVIEW_TOOLTIP_DUMMY_MODIFIER_HOLDER, RandomSource.create())), Optional.of(runegemData));
+                previewSockets.add(newSocket);
+            }
+        }
+
+        GearSockets previewGearSockets = new GearSockets(previewSockets);
+        itemStack.set(ModDataComponentType.GEAR_SOCKETS.get(), previewGearSockets);
+
+        return itemStack;
     }
 
     private void gearSlotChanged() {
