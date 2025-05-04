@@ -75,9 +75,9 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     @Override
     public int getWidth(@NotNull Font font) {
         // simulate renderText and renderImage to get the width
-        int width = font.width(getSocketDesc()) + 10; // 10 for the padding
-        for (GearSocket socket : this.getSockets()) {
-            if (socket.modifier().isPresent()) {
+        int width = font.width(getSocketsDescriptionComponent()) + 10; // 10 for the padding
+        for (GearSocket gearSocket : this.getSockets()) {
+            if (gearSocket.modifier().isPresent()) {
                 width += 10; // 10 for the icon
             }
         }
@@ -86,26 +86,25 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public void renderText(
-            @NotNull Font pFont,
+            @NotNull Font font,
             int x,
             int y,
-            @NotNull Matrix4f pMatrix4f,
-            MultiBufferSource.@NotNull BufferSource pBufferSource) {
+            @NotNull Matrix4f matrix4f,
+            MultiBufferSource.@NotNull BufferSource bufferSource) {
         int usedSockets = (int) this.component.gearSocket()
                 .stream()
                 .filter(socket -> socket.runegem().isPresent())
                 .count();
         int totalSockets = this.component.gearSocket().size();
-        MutableComponent socketsDescriptionComponent = getSocketDesc().copy().withStyle(ChatFormatting.GRAY);
-        pFont.drawInBatch(socketsDescriptionComponent, x, y, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f,
-                pBufferSource, Font.DisplayMode.NORMAL, 0, 0x00F000F0);
+        MutableComponent socketsDescriptionComponent = getSocketsDescriptionComponent();
+        font.drawInBatch(socketsDescriptionComponent, x, y, ChatFormatting.DARK_GRAY.getColor(), true, matrix4f,
+                bufferSource, Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
 
         if (getIsShiftDown()) {
-            MutableComponent socketCountComponent = Component.literal("[" + usedSockets + "/" + totalSockets + "]")
-                    .withStyle(ChatFormatting.DARK_GRAY);
-            pFont.drawInBatch(socketCountComponent, x + pFont.width(getSocketDesc()) + totalSockets * 10, y,
-                    ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0,
-                    0x00F000F0);
+            MutableComponent socketCountComponent = getSocketCountComponent(usedSockets, totalSockets);
+            font.drawInBatch(socketCountComponent, x + font.width(getSocketsDescriptionComponent()) + 4 + (totalSockets * 10 - 2) + 4, y,
+                    ChatFormatting.DARK_GRAY.getColor(), true, matrix4f, bufferSource, Font.DisplayMode.NORMAL,
+                    ChatFormatting.BLACK.getColor(), 0x00F000F0);
         }
 
         y += SOCKET_LINE_HEIGHT + 2;
@@ -114,15 +113,15 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             List<AbstractModifierEffect> effects = getModifierEffects(gearSocket);
 
             if (gearSocket.isEmpty()) {
-                pFont.drawInBatch(Component.literal("(Empty slot)"), x + 10, y - 1, 0x00555555, true, pMatrix4f,
-                        pBufferSource, Font.DisplayMode.NORMAL, 0, 0x00F000F0);
+                font.drawInBatch(getEmptySocketComponent(), x + 10, y - 2, ChatFormatting.DARK_GRAY.getColor(), true, matrix4f,
+                        bufferSource, Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
                 y += SOCKET_LINE_HEIGHT;
                 continue;
             }
 
             if (effects.isEmpty()) {
-                pFont.drawInBatch(Component.literal("???"), x + 10, y - 1, 0x00555555, true, pMatrix4f, pBufferSource,
-                        Font.DisplayMode.NORMAL, 0, 0x00F000F0);
+                font.drawInBatch(getUnknownSocketComponent(), x + 10, y - 2, ChatFormatting.DARK_GRAY.getColor(), true, matrix4f, bufferSource,
+                        Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
                 y += SOCKET_LINE_HEIGHT;
                 continue;
             }
@@ -161,8 +160,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     }
                 }
 
-                pFont.drawInBatch(lineComponent, x + 10, y - 1, ChatFormatting.GREEN.getColor(), true, pMatrix4f,
-                        pBufferSource, Font.DisplayMode.NORMAL, 0, 0x00F000F0);
+                font.drawInBatch(lineComponent, x + 10, y - 2, ChatFormatting.GREEN.getColor(), true, matrix4f,
+                        bufferSource, Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
                 y += SOCKET_LINE_HEIGHT;
             }
         }
@@ -173,7 +172,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         PoseStack pose = guiGraphics.pose();
 
         int startX = x;
-        x += font.width(getSocketDesc());
+        x += font.width(getSocketsDescriptionComponent()) + 4;
         for (GearSocket socket : this.component.gearSocket()) {
             renderSocketIcon(guiGraphics, pose, x, y, socket);
 
@@ -183,60 +182,77 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         y += SOCKET_LINE_HEIGHT;
 
-        for (GearSocket socket : this.getSockets()) {
-            List<AbstractModifierEffect> modifiers = getModifierEffects(socket);
-            int val = modifiers.size();
+        for (GearSocket gearSocket : this.getSockets()) {
+            List<AbstractModifierEffect> modifiers = getModifierEffects(gearSocket);
 
-            renderSocketIcon(guiGraphics, pose, x, y, socket);
+            renderSocketIcon(guiGraphics, pose, x, y, gearSocket);
 
             y += SOCKET_LINE_HEIGHT;
 
-            for (int i = 1; i < val; i++) {
+            for (int i = 1; i < modifiers.size(); i++) {
                 y += SOCKET_LINE_HEIGHT;
             }
         }
     }
 
-    private void renderSocketIcon(GuiGraphics guiGraphics, PoseStack pose, int x, int y, GearSocket socket) {
+    private void renderSocketIcon(GuiGraphics guiGraphics, PoseStack pose, int x, int y, GearSocket gearSocket) {
         pose.pushPose();
         pose.translate(x, y, 0);
-        if (socket.modifier().isPresent()) {
-            guiGraphics.blit(RenderType.GUI_TEXTURED, SHAPE_RESOURCE_LOCATION_MAP_COLOR.get(socket.shape()), 0, 0, 0, 0,
-                    8, 8, 8, 8
-            );
+
+        ResourceLocation texture;
+        if (gearSocket.modifier().isPresent()) {
+            texture = SHAPE_RESOURCE_LOCATION_MAP_COLOR.get(gearSocket.shape());
         } else {
-            guiGraphics.blit(RenderType.GUI_TEXTURED, SHAPE_RESOURCE_LOCATION_MAP_GRAYSCALE.get(socket.shape()), 0, 0,
-                    0, 0, 8, 8, 8, 8
-            );
+            texture = SHAPE_RESOURCE_LOCATION_MAP_GRAYSCALE.get(gearSocket.shape());
         }
+
+        guiGraphics.blit(RenderType.GUI_TEXTURED, texture, 0, 0,
+                0, 0, 8, 8, 8, 8
+        );
+
         pose.popPose();
     }
 
     private List<GearSocket> getSockets() {
-        List<GearSocket> sockets;
+        List<GearSocket> gearSockets;
         if (getIsShiftDown()) {
-            sockets = this.component.gearSocket();
+            gearSockets = this.component.gearSocket();
         } else {
-            sockets = this.component.getFilteredSockets();
+            gearSockets = this.component.getFilteredSockets();
         }
-        return sockets;
+        return gearSockets;
     }
 
-    public static Component getSocketDesc() {
-        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket");
+    public static MutableComponent getSocketsDescriptionComponent() {
+        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket").withStyle(ChatFormatting.GRAY);
     }
 
-    private List<AbstractModifierEffect> getModifierEffects(GearSocket socket) {
-        return socket.modifier().map(m -> m.modifier().value().getModifierEffects()).orElse(List.of());
+    public static MutableComponent getEmptySocketComponent() {
+        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket.empty")
+                .withStyle(ChatFormatting.DARK_GRAY);
     }
 
-    private int getLineCount(GearSocket socket) {
-        return socket.modifier().map(m -> {
-            int e = m.modifier().value().getModifierEffects().size();
-            if (e == 0) {
+    public static MutableComponent getUnknownSocketComponent() {
+        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket.unknown")
+                .withStyle(ChatFormatting.DARK_GRAY);
+    }
+
+    public static MutableComponent getSocketCountComponent(int used, int total) {
+        return Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".socket.count", used, total)
+                .withStyle(ChatFormatting.DARK_GRAY);
+    }
+
+    private List<AbstractModifierEffect> getModifierEffects(GearSocket gearSocket) {
+        return gearSocket.modifier().map(modifierInstance -> modifierInstance.modifier().value().getModifierEffects()).orElse(List.of());
+    }
+
+    private int getLineCount(GearSocket gearSocket) {
+        return gearSocket.modifier().map(modifierInstance -> {
+            int effectCount = modifierInstance.modifier().value().getModifierEffects().size();
+            if (effectCount == 0) {
                 return 1;
             }
-            return e;
+            return effectCount;
         }).orElse(0);
     }
 
@@ -248,7 +264,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT);
     }
 
-    public record GearSocketComponent(ItemStack socketed, List<GearSocket> gearSocket) implements TooltipComponent {
+    public record GearSocketComponent(ItemStack itemStack, List<GearSocket> gearSocket) implements TooltipComponent {
         public List<GearSocket> getFilteredSockets() {
             return this.gearSocket.stream().filter(socket -> socket.runegem().isPresent()).collect(Collectors.toList());
         }

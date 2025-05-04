@@ -156,8 +156,11 @@ public class ModLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Rift Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
-        add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
-        add("tooltip." + WanderersOfTheRift.MODID + ".implicit-", "Implicit: ");
+        add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets:");
+        add("tooltip." + WanderersOfTheRift.MODID + ".socket.count", "[%s/%s]");
+        add("tooltip." + WanderersOfTheRift.MODID + ".socket.empty", "(Unused Socket)");
+        add("tooltip." + WanderersOfTheRift.MODID + ".socket.unknown", "???");
+        add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
 
         add("subtitles." + WanderersOfTheRift.MODID + ".rift_open", "Rift Opens");
