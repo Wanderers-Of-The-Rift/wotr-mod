@@ -54,7 +54,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     // Server
     public RuneAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, boolean isServer,
-                         Container container) {
+            Container container) {
         super(ModMenuTypes.RUNE_ANVIL_MENU.get(), containerId);
         this.playerInventory = playerInventory;
         this.access = access;
