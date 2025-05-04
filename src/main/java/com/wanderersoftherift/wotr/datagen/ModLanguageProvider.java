@@ -78,7 +78,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add("block." + WanderersOfTheRift.MODID + ".processor_block_5", "Processor Block 5 [Alt Floor]");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_6", "Processor Block 6 [Planks]");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_7", "Processor Block 7 [Bricks]");
-        add("block." + WanderersOfTheRift.MODID + ".processor_block_8", "Processor Block 8");
+        add("block." + WanderersOfTheRift.MODID + ".processor_block_8", "Processor Block 8 [Alt Path]");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_9", "Processor Block 9");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_10", "Processor Block 10");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_11", "Processor Block 11");
