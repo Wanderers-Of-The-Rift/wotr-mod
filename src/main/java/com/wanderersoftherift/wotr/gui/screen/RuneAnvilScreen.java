@@ -77,7 +77,10 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
                     .map((component) -> component.getHeight(this.font))
                     .reduce(0, Integer::sum) + 8;
 
-            if (width > this.leftPos) return; // don't show tooltips if they would be wider than the available space
+            if (width > this.leftPos) {
+                return;
+            }
+            ; // don't show tooltips if they would be wider than the available space
 
             int leftMiddle = this.leftPos / 2;
             int rightMiddle = this.leftPos + this.imageWidth + leftMiddle;
