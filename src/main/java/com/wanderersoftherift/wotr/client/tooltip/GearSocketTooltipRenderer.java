@@ -29,10 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-//TODO: Get rid of literals
-//TODO: Fix the getWidth() method
-//TODO: Cleanup
-//TODO: Icons for modifiers
 @SuppressWarnings("DataFlowIssue")
 public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     private static final int SOCKET_LINE_HEIGHT = 10;
@@ -257,6 +253,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         for (GearSocket gearSocket : this.getSockets()) {
             List<AbstractModifierEffect> modifiers = getModifierEffects(gearSocket);
+            //TODO: Icons for modifiers
 
             renderSocketIcon(guiGraphics, pose, x, y, gearSocket);
 
