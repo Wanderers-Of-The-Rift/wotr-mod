@@ -36,7 +36,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             new Vector2i(33, 101), new Vector2i(33, 51));
     private static final Vector2i GEAR_SLOT_POSITION = new Vector2i(80, 76);
     private static final Modifier PREVIEW_TOOLTIP_DUMMY_MODIFIER = new Modifier(0, List.of());
-    private static final Holder<Modifier> PREVIEW_TOOLTIP_DUMMY_MODIFIER_HOLDER = Holder.direct(PREVIEW_TOOLTIP_DUMMY_MODIFIER);
+    private static final Holder<Modifier> PREVIEW_TOOLTIP_DUMMY_MODIFIER_HOLDER = Holder
+            .direct(PREVIEW_TOOLTIP_DUMMY_MODIFIER);
     private final List<Slot> playerInventorySlots = new ArrayList<>();
     private final List<RunegemSlot> socketSlots = new ArrayList<>();
     private final Inventory playerInventory;
@@ -190,7 +191,9 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
 
-                GearSocket newSocket = new GearSocket(runegemData.shape(), Optional.of(ModifierInstance.of(PREVIEW_TOOLTIP_DUMMY_MODIFIER_HOLDER, RandomSource.create())), Optional.of(runegemData));
+                GearSocket newSocket = new GearSocket(runegemData.shape(),
+                        Optional.of(ModifierInstance.of(PREVIEW_TOOLTIP_DUMMY_MODIFIER_HOLDER, RandomSource.create())),
+                        Optional.of(runegemData));
                 previewSockets.add(newSocket);
             }
         }

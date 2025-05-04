@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.mixin.TrialSpawnerAccessor;
 import com.wanderersoftherift.wotr.mixin.TrialSpawnerBlockEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -17,18 +16,21 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.mixins.BlockEntityTypeAccessor;
 import org.jetbrains.annotations.Nullable;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.TRIAL_SPAWNER;
 
 public class TrialSpawnerProcessor extends StructureProcessor {
-    private  static PlayerDetector RIFT_PLAYERS = (level, entitySelector, pos, maxDistance, requiresLineOfSight) -> entitySelector.getPlayers(
-                    level, p_390338_ -> p_390338_.blockPosition().closerThan(pos, maxDistance) && !p_390338_.isCreative() && !p_390338_.isSpectator()
-            )
-            .stream()
-            .map(Entity::getUUID)
-            .toList();
+    private static PlayerDetector RIFT_PLAYERS = (
+            level,
+            entitySelector,
+            pos,
+            maxDistance,
+            requiresLineOfSight) -> entitySelector.getPlayers(
+            level,
+            p_390338_ -> p_390338_.blockPosition().closerThan(pos, maxDistance) && !p_390338_.isCreative()
+                    && !p_390338_.isSpectator()
+    ).stream().map(Entity::getUUID).toList();
     public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
             .group(TrialSpawnerConfig.CODEC.fieldOf("config").forGetter(TrialSpawnerProcessor::getSpawnerConfig)
             ).apply(builder, TrialSpawnerProcessor::new));
@@ -71,13 +73,7 @@ public class TrialSpawnerProcessor extends StructureProcessor {
         CompoundTag nbt = blockInfo.nbt();
         blockEntity.loadWithComponents(nbt, world.registryAccess());
         TrialSpawner trialSpawner = new TrialSpawner(
-                spawnerConfig,
-                spawnerConfig,
-                new TrialSpawnerData(),
-                72000,
-                9,
-                blockEntity,
-                RIFT_PLAYERS,
+                spawnerConfig, spawnerConfig, new TrialSpawnerData(), 72_000, 9, blockEntity, RIFT_PLAYERS,
                 PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
         trialSpawner.getData().reset();
         ((TrialSpawnerBlockEntityAccessor) blockEntity).setTrialSpawner(trialSpawner);

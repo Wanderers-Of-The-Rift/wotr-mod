@@ -66,10 +66,16 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
     private void renderItemPreviewSingle(@NotNull GuiGraphics guiGraphics, ItemStack itemStack, boolean right) {
         if (!itemStack.isEmpty()) {
             List<Component> tooltip = this.getTooltipFromContainerItem(itemStack);
-            List<ClientTooltipComponent> clientTooltip = ClientHooks.gatherTooltipComponents(itemStack, tooltip, 0, this.width, this.height, this.font);
+            List<ClientTooltipComponent> clientTooltip = ClientHooks.gatherTooltipComponents(itemStack, tooltip, 0,
+                    this.width, this.height, this.font);
 
-            int width = clientTooltip.stream().map((component) -> component.getWidth(this.font)).max(Integer::compareTo).orElse(0) + 8;
-            int height = clientTooltip.stream().map((component) -> component.getHeight(this.font)).reduce(0, Integer::sum) + 8;
+            int width = clientTooltip.stream()
+                    .map((component) -> component.getWidth(this.font))
+                    .max(Integer::compareTo)
+                    .orElse(0) + 8;
+            int height = clientTooltip.stream()
+                    .map((component) -> component.getHeight(this.font))
+                    .reduce(0, Integer::sum) + 8;
 
             if (width > this.leftPos) return; // don't show tooltips if they would be wider than the available space
 

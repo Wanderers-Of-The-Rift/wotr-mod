@@ -7,35 +7,27 @@ import java.util.List;
 
 public class ColorUtil {
     public static final List<String> RAINBOW = Arrays.asList(
-            "#FF0000",
-            "#FF7F00",
-            "#FFFF00",
-            "#00FF00",
-            "#0000FF",
-            "#4B0082",
-            "#8B00FF"
+            "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8B00FF"
     );
-
-
 
     public static int blendColors(int firstColor, int secondColor, float firstWeight) {
         float weight1 = Mth.clamp(firstWeight, 0F, 1F);
         float weight2 = 1F - weight1;
 
         int alpha1 = (firstColor >>> 24) & 0xFF;
-        int red1   = (firstColor >>> 16) & 0xFF;
-        int green1 = (firstColor >>> 8)  & 0xFF;
-        int blue1  = firstColor & 0xFF;
+        int red1 = (firstColor >>> 16) & 0xFF;
+        int green1 = (firstColor >>> 8) & 0xFF;
+        int blue1 = firstColor & 0xFF;
 
         int alpha2 = (secondColor >>> 24) & 0xFF;
-        int red2   = (secondColor >>> 16) & 0xFF;
+        int red2 = (secondColor >>> 16) & 0xFF;
         int green2 = (secondColor >>> 8) & 0xFF;
-        int blue2  = secondColor & 0xFF;
+        int blue2 = secondColor & 0xFF;
 
         int blendedAlpha = Mth.clamp(Math.round(alpha1 * weight1 + alpha2 * weight2), 0, 255);
-        int blendedRed   = Mth.clamp(Math.round(red1 * weight1 + red2 * weight2), 0, 255);
+        int blendedRed = Mth.clamp(Math.round(red1 * weight1 + red2 * weight2), 0, 255);
         int blendedGreen = Mth.clamp(Math.round(green1 * weight1 + green2 * weight2), 0, 255);
-        int blendedBlue  = Mth.clamp(Math.round(blue1 * weight1 + blue2 * weight2), 0, 255);
+        int blendedBlue = Mth.clamp(Math.round(blue1 * weight1 + blue2 * weight2), 0, 255);
 
         return (blendedAlpha << 24) | (blendedRed << 16) | (blendedGreen << 8) | blendedBlue;
     }
