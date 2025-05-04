@@ -174,7 +174,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         if (getIsShiftDown()) {
             MutableComponent socketCountComponent = getSocketCountComponent(usedSockets, totalSockets);
-            font.drawInBatch(socketCountComponent, x + font.width(getSocketsDescriptionComponent()) + 4 + (totalSockets * 10 - 2) + 4, y,
+            font.drawInBatch(socketCountComponent,
+                    x + font.width(getSocketsDescriptionComponent()) + 4 + (totalSockets * 10 - 2) + 4, y,
                     ChatFormatting.DARK_GRAY.getColor(), true, matrix4f, bufferSource, Font.DisplayMode.NORMAL,
                     ChatFormatting.BLACK.getColor(), 0x00F000F0);
         }
@@ -185,15 +186,15 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             List<AbstractModifierEffect> effects = getModifierEffects(gearSocket);
 
             if (gearSocket.isEmpty()) {
-                font.drawInBatch(getEmptySocketComponent(), x + 10, y - 2, ChatFormatting.DARK_GRAY.getColor(), true, matrix4f,
-                        bufferSource, Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
+                font.drawInBatch(getEmptySocketComponent(), x + 10, y - 2, ChatFormatting.DARK_GRAY.getColor(), true,
+                        matrix4f, bufferSource, Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
                 y += SOCKET_LINE_HEIGHT;
                 continue;
             }
 
             if (effects.isEmpty()) {
-                font.drawInBatch(getUnknownSocketComponent(), x + 10, y - 2, ChatFormatting.DARK_GRAY.getColor(), true, matrix4f, bufferSource,
-                        Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
+                font.drawInBatch(getUnknownSocketComponent(), x + 10, y - 2, ChatFormatting.DARK_GRAY.getColor(), true,
+                        matrix4f, bufferSource, Font.DisplayMode.NORMAL, ChatFormatting.BLACK.getColor(), 0x00F000F0);
                 y += SOCKET_LINE_HEIGHT;
                 continue;
             }
@@ -278,8 +279,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             texture = SHAPE_RESOURCE_LOCATION_MAP_GRAYSCALE.get(gearSocket.shape());
         }
 
-        guiGraphics.blit(RenderType.GUI_TEXTURED, texture, 0, 0,
-                0, 0, 8, 8, 8, 8
+        guiGraphics.blit(RenderType.GUI_TEXTURED, texture, 0, 0, 0, 0, 8, 8, 8, 8
         );
 
         pose.popPose();
@@ -315,7 +315,9 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     }
 
     private List<AbstractModifierEffect> getModifierEffects(GearSocket gearSocket) {
-        return gearSocket.modifier().map(modifierInstance -> modifierInstance.modifier().value().getModifierEffects()).orElse(List.of());
+        return gearSocket.modifier()
+                .map(modifierInstance -> modifierInstance.modifier().value().getModifierEffects())
+                .orElse(List.of());
     }
 
     private int getLineCount(GearSocket gearSocket) {
