@@ -74,14 +74,86 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public int getWidth(@NotNull Font font) {
-        // simulate renderText and renderImage to get the width
-        int width = font.width(getSocketsDescriptionComponent()) + 10; // 10 for the padding
+        int maxWidth = 0;
+
+        // Calculate width of the header line (sockets description + icons + count)
+        int headerWidth = font.width(getSocketsDescriptionComponent()) + 4;
+        headerWidth += this.component.gearSocket().size() * 10; // Socket icons (8px wide + 2px spacing)
+
+        if (getIsShiftDown()) {
+            // Add the socket count text
+            int usedSockets = (int) this.component.gearSocket()
+                    .stream()
+                    .filter(socket -> socket.runegem().isPresent())
+                    .count();
+            int totalSockets = this.component.gearSocket().size();
+            MutableComponent socketCountComponent = getSocketCountComponent(usedSockets, totalSockets);
+            headerWidth += 4 + font.width(socketCountComponent); // 4px spacing + text width
+        }
+
+        maxWidth = Math.max(maxWidth, headerWidth);
+
+        // Calculate width for each socket line and its modifiers
         for (GearSocket gearSocket : this.getSockets()) {
-            if (gearSocket.modifier().isPresent()) {
-                width += 10; // 10 for the icon
+            int socketLineWidth = 10; // Icon width + margin
+
+            if (gearSocket.isEmpty()) {
+                socketLineWidth += font.width(getEmptySocketComponent());
+                maxWidth = Math.max(maxWidth, socketLineWidth);
+                continue;
+            }
+
+            List<AbstractModifierEffect> effects = getModifierEffects(gearSocket);
+
+            if (effects.isEmpty()) {
+                socketLineWidth += font.width(getUnknownSocketComponent());
+                maxWidth = Math.max(maxWidth, socketLineWidth);
+                continue;
+            }
+
+            // Calculate width for each effect line
+            int modifierTier = gearSocket.modifier().map(m -> m.modifier().value().getTier()).orElse(0);
+
+            for (AbstractModifierEffect effect : effects) {
+                MutableComponent lineComponent = Component.empty();
+                TooltipComponent tooltipComponent = effect.getTooltipComponent(ItemStack.EMPTY,
+                        gearSocket.modifier().map(ModifierInstance::roll).orElse(0.0F), ChatFormatting.AQUA);
+
+                if (tooltipComponent instanceof ImageComponent img) {
+                    lineComponent.append(Component.literal(img.base().getString()));
+                }
+
+                int effectWidth = font.width(lineComponent);
+
+                if (getIsShiftDown()) {
+                    MutableComponent detailsComponent = Component.empty();
+                    if (effect instanceof AttributeModifierEffect attributeEffect) {
+                        if (attributeEffect.getOperation() == AttributeModifier.Operation.ADD_VALUE) {
+                            detailsComponent = Component
+                                    .literal(" (T" + modifierTier + " : " + attributeEffect.getMinimumRoll() + " - "
+                                            + attributeEffect.getMaximumRoll() + ")")
+                                    .withStyle(ChatFormatting.DARK_GRAY);
+                        } else if (attributeEffect.getOperation() == AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                || attributeEffect.getOperation() == AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) {
+                            detailsComponent = Component
+                                    .literal(" (T" + modifierTier + " : "
+                                            + (int) (attributeEffect.getMinimumRoll() * 100) + "% - "
+                                            + (int) (attributeEffect.getMaximumRoll() * 100) + "%)")
+                                    .withStyle(ChatFormatting.DARK_GRAY);
+                        }
+                    } else {
+                        detailsComponent = Component.literal(" (T " + modifierTier + ")")
+                                .withStyle(ChatFormatting.DARK_GRAY);
+                    }
+                    effectWidth += font.width(detailsComponent);
+                }
+
+                socketLineWidth = Math.max(socketLineWidth, 10 + effectWidth); // 10px for icon + effect text width
+                maxWidth = Math.max(maxWidth, socketLineWidth);
             }
         }
-        return width;
+
+        return maxWidth;
     }
 
     @Override
