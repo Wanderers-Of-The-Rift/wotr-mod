@@ -253,7 +253,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         for (GearSocket gearSocket : this.getSockets()) {
             List<AbstractModifierEffect> modifiers = getModifierEffects(gearSocket);
-            //TODO: Icons for modifiers
+            // TODO: Icons for modifiers
 
             renderSocketIcon(guiGraphics, pose, x, y, gearSocket);
 
