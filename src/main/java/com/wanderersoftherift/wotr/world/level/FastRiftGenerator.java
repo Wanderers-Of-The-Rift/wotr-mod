@@ -135,7 +135,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         if (layout==null || roomGenerator==null) {
-            layout = new ChaoticRiftLayout(layerCount-2, new RoomRandomizerImpl());
+            layout = new ChaoticRiftLayout(layerCount-2, new RoomRandomizerImpl(serverLevel.getServer()));
             roomGenerator = new RiftRoomGenerator();
         }
         var perimeterBlock = customBlock;
@@ -204,7 +204,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         return new NoiseColumn(0, new BlockState[]{AIR.defaultBlockState()});
     }
 
-    @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {//todo more debug info: used template and placement, performance, etc.
+    @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
         if (layout!=null){
             var currentSpace = layout.getChunkSpace(SectionPos.of(pos), null);
             info.add("current space");
@@ -213,6 +213,9 @@ public class FastRiftGenerator extends ChunkGenerator {
             } else {
                 info.add("origin: " + currentSpace.origin().getX() + " " + currentSpace.origin().getY() + " " + currentSpace.origin().getZ());
                 info.add("size: " + currentSpace.size().getX() + " " + currentSpace.size().getY() + " " + currentSpace.size().getZ());
+                info.add("transform: " + currentSpace.templateTransform().x() + " " + currentSpace.templateTransform().z() + " " + currentSpace.templateTransform().diagonal());
+                var template = currentSpace.template();
+                if(template!=null) info.add("room base template: " + template.identifier());
             }
         }
         info.add("performance");

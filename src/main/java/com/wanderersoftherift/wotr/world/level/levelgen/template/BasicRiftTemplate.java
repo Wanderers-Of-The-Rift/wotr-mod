@@ -21,9 +21,11 @@ public class BasicRiftTemplate implements RiftGeneratable {
     private final StructurePlaceSettings settings;
     private final HashMap<Vec3i, CompoundTag> tileEntities;
     private final List<StructureTemplate.JigsawBlockInfo> jigsaws;
+    private final String identifier;
 
 
-    public BasicRiftTemplate(BlockState[][] data, Vec3i size, StructurePlaceSettings settings, HashMap<Vec3i, CompoundTag> tileEntities, List<StructureTemplate.JigsawBlockInfo> jigsaws) {
+
+    public BasicRiftTemplate(BlockState[][] data, Vec3i size, StructurePlaceSettings settings, HashMap<Vec3i, CompoundTag> tileEntities, List<StructureTemplate.JigsawBlockInfo> jigsaws, String identifier) {
         this.data = data;
         this.size = size;
         this.settings = settings;
@@ -120,4 +122,7 @@ public class BasicRiftTemplate implements RiftGeneratable {
         }
     }
 
+    public String identifier() {
+        return identifier;
+    }
 }

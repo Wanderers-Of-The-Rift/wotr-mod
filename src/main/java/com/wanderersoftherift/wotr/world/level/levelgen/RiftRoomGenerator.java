@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -38,13 +37,16 @@ public class RiftRoomGenerator {
             var origin = processedRoom2.space.origin();
             var randomFactory = randomState.getOrCreateRandomFactory(WanderersOfTheRift.id("rift"));
             var randomSource = randomFactory.at(origin.getX(),origin.getY(),origin.getZ());
-            var mirrorInt = randomSource.nextInt(8);
-            var actualSize = processedRoom2.space.size().multiply(16).subtract(new Vec3i(1,1,1));
-            var template = RiftTemplates.random(world.getServer(), WanderersOfTheRift.id("rift/room_"+space.type().toString().toLowerCase()),((mirrorInt & 0b100) !=0? TripleMirror.DIAGONAL : TripleMirror.NONE).applyToPosition(actualSize,0,0),randomSource);//todo move template choice to layout
-
-            if(template!=null) {
-                RiftGeneratable.generate(template, processedRoom2, world, new Vec3i(1, 1, 1), new TripleMirror(mirrorInt), world.getServer(), randomSource);
+            var mirror = space.templateTransform();
+            if(mirror==null) {
+                var mirrorInt = randomSource.nextInt(8);
+                mirror = new TripleMirror(mirrorInt);
             }
+            var template = space.template();
+            if(template==null) {
+                throw new IllegalStateException("template should not be null");
+            }
+            RiftGeneratable.generate(template, processedRoom2, world, new Vec3i(1, 1, 1), mirror, world.getServer(), randomSource);
             processedRoom2.markAsComplete();
         }
         return processedRoom;

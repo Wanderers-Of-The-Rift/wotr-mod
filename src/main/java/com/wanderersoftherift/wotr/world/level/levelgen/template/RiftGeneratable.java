@@ -22,6 +22,8 @@ public interface RiftGeneratable {
 
     Vec3i size();
 
+    String identifier();
+
 
     public static void generate(RiftGeneratable generatable, RiftProcessedRoom destination, ServerLevel world, Vec3i placementShift, TripleMirror mirror, MinecraftServer server, RandomSource random){
 
@@ -30,7 +32,7 @@ public interface RiftGeneratable {
             if (isPoolBlacklisted(pool)) {
                 continue;
             }
-            var next = RiftTemplates.random(server,pool,null,random);
+            var next = RiftTemplates.random(server,pool,random);
             if(next==null) {
                 continue;
             }

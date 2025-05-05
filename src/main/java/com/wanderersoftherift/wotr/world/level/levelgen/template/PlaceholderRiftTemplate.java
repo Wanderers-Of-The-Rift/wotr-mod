@@ -83,4 +83,9 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
     public Vec3i size() {
         return size;
     }
+
+    @Override
+    public String identifier() {
+        return "wotr:builtin:placeholder_"+size.getX()+"x"+size.getY()+"x"+size.getZ();
+    }
 }
