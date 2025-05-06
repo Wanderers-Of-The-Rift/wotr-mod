@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.init.RegistryEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagEntry;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,10 +20,12 @@ public class ModAbilityTagsProvider extends TagsProvider<AbstractAbility> {
 
     @Override
     protected void addTags(HolderLookup.Provider lookupProvider) {
+        // spotless:off
         tag(ModTags.Abilities.RIFT_DROPS)
-                .add(ResourceKey.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("dash")))
-                .add(ResourceKey.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("fireball")))
-                .add(ResourceKey.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("heal")))
-                .add(ResourceKey.create(RegistryEvents.ABILITY_REGISTRY, WanderersOfTheRift.id("icicles")));
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("dash")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("fireball")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("heal")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("icicles")));
+        // spotless:on
     }
 }
