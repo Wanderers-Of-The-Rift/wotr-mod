@@ -23,15 +23,6 @@ public class RiftProcessedRoom {
     }
 
 
-    public RiftProcessedChunk getChunk(Vec3i sectionPos) {
-        try {
-            isComplete.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-        return data.get(sectionPos);
-    }
-
     public RiftProcessedChunk getAndRemoveChunk(Vec3i sectionPos) {
         try {
             isComplete.get();

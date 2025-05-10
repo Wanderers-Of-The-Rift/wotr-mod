@@ -29,8 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 
 public class RiftTemplates {
-    
-    private static final Map<String, List<RiftGeneratable>> RIFT_TEMPLATE_CACHE = new ConcurrentHashMap<>();
+
     private static final Map<String, FastWeightedList<RiftGeneratable>> RIFT_TEMPLATE_POOL_CACHE = new ConcurrentHashMap<>();
 
 
@@ -50,24 +49,6 @@ public class RiftTemplates {
                 .get(pool).map(it -> it.value().getShuffledTemplates(RandomSource.create(0))).orElse(Collections.emptyList());
         return startPool.stream().flatMap(it ->  fromPoolElement((SinglePoolElement) it, manager).stream()).toList();
     }
-
-    public static RiftGeneratable fromPoolElement(SinglePoolElement e, StructureTemplateManager manager, RandomSource random){
-        var template = ((AccessorSinglePoolElement) e).callGetTemplate(manager);
-        var id = ((TemplateIdLookup) manager).idForTemplate(template);
-        if (id==null) return null;
-
-        var templates = RIFT_TEMPLATE_CACHE.computeIfAbsent(id.toString(),(sid)->{
-            var processorsHolder = ((AccessorSinglePoolElement) e).getProcessors();
-            var palettes = ((AccessorStructureTemplate) template).getPalettes();
-            WanderersOfTheRift.LOGGER.debug("[" + Thread.currentThread() + "] processing template " + id + ", number of palettes: " + palettes.size());
-            return IntStream.range(0,palettes.size()).mapToObj((idx)->
-                    fromPalette(palettes.get(idx), template.getSize(),processorsHolder.value(),sid+":"+idx)
-            ).toList();
-        });
-        return templates.isEmpty() ? null : templates.get(random.nextInt(templates.size()));
-    }
-
-
 
     public static List<RiftGeneratable> fromPoolElement(SinglePoolElement e, StructureTemplateManager manager){
         var template = ((AccessorSinglePoolElement) e).callGetTemplate(manager);

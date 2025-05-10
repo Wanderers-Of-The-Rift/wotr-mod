@@ -158,26 +158,24 @@ public class ChaoticRiftLayout implements RiftLayout{
                     var spaceOffsetX = roomPosition.getX()+corridor.position().getX();
                     var spaceOffsetY = roomPosition.getY()+corridor.position().getY();
                     var spaceOffsetZ = roomPosition.getZ()+corridor.position().getZ();
-                    if(tangentDirection.getStepX()>0){
-                        spaceOffsetX += x;
-                    }else if (tangentDirection.getStepX()<0){
-                        spaceOffsetX -= width-1+x;
-                    }
                     spaceOffsetY += y;
-                    if(tangentDirection.getStepZ()>0){
-                        spaceOffsetZ += x;
-                    }else if (tangentDirection.getStepZ()<0){
-                        spaceOffsetZ -= x+width-1;
-                    }
-                    if(corridor.direction().getStepX()>0){
-                        spaceOffsetX+=1;
-                    }else if (corridor.direction().getStepX()<0){
-                        spaceOffsetX-=roomSize.getX();
-                    }
-                    if(corridor.direction().getStepZ()>0){
-                        spaceOffsetZ+=1;
-                    }else if (corridor.direction().getStepZ()<0){
-                        spaceOffsetZ-=roomSize.getZ();
+                    switch (corridor.direction()){
+                        case NORTH -> {
+                            spaceOffsetX += x;
+                            spaceOffsetZ-=roomSize.getZ();
+                        }
+                        case SOUTH -> {
+                            spaceOffsetX -= width-1+x;
+                            spaceOffsetZ+=1;
+                        }
+                        case WEST -> {
+                            spaceOffsetZ -= x+width-1;
+                            spaceOffsetX-=roomSize.getX();
+                        }
+                        case EAST -> {
+                            spaceOffsetZ += x;
+                            spaceOffsetX+=1;
+                        }
                     }
                     var result = space.offset(spaceOffsetX,spaceOffsetY,spaceOffsetZ);
                     return result;

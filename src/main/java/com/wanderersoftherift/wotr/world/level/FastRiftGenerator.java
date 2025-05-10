@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.ChaoticRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
@@ -43,6 +44,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 
+/*
+ * todo rift tier
+ */
+
 // https://wiki.fabricmc.net/tutorial:chunkgenerator
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -64,10 +69,10 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final AtomicInteger completedChunks = new AtomicInteger(0);
     private final AtomicInteger completedChunksInWindow = new AtomicInteger(0);
     private long generationStart = 0;
-    private AtomicLong lastChunkStart = new AtomicLong(0);
-
+    private final AtomicLong lastChunkStart = new AtomicLong(0);
     private RiftLayout layout = null;
     private RiftRoomGenerator roomGenerator = null;
+
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock) {
         super(biomeSource);
         this.layerCount = layerCount;
@@ -128,7 +133,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevel serverLevel, ServerLevelAccessor level){
 
         var threads = new ArrayList<Thread>();
-        if(false) {
+        if(false) { //for testing how quick is generation of empty world
             inFlightChunks.decrementAndGet();
             completedChunks.incrementAndGet();
             completedChunksInWindow.incrementAndGet();
@@ -139,13 +144,13 @@ public class FastRiftGenerator extends ChunkGenerator {
             roomGenerator = new RiftRoomGenerator();
         }
         var perimeterBlock = customBlock;
-        RiftSpace.placeInChunk(chunk,null, -1+layerCount /2, perimeterBlock);
-        RiftSpace.placeInChunk(chunk,null,- layerCount /2, perimeterBlock);
-        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount-2];
-        RiftSpace[] spaces = new RiftSpace[layerCount-2];
-        for (int i = 0; i < layerCount-2; i++) {
-            var position = new Vec3i(chunk.getPos().x, 1+i- layerCount /2, chunk.getPos().z);
-            var space = layout.getChunkSpace(position,randomState);
+        RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount/2, perimeterBlock);
+        RiftSpace.placePerimeterInChunk(chunk, null, -layerCount/2, perimeterBlock);
+        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount - 2];
+        RiftSpace[] spaces = new RiftSpace[layerCount - 2];
+        for (int i = 0; i < layerCount - 2; i++) {
+            var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount/2, chunk.getPos().z);
+            var space = layout.getChunkSpace(position, randomState);
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, serverLevel, randomState);
                 spaces[i] = space;
@@ -156,18 +161,18 @@ public class FastRiftGenerator extends ChunkGenerator {
 
             var space = spaces[i];
             if(space == null || space instanceof VoidRiftSpace){
-                RiftSpace.placeInChunk(chunk,space,1+i- layerCount /2, perimeterBlock);
-            }else if(generatedRoomChunkFuture!=null) {
+                RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount/2, perimeterBlock);
+            }else if(generatedRoomChunkFuture != null) {
                 try {
                     RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
 
                     if(generatedRoomChunk!=null) {
                         threads.add(Thread.startVirtualThread(()-> {
-                            RiftSpace.placeInRiftChunk(generatedRoomChunk, space, perimeterBlock);
+                            RiftSpace.placePerimeterInRiftChunk(generatedRoomChunk, space, perimeterBlock);
                             generatedRoomChunk.placeInWorld(chunk, level);
                         }));
                     }else {
-                        RiftSpace.placeInChunk(chunk,space,1+i- layerCount /2, perimeterBlock);
+                        RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount/2, perimeterBlock);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
