@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -39,6 +40,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
+    private final DataSlot canLevel;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL,
@@ -56,6 +58,9 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
         addStandardInventorySlots(playerInventory, 32, 154);
         addPlayerAbilitySlots(abilities, 4, 46);
+
+        canLevel = DataSlot.standalone();
+        addDataSlot(canLevel);
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -82,6 +87,18 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                                 AbilityUpgradePool.SELECTION_PER_LEVEL)
                         .toImmutable();
                 item.set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
+            }
+
+            if (item.isEmpty()) {
+                canLevel.set(0);
+            } else {
+                AbilityUpgradePool upgradePool = getUpgradePool();
+                Holder<AbstractAbility> ability = getAbility();
+                if (upgradePool.canLevelUp(level.registryAccess(), ability.value())) {
+                    canLevel.set(1);
+                } else {
+                    canLevel.set(0);
+                }
             }
         });
     }
@@ -131,19 +148,18 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      * @return Whether the ability could be leveled up (ignoring currency availability)
      */
     public boolean canLevelUp() {
-        AbilityUpgradePool pool = getUpgradePool();
-        if (pool != null) {
-            return pool.getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size();
-        }
-        return false;
+        return canLevel.get() == 1;
     }
 
     /**
      * @return How much currency is required for the next level
      */
     public int costForNextLevel() {
+        if (!canLevelUp()) {
+            return 0;
+        }
         AbilityUpgradePool pool = getUpgradePool();
-        if (pool != null) {
+        if (pool != null && pool.getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()) {
             return AbilityUpgradePool.COST_PER_LEVEL.getInt(pool.getChoiceCount());
         }
         return 65;
@@ -166,11 +182,17 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 return;
             }
             inputContainer.getItem(1).shrink(cost);
-            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL,
-                    pool.getMutable()
-                            .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
-                                    AbilityUpgradePool.SELECTION_PER_LEVEL)
-                            .toImmutable());
+            AbilityUpgradePool updatedPool = pool.getMutable()
+                    .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
+                            AbilityUpgradePool.SELECTION_PER_LEVEL)
+                    .toImmutable();
+            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL, updatedPool);
+
+            if (updatedPool.canLevelUp(serverLevel.registryAccess(), getAbility().value())) {
+                canLevel.set(1);
+            } else {
+                canLevel.set(0);
+            }
         });
     }
 
