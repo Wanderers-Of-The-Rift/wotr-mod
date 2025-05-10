@@ -9,46 +9,56 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.RandomState;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class RiftRoomGenerator {
 
-    private final ConcurrentHashMap<Vec3i, WeakReference<RiftProcessedRoom>> structureCache = new ConcurrentHashMap<>();
-
-    public Future<RiftProcessedChunk> getRoomChunk(Vec3i sectionPos, RoomRiftSpace space, ServerLevel world, RandomState randomState){
-        return CompletableFuture.supplyAsync(()->getOrCreateProcessedRoom(space, world,randomState),Thread::startVirtualThread).thenApply((it)->it.getChunk(sectionPos));
-    }
+    private final ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> structureCache = new ConcurrentHashMap<>();
 
     public Future<RiftProcessedChunk> getAndRemoveRoomChunk(Vec3i sectionPos, RoomRiftSpace space, ServerLevel world, RandomState randomState){
-        return CompletableFuture.supplyAsync(()->getOrCreateProcessedRoom(space, world,randomState),Thread::startVirtualThread).thenApply((it)->it.getAndRemoveChunk(sectionPos));
+        return getOrCreateFutureProcessedRoom(space, world, randomState).thenApply(it -> it.getAndRemoveChunk(sectionPos));
     }
 
-    private RiftProcessedRoom getOrCreateProcessedRoom(RoomRiftSpace space, ServerLevel world, RandomState randomState) {
-        var processedRoomWeak = structureCache.get(space.origin());
-        RiftProcessedRoom processedRoom;
-        if(processedRoomWeak!=null && ((processedRoom=processedRoomWeak.get())!=null)) return processedRoom;
-        var processedRoom2 = new RiftProcessedRoom(space);
-        do {
-            processedRoomWeak = structureCache.compute(space.origin(), (pos, old) -> (old == null || old.refersTo(null)) ? new WeakReference<>(processedRoom2) : old);
-        } while ((processedRoom=processedRoomWeak.get())==null);
-        if(processedRoom==processedRoom2) {
-            var origin = processedRoom2.space.origin();
-            var randomFactory = randomState.getOrCreateRandomFactory(WanderersOfTheRift.id("rift"));
-            var randomSource = randomFactory.at(origin.getX(),origin.getY(),origin.getZ());
-            var mirror = space.templateTransform();
-            if(mirror==null) {
-                var mirrorInt = randomSource.nextInt(8);
-                mirror = new TripleMirror(mirrorInt);
+    private CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(RoomRiftSpace space, ServerLevel world, RandomState randomState) {
+        var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
+        var processedRoomFuture = structureCache.compute(space.origin(), (key, oldFuture) -> {
+            if(oldFuture == null) return newFuture;
+            if(!oldFuture.isDone()) return oldFuture;
+            try {
+                var gn = oldFuture.get(0, TimeUnit.MICROSECONDS);
+                return gn.refersTo(null) ? newFuture : oldFuture;
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                throw new IllegalStateException("failed to immediately get result of completed future", e);
             }
-            var template = space.template();
-            if(template==null) {
-                throw new IllegalStateException("template should not be null");
-            }
-            RiftGeneratable.generate(template, processedRoom2, world, new Vec3i(1, 1, 1), mirror, world.getServer(), randomSource);
-            processedRoom2.markAsComplete();
+        });
+        if(processedRoomFuture == newFuture){
+            return CompletableFuture.supplyAsync(()-> {
+                var processedRoom2 = new RiftProcessedRoom(space);
+                var origin = processedRoom2.space.origin();
+                var randomFactory = randomState.getOrCreateRandomFactory(WanderersOfTheRift.id("rift"));
+                var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
+                var mirror = space.templateTransform();
+                if (mirror == null) {
+                    var mirrorInt = randomSource.nextInt(8);
+                    mirror = new TripleMirror(mirrorInt);
+                }
+                var template = space.template();
+                if (template == null) {
+                    throw new IllegalStateException("template should not be null");
+                }
+                RiftGeneratable.generate(template, processedRoom2, world, new Vec3i(1, 1, 1), mirror, world.getServer(), randomSource);
+                processedRoom2.markAsComplete();
+                newFuture.complete(new WeakReference<>(processedRoom2));
+                return processedRoom2;
+            }, Thread::startVirtualThread);
         }
-        return processedRoom;
+        var newResult = new CompletableFuture<RiftProcessedRoom>();
+        processedRoomFuture.thenAccept((weak) -> {
+            var value = weak.get();
+            if(value == null)
+                getOrCreateFutureProcessedRoom(space, world, randomState).thenAccept(newResult::complete);
+            else newResult.complete(value);
+        });
+        return newResult;
     }
 }
