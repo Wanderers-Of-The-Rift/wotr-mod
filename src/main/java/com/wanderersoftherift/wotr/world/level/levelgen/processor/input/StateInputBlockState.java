@@ -30,6 +30,11 @@ public class StateInputBlockState extends InputBlockState {
     }
 
     @Override
+    public boolean matchesBlockstateAssumingBlockEqual(BlockState blockState) {
+        return matchesBlockstate(blockState); //todo
+    }
+
+    @Override
     public Block block() {
         return getState().getBlock();
     }

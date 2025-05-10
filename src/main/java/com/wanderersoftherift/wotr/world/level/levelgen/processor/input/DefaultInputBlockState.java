@@ -33,6 +33,11 @@ public class DefaultInputBlockState extends InputBlockState {
     }
 
     @Override
+    public boolean matchesBlockstateAssumingBlockEqual(BlockState blockState) {
+        return true;
+    }
+
+    @Override
     public Block block() { return getBlock(); }
 
 }
