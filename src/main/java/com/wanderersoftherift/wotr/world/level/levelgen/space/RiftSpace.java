@@ -45,7 +45,7 @@ public interface RiftSpace {
                     corridor.position().getX() + space.origin().getX() == chunk.origin.getX() &&
                             corridor.position().getZ() + space.origin().getZ() == chunk.origin.getZ() &&
                             corridor.position().getY() + space.origin().getY() == level).toList();
-            var hasCorridorNorth = corridors.stream().anyMatch((it)->it.direction()== Direction.NORTH);
+            var hasCorridorNorth = corridors.stream().anyMatch((it)->it.direction()== Direction.NORTH);//todo bidirectional corridor check
             var hasCorridorWest = corridors.stream().anyMatch((it)->it.direction()== Direction.WEST);
             for (int y = level * 16; y < level * 16 + 16; y++) {
                 for (int x = 0; x < 16 && originRelativeZ <= 0; x++) {
@@ -73,5 +73,4 @@ public interface RiftSpace {
     List<RiftSpaceCorridor> corridors();
     TripleMirror templateTransform();
     @Nullable RiftGeneratable template();
-    //todo add information about template used in the room
 }

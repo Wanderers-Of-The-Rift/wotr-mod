@@ -183,7 +183,7 @@ public class BasicRiftTemplate implements RiftGeneratable {
                         nbt = emptyNBT;
                     }
                     if (settings != null) {
-                        blockState = ((RiftTemplateProcessor)JigsawReplacementProcessor.INSTANCE).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt,isVisible);
+                        blockState = ((RiftTemplateProcessor)JigsawReplacementProcessor.INSTANCE).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
                         List<StructureProcessor> processors = settings.getProcessors();
                         for (int k = 0; k < processors.size(); k++) {
                             var processor = processors.get(k);

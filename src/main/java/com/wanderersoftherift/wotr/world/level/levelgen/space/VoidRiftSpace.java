@@ -9,7 +9,7 @@ import java.util.List;
 public class VoidRiftSpace implements RiftSpace {
     @Override
     public Vec3i origin() {
-        return null;//todo?
+        return null;
     }
 
     @Override

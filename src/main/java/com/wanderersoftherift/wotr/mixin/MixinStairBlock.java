@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /*
-* Fix stair block mirroring since MOJANG apparently can't
+* Fix stair block mirroring since MOJANK apparently can't
 * */
 
 @Mixin(StairBlock.class)
