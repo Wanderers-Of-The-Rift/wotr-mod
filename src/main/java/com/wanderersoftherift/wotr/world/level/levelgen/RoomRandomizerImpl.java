@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 public class RoomRandomizerImpl implements RoomRandomizer {
 
     private static Pair<PhantomReference<MinecraftServer>, EnumMap<RoomRiftSpace.RoomType, RiftSpaceHolder>> cache;
-
     private final MinecraftServer server;
 
     public RoomRandomizerImpl(MinecraftServer server) {
@@ -105,12 +104,10 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         private final FastWeightedList<RoomRiftSpace>[] weightedListForSize = new FastWeightedList[64];
 
         public MultiSizeRiftSpaceRandomList(List<RiftGeneratable> templates, RoomConverter converter) {
-
             for (int i = 0; i < 64; i++) {
                 var desiredTemplateSize = new Vec3i((i & 0b11) + 1, ((i >> 2) & 0b11) + 1, ((i >> 4) & 0b11) + 1);
-                weightedListForSize[i]= FastWeightedList.byCountingDuplicates(templates.stream().flatMap(template -> converter.convertRoom(template, desiredTemplateSize)).toList(), space -> space.template().identifier());
+                weightedListForSize[i]= FastWeightedList.byCountingDuplicates(templates.stream().flatMap(template -> converter.convertRoom(template, desiredTemplateSize)).toList(), space -> new Pair(space.template().identifier(),space.templateTransform()));
             }
-
         }
 
         public RoomRiftSpace random(Vec3i maxSize, RandomSource random){
@@ -123,7 +120,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         private final FastWeightedList<RoomRiftSpace> weightedList;
 
         public MonoSizeRiftSpaceRandomList(List<RiftGeneratable> templates, RoomConverter converter) {
-            weightedList = FastWeightedList.byCountingDuplicates(templates.stream().flatMap(template -> converter.convertRoom(template,null)).toList(),space -> space.template().identifier());
+            weightedList = FastWeightedList.byCountingDuplicates(templates.stream().flatMap(template -> converter.convertRoom(template,null)).toList(),space -> new Pair(space.template().identifier(),space.templateTransform()));
         }
 
         public RoomRiftSpace random(Vec3i maxSize, RandomSource random){

@@ -111,7 +111,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         }
 
         lastChunkStart.updateAndGet((value)-> Math.max(value, time));
-        var level = ((AccessorStructureManager)structureManager).getLevel();
+        var level = (ServerLevelAccessor) ((AccessorStructureManager)structureManager).getLevel();
         ServerLevel serverLevel;
         if(level instanceof WorldGenRegion r){
             serverLevel=r.getLevel();
@@ -125,7 +125,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         return CompletableFuture.completedFuture(chunk);
     }
 
-    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevel serverLevel, LevelAccessor level){
+    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevel serverLevel, ServerLevelAccessor level){
 
         var threads = new ArrayList<Thread>();
         if(false) {

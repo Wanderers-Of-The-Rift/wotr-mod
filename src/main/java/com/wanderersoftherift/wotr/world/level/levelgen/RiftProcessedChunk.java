@@ -15,13 +15,14 @@ public class RiftProcessedChunk {
     public final BlockState[] blocks = new BlockState[4096];
     public final CompoundTag[] blockNBT = new CompoundTag[4096];
     public final RiftProcessedRoom parentRoom;
+    public final ArrayList<CompoundTag> entities = new ArrayList<>();
 
     public RiftProcessedChunk(Vec3i origin, RiftProcessedRoom parentRoom) {
         this.origin = origin;
         this.parentRoom = parentRoom;
     }
 
-    public void placeInWorld(ChunkAccess chunk, LevelAccessor level){
+    public void placeInWorld(ChunkAccess chunk, ServerLevelAccessor level){
         var mutablePosition = new BlockPos.MutableBlockPos();
         for (int index = 0; index < 4096; index++) {
             var block = blocks[index];
@@ -40,6 +41,16 @@ public class RiftProcessedChunk {
                 chunk.setBlockEntityNbt(nbt);
                 level.getBlockEntity(mutablePosition.move((origin.getX()<<4),0,(origin.getZ()<<4)));
             }
+        }
+        for (int i = 0; i < entities.size(); i++) {
+            var entityNBT = entities.get(i);
+            EntityType.create(entityNBT, level.getLevel(), EntitySpawnReason.STRUCTURE).ifPresent((entity)->{
+
+                if (entity instanceof Mob mob) {
+                    mob.finalizeSpawn(level, level.getCurrentDifficultyAt(BlockPos.containing(entity.position())), EntitySpawnReason.STRUCTURE, (SpawnGroupData)null);
+                }
+                level.addFreshEntityWithPassengers(entity);
+            });
         }
     }
 
