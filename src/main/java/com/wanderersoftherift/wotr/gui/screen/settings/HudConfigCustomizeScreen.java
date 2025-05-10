@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.gui.screen.settings;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
+import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
 import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -83,6 +85,8 @@ public class HudConfigCustomizeScreen extends Screen {
 
     @Override
     public void onClose() {
+        HudPresetManager.getInstance().updateCustom(minecraft.getConnection().registryAccess());
+        ClientConfig.HUD_PRESET.set(HudPresetManager.CUSTOM_ID.toString());
         Minecraft.getInstance().setScreen(new HudConfigOptionsScreen());
     }
 
