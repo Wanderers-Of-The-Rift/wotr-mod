@@ -25,11 +25,11 @@ public class BasicRiftTemplate implements RiftGeneratable {
 
 
 
-    public BasicRiftTemplate(BlockState[][] data, Vec3i size, StructurePlaceSettings settings, HashMap<Vec3i, CompoundTag> tileEntities, List<StructureTemplate.JigsawBlockInfo> jigsaws, String identifier) {
+    public BasicRiftTemplate(BlockState[][] data, Vec3i size, StructurePlaceSettings settings, HashMap<Vec3i, CompoundTag> tileEntities, List<StructureTemplate.JigsawBlockInfo> jigsaws, String identifier, List<StructureTemplate.StructureEntityInfo> entities) {
         this.data = data;
         this.size = size;
         this.settings = settings;
-        this.tileEntities = tileEntities;
+        this.entities = entities;
         this.jigsaws = jigsaws;
     }
 
@@ -113,12 +113,27 @@ public class BasicRiftTemplate implements RiftGeneratable {
                 }
            // }));
         }
-        for (var thread:threads){
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        //todo some alternative for StructureTemplate.finalizeProcessing
+
+        for (StructureTemplate.StructureEntityInfo it : entities) {
+            var newNbt = it.nbt.copy();
+            var position = mirror.applyToPosition(it.pos, size.getX(), size.getZ()).add(offset.getX(), offset.getY(), offset.getZ());
+            var blockPosition = mirror.applyToPosition(it.blockPos, size.getX()-1, size.getZ()-1).offset(offset.getX(), offset.getY(), offset.getZ());
+            var info = new StructureTemplate.StructureEntityInfo(position, new BlockPos((int) position.x, (int) position.y, (int) position.z), newNbt);
+            mirror.applyToEntity(newNbt);
+
+            if (settings != null) {
+                var original = new StructureTemplate.StructureEntityInfo(position, new BlockPos(blockPosition), newNbt);
+                info = JigsawReplacementProcessor.INSTANCE.processEntity(world, offset, original, info, settings, null);
+                for (var processor : settings.getProcessors()) {
+                    if (info == null) break;
+                    info = processor.processEntity(world, offset, original, info, settings, null);
+                }
+                if (info == null) continue;
             }
+            destination.addEntity(info);
+
+
         }
     }
 

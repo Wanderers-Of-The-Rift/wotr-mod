@@ -10,4 +10,7 @@ import java.util.List;
 public interface AccessorStructureTemplate {
     @Accessor
     List<StructureTemplate.Palette> getPalettes();
+
+    @Accessor
+    List<StructureTemplate.StructureEntityInfo> getEntityInfoList();
 }

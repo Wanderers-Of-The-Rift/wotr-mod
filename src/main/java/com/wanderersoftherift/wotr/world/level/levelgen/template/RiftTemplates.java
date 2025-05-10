@@ -76,14 +76,15 @@ public class RiftTemplates {
 
         var processorsHolder = ((AccessorSinglePoolElement) e).getProcessors();
         var palettes = ((AccessorStructureTemplate) template).getPalettes();
+        var entities = ((AccessorStructureTemplate)template).getEntityInfoList();
         var templates = IntStream.range(0, palettes.size()).mapToObj( idx ->
-                fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), id.toString()+":"+idx)
+                fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities, id.toString()+":"+idx)
         ).toList();
 
         return templates;
     }
 
-    public static RiftGeneratable fromPalette(StructureTemplate.Palette palette, Vec3i size, StructureProcessorList processors, String identifier){
+    public static RiftGeneratable fromPalette(StructureTemplate.Palette palette, Vec3i size, StructureProcessorList processors, List<StructureTemplate.StructureEntityInfo> entities, String identifier){
         int chunkCount = Math.ceilDiv(size.getX(), BasicRiftTemplate.CHUNK_WIDTH);
         var blockStates = new BlockState[chunkCount][BasicRiftTemplate.CHUNK_WIDTH * size.getY() * size.getZ()];
         var blockEntities = new HashMap<Vec3i, CompoundTag>();
@@ -110,8 +111,7 @@ public class RiftTemplates {
         var settings = new StructurePlaceSettings();
 
         processors.list().forEach(settings::addProcessor);
-        return new BasicRiftTemplate(blockStates, size, settings, blockEntities, palette.jigsaws(), identifier);
-
+        return new BasicRiftTemplate(blockStates, size, settings, blockEntities, palette.jigsaws(), identifier, entities);
     }
 
 }
