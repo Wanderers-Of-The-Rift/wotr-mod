@@ -62,7 +62,7 @@ public class AbilityUpgradePool {
      * The cost for unlocking each level
      */
     public static final IntList COST_PER_LEVEL = new IntArrayList(
-            new int[] { 0, 1, 1, 1, 2, 2, 3, 4, 5, 7}); //, 9, 12, 16, 21, 28 });
+            new int[] { 0, 1, 1, 1, 2, 2, 3, 4, 5, 7 }); // , 9, 12, 16, 21, 28 });
 
     protected final List<List<Holder<AbilityUpgrade>>> choices;
     protected final IntList selectedUpgrades;
@@ -143,9 +143,9 @@ public class AbilityUpgradePool {
         }
     }
 
-    public boolean canLevelUp(RegistryAccess registryAccess,
-                              AbstractAbility ability) {
-        return getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size() && !determineChoices(registryAccess, ability, choices).isEmpty();
+    public boolean canLevelUp(RegistryAccess registryAccess, AbstractAbility ability) {
+        return getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()
+                && !determineChoices(registryAccess, ability, choices).isEmpty();
     }
 
     /**
@@ -242,7 +242,8 @@ public class AbilityUpgradePool {
                 int count,
                 RandomSource random,
                 int optionCount) {
-            Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability, choices);
+            Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability,
+                    choices);
 
             for (int i = 0; i < count; i++) {
                 ObjectList<Holder<AbilityUpgrade>> upgradeSet = new ObjectArrayList<>(availableUpgrades.keySet());
