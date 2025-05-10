@@ -72,6 +72,10 @@
           "input_state": "minecraft:green_concrete",
           "output_steps": [
             {
+              "output_state": "minecraft:green_concrete",
+              "step_size": 0.0
+            },
+            {
               "output_state": {
                 "type": "wotr:blockstate",
                 "Name": "minecraft:oak_leaves",

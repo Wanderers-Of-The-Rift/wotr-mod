@@ -8,6 +8,8 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Processor
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedBlockstateEntry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.LevelReader;
@@ -24,7 +26,7 @@ import java.util.List;
 import static com.wanderersoftherift.wotr.init.ModProcessors.WEIGHTED_REPLACE;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 
-public class WeightedReplaceProcessor extends StructureProcessor {
+public class WeightedReplaceProcessor extends StructureProcessor implements RiftTemplateProcessor {
     public static final MapCodec<WeightedReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             WeightedBlockstateEntry.CODEC.listOf()
                     .fieldOf("output_list")
@@ -102,5 +104,20 @@ public class WeightedReplaceProcessor extends StructureProcessor {
 
     public InputBlockState getInputBlockState() {
         return inputBlockState;
+    }
+
+    @Override
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+        ProcessorUtil.getRandom(structureRandomType, new BlockPos(x,y,z), structurePos, BlockPos.ZERO/*rifts always start at portal room, this could be changed to room origin*/, world, seedAdjustment);
+        if (inputBlockState.matchesBlockstate(currentState)) {
+            return currentState;
+        }
+
+        BlockState newBlockState = getReplacementBlock(world);
+        if (newBlockState == null) {
+            return currentState;
+        }
+
+        return ProcessorUtil.copyState(currentState, newBlockState);
     }
 }

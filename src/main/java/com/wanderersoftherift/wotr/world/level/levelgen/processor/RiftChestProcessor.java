@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Structure
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedRiftChestTypeEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -41,7 +42,7 @@ import static net.minecraft.world.level.block.Blocks.AIR;
 import static net.minecraft.world.level.block.Blocks.CHEST;
 import static net.minecraft.world.level.block.ChestBlock.FACING;
 
-public class RiftChestProcessor extends StructureProcessor {
+public class RiftChestProcessor extends StructureProcessor implements RiftTemplateProcessor {
 
     public static final MapCodec<RiftChestProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             ResourceLocation.CODEC.optionalFieldOf("base_loot_table", ResourceLocation.parse("wotr:empty"))
@@ -154,5 +155,51 @@ public class RiftChestProcessor extends StructureProcessor {
     @Override
     protected StructureProcessorType<?> getType() {
         return RIFT_CHESTS.get();
+    }
+
+    @Override
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+
+        if ((currentState.is(RIFT_CHEST.get()) || currentState.is(CHEST)) && currentState.hasBlockEntity()) {
+            RandomSource random;
+            BlockPos pos = new BlockPos(x, y, z);
+            random = ProcessorUtil.getRandom(randomType, pos, structurePos, BlockPos.ZERO, world, SEED);
+            /*
+             * if (blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) { Direction connectedDirection =
+             * getConnectedDirection(blockInfo.state().rotate((LevelAccessor) world, pos, settings.getRotation()));
+             * random = ProcessorUtil.getRandom(randomType, pos.relative(connectedDirection), piecePos, structurePos,
+             * world, SEED); } else { random = ProcessorUtil.getRandom(randomType, pos, piecePos, structurePos, world,
+             * SEED); }
+             */
+            if (random.nextFloat() < rarity) {
+                RiftChestType chestType = getRandomChestType(random);
+                BlockState blockState = CHEST_TYPES.get(chestType).get().defaultBlockState();
+                blockState = copyProperties(blockState, currentState);
+                BlockEntity tileEntity = ((RiftChestEntityBlock) blockState.getBlock()).newBlockEntity(pos, blockState);
+                tileEntity.loadWithComponents(nbt, world.registryAccess());
+                ServerLevel serverWorld = ((ServerLevelAccessor) world).getLevel();
+                // if (!blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
+                ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType),
+                        /*serverWorld.random.nextLong()*/random.nextLong());
+                // }
+                var newNbt = tileEntity.saveWithId(world.registryAccess());
+                for (var key : nbt.getAllKeys().toArray()){
+                    if (!newNbt.getAllKeys().contains(key))nbt.remove((String) key);
+                }
+
+                for (var key : newNbt.getAllKeys()){
+                    nbt.put(key, newNbt.get(key));
+                }
+                return blockState;
+            } else {
+                BlockState blockState = replaceOutput.convertBlockState();
+
+                for (var key : nbt.getAllKeys().toArray()){
+                    nbt.remove((String) key);
+                }
+                return blockState;
+            }
+        }
+        return currentState;
     }
 }
