@@ -52,10 +52,12 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.FRAMED_RUNEGEM_GEODE, "Runegem Geode (Framed)");
         addItem(ModItems.ABILITY_HOLDER, "Empty Ability");
         addItem(ModItems.SKILL_THREAD, "Skill Thread");
+        addItem(ModItems.EXIT_PEARL, "Exit Pearl");
 
         addEntityType(ModEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(ModEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(ModEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
+        addEntityType(ModEntities.THROWN_EXIT_PEARL, "Exit Pearl");
 
         addEssenceType("animal", "Animal");
         addEssenceType("plant", "Plant");

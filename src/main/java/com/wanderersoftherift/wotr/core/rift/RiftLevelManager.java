@@ -177,11 +177,7 @@ public final class RiftLevelManager {
         return level;
     }
 
-    /**
-     * copy of {@link com.wanderersoftherift.wotr.item.riftkey.RiftKey::spawnRift(Level, Vec3, Direction)}
-     */
-    // TODO: clean it up (maybe move as static method to the entity or the spawner class)
-    private static void spawnRiftExit(Level level, Vec3 pos) {
+    public static void spawnRiftExit(Level level, Vec3 pos) {
         RiftPortalExitEntity rift = new RiftPortalExitEntity(ModEntities.RIFT_EXIT.get(), level);
         rift.setPos(pos);
         rift.setYRot(Direction.UP.toYRot());

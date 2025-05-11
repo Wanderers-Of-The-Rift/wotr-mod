@@ -105,6 +105,7 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.FRAMED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BASE_ABILITY_HOLDER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.SKILL_THREAD.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.EXIT_PEARL.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.itemModelOutput.accept(ModItems.ABILITY_HOLDER.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_ability_holder"),

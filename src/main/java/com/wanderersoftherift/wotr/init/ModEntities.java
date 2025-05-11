@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
+import com.wanderersoftherift.wotr.entity.projectile.ThrownExitPearl;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -23,4 +24,7 @@ public class ModEntities {
             .registerEntityType("rift_exit", RiftPortalExitEntity::new, MobCategory.MISC,
                     builder -> builder.sized(0.5f, 3f));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<ThrownExitPearl>> THROWN_EXIT_PEARL = ENTITIES
+            .registerEntityType("thrown_exit_pearl", ThrownExitPearl::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 3f));
 }

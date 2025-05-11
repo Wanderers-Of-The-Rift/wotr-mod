@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
+import com.wanderersoftherift.wotr.item.ExitPearlItem;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
@@ -66,6 +67,10 @@ public class ModItems {
     public static final DeferredItem<Item> SKILL_THREAD = ITEMS.register("skill_thread",
             registryName -> new SkillThread(new Item.Properties().stacksTo(64)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("skill_thread")))));
+
+    public static final DeferredItem<Item> EXIT_PEARL = ITEMS.register("exit_pearl",
+            registryName -> new ExitPearlItem(new Item.Properties().stacksTo(1)
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("exit_pearl")))));
 
     private static @NotNull DeferredItem<Item> registerRunegemGeode(RunegemTier tier) {
         String idString = tier.getName() + "_runegem_geode";

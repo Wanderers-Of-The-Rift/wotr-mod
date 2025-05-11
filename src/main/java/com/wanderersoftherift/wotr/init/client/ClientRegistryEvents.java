@@ -23,6 +23,7 @@ import com.wanderersoftherift.wotr.init.ModEntities;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionSpecialEffects;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -92,6 +93,7 @@ public final class ClientRegistryEvents {
         event.registerBlockEntityRenderer(ModBlockEntities.DITTO_BLOCK_ENTITY.get(), DittoBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RIFT_MOB_SPAWNER.get(),
                 RiftMobSpawnerBlockEntityRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWN_EXIT_PEARL.get(), ThrownItemRenderer::new);
     }
 
     @SubscribeEvent
