@@ -59,14 +59,14 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
         return generated;
     }
 
-    public void setGenerated(boolean generated) {
-        this.generated = generated;
-    }
-
     @Override
     public void tick() {
         if (generated) {
             if (!levelExists(getRiftDimensionId())) {
+                this.remove(RemovalReason.DISCARDED);
+                return;
+            }
+            if (!RiftData.get(RiftLevelManager.getRiftLevel(riftDimensionID)).getBannedPlayers().isEmpty()) {
                 this.remove(RemovalReason.DISCARDED);
                 return;
             }
@@ -88,7 +88,11 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
             player.displayClientMessage(Component.translatable(WanderersOfTheRift.MODID + ".rift.create.failed"), true);
             return;
         }
-        this.setGenerated(true);
+        generated = true;
+        if (RiftData.get(lvl).isBannedFromRift(player)) {
+            return;
+        }
+
         RiftData.get(lvl).addPlayer(player.getUUID());
 
         var riftSpawnCoords = getRiftSpawnCoords();
