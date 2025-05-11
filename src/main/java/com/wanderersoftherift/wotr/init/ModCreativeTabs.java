@@ -27,6 +27,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.CUT_RUNEGEM_GEODE);
                         output.accept(ModItems.POLISHED_RUNEGEM_GEODE);
                         output.accept(ModItems.FRAMED_RUNEGEM_GEODE);
+                        output.accept(ModItems.EXIT_PEARL);
                         ModItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
