@@ -4,11 +4,14 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.network.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.network.AbilitySlotsContentPayload;
 import com.wanderersoftherift.wotr.network.AbilitySlotsCooldownsPayload;
 import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.network.AbilityToggleStatePayload;
+import com.wanderersoftherift.wotr.network.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.LevelUpAbilityPayload;
 import com.wanderersoftherift.wotr.network.ManaChangePayload;
 import com.wanderersoftherift.wotr.network.SelectAbilitySlotPayload;
@@ -28,6 +31,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ModPayloadHandlers {
@@ -62,6 +66,9 @@ public class ModPayloadHandlers {
                 AbilityToggleStatePayload::handleOnClient);
         registrar.playToClient(ManaChangePayload.TYPE, ManaChangePayload.STREAM_CODEC,
                 ManaChangePayload::handleOnClient);
+
+        registrar.playToClient(BannedFromRiftPayload.TYPE, BannedFromRiftPayload.STREAM_CODEC,
+                BannedFromRiftPayload::handleOnClient);
     }
 
     @SubscribeEvent
@@ -69,6 +76,7 @@ public class ModPayloadHandlers {
         replicateAbilities(event.getEntity());
         replicateEffectMarkers(event.getEntity());
         replicateMana(event.getEntity());
+        replicateBannedRifts(event.getEntity());
     }
 
     @SubscribeEvent
@@ -90,6 +98,22 @@ public class ModPayloadHandlers {
         }
         PacketDistributor.sendToPlayer(serverPlayer,
                 new ManaChangePayload(serverPlayer.getData(ModAttachments.MANA).getAmount()));
+    }
+
+    private static void replicateBannedRifts(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        BannedFromRiftPayload payload = new BannedFromRiftPayload(serverPlayer.serverLevel()
+                .getServer()
+                .levelKeys()
+                .stream()
+                .map(x -> RiftLevelManager.getRiftLevel(x.location()))
+                .filter(Objects::nonNull)
+                .filter(x -> RiftData.get(x).isBannedFromRift(player))
+                .map(x -> x.dimension().location())
+                .toList());
+        PacketDistributor.sendToPlayer(serverPlayer, payload);
     }
 
     private static void replicateAbilities(Player player) {
