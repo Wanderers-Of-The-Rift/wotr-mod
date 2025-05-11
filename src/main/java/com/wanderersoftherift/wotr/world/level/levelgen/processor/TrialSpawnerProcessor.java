@@ -8,8 +8,8 @@ import com.wanderersoftherift.wotr.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.TrialSpawnerBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.trialspawner.PlayerDetector;
@@ -87,7 +87,7 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
 
         if (currentState.getBlock() instanceof TrialSpawnerBlock) {
             BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
@@ -104,7 +104,7 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
         return currentState; //todo implement with nbt (or maybe with TileEntities)
     }
 
-    private BlockState fixNbtReturnState(BlockEntity blockEntity, ServerLevel world, CompoundTag nbt, BlockState currentState){
+    private BlockState fixNbtReturnState(BlockEntity blockEntity, ServerLevelAccessor world, CompoundTag nbt, BlockState currentState){
 
         if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
 

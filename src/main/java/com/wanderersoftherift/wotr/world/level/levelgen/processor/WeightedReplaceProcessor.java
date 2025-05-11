@@ -9,10 +9,10 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Structure
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedBlockstateEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -107,7 +107,7 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
         ProcessorUtil.getRandom(structureRandomType, new BlockPos(x,y,z), structurePos, BlockPos.ZERO/*rifts always start at portal room, this could be changed to room origin*/, world, seedAdjustment);
         if (inputBlockState.matchesBlockstate(currentState)) {
             return currentState;

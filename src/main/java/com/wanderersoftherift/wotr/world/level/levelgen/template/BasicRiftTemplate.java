@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
@@ -116,7 +116,7 @@ public class BasicRiftTemplate implements RiftGeneratable {
 
     //what a mess...
     @Override
-    public void processAndPlace(RiftProcessedRoom destination, ServerLevel world, Vec3i placementShift, TripleMirror mirror){
+    public void processAndPlace(RiftProcessedRoom destination, ServerLevelAccessor world, Vec3i placementShift, TripleMirror mirror){
         var emptyNBT = new CompoundTag();
         var offset = new BlockPos(destination.space.origin().multiply(16)).offset(placementShift);
         var mutablePosition = new BlockPos.MutableBlockPos();
@@ -190,8 +190,9 @@ public class BasicRiftTemplate implements RiftGeneratable {
                             if (blockState == null) break;
                             if (!(processor instanceof RiftTemplateProcessor)) {
                                 //WanderersOfTheRift.LOGGER.debug("processor not rift processor: " + processor.getClass());
-                            } else
+                            } else {
                                 blockState = ((RiftTemplateProcessor) processor).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
+                            }
                         }
                         if (blockState == null) continue;
                     }

@@ -107,8 +107,6 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunk) {
-
-
         var time = System.currentTimeMillis();
         if (inFlightChunks.getAndIncrement()==0 && time-lastChunkStart.get()>3000) {
             generationStart = time;
@@ -117,20 +115,13 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         lastChunkStart.updateAndGet((value)-> Math.max(value, time));
         var level = (ServerLevelAccessor) ((AccessorStructureManager)structureManager).getLevel();
-        ServerLevel serverLevel;
-        if(level instanceof WorldGenRegion r){
-            serverLevel=r.getLevel();
-        } else if(level instanceof ServerLevel r){
-            serverLevel = r;
-        } else throw new IllegalStateException("trying to generate in non-server world");
 
-
-        runRiftGeneration(chunk,randomState,serverLevel,level);
+        runRiftGeneration(chunk, randomState, level);
 
         return CompletableFuture.completedFuture(chunk);
     }
 
-    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevel serverLevel, ServerLevelAccessor level){
+    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState,  ServerLevelAccessor level){
 
         var threads = new ArrayList<Thread>();
         if(false) { //for testing how quick is generation of empty world
@@ -140,7 +131,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         if (layout==null || roomGenerator==null) {
-            layout = new ChaoticRiftLayout(layerCount-2, new RoomRandomizerImpl(serverLevel.getServer()));
+            layout = new ChaoticRiftLayout(layerCount-2, new RoomRandomizerImpl(level.getServer()));
             roomGenerator = new RiftRoomGenerator();
         }
         var perimeterBlock = customBlock;
@@ -152,7 +143,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount/2, chunk.getPos().z);
             var space = layout.getChunkSpace(position, randomState);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, serverLevel, randomState);
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level, randomState);
                 spaces[i] = space;
             }
         }

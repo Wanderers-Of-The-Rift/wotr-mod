@@ -158,7 +158,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
 
         if ((currentState.is(RIFT_CHEST.get()) || currentState.is(CHEST)) && currentState.hasBlockEntity()) {
             RandomSource random;
@@ -177,7 +177,6 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 blockState = copyProperties(blockState, currentState);
                 BlockEntity tileEntity = ((RiftChestEntityBlock) blockState.getBlock()).newBlockEntity(pos, blockState);
                 tileEntity.loadWithComponents(nbt, world.registryAccess());
-                ServerLevel serverWorld = ((ServerLevelAccessor) world).getLevel();
                 // if (!blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
                 ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType),
                         /*serverWorld.random.nextLong()*/random.nextLong());

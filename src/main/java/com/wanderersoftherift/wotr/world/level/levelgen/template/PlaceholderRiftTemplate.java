@@ -9,7 +9,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
@@ -25,7 +25,7 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
     }
 
     @Override
-    public void processAndPlace(RiftProcessedRoom destination, ServerLevel world, Vec3i placementShift, TripleMirror mirror) {
+    public void processAndPlace(RiftProcessedRoom destination, ServerLevelAccessor world, Vec3i placementShift, TripleMirror mirror) {
         var themeProcessor = new ThemeProcessor(ThemePieceType.ROOM);
         var offset = new BlockPos(destination.space.origin().multiply(16)).offset(placementShift);
         var mutablePosition = new BlockPos.MutableBlockPos();

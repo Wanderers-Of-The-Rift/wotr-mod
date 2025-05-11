@@ -73,7 +73,7 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> result = processedBlockInfos;
 
-        for (StructureProcessor structureprocessor : getThemeProcessors(serverLevel, structurePos)) {
+        for (StructureProcessor structureprocessor : getThemeProcessors(serverLevel.getLevel(), structurePos)) {
             result = structureprocessor.finalizeProcessing(serverLevel, piecePos, structurePos, originalBlockInfos,
                     result, settings);
         }
@@ -121,8 +121,8 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
-        var processors = getThemeTemplateProcessors(world, structurePos);
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+        var processors = getThemeTemplateProcessors(world.getLevel(), structurePos);
 
         for (int i = 0; i < processors.size() && currentState!=null; i++) {
             currentState = processors.get(i).processBlockState(currentState, x, y, z, world, structurePos, nbt, isVisible);

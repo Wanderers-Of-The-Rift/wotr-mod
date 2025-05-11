@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -111,7 +112,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
     }
 
     @Override
-    public BlockState processBlockState(BlockState blockstate, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(BlockState blockstate, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
         Block block = blockstate.getBlock();
         var blockHash = hashBlock(block);
         List<Pair<InputBlockState, OutputSteps>> multiOutputState;

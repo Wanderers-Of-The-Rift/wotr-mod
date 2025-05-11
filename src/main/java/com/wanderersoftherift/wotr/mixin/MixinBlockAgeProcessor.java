@@ -5,9 +5,9 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Processor
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockAgeProcessor;
@@ -29,7 +29,7 @@ public abstract class MixinBlockAgeProcessor implements RiftTemplateProcessor {
     @Shadow @Nullable protected abstract BlockState maybeReplaceFullStoneBlock(RandomSource random);
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
         BlockPos blockpos = new BlockPos(x,y,z);
         RandomSource randomsource = ProcessorUtil.getRandom(StructureRandomType.PIECE,null, blockpos,null, world,0xab46158bL);
         BlockState blockstate1 = null;

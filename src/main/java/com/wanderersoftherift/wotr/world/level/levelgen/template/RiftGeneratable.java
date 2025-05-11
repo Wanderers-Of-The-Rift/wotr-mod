@@ -6,8 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public interface RiftGeneratable {
 
-    void processAndPlace(RiftProcessedRoom destination, ServerLevel world, Vec3i placementShift, TripleMirror mirror);
+    void processAndPlace(RiftProcessedRoom destination, ServerLevelAccessor world, Vec3i placementShift, TripleMirror mirror);
 
     Collection<StructureTemplate.JigsawBlockInfo> jigsaws();
 
@@ -25,7 +25,7 @@ public interface RiftGeneratable {
     String identifier();
 
 
-    public static void generate(RiftGeneratable generatable, RiftProcessedRoom destination, ServerLevel world, Vec3i placementShift, TripleMirror mirror, MinecraftServer server, RandomSource random){
+    public static void generate(RiftGeneratable generatable, RiftProcessedRoom destination, ServerLevelAccessor world, Vec3i placementShift, TripleMirror mirror, MinecraftServer server, RandomSource random){
 
         for (var jigsaw:generatable.jigsaws()){
             var pool = jigsaw.pool();
