@@ -258,7 +258,8 @@ public final class RiftLevelManager {
         level.getServer().registryAccess().lookupOrThrow(Registries.DIMENSION).get(level.dimension()).ifPresent(dim -> {
             if (level.getServer()
                     .registryAccess()
-                    .lookupOrThrow(Registries.DIMENSION) instanceof MappedRegistry<Level> mr && mr instanceof AccessorMappedRegistry<Level> accessorMappedRegistry) {
+                    .lookupOrThrow(Registries.DIMENSION) instanceof MappedRegistry<Level> mr) {
+                var accessorMappedRegistry = (AccessorMappedRegistry<Level>) mr;
                 Holder.Reference<Level> holder = accessorMappedRegistry.getByLocation().remove(id);
                 if (holder == null) {
                     WanderersOfTheRift.LOGGER.error("Failed to remove level from registry (null holder)");

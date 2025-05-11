@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
 
 import static com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity.RIFT_PLAYERS;
 import static com.wanderersoftherift.wotr.init.ModProcessors.TRIAL_SPAWNER;
@@ -90,33 +89,36 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
     @Override
     public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
 
-        if (currentState.getBlock() instanceof TrialSpawnerBlock block) {
+        if (currentState.getBlock() instanceof TrialSpawnerBlock) {
             BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
-            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(blockInfo.pos(),
+            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(new BlockPos(x, y, z),
                     blockState);
-            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
-                var newNbt = getBlockEntity(world, nbt, spawnerBlockEntity);
-                for (var key : nbt.getAllKeys().toArray()){
-                    if (!newNbt.getAllKeys().contains(key))nbt.remove((String) key);
-                }
-
-                for (var key : newNbt.getAllKeys()){
-                    nbt.put(key, newNbt.get(key));
-                }
-                return currentState.setValue(TrialSpawnerBlock.STATE, TrialSpawnerState.INACTIVE);
-            }
+            return fixNbtReturnState(blockEntity, world, nbt, blockState);
 
         }
 
-        if (blockInfo.state().getBlock() instanceof RiftMobSpawnerBlock) {
-            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockInfo.state().getBlock())
-                    .newBlockEntity(blockInfo.pos(), blockInfo.state());
-            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
-                return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
-                        blockInfo.state().setValue(RiftMobSpawnerBlock.STATE, TrialSpawnerState.INACTIVE),
-                        getBlockEntity(world, spawnerBlockEntity));
-            }
+        if (currentState.getBlock() instanceof RiftMobSpawnerBlock block) {
+            BlockEntity blockEntity = block.newBlockEntity(new BlockPos(x, y, z), currentState);
+            return fixNbtReturnState(blockEntity, world, nbt, currentState);
         }
         return currentState; //todo implement with nbt (or maybe with TileEntities)
+    }
+
+    private BlockState fixNbtReturnState(BlockEntity blockEntity, ServerLevel world, CompoundTag nbt, BlockState currentState){
+
+        if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
+
+            var newNbt = getBlockEntity(world, spawnerBlockEntity);
+            for (var key : nbt.getAllKeys().toArray()) {
+                if (!newNbt.getAllKeys().contains(key)) nbt.remove((String) key);
+            }
+
+            for (var key : newNbt.getAllKeys()) {
+                nbt.put(key, newNbt.get(key));
+            }
+            return currentState.setValue(RiftMobSpawnerBlock.STATE, TrialSpawnerState.INACTIVE);
+        } else {
+            return currentState;
+        }
     }
 }
