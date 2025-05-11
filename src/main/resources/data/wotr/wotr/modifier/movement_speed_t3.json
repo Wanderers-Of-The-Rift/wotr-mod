@@ -5,8 +5,8 @@
         "type": "wotr:attribute",
         "id": "wotr:movement_speed",
         "attribute": "movement_speed",
-        "min_roll": 0.5,
-        "max_roll": 0.6,
+        "min_roll": 0.08,
+        "max_roll": 0.1,
         "operation": "add_value"
       }
     ]

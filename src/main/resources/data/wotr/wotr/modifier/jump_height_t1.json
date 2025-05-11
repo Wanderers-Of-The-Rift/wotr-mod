@@ -5,8 +5,8 @@
         "type": "wotr:attribute",
         "id": "wotr:jump_height_t1",
         "attribute": "jump_strength",
-        "min_roll": 1,
-        "max_roll": 1,
+        "min_roll": 0.06,
+        "max_roll": 0.12,
         "operation": "add_value"
       },
       {
