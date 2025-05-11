@@ -1,9 +1,12 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
+import com.google.common.collect.ImmutableList;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftFinalProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftTemplateProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +16,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,7 +28,9 @@ public class BasicRiftTemplate implements RiftGeneratable {
 
     private final BlockState[][] data;
     private final Vec3i size;
-    private final StructurePlaceSettings settings;
+    private final List<StructureProcessor> entityProcessor;
+    private final List<RiftFinalProcessor> finalProcessors;
+    private final List<RiftTemplateProcessor> templateProcessors;
     private final List<StructureTemplate.StructureEntityInfo> entities;
     private final Map<Vec3i, CompoundTag> tileEntities;
     private final List<StructureTemplate.JigsawBlockInfo> jigsaws;
@@ -38,7 +44,27 @@ public class BasicRiftTemplate implements RiftGeneratable {
     public BasicRiftTemplate(BlockState[][] data, Vec3i size, StructurePlaceSettings settings, Map<Vec3i, CompoundTag> tileEntities, List<StructureTemplate.JigsawBlockInfo> jigsaws, String identifier, List<StructureTemplate.StructureEntityInfo> entities) {
         this.data = data;
         this.size = size;
-        this.settings = settings;
+        var templateProcessors = new ArrayList<RiftTemplateProcessor>();
+        var finalProcessors = new ArrayList<RiftFinalProcessor>();
+
+        for (StructureProcessor processor : settings.getProcessors()) {
+            var used = false;
+            if (processor instanceof RiftTemplateProcessor riftTemplateProcessor) {
+                templateProcessors.add(riftTemplateProcessor);
+                used = true;
+            }
+            if (processor instanceof RiftFinalProcessor riftTemplateProcessor) {
+                finalProcessors.add(riftTemplateProcessor);
+                used = true;
+            }
+            if (!used && !(processor instanceof NopProcessor)) WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+        }
+
+        this.templateProcessors = ImmutableList.copyOf(templateProcessors);
+        this.finalProcessors = ImmutableList.copyOf(finalProcessors);
+        this.entityProcessor = ImmutableList.copyOf(settings.getProcessors());
+
+
         this.entities = entities;
         this.jigsaws = jigsaws;
         this.identifier = identifier;
@@ -182,21 +208,13 @@ public class BasicRiftTemplate implements RiftGeneratable {
                     } else {
                         nbt = emptyNBT;
                     }
-                    if (settings != null) {
-                        blockState = ((RiftTemplateProcessor)JigsawReplacementProcessor.INSTANCE).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
-                        List<StructureProcessor> processors = settings.getProcessors();
-                        for (int k = 0; k < processors.size(); k++) {
-                            var processor = processors.get(k);
-                            if (blockState == null) break;
-                            if (!(processor instanceof RiftTemplateProcessor)) {
-                                //WanderersOfTheRift.LOGGER.debug("processor not rift processor: " + processor.getClass());
-                            } else {
-                                blockState = ((RiftTemplateProcessor) processor).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
-                            }
-                        }
-                        if (blockState == null) continue;
+                    blockState = ((RiftTemplateProcessor)JigsawReplacementProcessor.INSTANCE).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
+                    var processors = templateProcessors;
+                    for (int k = 0; k < processors.size() && blockState != null; k++) {
+                        blockState = processors.get(k).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
                     }
-
+                    if (blockState == null) continue;
+                    /*
                     if (xLastChunkPosition!=xChunkPosition || yLastChunkPosition != yChunkPosition || zLastChunkPosition != zChunkPosition || roomChunk == null){
                         xLastChunkPosition = xChunkPosition;
                         yLastChunkPosition = yChunkPosition;
@@ -209,17 +227,15 @@ public class BasicRiftTemplate implements RiftGeneratable {
                         }else {
                             roomChunk = (roomChunkHashTableCache[hash] = destination.getOrCreateChunk(new Vec3i(xChunkPosition,yChunkPosition,zChunkPosition)));
                         }
-                    };
+                    };*/
                     roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) <<4 ) | ((yWithinChunk) << 8)] = blockState;
 
                     if(!emptyNBT.isEmpty()) {
-                        if(nbt != null) {
-                            nbt = nbt.copy();
-                        }
+                        nbt = nbt.copy();
                         var added = emptyNBT.getAllKeys().toArray();
                         for (var key:added)emptyNBT.remove((String) key);
                     }
-                    if(nbt!=null && !nbt.isEmpty() && blockState.hasBlockEntity()) {
+                    if(!nbt.isEmpty() && blockState.hasBlockEntity()) {
                         roomChunk.blockNBT[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = nbt;
                     }
                 }
@@ -234,16 +250,20 @@ public class BasicRiftTemplate implements RiftGeneratable {
             var info = new StructureTemplate.StructureEntityInfo(position, new BlockPos((int) position.x, (int) position.y, (int) position.z), newNbt);
             mirror.applyToEntity(newNbt);
 
-            if (settings != null) {
-                var original = new StructureTemplate.StructureEntityInfo(position, new BlockPos(blockPosition), newNbt);
-                info = JigsawReplacementProcessor.INSTANCE.processEntity(world, offset, original, info, settings, null);
-                for (var processor : settings.getProcessors()) {
-                    if (info == null) break;
-                    info = processor.processEntity(world, offset, original, info, settings, null);
-                }
-                if (info == null) continue;
+            var original = new StructureTemplate.StructureEntityInfo(position, new BlockPos(blockPosition), newNbt);
+            info = JigsawReplacementProcessor.INSTANCE.processEntity(world, offset, original, info, null, null);
+            for (var processor : entityProcessor) {
+                if (info == null) break;
+                info = processor.processEntity(world, offset, original, info, null, null);
             }
+            if (info == null) continue;
+
             destination.addEntity(info);
+        }
+
+        var processors = finalProcessors;
+        for (int k = 0; k < processors.size(); k++) {
+            processors.get(k).finalizeRoomProcessing(destination, world, offset, size);
         }
     }
 
