@@ -39,7 +39,7 @@ public class RiftProcessedChunk {
             mutablePosition.set(x,y+16*origin.getY(),z);
             chunk.setBlockState(mutablePosition,block,false);
             var nbt = blockNBT[index];
-            if(nbt!=null && level!=null){
+            if(block.hasBlockEntity() && nbt!=null && level!=null){
                 nbt.putInt("x",x | (origin.getX()<<4));
                 nbt.putInt("y",y | (origin.getY()<<4));
                 nbt.putInt("z",z | (origin.getZ()<<4));
