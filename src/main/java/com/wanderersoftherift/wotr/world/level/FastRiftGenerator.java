@@ -70,8 +70,8 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final AtomicInteger completedChunksInWindow = new AtomicInteger(0);
     private long generationStart = 0;
     private final AtomicLong lastChunkStart = new AtomicLong(0);
-    private RiftLayout layout = null;
-    private RiftRoomGenerator roomGenerator = null;
+    public RiftLayout layout = null;
+    public RiftRoomGenerator roomGenerator = null;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock) {
         super(biomeSource);
