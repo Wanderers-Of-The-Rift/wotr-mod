@@ -26,7 +26,7 @@ public record S2CRiftMapperRoomPacket(MapRoom room) implements CustomPacketPaylo
 
     public static class S2CRiftMapperRoomPacketHandler implements IPayloadHandler<S2CRiftMapperRoomPacket> {
         public void handle(@NotNull S2CRiftMapperRoomPacket packet, @NotNull IPayloadContext context) {
-            MapData.addRoom(packet.room);
+            MapData.updateRoom(packet.room);
         }
     }
 }

@@ -61,7 +61,7 @@ public final class ClientRegistryEvents {
                         EnumSet.of(Direction.NORTH, Direction.EAST));
                 ArrayList<MapCell> cells = new ArrayList<>();
                 cells.add(cell);
-                MapData.addRoom(new MapRoom(x, 0, z, 1, 1, 1, cells));
+                MapData.updateRoom(new MapRoom(x, 0, z, 1, 1, 1, cells));
             }
             // }
         }
@@ -74,7 +74,7 @@ public final class ClientRegistryEvents {
         ArrayList<MapCell> cells = new ArrayList<>();
         cells.add(cell);
         cells.add(cell2);
-        MapData.addRoom(new MapRoom(4, 0, 4, 2, 1, 2, cells));
+        MapData.updateRoom(new MapRoom(4, 0, 4, 2, 1, 2, cells));
     }
 
     @SubscribeEvent

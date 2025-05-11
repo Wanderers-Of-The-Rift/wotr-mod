@@ -6,6 +6,7 @@ import org.joml.Vector3i;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class contains all map data and methods for manipulating it Rendering is separated into client.render package
@@ -18,41 +19,41 @@ public class MapData {
     public static HashMap<Vector3i, MapCell> cells = new HashMap<>();
     public static HashMap<Vector3i, MapRoom> rooms = new HashMap<>();
     public static HashMap<String, Player> playersByUUID = new HashMap<>();
-    public static HashMap<Vector3i, Player> players = new HashMap<>();
+    public static HashMap<Vector3i, List<Player>> players = new HashMap<>();
 
     static {
         int size = 6;
         MapCell cell3 = new MapCell(new Vector3f(-3,1,-3), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
         ArrayList<MapCell> new_cells3 = new ArrayList<>();
         new_cells3.add(cell3);
-        addRoom(new MapRoom(-3, 1, -3, 1, 1, 1, new_cells3));
+        updateRoom(new MapRoom(-3, 1, -3, 1, 1, 1, new_cells3));
         MapCell cell4 = new MapCell(new Vector3f(-3,-1,-3), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
         ArrayList<MapCell> new_cells4 = new ArrayList<>();
         new_cells4.add(cell4);
-        addRoom(new MapRoom(-3, -1, -3, 1, 1, 1, new_cells4));
+        updateRoom(new MapRoom(-3, -1, -3, 1, 1, 1, new_cells4));
         for (int x = -size/2; x <= size/2; x++) {
             for (int y = -size/2; y <= size/2; y++) {
                 MapCell cell = new MapCell(new Vector3f(x,0,y), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
                 ArrayList<MapCell> new_cells = new ArrayList<>();
                 new_cells.add(cell);
-                addRoom(new MapRoom(x, 0, y, 1, 1, 1, new_cells));
+                updateRoom(new MapRoom(x, 0, y, 1, 1, 1, new_cells));
             }
         }
         MapCell cell = new MapCell(new Vector3f(-3,0,-4), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
         ArrayList<MapCell> new_cells = new ArrayList<>();
         new_cells.add(cell);
-        addRoom(new MapRoom(-3, 0, -4, 1, 1, 1, new_cells));
+        updateRoom(new MapRoom(-3, 0, -4, 1, 1, 1, new_cells));
         MapCell cell2 = new MapCell(new Vector3f(-4,0,-3), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
         ArrayList<MapCell> new_cells2 = new ArrayList<>();
         new_cells2.add(cell2);
-        addRoom(new MapRoom(-4, 0, -3, 1, 1, 1, new_cells2));
+        updateRoom(new MapRoom(-4, 0, -3, 1, 1, 1, new_cells2));
 
         MapCell cella = new MapCell(new Vector3f(4, 0, 0), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
         MapCell cellb = new MapCell(new Vector3f(4, 0, 2), 1, 0, EnumSet.allOf(Direction.class), EnumSet.noneOf(Direction.class));
         ArrayList<MapCell> new_cellse = new ArrayList<>();
         new_cellse.add(cella);
         new_cellse.add(cellb);
-        addRoom(new MapRoom(4, -1, 0, 3, 3, 3, new_cellse));
+        updateRoom(new MapRoom(4, -1, 0, 3, 3, 3, new_cellse));
     }
 
     /**
@@ -61,23 +62,54 @@ public class MapData {
      * @param player
      */
     public static void updatePlayer(Player player) {
-        // check if the player is already in the map
-        if (players.containsKey(new Vector3i(player.x, player.y, player.z))) { // remove player if already exists to properly update everything
-            Player oldPlayer = players.get(new Vector3i(player.x, player.y, player.z));
-            removePlayer(oldPlayer);
+        // check if the player changed room
+        Player oldPlayer = playersByUUID.get(player.uuid);
+        if (oldPlayer != null) {
+            if (oldPlayer.x != player.x || oldPlayer.y != player.y || oldPlayer.z != player.z) {
+                // remove the old player from the map
+                removePlayer(oldPlayer);
+            } else {
+                // if the player is in the same room, no need to update position in map, just update the the rotations on existing object (to avoid having to find it inside the map hashmap
+                oldPlayer.pitch = player.pitch;
+                oldPlayer.yaw = player.yaw;
+                return;
+            }
         }
-        players.put(new Vector3i(player.x, player.y, player.z), player);
+        // add the new player
         playersByUUID.put(player.uuid, player);
+
+        List<Player> playrs = players.get(new Vector3i(player.x, player.y, player.z));
+        if (playrs == null) playrs = new ArrayList<>();
+        playrs.add(player);
     }
 
     /**
      * Used to remove player from the map
      *
-     * @param player
+     * @param player the player instance that should be removed
      */
     public static void removePlayer(Player player) {
-        players.remove(new Vector3i(player.x, player.y, player.z));
-        playersByUUID.remove(player.uuid);
+        Player plr = playersByUUID.remove(player.uuid); // store the return of remove for easier removal from list later
+
+        List<Player> playrs = players.get(new Vector3i(plr.x, plr.y, plr.z));
+        if (playrs != null) {
+            playrs.remove(plr);
+        }
+    }
+
+    /**
+     * Used to remove player from the map
+     *
+     * @param uuid the uuid of player that should be removed
+     */
+    public static void removePlayer(String uuid) {
+        Player plr = playersByUUID.remove(uuid); // store the return of remove for easier removal from list later
+        if (plr == null) return;
+
+        List<Player> playrs = players.get(new Vector3i(plr.x, plr.y, plr.z));
+        if (playrs != null) {
+            playrs.remove(plr);
+        }
     }
 
 
@@ -97,7 +129,7 @@ public class MapData {
      *
      * @param room
      */
-    public static void addRoom(MapRoom room) {
+    public static void updateRoom(MapRoom room) {
         // check if the room is already in the map
         if (rooms.containsKey(new Vector3i(room.x, room.y, room.z))) { // remove room if already exists to properly update everything
             MapRoom oldRoom = rooms.get(new Vector3i(room.x, room.y, room.z));
