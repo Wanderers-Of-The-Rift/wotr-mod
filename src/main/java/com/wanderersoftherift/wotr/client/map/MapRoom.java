@@ -76,8 +76,6 @@ public class MapRoom {
 
     // to solve the rendering the 1wide tunnels, on render, go through all the cells that have the possibility of having
     // tunnel and check their variable
-    // TODO: move rendering from MapCell to here, basically rewrite MapCell
-
     public MapRoom(int x, int y, int z, int sizeX, int sizeY, int sizeZ, ArrayList<MapCell> cells) {
         this(x, y, z, sizeX, sizeY, sizeZ, cells,
                 MapRoomEffects.getFlags(new MapRoomEffects.Flag[] { MapRoomEffects.Flag.DOTS }));
