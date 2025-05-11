@@ -40,7 +40,7 @@ public class OverrideVanillaLootModifier extends LootModifier {
         if (RiftData.isRift(serverlevel)) {
             return generatedLoot;
         }
-        if(!context.getQueriedLootTableId().getPath().contains("chests/")) {
+        if (!context.getQueriedLootTableId().getPath().contains("chests/")) {
             return generatedLoot;
         }
         ResourceKey<Level> dimension = context.getLevel().dimension();
