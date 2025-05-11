@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import javax.annotation.Nullable;
+import java.lang.ref.PhantomReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +33,25 @@ public class RiftTemplates {
 
     private static final Map<String, FastWeightedList<RiftGeneratable>> RIFT_TEMPLATE_POOL_CACHE = new ConcurrentHashMap<>();
 
+    private static PhantomReference<MinecraftServer> cachedServer;
+
 
     public static RiftGeneratable random(MinecraftServer server, ResourceLocation pool, RandomSource random){
         var cacheKey = pool.toString();
         if (cacheKey.equals("minecraft:empty")){
             return null;
         }
+
+        tryInvalidateCache(server);
         var list = RIFT_TEMPLATE_POOL_CACHE.computeIfAbsent(cacheKey,(unused)->FastWeightedList.byCountingDuplicates(all(server, pool), RiftGeneratable::identifier));
         return list.random(random);
+    }
+
+    private static void tryInvalidateCache(MinecraftServer server) { //some processors contain registry holders which need to be reloaded to work properly, alternatively you could refresh holders used by those processors
+        if(cachedServer==null || !cachedServer.refersTo(server)){
+            RIFT_TEMPLATE_POOL_CACHE.clear();
+            cachedServer= new PhantomReference<>(server,null);
+        }
     }
 
     public static List<RiftGeneratable> all(MinecraftServer server, ResourceLocation pool){
