@@ -1,0 +1,126 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 4,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 5,
+              "min_sockets": 3
+            }
+          ],
+          "name": "minecraft:netherite_pickaxe",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 5
+            }
+          ],
+          "name": "minecraft:netherite_pickaxe",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 4,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 5,
+              "min_sockets": 3
+            }
+          ],
+          "name": "minecraft:netherite_shovel",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 5
+            }
+          ],
+          "name": "minecraft:netherite_shovel",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 4,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 5,
+              "min_sockets": 3
+            }
+          ],
+          "name": "minecraft:netherite_hoe",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 5
+            }
+          ],
+          "name": "minecraft:netherite_hoe",
+          "weight": 5
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:rift/socketed_vanilla_tools"
+}

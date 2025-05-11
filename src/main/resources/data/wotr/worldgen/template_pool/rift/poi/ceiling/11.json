@@ -13,8 +13,17 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/ceiling/11/skulk_platform-1-team",
+                "location": "wotr:rift/poi/ceiling/11/skulk_platform-1-jj",
                 "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/11/bush-1-ada",
+                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }

@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.layer.objective;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.network.S2CRiftObjectiveStatusPacket;
-import com.wanderersoftherift.wotr.rift.objective.AbstractObjective;
+import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -13,27 +13,30 @@ import static com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes.ONGOING_
 
 public class ObjectiveRenderers {
 
-    public static final Map<ResourceLocation, Function<AbstractObjective, ObjectiveRenderer>> RENDERERS = new HashMap<>();
+    public static final Map<ResourceLocation, Function<OngoingObjective, ObjectiveRenderer>> RENDERERS = new HashMap<>();
 
-    public static final Function<AbstractObjective, ObjectiveRenderer> STEALTH = register(
+    public static final Function<OngoingObjective, ObjectiveRenderer> STEALTH = register(
             WanderersOfTheRift.id("stealth"), StealthObjectiveRenderer::create);
 
-    public static Function<AbstractObjective, ObjectiveRenderer> register(
+    public static final Function<OngoingObjective, ObjectiveRenderer> KILL = register(WanderersOfTheRift.id("kill"),
+            GeneralObjectiveBarRenderer::create);
+
+    public static Function<OngoingObjective, ObjectiveRenderer> register(
             ResourceLocation id,
-            Function<AbstractObjective, ObjectiveRenderer> renderer) {
+            Function<OngoingObjective, ObjectiveRenderer> renderer) {
         RENDERERS.put(id, renderer);
         return renderer;
     }
 
-    public static Function<AbstractObjective, ObjectiveRenderer> get(ResourceLocation id) {
+    public static Function<OngoingObjective, ObjectiveRenderer> get(ResourceLocation id) {
         return RENDERERS.get(id);
     }
 
     public static void handleObjectiveStatus(S2CRiftObjectiveStatusPacket packet) {
         if (packet.objective().isPresent()) {
-            AbstractObjective objective = packet.objective().get();
+            OngoingObjective objective = packet.objective().get();
             ResourceLocation key = ONGOING_OBJECTIVE_TYPE_REGISTRY.getKey(objective.getCodec());
-            Function<AbstractObjective, ObjectiveRenderer> renderer = get(key);
+            Function<OngoingObjective, ObjectiveRenderer> renderer = get(key);
             if (renderer != null) {
                 ObjectiveRenderer.current = renderer.apply(objective);
             } else {

@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -57,14 +58,14 @@ public class AbilityArgument implements ArgumentType<ResourceLocation> {
         return new AbilityArgument();
     }
 
-    public static AbstractAbility getAbility(CommandContext<CommandSourceStack> context, String name)
+    public static Holder<AbstractAbility> getAbility(CommandContext<CommandSourceStack> context, String name)
             throws CommandSyntaxException {
         ResourceLocation resourcelocation = context.getArgument(name, ResourceLocation.class);
-        Optional<AbstractAbility> result = context.getSource()
+        Optional<Holder<AbstractAbility>> result = context.getSource()
                 .getLevel()
                 .registryAccess()
                 .lookup(RegistryEvents.ABILITY_REGISTRY)
-                .flatMap(registry -> Optional.ofNullable(registry.getValue(resourcelocation)));
+                .flatMap(registry -> registry.get(resourcelocation));
         if (result.isPresent()) {
             return result.get();
         } else {

@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapData;
 import com.wanderersoftherift.wotr.client.map.MapRoom;
 import com.wanderersoftherift.wotr.client.render.blockentity.JigsawBlockEntityRenderer;
+import com.wanderersoftherift.wotr.client.render.blockentity.RiftMobSpawnerBlockEntityRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.AltSpiderRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.RiftPortalRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.SimpleEffectProjectileRenderer;
@@ -16,7 +17,7 @@ import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRu
 import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.client.tooltip.ImageTooltipRenderer;
-import com.wanderersoftherift.wotr.gui.layer.objective.ObjectiveLayer;
+import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
 import com.wanderersoftherift.wotr.init.ModBlockEntities;
 import com.wanderersoftherift.wotr.init.ModEntities;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionSpecialEffects;
@@ -28,13 +29,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterSelectItemModelPropertyEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -88,6 +90,8 @@ public final class ClientRegistryEvents {
         event.registerBlockEntityRenderer(BlockEntityType.JIGSAW, JigsawBlockEntityRenderer::new);
         event.registerEntityRenderer(ModEntities.SIMPLE_EFFECT_PROJECTILE.get(), SimpleEffectProjectileRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DITTO_BLOCK_ENTITY.get(), DittoBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RIFT_MOB_SPAWNER.get(),
+                RiftMobSpawnerBlockEntityRenderer::new);
     }
 
     @SubscribeEvent
@@ -109,11 +113,6 @@ public final class ClientRegistryEvents {
     }
 
     @SubscribeEvent
-    public static void registerGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(WanderersOfTheRift.id("objective"), new ObjectiveLayer());
-    }
-
-    @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(JIGSAW_NAME_TOGGLE_KEY);
     }
@@ -122,4 +121,15 @@ public final class ClientRegistryEvents {
     private static void registerClientDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
         event.register(RiftDimensionType.RIFT_DIMENSION_RENDERER_KEY, new RiftDimensionSpecialEffects());
     }
+
+    @SubscribeEvent
+    public static void registerRegistries(NewRegistryEvent event) {
+        event.register(ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY);
+    }
+
+    @SubscribeEvent
+    public static void resourceReload(AddClientReloadListenersEvent event) {
+        event.addListener(WanderersOfTheRift.id("hud_preset"), HudPresetManager.getInstance());
+    }
+
 }

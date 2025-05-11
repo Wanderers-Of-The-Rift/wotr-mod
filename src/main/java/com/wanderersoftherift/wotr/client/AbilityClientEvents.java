@@ -69,7 +69,7 @@ public final class AbilityClientEvents {
     @SubscribeEvent
     public static void tickMana(ClientTickEvent.Pre event) {
         Player player = Minecraft.getInstance().player;
-        if (player == null) {
+        if (player == null || Minecraft.getInstance().isPaused()) {
             return;
         }
 

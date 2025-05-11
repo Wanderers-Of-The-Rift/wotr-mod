@@ -1,4 +1,4 @@
 {
-  "priority": -1,
-  "theme": "wotr:cave"
+  "output": "wotr:cave",
+  "priority": -1
 }

@@ -1,0 +1,33 @@
+{
+  "type": "wotr:remove_enchants_from_loot",
+  "conditions" : [
+    {
+      "condition": "neoforge:loot_table_id",
+      "predicate": {
+        "namespace": "minecraft",
+        "path": "chests/*"
+      }
+    },
+    {
+      "condition": "neoforge:loot_table_id",
+      "predicate": {
+        "namespace": "minecraft",
+        "path": "equipment/*"
+      }
+    },
+    {
+      "condition": "neoforge:loot_table_id",
+      "predicate": {
+        "namespace": "minecraft",
+        "path": "spawners/*"
+      }
+    },
+    {
+      "condition": "neoforge:loot_table_id",
+      "predicate": {
+        "namespace": "minecraft",
+        "path": "gameplay/*"
+      }
+    }
+  ]
+}

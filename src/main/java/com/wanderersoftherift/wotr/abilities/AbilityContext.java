@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
@@ -44,9 +43,9 @@ public record AbilityContext(LivingEntity caster, ItemStack abilityItem) {
      * Enables all modifiers that impact the ability
      */
     public void enableModifiers() {
-        if (caster != null && !caster.isRemoved()) {
-            ModifierHelper.enableModifier(caster);
-        }
+        /*
+         * if (caster != null && !caster.isRemoved()) { ModifierHelper.enableModifier(caster); }
+         */
         AbilityUpgradePool pool = abilityItem.get(ModDataComponentType.ABILITY_UPGRADE_POOL);
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {
@@ -60,9 +59,9 @@ public record AbilityContext(LivingEntity caster, ItemStack abilityItem) {
      * Disables all modifiers that were enabled by {@link #enableModifiers()}
      */
     public void disableModifiers() {
-        if (caster != null && !caster.isRemoved()) {
-            ModifierHelper.disableModifier(caster);
-        }
+        /*
+         * if (caster != null && !caster.isRemoved()) { ModifierHelper.disableModifier(caster); }
+         */
         AbilityUpgradePool pool = abilityItem.get(ModDataComponentType.ABILITY_UPGRADE_POOL);
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {

@@ -1,0 +1,389 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "gear_type.rogue_type_gear"
+            }
+          ],
+          "name": "minecraft:leather_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "gear_type.rogue_type_gear"
+            }
+          ],
+          "name": "minecraft:leather_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "gear_type.rogue_type_gear"
+            }
+          ],
+          "name": "minecraft:leather_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "gear_type.rogue_type_gear"
+            }
+          ],
+          "name": "minecraft:leather_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "gear_type.tank_type_gear"
+            }
+          ],
+          "name": "minecraft:iron_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "gear_type.tank_type_gear"
+            }
+          ],
+          "name": "minecraft:iron_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "gear_type.tank_type_gear"
+            }
+          ],
+          "name": "minecraft:iron_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "gear_type.tank_type_gear"
+            }
+          ],
+          "name": "minecraft:iron_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "gear_type.barbarian_type_gear"
+            }
+          ],
+          "name": "minecraft:diamond_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "gear_type.barbarian_type_gear"
+            }
+          ],
+          "name": "minecraft:diamond_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "gear_type.barbarian_type_gear"
+            }
+          ],
+          "name": "minecraft:diamond_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "gear_type.barbarian_type_gear"
+            }
+          ],
+          "name": "minecraft:diamond_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "gear_type.wizard_type_gear"
+            }
+          ],
+          "name": "minecraft:golden_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "gear_type.wizard_type_gear"
+            }
+          ],
+          "name": "minecraft:golden_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "gear_type.wizard_type_gear"
+            }
+          ],
+          "name": "minecraft:golden_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "gear_type.wizard_type_gear"
+            }
+          ],
+          "name": "minecraft:golden_helmet",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 4
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 5,
+              "min_sockets": 4
+            }
+          ],
+          "name": "minecraft:elytra",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 6
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 5
+            }
+          ],
+          "name": "minecraft:elytra",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 6
+            }
+          ],
+          "name": "minecraft:elytra",
+          "weight": 20
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:rift/socketed_vanilla_armor"
+}

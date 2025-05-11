@@ -1,0 +1,13 @@
+{
+    "tier": 1,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:ability_cooldown_t1",
+        "attribute": "wotr:ability_cooldown",
+        "min_roll": 0,
+        "max_roll": -0.05,
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }

@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -28,6 +29,16 @@ public class ModTags {
         public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT = createTag("socketable_main_hand_slot");
         public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
 
+        public static final TagKey<Item> ROGUE_TYPE_GEAR = createTag("gear_type.rogue_type_gear");
+        public static final TagKey<Item> TANK_TYPE_GEAR = createTag("gear_type.tank_type_gear");
+        public static final TagKey<Item> BARBARIAN_TYPE_GEAR = createTag("gear_type.barbarian_type_gear");
+        public static final TagKey<Item> WIZARD_TYPE_GEAR = createTag("gear_type.wizard_type_gear");
+
+        public static final TagKey<Item> ROGUE_TYPE_WEAPON = createTag("weapon_type.rogue_type_weapon");
+        public static final TagKey<Item> TANK_TYPE_WEAPON = createTag("weapon_type.tank_type_weapon");
+        public static final TagKey<Item> BARBARIAN_TYPE_WEAPON = createTag("weapon_type.barbarian_type_weapon");
+        public static final TagKey<Item> WIZARD_TYPE_WEAPON = createTag("weapon_type.wizard_type_weapon");
+
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(WanderersOfTheRift.id(name));
         }
@@ -45,6 +56,15 @@ public class ModTags {
         private static TagKey<RunegemData> createTag(String name) {
             return TagKey.create(ModDatapackRegistries.RUNEGEM_DATA_KEY,
                     ResourceLocation.fromNamespaceAndPath("wotr", name));
+        }
+    }
+
+    public static class Abilities {
+
+        public static final TagKey<AbstractAbility> RIFT_DROPS = createTag("rift_drops");
+
+        private static TagKey<AbstractAbility> createTag(String name) {
+            return TagKey.create(RegistryEvents.ABILITY_REGISTRY, ResourceLocation.fromNamespaceAndPath("wotr", name));
         }
     }
 }

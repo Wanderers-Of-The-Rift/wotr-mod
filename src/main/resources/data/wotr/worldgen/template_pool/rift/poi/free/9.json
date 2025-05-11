@@ -14,7 +14,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/9/trees-2-k",
-                "processors": "wotr:poi_theme_default",
+                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -32,7 +32,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/9/stump-1-mal",
-                "processors": "wotr:poi_theme_default",
+                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }

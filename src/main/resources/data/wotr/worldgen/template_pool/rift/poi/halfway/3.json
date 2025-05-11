@@ -4,33 +4,6 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/wall/3/water_wall_fountain-1-grimm",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/wall/3/white_shack-1-grimm",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/wall/3/trapdoor_troll-1-grimm",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
                 "location": "wotr:rift/poi/halfway/3/arch-1-team",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
@@ -49,7 +22,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/trapdoor-1-team",
+                "location": "wotr:rift/poi/halfway/3/trapdoor-1-grimm",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -58,7 +31,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/pale_oak_house-1-team",
+                "location": "wotr:rift/poi/halfway/3/pale_oak_house-1-grimm",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -67,7 +40,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/waterwall-1-team",
+                "location": "wotr:rift/poi/halfway/3/waterwall-1-grimm",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

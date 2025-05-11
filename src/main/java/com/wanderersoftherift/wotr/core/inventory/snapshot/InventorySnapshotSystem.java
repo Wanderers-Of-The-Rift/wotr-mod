@@ -85,6 +85,7 @@ public final class InventorySnapshotSystem {
         event.getDrops().addAll(refiner.dropItems);
 
         player.setData(ModAttachments.RESPAWN_ITEMS, refiner.retainItems);
+        player.setData(ModAttachments.INVENTORY_SNAPSHOT, new InventorySnapshot());
     }
 
     /**

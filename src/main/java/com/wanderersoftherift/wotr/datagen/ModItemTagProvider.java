@@ -19,27 +19,32 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        // spotless:off
 
         /* Handles all the socketable Armor */
-        tag(ModTags.Items.SOCKETABLE_HELMET_SLOT).add(Items.LEATHER_HELMET)
+        tag(ModTags.Items.SOCKETABLE_HELMET_SLOT)
+                .add(Items.LEATHER_HELMET)
                 .add(Items.CHAINMAIL_HELMET)
                 .add(Items.IRON_HELMET)
                 .add(Items.GOLDEN_HELMET)
                 .add(Items.DIAMOND_HELMET)
                 .add(Items.NETHERITE_HELMET);
-        tag(ModTags.Items.SOCKETABLE_CHESTPLATE_SLOT).add(Items.LEATHER_CHESTPLATE)
+        tag(ModTags.Items.SOCKETABLE_CHESTPLATE_SLOT)
+                .add(Items.LEATHER_CHESTPLATE)
                 .add(Items.CHAINMAIL_CHESTPLATE)
                 .add(Items.IRON_CHESTPLATE)
                 .add(Items.GOLDEN_CHESTPLATE)
                 .add(Items.DIAMOND_CHESTPLATE)
                 .add(Items.NETHERITE_CHESTPLATE);
-        tag(ModTags.Items.SOCKETABLE_LEGGINGS_SLOT).add(Items.LEATHER_LEGGINGS)
+        tag(ModTags.Items.SOCKETABLE_LEGGINGS_SLOT)
+                .add(Items.LEATHER_LEGGINGS)
                 .add(Items.CHAINMAIL_LEGGINGS)
                 .add(Items.IRON_LEGGINGS)
                 .add(Items.GOLDEN_LEGGINGS)
                 .add(Items.DIAMOND_LEGGINGS)
                 .add(Items.NETHERITE_LEGGINGS);
-        tag(ModTags.Items.SOCKETABLE_BOOTS_SLOT).add(Items.LEATHER_BOOTS)
+        tag(ModTags.Items.SOCKETABLE_BOOTS_SLOT)
+                .add(Items.LEATHER_BOOTS)
                 .add(Items.CHAINMAIL_BOOTS)
                 .add(Items.IRON_BOOTS)
                 .add(Items.GOLDEN_BOOTS)
@@ -47,11 +52,17 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.NETHERITE_BOOTS);
 
         /* Handles all the socketable main/off hand items */
-        tag(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT).add(Items.WOODEN_AXE)
+        tag(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT)
+                .add(Items.WOODEN_AXE)
                 .add(Items.WOODEN_PICKAXE)
                 .add(Items.WOODEN_HOE)
                 .add(Items.WOODEN_SHOVEL)
                 .add(Items.WOODEN_SWORD)
+                .add(Items.STONE_AXE)
+                .add(Items.STONE_PICKAXE)
+                .add(Items.STONE_HOE)
+                .add(Items.STONE_SHOVEL)
+                .add(Items.STONE_SWORD)
                 .add(Items.IRON_AXE)
                 .add(Items.IRON_PICKAXE)
                 .add(Items.IRON_HOE)
@@ -71,9 +82,65 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.NETHERITE_PICKAXE)
                 .add(Items.NETHERITE_HOE)
                 .add(Items.NETHERITE_SHOVEL)
-                .add(Items.NETHERITE_SWORD);
+                .add(Items.NETHERITE_SWORD)
+                .add(Items.BOW)
+                .add(Items.CROSSBOW);
 
-        tag(ModTags.Items.SOCKETABLE_OFF_HAND_SLOT).add(Items.SHIELD);
+        tag(ModTags.Items.SOCKETABLE_OFF_HAND_SLOT)
+                .add(Items.SHIELD);
 
+        // adds back more generic socketable tag by adding all other socketable tags
+        tag(ModTags.Items.SOCKETABLE)
+                .addTag(ModTags.Items.SOCKETABLE_HELMET_SLOT)
+                .addTag(ModTags.Items.SOCKETABLE_CHESTPLATE_SLOT)
+                .addTag(ModTags.Items.SOCKETABLE_LEGGINGS_SLOT)
+                .addTag(ModTags.Items.SOCKETABLE_BOOTS_SLOT)
+                .addTag(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT)
+                .addTag(ModTags.Items.SOCKETABLE_OFF_HAND_SLOT);
+
+        tag(ModTags.Items.ROGUE_TYPE_GEAR)
+                .add(Items.LEATHER_HELMET)
+                .add(Items.LEATHER_CHESTPLATE)
+                .add(Items.LEATHER_LEGGINGS)
+                .add(Items.LEATHER_BOOTS);
+
+        tag(ModTags.Items.TANK_TYPE_GEAR)
+                .add(Items.IRON_HELMET)
+                .add(Items.IRON_CHESTPLATE)
+                .add(Items.IRON_LEGGINGS)
+                .add(Items.IRON_BOOTS);
+
+        tag(ModTags.Items.BARBARIAN_TYPE_GEAR)
+                .add(Items.DIAMOND_HELMET)
+                .add(Items.DIAMOND_CHESTPLATE)
+                .add(Items.DIAMOND_LEGGINGS)
+                .add(Items.DIAMOND_BOOTS);
+
+        tag(ModTags.Items.WIZARD_TYPE_GEAR)
+                .add(Items.GOLDEN_HELMET)
+                .add(Items.GOLDEN_CHESTPLATE)
+                .add(Items.GOLDEN_LEGGINGS)
+                .add(Items.GOLDEN_BOOTS);
+
+        tag(ModTags.Items.ROGUE_TYPE_WEAPON)
+                .add(Items.WOODEN_SWORD)
+                .add(Items.WOODEN_AXE)
+                .add(Items.BOW);
+
+        tag(ModTags.Items.TANK_TYPE_WEAPON)
+                .add(Items.IRON_SWORD)
+                .add(Items.IRON_AXE)
+                .add(Items.SHIELD);
+
+        tag(ModTags.Items.BARBARIAN_TYPE_WEAPON)
+                .add(Items.DIAMOND_SWORD)
+                .add(Items.DIAMOND_AXE);
+
+        tag(ModTags.Items.WIZARD_TYPE_WEAPON)
+                .add(Items.GOLDEN_SWORD)
+                .add(Items.GOLDEN_AXE)
+                .add(Items.CROSSBOW);
+
+        // spotless:on
     }
 }

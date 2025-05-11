@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RuneAnvilBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,4 +29,8 @@ public class ModBlockEntities {
                             Set.of(ModBlocks.DITTO_BLOCK.get(), ModBlocks.TRAP_BLOCK.get(),
                                     ModBlocks.MOB_TRAP_BLOCK.get(), ModBlocks.PLAYER_TRAP_BLOCK.get(),
                                     ModBlocks.SPRING_BLOCK.get())));
+
+    public static final Supplier<BlockEntityType<RiftMobSpawnerBlockEntity>> RIFT_MOB_SPAWNER = BLOCK_ENTITIES.register(
+            "rift_mob_spawner",
+            () -> new BlockEntityType<>(RiftMobSpawnerBlockEntity::new, ModBlocks.RIFT_MOB_SPAWNER.get()));
 }

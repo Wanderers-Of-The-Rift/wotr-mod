@@ -1,0 +1,67 @@
+{
+  "minecraft:experience_level": {
+    "xOffset": 0,
+    "yOffset": -26,
+    "visible": false,
+    "anchor": "bottom_center"
+  },
+  "wotr:mana_bar": {
+    "xOffset": 25,
+    "yOffset": 0,
+    "orientation": "vertical",
+    "visible": true,
+    "anchor": "bottom_left"
+  },
+  "minecraft:player_health": {
+    "xOffset": -51,
+    "yOffset": -24,
+    "visible": true,
+    "anchor": "bottom_center"
+  },
+  "wotr:ability_bar": {
+    "xOffset": 0,
+    "yOffset": 0,
+    "orientation": "vertical",
+    "visible": true,
+    "anchor": "bottom_left"
+  },
+  "wotr:effect_bar": {
+    "xOffset": 31,
+    "yOffset": 0,
+    "orientation": "vertical",
+    "visible": false,
+    "anchor": "top_left"
+  },
+  "wotr:objective": {
+    "xOffset": 0,
+    "yOffset": 25,
+    "visible": false,
+    "anchor": "top_center"
+  },
+  "minecraft:experience_bar": {
+    "xOffset": 0,
+    "yOffset": -24,
+    "orientation": "horizontal",
+    "visible": false,
+    "anchor": "bottom_center"
+  },
+  "minecraft:effects": {
+    "xOffset": 0,
+    "yOffset": 0,
+    "visible": false,
+    "anchor": "top_right"
+  },
+  "minecraft:food_level": {
+    "xOffset": 50,
+    "yOffset": -24,
+    "visible": true,
+    "anchor": "bottom_center"
+  },
+  "minecraft:air_level": {
+    "xOffset": 50,
+    "yOffset": -34,
+    "orientation": "horizontal",
+    "visible": true,
+    "anchor": "bottom_center"
+  }
+}

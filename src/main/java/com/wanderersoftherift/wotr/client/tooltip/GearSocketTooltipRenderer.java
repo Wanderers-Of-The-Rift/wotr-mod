@@ -47,10 +47,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public int getWidth(@NotNull Font font) {
-        int maxWidth = 0;
-        for (GearSocket socket : this.cmp.gearSocket) {
-            maxWidth += 20; // For each available socket +16 w/ 4px between each
-        }
+        int maxWidth = this.cmp.gearSocket.size() * 10 - 2; // 10px for each socket
         return maxWidth + font.width(getSocketDesc());
     }
 

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
+import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModEntities;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
@@ -21,6 +22,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -35,33 +37,99 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
-public class RiftLevelManager {
+/**
+ * Static manager for handing access to, creation, and destruction of a rift
+ */
+public final class RiftLevelManager {
+
+    private RiftLevelManager() {
+    }
 
     /**
      * @param id
      * @return Whether a level with the given id exists
      */
     public static boolean levelExists(ResourceLocation id) {
-        var server = ServerLifecycleHooks.getCurrentServer();
-        var existingRift = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
-        return existingRift != null;
+        return ServerLifecycleHooks.getCurrentServer()
+                .forgeGetWorldMap()
+                .containsKey(ResourceKey.create(Registries.DIMENSION, id));
     }
 
-    // TODO: unload the dimesnions if all plauers are disconnected, but still in the dimension
+    /**
+     * @param id
+     * @return The rift level with the given id, if it exists
+     */
+    public static @Nullable ServerLevel getRiftLevel(ResourceLocation id) {
+        var server = ServerLifecycleHooks.getCurrentServer();
+
+        ServerLevel serverLevel = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
+        if (serverLevel != null && RiftData.isRift(serverLevel)) {
+            return serverLevel;
+        }
+        return null;
+    }
+
+    public static void onPlayerDeath(ServerPlayer player, ServerLevel level) {
+        if (!RiftData.isRift(level)) {
+            return;
+        }
+        RiftData riftData = RiftData.get(player.serverLevel());
+        NeoForge.EVENT_BUS.post(new RiftEvent.PlayerDied(player, player.serverLevel(), riftData.getConfig()));
+        riftData.removePlayer(player);
+        if (riftData.isRiftEmpty()) {
+            unregisterAndDeleteLevel(player.serverLevel());
+        }
+        player.setData(ModAttachments.DIED_IN_RIFT, true);
+    }
+
+    /**
+     * @param player The player to remove from a rift level
+     * @return Whether the player was successfully removed from a rift
+     */
+    public static boolean returnPlayerFromRift(ServerPlayer player) {
+        ServerLevel riftLevel = player.serverLevel();
+        if (!RiftData.isRift(riftLevel)) {
+            return false;
+        }
+
+        RiftData riftData = RiftData.get(riftLevel);
+
+        ResourceKey<Level> respawnKey = riftData.getPortalDimension();
+        if (respawnKey == riftLevel.dimension()) {
+            respawnKey = Level.OVERWORLD;
+        }
+
+        ServerLevel respawnDimension = riftLevel.getServer().getLevel(respawnKey);
+        if (respawnDimension == null) {
+            respawnDimension = riftLevel.getServer().overworld();
+        }
+
+        var respawnPos = riftData.getPortalPos().above();
+        riftData.removePlayer(player);
+        player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(),
+                Set.of(), player.getRespawnAngle(), 0, true);
+        if (riftData.getPlayers().isEmpty()) {
+            RiftLevelManager.unregisterAndDeleteLevel(riftLevel);
+        }
+        return true;
+    }
+
+    // TODO: unload the dimensions if all players are disconnected, but still in the dimension
     @SuppressWarnings("deprecation")
     public static ServerLevel getOrCreateRiftLevel(
             ResourceLocation id,
             ResourceKey<Level> portalDimension,
             BlockPos portalPos,
-            @Nullable RiftConfig config) {
+            RiftConfig config) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var ow = server.overworld();
 
@@ -101,14 +169,19 @@ public class RiftLevelManager {
 
         level.getServer().forgeGetWorldMap().put(level.dimension(), level);
         level.getServer().markWorldsDirty();
+
+        NeoForge.EVENT_BUS.post(new RiftEvent.Created(level, config));
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
+
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
         spawnRiftExit(level, new BlockPos(8,6,8).above().getBottomCenter());
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
     }
 
-    /** copy of {@link com.wanderersoftherift.wotr.item.riftkey.RiftKey::spawnRift(Level, Vec3, Direction)} */
+    /**
+     * copy of {@link com.wanderersoftherift.wotr.item.riftkey.RiftKey::spawnRift(Level, Vec3, Direction)}
+     */
     // TODO: clean it up (maybe move as static method to the entity or the spawner class)
     private static void spawnRiftExit(Level level, Vec3 pos) {
         RiftPortalExitEntity rift = new RiftPortalExitEntity(ModEntities.RIFT_EXIT.get(), level);
@@ -148,15 +221,17 @@ public class RiftLevelManager {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public static void unregisterAndDeleteLevel(ServerLevel level) {
+    private static void unregisterAndDeleteLevel(ServerLevel level) {
         if (!RiftData.isRift(level)) {
             return;
         }
-        if (!RiftData.get(level).getPlayers().isEmpty()) {
+        RiftData riftData = RiftData.get(level);
+        if (!riftData.getPlayers().isEmpty()) {
             // multiplayer - delete after all players leave
             return;
         }
 
+        NeoForge.EVENT_BUS.post(new RiftEvent.Closing(level, riftData.getConfig()));
         // unload the level
         level.save(null, true, false);
         level.getServer().forgeGetWorldMap().remove(level.dimension());
@@ -183,8 +258,8 @@ public class RiftLevelManager {
         level.getServer().registryAccess().lookupOrThrow(Registries.DIMENSION).get(level.dimension()).ifPresent(dim -> {
             if (level.getServer()
                     .registryAccess()
-                    .lookupOrThrow(Registries.DIMENSION) instanceof MappedRegistry<Level> mr) {
-                Holder.Reference<Level> holder = ((AccessorMappedRegistry<Level>) mr).getByLocation().remove(id);
+                    .lookupOrThrow(Registries.DIMENSION) instanceof MappedRegistry<Level> mr && mr instanceof AccessorMappedRegistry<Level> accessorMappedRegistry) {
+                Holder.Reference<Level> holder = accessorMappedRegistry.getByLocation().remove(id);
                 if (holder == null) {
                     WanderersOfTheRift.LOGGER.error("Failed to remove level from registry (null holder)");
                     return;
@@ -194,7 +269,6 @@ public class RiftLevelManager {
                     WanderersOfTheRift.LOGGER.error("Failed to remove level from registry (id -1)");
                     return;
                 }
-                var accessorMappedRegistry = (AccessorMappedRegistry<Level>) mr;
                 accessorMappedRegistry.getToId().remove(holder.value());
                 accessorMappedRegistry.getById().set(dimId, null);
                 accessorMappedRegistry.getByKey().remove(holder.key());
@@ -219,7 +293,7 @@ public class RiftLevelManager {
             LevelStem stem,
             ResourceKey<Level> portalDimension,
             BlockPos portalPos,
-            @Nullable RiftConfig config) {
+            RiftConfig config) {
         AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
         var chunkProgressListener = server.getProgressListenerFactory().create(0);
         var storageSource = server.getStorageSource();
@@ -234,12 +308,7 @@ public class RiftLevelManager {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        int seed;
-        if (config != null && config.seed().isPresent()) {
-            seed = config.seed().get();
-        } else {
-            seed = new Random().nextInt();
-        }
+        int seed = config.seed().orElseGet(() -> new Random().nextInt());
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
                 new DerivedLevelData(worldData, worldData.overworldData()),
@@ -248,19 +317,13 @@ public class RiftLevelManager {
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
+        riftData.setConfig(config);
         var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
 
         Holder<RiftTheme> riftTheme;
         int maxDepth;
-        if (config != null) {
-            riftTheme = config.theme().orElse(LevelRiftThemeData.getRandomTheme(riftLevel));
-            maxDepth = getRiftSize(config.tier());
-            riftData.setTier(config.tier());
-        } else {
-            riftTheme = LevelRiftThemeData.getRandomTheme(riftLevel);
-            maxDepth = getRiftSize(0);
-            riftData.setTier(0);
-        }
+        riftTheme = config.theme().orElse(LevelRiftThemeData.getRandomTheme(riftLevel));
+        maxDepth = getRiftSize(config.tier());
         themeData.setTheme(riftTheme);
 
         /*

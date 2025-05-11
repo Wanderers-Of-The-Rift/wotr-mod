@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.core.rift;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -9,11 +11,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -33,15 +38,16 @@ public class RiftData extends SavedData { // TODO: split this
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
     private final List<UUID> players;
-    private int tier = 0;
+    private RiftConfig config;
 
-    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players) {
+    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players, RiftConfig config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new ArrayList<>(Objects.requireNonNull(players));
+        this.config = config;
     }
 
-    public static boolean isRift(ServerLevel level) {
+    public static boolean isRift(Level level) {
         Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
         Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPES.stream()
                 .map(dimTypes::get)
@@ -56,11 +62,15 @@ public class RiftData extends SavedData { // TODO: split this
         }
         return level.getDataStorage()
                 .computeIfAbsent(factory(level.getServer().overworld().dimension(),
-                        level.getServer().overworld().getSharedSpawnPos()), "rift_data");
+                        level.getServer().overworld().getSharedSpawnPos(), new RiftConfig(0)), "rift_data");
     }
 
-    private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
-        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of()), RiftData::load);
+    private static SavedData.Factory<RiftData> factory(
+            ResourceKey<Level> portalDimension,
+            BlockPos portalPos,
+            RiftConfig config) {
+        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of(), config),
+                RiftData::load);
     }
 
     private static RiftData load(CompoundTag tag, HolderLookup.Provider registries) {
@@ -68,7 +78,14 @@ public class RiftData extends SavedData { // TODO: split this
         ResourceKey<Level> portalDimension = ResourceKey.create(Registries.DIMENSION, portalDimensionLocation);
         List<UUID> players = new ArrayList<>();
         tag.getList("Players", Tag.TAG_STRING).forEach(player -> players.add(UUID.fromString(player.getAsString())));
-        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players);
+        RiftConfig config = new RiftConfig(0);
+        if (tag.contains("Config")) {
+            config = RiftConfig.CODEC
+                    .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.getCompound("Config"))
+                    .resultOrPartial(x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid rift config: '{}'", x))
+                    .orElse(new RiftConfig(0));
+        }
+        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, config);
     }
 
     @Override
@@ -78,6 +95,11 @@ public class RiftData extends SavedData { // TODO: split this
         ListTag playerTag = new ListTag();
         this.players.forEach(player -> playerTag.add(StringTag.valueOf(player.toString())));
         tag.put("Players", playerTag);
+        if (config != null) {
+            tag.put("Config",
+                    RiftConfig.CODEC.encode(config, registries.createSerializationContext(NbtOps.INSTANCE), tag)
+                            .getOrThrow());
+        }
         return tag;
     }
 
@@ -111,17 +133,29 @@ public class RiftData extends SavedData { // TODO: split this
         this.setDirty();
     }
 
-    public void removePlayer(UUID player) {
-        this.players.remove(player);
+    public void removePlayer(ServerPlayer player) {
+        this.players.remove(player.getUUID());
+        this.setDirty();
+    }
+
+    public RiftConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(RiftConfig config) {
+        this.config = config;
         this.setDirty();
     }
 
     public int getTier() {
-        return tier;
+        return config.tier();
     }
 
-    public void setTier(int tier) {
-        this.tier = tier;
-        this.setDirty();
+    public boolean containsPlayer(Player player) {
+        return players.contains(player.getUUID());
+    }
+
+    public boolean isRiftEmpty() {
+        return players.isEmpty();
     }
 }

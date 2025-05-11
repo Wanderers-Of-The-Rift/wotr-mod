@@ -27,11 +27,15 @@ import java.util.Optional;
  */
 public class RiftSpawnerBlock extends Block {
     public static final MapCodec<RiftSpawnerBlock> CODEC = simpleCodec(RiftSpawnerBlock::new);
-    private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(Direction.UP,
-            Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0), Direction.DOWN, Block.box(0.0, 3.0, 0.0, 16.0, 16.0, 16.0),
-            Direction.NORTH, Block.box(0.0, 0.0, 3.0, 16.0, 16.0, 16.0), Direction.SOUTH,
-            Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 13.0), Direction.WEST, Block.box(3.0, 0.0, 0.0, 16.0, 16.0, 16.0),
+    // spotless:off
+    private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(
+            Direction.UP, Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0),
+            Direction.DOWN, Block.box(0.0, 3.0, 0.0, 16.0, 16.0, 16.0),
+            Direction.NORTH, Block.box(0.0, 0.0, 3.0, 16.0, 16.0, 16.0),
+            Direction.SOUTH, Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 13.0),
+            Direction.WEST, Block.box(3.0, 0.0, 0.0, 16.0, 16.0, 16.0),
             Direction.EAST, Block.box(0.0, 0.0, 0.0, 13.0, 16.0, 16.0)));
+    // spotless:on
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 

@@ -1,0 +1,21 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:leather_boots",
+      "attribute": "movement_speed",
+      "min_roll": 0.01,
+      "max_roll": 0.03,
+      "operation": "add_value"
+    },
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:leather_boots",
+      "attribute": "wotr:projectile_speed",
+      "min_roll": 0.01,
+      "max_roll": 0.05,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

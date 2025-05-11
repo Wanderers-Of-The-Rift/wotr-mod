@@ -5,6 +5,11 @@
     "minecraft:wooden_hoe",
     "minecraft:wooden_shovel",
     "minecraft:wooden_sword",
+    "minecraft:stone_axe",
+    "minecraft:stone_pickaxe",
+    "minecraft:stone_hoe",
+    "minecraft:stone_shovel",
+    "minecraft:stone_sword",
     "minecraft:iron_axe",
     "minecraft:iron_pickaxe",
     "minecraft:iron_hoe",
@@ -24,6 +29,8 @@
     "minecraft:netherite_pickaxe",
     "minecraft:netherite_hoe",
     "minecraft:netherite_shovel",
-    "minecraft:netherite_sword"
+    "minecraft:netherite_sword",
+    "minecraft:bow",
+    "minecraft:crossbow"
   ]
 }

@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.entity.portal;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
+import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModEntityDataSerializers;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import net.minecraft.core.BlockPos;
@@ -45,7 +47,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
         builder.define(DATA_RIFT_CONFIG, new RiftConfig(0));
     }
 
-    public ResourceLocation getRiftDimensionID() {
+    public ResourceLocation getRiftDimensionId() {
         return riftDimensionID;
     }
 
@@ -64,7 +66,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
     @Override
     public void tick() {
         if (generated) {
-            if (!levelExists(getRiftDimensionID())) {
+            if (!levelExists(getRiftDimensionId())) {
                 this.remove(RemovalReason.DISCARDED);
                 return;
             }
@@ -75,7 +77,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
     @Override
     protected void onPlayerInPortal(ServerPlayer player, ServerLevel level) {
         BlockPos pos = blockPosition();
-        ResourceLocation riftId = this.getRiftDimensionID();
+        ResourceLocation riftId = this.getRiftDimensionId();
         var plDir = player.getDirection().getOpposite();
         var axis = plDir.getAxis();
         var axisDir = plDir.getAxisDirection().getStep();
@@ -90,7 +92,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
         RiftData.get(lvl).addPlayer(player.getUUID());
 
         var riftSpawnCoords = getRiftSpawnCoords();
-
+        player.setData(ModAttachments.PRE_RIFT_STATS, new StatSnapshot(player));
         player.teleportTo(lvl, riftSpawnCoords.x, riftSpawnCoords.y, riftSpawnCoords.z, Set.of(), player.getYRot(), 0,
                 false);
     }
@@ -136,12 +138,14 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
                         .encode(getRiftConfig(),
                                 this.level().registryAccess().createSerializationContext(NbtOps.INSTANCE), tag)
                         .getOrThrow());
-        tag.putString("riftDimensionID", getRiftDimensionID().toString());
+        tag.putString("riftDimensionID", getRiftDimensionId().toString());
         tag.putBoolean("generated", generated);
     }
 
     public void setRiftConfig(RiftConfig config) {
-        this.entityData.set(DATA_RIFT_CONFIG, config);
+        if (config != null) {
+            this.entityData.set(DATA_RIFT_CONFIG, config);
+        }
     }
 
     public RiftConfig getRiftConfig() {

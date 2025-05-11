@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.AbilityBenchMenu;
 import com.wanderersoftherift.wotr.gui.menu.KeyForgeMenu;
+import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
@@ -23,4 +24,7 @@ public class ModMenuTypes {
 
     public static final Supplier<MenuType<AbilityBenchMenu>> ABILITY_BENCH_MENU = MENUS.register("ability_bench_menu",
             () -> new MenuType<>(AbilityBenchMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    public static final Supplier<MenuType<RiftCompleteMenu>> RIFT_COMPLETE_MENU = MENUS.register("rift_complete_menu",
+            () -> new MenuType<>(RiftCompleteMenu::new, FeatureFlags.DEFAULT_FLAGS));
 }

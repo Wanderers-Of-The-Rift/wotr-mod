@@ -1,0 +1,13 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:iron_leggings",
+      "attribute": "armor_toughness",
+      "min_roll": 0.01,
+      "max_roll": 0.03,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

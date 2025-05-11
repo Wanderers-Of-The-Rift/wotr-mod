@@ -108,12 +108,12 @@ public abstract class AbstractAbility {
 //        return ModAbilities.COOL_DOWN_ATTACHMENTS.containsKey(this.getName()) && p.getData(ModAbilities.COOL_DOWN_ATTACHMENTS.get(this.getName())) > 0;
     }
 
-    // TODO refactor this because I dont think we need to pass in this attribute anymore?
     public void setCooldown(Player player, int slot, float amount) {
         if (this.hasCooldown()) {
             WanderersOfTheRift.LOGGER.info("Setting cooldown for: " + this.getName() + " length: " + amount);
             PlayerCooldownData cooldowns = player.getData(ModAttachments.ABILITY_COOLDOWNS);
-            cooldowns.setCooldown(slot, (int) amount);
+            int finalCooldown = (int) Math.max(getBaseCooldown() * 0.9F, amount);
+            cooldowns.setCooldown(slot, finalCooldown);
             player.setData(ModAttachments.ABILITY_COOLDOWNS, cooldowns);
 
             PacketDistributor.sendToPlayer((ServerPlayer) player,

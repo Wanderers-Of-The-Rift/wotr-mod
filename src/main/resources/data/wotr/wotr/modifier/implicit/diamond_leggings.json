@@ -1,0 +1,13 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:diamond_leggings",
+      "attribute": "wotr:max_mana",
+      "min_roll": 0.01,
+      "max_roll": 0.05,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

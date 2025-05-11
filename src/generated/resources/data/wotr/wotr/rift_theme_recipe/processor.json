@@ -1,0 +1,10 @@
+{
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:processor",
+      "minPercent": 1.0
+    }
+  ],
+  "output": "wotr:processor",
+  "priority": 0
+}

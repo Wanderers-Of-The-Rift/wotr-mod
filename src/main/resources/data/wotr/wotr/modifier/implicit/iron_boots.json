@@ -1,0 +1,21 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:iron_boots",
+      "attribute": "movement_speed",
+      "min_roll": 0.01,
+      "max_roll": 0.03,
+      "operation": "add_value"
+    },
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:iron_boots",
+      "attribute": "armor_toughness",
+      "min_roll": 0.01,
+      "max_roll": 0.03,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

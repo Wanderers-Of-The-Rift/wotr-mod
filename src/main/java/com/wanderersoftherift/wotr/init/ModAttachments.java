@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.init;
 
+import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
@@ -8,6 +9,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
+import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -31,6 +33,11 @@ public class ModAttachments {
                     .serialize(ItemStack.CODEC.listOf())
                     .copyOnDeath()
                     .build());
+    public static final Supplier<AttachmentType<Boolean>> DIED_IN_RIFT = ATTACHMENT_TYPES.register(
+            "died_in_rift", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).copyOnDeath().build());
+    public static final Supplier<AttachmentType<StatSnapshot>> PRE_RIFT_STATS = ATTACHMENT_TYPES.register(
+            "pre_rift_stats",
+            () -> AttachmentType.builder(() -> new StatSnapshot()).serialize(StatSnapshot.CODEC).copyOnDeath().build());
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<PlayerCooldownData>> ABILITY_COOLDOWNS = ATTACHMENT_TYPES
             .register("cooldowns",

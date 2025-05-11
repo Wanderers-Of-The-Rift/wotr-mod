@@ -28,6 +28,7 @@ public class ModDataMapProvider extends DataMapProvider {
     protected void gather(HolderLookup.@NotNull Provider provider) {
         ResourceLocation animal = WanderersOfTheRift.id("animal");
         ResourceLocation plant = WanderersOfTheRift.id("plant");
+        ResourceLocation mushroom = WanderersOfTheRift.id("mushroom");
 
         ResourceLocation life = WanderersOfTheRift.id("life");
         ResourceLocation death = WanderersOfTheRift.id("death");
@@ -54,6 +55,8 @@ public class ModDataMapProvider extends DataMapProvider {
 
         ResourceLocation nether = WanderersOfTheRift.id("nether");
         ResourceLocation end = WanderersOfTheRift.id("end");
+
+        ResourceLocation processor = WanderersOfTheRift.id("processor");
 
         // Bee stuff
         this.builder(ModDataMaps.ESSENCE_VALUE_DATA)
@@ -149,16 +152,21 @@ public class ModDataMapProvider extends DataMapProvider {
 
         // Fungi
         this.builder(ModDataMaps.ESSENCE_VALUE_DATA)
-                .add(Tags.Items.MUSHROOMS, new EssenceValue(life, 1), false)
-                .add(Items.MUSHROOM_STEM.builtInRegistryHolder(), new EssenceValue(life, 1), false)
-                .add(Items.BROWN_MUSHROOM_BLOCK.builtInRegistryHolder(), new EssenceValue(life, 1), false)
-                .add(Items.MYCELIUM.builtInRegistryHolder(), new EssenceValue(earth, 1, life, 1), false)
+                .add(Tags.Items.MUSHROOMS, new EssenceValue(life, 1, mushroom, 1), false)
+                .add(Items.MUSHROOM_STEM.builtInRegistryHolder(), new EssenceValue(life, 1, mushroom, 1), false)
+                .add(Items.BROWN_MUSHROOM_BLOCK.builtInRegistryHolder(), new EssenceValue(life, 1, mushroom, 1), false)
+                .add(Items.MYCELIUM.builtInRegistryHolder(), new EssenceValue(earth, 1, life, 1, mushroom, 1), false)
                 .add(Items.RED_MUSHROOM_BLOCK.builtInRegistryHolder(), new EssenceValue(life, 1), false)
-                .add(Items.CRIMSON_NYLIUM.builtInRegistryHolder(), new EssenceValue(earth, 1, nether, 1), false)
-                .add(Items.WARPED_NYLIUM.builtInRegistryHolder(), new EssenceValue(earth, 1, nether, 1), false)
-                .add(Items.CRIMSON_FUNGUS.builtInRegistryHolder(), new EssenceValue(life, 1, nether, 1), false)
-                .add(Items.WARPED_FUNGUS.builtInRegistryHolder(), new EssenceValue(life, 1, nether, 1), false)
-                .add(Items.GLOW_LICHEN.builtInRegistryHolder(), new EssenceValue(life, 1, light, 1), false);
+                .add(Items.CRIMSON_NYLIUM.builtInRegistryHolder(), new EssenceValue(earth, 1, nether, 1, mushroom, 1),
+                        false)
+                .add(Items.WARPED_NYLIUM.builtInRegistryHolder(), new EssenceValue(earth, 1, nether, 1, mushroom, 1),
+                        false)
+                .add(Items.CRIMSON_FUNGUS.builtInRegistryHolder(), new EssenceValue(life, 1, nether, 1, mushroom, 1),
+                        false)
+                .add(Items.WARPED_FUNGUS.builtInRegistryHolder(), new EssenceValue(life, 1, nether, 1, mushroom, 1),
+                        false)
+                .add(Items.GLOW_LICHEN.builtInRegistryHolder(), new EssenceValue(life, 1, light, 1, mushroom, 1),
+                        false);
 
         // Grasses, ground & wall covers
         this.builder(ModDataMaps.ESSENCE_VALUE_DATA)
@@ -1038,7 +1046,12 @@ public class ModDataMapProvider extends DataMapProvider {
                 .add(Items.ARMOR_STAND.builtInRegistryHolder(), new EssenceValue(order, 1), false)
                 .add(Items.TOTEM_OF_UNDYING.builtInRegistryHolder(), new EssenceValue(life, 1, death, 1), false)
                 .add(Items.GOAT_HORN.builtInRegistryHolder(), new EssenceValue(animal, 1, order, 1), false)
-                .add(Items.BELL.builtInRegistryHolder(), new EssenceValue(metal, 1), false)
+                .add(Items.BELL.builtInRegistryHolder(), new EssenceValue(metal, 1), false);
+
+        // Processors
+        this.builder(ModDataMaps.ESSENCE_VALUE_DATA)
+                .add(Items.STRUCTURE_BLOCK.builtInRegistryHolder(), new EssenceValue(processor, 5), false)
+                .add(Items.JIGSAW.builtInRegistryHolder(), new EssenceValue(processor, 1), false)
 
                 .build();
     }

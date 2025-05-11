@@ -96,7 +96,7 @@ public class SimpleProjectileEffect extends AbstractEffect {
             projectileEntity.setPos(user.getEyePosition());
             projectileEntity.setOwner(context.caster());
             projectileEntity.setEffect(this);
-            projectileEntity.configure(config);
+            projectileEntity.configure(config, context);
 
             projectileEntity.shootFromRotation(user, user.getXRot(), user.getYRot() + angle, 0,
                     context.getAbilityAttribute(ModAttributes.PROJECTILE_SPEED, config.velocity()), 0);

@@ -16,6 +16,7 @@
         "MixinChunkAccess",
         "MixinChunkMap",
         "MixinEnchantingTableBlock",
+        "MixinItem",
         "MixinItemStack",
         "MixinJigsawReplacementProcessor",
         "MixinLivingEntity",
@@ -26,7 +27,8 @@
         "MixinStructureTemplate",
         "MixinStructureTemplateManager",
         "MixinWorldDimensions",
-        "TrialSpawnerAccessor"
+        "TrialSpawnerAccessor",
+        "TrialSpawnerBlockEntityAccessor"
     ],
     "client": [
         "MixinAccessibilityOptionsScreen",

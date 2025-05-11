@@ -4,7 +4,9 @@ import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.commands.AbilityCommands;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.EssenceCommands;
+import com.wanderersoftherift.wotr.commands.HudCommands;
 import com.wanderersoftherift.wotr.commands.InventorySnapshotCommands;
+import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
@@ -29,12 +31,14 @@ import com.wanderersoftherift.wotr.init.ModLootModifiers;
 import com.wanderersoftherift.wotr.init.ModMenuTypes;
 import com.wanderersoftherift.wotr.init.ModMobEffects;
 import com.wanderersoftherift.wotr.init.ModModifierEffects;
+import com.wanderersoftherift.wotr.init.ModObjectiveTypes;
 import com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.ModOutputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.ModPayloadHandlers;
 import com.wanderersoftherift.wotr.init.ModProcessors;
 import com.wanderersoftherift.wotr.init.ModSoundEvents;
 import com.wanderersoftherift.wotr.init.ModTargetingTypes;
+import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -49,9 +53,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -94,8 +96,14 @@ public class WanderersOfTheRift {
         ModTargetingTypes.TARGETING_TYPES.register(modEventBus);
 
         ModModifierEffects.MODIFIER_EFFECT_TYPES.register(modEventBus);
+        ModObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
         ModOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
         ModChunkGenerators.CHUNK_GENERATORS.register(modEventBus);
+
+        if (FMLEnvironment.dist.isClient()) {
+            ModConfigurableLayers.LAYERS.register(modEventBus);
+            ModConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
+        }
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (Wotr) to respond directly to events.
@@ -103,7 +111,6 @@ public class WanderersOfTheRift {
         // onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
-        modEventBus.addListener(this::addCreative); // Register the item to a creative tab
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);
         modEventBus.addListener(ModPayloadHandlers::registerPayloadHandlers);
@@ -166,17 +173,7 @@ public class WanderersOfTheRift {
         AbilityCommands.register(event.getDispatcher(), event.getBuildContext());
         new RiftKeyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new EssenceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new HudCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
-
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        // if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) event.accept(ModBlocks.EXAMPLE_BLOCK);
-    }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info("HELLO from server starting"); // Do something when the server starts
-    }
-
 }

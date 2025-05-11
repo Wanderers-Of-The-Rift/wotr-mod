@@ -1,0 +1,29 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:dash",
+  "cooldown": 200,
+  "effects": [
+    {
+      "type": "wotr:movement_effect",
+      "targeting": {
+        "type": "wotr:self_targeting"
+      },
+      "velocity": [
+        0.0,
+        0.4000000059604645,
+        1.0
+      ]
+    },
+    {
+      "type": "wotr:sound_effect",
+      "sound": {
+        "sound_id": "minecraft:entity.breeze.charge"
+      },
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    }
+  ],
+  "icon": "minecraft:textures/mob_effect/speed.png",
+  "mana_cost": 10
+}

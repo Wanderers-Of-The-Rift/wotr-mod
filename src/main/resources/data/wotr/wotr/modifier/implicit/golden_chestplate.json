@@ -1,0 +1,13 @@
+{
+  "tier": 1,
+  "modifiers": [
+    {
+      "type": "wotr:attribute",
+      "id": "wotr:golden_chestplate",
+      "attribute": "wotr:ability_raw_damage",
+      "min_roll": 0.01,
+      "max_roll": 0.05,
+      "operation": "add_multiplied_base"
+    }
+  ]
+}

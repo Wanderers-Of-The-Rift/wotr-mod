@@ -2,7 +2,9 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.mixin.TrialSpawnerAccessor;
+import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
+import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
+import com.wanderersoftherift.wotr.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -10,8 +12,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.TrialSpawnerBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
+import net.minecraft.world.level.block.entity.trialspawner.PlayerDetector;
+import net.minecraft.world.level.block.entity.trialspawner.TrialSpawner;
 import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerConfig;
+import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerData;
 import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -20,6 +24,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 
+import static com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity.RIFT_PLAYERS;
 import static com.wanderersoftherift.wotr.init.ModProcessors.TRIAL_SPAWNER;
 
 public class TrialSpawnerProcessor extends StructureProcessor implements RiftTemplateProcessor {
@@ -37,7 +42,7 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
         return spawnerConfig;
     }
 
-    @Nullable @Override
+    @Override
     public StructureTemplate.StructureBlockInfo process(
             LevelReader world,
             BlockPos piecePos,
@@ -47,25 +52,33 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
             StructurePlaceSettings settings,
             @javax.annotation.Nullable StructureTemplate template) {
         if (blockInfo.state().getBlock() instanceof TrialSpawnerBlock) {
-            BlockEntity blockEntity = ((TrialSpawnerBlock) blockInfo.state().getBlock()).newBlockEntity(blockInfo.pos(),
-                    blockInfo.state());
-            if (blockEntity instanceof TrialSpawnerBlockEntity trialSpawnerBlockEntity && blockInfo.nbt() != null) {
+            BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
+            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(blockInfo.pos(),
+                    blockState);
+            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
                 return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
-                        blockInfo.state().setValue(TrialSpawnerBlock.STATE, TrialSpawnerState.INACTIVE),
-                        getBlockEntity(world, blockInfo.nbt(), trialSpawnerBlockEntity));
+                        blockState.setValue(RiftMobSpawnerBlock.STATE, TrialSpawnerState.INACTIVE),
+                        getBlockEntity(world, spawnerBlockEntity));
+            }
+        }
+        if (blockInfo.state().getBlock() instanceof RiftMobSpawnerBlock) {
+            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockInfo.state().getBlock())
+                    .newBlockEntity(blockInfo.pos(), blockInfo.state());
+            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
+                return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
+                        blockInfo.state().setValue(RiftMobSpawnerBlock.STATE, TrialSpawnerState.INACTIVE),
+                        getBlockEntity(world, spawnerBlockEntity));
             }
         }
         return blockInfo;
     }
 
-    private CompoundTag getBlockEntity(
-            LevelReader world,
-            CompoundTag nbt,
-            TrialSpawnerBlockEntity blockEntity) {
-        blockEntity.loadWithComponents(nbt, world.registryAccess());
-        blockEntity.getTrialSpawner().getData().reset();
-        ((TrialSpawnerAccessor) (Object) blockEntity.getTrialSpawner()).setNormalConfig(spawnerConfig);
-        ((TrialSpawnerAccessor) (Object) blockEntity.getTrialSpawner()).setOminousConfig(spawnerConfig);
+    private CompoundTag getBlockEntity(LevelReader world, RiftMobSpawnerBlockEntity blockEntity) {
+        TrialSpawner trialSpawner = new TrialSpawner(
+                spawnerConfig, spawnerConfig, new TrialSpawnerData(), 72_000, 9, blockEntity, RIFT_PLAYERS,
+                PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
+        trialSpawner.getData().reset();
+        blockEntity.setTrialSpawner(trialSpawner);
         return blockEntity.saveWithId(world.registryAccess());
     }
 
@@ -78,9 +91,11 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
     public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevel world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
 
         if (currentState.getBlock() instanceof TrialSpawnerBlock block) {
-            BlockEntity blockEntity = block.newBlockEntity(new BlockPos(x, y, z), currentState);
-            if (blockEntity instanceof TrialSpawnerBlockEntity trialSpawnerBlockEntity && nbt != null) {
-                var newNbt = getBlockEntity(world, nbt, trialSpawnerBlockEntity);
+            BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
+            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(blockInfo.pos(),
+                    blockState);
+            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
+                var newNbt = getBlockEntity(world, nbt, spawnerBlockEntity);
                 for (var key : nbt.getAllKeys().toArray()){
                     if (!newNbt.getAllKeys().contains(key))nbt.remove((String) key);
                 }
@@ -89,6 +104,17 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
                     nbt.put(key, newNbt.get(key));
                 }
                 return currentState.setValue(TrialSpawnerBlock.STATE, TrialSpawnerState.INACTIVE);
+            }
+
+        }
+
+        if (blockInfo.state().getBlock() instanceof RiftMobSpawnerBlock) {
+            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockInfo.state().getBlock())
+                    .newBlockEntity(blockInfo.pos(), blockInfo.state());
+            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
+                return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
+                        blockInfo.state().setValue(RiftMobSpawnerBlock.STATE, TrialSpawnerState.INACTIVE),
+                        getBlockEntity(world, spawnerBlockEntity));
             }
         }
         return currentState; //todo implement with nbt (or maybe with TileEntities)

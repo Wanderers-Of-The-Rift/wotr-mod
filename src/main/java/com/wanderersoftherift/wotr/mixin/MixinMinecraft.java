@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.gui.screen.AccessibilityOptionsScreen;
+import com.wanderersoftherift.wotr.gui.screen.settings.AccessibilityOptionsScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;

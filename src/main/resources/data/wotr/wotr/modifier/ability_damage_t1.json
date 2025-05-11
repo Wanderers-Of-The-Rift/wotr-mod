@@ -1,0 +1,13 @@
+{
+    "tier": 1,
+    "modifiers": [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:ability_damage_t1",
+        "attribute": "wotr:ability_raw_damage",
+        "min_roll": 0,
+        "max_roll": 0.1,
+        "operation": "add_multiplied_base"
+      }
+    ]
+  }

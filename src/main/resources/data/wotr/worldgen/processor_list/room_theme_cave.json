@@ -25,6 +25,27 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_1_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:stone",
+              "step_size": 0.35
+            },
+            {
+              "output_state": "minecraft:andesite",
+              "step_size": 0.30
+            },
+            {
+              "output_state": "minecraft:cobblestone",
+              "step_size": 0.20
+            },
+            {
+              "output_state": "minecraft:mossy_cobblestone",
+              "step_size": 0.15
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_1_slab",
           "output_steps": [
             {
@@ -112,6 +133,32 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_1_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:light_gray_stained_glass",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:gray_stained_glass",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:light_gray_stained_glass_pane",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:gray_stained_glass_pane",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_1_trapdoor",
           "output_steps": [
             {
@@ -124,6 +171,19 @@
 
         {
           "input_state": "wotr:processor_block_2",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mud_bricks",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:packed_mud",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_directional_pillar",
           "output_steps": [
             {
               "output_state": "minecraft:mud_bricks",
@@ -199,6 +259,24 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_2_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_2_trapdoor",
           "output_steps": [
             {
@@ -211,6 +289,23 @@
 
         {
           "input_state": "wotr:processor_block_3",
+          "output_steps": [
+            {
+              "output_state": "minecraft:cobblestone",
+              "step_size": 0.3
+            },
+            {
+              "output_state": "minecraft:dripstone_block",
+              "step_size": 0.5
+            },
+            {
+              "output_state": "minecraft:rooted_dirt",
+              "step_size": 0.2
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_directional_pillar",
           "output_steps": [
             {
               "output_state": "minecraft:cobblestone",
@@ -302,6 +397,24 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_3_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_3_trapdoor",
           "output_steps": [
             {
@@ -314,6 +427,19 @@
 
         {
           "input_state": "wotr:processor_block_4",
+          "output_steps": [
+            {
+              "output_state": "minecraft:deepslate",
+              "step_size": 0.8
+            },
+            {
+              "output_state": "minecraft:tuff",
+              "step_size": 0.2
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_directional_pillar",
           "output_steps": [
             {
               "output_state": "minecraft:deepslate",
@@ -389,6 +515,32 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_4_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:black_stained_glass",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:gray_stained_glass",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:black_stained_glass_pane",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:gray_stained_glass_pane",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_4_trapdoor",
           "output_steps": [
             {
@@ -401,6 +553,19 @@
 
         {
           "input_state": "wotr:processor_block_5",
+          "output_steps": [
+            {
+              "output_state": "minecraft:granite",
+              "step_size": 0.8
+            },
+            {
+              "output_state": "minecraft:mud",
+              "step_size": 0.2
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_directional_pillar",
           "output_steps": [
             {
               "output_state": "minecraft:granite",
@@ -476,6 +641,24 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_5_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_5_trapdoor",
           "output_steps": [
             {
@@ -496,6 +679,15 @@
             {
               "output_state": "minecraft:spruce_planks",
               "step_size": 0.2
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:stripped_oak_log",
+              "step_size": 1
             }
           ]
         },
@@ -587,6 +779,24 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_6_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:oak_leaves",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:green_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_6_trapdoor",
           "output_steps": [
             {
@@ -603,6 +813,15 @@
 
         {
           "input_state": "wotr:processor_block_7",
+          "output_steps": [
+            {
+              "output_state": "minecraft:bricks",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_directional_pillar",
           "output_steps": [
             {
               "output_state": "minecraft:bricks",
@@ -674,6 +893,24 @@
           ]
         },
         {
+          "input_state": "wotr:processor_block_7_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:tinted_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:iron_bars",
+              "step_size": 1
+            }
+          ]
+        },
+        {
           "input_state": "wotr:processor_block_7_trapdoor",
           "output_steps": [
             {
@@ -694,6 +931,19 @@
 
         {
           "input_state": "wotr:processor_block_8",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mud_bricks",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:packed_mud",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_directional_pillar",
           "output_steps": [
             {
               "output_state": "minecraft:mud_bricks",
@@ -764,6 +1014,24 @@
           "output_steps": [
             {
               "output_state": "minecraft:acacia_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:orange_stained_glass_pane",
               "step_size": 1
             }
           ]

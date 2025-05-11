@@ -32,6 +32,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.PLAYER_TRAP_BLOCK.get());
         dropSelf(ModBlocks.MOB_TRAP_BLOCK.get());
         dropSelf(ModBlocks.SPRING_BLOCK.get());
+        add(ModBlocks.RIFT_MOB_SPAWNER.get(), noDrop());
     }
 
     @Override

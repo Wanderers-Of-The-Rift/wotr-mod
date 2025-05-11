@@ -1,0 +1,111 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "abilities": "#wotr:rift_drops",
+              "function": "wotr:ability_holder",
+              "max_level": 1,
+              "min_level": 1
+            }
+          ],
+          "name": "wotr:ability_holder",
+          "weight": 16
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 3,
+              "min_tier": 1
+            }
+          ],
+          "functions": [
+            {
+              "abilities": "#wotr:rift_drops",
+              "function": "wotr:ability_holder",
+              "max_level": 3,
+              "min_level": 1
+            }
+          ],
+          "name": "wotr:ability_holder",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 3
+            }
+          ],
+          "functions": [
+            {
+              "abilities": "#wotr:rift_drops",
+              "function": "wotr:ability_holder",
+              "max_level": 6,
+              "min_level": 3
+            }
+          ],
+          "name": "wotr:ability_holder",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 4
+            }
+          ],
+          "functions": [
+            {
+              "abilities": "#wotr:rift_drops",
+              "function": "wotr:ability_holder",
+              "max_level": 7,
+              "min_level": 5
+            }
+          ],
+          "name": "wotr:ability_holder",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "abilities": "#wotr:rift_drops",
+              "function": "wotr:ability_holder",
+              "max_level": 10,
+              "min_level": 7
+            }
+          ],
+          "name": "wotr:ability_holder"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:rift/ability"
+}

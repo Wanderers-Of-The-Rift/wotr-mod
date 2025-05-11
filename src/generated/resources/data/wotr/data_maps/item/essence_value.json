@@ -90,7 +90,8 @@
       "wotr:nether": 1
     },
     "#c:mushrooms": {
-      "wotr:life": 1
+      "wotr:life": 1,
+      "wotr:mushroom": 1
     },
     "#c:music_discs": {
       "wotr:knowledge": 1,
@@ -488,7 +489,8 @@
       "wotr:earth": 1
     },
     "minecraft:brown_mushroom_block": {
-      "wotr:life": 1
+      "wotr:life": 1,
+      "wotr:mushroom": 1
     },
     "minecraft:brush": {
       "wotr:order": 1
@@ -737,10 +739,12 @@
     },
     "minecraft:crimson_fungus": {
       "wotr:life": 1,
+      "wotr:mushroom": 1,
       "wotr:nether": 1
     },
     "minecraft:crimson_nylium": {
       "wotr:earth": 1,
+      "wotr:mushroom": 1,
       "wotr:nether": 1
     },
     "minecraft:crimson_roots": {
@@ -1174,7 +1178,8 @@
     },
     "minecraft:glow_lichen": {
       "wotr:life": 1,
-      "wotr:light": 1
+      "wotr:light": 1,
+      "wotr:mushroom": 1
     },
     "minecraft:glowstone": {
       "wotr:light": 1,
@@ -1389,6 +1394,9 @@
       "wotr:light": 1,
       "wotr:plant": 1
     },
+    "minecraft:jigsaw": {
+      "wotr:processor": 1
+    },
     "minecraft:jukebox": {
       "wotr:order": 1,
       "wotr:power": 1
@@ -1565,14 +1573,16 @@
       "wotr:plant": 1
     },
     "minecraft:mushroom_stem": {
-      "wotr:life": 1
+      "wotr:life": 1,
+      "wotr:mushroom": 1
     },
     "minecraft:mushroom_stew": {
       "wotr:life": 1
     },
     "minecraft:mycelium": {
       "wotr:earth": 1,
-      "wotr:life": 1
+      "wotr:life": 1,
+      "wotr:mushroom": 1
     },
     "minecraft:name_tag": {
       "wotr:order": 1
@@ -2334,6 +2344,9 @@
     "minecraft:string": {
       "wotr:fabric": 1
     },
+    "minecraft:structure_block": {
+      "wotr:processor": 5
+    },
     "minecraft:sugar": {
       "wotr:life": 1
     },
@@ -2469,6 +2482,7 @@
     },
     "minecraft:warped_fungus": {
       "wotr:life": 1,
+      "wotr:mushroom": 1,
       "wotr:nether": 1
     },
     "minecraft:warped_fungus_on_a_stick": {
@@ -2477,6 +2491,7 @@
     },
     "minecraft:warped_nylium": {
       "wotr:earth": 1,
+      "wotr:mushroom": 1,
       "wotr:nether": 1
     },
     "minecraft:warped_roots": {

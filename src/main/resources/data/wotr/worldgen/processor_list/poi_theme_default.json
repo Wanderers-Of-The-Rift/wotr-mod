@@ -6,7 +6,7 @@
     },
     {
       "processor_type": "wotr:trial_spawner",
-      "config": "wotr:test"
+      "config": "wotr:rift"
     }
   ]
 }

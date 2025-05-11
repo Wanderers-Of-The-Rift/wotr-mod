@@ -1,0 +1,332 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "weapon_type.rogue_type_weapon"
+            }
+          ],
+          "name": "minecraft:wooden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "weapon_type.rogue_type_weapon"
+            }
+          ],
+          "name": "minecraft:wooden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "weapon_type.rogue_type_weapon"
+            }
+          ],
+          "name": "minecraft:wooden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "weapon_type.rogue_type_weapon"
+            }
+          ],
+          "name": "minecraft:wooden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "weapon_type.tank_type_weapon"
+            }
+          ],
+          "name": "minecraft:iron_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "weapon_type.tank_type_weapon"
+            }
+          ],
+          "name": "minecraft:iron_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "weapon_type.tank_type_weapon"
+            }
+          ],
+          "name": "minecraft:iron_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "weapon_type.tank_type_weapon"
+            }
+          ],
+          "name": "minecraft:iron_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "weapon_type.barbarian_type_weapon"
+            }
+          ],
+          "name": "minecraft:diamond_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "weapon_type.barbarian_type_weapon"
+            }
+          ],
+          "name": "minecraft:diamond_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "weapon_type.barbarian_type_weapon"
+            }
+          ],
+          "name": "minecraft:diamond_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "weapon_type.barbarian_type_weapon"
+            }
+          ],
+          "name": "minecraft:diamond_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 2,
+              "min_tier": 0
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 4,
+              "min_sockets": 3,
+              "tag_location": "weapon_type.wizard_type_weapon"
+            }
+          ],
+          "name": "minecraft:golden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 2
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 5,
+              "min_sockets": 4,
+              "tag_location": "weapon_type.wizard_type_weapon"
+            }
+          ],
+          "name": "minecraft:golden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 5
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 5,
+              "tag_location": "weapon_type.wizard_type_weapon"
+            }
+          ],
+          "name": "minecraft:golden_sword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 7,
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:roll_gear",
+              "max_sockets": 6,
+              "min_sockets": 6,
+              "tag_location": "weapon_type.wizard_type_weapon"
+            }
+          ],
+          "name": "minecraft:golden_sword",
+          "weight": 20
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:rift/socketed_vanilla_weapons"
+}

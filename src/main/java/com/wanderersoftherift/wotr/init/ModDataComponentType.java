@@ -33,6 +33,8 @@ public class ModDataComponentType {
             "runegem_data", RunegemData.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_SNAPSHOT_ID = register(
             "inventory_snapshot_id", UUIDUtil.CODEC, null);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ITEM_RIFT_TIER = register(
+            "item_rift_tier", Codec.INT, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<LootBox>> LOOT_BOX = register("loot_box",
             LootBox.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<AbstractAbility>>> ABILITY = register(

@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.block.KeyForgeBlock;
 import com.wanderersoftherift.wotr.block.MobTrapBlock;
 import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
 import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
+import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RuneAnvilEntityBlock;
 import com.wanderersoftherift.wotr.block.SpringBlock;
@@ -32,6 +33,8 @@ import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -67,6 +70,17 @@ public class ModBlocks {
             () -> new RiftChestEntityBlock(ModBlockEntities.RIFT_CHEST::get,
                     BlockBehaviour.Properties.of().setId(blockId("rift_chest")).strength(1.5F).sound(SoundType.WOOD)),
             RiftChestType.WOODEN);
+
+    public static final DeferredBlock<RiftMobSpawnerBlock> RIFT_MOB_SPAWNER = registerBlock("rift_mob_spawner",
+            () -> new RiftMobSpawnerBlock(BlockBehaviour.Properties.of()
+                    .setId(blockId("rift_mob_spawner"))
+                    .mapColor(MapColor.STONE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .lightLevel(blockState -> blockState.getValue(RiftMobSpawnerBlock.STATE).lightLevel())
+                    .strength(50.0F)
+                    .sound(SoundType.TRIAL_SPAWNER)
+                    .isViewBlocking((blockState, blockGetter, blockPos) -> false)
+                    .noOcclusion()));
 
     public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = registerBlock("rift_spawner",
             () -> new RiftSpawnerBlock(BlockBehaviour.Properties.of()

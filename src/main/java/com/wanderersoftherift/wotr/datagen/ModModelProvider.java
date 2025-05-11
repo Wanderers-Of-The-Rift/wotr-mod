@@ -55,8 +55,6 @@ public class ModModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
-        blockModels.createTrivialCube(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
-        blockModels.createTrivialCube(ModBlocks.KEY_FORGE.get());
         blockModels.createTrivialBlock(ModBlocks.DITTO_BLOCK.get(),
                 TexturedModel.CUBE.updateTemplate(template -> template.extend().renderType("cutout").build()));
         blockModels.createTrivialCube(ModBlocks.SPRING_BLOCK.get());
@@ -65,10 +63,23 @@ public class ModModelProvider extends ModelProvider {
         createBlockStatesForTrapBlock(ModBlocks.PLAYER_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(ModBlocks.TRAP_BLOCK, blockModels);
 
+        createTrialSpawner(blockModels, itemModels);
+
         ResourceLocation abilityBenchModel = WanderersOfTheRift.id("block/ability_bench");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(ModBlocks.ABILITY_BENCH.get(),
                         Variant.variant().with(VariantProperties.MODEL, abilityBenchModel))
+                .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        ResourceLocation keyForgeModel = WanderersOfTheRift.id("block/key_forge");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator
+                .multiVariant(ModBlocks.KEY_FORGE.get(), Variant.variant().with(VariantProperties.MODEL, keyForgeModel))
+                .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        ResourceLocation runeAnvilModel = WanderersOfTheRift.id("block/rune_anvil");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator
+                .multiVariant(ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get(),
+                        Variant.variant().with(VariantProperties.MODEL, runeAnvilModel))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
         ResourceLocation baseChestModel = WanderersOfTheRift.id("block/rift_chest");
@@ -278,5 +289,61 @@ public class ModModelProvider extends ModelProvider {
     private void createDirectionalPillar(BlockModelGenerators blockModels, Block directionalPillarBlock) {
         blockModels.createRotatedPillarWithHorizontalVariant(directionalPillarBlock, TexturedModel.COLUMN_ALT,
                 TexturedModel.COLUMN_HORIZONTAL_ALT);
+    }
+
+    public void createTrialSpawner(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
+        Block block = ModBlocks.RIFT_MOB_SPAWNER.get();
+        TextureMapping texturemapping = TextureMapping.trialSpawner(block, "_side_inactive", "_top_inactive");
+        TextureMapping texturemapping1 = TextureMapping.trialSpawner(block, "_side_active", "_top_active");
+        TextureMapping texturemapping2 = TextureMapping.trialSpawner(block, "_side_active", "_top_ejecting_reward");
+        TextureMapping texturemapping3 = TextureMapping.trialSpawner(block, "_side_inactive_ominous",
+                "_top_inactive_ominous");
+        TextureMapping texturemapping4 = TextureMapping.trialSpawner(block, "_side_active_ominous",
+                "_top_active_ominous");
+        TextureMapping texturemapping5 = TextureMapping.trialSpawner(block, "_side_active_ominous",
+                "_top_ejecting_reward_ominous");
+        ResourceLocation resourcelocation = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.create(block, texturemapping,
+                blockModels.modelOutput);
+        ResourceLocation resourcelocation1 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+                "_active", texturemapping1, blockModels.modelOutput);
+        ResourceLocation resourcelocation2 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+                "_ejecting_reward", texturemapping2, blockModels.modelOutput);
+        ResourceLocation resourcelocation3 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+                "_inactive_ominous", texturemapping3, blockModels.modelOutput);
+        ResourceLocation resourcelocation4 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+                "_active_ominous", texturemapping4, blockModels.modelOutput);
+        ResourceLocation resourcelocation5 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+                "_ejecting_reward_ominous", texturemapping5, blockModels.modelOutput);
+        blockModels.registerSimpleItemModel(block, resourcelocation);
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.multiVariant(block)
+                        .with(
+                                PropertyDispatch
+                                        .properties(BlockStateProperties.TRIAL_SPAWNER_STATE,
+                                                BlockStateProperties.OMINOUS)
+                                        .generate(
+                                                (state, isActive) -> {
+                                                    return switch (state) {
+                                                        case INACTIVE,
+                                                                COOLDOWN ->
+                                                            Variant.variant()
+                                                                    .with(VariantProperties.MODEL,
+                                                                            isActive ? resourcelocation3
+                                                                                    : resourcelocation);
+                                                        case WAITING_FOR_PLAYERS, ACTIVE,
+                                                                WAITING_FOR_REWARD_EJECTION ->
+                                                            Variant.variant()
+                                                                    .with(VariantProperties.MODEL,
+                                                                            isActive ? resourcelocation4
+                                                                                    : resourcelocation1);
+                                                        case EJECTING_REWARD -> Variant.variant()
+                                                                .with(VariantProperties.MODEL,
+                                                                        isActive ? resourcelocation5
+                                                                                : resourcelocation2);
+                                                    };
+                                                }
+                                        )
+                        )
+        );
     }
 }

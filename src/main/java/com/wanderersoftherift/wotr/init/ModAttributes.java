@@ -55,6 +55,10 @@ public class ModAttributes {
             "projectile_speed",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "projectile_speed"), 0, 0,
                     Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> PROJECTILE_PIERCE = registerPlayerAttribute(
+            "projectile_pierce",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "projectile_pierce"), 0, 0,
+                    Integer.MAX_VALUE));
 
     /* Mana */
     public static final DeferredHolder<Attribute, RangedAttribute> MAX_MANA = registerPlayerAttribute("max_mana",
