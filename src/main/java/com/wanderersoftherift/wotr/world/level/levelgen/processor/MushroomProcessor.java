@@ -4,9 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModProcessors;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -25,15 +28,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomBlockFromItemTag;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.*;
 import static net.minecraft.core.Direction.DOWN;
 import static net.minecraft.core.Direction.UP;
 import static net.neoforged.neoforge.common.Tags.Items.MUSHROOMS;
 
-public class MushroomProcessor extends StructureProcessor {
+public class MushroomProcessor extends StructureProcessor implements RiftFinalProcessor {
     public static final MapCodec<MushroomProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(BuiltInRegistries.BLOCK.byNameCodec()
@@ -117,5 +119,43 @@ public class MushroomProcessor extends StructureProcessor {
 
     public StructureRandomType getTagStructureRandomType() {
         return tagStructureRandomType;
+    }
+
+
+    @Override
+    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
+
+        var blockRandomFlag = structureRandomType==BLOCK;
+        RandomSource random = ProcessorUtil.getRandom(blockRandomFlag ? STRUCTURE : structureRandomType, null, structurePos, new BlockPos(0,0,0),
+                world, SEED);
+        var blockRandomFlag2 = structureRandomType==BLOCK;
+        RandomSource random2 = ProcessorUtil.getRandom(blockRandomFlag ? STRUCTURE : structureRandomType, null, structurePos, new BlockPos(0,0,0),
+                world, SEED);
+        var roll = random.nextFloat();
+        var roll2 = getRandomBlockFromItemTag(itemTag, random2, exclusionList);
+        for (int x = 0; x < pieceSize.getX(); x++) {
+            for (int z = 0; z < pieceSize.getZ(); z++) {
+                for (int y = 0; y < pieceSize.getY(); y++) {
+                    var basePos = new BlockPos(x+structurePos.getX(),y+structurePos.getY(),z+structurePos.getZ());
+                    var currentState = room.getBlock(basePos);
+                    if (currentState!=null && currentState.isAir()) {
+                        if(blockRandomFlag){
+                            roll=random.nextFloat();
+                        }
+                        if (roll <= rarity) {
+                            if(blockRandomFlag2) {
+                                roll2 = getRandomBlockFromItemTag(itemTag, random2, exclusionList);
+                            }
+                            var pos2 = basePos.below();
+                            var newBlock = room.getBlock(pos2);
+                            boolean validDown = newBlock == null || isFaceFullFast(newBlock, pos2, Direction.UP);
+                            if (!validDown) continue;
+                            room.setBlock(basePos, roll2.defaultBlockState());
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }

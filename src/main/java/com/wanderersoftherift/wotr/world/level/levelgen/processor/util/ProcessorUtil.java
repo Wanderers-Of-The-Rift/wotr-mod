@@ -182,7 +182,7 @@ public class ProcessorUtil {
         }
     }
 
-    private static boolean isFaceFullFast(BlockState state, BlockPos pos, Direction direction) {
+    public static boolean isFaceFullFast(BlockState state, BlockPos pos, Direction direction) {
         if (state.isAir() || state.getBlock() instanceof LiquidBlock) {
             return false;
         }

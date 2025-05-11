@@ -4,10 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -16,18 +18,18 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.ATTACHMENT;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.*;
 import static net.minecraft.core.Direction.Plane;
 
-public class AttachmentProcessor extends StructureProcessor {
+public class AttachmentProcessor extends StructureProcessor implements RiftFinalProcessor {
     public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
             Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
@@ -151,5 +153,52 @@ public class AttachmentProcessor extends StructureProcessor {
 
     public Optional<Long> getSeed() {
         return seed;
+    }
+
+    @Override
+    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
+        var blockRandomFlag = structureRandomType==BLOCK;
+        RandomSource random = ProcessorUtil.getRandom(blockRandomFlag ? STRUCTURE : structureRandomType, null, structurePos, new BlockPos(0,0,0),
+                world, seed);
+        var roll = random.nextFloat();
+        for (int x = 0; x < pieceSize.getX(); x++) {
+            for (int z = 0; z < pieceSize.getZ(); z++) {
+                for (int y = 0; y < pieceSize.getY(); y++) {
+                    var basePos = new BlockPos(x+structurePos.getX(),y+structurePos.getY(),z+structurePos.getZ());
+                    var currentState = room.getBlock(basePos);
+                    if (currentState!=null && currentState.isAir()) {
+                        if(blockRandomFlag){
+                            roll = random.nextFloat();
+                        }
+                        if (roll <= rarity) {
+
+                            int sideCount = requiresSides;
+                            BlockPos pos2;
+                            BlockState newBlock;
+                            for (var side : Plane.HORIZONTAL) {
+                                if (sideCount <= 0) break;
+                                pos2 = basePos.relative(side);
+                                newBlock = room.getBlock(pos2);
+                                if (newBlock != null && !isFaceFullFast(newBlock, pos2, side.getOpposite())) {
+                                    sideCount--;
+                                }
+                            }
+
+                            if (sideCount > 0) continue;
+                            pos2 = basePos.above();
+                            newBlock = room.getBlock(pos2);
+                            boolean validUp = !requiresUp || newBlock == null || isFaceFullFast(newBlock, pos2, Direction.DOWN);
+                            if (!validUp) continue;
+                            pos2 = basePos.below();
+                            newBlock = room.getBlock(pos2);
+                            boolean validDown = !requiresDown || newBlock == null || isFaceFullFast(newBlock, pos2, Direction.UP);
+                            if (!validDown) continue;
+                            room.setBlock(basePos, blockState);
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }

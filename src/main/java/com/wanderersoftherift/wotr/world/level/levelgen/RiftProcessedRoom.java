@@ -6,6 +6,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.concurrent.CompletableFuture;
@@ -62,5 +63,33 @@ public class RiftProcessedRoom {
         nbt.put("Pos", listtag);
         nbt.remove("UUID");
         this.getOrCreateChunk(new Vec3i(position.getX() >> 4, position.getY() >> 4, position.getZ() >> 4)).entities.add(nbt);
+    }
+
+    public BlockState getBlock(int x, int y, int z) {
+        var chunkX = x >> 4;
+        var chunkY = y >> 4;
+        var chunkZ = z >> 4;
+        var chunk = data.get(new Vec3i(chunkX, chunkY, chunkZ));
+        if(chunk==null){
+            return null;
+        }
+        return chunk.getBlockStatePure(x & 0xf, y & 0xf, z & 0xf);
+    }
+
+    public BlockState getBlock(Vec3i pos){
+        return getBlock(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+
+    public void setBlock(int x, int y, int z, BlockState state) {
+        var chunkX = x >> 4;
+        var chunkY = y >> 4;
+        var chunkZ = z >> 4;
+        var chunk = getOrCreateChunk(new Vec3i(chunkX, chunkY, chunkZ));
+        chunk.setBlockStatePure(x & 0xf, y & 0xf, z & 0xf, state);
+    }
+
+    public void setBlock(Vec3i basePos, BlockState blockState) {
+        setBlock(basePos.getX(), basePos.getY(), basePos.getZ(), blockState);
     }
 }

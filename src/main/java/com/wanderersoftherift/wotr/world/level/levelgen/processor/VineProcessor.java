@@ -4,10 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModProcessors;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -23,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.*;
 import static net.minecraft.core.Direction.EAST;
 import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.SOUTH;
@@ -34,7 +35,7 @@ import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;
 
-public class VineProcessor extends StructureProcessor {
+public class VineProcessor extends StructureProcessor implements RiftFinalProcessor {
     public static final MapCodec<VineProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(Codec.BOOL.optionalFieldOf("attach_to_wall", true).forGetter(VineProcessor::isAttachToWall),
@@ -138,6 +139,30 @@ public class VineProcessor extends StructureProcessor {
         return isFaceFull(block, direction.getOpposite());
     }
 
+    private Direction selectDirection(RiftProcessedRoom room, BlockPos blockpos) {
+        if (attachToWall) {
+            for (var horizontal :Direction.Plane.HORIZONTAL) {
+                if (isDirectionPossible(room, blockpos, horizontal)) {
+                    return horizontal;
+                }
+            }
+        }
+        if (attachToCeiling) {
+            if (isDirectionPossible(room, blockpos, UP)) {
+                return UP;
+            }
+        }
+        return null;
+    }
+
+    private boolean isDirectionPossible(
+            RiftProcessedRoom room,
+            BlockPos pos,
+            Direction direction) {
+        var state = room.getBlock(pos.relative(direction));
+        return state!=null && isFaceFullFast(state, pos, direction.getOpposite());
+    }
+
     protected StructureProcessorType<?> getType() {
         return ModProcessors.VINES.get();
     }
@@ -156,5 +181,32 @@ public class VineProcessor extends StructureProcessor {
 
     public StructureRandomType getStructureRandomType() {
         return structureRandomType;
+    }
+
+    @Override
+    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
+        var blockRandomFlag = structureRandomType==BLOCK;
+        RandomSource random = ProcessorUtil.getRandom(/*because block is cached, it's (apparently) not thread safe so it can't be used*/blockRandomFlag ? STRUCTURE : structureRandomType, null, structurePos, new BlockPos(0,0,0),
+                world, Optional.empty());
+        var roll = random.nextFloat();
+        for (int x = 0; x < pieceSize.getX(); x++) {
+            for (int z = 0; z < pieceSize.getZ(); z++) {
+                for (int y = 0; y < pieceSize.getY(); y++) {
+                    var basePos = new BlockPos(x+structurePos.getX(),y+structurePos.getY(),z+structurePos.getZ());
+                    var currentState = room.getBlock(basePos);
+                    if (currentState!=null && currentState.isAir()) {
+                        if(blockRandomFlag){
+                            roll=random.nextFloat();
+                        }
+                        if(roll <= rarity) {
+                            var direction = selectDirection(room, basePos);
+                            if (direction == null) continue;
+                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
+                            room.setBlock(basePos, VINE.defaultBlockState().setValue(property, true));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

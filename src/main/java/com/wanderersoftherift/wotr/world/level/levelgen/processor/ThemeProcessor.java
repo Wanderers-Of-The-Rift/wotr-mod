@@ -4,11 +4,13 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -29,14 +31,13 @@ import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.RIFT_THEME;
 
-public class ThemeProcessor extends StructureProcessor implements RiftTemplateProcessor {
+public class ThemeProcessor extends StructureProcessor implements RiftTemplateProcessor, RiftFinalProcessor {
     public static final MapCodec<ThemeProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
             .group(ThemePieceType.CODEC.fieldOf("piece_type").forGetter(ThemeProcessor::getThemePieceType)
             ).apply(builder, ThemeProcessor::new));
 
     private ThemePieceType themePieceType;
-    private Pair<PhantomReference<LevelReader>,List<RiftTemplateProcessor>> lastThemeTemplateProcessorCache = null;
-    private Pair<PhantomReference<LevelReader>,List<Void>> lastThemeRoomProcessorCache = null;
+    private ThemeCache lastThemeTemplateProcessorCache = null;
 
     public ThemeProcessor(ThemePieceType themePieceType) {
         this.themePieceType = themePieceType;
@@ -92,19 +93,44 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         return new ArrayList<>();
     }
 
-
     private List<RiftTemplateProcessor> getThemeTemplateProcessors(LevelReader world, BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
-        if(world!=null && currentCache!=null && currentCache.getA().refersTo(world)) return currentCache.getB();
+        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) return currentCache.templateProcessors;
         if(world instanceof ServerLevel serverLevel) {
-            LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-            var result = ((riftThemeData.getTheme() != null)?
-                    riftThemeData.getTheme().value().getProcessors(themePieceType)
-                    : defaultThemeProcessors(serverLevel, structurePos)).stream().filter(it->it instanceof RiftTemplateProcessor).map(it -> (RiftTemplateProcessor)it).toList();
-            lastThemeTemplateProcessorCache = new Pair<>(new PhantomReference<>(world,null),result);
-            return result;
+            return reloadCache(serverLevel, structurePos).templateProcessors;
         }
         return new ArrayList<>();
+    }
+
+    private List<RiftFinalProcessor> getFinalTemplateProcessors(LevelReader world, BlockPos structurePos) {
+        var currentCache = lastThemeTemplateProcessorCache;
+        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) return currentCache.finalProcessors;
+        if(world instanceof ServerLevel serverLevel) {
+            return reloadCache(serverLevel, structurePos).finalProcessors;
+        }
+        return new ArrayList<>();
+    }
+
+    private ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos) {
+        LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
+        var structureProcessors = (riftThemeData.getTheme() != null)?
+                riftThemeData.getTheme().value().getProcessors(themePieceType)
+                : defaultThemeProcessors(serverLevel, structurePos);
+        var newCache = new ThemeCache(new PhantomReference<>(serverLevel,null),new ArrayList<>(),new ArrayList<>());
+        for (var processor:structureProcessors){
+            var used = false;
+            if(processor instanceof RiftTemplateProcessor riftTemplateProcessor){
+                newCache.templateProcessors.add(riftTemplateProcessor);
+                used = true;
+            }
+            if(processor instanceof RiftFinalProcessor riftTemplateProcessor){
+                newCache.finalProcessors.add(riftTemplateProcessor);
+                used = true;
+            }
+            if(!used) WanderersOfTheRift.LOGGER.warn("incompatible processor type:"+processor.getClass());
+        }
+        return lastThemeTemplateProcessorCache = newCache;
+
     }
 
     private List<StructureProcessor> defaultThemeProcessors(ServerLevel world, BlockPos structurePos) {
@@ -130,4 +156,15 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         return currentState;
 
     }
+
+    @Override
+    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
+        var processors = getFinalTemplateProcessors(world.getLevel(), structurePos);
+
+        for (int i = 0; i < processors.size(); i++) {
+            processors.get(i).finalizeRoomProcessing(room, world, structurePos, pieceSize);
+        }
+    }
+
+    private record ThemeCache(PhantomReference<LevelReader> level, List<RiftTemplateProcessor> templateProcessors, List<RiftFinalProcessor> finalProcessors){}
 }
