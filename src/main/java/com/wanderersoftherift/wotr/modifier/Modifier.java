@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -39,14 +38,14 @@ public class Modifier {
     }
 
     public void enableModifier(float roll, Entity entity, ModifierSource source, int tier) {
-        if(!modifierTiers.containsKey(tier)) {
+        if (!modifierTiers.containsKey(tier)) {
             return;
         }
         modifierTiers.get(tier).enableModifier(roll, entity, source);
     }
 
     public void disableModifier(float roll, Entity entity, ModifierSource source, int tier) {
-        if(!modifierTiers.containsKey(tier)) {
+        if (!modifierTiers.containsKey(tier)) {
             return;
         }
         modifierTiers.get(tier).disableModifier(roll, entity, source);
@@ -57,11 +56,9 @@ public class Modifier {
             float roll,
             ModifierInstance instance,
             ChatFormatting chatFormatting) {
-        return modifierTiers.get(0).getTooltipComponent(
-                stack,
-                roll,
-                instance,
-                chatFormatting
-        );
+        return modifierTiers.get(0)
+                .getTooltipComponent(
+                        stack, roll, instance, chatFormatting
+                );
     }
 }
