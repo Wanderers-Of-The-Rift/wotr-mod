@@ -21,6 +21,7 @@
         "MixinJigsawReplacementProcessor",
         "MixinLivingEntity",
         "MixinOctahedralGroup",
+        "MixinProtoChunk",
         "MixinServerPlayer",
         "MixinSetItemDamageFunction",
         "MixinStairBlock",
