@@ -76,7 +76,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             int scaledY = (int) (y / scaleFactor);
 
             if (socket.modifier().isPresent()) {
-                RunegemData data = new RunegemData(socket.shape(), null, RunegemTier.RAW);
+                RunegemData data = new RunegemData(Component.empty(), socket.shape(), null, RunegemTier.RAW);
                 ItemStack fakeStack = new ItemStack(ModItems.RUNEGEM.get());
                 fakeStack.set(ModDataComponentType.RUNEGEM_DATA, data);
 

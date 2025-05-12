@@ -13,6 +13,8 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
@@ -22,56 +24,18 @@ import java.util.List;
 public class ModRuneGemDataProvider {
     public static void bootstrapRuneGems(BootstrapContext<RunegemData> context) {
         HolderGetter<Modifier> lookup = context.lookup(ModDatapackRegistries.MODIFIER_KEY);
-        HolderSet.Named<Item> HelmetTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_HELMET_SLOT);
+        HolderSet.Named<Item> socketablesTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE);
+        HolderSet.Named<Item> helmetTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_HELMET_SLOT);
         HolderSet.Named<Item> chestplateTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_CHESTPLATE_SLOT);
         HolderSet.Named<Item> leggingsTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_LEGGINGS_SLOT);
         HolderSet.Named<Item> bootsTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_BOOTS_SLOT);
         HolderSet.Named<Item> mainHandTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT);
         HolderSet.Named<Item> offHandTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_OFF_HAND_SLOT);
         context.register(getRunegemResourceKey("raw_attack"),
-                new RunegemData(RunegemShape.CIRCLE,
+                new RunegemData(getTranslatableName("raw_attack"),
+                        RunegemShape.CIRCLE,
                         List.of(new RunegemData.ModifierGroup(
-                                        HelmetTag,
-                                        List.of(
-                                                new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "knockback")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
-                                        )),
-                                new RunegemData.ModifierGroup(
-                                        chestplateTag,
-                                        List.of(
-                                                new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "knockback")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
-                                        )),
-                                new RunegemData.ModifierGroup(
-                                        leggingsTag,
-                                        List.of(
-                                                new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "knockback")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
-                                        )),
-                                new RunegemData.ModifierGroup(
-                                        bootsTag,
-                                        List.of(
-                                                new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "knockback")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
-                                        )),
-                                new RunegemData.ModifierGroup(
-                                        mainHandTag,
-                                        List.of(
-                                                new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                                new TieredModifier(1, getModifier(lookup, "knockback")),
-                                                new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
-                                        )),
-                                new RunegemData.ModifierGroup(
-                                        offHandTag,
+                                        socketablesTag,
                                         List.of(
                                                 new TieredModifier(1, getModifier(lookup, "flat_attack")),
                                                 new TieredModifier(1, getModifier(lookup, "heavy_attack")),
@@ -79,6 +43,10 @@ public class ModRuneGemDataProvider {
                                                 new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
                                         ))),
                         RunegemTier.RAW));
+    }
+
+    private static @NotNull MutableComponent getTranslatableName(String id) {
+        return Component.translatable("runegem." + WanderersOfTheRift.MODID + "." + id);
     }
 
     private static @NotNull ResourceKey<RunegemData> getRunegemResourceKey(String id) {

@@ -95,7 +95,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
                 && runegemSlot.getShape() != null) {
             ItemStack stack = new ItemStack(ModItems.RUNEGEM.get());
             RunegemShape shape = runegemSlot.getShape();
-            stack.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(shape, List.of(), RunegemTier.RAW));
+            stack.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(Component.empty(), shape, List.of(), RunegemTier.RAW));
 
             super.renderSlotContents(guiGraphics, stack, slot, null);
             guiGraphics.blit(RenderType::guiTexturedOverlay, SLOTS, x, y, getSlotOffset(shape, true), 18, 18, 18, 256,

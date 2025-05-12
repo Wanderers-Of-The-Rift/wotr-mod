@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -42,7 +43,7 @@ public class ModItems {
                     .setId(ResourceKey.create(Registries.ITEM,
                             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "runegem")))
                     .component(ModDataComponentType.RUNEGEM_DATA,
-                            new RunegemData(RunegemShape.CIRCLE, new ArrayList<>(), RunegemTier.RAW))));
+                            new RunegemData(Component.empty(), RunegemShape.CIRCLE, new ArrayList<>(), RunegemTier.RAW))));
 
     public static final DeferredItem<Item> RIFT_KEY = ITEMS
             .register("rift_key",

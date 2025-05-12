@@ -127,6 +127,9 @@
       "supported_items": "#wotr:socketable_off_hand_slot"
     }
   ],
+  "name": {
+    "translate": "runegem.wotr.raw_attack"
+  },
   "shape": "circle",
   "tier": "raw"
 }

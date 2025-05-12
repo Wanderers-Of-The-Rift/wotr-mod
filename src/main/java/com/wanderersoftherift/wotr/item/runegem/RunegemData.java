@@ -6,6 +6,9 @@ import com.wanderersoftherift.wotr.modifier.TieredModifier;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -13,10 +16,12 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Optional;
 
-public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists, RunegemTier tier) {
+public record RunegemData(Component name, RunegemShape shape, List<ModifierGroup> modifierLists, RunegemTier tier) {
 
     public static final Codec<RunegemData> CODEC = RecordCodecBuilder
-            .create(inst -> inst.group(RunegemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
+            .create(inst -> inst.group(
+                    ComponentSerialization.CODEC.fieldOf("name").forGetter(RunegemData::name),
+                    RunegemShape.CODEC.fieldOf("shape").forGetter(RunegemData::shape),
                     ModifierGroup.CODEC.listOf().fieldOf("modifier_options").forGetter(RunegemData::modifierLists),
                     RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
             ).apply(inst, RunegemData::new));
@@ -31,6 +36,10 @@ public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists,
             return Optional.empty();
         }
         return Optional.of(modifiers.get(level.random.nextInt(modifiers.size())));
+    }
+
+    public ResourceLocation getName() {
+        return null;
     }
 
     public record ModifierGroup(HolderSet<Item> supportedItems, List<TieredModifier> modifiers) {

@@ -3,8 +3,11 @@ package com.wanderersoftherift.wotr.item.runegem;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.ModItems;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -12,9 +15,12 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,6 +47,15 @@ public class Runegem extends Item {
     }
 
     @Override
+    public Component getName(ItemStack stack) {
+        RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
+        if (gemData != null) {
+            gemData.name();
+        }
+        return super.getName(stack);
+    }
+
+    @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         if (stack.has(ModDataComponentType.RUNEGEM_DATA)) {
             RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
@@ -50,5 +65,17 @@ public class Runegem extends Item {
         }
 
         return super.getTooltipImage(stack);
+    }
+
+    @Override
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            List<Component> tooltipComponents,
+            TooltipFlag tooltipFlag) {
+        if (stack.has(ModDataComponentType.RUNEGEM_DATA)) {
+            RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
+
+        }
     }
 }
