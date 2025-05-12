@@ -50,7 +50,7 @@ public class Runegem extends Item {
     public Component getName(ItemStack stack) {
         RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
         if (gemData != null) {
-            gemData.name();
+            return gemData.name();
         }
         return super.getName(stack);
     }
