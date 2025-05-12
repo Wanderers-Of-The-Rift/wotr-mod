@@ -20,15 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(StairBlock.class)
 public class MixinStairBlock {
 
-    @Shadow @Final public static EnumProperty<Direction> FACING;
+    @SuppressWarnings("StaticVariableName") @Shadow @Final public static EnumProperty<Direction> FACING;
 
-    @Shadow @Final public static EnumProperty<StairsShape> SHAPE;
+    @SuppressWarnings("StaticVariableName") @Shadow @Final public static EnumProperty<StairsShape> SHAPE;
 
     @Inject(method = "mirror",at = @At("HEAD"),cancellable = true)
     private void fixMirror(BlockState state, Mirror mirror, CallbackInfoReturnable<BlockState> cir){
 
-        Direction direction = (Direction)state.getValue(FACING);
-        StairsShape stairsshape = (StairsShape)state.getValue(SHAPE);
+        Direction direction = state.getValue(FACING);
+        StairsShape stairsshape = state.getValue(SHAPE);
         switch (mirror) {
             case FRONT_BACK:
                 if (direction.getAxis() == Direction.Axis.Z) {

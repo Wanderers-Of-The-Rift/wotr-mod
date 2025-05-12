@@ -15,9 +15,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class RiftProcessedRoom {
 
+    public final RoomRiftSpace space;
     private final AtomicReference<RiftProcessedChunk>[] chunkArray = new AtomicReference[64];
     private final CompletableFuture<Unit> isComplete = new CompletableFuture<>();
-    public final RoomRiftSpace space;
     private final Vec3i origin;
 
     public RiftProcessedRoom(RoomRiftSpace space) {
@@ -43,10 +43,14 @@ public class RiftProcessedRoom {
         if (x2<0 || x2>=space.size().getX() ||
                 y2<0 || y2>=space.size().getY() ||
                 z2<0 || z2>=space.size().getZ()
-        )return null;
+        ) {
+            return null;
+        }
         var idx = x2+(z2<<2)+(y2<<4);
         var ref = chunkArray[idx];
-        if(ref==null) return null;
+        if(ref==null) {
+            return null;
+        }
         chunkArray[idx]=null;
         return ref.get();
     }
@@ -54,8 +58,8 @@ public class RiftProcessedRoom {
 
     public RiftProcessedChunk getOrCreateChunk(Vec3i sectionPos) {
         return getOrCreateChunk(sectionPos.getX(), sectionPos.getY(), sectionPos.getZ());
-        //return data.computeIfAbsent(sectionPos, (pos)->new RiftProcessedChunk(sectionPos,this));
     }
+
     public RiftProcessedChunk getOrCreateChunk(int x, int y, int z) {
         var x2 = x-origin.getX();
         var y2 = y-origin.getY();
@@ -63,11 +67,17 @@ public class RiftProcessedRoom {
         if (x2<0 || x2>=space.size().getX() ||
                 y2<0 || y2>=space.size().getY() ||
                 z2<0 || z2>=space.size().getZ()
-        )return null;
+        ) {
+            return null;
+        }
         var ref = chunkArray[x2+(z2<<2)+(y2<<4)];
-        if(ref==null) return null;
+        if(ref==null) {
+            return null;
+        }
         var newValue = ref.get();
-        if (newValue!=null)return newValue;
+        if (newValue!=null) {
+            return newValue;
+        }
         newValue = new RiftProcessedChunk(new Vec3i(x, y, z), this);
         if (ref.compareAndSet(null,newValue)){
             return newValue;
@@ -82,9 +92,13 @@ public class RiftProcessedRoom {
         if (x2<0 || x2>=space.size().getX() ||
                 y2<0 || y2>=space.size().getY() ||
                 z2<0 || z2>=space.size().getZ()
-        )return null;
+        ) {
+            return null;
+        }
         var ref = chunkArray[x2+(z2<<2)+(y2<<4)];
-        if(ref==null) return null;
+        if(ref==null) {
+            return null;
+        }
         return ref.get();
     }
 

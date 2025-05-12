@@ -19,9 +19,11 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Block;
@@ -34,6 +36,7 @@ import net.minecraft.world.level.levelgen.blending.Blender;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -60,18 +63,18 @@ public class FastRiftGenerator extends ChunkGenerator {
             ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID)
                 ).apply(instance, FastRiftGenerator::new));
 
-    private final int layerCount;
 
+    public RiftLayout layout = null;
+    public RiftRoomGenerator roomGenerator = null;
+    private final int layerCount;
     private final ResourceLocation customBlockID;
     private final BlockState customBlock;
 
     private final AtomicInteger inFlightChunks = new AtomicInteger(0);
     private final AtomicInteger completedChunks = new AtomicInteger(0);
     private final AtomicInteger completedChunksInWindow = new AtomicInteger(0);
-    private long generationStart = 0;
     private final AtomicLong lastChunkStart = new AtomicLong(0);
-    public RiftLayout layout = null;
-    public RiftRoomGenerator roomGenerator = null;
+    private long generationStart = 0;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock) {
         super(biomeSource);
@@ -102,7 +105,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     @Override public int getGenDepth() {
-        return layerCount *16;
+        return layerCount * 16;
     }
 
     @Override
@@ -137,7 +140,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         var perimeterBlock = customBlock;
         RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount/2, perimeterBlock);
         RiftSpace.placePerimeterInChunk(chunk, null, -layerCount/2, perimeterBlock);
-        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount - 2];
+        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount-2];
         RiftSpace[] spaces = new RiftSpace[layerCount - 2];
         for (int i = 0; i < layerCount - 2; i++) {
             var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount/2, chunk.getPos().z);
@@ -185,15 +188,15 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     @Override public int getSeaLevel() {
-        return -layerCount *8;
+        return -layerCount * 8;
     }
 
     @Override public int getMinY() {
-        return -layerCount *8;
+        return -layerCount * 8;
     }
 
     @Override public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
-        return layerCount *16;
+        return layerCount * 16;
     }
 
     @Override public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
@@ -207,11 +210,13 @@ public class FastRiftGenerator extends ChunkGenerator {
             if(currentSpace==null || currentSpace instanceof VoidRiftSpace){
                 info.add("void");
             } else {
-                info.add("origin: " + currentSpace.origin().getX() + " " + currentSpace.origin().getY() + " " + currentSpace.origin().getZ());
-                info.add("size: " + currentSpace.size().getX() + " " + currentSpace.size().getY() + " " + currentSpace.size().getZ());
-                info.add("transform: " + currentSpace.templateTransform().x() + " " + currentSpace.templateTransform().z() + " " + currentSpace.templateTransform().diagonal());
+                info.add(MessageFormat.format("origin: {0} {1} {2}", currentSpace.origin().getX(), currentSpace.origin().getY(), currentSpace.origin().getZ()));
+                info.add(MessageFormat.format("size: {0} {1} {2}", currentSpace.size().getX(), currentSpace.size().getY(), currentSpace.size().getZ()));
+                info.add(MessageFormat.format("transform: {0} {1} {2}", currentSpace.templateTransform().x(), currentSpace.templateTransform().z(), currentSpace.templateTransform().diagonal()));
                 var template = currentSpace.template();
-                if(template!=null) info.add("room base template: " + template.identifier());
+                if(template != null) {
+                    info.add("room base template: " + template.identifier());
+                }
             }
         }
         info.add("performance");

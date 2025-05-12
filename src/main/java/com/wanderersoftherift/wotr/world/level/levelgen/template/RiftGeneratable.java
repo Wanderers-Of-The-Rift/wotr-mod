@@ -46,18 +46,20 @@ public interface RiftGeneratable {
                         return otherJigsaw.name().equals(jigsaw.target()) && (simplifiedDirection1Opposite==otherSimplifiedDirection || (simplifiedDirection1.getStepY()==0 && otherSimplifiedDirection.getStepY()==0 /*checks if both directions are horizontal*/));
                     }).toList();
 
-            if(jigsaw2List.isEmpty()) continue;//todo possibly multiple attempts
+            if(jigsaw2List.isEmpty()) {
+                continue;//todo possibly multiple attempts
+            }
             var jigsaw2 = jigsaw2List.get(random.nextInt(jigsaw2List.size()));
             var simplifiedDirection2 = simplifiedDirection(jigsaw2,TripleMirror.NONE);
             var nextMirrorInt = random.nextInt(8);
-            if(simplifiedDirection1.getAxis()== Direction.Axis.Y){
+            if(simplifiedDirection1.getAxis() == Direction.Axis.Y) {
                 if (simplifiedDirection2!=simplifiedDirection1Opposite){
                     continue;
                 }
                 if(jigsaw.jointType()== JigsawBlockEntity.JointType.ALIGNED && jigsaw2.jointType()== JigsawBlockEntity.JointType.ALIGNED){
                     nextMirrorInt = mirrorCorrection(auxiliaryDirection(jigsaw,mirror), auxiliaryDirection(jigsaw2,TripleMirror.NONE),nextMirrorInt,false);
                 }
-            }else {
+            } else {
                 nextMirrorInt = mirrorCorrection(simplifiedDirection1,simplifiedDirection2,nextMirrorInt,true);
             }
             var nextMirror = new TripleMirror(nextMirrorInt);

@@ -6,10 +6,15 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.util.ZeroBitStorage;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.chunk.PalettedContainer;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -29,22 +34,24 @@ public class RiftProcessedChunk {
 
     public void placeInWorld(ChunkAccess chunk, ServerLevelAccessor level){
         var mutablePosition = new BlockPos.MutableBlockPos();
-        swapDataInMinecraftSection(chunk.getSection((origin.getY()-chunk.getMinY())/16));
+        swapDataInMinecraftSection(chunk.getSection((origin.getY() - chunk.getMinY())/16));
         for (int index = 0; index < 4096; index++) {
             var block = blocks[index];
-            if(block==null)continue;
+            if(block==null) {
+                continue;
+            }
             var x = index & 0xf;
             var z = (index >> 4) & 0xf;
             var y = (index >> 8) & 0xf;
             mutablePosition.set(x,y+16*origin.getY(),z);
             chunk.setBlockState(mutablePosition,block,false);
             var nbt = blockNBT[index];
-            if(block.hasBlockEntity() && nbt!=null && level!=null){
-                nbt.putInt("x",x | (origin.getX()<<4));
-                nbt.putInt("y",y | (origin.getY()<<4));
-                nbt.putInt("z",z | (origin.getZ()<<4));
+            if(block.hasBlockEntity() && nbt != null && level != null){
+                nbt.putInt("x", x | (origin.getX() << 4));
+                nbt.putInt("y", y | (origin.getY() << 4));
+                nbt.putInt("z", z | (origin.getZ() << 4));
                 chunk.setBlockEntityNbt(nbt);
-                level.getBlockEntity(mutablePosition.move((origin.getX()<<4),0,(origin.getZ()<<4)));
+                level.getBlockEntity(mutablePosition.move((origin.getX() << 4),0, (origin.getZ() << 4)));
             }
         }
         for (int i = 0; i < entities.size(); i++) {
@@ -65,7 +72,7 @@ public class RiftProcessedChunk {
     }
 
     public void setBlockState(int x, int y, int z, BlockState blockState) {
-        var index = x + z*16 + (y-origin.getY()*16)*256;
+        var index = x + z * 16 + (y - origin.getY() * 16) * 256;
         blocks[index]=blockState;
     }
     public void setBlockStatePure(int x, int y, int z, BlockState blockState) {
@@ -79,7 +86,7 @@ public class RiftProcessedChunk {
     }
 
     public BlockState getBlockState(int x, int y, int z) {
-        var index = x + z*16 + (y-origin.getY()*16)*256;
+        var index = x + z * 16 + (y - origin.getY() * 16) * 256;
         return blocks[index];
     }
 

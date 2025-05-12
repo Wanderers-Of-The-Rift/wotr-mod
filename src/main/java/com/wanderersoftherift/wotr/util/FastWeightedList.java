@@ -63,7 +63,9 @@ public class FastWeightedList<T> {
         var selected = rng.nextDouble()*totalWeight;
         for (int i = 0; i < weights.size(); i++) {
             var weight = weights.getFloat(i);
-            if(weight > selected) return values.get(i);
+            if(weight > selected) {
+                return values.get(i);
+            }
             selected -= weight;
         }
         return null;

@@ -18,15 +18,19 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.ModProcessors.ATTACHMENT;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.createRandom;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomSeed;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.Plane;
 
 public class AttachmentProcessor extends StructureProcessor implements RiftFinalProcessor {
@@ -40,6 +44,7 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
                     .forGetter(AttachmentProcessor::getStructureRandomType),
             Codec.LONG.optionalFieldOf("seed").forGetter(AttachmentProcessor::getSeed)
     ).apply(builder, AttachmentProcessor::new));
+    private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
 
     private final BlockState blockState;
     private final int requiresSides;
@@ -48,6 +53,7 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
     private final float rarity;
     private final StructureRandomType structureRandomType;
     private final Optional<Long> seed;
+
 
     public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown,
             float rarity, StructureRandomType structureRandomType, Optional<Long> seed) {
@@ -155,8 +161,6 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
         return seed;
     }
 
-    private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
-
     @Override
     public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
         var blockRandomFlag = structureRandomType==BLOCK;
@@ -180,7 +184,9 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
                             BlockState newBlock;
                             for (int i = 0; i < HORIZONTAL.size(); i++) {
                                 var side = HORIZONTAL.get(i);
-                                if (sideCount <= 0) break;
+                                if (sideCount <= 0) {
+                                    break;
+                                }
                                 newBlock = room.getBlock(x2 + side.getStepX(), y2, z2 + side.getStepZ());
                                 bp.set(x2 + side.getStepX(), y2, z2 + side.getStepZ());
                                 if (newBlock != null && !isFaceFullFast(newBlock, bp, side.getOpposite())) {
@@ -188,15 +194,21 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
                                 }
                             }
 
-                            if (sideCount > 0) continue;
+                            if (sideCount > 0) {
+                                continue;
+                            }
                             newBlock = room.getBlock(x2,y2+1,z2);
                             bp.set(x2,y2+1,z2);
                             boolean validUp = !requiresUp || newBlock == null || isFaceFullFast(newBlock, bp, Direction.DOWN);
-                            if (!validUp) continue;
+                            if (!validUp) {
+                                continue;
+                            }
                             newBlock = room.getBlock(x2,y2-1,z2);
                             bp.setY(y2-1);
                             boolean validDown = !requiresDown || newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
-                            if (!validDown) continue;
+                            if (!validDown) {
+                                continue;
+                            }
                             room.setBlock(x2,y2,z2, blockState);
 
                         }

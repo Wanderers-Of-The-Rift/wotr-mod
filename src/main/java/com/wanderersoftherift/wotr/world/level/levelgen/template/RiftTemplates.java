@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.mixin.AccessorSinglePoolElement;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureTemplate;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import javax.annotation.Nullable;
 import java.lang.ref.PhantomReference;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,16 +65,17 @@ public class RiftTemplates {
     public static List<RiftGeneratable> fromPoolElement(SinglePoolElement e, StructureTemplateManager manager){
         var template = ((AccessorSinglePoolElement) e).callGetTemplate(manager);
         var id = ((TemplateIdLookup) manager).idForTemplate(template);
-        if (id == null) return null;
+        if (id == null) {
+            return Collections.emptyList();
+        }
 
         var processorsHolder = ((AccessorSinglePoolElement) e).getProcessors();
         var palettes = ((AccessorStructureTemplate) template).getPalettes();
         var entities = ((AccessorStructureTemplate)template).getEntityInfoList();
-        var templates = IntStream.range(0, palettes.size()).mapToObj( idx ->
-                fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities, id.toString()+":"+idx)
-        ).toList();
 
-        return templates;
+        return IntStream.range(0, palettes.size()).mapToObj(idx ->
+                fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities, MessageFormat.format("{0}:{1}:{2}", id.getNamespace(), id.getPath(), idx))
+        ).toList();
     }
 
     public static RiftGeneratable fromPalette(StructureTemplate.Palette palette, Vec3i size, StructureProcessorList processors, List<StructureTemplate.StructureEntityInfo> entities, String identifier){
@@ -87,7 +88,9 @@ public class RiftTemplates {
                 var chunk = pos.getX()/ BasicRiftTemplate.CHUNK_WIDTH;
                 var blockStateChunk = blockStates[chunk];
                 blockStateChunk[(pos.getX()%BasicRiftTemplate.CHUNK_WIDTH) + pos.getZ() * BasicRiftTemplate.CHUNK_WIDTH + pos.getY() * BasicRiftTemplate.CHUNK_WIDTH * size.getZ()] = state;
-                if(nbt!=null && !nbt.isEmpty())blockEntities.put(pos, nbt);
+                if(nbt!=null && !nbt.isEmpty()) {
+                    blockEntities.put(pos, nbt);
+                }
             }
         });
 
@@ -98,7 +101,9 @@ public class RiftTemplates {
             var blockChunk = blocks[chunk];
             for (int i = 0; i < blockStateChunk.length; i++) {
                 var state = blockStateChunk[i];
-                if(state != null) blockChunk[i] = state.getBlock();
+                if(state != null) {
+                    blockChunk[i] = state.getBlock();
+                }
             }
         }
         var settings = new StructurePlaceSettings();

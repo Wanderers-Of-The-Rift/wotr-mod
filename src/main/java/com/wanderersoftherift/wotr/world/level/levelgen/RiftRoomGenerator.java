@@ -9,7 +9,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.RandomState;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class RiftRoomGenerator {
 
@@ -22,8 +27,12 @@ public class RiftRoomGenerator {
     private CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(RoomRiftSpace space, ServerLevelAccessor world, RandomState randomState) {
         var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
         var processedRoomFuture = structureCache.compute(space.origin(), (key, oldFuture) -> {
-            if(oldFuture == null) return newFuture;
-            if(!oldFuture.isDone()) return oldFuture;
+            if(oldFuture == null) {
+                return newFuture;
+            }
+            if(!oldFuture.isDone()) {
+                return oldFuture;
+            }
             try {
                 var gn = oldFuture.get(0, TimeUnit.MICROSECONDS);
                 return gn.refersTo(null) ? newFuture : oldFuture;
@@ -55,9 +64,11 @@ public class RiftRoomGenerator {
         var newResult = new CompletableFuture<RiftProcessedRoom>();
         processedRoomFuture.thenAccept((weak) -> {
             var value = weak.get();
-            if(value == null)
+            if(value == null) {
                 getOrCreateFutureProcessedRoom(space, world, randomState).thenAccept(newResult::complete);
-            else newResult.complete(value);
+            } else {
+                newResult.complete(value);
+            }
         });
         return newResult;
     }

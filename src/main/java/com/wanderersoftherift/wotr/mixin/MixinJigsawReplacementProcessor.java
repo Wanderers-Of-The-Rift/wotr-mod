@@ -23,12 +23,12 @@ public class MixinJigsawReplacementProcessor implements RiftTemplateProcessor {
             if (nbt == null) {
                 return currentState;
             } else {
-                String s = nbt.getString("final_state");
+                String finalState = nbt.getString("final_state");
 
                 BlockState blockstate1;
                 try {
-                    BlockStateParser.BlockResult blockstateparser$blockresult = BlockStateParser.parseForBlock(world.holderLookup(Registries.BLOCK), s, true);
-                    blockstate1 = blockstateparser$blockresult.blockState();
+                    BlockStateParser.BlockResult blockResult = BlockStateParser.parseForBlock(world.holderLookup(Registries.BLOCK), finalState, true);
+                    blockstate1 = blockResult.blockState();
                 } catch (CommandSyntaxException commandsyntaxexception) {
                     return null;
                 }

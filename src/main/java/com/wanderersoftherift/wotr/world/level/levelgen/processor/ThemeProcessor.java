@@ -95,7 +95,9 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private List<RiftTemplateProcessor> getThemeTemplateProcessors(LevelReader world, BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
-        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) return currentCache.templateProcessors;
+        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) {
+            return currentCache.templateProcessors;
+        }
         if(world instanceof ServerLevel serverLevel) {
             return reloadCache(serverLevel, structurePos).templateProcessors;
         }
@@ -104,7 +106,9 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private List<RiftFinalProcessor> getFinalTemplateProcessors(LevelReader world, BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
-        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) return currentCache.finalProcessors;
+        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) {
+            return currentCache.finalProcessors;
+        }
         if(world instanceof ServerLevel serverLevel) {
             return reloadCache(serverLevel, structurePos).finalProcessors;
         }
@@ -127,7 +131,9 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
                 newCache.finalProcessors.add(riftTemplateProcessor);
                 used = true;
             }
-            if(!used) WanderersOfTheRift.LOGGER.warn("incompatible processor type:"+processor.getClass());
+            if(!used) {
+                WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+            }
         }
         return lastThemeTemplateProcessorCache = newCache;
 

@@ -33,7 +33,7 @@ public class MixinChunkAccess {
 
     @Coerce
     @Inject(method = "<init>",at = @At("TAIL"))
-    private void useConcurrentHashMap(ChunkPos p_187621_, UpgradeData p_187622_, LevelHeightAccessor p_187623_, Registry p_187624_, long p_187625_, LevelChunkSection[] p_187626_, BlendingData p_187627_, CallbackInfo ci){
+    private void useConcurrentHashMap(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, Registry registry, long inhabitedTime, LevelChunkSection[] chunkSections, BlendingData blendingData, CallbackInfo callbackInfo){
         pendingBlockEntities=new ConcurrentHashMap<>();
         blockEntities=new ConcurrentHashMap<>();
     }

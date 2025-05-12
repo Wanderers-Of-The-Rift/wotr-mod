@@ -110,7 +110,9 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
 
             var newNbt = getBlockEntity(world, spawnerBlockEntity);
             for (var key : nbt.getAllKeys().toArray()) {
-                if (!newNbt.getAllKeys().contains(key)) nbt.remove((String) key);
+                if (!newNbt.getAllKeys().contains(key)) {
+                    nbt.remove((String) key);
+                }
             }
 
             for (var key : newNbt.getAllKeys()) {

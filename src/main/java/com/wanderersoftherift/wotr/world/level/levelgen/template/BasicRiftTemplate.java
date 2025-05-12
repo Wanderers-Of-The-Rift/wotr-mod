@@ -14,7 +14,11 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.JigsawReplacementProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.NopProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,11 +58,13 @@ public class BasicRiftTemplate implements RiftGeneratable {
                 templateProcessors.add(riftTemplateProcessor);
                 used = true;
             }
-            if (processor instanceof RiftFinalProcessor riftTemplateProcessor) {
-                finalProcessors.add(riftTemplateProcessor);
+            if (processor instanceof RiftFinalProcessor riftFinalProcessor) {
+                finalProcessors.add(riftFinalProcessor);
                 used = true;
             }
-            if (!used && !(processor instanceof NopProcessor)) WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+            if (!used && !(processor instanceof NopProcessor)) {
+                WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+            }
         }
 
         this.templateProcessors = ImmutableList.copyOf(templateProcessors);
@@ -84,44 +90,53 @@ public class BasicRiftTemplate implements RiftGeneratable {
             }
         }
         if(tileEntities.isEmpty()){
-            tileEntities=null;
+            tileEntities = null;
         }else if(tileEntities.size() == 1){
             var entry = tileEntities.entrySet().stream().findFirst().get();
-            tileEntities=Collections.singletonMap(entry.getKey(), entry.getValue());
+            tileEntities = Collections.singletonMap(entry.getKey(), entry.getValue());
         }
-        this.tileEntities=tileEntities;
+        this.tileEntities = tileEntities;
 
-        hidden = new short[data.length][data[0].length/16];
-        for (int i = 0; i < data.length; i++) {
-            var hiddenChunk = hidden[i];
-            var dataChunk = data[i];
+        hidden = computeHidden(data, size);
+    }
 
-            for (int j = 0; j < dataChunk.length; j++) {
-                var blockState = dataChunk[j];
+    private static short[][] computeHidden(BlockState[][] data, Vec3i size){
+        var result = new short[data.length][data[0].length/16];
+        for (int index1A = 0; index1A < data.length; index1A++) {
+            var hiddenChunk = result[index1A];
+            var dataChunk = data[index1A];
+
+            for (int index1B = 0; index1B < dataChunk.length; index1B++) {
+                var blockState = dataChunk[index1B];
                 if (blockState != null) {
-                    var blockPosX = i * CHUNK_WIDTH + j % CHUNK_WIDTH;
-                    var blockPosY = (j / CHUNK_WIDTH) / size.getZ();
-                    var blockPosZ = (j / CHUNK_WIDTH) % size.getZ();
+                    var blockPosX = index1A * CHUNK_WIDTH + index1B % CHUNK_WIDTH;
+                    var blockPosY = (index1B / CHUNK_WIDTH) / size.getZ();
+                    var blockPosZ = (index1B / CHUNK_WIDTH) % size.getZ();
                     var blockPos = new BlockPos(blockPosX, blockPosY, blockPosZ);
                     var isInvisible = blockState.canOcclude();
                     for (var direction: DIRECTIONS){
-                        if (!isInvisible) break;
+                        if (!isInvisible) {
+                            break;
+                        }
                         var offsetPos = blockPos.relative(direction);
                         if(offsetPos.getX() < 0 || offsetPos.getX() >= size.getX() ||
                                 offsetPos.getY() < 0 || offsetPos.getY() >= size.getY() ||
                                 offsetPos.getZ() < 0 || offsetPos.getZ() >= size.getZ()
-                        ) continue;
-                        var index2_0 = offsetPos.getX() / CHUNK_WIDTH;
-                        var index2_1 = offsetPos.getX() % CHUNK_WIDTH + offsetPos.getZ() * CHUNK_WIDTH + offsetPos.getY() * CHUNK_WIDTH * size.getZ();
-                        var blockState2 = data[index2_0][index2_1];
+                        ) {
+                            continue;
+                        }
+                        var index2A = offsetPos.getX() / CHUNK_WIDTH;
+                        var index2B = offsetPos.getX() % CHUNK_WIDTH + offsetPos.getZ() * CHUNK_WIDTH + offsetPos.getY() * CHUNK_WIDTH * size.getZ();
+                        var blockState2 = data[index2A][index2B];
                         isInvisible = blockState2 != null && blockState2.canOcclude();
                     }
                     if (isInvisible) {
-                        hiddenChunk[j / CHUNK_WIDTH] |= (short) (1 << (j % CHUNK_WIDTH));
+                        hiddenChunk[index1B / CHUNK_WIDTH] |= (short) (1 << (index1B % CHUNK_WIDTH));
                     }
                 }
             }
         }
+        return result;
     }
 
     private static int hashTileEntityPosition(int x, int y, int z){
@@ -191,17 +206,19 @@ public class BasicRiftTemplate implements RiftGeneratable {
                     var xWithinChunk = mutablePosition.getX() & 0xf;
                     var yWithinChunk = mutablePosition.getY() & 0xf;
                     var zWithinChunk = mutablePosition.getZ() & 0xf;
-                    if(roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) <<4) | ((yWithinChunk) <<8)]!=null)continue;
+                    if(roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) <<4) | ((yWithinChunk) <<8)]!=null) {
+                        continue;
+                    }
 
                     var tileEntityHash = hashTileEntityPosition(blockPosX, blockPosY, blockPosZ);
                     var nbt = fastTileEntityHashTable[tileEntityHash];
-                    if(nbt!=null){
+                    if(nbt != null) {
                         var position = fastTileEntityPositionsHashTable[tileEntityHash];
-                        if(position.getX()!=blockPosX || position.getY()!=blockPosY || position.getZ()!=blockPosZ){
+                        if(position.getX() != blockPosX || position.getY() != blockPosY || position.getZ() != blockPosZ) {
                             if(tileEntities==null){
                                 nbt=null;
                             }else {
-                                var blockPos = new Vec3i(blockPosX, blockPosY, blockPosZ );
+                                var blockPos = new Vec3i(blockPosX, blockPosY, blockPosZ);
                                 nbt = tileEntities.get(blockPos);
                             }
                         }
@@ -218,7 +235,9 @@ public class BasicRiftTemplate implements RiftGeneratable {
                     for (int k = 0; k < processors.size() && blockState != null; k++) {
                         blockState = processors.get(k).processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, isVisible);
                     }
-                    if (blockState == null) continue;
+                    if (blockState == null) {
+                        continue;
+                    }
                     /*
                     if (xLastChunkPosition!=xChunkPosition || yLastChunkPosition != yChunkPosition || zLastChunkPosition != zChunkPosition || roomChunk == null){
                         xLastChunkPosition = xChunkPosition;
@@ -238,7 +257,9 @@ public class BasicRiftTemplate implements RiftGeneratable {
                     if(!emptyNBT.isEmpty()) {
                         nbt = nbt.copy();
                         var added = emptyNBT.getAllKeys().toArray();
-                        for (var key:added)emptyNBT.remove((String) key);
+                        for (var key : added) {
+                            emptyNBT.remove((String) key);
+                        }
                     }
                     if(!nbt.isEmpty() && blockState.hasBlockEntity()) {
                         roomChunk.blockNBT[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = nbt;
@@ -258,10 +279,14 @@ public class BasicRiftTemplate implements RiftGeneratable {
             var original = new StructureTemplate.StructureEntityInfo(position, new BlockPos(blockPosition), newNbt);
             info = JigsawReplacementProcessor.INSTANCE.processEntity(world, offset, original, info, null, null);
             for (var processor : entityProcessor) {
-                if (info == null) break;
+                if (info == null) {
+                    break;
+                }
                 info = processor.processEntity(world, offset, original, info, null, null);
             }
-            if (info == null) continue;
+            if (info == null) {
+                continue;
+            }
 
             destination.addEntity(info);
         }

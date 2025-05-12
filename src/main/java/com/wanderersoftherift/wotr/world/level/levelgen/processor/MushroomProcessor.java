@@ -28,9 +28,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.createRandom;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomBlockFromItemTag;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomSeed;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.DOWN;
 import static net.minecraft.core.Direction.UP;
 import static net.neoforged.neoforge.common.Tags.Items.MUSHROOMS;
@@ -152,7 +157,9 @@ public class MushroomProcessor extends StructureProcessor implements RiftFinalPr
                             var newBlock = room.getBlock(x2,y2-1,z2);
                             bp.set(x2,y2-1,z2);
                             boolean validDown = newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
-                            if (!validDown) continue;
+                            if (!validDown) {
+                                continue;
+                            }
                             room.setBlock(x2, y2, z2, roll2.defaultBlockState());
 
                         }

@@ -183,7 +183,9 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 // }
                 var newNbt = tileEntity.saveWithId(world.registryAccess());
                 for (var key : nbt.getAllKeys().toArray()){
-                    if (!newNbt.getAllKeys().contains(key))nbt.remove((String) key);
+                    if (!newNbt.getAllKeys().contains(key)) {
+                        nbt.remove((String) key);
+                    }
                 }
 
                 for (var key : newNbt.getAllKeys()){

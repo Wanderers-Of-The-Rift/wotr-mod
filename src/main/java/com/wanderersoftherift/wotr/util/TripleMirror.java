@@ -13,12 +13,12 @@ import oshi.util.tuples.Pair;
 
 public record TripleMirror(boolean x, boolean z, boolean diagonal) {
 
+    public static final TripleMirror DIAGONAL = new TripleMirror(false,false,true);
+    public static final TripleMirror NONE = new TripleMirror(false, false, false);
+
     public TripleMirror(int permutation){
         this((permutation & 0b1) !=0,(permutation & 0b10) !=0,(permutation & 0b100) !=0);
     }
-
-    public static final TripleMirror DIAGONAL = new TripleMirror(false,false,true);
-    public static final TripleMirror NONE = new TripleMirror(false, false, false);
 
     public Vec3i applyToPosition(Vec3i position, int sizeX, int sizeZ){
         if(x) {
@@ -80,8 +80,10 @@ public record TripleMirror(boolean x, boolean z, boolean diagonal) {
     }
 
     public Direction applyToDirection(Direction direction) {
-        if((x && direction.getAxis()== Direction.Axis.X) || (z && direction.getAxis()== Direction.Axis.Z))direction=direction.getOpposite();
-        if(diagonal){
+        if((x && direction.getAxis()== Direction.Axis.X) || (z && direction.getAxis()== Direction.Axis.Z)) {
+            direction = direction.getOpposite();
+        }
+        if(diagonal) {
             direction=switch (direction){
                 case DOWN -> Direction.DOWN;
                 case UP -> Direction.UP;

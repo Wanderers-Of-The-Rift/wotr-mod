@@ -77,7 +77,9 @@ public class RoomRandomizerImpl implements RoomRandomizer {
                     desiredTemplateSize.getY() >= it.size().getY() &&
                     desiredTemplateSize.getZ() >= it.size().getZ()
             );
-        } else return baseStream;
+        } else {
+            return baseStream;
+        }
     }
 
     private static List<RiftSpaceCorridor> computeCorridors(Collection<StructureTemplate.JigsawBlockInfo> jigsaws, TripleMirror mirror, Vec3i sizeChunks) {

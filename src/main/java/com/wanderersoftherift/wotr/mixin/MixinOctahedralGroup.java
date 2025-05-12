@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-
 /*copied from VaultFaster*/
 @Mixin(OctahedralGroup.class)
 public abstract class MixinOctahedralGroup {
@@ -23,26 +22,26 @@ public abstract class MixinOctahedralGroup {
 
     @Shadow @Final private SymmetricGroup3 permutation;
 
-    @Shadow public abstract boolean inverts(Direction.Axis p_56527_);
+    @Shadow public abstract boolean inverts(Direction.Axis axis);
 
-    @Inject(method = "rotate(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;",at=@At("HEAD"),remap = true,cancellable = true)
-    private void fixRotateMultithreaded(Direction p_56529_, CallbackInfoReturnable<Direction> cir){
+    @Inject(method = "rotate(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;",at=@At("HEAD"), cancellable = true)
+    private void fixRotateMultithreaded(Direction baseDirection, CallbackInfoReturnable<Direction> cir){
         var privateRotatedDirections = this.rotatedDirections;
         if (privateRotatedDirections == null) {
             privateRotatedDirections = Maps.newEnumMap(Direction.class);
 
             var axes = Direction.Axis.values();
             for(Direction direction : Direction.values()) {
-                Direction.Axis direction$axis = direction.getAxis();
-                Direction.AxisDirection direction$axisdirection = direction.getAxisDirection();
-                Direction.Axis direction$axis1 = axes[this.permutation.permutation(direction$axis.ordinal())];
-                Direction.AxisDirection direction$axisdirection1 = this.inverts(direction$axis1) ? direction$axisdirection.opposite() : direction$axisdirection;
-                Direction direction1 = Direction.fromAxisAndDirection(direction$axis1, direction$axisdirection1);
+                Direction.Axis axis = direction.getAxis();
+                Direction.AxisDirection axisDirection = direction.getAxisDirection();
+                Direction.Axis otherAxis = axes[this.permutation.permutation(axis.ordinal())];
+                Direction.AxisDirection otherAxisDirection = this.inverts(otherAxis) ? axisDirection.opposite() : axisDirection;
+                Direction direction1 = Direction.fromAxisAndDirection(otherAxis, otherAxisDirection);
                 privateRotatedDirections.put(direction, direction1);
             }
         }
 
-        cir.setReturnValue((this.rotatedDirections = privateRotatedDirections).get(p_56529_));
+        cir.setReturnValue((this.rotatedDirections = privateRotatedDirections).get(baseDirection));
 
     }
 }

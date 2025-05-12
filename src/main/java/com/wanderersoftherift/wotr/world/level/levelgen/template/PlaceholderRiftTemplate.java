@@ -17,8 +17,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class PlaceholderRiftTemplate implements RiftGeneratable {
-    private final Vec3i size;
     private static final BlockState blockState = ModBlocks.PROCESSOR_BLOCK_1.getBlock().get().defaultBlockState();
+    private final Vec3i size;
 
     public PlaceholderRiftTemplate(Vec3i size) {
         this.size = size;
@@ -42,7 +42,9 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
                     var f1 = xm>=6 && xm<9;
                     var f2 = ym>=6 && ym<9;
                     var f3 = zm>=6 && zm<9;
-                    if ((f1&&f2) || (f2&&f3) ||(f3&&f1))continue;
+                    if ((f1&&f2) || (f2&&f3) ||(f3&&f1)) {
+                        continue;
+                    }
                     var blockPos = new Vec3i(x,y,z);
 
                     mutablePosition.set(offset).move(mirror.applyToPosition(blockPos, size.getX()-1, size.getZ()-1));
@@ -50,7 +52,9 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
                     var nbt = new CompoundTag();
                     var info = new StructureTemplate.StructureBlockInfo(mutablePosition, blockState, nbt);
                     var newBlockState = themeProcessor.processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, true);
-                    if (newBlockState == null) continue;
+                    if (newBlockState == null) {
+                        continue;
+                    }
 
                     var finalPos = info.pos();
                     var xChunkPosition = finalPos.getX() >> 4;

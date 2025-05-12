@@ -25,8 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.*;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.*;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.createRandom;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomSeed;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.EAST;
 import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.SOUTH;
@@ -207,7 +212,9 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
                         if(roll <= rarity) {
                             bp.set(x2, y2, z2);
                             var direction = selectDirection(room, bp);
-                            if (direction == null) continue;
+                            if (direction == null) {
+                                continue;
+                            }
                             BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
                             room.setBlock(x2, y2, z2, VINE.defaultBlockState().setValue(property, true));
                         }
