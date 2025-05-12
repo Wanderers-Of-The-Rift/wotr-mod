@@ -2,9 +2,7 @@ package com.wanderersoftherift.wotr.item.runegem;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
-import com.wanderersoftherift.wotr.modifier.Modifier;
-import net.minecraft.core.Holder;
+import com.wanderersoftherift.wotr.modifier.TieredModifier;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
@@ -23,11 +21,10 @@ public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists,
                     RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
             ).apply(inst, RunegemData::new));
 
-    public Optional<Holder<Modifier>> getRandomModifierForItem(ItemStack stack, Level level) {
-        List<Holder<Modifier>> modifiers = modifierLists.stream()
+    public Optional<TieredModifier> getRandomTieredModifierForItem(ItemStack stack, Level level) {
+        List<TieredModifier> modifiers = modifierLists.stream()
                 .filter(group -> stack.is(group.supportedItems()))
-                .map(ModifierGroup::modifiers)
-                .flatMap(HolderSet::stream)
+                .flatMap(group -> group.modifiers.stream())
                 .distinct()
                 .toList();
         if (modifiers.isEmpty()) {
@@ -36,14 +33,15 @@ public record RunegemData(RunegemShape shape, List<ModifierGroup> modifierLists,
         return Optional.of(modifiers.get(level.random.nextInt(modifiers.size())));
     }
 
-    public record ModifierGroup(HolderSet<Item> supportedItems, HolderSet<Modifier> modifiers) {
+    public record ModifierGroup(HolderSet<Item> supportedItems, List<TieredModifier> modifiers) {
         public static final Codec<ModifierGroup> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-                RegistryCodecs.homogeneousList(Registries.ITEM)
-                        .fieldOf("supported_items")
-                        .forGetter(ModifierGroup::supportedItems),
-                RegistryCodecs.homogeneousList(ModDatapackRegistries.MODIFIER_KEY)
-                        .fieldOf("modifiers")
-                        .forGetter(ModifierGroup::modifiers))
+                        RegistryCodecs.homogeneousList(Registries.ITEM)
+                                .fieldOf("supported_items")
+                                .forGetter(ModifierGroup::supportedItems),
+                        TieredModifier.CODEC.listOf().fieldOf("modifiers")
+                                .forGetter(ModifierGroup::modifiers))
                 .apply(inst, ModifierGroup::new));
+
     }
+
 }

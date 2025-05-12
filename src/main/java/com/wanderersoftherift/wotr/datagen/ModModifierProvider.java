@@ -99,6 +99,15 @@ public class ModModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE)))))
         );
+        context.register(getResourceKey("heavy_knockback"),
+                new Modifier(generateEqualRollSpread(3,
+                        List.of(new ToBeTieredModifierEffect(0, 15F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("heavy_knockback"),
+                                        Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE))),
+                        List.of(new AttributeModifierEffect(
+                                WanderersOfTheRift.id("heavy_knockback"), Attributes.ATTACK_SPEED,
+                                -1, -0.5F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
+        );
         context.register(getResourceKey("movement_speed"),
                 new Modifier(generateEqualRollSpread(3,
                         List.of(new ToBeTieredModifierEffect(0, 0.35F,
@@ -126,7 +135,7 @@ public class ModModifierProvider {
         context.register(getResourceKey("flat_ability_damage"),
                 new Modifier(generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0, 7F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("flat_ability_damage"),
                                         ModAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         context.register(getResourceKey("percent_ability_damage"),

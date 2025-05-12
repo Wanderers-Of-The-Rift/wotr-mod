@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
+import com.wanderersoftherift.wotr.modifier.TieredModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -41,12 +42,12 @@ public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier
         if (runegemData == null) {
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifierForItem(stack, level);
-        if (modifierHolder.isEmpty()) {
+        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(stack, level);
+        if (tieredModifier.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), 0, level.random)),
+        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(tieredModifier.get().modifier(), tieredModifier.get().tier(), level.random)),
                 Optional.of(runegemData));
     }
 }
