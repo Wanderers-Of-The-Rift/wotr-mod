@@ -195,7 +195,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
-        add("tooltip." + WanderersOfTheRift.MODID + ".implicit-", "Implicit: ");
+        add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
 
@@ -288,6 +288,19 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("hud_preset", "default"), "Default");
         add(WanderersOfTheRift.translationId("hud_preset", "minimal"), "Minimal");
+
+        add(WanderersOfTheRift.translationId("attribute", "ability.aoe"), "Ability Area of Effect");
+        add(WanderersOfTheRift.translationId("attribute", "ability.raw_damage"), "Ability Damage");
+        add(WanderersOfTheRift.translationId("attribute", "ability.cooldown"), "Ability Cooldown");
+        add(WanderersOfTheRift.translationId("attribute", "ability.heal_amount"), "Ability Heal Amount");
+        add(WanderersOfTheRift.translationId("attribute", "ability.mana_cost"), "Mana Cost");
+        add(WanderersOfTheRift.translationId("attribute", "projectile_spread"), "Ability Projectile Spread");
+        add(WanderersOfTheRift.translationId("attribute", "projectile_count"), "Ability Projectile Count");
+        add(WanderersOfTheRift.translationId("attribute", "projectile_speed"), "Ability Projectile Speed");
+        add(WanderersOfTheRift.translationId("attribute", "projectile_pierce"), "Ability Projectile Pierce");
+        add(WanderersOfTheRift.translationId("attribute", "max_mana"), "Max Mana");
+        add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
+        add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
     }
 
     private void addEssenceType(String id, String value) {
