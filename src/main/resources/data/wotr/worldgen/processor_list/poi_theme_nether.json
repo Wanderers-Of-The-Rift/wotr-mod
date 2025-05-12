@@ -1,0 +1,1013 @@
+{
+  "processors": [
+    {
+      "processor_type": "wotr:spot_gradient",
+      "replacements": [
+        {
+          "input_state": "wotr:processor_block_1",
+          "output_steps": [
+            {
+              "output_state": "minecraft:netherrack",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:nether_wart_block",
+              "step_size": 0.3
+            },
+            {
+              "output_state": "minecraft:magma_block",
+              "step_size": 0.1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:crimson_stem",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_slab",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_stairs",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_wall",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:crimson_button",
+              "step_size": 0.5
+            },
+            {
+              "output_state": "minecraft:mangrove_button",
+              "step_size": 0.5
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:crimson_pressure_plate",
+              "step_size": 0.5
+            },
+            {
+              "output_state": "minecraft:mangrove_pressure_plate",
+              "step_size": 0.5
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_fence",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:crimson_fence",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:crimson_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_stained_glass",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:black_stained_glass",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_stained_glass_pane",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:black_stained_glass_pane",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_1_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_trapdoor",
+              "step_size": 0.3
+            },
+            {
+              "output_state": "minecraft:crimson_trapdoor",
+              "step_size": 0.7
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_2",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_bricks",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_bricks",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_brick_slab",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_brick_stairs",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_brick_wall",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_button",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_pressure_plate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_fence",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_2_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_trapdoor",
+              "step_size": 1
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_3",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_deepslate",
+              "step_size": 0.2
+            },
+            {
+              "output_state": "minecraft:basalt",
+              "step_size": 0.2
+            },
+            {
+              "output_state": "minecraft:deepslate",
+              "step_size": 0.35
+            },
+            {
+              "output_state": "minecraft:cobbled_deepslate",
+              "step_size": 0.35
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:pale_oak_wood",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:cobbled_deepslate_slab",
+              "step_size": 0.75
+            },
+            {
+              "output_state": "minecraft:polished_deepslate_slab",
+              "step_size": 0.25
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_deepslate_stairs",
+              "step_size": 0.5
+            },
+            {
+              "output_state": "minecraft:cobbled_deepslate_stairs",
+              "step_size": 0.5
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:cobbled_deepslate_wall",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:polished_deepslate_wall",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_button",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_pressure_plate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_fence",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:light_gray_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:light_gray_stained_glass_pane",
+              "step_size": 0.5
+            },
+            {
+              "output_state": "minecraft:gray_stained_glass_pane",
+              "step_size": 0.5
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_3_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_trapdoor",
+              "step_size": 1
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_5",
+          "output_steps": [
+            {
+              "output_state": "minecraft:deepslate_bricks",
+              "step_size": 0.5
+            },
+            {
+              "output_state": "minecraft:cracked_deepslate_bricks",
+              "step_size": 0.2
+            },
+            {
+              "output_state": "minecraft:cracked_deepslate_tiles",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:pale_oak_wood",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:deepslate_brick_slab",
+              "step_size": 0.8
+            },
+            {
+              "output_state": "minecraft:deepslate_tile_slab",
+              "step_size": 0.2
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:deepslate_brick_stairs",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:deepslate_tile_stairs",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:deepslate_brick_wall",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:deepslate_tile_wall",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_button",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_pressure_plate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:pale_oak_fence",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:pale_oak_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:light_gray_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:iron_bars",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_5_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:pale_oak_trapdoor",
+              "step_size": 1
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_4",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_bricks",
+              "step_size": 0.9
+            },
+            {
+              "output_state": "minecraft:red_nether_bricks",
+              "step_size": 0.1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:stripped_crimson_hyphae",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_brick_slab",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_brick_stairs",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_nether_brick_wall",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_button",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:acacia_button",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_pressure_plate",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:acacia_pressure_plate",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_fence",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:acacia_fence",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_fence_gate",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:acacia_fence_gate",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:red_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_4_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_trapdoor",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:acacia_trapdoor",
+              "step_size": 0.4
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_6",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_planks",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_stem",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_slab",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_stairs",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:tuff_wall",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_button",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_pressure_plate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_fence",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:gray_stained_glass",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:black_stained_glass",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:gray_stained_glass_pane",
+              "step_size": 0.7
+            },
+            {
+              "output_state": "minecraft:black_stained_glass_pane",
+              "step_size": 0.3
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_6_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:warped_trapdoor",
+              "step_size": 1
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_7",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_bricks",
+              "step_size": 0.6
+            },
+            {
+              "output_state": "minecraft:cracked_polished_blackstone_bricks",
+              "step_size": 0.4
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:chiseled_polished_blackstone",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_brick_slab",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_brick_stairs",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_brick_wall",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_button",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_pressure_plate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_fence",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:black_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:black_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_7_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_trapdoor",
+              "step_size": 1
+            }
+          ]
+        },
+
+        {
+          "input_state": "wotr:processor_block_8",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_bricks",
+              "step_size": 0.8
+            },
+            {
+              "output_state": "minecraft:cracked_nether_bricks",
+              "step_size": 0.2
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_directional_pillar",
+          "output_steps": [
+            {
+              "output_state": "minecraft:crimson_hyphae",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_slab",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_slab",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_stairs",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_stairs",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_wall",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_wall",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_button",
+          "output_steps": [
+            {
+              "output_state": "minecraft:dark_oak_button",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_pressure_plate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:polished_blackstone_pressure_plate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_fence",
+          "output_steps": [
+            {
+              "output_state": "minecraft:nether_brick_fence",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_fence_gate",
+          "output_steps": [
+            {
+              "output_state": "minecraft:mangrove_fence_gate",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_glass",
+          "output_steps": [
+            {
+              "output_state": "minecraft:gray_stained_glass",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_glass_pane",
+          "output_steps": [
+            {
+              "output_state": "minecraft:gray_stained_glass_pane",
+              "step_size": 1
+            }
+          ]
+        },
+        {
+          "input_state": "wotr:processor_block_8_trapdoor",
+          "output_steps": [
+            {
+              "output_state": "minecraft:waxed_copper_trapdoor",
+              "step_size": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "processor_type": "wotr:rift_chests",
+      "base_loot_table": "wotr:chests/",
+      "rarity": 0.6,
+      "chest_types": [
+        {
+          "chest_type": "wooden",
+          "weight": 1
+        }
+      ]
+    }
+
+
+  ]
+}
