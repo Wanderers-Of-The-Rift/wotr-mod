@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.fix;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.Dist;
@@ -29,7 +30,8 @@ public final class DisableTrialSpawnerAmbient {
 
     @SubscribeEvent
     public static void catchPlaySound(PlaySoundEvent event) {
-        if (TRIAL_AMBIENT_SOUNDS.contains(event.getOriginalSound().getLocation())) {
+        if (TRIAL_AMBIENT_SOUNDS.contains(event.getOriginalSound().getLocation())
+                && Minecraft.getInstance().level.dimension().location().getPath().startsWith("rift_")) {
             event.setSound(null);
         }
     }
