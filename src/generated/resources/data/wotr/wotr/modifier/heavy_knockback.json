@@ -1,0 +1,67 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_knockback",
+          "id": "wotr:heavy_knockback",
+          "max_roll": 5.0,
+          "min_roll": 0.0,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_speed",
+          "id": "wotr:heavy_knockback",
+          "max_roll": -0.5,
+          "min_roll": -1.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_knockback",
+          "id": "wotr:heavy_knockback",
+          "max_roll": 10.0,
+          "min_roll": 5.0,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_speed",
+          "id": "wotr:heavy_knockback",
+          "max_roll": -0.5,
+          "min_roll": -1.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_knockback",
+          "id": "wotr:heavy_knockback",
+          "max_roll": 15.0,
+          "min_roll": 10.0,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_speed",
+          "id": "wotr:heavy_knockback",
+          "max_roll": -0.5,
+          "min_roll": -1.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 3
+    }
+  ]
+}
