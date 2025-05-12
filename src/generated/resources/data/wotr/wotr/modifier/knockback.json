@@ -4,9 +4,9 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 0.5,
+          "attribute": "minecraft:attack_knockback",
+          "id": "wotr:knockback",
+          "max_roll": 2.5,
           "min_roll": 0.0,
           "operation": "add_value"
         }
@@ -17,10 +17,10 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 1.0,
-          "min_roll": 0.5,
+          "attribute": "minecraft:attack_knockback",
+          "id": "wotr:knockback",
+          "max_roll": 5.0,
+          "min_roll": 2.5,
           "operation": "add_value"
         }
       ],
@@ -30,10 +30,10 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 1.5,
-          "min_roll": 1.0,
+          "attribute": "minecraft:attack_knockback",
+          "id": "wotr:knockback",
+          "max_roll": 7.5,
+          "min_roll": 5.0,
           "operation": "add_value"
         }
       ],

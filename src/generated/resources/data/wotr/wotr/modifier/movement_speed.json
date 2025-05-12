@@ -4,9 +4,9 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 0.5,
+          "attribute": "minecraft:jump_strength",
+          "id": "wotr:movement_speed",
+          "max_roll": 0.10000000149011612,
           "min_roll": 0.0,
           "operation": "add_value"
         }
@@ -17,10 +17,10 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 1.0,
-          "min_roll": 0.5,
+          "attribute": "minecraft:jump_strength",
+          "id": "wotr:movement_speed",
+          "max_roll": 0.25,
+          "min_roll": 0.10000000149011612,
           "operation": "add_value"
         }
       ],
@@ -30,10 +30,10 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 1.5,
-          "min_roll": 1.0,
+          "attribute": "minecraft:jump_strength",
+          "id": "wotr:movement_speed",
+          "max_roll": 0.3499999940395355,
+          "min_roll": 0.25,
           "operation": "add_value"
         }
       ],

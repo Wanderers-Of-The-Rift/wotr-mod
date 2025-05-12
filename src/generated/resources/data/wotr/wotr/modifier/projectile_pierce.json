@@ -1,0 +1,30 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_pierce",
+          "id": "wotr:projectile_pierce",
+          "max_roll": 0.05000000074505806,
+          "min_roll": 0.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_pierce",
+          "id": "wotr:projectile_pierce",
+          "max_roll": 0.10000000149011612,
+          "min_roll": 0.05000000074505806,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 2
+    }
+  ]
+}

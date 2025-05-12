@@ -5,10 +5,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:health",
+          "id": "wotr:flat_health",
           "max_roll": 2.0,
           "min_roll": 0.0,
-          "operation": "add_multiplied_base"
+          "operation": "add_value"
         }
       ],
       "tier": 1
@@ -18,10 +18,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:health",
+          "id": "wotr:flat_health",
           "max_roll": 4.0,
           "min_roll": 2.0,
-          "operation": "add_multiplied_base"
+          "operation": "add_value"
         }
       ],
       "tier": 2
@@ -31,10 +31,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:health",
+          "id": "wotr:flat_health",
           "max_roll": 6.0,
           "min_roll": 4.0,
-          "operation": "add_multiplied_base"
+          "operation": "add_value"
         }
       ],
       "tier": 3
@@ -44,10 +44,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:health",
+          "id": "wotr:flat_health",
           "max_roll": 8.0,
           "min_roll": 6.0,
-          "operation": "add_multiplied_base"
+          "operation": "add_value"
         }
       ],
       "tier": 4
@@ -57,10 +57,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:health",
+          "id": "wotr:flat_health",
           "max_roll": 10.0,
           "min_roll": 8.0,
-          "operation": "add_multiplied_base"
+          "operation": "add_value"
         }
       ],
       "tier": 5
@@ -70,10 +70,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:health",
+          "id": "wotr:flat_health",
           "max_roll": 12.0,
           "min_roll": 10.0,
-          "operation": "add_multiplied_base"
+          "operation": "add_value"
         }
       ],
       "tier": 6

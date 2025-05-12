@@ -5,10 +5,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 1.5499999523162842,
+          "id": "wotr:percent_attack",
+          "max_roll": 0.15000000596046448,
           "min_roll": 0.0,
-          "operation": "add_value"
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 1
@@ -18,10 +18,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 3.1500000953674316,
-          "min_roll": 1.5499999523162842,
-          "operation": "add_value"
+          "id": "wotr:percent_attack",
+          "max_roll": 0.30000001192092896,
+          "min_roll": 0.15000000596046448,
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 2
@@ -31,10 +31,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 4.699999809265137,
-          "min_roll": 3.1500000953674316,
-          "operation": "add_value"
+          "id": "wotr:percent_attack",
+          "max_roll": 0.44999998807907104,
+          "min_roll": 0.30000001192092896,
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 3
@@ -44,10 +44,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 6.300000190734863,
-          "min_roll": 4.699999809265137,
-          "operation": "add_value"
+          "id": "wotr:percent_attack",
+          "max_roll": 0.550000011920929,
+          "min_roll": 0.44999998807907104,
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 4
@@ -57,10 +57,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 7.849999904632568,
-          "min_roll": 6.300000190734863,
-          "operation": "add_value"
+          "id": "wotr:percent_attack",
+          "max_roll": 0.699999988079071,
+          "min_roll": 0.550000011920929,
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 5
@@ -70,10 +70,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 9.449999809265137,
-          "min_roll": 7.849999904632568,
-          "operation": "add_value"
+          "id": "wotr:percent_attack",
+          "max_roll": 0.8500000238418579,
+          "min_roll": 0.699999988079071,
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 6
@@ -83,10 +83,10 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:flat_attack",
-          "max_roll": 11.0,
-          "min_roll": 9.449999809265137,
-          "operation": "add_value"
+          "id": "wotr:percent_attack",
+          "max_roll": 1.0,
+          "min_roll": 0.8500000238418579,
+          "operation": "add_multiplied_base"
         }
       ],
       "tier": 7
