@@ -45,11 +45,13 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
                             RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
                                     .forGetter(VineProcessor::getStructureRandomType))
                     .apply(builder, VineProcessor::new));
+    private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
 
     private final boolean attachToWall;
     private final boolean attachToCeiling;
     private final float rarity;
     private final StructureRandomType structureRandomType;
+
 
     public VineProcessor(boolean attachToWall, boolean attachToCeiling, float rarity,
             StructureRandomType structureRandomType) {
@@ -141,7 +143,8 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
 
     private Direction selectDirection(RiftProcessedRoom room, BlockPos blockpos) {
         if (attachToWall) {
-            for (var horizontal :Direction.Plane.HORIZONTAL) {
+            for (int i = 0; i < HORIZONTAL.size(); i++) {
+                var horizontal = HORIZONTAL.get(i);
                 if (isDirectionPossible(room, blockpos, horizontal)) {
                     return horizontal;
                 }
@@ -159,7 +162,7 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
             RiftProcessedRoom room,
             BlockPos pos,
             Direction direction) {
-        var state = room.getBlock(pos.relative(direction));
+        var state = room.getBlock(pos.getX()+direction.getStepX(), pos.getY()+direction.getStepY(), pos.getZ()+direction.getStepZ());
         return state!=null && isFaceFullFast(state, pos, direction.getOpposite());
     }
 
@@ -186,23 +189,27 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
     @Override
     public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
         var blockRandomFlag = structureRandomType==BLOCK;
-        RandomSource random = ProcessorUtil.getRandom(/*because block is cached, it's (apparently) not thread safe so it can't be used*/blockRandomFlag ? STRUCTURE : structureRandomType, null, structurePos, new BlockPos(0,0,0),
-                world, Optional.empty());
+        RandomSource random = createRandom(getRandomSeed(structurePos, 0L));
+                //ProcessorUtil.getRandom(/*because block is cached, it's (apparently) not thread safe so it can't be used*/blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world, Optional.empty());
         var roll = random.nextFloat();
+        var bp = new BlockPos.MutableBlockPos();
         for (int x = 0; x < pieceSize.getX(); x++) {
             for (int z = 0; z < pieceSize.getZ(); z++) {
                 for (int y = 0; y < pieceSize.getY(); y++) {
-                    var basePos = new BlockPos(x+structurePos.getX(),y+structurePos.getY(),z+structurePos.getZ());
-                    var currentState = room.getBlock(basePos);
+                    var x2 = x+structurePos.getX();
+                    var y2 = y+structurePos.getY();
+                    var z2 = z+structurePos.getZ();
+                    var currentState = room.getBlock(x2, y2, z2);
                     if (currentState!=null && currentState.isAir()) {
                         if(blockRandomFlag){
                             roll=random.nextFloat();
                         }
                         if(roll <= rarity) {
-                            var direction = selectDirection(room, basePos);
+                            bp.set(x2, y2, z2);
+                            var direction = selectDirection(room, bp);
                             if (direction == null) continue;
                             BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
-                            room.setBlock(basePos, VINE.defaultBlockState().setValue(property, true));
+                            room.setBlock(x2, y2, z2, VINE.defaultBlockState().setValue(property, true));
                         }
                     }
                 }

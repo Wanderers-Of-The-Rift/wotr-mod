@@ -49,11 +49,9 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
 
                     var nbt = new CompoundTag();
                     var info = new StructureTemplate.StructureBlockInfo(mutablePosition, blockState, nbt);
-                    if (true) {
-                        var original = new StructureTemplate.StructureBlockInfo(mutablePosition, blockState, nbt);
-                        info= themeProcessor.process(world,offset,offset,original,info,null,null);
-                        if (info == null) continue;
-                    }
+                    var newBlockState = themeProcessor.processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, true);
+                    if (newBlockState == null) continue;
+
                     var finalPos = info.pos();
                     var xChunkPosition = finalPos.getX() >> 4;
                     var yChunkPosition = finalPos.getY() >> 4;

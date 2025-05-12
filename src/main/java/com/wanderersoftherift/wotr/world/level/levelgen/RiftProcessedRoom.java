@@ -10,17 +10,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class RiftProcessedRoom {
 
-    private final ConcurrentHashMap<Vec3i, RiftProcessedChunk> data = new ConcurrentHashMap<>();
+    private final AtomicReference<RiftProcessedChunk>[] chunkArray = new AtomicReference[64];
     private final CompletableFuture<Unit> isComplete = new CompletableFuture<>();
     public final RoomRiftSpace space;
+    private final Vec3i origin;
 
     public RiftProcessedRoom(RoomRiftSpace space) {
         this.space = space;
+        origin = space.origin();
+        for (int i = 0; i < chunkArray.length; i++) {
+            if((i & 0b11) < space.size().getX() && ((i>>4) & 0b11) < space.size().getY() && ((i>>2) & 0b11) < space.size().getZ()) {
+                chunkArray[i] = new AtomicReference<>();
+            }
+        }
     }
 
 
@@ -30,12 +37,55 @@ public class RiftProcessedRoom {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-        return data.remove(sectionPos);
+        var x2 = sectionPos.getX()-origin.getX();
+        var y2 = sectionPos.getY()-origin.getY();
+        var z2 = sectionPos.getZ()-origin.getZ();
+        if (x2<0 || x2>=space.size().getX() ||
+                y2<0 || y2>=space.size().getY() ||
+                z2<0 || z2>=space.size().getZ()
+        )return null;
+        var idx = x2+(z2<<2)+(y2<<4);
+        var ref = chunkArray[idx];
+        if(ref==null) return null;
+        chunkArray[idx]=null;
+        return ref.get();
     }
 
 
     public RiftProcessedChunk getOrCreateChunk(Vec3i sectionPos) {
-        return data.computeIfAbsent(sectionPos, (pos)->new RiftProcessedChunk(sectionPos,this));
+        return getOrCreateChunk(sectionPos.getX(), sectionPos.getY(), sectionPos.getZ());
+        //return data.computeIfAbsent(sectionPos, (pos)->new RiftProcessedChunk(sectionPos,this));
+    }
+    public RiftProcessedChunk getOrCreateChunk(int x, int y, int z) {
+        var x2 = x-origin.getX();
+        var y2 = y-origin.getY();
+        var z2 = z-origin.getZ();
+        if (x2<0 || x2>=space.size().getX() ||
+                y2<0 || y2>=space.size().getY() ||
+                z2<0 || z2>=space.size().getZ()
+        )return null;
+        var ref = chunkArray[x2+(z2<<2)+(y2<<4)];
+        if(ref==null) return null;
+        var newValue = ref.get();
+        if (newValue!=null)return newValue;
+        newValue = new RiftProcessedChunk(new Vec3i(x, y, z), this);
+        if (ref.compareAndSet(null,newValue)){
+            return newValue;
+        }
+        return ref.get();
+    }
+
+    public RiftProcessedChunk getChunk(int x, int y, int z) {
+        var x2 = x-origin.getX();
+        var y2 = y-origin.getY();
+        var z2 = z-origin.getZ();
+        if (x2<0 || x2>=space.size().getX() ||
+                y2<0 || y2>=space.size().getY() ||
+                z2<0 || z2>=space.size().getZ()
+        )return null;
+        var ref = chunkArray[x2+(z2<<2)+(y2<<4)];
+        if(ref==null) return null;
+        return ref.get();
     }
 
     public void markAsComplete() {
@@ -69,7 +119,7 @@ public class RiftProcessedRoom {
         var chunkX = x >> 4;
         var chunkY = y >> 4;
         var chunkZ = z >> 4;
-        var chunk = data.get(new Vec3i(chunkX, chunkY, chunkZ));
+        var chunk = getChunk(chunkX, chunkY, chunkZ);
         if(chunk==null){
             return null;
         }
@@ -85,7 +135,7 @@ public class RiftProcessedRoom {
         var chunkX = x >> 4;
         var chunkY = y >> 4;
         var chunkZ = z >> 4;
-        var chunk = getOrCreateChunk(new Vec3i(chunkX, chunkY, chunkZ));
+        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
         chunk.setBlockStatePure(x & 0xf, y & 0xf, z & 0xf, state);
     }
 

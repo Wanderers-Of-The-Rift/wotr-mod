@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
@@ -56,7 +57,6 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
     private final int seedAdjustment;
 
     private Pair<PhantomReference<LevelReader>,OpenSimplex2F> lastNoiseCache = null;
-
     private final List<Pair<InputBlockState, OutputSteps>>[] fastBetterReplaceMapValues;
     private final Block[] fastBetterReplaceMapKeys;
 
@@ -92,7 +92,11 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         return (System.identityHashCode(b)* FibonacciHashing.GOLDEN_RATIO_INT)>>>25;
     }
 
-    public OpenSimplex2F getNoiseGen(long seed) {
+    public OpenSimplex2F getNoiseGen(@NotNull Long seed) {
+        var noiseGen = noiseGenSeeds.get(seed);
+        if(noiseGen!=null){
+            return noiseGen;
+        }
         return noiseGenSeeds.computeIfAbsent(seed, OpenSimplex2F::new);
     }
 
@@ -154,13 +158,14 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
     }
 
     private OpenSimplex2F getNoiseGen(LevelReader world, BlockPos structurePos) {
+        world = world instanceof ServerLevelAccessor sa ? sa.getLevel() : world;
         var currentCache = lastNoiseCache;
         if (world!=null && currentCache!=null && currentCache.getA().refersTo(world)) {
             return currentCache.getB();
         }
         OpenSimplex2F noiseGen = null;
-        if (world instanceof WorldGenLevel) {
-            noiseGen = getNoiseGen(((WorldGenLevel) world).getSeed() + seedAdjustment);
+        if (world instanceof ServerLevelAccessor serverLevelAccessor) {
+            noiseGen = getNoiseGen(serverLevelAccessor.getLevel().getSeed() + seedAdjustment);
             lastNoiseCache = new Pair(new PhantomReference<>(world, null), noiseGen);
         } else {
             noiseGen = getNoiseGen(structurePos.asLong() + seedAdjustment);

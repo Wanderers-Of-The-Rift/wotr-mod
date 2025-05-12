@@ -15,8 +15,8 @@ import net.minecraft.world.level.levelgen.RandomState;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -58,7 +58,7 @@ public class ChaoticRiftLayout implements RiftLayout{
         private final long[] emptySpaces = new long[15*15];
 
         public final Vec3i origin;
-        private final AtomicReference<Thread> generatorThread = new AtomicReference<>(null);
+        private final AtomicReference<WeakReference<Thread>> generatorThread = new AtomicReference<>(null);
         private final CompletableFuture<Unit> generationCompletion = new CompletableFuture<>();
 
         public Region(Vec3i origin) {
@@ -261,7 +261,7 @@ public class ChaoticRiftLayout implements RiftLayout{
 
         public void tryGenerate(RandomSource random) {
             if(generatorThread.get()==null && random!=null){
-                if(generatorThread.compareAndSet(null,Thread.currentThread())){
+                if(generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))){
                     generate(random);
                 }
             }

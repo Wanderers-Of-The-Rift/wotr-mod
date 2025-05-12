@@ -155,45 +155,49 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
         return seed;
     }
 
+    private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
+
     @Override
     public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
         var blockRandomFlag = structureRandomType==BLOCK;
-        RandomSource random = ProcessorUtil.getRandom(blockRandomFlag ? STRUCTURE : structureRandomType, null, structurePos, new BlockPos(0,0,0),
-                world, seed);
+        RandomSource random = createRandom(getRandomSeed(structurePos, seed.orElse(0L)));
+                //ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world, seed);
         var roll = random.nextFloat();
+        var bp = new BlockPos.MutableBlockPos();
         for (int x = 0; x < pieceSize.getX(); x++) {
             for (int z = 0; z < pieceSize.getZ(); z++) {
                 for (int y = 0; y < pieceSize.getY(); y++) {
-                    var basePos = new BlockPos(x+structurePos.getX(),y+structurePos.getY(),z+structurePos.getZ());
-                    var currentState = room.getBlock(basePos);
+                    var x2 = x+structurePos.getX();
+                    var y2 = y+structurePos.getY();
+                    var z2 = z+structurePos.getZ();
+                    var currentState = room.getBlock(x2, y2, z2);
                     if (currentState!=null && currentState.isAir()) {
                         if(blockRandomFlag){
                             roll = random.nextFloat();
                         }
                         if (roll <= rarity) {
-
                             int sideCount = requiresSides;
-                            BlockPos pos2;
                             BlockState newBlock;
-                            for (var side : Plane.HORIZONTAL) {
+                            for (int i = 0; i < HORIZONTAL.size(); i++) {
+                                var side = HORIZONTAL.get(i);
                                 if (sideCount <= 0) break;
-                                pos2 = basePos.relative(side);
-                                newBlock = room.getBlock(pos2);
-                                if (newBlock != null && !isFaceFullFast(newBlock, pos2, side.getOpposite())) {
+                                newBlock = room.getBlock(x2 + side.getStepX(), y2, z2 + side.getStepZ());
+                                bp.set(x2 + side.getStepX(), y2, z2 + side.getStepZ());
+                                if (newBlock != null && !isFaceFullFast(newBlock, bp, side.getOpposite())) {
                                     sideCount--;
                                 }
                             }
 
                             if (sideCount > 0) continue;
-                            pos2 = basePos.above();
-                            newBlock = room.getBlock(pos2);
-                            boolean validUp = !requiresUp || newBlock == null || isFaceFullFast(newBlock, pos2, Direction.DOWN);
+                            newBlock = room.getBlock(x2,y2+1,z2);
+                            bp.set(x2,y2+1,z2);
+                            boolean validUp = !requiresUp || newBlock == null || isFaceFullFast(newBlock, bp, Direction.DOWN);
                             if (!validUp) continue;
-                            pos2 = basePos.below();
-                            newBlock = room.getBlock(pos2);
-                            boolean validDown = !requiresDown || newBlock == null || isFaceFullFast(newBlock, pos2, Direction.UP);
+                            newBlock = room.getBlock(x2,y2-1,z2);
+                            bp.setY(y2-1);
+                            boolean validDown = !requiresDown || newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
                             if (!validDown) continue;
-                            room.setBlock(basePos, blockState);
+                            room.setBlock(x2,y2,z2, blockState);
 
                         }
                     }

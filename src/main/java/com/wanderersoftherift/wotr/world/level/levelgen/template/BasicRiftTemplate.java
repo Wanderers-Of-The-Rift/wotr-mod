@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class BasicRiftTemplate implements RiftGeneratable {
     public static final int CHUNK_WIDTH = 16;
+    private static final ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
 
     private final BlockState[][] data;
     private final Vec3i size;
@@ -103,7 +104,7 @@ public class BasicRiftTemplate implements RiftGeneratable {
                     var blockPosZ = (j / CHUNK_WIDTH) % size.getZ();
                     var blockPos = new BlockPos(blockPosX, blockPosY, blockPosZ);
                     var isInvisible = blockState.canOcclude();
-                    for (var direction: Direction.values()){
+                    for (var direction: DIRECTIONS){
                         if (!isInvisible) break;
                         var offsetPos = blockPos.relative(direction);
                         if(offsetPos.getX() < 0 || offsetPos.getX() >= size.getX() ||
@@ -180,7 +181,11 @@ public class BasicRiftTemplate implements RiftGeneratable {
                         if(hashTableCached != null && hashTableCached.origin.getX() == xChunkPosition && hashTableCached.origin.getY() == yChunkPosition && hashTableCached.origin.getZ() == zChunkPosition){
                             roomChunk = hashTableCached;
                         }else {
-                            roomChunk = (roomChunkHashTableCache[hash] = destination.getOrCreateChunk(new Vec3i(xChunkPosition, yChunkPosition, zChunkPosition)));
+                            roomChunk = (roomChunkHashTableCache[hash] = destination.getOrCreateChunk(xChunkPosition, yChunkPosition, zChunkPosition));
+                            if(roomChunk == null){
+                                destination.getOrCreateChunk(xChunkPosition, yChunkPosition, zChunkPosition);
+                                continue;
+                            }
                         }
                     }
                     var xWithinChunk = mutablePosition.getX() & 0xf;
