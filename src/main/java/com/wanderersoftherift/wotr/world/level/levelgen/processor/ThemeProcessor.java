@@ -203,21 +203,24 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             pairs[i] = ReplaceAirBySurroundingRiftProcessor.ProcessorDataPair.create(processors.get(i), structurePos,
                     pieceSize);
         }
+
         var directionBlocksArray = new BlockState[6];
-        for (int x = 0; x < pieceSize.getX(); x++) {
+        var preloaded = new BlockState[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
+        preloadLayer(room, structurePos.getX(), structurePos.getY(), structurePos.getZ(), pieceSize, preloaded[0]);
+        for (int y = 0; y < pieceSize.getY(); y++) {
+            preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1, structurePos.getZ(), pieceSize,
+                    preloaded[(y + 1) & 3]);
             for (int z = 0; z < pieceSize.getZ(); z++) {
-                for (int y = 0; y < pieceSize.getY(); y++) {
-                    var x2 = x + structurePos.getX();
-                    var y2 = y + structurePos.getY();
-                    var z2 = z + structurePos.getZ();
-                    var currentState = room.getBlock(x2, y2, z2);
+                for (int x = 0; x < pieceSize.getX(); x++) {
+
+                    BlockState currentState = preloaded[y & 3][z + 1][x + 1];
                     if (currentState != null && currentState.isAir()) {
-                        var down = directionBlocksArray[0] = room.getBlock(x2, y2 - 1, z2);
-                        var up = directionBlocksArray[1] = room.getBlock(x2, y2 + 1, z2);
-                        var north = directionBlocksArray[2] = room.getBlock(x2, y2, z2 - 1);
-                        var south = directionBlocksArray[3] = room.getBlock(x2, y2, z2 + 1);
-                        var west = directionBlocksArray[4] = room.getBlock(x2 + 1, y2, z2);
-                        var east = directionBlocksArray[5] = room.getBlock(x2 - 1, y2, z2);
+                        var down = directionBlocksArray[0] = preloaded[(y - 1) & 3][z + 1][x + 1];
+                        var up = directionBlocksArray[1] = preloaded[(y + 1) & 3][z + 1][x + 1];
+                        var north = directionBlocksArray[2] = preloaded[y & 3][z][x + 1];
+                        var south = directionBlocksArray[3] = preloaded[y & 3][z + 2][x + 1];
+                        var west = directionBlocksArray[4] = preloaded[y & 3][z + 1][x];
+                        var east = directionBlocksArray[5] = preloaded[y & 3][z + 1][x + 2];
                         for (int i = 0; i < pairs.length; i++) {
                             var pair = pairs[i];
                             currentState = pair.run(up, down, north, south, east, west, directionBlocksArray);
@@ -225,7 +228,8 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
                                 break;
                             }
                         }
-                        room.setBlock(x2, y2, z2, currentState);
+                        room.setBlock(x + structurePos.getX(), y + structurePos.getY(), z + structurePos.getZ(),
+                                currentState);
                     }
                 }
             }
@@ -235,6 +239,22 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
         for (int i = 0; i < processors2.size(); i++) {
             processors2.get(i).finalizeRoomProcessing(room, world, structurePos, pieceSize);
+        }
+    }
+
+    private static void preloadLayer(
+            RiftProcessedRoom room,
+            int xOffset,
+            int yOffset,
+            int zOffset,
+            Vec3i pieceSize,
+            BlockState[][] preloading) {
+        for (int z = 0; z < pieceSize.getZ(); z++) {
+            var z2 = z + zOffset;
+            for (int x = 0; x < pieceSize.getX(); x++) {
+                var state = room.getBlock(x + xOffset, yOffset, z2);
+                preloading[z + 1][x + 1] = state;
+            }
         }
     }
 
