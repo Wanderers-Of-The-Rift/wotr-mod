@@ -13,6 +13,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -40,7 +41,8 @@ import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;
 
-public class VineProcessor extends StructureProcessor implements RiftFinalProcessor {
+public class VineProcessor extends StructureProcessor
+        implements ReplaceAirBySurroundingRiftProcessor<VineProcessor.ReplacementData> {
     public static final MapCodec<VineProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(Codec.BOOL.optionalFieldOf("attach_to_wall", true).forGetter(VineProcessor::isAttachToWall),
@@ -168,6 +170,27 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
         return state != null && isFaceFullFast(state, pos, direction.getOpposite());
     }
 
+    private Direction selectDirection(BlockState... directions) {
+        if (attachToWall) {
+            for (int i = 0; i < HORIZONTAL.size(); i++) {
+                var horizontal = HORIZONTAL.get(i);
+                if (isDirectionPossible(directions[horizontal.ordinal()], horizontal)) {
+                    return horizontal;
+                }
+            }
+        }
+        if (attachToCeiling) {
+            if (isDirectionPossible(directions[UP.ordinal()], UP)) {
+                return UP;
+            }
+        }
+        return null;
+    }
+
+    private boolean isDirectionPossible(BlockState state, Direction direction) {
+        return state != null && isFaceFullFast(state, BlockPos.ZERO, direction.getOpposite());
+    }
+
     protected StructureProcessorType<?> getType() {
         return ModProcessors.VINES.get();
     }
@@ -188,7 +211,7 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
         return structureRandomType;
     }
 
-    @Override
+    // @Override
     public void finalizeRoomProcessing(
             RiftProcessedRoom room,
             ServerLevelAccessor world,
@@ -224,6 +247,54 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public BlockState replace(
+            VineProcessor.ReplacementData data,
+            BlockState up,
+            BlockState down,
+            BlockState north,
+            BlockState south,
+            BlockState east,
+            BlockState west,
+            BlockState... directions) {
+        if (data.recalculateChance() <= rarity) {
+            var direction = selectDirection(directions);
+            if (direction == null) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
+            return VINE.defaultBlockState().setValue(property, true);
+        }
+        return Blocks.AIR.defaultBlockState();
+    }
+
+    @Override
+    public VineProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
+        // todo make RNG that doesn't trash performance
+        return new VineProcessor.ReplacementData(
+                createRandom(getRandomSeed(structurePos, 0L)), structureRandomType == BLOCK
+        );
+    }
+
+    public static class ReplacementData {
+        private final RandomSource rng1;
+        private final boolean isRng1PerBlock;
+        private float roll1;
+
+        public ReplacementData(RandomSource rng1, boolean isRng1PerBlock) {
+            this.rng1 = rng1;
+            this.isRng1PerBlock = isRng1PerBlock;
+            roll1 = rng1.nextFloat();
+        }
+
+        public float recalculateChance() {
+            if (isRng1PerBlock) {
+                roll1 = rng1.nextFloat();
+            }
+            return roll1;
         }
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -33,7 +34,8 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.St
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.Plane;
 
-public class AttachmentProcessor extends StructureProcessor implements RiftFinalProcessor {
+public class AttachmentProcessor extends StructureProcessor
+        implements ReplaceAirBySurroundingRiftProcessor<AttachmentProcessor.ReplacementData> {
     public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
             Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
@@ -160,7 +162,6 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
         return seed;
     }
 
-    @Override
     public void finalizeRoomProcessing(
             RiftProcessedRoom room,
             ServerLevelAccessor world,
@@ -223,4 +224,70 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
             }
         }
     }
+
+    @Override
+    public BlockState replace(
+            AttachmentProcessor.ReplacementData data,
+            BlockState up,
+            BlockState down,
+            BlockState north,
+            BlockState south,
+            BlockState east,
+            BlockState west,
+            BlockState[] directions) {
+        if (data.recalculateChance() <= rarity) {
+            int sideCount = requiresSides;
+            for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
+                var side = HORIZONTAL.get(i);
+                var directionBlock = directions[side.ordinal()];
+                if (directionBlock != null && !isFaceFullFast(directionBlock, BlockPos.ZERO, side.getOpposite())) {
+                    sideCount--;
+                }
+            }
+
+            if (sideCount > 0) {
+                return Blocks.AIR.defaultBlockState();
+            }
+
+            boolean validUp = !requiresUp || up == null || isFaceFullFast(up, BlockPos.ZERO, Direction.DOWN);
+            if (!validUp) {
+                return Blocks.AIR.defaultBlockState();
+            }
+
+            boolean validDown = !requiresDown || down == null || isFaceFullFast(down, BlockPos.ZERO, Direction.UP);
+            if (!validDown) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            return blockState;
+        }
+        return Blocks.AIR.defaultBlockState();
+    }
+
+    @Override
+    public AttachmentProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
+        // todo make RNG that doesn't trash performance
+        return new AttachmentProcessor.ReplacementData(
+                createRandom(getRandomSeed(structurePos, seed.orElse(0L))), structureRandomType == BLOCK
+        );
+    }
+
+    public static class ReplacementData {
+        private final RandomSource rng1;
+        private final boolean isRng1PerBlock;
+        private float roll1;
+
+        public ReplacementData(RandomSource rng1, boolean isRng1PerBlock) {
+            this.rng1 = rng1;
+            this.isRng1PerBlock = isRng1PerBlock;
+            roll1 = rng1.nextFloat();
+        }
+
+        public float recalculateChance() {
+            if (isRng1PerBlock) {
+                roll1 = rng1.nextFloat();
+            }
+            return roll1;
+        }
+    }
+
 }

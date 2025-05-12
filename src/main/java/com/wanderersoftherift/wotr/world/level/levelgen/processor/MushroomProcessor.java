@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -40,7 +41,8 @@ import static net.minecraft.core.Direction.DOWN;
 import static net.minecraft.core.Direction.UP;
 import static net.neoforged.neoforge.common.Tags.Items.MUSHROOMS;
 
-public class MushroomProcessor extends StructureProcessor implements RiftFinalProcessor {
+public class MushroomProcessor extends StructureProcessor
+        implements ReplaceAirBySurroundingRiftProcessor<MushroomProcessor.ReplacementData> {
     public static final MapCodec<MushroomProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(BuiltInRegistries.BLOCK.byNameCodec()
@@ -126,7 +128,7 @@ public class MushroomProcessor extends StructureProcessor implements RiftFinalPr
         return tagStructureRandomType;
     }
 
-    @Override
+    // @Override
     public void finalizeRoomProcessing(
             RiftProcessedRoom room,
             ServerLevelAccessor world,
@@ -159,9 +161,9 @@ public class MushroomProcessor extends StructureProcessor implements RiftFinalPr
                             if (blockRandomFlag2) {
                                 roll2 = getRandomBlockFromItemTag(itemTag, random2, exclusionList);
                             }
-                            var newBlock = room.getBlock(x2, y2 - 1, z2);
+                            var down = room.getBlock(x2, y2 - 1, z2);
                             bp.set(x2, y2 - 1, z2);
-                            boolean validDown = newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
+                            boolean validDown = down == null || isFaceFullFast(down, bp, Direction.UP);
                             if (!validDown) {
                                 continue;
                             }
@@ -171,6 +173,73 @@ public class MushroomProcessor extends StructureProcessor implements RiftFinalPr
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public BlockState replace(
+            ReplacementData data,
+            BlockState up,
+            BlockState down,
+            BlockState north,
+            BlockState south,
+            BlockState east,
+            BlockState west,
+            BlockState[] asArray) {
+        if (data.recalculateChance() <= rarity) {
+            boolean validDown = down == null || isFaceFullFast(down, BlockPos.ZERO, Direction.UP);
+            if (!validDown) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            return data.recalculateBlock().defaultBlockState();
+        }
+        return Blocks.AIR.defaultBlockState();
+    }
+
+    @Override
+    public ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
+        // todo make RNG that doesn't trash performance
+        return new ReplacementData(
+                itemTag, exclusionList, createRandom(getRandomSeed(structurePos, SEED.orElse(0L))),
+                createRandom(getRandomSeed(structurePos, SEED.orElse(0L))), structureRandomType == BLOCK,
+                tagStructureRandomType == BLOCK
+        );
+    }
+
+    public static class ReplacementData {
+        private final TagKey<Item> tagKey;
+        private final List<Block> exclusionList;
+        private final RandomSource rng1;
+        private final RandomSource rng2;
+        private final boolean isRng1PerBlock;
+        private final boolean isRng2PerBlock;
+        private float roll1;
+        private Block roll2;
+
+        public ReplacementData(TagKey<Item> tagKey, List<Block> exclusionList, RandomSource rng1, RandomSource rng2,
+                boolean isRng1PerBlock, boolean isRng2PerBlock) {
+            this.tagKey = tagKey;
+            this.exclusionList = exclusionList;
+            this.rng1 = rng1;
+            this.rng2 = rng2;
+            this.isRng1PerBlock = isRng1PerBlock;
+            this.isRng2PerBlock = isRng2PerBlock;
+            roll1 = rng1.nextFloat();
+            roll2 = getRandomBlockFromItemTag(tagKey, rng2, exclusionList);
+        }
+
+        public float recalculateChance() {
+            if (isRng1PerBlock) {
+                roll1 = rng1.nextFloat();
+            }
+            return roll1;
+        }
+
+        public Block recalculateBlock() {
+            if (isRng2PerBlock) {
+                roll2 = getRandomBlockFromItemTag(tagKey, rng2, exclusionList);
+            }
+            return roll2;
         }
     }
 }

@@ -115,12 +115,26 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         return new ArrayList<>();
     }
 
+    private List<ReplaceAirBySurroundingRiftProcessor<?>> getAirReplaceTemplateProcessors(
+            LevelReader world,
+            BlockPos structurePos) {
+        var currentCache = lastThemeTemplateProcessorCache;
+        if (world != null && currentCache != null && currentCache.level.refersTo(world)) {
+            return currentCache.airReplaceProcessors;
+        }
+        if (world instanceof ServerLevel serverLevel) {
+            return reloadCache(serverLevel, structurePos).airReplaceProcessors;
+        }
+        return new ArrayList<>();
+    }
+
     private ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos) {
         LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
         var structureProcessors = (riftThemeData.getTheme() != null)
                 ? riftThemeData.getTheme().value().getProcessors(themePieceType)
                 : defaultThemeProcessors(serverLevel, structurePos);
-        var newCache = new ThemeCache(new PhantomReference<>(serverLevel, null), new ArrayList<>(), new ArrayList<>());
+        var newCache = new ThemeCache(new PhantomReference<>(serverLevel, null), new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>());
         for (var processor : structureProcessors) {
             var used = false;
             if (processor instanceof RiftTemplateProcessor riftTemplateProcessor) {
@@ -129,6 +143,10 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             }
             if (processor instanceof RiftFinalProcessor riftTemplateProcessor) {
                 newCache.finalProcessors.add(riftTemplateProcessor);
+                used = true;
+            }
+            if (processor instanceof ReplaceAirBySurroundingRiftProcessor<?> replaceAirBySurroundingRiftProcessor) {
+                newCache.airReplaceProcessors.add(replaceAirBySurroundingRiftProcessor);
                 used = true;
             }
             if (!used) {
@@ -178,14 +196,50 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             ServerLevelAccessor world,
             BlockPos structurePos,
             Vec3i pieceSize) {
-        var processors = getFinalTemplateProcessors(world.getLevel(), structurePos);
 
-        for (int i = 0; i < processors.size(); i++) {
-            processors.get(i).finalizeRoomProcessing(room, world, structurePos, pieceSize);
+        var processors = getAirReplaceTemplateProcessors(world.getLevel(), structurePos);
+        var pairs = new ReplaceAirBySurroundingRiftProcessor.ProcessorDataPair<?>[processors.size()];
+        for (int i = 0; i < pairs.length; i++) {
+            pairs[i] = ReplaceAirBySurroundingRiftProcessor.ProcessorDataPair.create(processors.get(i), structurePos,
+                    pieceSize);
+        }
+        var directionBlocksArray = new BlockState[6];
+        for (int x = 0; x < pieceSize.getX(); x++) {
+            for (int z = 0; z < pieceSize.getZ(); z++) {
+                for (int y = 0; y < pieceSize.getY(); y++) {
+                    var x2 = x + structurePos.getX();
+                    var y2 = y + structurePos.getY();
+                    var z2 = z + structurePos.getZ();
+                    var currentState = room.getBlock(x2, y2, z2);
+                    if (currentState != null && currentState.isAir()) {
+                        var down = directionBlocksArray[0] = room.getBlock(x2, y2 - 1, z2);
+                        var up = directionBlocksArray[1] = room.getBlock(x2, y2 + 1, z2);
+                        var north = directionBlocksArray[2] = room.getBlock(x2, y2, z2 - 1);
+                        var south = directionBlocksArray[3] = room.getBlock(x2, y2, z2 + 1);
+                        var west = directionBlocksArray[4] = room.getBlock(x2 + 1, y2, z2);
+                        var east = directionBlocksArray[5] = room.getBlock(x2 - 1, y2, z2);
+                        for (int i = 0; i < pairs.length; i++) {
+                            var pair = pairs[i];
+                            currentState = pair.run(up, down, north, south, east, west, directionBlocksArray);
+                            if (currentState == null || !currentState.isAir()) {
+                                break;
+                            }
+                        }
+                        room.setBlock(x2, y2, z2, currentState);
+                    }
+                }
+            }
+        }
+
+        var processors2 = getFinalTemplateProcessors(world.getLevel(), structurePos);
+
+        for (int i = 0; i < processors2.size(); i++) {
+            processors2.get(i).finalizeRoomProcessing(room, world, structurePos, pieceSize);
         }
     }
 
     private record ThemeCache(PhantomReference<LevelReader> level, List<RiftTemplateProcessor> templateProcessors,
-            List<RiftFinalProcessor> finalProcessors) {
+            List<RiftFinalProcessor> finalProcessors,
+            List<ReplaceAirBySurroundingRiftProcessor<?>> airReplaceProcessors) {
     }
 }
