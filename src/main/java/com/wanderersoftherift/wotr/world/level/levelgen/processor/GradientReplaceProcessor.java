@@ -158,12 +158,10 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             int z,
             BlockState blockstate,
             boolean isVisible) {
-        OpenSimplex2F noiseGen = getNoiseGen(world, structurePos);
-        BlockState newBlockState = getReplacementBlock(outputSteps, x, y, z, noiseGen, isVisible);
+        BlockState newBlockState = getReplacementBlock(outputSteps, x, y, z, world, structurePos, isVisible);
         if (newBlockState == null) {
             return blockstate;
         }
-
         return ProcessorUtil.copyState(blockstate, newBlockState);
     }
 
@@ -188,7 +186,8 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             int x,
             int y,
             int z,
-            OpenSimplex2F noiseGen,
+            LevelReader world,
+            BlockPos structurePos,
             boolean isVisible) {
         if (outputSteps.isEmpty()) {
             return null;
@@ -196,8 +195,9 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         if (outputSteps.size() == 1 || !isVisible) {
             return outputSteps.convertedBlockStates[0];
         }
-        double noiseValue = Math
-                .abs(noiseGen.noise3_Classic(x * getNoiseScaleX(), y * getNoiseScaleY(), z * getNoiseScaleZ()));
+
+        double noiseValue = Math.abs(getNoiseGen(world, structurePos).noise3_Classic(x * getNoiseScaleX(),
+                y * getNoiseScaleY(), z * getNoiseScaleZ()));
         float stepSize = 0;
         var sizes = outputSteps.stepSizes;
         for (int i = 0; i < outputSteps.size(); i++) {
