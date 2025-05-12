@@ -14,7 +14,7 @@ public class VoidRiftSpace implements RiftSpace {
 
     @Override
     public Vec3i size() {
-        return new Vec3i(1,1,1);
+        return new Vec3i(1, 1, 1);
     }
 
     @Override

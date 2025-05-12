@@ -14,11 +14,17 @@ import java.util.function.IntSupplier;
 @Mixin(ChunkMap.class)
 public class MixinChunkMap {
 
-    @Shadow @Final ServerLevel level;
+    @Shadow
+    @Final
+    ServerLevel level;
 
     @Redirect(method = "runGenerationTask", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ChunkTaskDispatcher;submit(Ljava/lang/Runnable;JLjava/util/function/IntSupplier;)V"))
-    private void submitToVirtualThread(ChunkTaskDispatcher instance, Runnable task, long chunkPos, IntSupplier queueLevelSupplier){
-        if (this.level.dimension().location().getNamespace().equals("wotr")) {
+    private void submitToVirtualThread(
+            ChunkTaskDispatcher instance,
+            Runnable task,
+            long chunkPos,
+            IntSupplier queueLevelSupplier) {
+        if ("wotr".equals(this.level.dimension().location().getNamespace())) {
             Thread.startVirtualThread(task);
         } else {
             instance.submit(task, chunkPos, queueLevelSupplier);

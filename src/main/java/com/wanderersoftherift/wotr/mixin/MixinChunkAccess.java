@@ -26,15 +26,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MixinChunkAccess {
 
     @Mutable
-    @Shadow @Final protected Map<BlockPos, CompoundTag> pendingBlockEntities;
+    @Shadow
+    @Final
+    protected Map<BlockPos, CompoundTag> pendingBlockEntities;
 
     @Mutable
-    @Shadow @Final protected Map<BlockPos, BlockEntity> blockEntities;
+    @Shadow
+    @Final
+    protected Map<BlockPos, BlockEntity> blockEntities;
 
     @Coerce
-    @Inject(method = "<init>",at = @At("TAIL"))
-    private void useConcurrentHashMap(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, Registry registry, long inhabitedTime, LevelChunkSection[] chunkSections, BlendingData blendingData, CallbackInfo callbackInfo){
-        pendingBlockEntities=new ConcurrentHashMap<>();
-        blockEntities=new ConcurrentHashMap<>();
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void useConcurrentHashMap(
+            ChunkPos chunkPos,
+            UpgradeData upgradeData,
+            LevelHeightAccessor levelHeightAccessor,
+            Registry registry,
+            long inhabitedTime,
+            LevelChunkSection[] chunkSections,
+            BlendingData blendingData,
+            CallbackInfo callbackInfo) {
+        pendingBlockEntities = new ConcurrentHashMap<>();
+        blockEntities = new ConcurrentHashMap<>();
     }
 }

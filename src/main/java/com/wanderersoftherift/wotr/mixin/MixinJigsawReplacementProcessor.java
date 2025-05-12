@@ -17,7 +17,15 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(JigsawReplacementProcessor.class)
 public class MixinJigsawReplacementProcessor implements RiftTemplateProcessor {
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(
+            BlockState currentState,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
 
         if (currentState.is(Blocks.JIGSAW)) {
             if (nbt == null) {
@@ -27,18 +35,22 @@ public class MixinJigsawReplacementProcessor implements RiftTemplateProcessor {
 
                 BlockState blockstate1;
                 try {
-                    BlockStateParser.BlockResult blockResult = BlockStateParser.parseForBlock(world.holderLookup(Registries.BLOCK), finalState, true);
+                    BlockStateParser.BlockResult blockResult = BlockStateParser
+                            .parseForBlock(world.holderLookup(Registries.BLOCK), finalState, true);
                     blockstate1 = blockResult.blockState();
                 } catch (CommandSyntaxException commandsyntaxexception) {
                     return null;
                 }
 
-
                 var added = nbt.getAllKeys().toArray();
-                for (var key:added) {
+                for (var key : added) {
                     nbt.remove((String) key);
                 }
-                return blockstate1.is(Blocks.STRUCTURE_VOID) ? null : blockstate1;
+                if (blockstate1.is(Blocks.STRUCTURE_VOID)) {
+                    return null;
+                } else {
+                    return blockstate1;
+                }
             }
         } else {
             return currentState;

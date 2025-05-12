@@ -54,7 +54,6 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
     private final StructureRandomType structureRandomType;
     private final Optional<Long> seed;
 
-
     public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown,
             float rarity, StructureRandomType structureRandomType, Optional<Long> seed) {
         this.blockState = blockState;
@@ -162,21 +161,26 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
     }
 
     @Override
-    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
-        var blockRandomFlag = structureRandomType==BLOCK;
+    public void finalizeRoomProcessing(
+            RiftProcessedRoom room,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            Vec3i pieceSize) {
+        var blockRandomFlag = structureRandomType == BLOCK;
         RandomSource random = createRandom(getRandomSeed(structurePos, seed.orElse(0L)));
-                //ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world, seed);
+        // ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new
+        // BlockPos(0,0,0), world, seed);
         var roll = random.nextFloat();
         var bp = new BlockPos.MutableBlockPos();
         for (int x = 0; x < pieceSize.getX(); x++) {
             for (int z = 0; z < pieceSize.getZ(); z++) {
                 for (int y = 0; y < pieceSize.getY(); y++) {
-                    var x2 = x+structurePos.getX();
-                    var y2 = y+structurePos.getY();
-                    var z2 = z+structurePos.getZ();
+                    var x2 = x + structurePos.getX();
+                    var y2 = y + structurePos.getY();
+                    var z2 = z + structurePos.getZ();
                     var currentState = room.getBlock(x2, y2, z2);
-                    if (currentState!=null && currentState.isAir()) {
-                        if(blockRandomFlag){
+                    if (currentState != null && currentState.isAir()) {
+                        if (blockRandomFlag) {
                             roll = random.nextFloat();
                         }
                         if (roll <= rarity) {
@@ -197,19 +201,21 @@ public class AttachmentProcessor extends StructureProcessor implements RiftFinal
                             if (sideCount > 0) {
                                 continue;
                             }
-                            newBlock = room.getBlock(x2,y2+1,z2);
-                            bp.set(x2,y2+1,z2);
-                            boolean validUp = !requiresUp || newBlock == null || isFaceFullFast(newBlock, bp, Direction.DOWN);
+                            newBlock = room.getBlock(x2, y2 + 1, z2);
+                            bp.set(x2, y2 + 1, z2);
+                            boolean validUp = !requiresUp || newBlock == null
+                                    || isFaceFullFast(newBlock, bp, Direction.DOWN);
                             if (!validUp) {
                                 continue;
                             }
-                            newBlock = room.getBlock(x2,y2-1,z2);
-                            bp.setY(y2-1);
-                            boolean validDown = !requiresDown || newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
+                            newBlock = room.getBlock(x2, y2 - 1, z2);
+                            bp.setY(y2 - 1);
+                            boolean validDown = !requiresDown || newBlock == null
+                                    || isFaceFullFast(newBlock, bp, Direction.UP);
                             if (!validDown) {
                                 continue;
                             }
-                            room.setBlock(x2,y2,z2, blockState);
+                            room.setBlock(x2, y2, z2, blockState);
 
                         }
                     }

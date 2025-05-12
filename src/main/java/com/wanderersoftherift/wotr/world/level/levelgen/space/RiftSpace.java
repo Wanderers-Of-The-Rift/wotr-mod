@@ -18,17 +18,16 @@ import java.util.List;
  */
 public interface RiftSpace {
 
-
-    public static void placePerimeterInChunk(ChunkAccess chunk, RiftSpace space, int level, BlockState perimeterBlock) {
-        var processedChunk = new RiftProcessedChunk(new Vec3i(chunk.getPos().x, level, chunk.getPos().z),null);
+    static void placePerimeterInChunk(ChunkAccess chunk, RiftSpace space, int level, BlockState perimeterBlock) {
+        var processedChunk = new RiftProcessedChunk(new Vec3i(chunk.getPos().x, level, chunk.getPos().z), null);
         placePerimeterInRiftChunk(processedChunk, space, perimeterBlock);
-        processedChunk.placeInWorld(chunk,null);
+        processedChunk.placeInWorld(chunk, null);
 
     }
 
-    public static void placePerimeterInRiftChunk(RiftProcessedChunk chunk, RiftSpace space, BlockState perimeterBlock) {
+    static void placePerimeterInRiftChunk(RiftProcessedChunk chunk, RiftSpace space, BlockState perimeterBlock) {
         var level = chunk.origin.getY();
-        if(space==null || space instanceof VoidRiftSpace){
+        if (space == null || space instanceof VoidRiftSpace) {
             for (int y = level * 16; y < level * 16 + 16; y++) {
                 for (int xz = 0; xz < 256; xz++) {
                     var z = (xz >>> 4) & 0xf;
@@ -36,25 +35,30 @@ public interface RiftSpace {
                     chunk.setBlockState(x, y, z, perimeterBlock);
                 }
             }
-        }else if(level>=space.origin().getY() && level<space.origin().getY()+space.size().getY()){
+        } else if (level >= space.origin().getY() && level < space.origin().getY() + space.size().getY()) {
 
-            var originRelativeX = chunk.origin.getX()-space.origin().getX();
-            var originRelativeY = level-space.origin().getY();
-            var originRelativeZ = chunk.origin.getZ()-space.origin().getZ();
-            var corridors = space.corridors().stream().filter((corridor)->
-                    corridor.position().getX() + space.origin().getX() == chunk.origin.getX() &&
-                            corridor.position().getZ() + space.origin().getZ() == chunk.origin.getZ() &&
-                            corridor.position().getY() + space.origin().getY() == level).toList();
-            var hasCorridorNorth = corridors.stream().anyMatch((it)->it.direction()== Direction.NORTH);//todo bidirectional corridor check
-            var hasCorridorWest = corridors.stream().anyMatch((it)->it.direction()== Direction.WEST);
+            var originRelativeX = chunk.origin.getX() - space.origin().getX();
+            var originRelativeY = level - space.origin().getY();
+            var originRelativeZ = chunk.origin.getZ() - space.origin().getZ();
+            var corridors = space.corridors()
+                    .stream()
+                    .filter((corridor) -> corridor.position().getX() + space.origin().getX() == chunk.origin.getX()
+                            && corridor.position().getZ() + space.origin().getZ() == chunk.origin.getZ()
+                            && corridor.position().getY() + space.origin().getY() == level)
+                    .toList();
+            var hasCorridorNorth = corridors.stream().anyMatch((it) -> it.direction() == Direction.NORTH);// todo
+                                                                                                          // bidirectional
+                                                                                                          // corridor
+                                                                                                          // check
+            var hasCorridorWest = corridors.stream().anyMatch((it) -> it.direction() == Direction.WEST);
             for (int y = level * 16; y < level * 16 + 16; y++) {
                 for (int x = 0; x < 16 && originRelativeZ <= 0; x++) {
-                    if(!hasCorridorNorth || x <= 6 || x >= 10 || y <= 5 + level * 16 || y >= 11 + level * 16) {
+                    if (!hasCorridorNorth || x <= 6 || x >= 10 || y <= 5 + level * 16 || y >= 11 + level * 16) {
                         chunk.setBlockState(x, y, 0, perimeterBlock);
                     }
                 }
                 for (int z = 0; z < 16 && originRelativeX <= 0; z++) {
-                    if(!hasCorridorWest || z <= 6 || z >= 10 || y <= 5 + level * 16 || y >= 11 + level * 16) {
+                    if (!hasCorridorWest || z <= 6 || z >= 10 || y <= 5 + level * 16 || y >= 11 + level * 16) {
                         chunk.setBlockState(0, y, z, perimeterBlock);
                     }
                 }
@@ -69,8 +73,12 @@ public interface RiftSpace {
     }
 
     Vec3i origin();
+
     Vec3i size();
+
     List<RiftSpaceCorridor> corridors();
+
     TripleMirror templateTransform();
+
     @Nullable RiftGeneratable template();
 }

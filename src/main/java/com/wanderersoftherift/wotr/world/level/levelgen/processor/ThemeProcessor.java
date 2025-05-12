@@ -21,7 +21,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.lang.ref.PhantomReference;
@@ -58,8 +57,9 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             @Nullable StructureTemplate template) {
         List<StructureProcessor> processors = getThemeProcessors(world, structurePos);
 
-        for (int i = 0; i < processors.size() && blockInfo!=null; i++) {
-            blockInfo = processors.get(i).process(world, piecePos, structurePos, rawBlockInfo, blockInfo, settings, template);
+        for (int i = 0; i < processors.size() && blockInfo != null; i++) {
+            blockInfo = processors.get(i)
+                    .process(world, piecePos, structurePos, rawBlockInfo, blockInfo, settings, template);
         }
         return blockInfo;
     }
@@ -83,10 +83,10 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
     }
 
     private List<StructureProcessor> getThemeProcessors(LevelReader world, BlockPos structurePos) {
-        if(world instanceof ServerLevel serverLevel) {
+        if (world instanceof ServerLevel serverLevel) {
             LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-            var result = (riftThemeData.getTheme() != null)?
-                    riftThemeData.getTheme().value().getProcessors(themePieceType)
+            var result = (riftThemeData.getTheme() != null)
+                    ? riftThemeData.getTheme().value().getProcessors(themePieceType)
                     : defaultThemeProcessors(serverLevel, structurePos);
             return result;
         }
@@ -95,10 +95,10 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private List<RiftTemplateProcessor> getThemeTemplateProcessors(LevelReader world, BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
-        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) {
+        if (world != null && currentCache != null && currentCache.level.refersTo(world)) {
             return currentCache.templateProcessors;
         }
-        if(world instanceof ServerLevel serverLevel) {
+        if (world instanceof ServerLevel serverLevel) {
             return reloadCache(serverLevel, structurePos).templateProcessors;
         }
         return new ArrayList<>();
@@ -106,10 +106,10 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private List<RiftFinalProcessor> getFinalTemplateProcessors(LevelReader world, BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
-        if(world!=null && currentCache!=null && currentCache.level.refersTo(world)) {
+        if (world != null && currentCache != null && currentCache.level.refersTo(world)) {
             return currentCache.finalProcessors;
         }
-        if(world instanceof ServerLevel serverLevel) {
+        if (world instanceof ServerLevel serverLevel) {
             return reloadCache(serverLevel, structurePos).finalProcessors;
         }
         return new ArrayList<>();
@@ -117,21 +117,21 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos) {
         LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-        var structureProcessors = (riftThemeData.getTheme() != null)?
-                riftThemeData.getTheme().value().getProcessors(themePieceType)
+        var structureProcessors = (riftThemeData.getTheme() != null)
+                ? riftThemeData.getTheme().value().getProcessors(themePieceType)
                 : defaultThemeProcessors(serverLevel, structurePos);
-        var newCache = new ThemeCache(new PhantomReference<>(serverLevel,null),new ArrayList<>(),new ArrayList<>());
-        for (var processor:structureProcessors){
+        var newCache = new ThemeCache(new PhantomReference<>(serverLevel, null), new ArrayList<>(), new ArrayList<>());
+        for (var processor : structureProcessors) {
             var used = false;
-            if(processor instanceof RiftTemplateProcessor riftTemplateProcessor){
+            if (processor instanceof RiftTemplateProcessor riftTemplateProcessor) {
                 newCache.templateProcessors.add(riftTemplateProcessor);
                 used = true;
             }
-            if(processor instanceof RiftFinalProcessor riftTemplateProcessor){
+            if (processor instanceof RiftFinalProcessor riftTemplateProcessor) {
                 newCache.finalProcessors.add(riftTemplateProcessor);
                 used = true;
             }
-            if(!used) {
+            if (!used) {
                 WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
             }
         }
@@ -153,18 +153,31 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(
+            BlockState currentState,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
         var processors = getThemeTemplateProcessors(world.getLevel(), structurePos);
 
-        for (int i = 0; i < processors.size() && currentState!=null; i++) {
-            currentState = processors.get(i).processBlockState(currentState, x, y, z, world, structurePos, nbt, isVisible);
+        for (int i = 0; i < processors.size() && currentState != null; i++) {
+            currentState = processors.get(i)
+                    .processBlockState(currentState, x, y, z, world, structurePos, nbt, isVisible);
         }
         return currentState;
 
     }
 
     @Override
-    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
+    public void finalizeRoomProcessing(
+            RiftProcessedRoom room,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            Vec3i pieceSize) {
         var processors = getFinalTemplateProcessors(world.getLevel(), structurePos);
 
         for (int i = 0; i < processors.size(); i++) {
@@ -172,5 +185,7 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         }
     }
 
-    private record ThemeCache(PhantomReference<LevelReader> level, List<RiftTemplateProcessor> templateProcessors, List<RiftFinalProcessor> finalProcessors){}
+    private record ThemeCache(PhantomReference<LevelReader> level, List<RiftTemplateProcessor> templateProcessors,
+            List<RiftFinalProcessor> finalProcessors) {
+    }
 }

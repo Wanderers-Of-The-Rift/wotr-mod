@@ -18,22 +18,37 @@ import javax.annotation.Nullable;
 
 @Mixin(BlockAgeProcessor.class)
 public abstract class MixinBlockAgeProcessor implements RiftTemplateProcessor {
-    @Shadow @Nullable protected abstract BlockState maybeReplaceStairs(RandomSource random, BlockState state);
+    @Shadow
+    @Nullable protected abstract BlockState maybeReplaceStairs(RandomSource random, BlockState state);
 
-    @Shadow @Nullable protected abstract BlockState maybeReplaceSlab(RandomSource random);
+    @Shadow
+    @Nullable protected abstract BlockState maybeReplaceSlab(RandomSource random);
 
-    @Shadow @Nullable protected abstract BlockState maybeReplaceWall(RandomSource random);
+    @Shadow
+    @Nullable protected abstract BlockState maybeReplaceWall(RandomSource random);
 
-    @Shadow @Nullable protected abstract BlockState maybeReplaceObsidian(RandomSource random);
+    @Shadow
+    @Nullable protected abstract BlockState maybeReplaceObsidian(RandomSource random);
 
-    @Shadow @Nullable protected abstract BlockState maybeReplaceFullStoneBlock(RandomSource random);
+    @Shadow
+    @Nullable protected abstract BlockState maybeReplaceFullStoneBlock(RandomSource random);
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
-        BlockPos blockpos = new BlockPos(x,y,z);
-        RandomSource randomsource = ProcessorUtil.getRandom(StructureRandomType.PIECE,null, blockpos,null, world,0xab46158bL);
+    public BlockState processBlockState(
+            BlockState currentState,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
+        BlockPos blockpos = new BlockPos(x, y, z);
+        RandomSource randomsource = ProcessorUtil.getRandom(StructureRandomType.PIECE, null, blockpos, null, world,
+                0xab46158bL);
         BlockState blockstate1 = null;
-        if (!currentState.is(Blocks.STONE_BRICKS) && !currentState.is(Blocks.STONE) && !currentState.is(Blocks.CHISELED_STONE_BRICKS)) {
+        if (!currentState.is(Blocks.STONE_BRICKS) && !currentState.is(Blocks.STONE)
+                && !currentState.is(Blocks.CHISELED_STONE_BRICKS)) {
             if (currentState.is(BlockTags.STAIRS)) {
                 blockstate1 = this.maybeReplaceStairs(randomsource, currentState);
             } else if (currentState.is(BlockTags.SLABS)) {
@@ -47,6 +62,10 @@ public abstract class MixinBlockAgeProcessor implements RiftTemplateProcessor {
             blockstate1 = this.maybeReplaceFullStoneBlock(randomsource);
         }
 
-        return blockstate1 != null ? blockstate1 : currentState;
+        if (blockstate1 != null) {
+            return blockstate1;
+        } else {
+            return currentState;
+        }
     }
 }

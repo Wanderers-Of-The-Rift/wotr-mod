@@ -231,7 +231,9 @@ public class ProcessorUtil {
     }
 
     public static BlockState copyState(BlockState fromState, BlockState toState) {
-        for (var property : ((Reference2ObjectArrayMap<Property<?>, Comparable<?>>)fromState.getBlock().defaultBlockState().getValues()).keySet()/*todo maybe write accessor for key table and use it directly*/) {
+        for (var property : ((Reference2ObjectArrayMap<Property<?>, Comparable<?>>) fromState.getBlock()
+                .defaultBlockState()
+                .getValues()).keySet()/* todo maybe write accessor for key table and use it directly */) {
             toState = updateProperty(fromState, toState, property);
         }
         return toState;

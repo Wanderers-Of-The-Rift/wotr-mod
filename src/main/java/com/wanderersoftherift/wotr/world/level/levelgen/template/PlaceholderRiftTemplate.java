@@ -25,33 +25,39 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
     }
 
     @Override
-    public void processAndPlace(RiftProcessedRoom destination, ServerLevelAccessor world, Vec3i placementShift, TripleMirror mirror) {
+    public void processAndPlace(
+            RiftProcessedRoom destination,
+            ServerLevelAccessor world,
+            Vec3i placementShift,
+            TripleMirror mirror) {
         var themeProcessor = new ThemeProcessor(ThemePieceType.ROOM);
         var offset = new BlockPos(destination.space.origin().multiply(16)).offset(placementShift);
         var mutablePosition = new BlockPos.MutableBlockPos();
         var xLastChunkPosition = 0;
         var yLastChunkPosition = 0;
         var zLastChunkPosition = 0;
-        RiftProcessedChunk roomChunk=null;
+        RiftProcessedChunk roomChunk = null;
         for (int x = 0; x < size.getX(); x++) {
             for (int z = 0; z < size.getZ(); z++) {
                 for (int y = 0; y < size.getY(); y++) {
-                    var xm = x%16;
-                    var ym = y%16;
-                    var zm = z%16;
-                    var f1 = xm>=6 && xm<9;
-                    var f2 = ym>=6 && ym<9;
-                    var f3 = zm>=6 && zm<9;
-                    if ((f1&&f2) || (f2&&f3) ||(f3&&f1)) {
+                    var xm = x % 16;
+                    var ym = y % 16;
+                    var zm = z % 16;
+                    var f1 = xm >= 6 && xm < 9;
+                    var f2 = ym >= 6 && ym < 9;
+                    var f3 = zm >= 6 && zm < 9;
+                    if ((f1 && f2) || (f2 && f3) || (f3 && f1)) {
                         continue;
                     }
-                    var blockPos = new Vec3i(x,y,z);
+                    var blockPos = new Vec3i(x, y, z);
 
-                    mutablePosition.set(offset).move(mirror.applyToPosition(blockPos, size.getX()-1, size.getZ()-1));
+                    mutablePosition.set(offset)
+                            .move(mirror.applyToPosition(blockPos, size.getX() - 1, size.getZ() - 1));
 
                     var nbt = new CompoundTag();
                     var info = new StructureTemplate.StructureBlockInfo(mutablePosition, blockState, nbt);
-                    var newBlockState = themeProcessor.processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, true);
+                    var newBlockState = themeProcessor.processBlockState(blockState, mutablePosition.getX(),
+                            mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, true);
                     if (newBlockState == null) {
                         continue;
                     }
@@ -61,16 +67,18 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
                     var yChunkPosition = finalPos.getY() >> 4;
                     var zChunkPosition = finalPos.getZ() >> 4;
 
-                    if (xLastChunkPosition!=xChunkPosition || yLastChunkPosition!=yChunkPosition || zLastChunkPosition!=zChunkPosition || roomChunk==null){
+                    if (xLastChunkPosition != xChunkPosition || yLastChunkPosition != yChunkPosition
+                            || zLastChunkPosition != zChunkPosition || roomChunk == null) {
                         xLastChunkPosition = xChunkPosition;
                         yLastChunkPosition = yChunkPosition;
                         zLastChunkPosition = zChunkPosition;
-                        roomChunk = destination.getOrCreateChunk(new Vec3i(xChunkPosition,yChunkPosition,zChunkPosition));
+                        roomChunk = destination
+                                .getOrCreateChunk(new Vec3i(xChunkPosition, yChunkPosition, zChunkPosition));
                     }
                     var chunkX = finalPos.getX() & 0xf;
                     var chunkY = finalPos.getY() & 0xf;
                     var chunkZ = finalPos.getZ() & 0xf;
-                    roomChunk.blocks[(chunkX) | ((chunkZ) <<4) | ((chunkY) <<8)]=info.state();
+                    roomChunk.blocks[(chunkX) | ((chunkZ) << 4) | ((chunkY) << 8)] = info.state();
                 }
             }
         }
@@ -88,6 +96,6 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
 
     @Override
     public String identifier() {
-        return "wotr:builtin:placeholder_"+size.getX()+"x"+size.getY()+"x"+size.getZ();
+        return "wotr:builtin:placeholder_" + size.getX() + "x" + size.getY() + "x" + size.getZ();
     }
 }

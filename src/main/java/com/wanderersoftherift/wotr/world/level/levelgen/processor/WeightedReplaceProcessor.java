@@ -107,8 +107,18 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
-        ProcessorUtil.getRandom(structureRandomType, new BlockPos(x,y,z), structurePos, BlockPos.ZERO/*rifts always start at portal room, this could be changed to room origin*/, world, seedAdjustment);
+    public BlockState processBlockState(
+            BlockState currentState,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
+        ProcessorUtil.getRandom(structureRandomType, new BlockPos(x, y, z), structurePos,
+                BlockPos.ZERO/* rifts always start at portal room, this could be changed to room origin */, world,
+                seedAdjustment);
         if (inputBlockState.matchesBlockstate(currentState)) {
             return currentState;
         }

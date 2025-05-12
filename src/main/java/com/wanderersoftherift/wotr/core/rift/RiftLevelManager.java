@@ -146,8 +146,8 @@ public final class RiftLevelManager {
 
         int typeHeight = 5;
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(ow,(typeHeight+1)*4);
-        if (chunkGen == null){
+        ChunkGenerator chunkGen = getRiftChunkGenerator(ow, (typeHeight + 1) * 4);
+        if (chunkGen == null) {
             return null;
         }
 
@@ -174,7 +174,7 @@ public final class RiftLevelManager {
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
 
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
-        spawnRiftExit(level, new BlockPos(8,6,8).above().getBottomCenter());
+        spawnRiftExit(level, new BlockPos(8, 6, 8).above().getBottomCenter());
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
     }
@@ -192,7 +192,11 @@ public final class RiftLevelManager {
     }
 
     @SuppressWarnings("deprecation")
-    private static LevelStem getLevelStem(MinecraftServer server, ResourceLocation id, ChunkGenerator chunkGen, int type) {
+    private static LevelStem getLevelStem(
+            MinecraftServer server,
+            ResourceLocation id,
+            ChunkGenerator chunkGen,
+            int type) {
         Optional<Registry<LevelStem>> levelStemRegistry = server.overworld()
                 .registryAccess()
                 .lookup(Registries.LEVEL_STEM);
@@ -202,9 +206,9 @@ public final class RiftLevelManager {
 
         var riftType = server.registryAccess()
                 .lookupOrThrow(Registries.DIMENSION_TYPE)
-                .get(RiftDimensionType.RIFT_DIMENSION_TYPES.get(type/*todo read from key or something*/))
+                .get(RiftDimensionType.RIFT_DIMENSION_TYPES.get(type/* todo read from key or something */))
                 .orElse(null);
-        if (riftType == null){
+        if (riftType == null) {
             WanderersOfTheRift.LOGGER.error("Failed to get rift dimension type");
             return null;
         }
@@ -285,8 +289,8 @@ public final class RiftLevelManager {
         if (voidBiome == null) {
             return null;
         }
-        return new FastRiftGenerator(new FixedBiomeSource(voidBiome),
-                layerCount, ResourceLocation.withDefaultNamespace("bedrock"));
+        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount,
+                ResourceLocation.withDefaultNamespace("bedrock"));
     }
 
     private static ServerLevel createRift(
@@ -328,8 +332,8 @@ public final class RiftLevelManager {
         themeData.setTheme(riftTheme);
 
         /*
-        placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
-                maxDepth, new BlockPos(0, 2, 0));
+         * placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
+         * maxDepth, new BlockPos(0, 2, 0));
          */
         return riftLevel;
     }

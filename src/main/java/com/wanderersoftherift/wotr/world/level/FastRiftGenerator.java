@@ -56,13 +56,11 @@ import static net.minecraft.world.level.block.Blocks.AIR;
 @MethodsReturnNonnullByDefault
 public class FastRiftGenerator extends ChunkGenerator {
 
-    public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
-        instance.group(
+    public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
-                Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
+            Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
             ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID)
-                ).apply(instance, FastRiftGenerator::new));
-
+    ).apply(instance, FastRiftGenerator::new));
 
     public RiftLayout layout = null;
     public RiftRoomGenerator roomGenerator = null;
@@ -79,16 +77,26 @@ public class FastRiftGenerator extends ChunkGenerator {
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock) {
         super(biomeSource);
         this.layerCount = layerCount;
-        this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock).map(Holder.Reference::value).map(Block::defaultBlockState).orElse(AIR.defaultBlockState());
+        this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock)
+                .map(Holder.Reference::value)
+                .map(Block::defaultBlockState)
+                .orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
     }
 
-    @Override protected MapCodec<? extends ChunkGenerator> codec() {
+    @Override
+    protected MapCodec<? extends ChunkGenerator> codec() {
         return CODEC;
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk) {
+    public void applyCarvers(
+            WorldGenRegion level,
+            long seed,
+            RandomState random,
+            BiomeManager biomeManager,
+            StructureManager structureManager,
+            ChunkAccess chunk) {
 
     }
 
@@ -96,54 +104,65 @@ public class FastRiftGenerator extends ChunkGenerator {
         return layerCount;
     }
 
-    @Override public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random, ChunkAccess chunk) {
+    @Override
+    public void buildSurface(
+            WorldGenRegion level,
+            StructureManager structureManager,
+            RandomState random,
+            ChunkAccess chunk) {
 
     }
 
-    @Override public void spawnOriginalMobs(WorldGenRegion level) {
+    @Override
+    public void spawnOriginalMobs(WorldGenRegion level) {
 
     }
 
-    @Override public int getGenDepth() {
+    @Override
+    public int getGenDepth() {
         return layerCount * 16;
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunk) {
+    public CompletableFuture<ChunkAccess> fillFromNoise(
+            Blender blender,
+            RandomState randomState,
+            StructureManager structureManager,
+            ChunkAccess chunk) {
         var time = System.currentTimeMillis();
-        if (inFlightChunks.getAndIncrement()==0 && time-lastChunkStart.get()>3000) {
+        if (inFlightChunks.getAndIncrement() == 0 && time - lastChunkStart.get() > 3000) {
             generationStart = time;
             completedChunksInWindow.set(0);
         }
 
-        lastChunkStart.updateAndGet((value)-> Math.max(value, time));
-        var level = (ServerLevelAccessor) ((AccessorStructureManager)structureManager).getLevel();
+        lastChunkStart.updateAndGet((value) -> Math.max(value, time));
+        var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
 
         runRiftGeneration(chunk, randomState, level);
 
         return CompletableFuture.completedFuture(chunk);
     }
 
-    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState,  ServerLevelAccessor level){
+    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevelAccessor level) {
 
         var threads = new ArrayList<Thread>();
-        if(false) { //for testing how quick is generation of empty world
+        if (false) { // for testing how quick is generation of empty world
             inFlightChunks.decrementAndGet();
             completedChunks.incrementAndGet();
             completedChunksInWindow.incrementAndGet();
             return;
         }
-        if (layout==null || roomGenerator==null) {
-            layout = new ChaoticRiftLayout(layerCount-2, new RoomRandomizerImpl(level.getServer()));
+        if (layout == null || roomGenerator == null) {
+            layout = new ChaoticRiftLayout(layerCount - 2, new RoomRandomizerImpl(level.getServer()));
             roomGenerator = new RiftRoomGenerator();
         }
         var perimeterBlock = customBlock;
-        RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount/2, perimeterBlock);
-        RiftSpace.placePerimeterInChunk(chunk, null, -layerCount/2, perimeterBlock);
-        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount-2];
+        RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount / 2, perimeterBlock);
+        RiftSpace.placePerimeterInChunk(chunk, null, -layerCount / 2, perimeterBlock);
+        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount - 2];
         RiftSpace[] spaces = new RiftSpace[layerCount - 2];
         for (int i = 0; i < layerCount - 2; i++) {
-            var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount/2, chunk.getPos().z);
+            var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount / 2, chunk.getPos().z);
             var space = layout.getChunkSpace(position, randomState);
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level, randomState);
@@ -154,19 +173,19 @@ public class FastRiftGenerator extends ChunkGenerator {
             var generatedRoomChunkFuture = chunkFutures[i];
 
             var space = spaces[i];
-            if(space == null || space instanceof VoidRiftSpace){
-                RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount/2, perimeterBlock);
-            }else if(generatedRoomChunkFuture != null) {
+            if (space == null || space instanceof VoidRiftSpace) {
+                RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock);
+            } else if (generatedRoomChunkFuture != null) {
                 try {
                     RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
 
-                    if(generatedRoomChunk!=null) {
-                        threads.add(Thread.startVirtualThread(()-> {
+                    if (generatedRoomChunk != null) {
+                        threads.add(Thread.startVirtualThread(() -> {
                             RiftSpace.placePerimeterInRiftChunk(generatedRoomChunk, space, perimeterBlock);
                             generatedRoomChunk.placeInWorld(chunk, level);
                         }));
-                    }else {
-                        RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount/2, perimeterBlock);
+                    } else {
+                        RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
@@ -175,7 +194,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         }
 
-        for (var thread:threads) {
+        for (var thread : threads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
@@ -187,45 +206,54 @@ public class FastRiftGenerator extends ChunkGenerator {
         completedChunksInWindow.incrementAndGet();
     }
 
-    @Override public int getSeaLevel() {
+    @Override
+    public int getSeaLevel() {
         return -layerCount * 8;
     }
 
-    @Override public int getMinY() {
+    @Override
+    public int getMinY() {
         return -layerCount * 8;
     }
 
-    @Override public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
+    @Override
+    public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
         return layerCount * 16;
     }
 
-    @Override public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
-        return new NoiseColumn(0, new BlockState[]{AIR.defaultBlockState()});
+    @Override
+    public @NotNull NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
+        return new NoiseColumn(0, new BlockState[] { AIR.defaultBlockState() });
     }
 
-    @Override public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
-        if (layout!=null){
+    @Override
+    public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
+        if (layout != null) {
             var currentSpace = layout.getChunkSpace(SectionPos.of(pos), null);
             info.add("current space");
-            if(currentSpace==null || currentSpace instanceof VoidRiftSpace){
+            if (currentSpace == null || currentSpace instanceof VoidRiftSpace) {
                 info.add("void");
             } else {
-                info.add(MessageFormat.format("origin: {0} {1} {2}", currentSpace.origin().getX(), currentSpace.origin().getY(), currentSpace.origin().getZ()));
-                info.add(MessageFormat.format("size: {0} {1} {2}", currentSpace.size().getX(), currentSpace.size().getY(), currentSpace.size().getZ()));
-                info.add(MessageFormat.format("transform: {0} {1} {2}", currentSpace.templateTransform().x(), currentSpace.templateTransform().z(), currentSpace.templateTransform().diagonal()));
+                info.add(MessageFormat.format("origin: {0} {1} {2}", currentSpace.origin().getX(),
+                        currentSpace.origin().getY(), currentSpace.origin().getZ()));
+                info.add(MessageFormat.format("size: {0} {1} {2}", currentSpace.size().getX(),
+                        currentSpace.size().getY(), currentSpace.size().getZ()));
+                info.add(MessageFormat.format("transform: {0} {1} {2}", currentSpace.templateTransform().x(),
+                        currentSpace.templateTransform().z(), currentSpace.templateTransform().diagonal()));
                 var template = currentSpace.template();
-                if(template != null) {
+                if (template != null) {
                     info.add("room base template: " + template.identifier());
                 }
             }
         }
         info.add("performance");
-        info.add("all generated chunks: "+completedChunks.get());
-        info.add("window chunks: "+completedChunksInWindow.get());
-        info.add("window time: "+(lastChunkStart.get()-generationStart));
-        info.add("window CPS: "+(completedChunksInWindow.get()*1000.0/(lastChunkStart.get()-generationStart)));
-        info.add("currently generating chunks: "+inFlightChunks.get());
+        info.add("all generated chunks: " + completedChunks.get());
+        info.add("window chunks: " + completedChunksInWindow.get());
+        info.add("window time: " + (lastChunkStart.get() - generationStart));
+        info.add("window CPS: " + (completedChunksInWindow.get() * 1000.0 / (lastChunkStart.get() - generationStart)));
+        info.add("currently generating chunks: " + inFlightChunks.get());
     }
+
     public ResourceLocation getCustomBlockID() {
         return customBlockID;
     }

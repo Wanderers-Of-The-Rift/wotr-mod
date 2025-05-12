@@ -18,24 +18,33 @@ import java.util.Map;
 @Mixin(OctahedralGroup.class)
 public abstract class MixinOctahedralGroup {
 
-    @Shadow @Nullable private Map<Direction, Direction> rotatedDirections;
+    @Shadow
+    @Nullable private Map<Direction, Direction> rotatedDirections;
 
-    @Shadow @Final private SymmetricGroup3 permutation;
+    @Shadow
+    @Final
+    private SymmetricGroup3 permutation;
 
-    @Shadow public abstract boolean inverts(Direction.Axis axis);
+    @Shadow
+    public abstract boolean inverts(Direction.Axis axis);
 
-    @Inject(method = "rotate(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;",at=@At("HEAD"), cancellable = true)
-    private void fixRotateMultithreaded(Direction baseDirection, CallbackInfoReturnable<Direction> cir){
+    @Inject(method = "rotate(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;", at = @At("HEAD"), cancellable = true)
+    private void fixRotateMultithreaded(Direction baseDirection, CallbackInfoReturnable<Direction> cir) {
         var privateRotatedDirections = this.rotatedDirections;
         if (privateRotatedDirections == null) {
             privateRotatedDirections = Maps.newEnumMap(Direction.class);
 
             var axes = Direction.Axis.values();
-            for(Direction direction : Direction.values()) {
+            for (Direction direction : Direction.values()) {
                 Direction.Axis axis = direction.getAxis();
                 Direction.AxisDirection axisDirection = direction.getAxisDirection();
                 Direction.Axis otherAxis = axes[this.permutation.permutation(axis.ordinal())];
-                Direction.AxisDirection otherAxisDirection = this.inverts(otherAxis) ? axisDirection.opposite() : axisDirection;
+                Direction.AxisDirection otherAxisDirection;
+                if (this.inverts(otherAxis)) {
+                    otherAxisDirection = axisDirection.opposite();
+                } else {
+                    otherAxisDirection = axisDirection;
+                }
                 Direction direction1 = Direction.fromAxisAndDirection(otherAxis, otherAxisDirection);
                 privateRotatedDirections.put(direction, direction1);
             }

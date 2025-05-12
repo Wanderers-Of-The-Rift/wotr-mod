@@ -87,12 +87,20 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(
+            BlockState currentState,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
 
         if (currentState.getBlock() instanceof TrialSpawnerBlock) {
             BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
-            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(new BlockPos(x, y, z),
-                    blockState);
+            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock())
+                    .newBlockEntity(new BlockPos(x, y, z), blockState);
             return fixNbtReturnState(blockEntity, world, nbt, blockState);
 
         }
@@ -101,10 +109,14 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
             BlockEntity blockEntity = block.newBlockEntity(new BlockPos(x, y, z), currentState);
             return fixNbtReturnState(blockEntity, world, nbt, currentState);
         }
-        return currentState; //todo implement with nbt (or maybe with TileEntities)
+        return currentState; // todo implement with nbt (or maybe with TileEntities)
     }
 
-    private BlockState fixNbtReturnState(BlockEntity blockEntity, ServerLevelAccessor world, CompoundTag nbt, BlockState currentState){
+    private BlockState fixNbtReturnState(
+            BlockEntity blockEntity,
+            ServerLevelAccessor world,
+            CompoundTag nbt,
+            BlockState currentState) {
 
         if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
 

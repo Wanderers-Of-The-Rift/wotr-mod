@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -50,25 +49,25 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
     protected static Map<Long, OpenSimplex2F> noiseGenSeeds = new ConcurrentHashMap<>();
 
     private final Map<InputBlockState, List<OutputStep>> replaceMap;
-    private final Map<Block,List<Pair<InputBlockState, OutputSteps>>> betterReplaceMap;
+    private final Map<Block, List<Pair<InputBlockState, OutputSteps>>> betterReplaceMap;
     private final double noiseScaleX;
     private final double noiseScaleY;
     private final double noiseScaleZ;
     private final int seedAdjustment;
 
-    private Pair<PhantomReference<LevelReader>,OpenSimplex2F> lastNoiseCache = null;
+    private Pair<PhantomReference<LevelReader>, OpenSimplex2F> lastNoiseCache = null;
     private final List<Pair<InputBlockState, OutputSteps>>[] fastBetterReplaceMapValues;
     private final Block[] fastBetterReplaceMapKeys;
 
     public GradientReplaceProcessor(Map<InputBlockState, List<OutputStep>> replaceMap, double noiseScaleX,
             double noiseScaleY, double noiseScaleZ, int seedAdjustment) {
         this.replaceMap = new Object2ObjectLinkedOpenHashMap<>(replaceMap);
-        var betterReplaceMap=new IdentityHashMap<Block,List<Pair<InputBlockState, OutputSteps>>>();
-        replaceMap.forEach((inputState,outputStates)->{
-            var list = betterReplaceMap.computeIfAbsent(inputState.block(),(block)->new ArrayList<>());
+        var betterReplaceMap = new IdentityHashMap<Block, List<Pair<InputBlockState, OutputSteps>>>();
+        replaceMap.forEach((inputState, outputStates) -> {
+            var list = betterReplaceMap.computeIfAbsent(inputState.block(), (block) -> new ArrayList<>());
             list.add(new Pair<>(inputState, new OutputSteps(outputStates)));
         });
-        this.betterReplaceMap=betterReplaceMap;
+        this.betterReplaceMap = betterReplaceMap;
         this.noiseScaleX = noiseScaleX;
         this.noiseScaleY = noiseScaleY;
         this.noiseScaleZ = noiseScaleZ;
@@ -76,25 +75,25 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         fastBetterReplaceMapValues = new List[128];
         fastBetterReplaceMapKeys = new Block[128];
         var iter = betterReplaceMap.entrySet().iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             var entry = iter.next();
             var hash = hashBlock(entry.getKey());
-            if(fastBetterReplaceMapKeys[hash]==null){
-                fastBetterReplaceMapKeys[hash]=entry.getKey();
-                fastBetterReplaceMapValues[hash]=entry.getValue();
+            if (fastBetterReplaceMapKeys[hash] == null) {
+                fastBetterReplaceMapKeys[hash] = entry.getKey();
+                fastBetterReplaceMapValues[hash] = entry.getValue();
                 iter.remove();
             }
         }
 
     }
 
-    private int hashBlock(Block b){
-        return (System.identityHashCode(b)* FibonacciHashing.GOLDEN_RATIO_INT)>>>25;
+    private int hashBlock(Block b) {
+        return (System.identityHashCode(b) * FibonacciHashing.GOLDEN_RATIO_INT) >>> 25;
     }
 
     public OpenSimplex2F getNoiseGen(@NotNull Long seed) {
         var noiseGen = noiseGenSeeds.get(seed);
-        if(noiseGen!=null){
+        if (noiseGen != null) {
             return noiseGen;
         }
         return noiseGenSeeds.computeIfAbsent(seed, OpenSimplex2F::new);
@@ -110,21 +109,30 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             StructurePlaceSettings settings,
             @Nullable StructureTemplate template) {
 
-        var newBlockState = processBlockState(blockInfo.state(), blockInfo.pos().getX(), blockInfo.pos().getX(), blockInfo.pos().getX(), (ServerLevel) world, piecePos, blockInfo.nbt(), true);
+        var newBlockState = processBlockState(blockInfo.state(), blockInfo.pos().getX(), blockInfo.pos().getX(),
+                blockInfo.pos().getX(), (ServerLevel) world, piecePos, blockInfo.nbt(), true);
 
         return new StructureTemplate.StructureBlockInfo(blockInfo.pos(), newBlockState, blockInfo.nbt());
     }
 
     @Override
-    public BlockState processBlockState(BlockState blockstate, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(
+            BlockState blockstate,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
         Block block = blockstate.getBlock();
         var blockHash = hashBlock(block);
         List<Pair<InputBlockState, OutputSteps>> multiOutputState;
-        if(fastBetterReplaceMapKeys[blockHash]==block){
+        if (fastBetterReplaceMapKeys[blockHash] == block) {
             multiOutputState = fastBetterReplaceMapValues[blockHash];
-        }else {
+        } else {
             multiOutputState = betterReplaceMap.get(block);
-            if(multiOutputState==null){
+            if (multiOutputState == null) {
                 return blockstate;
             }
         }
@@ -132,7 +140,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
 
             if (entry.getA().matchesBlockstateAssumingBlockEqual(blockstate)) {
                 var steps = entry.getB();
-                if(steps.isEmpty()){
+                if (steps.isEmpty()) {
                     return blockstate;
                 }
                 return getOutputBlockState(steps, world, structurePos, x, y, z, blockstate, isVisible);
@@ -145,7 +153,9 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             OutputSteps outputSteps,
             LevelReader world,
             BlockPos structurePos,
-            int x, int y, int z,
+            int x,
+            int y,
+            int z,
             BlockState blockstate,
             boolean isVisible) {
         OpenSimplex2F noiseGen = getNoiseGen(world, structurePos);
@@ -160,7 +170,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
     private OpenSimplex2F getNoiseGen(LevelReader world, BlockPos structurePos) {
         world = world instanceof ServerLevelAccessor sa ? sa.getLevel() : world;
         var currentCache = lastNoiseCache;
-        if (world!=null && currentCache!=null && currentCache.getA().refersTo(world)) {
+        if (world != null && currentCache != null && currentCache.getA().refersTo(world)) {
             return currentCache.getB();
         }
         OpenSimplex2F noiseGen = null;
@@ -173,15 +183,21 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         return noiseGen;
     }
 
-    private BlockState getReplacementBlock(OutputSteps outputSteps, int x, int y, int z, OpenSimplex2F noiseGen, boolean isVisible) {
-        if (outputSteps.isEmpty()){
+    private BlockState getReplacementBlock(
+            OutputSteps outputSteps,
+            int x,
+            int y,
+            int z,
+            OpenSimplex2F noiseGen,
+            boolean isVisible) {
+        if (outputSteps.isEmpty()) {
             return null;
         }
-        if(outputSteps.size() == 1 || !isVisible){
+        if (outputSteps.size() == 1 || !isVisible) {
             return outputSteps.convertedBlockStates[0];
         }
-        double noiseValue = Math.abs(noiseGen.noise3_Classic(x * getNoiseScaleX(),
-                y * getNoiseScaleY(), z * getNoiseScaleZ()));
+        double noiseValue = Math
+                .abs(noiseGen.noise3_Classic(x * getNoiseScaleX(), y * getNoiseScaleY(), z * getNoiseScaleZ()));
         float stepSize = 0;
         var sizes = outputSteps.stepSizes;
         for (int i = 0; i < outputSteps.size(); i++) {
@@ -236,7 +252,6 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         }
     }
 
-
     private record OutputStep(OutputBlockState outputBlockState, float stepSize) {
         public static final Codec<OutputStep> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(OutputBlockState.DIRECT_CODEC.fieldOf("output_state").forGetter(OutputStep::outputBlockState),
@@ -244,26 +259,27 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
                 ).apply(builder, OutputStep::new));
     }
 
-    private static class OutputSteps{
+    private static class OutputSteps {
         private final float[] stepSizes;
         private final BlockState[] convertedBlockStates;
         private final int size;
 
         private OutputSteps(List<OutputStep> steps) {
-            this.size=steps.size();
+            this.size = steps.size();
             stepSizes = new float[steps.size()];
             convertedBlockStates = new BlockState[steps.size()];
             for (int i = 0; i < steps.size(); i++) {
                 var step = steps.get(i);
-                stepSizes[i]=step.stepSize;
+                stepSizes[i] = step.stepSize;
                 convertedBlockStates[i] = step.outputBlockState().convertBlockState();
             }
         }
 
         public boolean isEmpty() {
-            return size==0;
+            return size == 0;
         }
-        public int size(){
+
+        public int size() {
             return size;
         }
     }

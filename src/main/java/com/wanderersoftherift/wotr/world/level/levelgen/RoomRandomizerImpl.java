@@ -33,69 +33,76 @@ public class RoomRandomizerImpl implements RoomRandomizer {
 
     @Override
     public RoomRiftSpace randomSpace(RoomRiftSpace.RoomType roomType, RandomSource randomSource, Vec3i maximumSize) {
-        return getOrCreateSpaceHolder(roomType).random(maximumSize,randomSource);
+        return getOrCreateSpaceHolder(roomType).random(maximumSize, randomSource);
     }
 
-    private RiftSpaceHolder getOrCreateSpaceHolder(RoomRiftSpace.RoomType roomType){
+    private RiftSpaceHolder getOrCreateSpaceHolder(RoomRiftSpace.RoomType roomType) {
         var lastCache = cache;
-        if(lastCache!=null && lastCache.getA().refersTo(server)){
+        if (lastCache != null && lastCache.getA().refersTo(server)) {
             return lastCache.getB().get(roomType);
         }
         var map = new EnumMap<RoomRiftSpace.RoomType, RiftSpaceHolder>(RoomRiftSpace.RoomType.class);
-        for(var type : RoomRiftSpace.RoomType.values()){
+        for (var type : RoomRiftSpace.RoomType.values()) {
             map.computeIfAbsent(type, this::createSpaceHolder);
         }
         cache = new Pair<>(new PhantomReference<>(server, null), map);
         return map.get(roomType);
     }
 
-    private RiftSpaceHolder createSpaceHolder(RoomRiftSpace.RoomType roomType){
-        var templates = RiftTemplates.all(server, WanderersOfTheRift.id("rift/room_"+roomType.toString().toLowerCase()));
-        if (roomType == RoomRiftSpace.RoomType.CHAOS){
-            return new MultiSizeRiftSpaceRandomList(templates,((generatable, desiredTemplateSize) -> convertRoom(generatable,desiredTemplateSize, roomType)));
+    private RiftSpaceHolder createSpaceHolder(RoomRiftSpace.RoomType roomType) {
+        var templates = RiftTemplates.all(server,
+                WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase()));
+        if (roomType == RoomRiftSpace.RoomType.CHAOS) {
+            return new MultiSizeRiftSpaceRandomList(templates,
+                    ((generatable, desiredTemplateSize) -> convertRoom(generatable, desiredTemplateSize, roomType)));
         } else {
-            return new MonoSizeRiftSpaceRandomList(templates,((generatable, desiredTemplateSize) -> convertRoom(generatable,desiredTemplateSize, roomType)));
+            return new MonoSizeRiftSpaceRandomList(templates,
+                    ((generatable, desiredTemplateSize) -> convertRoom(generatable, desiredTemplateSize, roomType)));
         }
     }
 
-
-    private static Stream<RoomRiftSpace> convertRoom(RiftGeneratable generatable, @Nullable Vec3i desiredTemplateSize, RoomRiftSpace.RoomType type){ //todo maybe double weight if only one diagonal mirror is applicable
+    private static Stream<RoomRiftSpace> convertRoom(
+            RiftGeneratable generatable,
+            @Nullable Vec3i desiredTemplateSize,
+            RoomRiftSpace.RoomType type) { // todo maybe double weight if only one diagonal mirror is applicable
         var sizeBlocks = generatable.size();
-        var sizeChunks = new Vec3i((sizeBlocks.getX() + 1)/16, (sizeBlocks.getY() + 1)/16, (sizeBlocks.getZ() + 1)/16);
+        var sizeChunks = new Vec3i((sizeBlocks.getX() + 1) / 16, (sizeBlocks.getY() + 1) / 16,
+                (sizeBlocks.getZ() + 1) / 16);
         var baseStream = IntStream.range(0, 8).mapToObj((mirrorPermutation) -> {
             var mirror = new TripleMirror(mirrorPermutation);
             var modifiedSize = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(sizeChunks, 0, 0);
             return new RoomRiftSpace(modifiedSize,
-                    new Vec3i(modifiedSize.getX()/2, modifiedSize.getY()/2, modifiedSize.getZ()/2),
-                    computeCorridors(generatable.jigsaws(), mirror, sizeChunks),
-                    type, generatable, mirror
+                    new Vec3i(modifiedSize.getX() / 2, modifiedSize.getY() / 2, modifiedSize.getZ() / 2),
+                    computeCorridors(generatable.jigsaws(), mirror, sizeChunks), type, generatable, mirror
             );
         });
-        if(desiredTemplateSize!=null) {
-            return baseStream.filter((it) ->
-                    desiredTemplateSize.getX() >= it.size().getX() &&
-                    desiredTemplateSize.getY() >= it.size().getY() &&
-                    desiredTemplateSize.getZ() >= it.size().getZ()
+        if (desiredTemplateSize != null) {
+            return baseStream.filter((it) -> desiredTemplateSize.getX() >= it.size().getX()
+                    && desiredTemplateSize.getY() >= it.size().getY() && desiredTemplateSize.getZ() >= it.size().getZ()
             );
         } else {
             return baseStream;
         }
     }
 
-    private static List<RiftSpaceCorridor> computeCorridors(Collection<StructureTemplate.JigsawBlockInfo> jigsaws, TripleMirror mirror, Vec3i sizeChunks) {
+    private static List<RiftSpaceCorridor> computeCorridors(
+            Collection<StructureTemplate.JigsawBlockInfo> jigsaws,
+            TripleMirror mirror,
+            Vec3i sizeChunks) {
         return jigsaws.stream()
-                .filter((it)->it.pool().toString().contains("wotr:rift/ring"))
-                .map(jigsaw->new RiftSpaceCorridor(
+                .filter((it) -> it.pool().toString().contains("wotr:rift/ring"))
+                .map(jigsaw -> new RiftSpaceCorridor(
                         mirror.applyToPosition(
-                                new Vec3i(jigsaw.info().pos().getX()/16, jigsaw.info().pos().getY()/16, jigsaw.info().pos().getZ()/16),
+                                new Vec3i(jigsaw.info().pos().getX() / 16, jigsaw.info().pos().getY() / 16,
+                                        jigsaw.info().pos().getZ() / 16),
                                 sizeChunks.getX() - 1, sizeChunks.getZ() - 1
-                        ),
-                        mirror.applyToDirection(JigsawBlock.getFrontFacing(jigsaw.info().state())))
-                ).toList();
+                        ), mirror.applyToDirection(JigsawBlock.getFrontFacing(jigsaw.info().state())))
+                )
+                .toList();
     }
 
     private interface RoomConverter {
-        Stream<RoomRiftSpace> convertRoom(RiftGeneratable generatable,  @Nullable Vec3i desiredTemplateSize);
+        Stream<RoomRiftSpace> convertRoom(RiftGeneratable generatable, @Nullable Vec3i desiredTemplateSize);
     }
 
     private interface RiftSpaceHolder {
@@ -108,11 +115,13 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         public MultiSizeRiftSpaceRandomList(List<RiftGeneratable> templates, RoomConverter converter) {
             for (int i = 0; i < 64; i++) {
                 var desiredTemplateSize = new Vec3i((i & 0b11) + 1, ((i >> 2) & 0b11) + 1, ((i >> 4) & 0b11) + 1);
-                weightedListForSize[i]= FastWeightedList.byCountingDuplicates(templates.stream().flatMap(template -> converter.convertRoom(template, desiredTemplateSize)).toList(), space -> new Pair(space.template().identifier(),space.templateTransform()));
+                weightedListForSize[i] = FastWeightedList.byCountingDuplicates(templates.stream()
+                        .flatMap(template -> converter.convertRoom(template, desiredTemplateSize))
+                        .toList(), space -> new Pair(space.template().identifier(), space.templateTransform()));
             }
         }
 
-        public RoomRiftSpace random(Vec3i maxSize, RandomSource random){
+        public RoomRiftSpace random(Vec3i maxSize, RandomSource random) {
             var i = (maxSize.getX() - 1) + 4 * (maxSize.getY() - 1) + 16 * (maxSize.getZ() - 1);
             return weightedListForSize[i].random(random);
         }
@@ -122,10 +131,12 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         private final FastWeightedList<RoomRiftSpace> weightedList;
 
         public MonoSizeRiftSpaceRandomList(List<RiftGeneratable> templates, RoomConverter converter) {
-            weightedList = FastWeightedList.byCountingDuplicates(templates.stream().flatMap(template -> converter.convertRoom(template,null)).toList(),space -> new Pair(space.template().identifier(),space.templateTransform()));
+            weightedList = FastWeightedList.byCountingDuplicates(
+                    templates.stream().flatMap(template -> converter.convertRoom(template, null)).toList(),
+                    space -> new Pair(space.template().identifier(), space.templateTransform()));
         }
 
-        public RoomRiftSpace random(Vec3i maxSize, RandomSource random){
+        public RoomRiftSpace random(Vec3i maxSize, RandomSource random) {
             return weightedList.random(random);
         }
     }

@@ -38,6 +38,8 @@ public class DefaultInputBlockState extends InputBlockState {
     }
 
     @Override
-    public Block block() { return getBlock(); }
+    public Block block() {
+        return getBlock();
+    }
 
 }

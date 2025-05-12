@@ -24,12 +24,12 @@ public class RiftProcessedRoom {
         this.space = space;
         origin = space.origin();
         for (int i = 0; i < chunkArray.length; i++) {
-            if((i & 0b11) < space.size().getX() && ((i>>4) & 0b11) < space.size().getY() && ((i>>2) & 0b11) < space.size().getZ()) {
+            if ((i & 0b11) < space.size().getX() && ((i >> 4) & 0b11) < space.size().getY()
+                    && ((i >> 2) & 0b11) < space.size().getZ()) {
                 chunkArray[i] = new AtomicReference<>();
             }
         }
     }
-
 
     public RiftProcessedChunk getAndRemoveChunk(Vec3i sectionPos) {
         try {
@@ -37,66 +37,59 @@ public class RiftProcessedRoom {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-        var x2 = sectionPos.getX()-origin.getX();
-        var y2 = sectionPos.getY()-origin.getY();
-        var z2 = sectionPos.getZ()-origin.getZ();
-        if (x2<0 || x2>=space.size().getX() ||
-                y2<0 || y2>=space.size().getY() ||
-                z2<0 || z2>=space.size().getZ()
-        ) {
+        var x2 = sectionPos.getX() - origin.getX();
+        var y2 = sectionPos.getY() - origin.getY();
+        var z2 = sectionPos.getZ() - origin.getZ();
+        if (x2 < 0 || x2 >= space.size().getX() || y2 < 0 || y2 >= space.size().getY() || z2 < 0
+                || z2 >= space.size().getZ()) {
             return null;
         }
-        var idx = x2+(z2<<2)+(y2<<4);
+        var idx = x2 + (z2 << 2) + (y2 << 4);
         var ref = chunkArray[idx];
-        if(ref==null) {
+        if (ref == null) {
             return null;
         }
-        chunkArray[idx]=null;
+        chunkArray[idx] = null;
         return ref.get();
     }
-
 
     public RiftProcessedChunk getOrCreateChunk(Vec3i sectionPos) {
         return getOrCreateChunk(sectionPos.getX(), sectionPos.getY(), sectionPos.getZ());
     }
 
     public RiftProcessedChunk getOrCreateChunk(int x, int y, int z) {
-        var x2 = x-origin.getX();
-        var y2 = y-origin.getY();
-        var z2 = z-origin.getZ();
-        if (x2<0 || x2>=space.size().getX() ||
-                y2<0 || y2>=space.size().getY() ||
-                z2<0 || z2>=space.size().getZ()
-        ) {
+        var x2 = x - origin.getX();
+        var y2 = y - origin.getY();
+        var z2 = z - origin.getZ();
+        if (x2 < 0 || x2 >= space.size().getX() || y2 < 0 || y2 >= space.size().getY() || z2 < 0
+                || z2 >= space.size().getZ()) {
             return null;
         }
-        var ref = chunkArray[x2+(z2<<2)+(y2<<4)];
-        if(ref==null) {
+        var ref = chunkArray[x2 + (z2 << 2) + (y2 << 4)];
+        if (ref == null) {
             return null;
         }
         var newValue = ref.get();
-        if (newValue!=null) {
+        if (newValue != null) {
             return newValue;
         }
         newValue = new RiftProcessedChunk(new Vec3i(x, y, z), this);
-        if (ref.compareAndSet(null,newValue)){
+        if (ref.compareAndSet(null, newValue)) {
             return newValue;
         }
         return ref.get();
     }
 
     public RiftProcessedChunk getChunk(int x, int y, int z) {
-        var x2 = x-origin.getX();
-        var y2 = y-origin.getY();
-        var z2 = z-origin.getZ();
-        if (x2<0 || x2>=space.size().getX() ||
-                y2<0 || y2>=space.size().getY() ||
-                z2<0 || z2>=space.size().getZ()
-        ) {
+        var x2 = x - origin.getX();
+        var y2 = y - origin.getY();
+        var z2 = z - origin.getZ();
+        if (x2 < 0 || x2 >= space.size().getX() || y2 < 0 || y2 >= space.size().getY() || z2 < 0
+                || z2 >= space.size().getZ()) {
             return null;
         }
-        var ref = chunkArray[x2+(z2<<2)+(y2<<4)];
-        if(ref==null) {
+        var ref = chunkArray[x2 + (z2 << 2) + (y2 << 4)];
+        if (ref == null) {
             return null;
         }
         return ref.get();
@@ -109,12 +102,13 @@ public class RiftProcessedRoom {
     public void addEntity(StructureTemplate.StructureEntityInfo info) {
         var position = info.blockPos;
         var nbt = info.nbt;
-        if(nbt.getAllKeys().contains("TileX") && nbt.getAllKeys().contains("TileY") && nbt.getAllKeys().contains("TileZ")){
-            if (position.getX()<0){
-                position = new BlockPos(position.getX()-1, position.getY(), position.getZ());
+        if (nbt.getAllKeys().contains("TileX") && nbt.getAllKeys().contains("TileY")
+                && nbt.getAllKeys().contains("TileZ")) {
+            if (position.getX() < 0) {
+                position = new BlockPos(position.getX() - 1, position.getY(), position.getZ());
             }
-            if (position.getZ()<0){
-                position = new BlockPos(position.getX(), position.getY(), position.getZ()-1);
+            if (position.getZ() < 0) {
+                position = new BlockPos(position.getX(), position.getY(), position.getZ() - 1);
             }
             nbt.putInt("TileX", position.getX());
             nbt.putInt("TileY", position.getY());
@@ -126,7 +120,8 @@ public class RiftProcessedRoom {
         listtag.add(DoubleTag.valueOf(info.pos.z));
         nbt.put("Pos", listtag);
         nbt.remove("UUID");
-        this.getOrCreateChunk(new Vec3i(position.getX() >> 4, position.getY() >> 4, position.getZ() >> 4)).entities.add(nbt);
+        this.getOrCreateChunk(new Vec3i(position.getX() >> 4, position.getY() >> 4, position.getZ() >> 4)).entities
+                .add(nbt);
     }
 
     public BlockState getBlock(int x, int y, int z) {
@@ -134,16 +129,15 @@ public class RiftProcessedRoom {
         var chunkY = y >> 4;
         var chunkZ = z >> 4;
         var chunk = getChunk(chunkX, chunkY, chunkZ);
-        if(chunk==null){
+        if (chunk == null) {
             return null;
         }
         return chunk.getBlockStatePure(x & 0xf, y & 0xf, z & 0xf);
     }
 
-    public BlockState getBlock(Vec3i pos){
+    public BlockState getBlock(Vec3i pos) {
         return getBlock(pos.getX(), pos.getY(), pos.getZ());
     }
-
 
     public void setBlock(int x, int y, int z, BlockState state) {
         var chunkX = x >> 4;

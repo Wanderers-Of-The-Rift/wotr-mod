@@ -126,36 +126,41 @@ public class MushroomProcessor extends StructureProcessor implements RiftFinalPr
         return tagStructureRandomType;
     }
 
-
     @Override
-    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
+    public void finalizeRoomProcessing(
+            RiftProcessedRoom room,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            Vec3i pieceSize) {
 
-        var blockRandomFlag = structureRandomType==BLOCK;
+        var blockRandomFlag = structureRandomType == BLOCK;
         RandomSource random = createRandom(getRandomSeed(structurePos, SEED.orElse(0L)));
-            //ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world, SEED);
-        var blockRandomFlag2 = tagStructureRandomType==BLOCK;
+        // ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new
+        // BlockPos(0,0,0), world, SEED);
+        var blockRandomFlag2 = tagStructureRandomType == BLOCK;
         RandomSource random2 = createRandom(getRandomSeed(structurePos, SEED.orElse(0L)));
-                //ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world, SEED);
+        // ProcessorUtil.getRandom(blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new
+        // BlockPos(0,0,0), world, SEED);
         var roll = random.nextFloat();
         var roll2 = getRandomBlockFromItemTag(itemTag, random2, exclusionList);
         var bp = new BlockPos.MutableBlockPos();
         for (int x = 0; x < pieceSize.getX(); x++) {
             for (int z = 0; z < pieceSize.getZ(); z++) {
                 for (int y = 0; y < pieceSize.getY(); y++) {
-                    var x2 = x+structurePos.getX();
-                    var y2 = y+structurePos.getY();
-                    var z2 = z+structurePos.getZ();
+                    var x2 = x + structurePos.getX();
+                    var y2 = y + structurePos.getY();
+                    var z2 = z + structurePos.getZ();
                     var currentState = room.getBlock(x2, y2, z2);
-                    if (currentState!=null && currentState.isAir()) {
-                        if(blockRandomFlag){
-                            roll=random.nextFloat();
+                    if (currentState != null && currentState.isAir()) {
+                        if (blockRandomFlag) {
+                            roll = random.nextFloat();
                         }
                         if (roll <= rarity) {
-                            if(blockRandomFlag2) {
+                            if (blockRandomFlag2) {
                                 roll2 = getRandomBlockFromItemTag(itemTag, random2, exclusionList);
                             }
-                            var newBlock = room.getBlock(x2,y2-1,z2);
-                            bp.set(x2,y2-1,z2);
+                            var newBlock = room.getBlock(x2, y2 - 1, z2);
+                            bp.set(x2, y2 - 1, z2);
                             boolean validDown = newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
                             if (!validDown) {
                                 continue;

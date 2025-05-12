@@ -14,5 +14,6 @@ public interface AccessorSinglePoolElement {
     @Invoker
     StructureTemplate callGetTemplate(StructureTemplateManager manager);
 
-    @Accessor Holder<StructureProcessorList> getProcessors();
+    @Accessor
+    Holder<StructureProcessorList> getProcessors();
 }

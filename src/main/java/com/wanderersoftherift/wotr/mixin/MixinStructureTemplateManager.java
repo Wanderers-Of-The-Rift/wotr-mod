@@ -13,14 +13,15 @@ import java.util.Optional;
 
 @Mixin(StructureTemplateManager.class)
 public class MixinStructureTemplateManager implements TemplateIdLookup {
-    @Shadow @Final private Map<ResourceLocation, Optional<StructureTemplate>> structureRepository;
+    @Shadow
+    @Final
+    private Map<ResourceLocation, Optional<StructureTemplate>> structureRepository;
 
     @Override
     public ResourceLocation idForTemplate(StructureTemplate template) {
-        return structureRepository
-                .entrySet()
+        return structureRepository.entrySet()
                 .stream()
-                .filter((it)->it.getValue().isPresent() && it.getValue().get()==template )
+                .filter((it) -> it.getValue().isPresent() && it.getValue().get() == template)
                 .findFirst()
                 .map(Map.Entry::getKey)
                 .orElse(null);

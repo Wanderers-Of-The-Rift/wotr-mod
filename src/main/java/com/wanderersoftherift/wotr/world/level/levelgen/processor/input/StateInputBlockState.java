@@ -31,7 +31,7 @@ public class StateInputBlockState extends InputBlockState {
 
     @Override
     public boolean matchesBlockstateAssumingBlockEqual(BlockState blockState) {
-        return matchesBlockstate(blockState); //todo
+        return matchesBlockstate(blockState); // todo
     }
 
     @Override

@@ -57,7 +57,6 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
     private final float rarity;
     private final StructureRandomType structureRandomType;
 
-
     public VineProcessor(boolean attachToWall, boolean attachToCeiling, float rarity,
             StructureRandomType structureRandomType) {
         this.attachToWall = attachToWall;
@@ -163,12 +162,10 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
         return null;
     }
 
-    private boolean isDirectionPossible(
-            RiftProcessedRoom room,
-            BlockPos pos,
-            Direction direction) {
-        var state = room.getBlock(pos.getX()+direction.getStepX(), pos.getY()+direction.getStepY(), pos.getZ()+direction.getStepZ());
-        return state!=null && isFaceFullFast(state, pos, direction.getOpposite());
+    private boolean isDirectionPossible(RiftProcessedRoom room, BlockPos pos, Direction direction) {
+        var state = room.getBlock(pos.getX() + direction.getStepX(), pos.getY() + direction.getStepY(),
+                pos.getZ() + direction.getStepZ());
+        return state != null && isFaceFullFast(state, pos, direction.getOpposite());
     }
 
     protected StructureProcessorType<?> getType() {
@@ -192,24 +189,30 @@ public class VineProcessor extends StructureProcessor implements RiftFinalProces
     }
 
     @Override
-    public void finalizeRoomProcessing(RiftProcessedRoom room, ServerLevelAccessor world, BlockPos structurePos, Vec3i pieceSize) {
-        var blockRandomFlag = structureRandomType==BLOCK;
+    public void finalizeRoomProcessing(
+            RiftProcessedRoom room,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            Vec3i pieceSize) {
+        var blockRandomFlag = structureRandomType == BLOCK;
         RandomSource random = createRandom(getRandomSeed(structurePos, 0L));
-                //ProcessorUtil.getRandom(/*because block is cached, it's (apparently) not thread safe so it can't be used*/blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world, Optional.empty());
+        // ProcessorUtil.getRandom(/*because block is cached, it's (apparently) not thread safe so it can't be
+        // used*/blockRandomFlag ? PIECE : structureRandomType, null, structurePos, new BlockPos(0,0,0), world,
+        // Optional.empty());
         var roll = random.nextFloat();
         var bp = new BlockPos.MutableBlockPos();
         for (int x = 0; x < pieceSize.getX(); x++) {
             for (int z = 0; z < pieceSize.getZ(); z++) {
                 for (int y = 0; y < pieceSize.getY(); y++) {
-                    var x2 = x+structurePos.getX();
-                    var y2 = y+structurePos.getY();
-                    var z2 = z+structurePos.getZ();
+                    var x2 = x + structurePos.getX();
+                    var y2 = y + structurePos.getY();
+                    var z2 = z + structurePos.getZ();
                     var currentState = room.getBlock(x2, y2, z2);
-                    if (currentState!=null && currentState.isAir()) {
-                        if(blockRandomFlag){
-                            roll=random.nextFloat();
+                    if (currentState != null && currentState.isAir()) {
+                        if (blockRandomFlag) {
+                            roll = random.nextFloat();
                         }
-                        if(roll <= rarity) {
+                        if (roll <= rarity) {
                             bp.set(x2, y2, z2);
                             var direction = selectDirection(room, bp);
                             if (direction == null) {

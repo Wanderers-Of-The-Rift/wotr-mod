@@ -3,11 +3,8 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Vec3i;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.RandomState;
 import org.joml.Vector2i;
-
-import java.util.List;
 
 public class GridTunnelRiftLayout implements RiftLayout {
     private final Vector2i period;
@@ -20,24 +17,29 @@ public class GridTunnelRiftLayout implements RiftLayout {
 
     @Override
     public RiftSpace getChunkSpace(Vec3i chunkPos, RandomState randomState) {
-        var gridX = Math.floorDiv(chunkPos.getX(),3);
-        var gridZ = Math.floorDiv(chunkPos.getZ(),3);
+        var gridX = Math.floorDiv(chunkPos.getX(), 3);
+        var gridZ = Math.floorDiv(chunkPos.getZ(), 3);
 
-        var isTunnelX = Math.floorMod(gridX,period.x)>=split.x;
-        var isTunnelZ = Math.floorMod(gridZ,period.y)>=split.y;
+        var isTunnelX = Math.floorMod(gridX, period.x) >= split.x;
+        var isTunnelZ = Math.floorMod(gridZ, period.y) >= split.y;
 
         RiftSpace space;
 
         if (isTunnelX && isTunnelZ) {
-            space=null;
+            space = null;
         } else if (isTunnelX) {
-            space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(1,1,3));
+            space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), new Vec3i(1, 1, 3));
 
         } else if (isTunnelZ) {
-            space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX*3, 1,gridZ*3),new Vec3i(3,1,1));
+            space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), new Vec3i(3, 1, 1));
         } else {
-            space = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), 3, 1, RoomRiftSpace.RoomType.STABLE);
+            space = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), 3, 1,
+                    RoomRiftSpace.RoomType.STABLE);
         }
-        return chunkPos.getY()>=-1 && chunkPos.getY()<=1 ? space : null;
+        if (chunkPos.getY() >= -1 && chunkPos.getY() <= 1) {
+            return space;
+        } else {
+            return null;
+        }
     }
 }

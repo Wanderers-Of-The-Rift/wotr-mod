@@ -35,34 +35,39 @@ public class RiftTemplates {
 
     private static PhantomReference<MinecraftServer> cachedServer;
 
-
-    public static RiftGeneratable random(MinecraftServer server, ResourceLocation pool, RandomSource random){
+    public static RiftGeneratable random(MinecraftServer server, ResourceLocation pool, RandomSource random) {
         var cacheKey = pool.toString();
-        if (cacheKey.equals("minecraft:empty")){
+        if ("minecraft:empty".equals(cacheKey)) {
             return null;
         }
 
         tryInvalidateCache(server);
-        var list = RIFT_TEMPLATE_POOL_CACHE.computeIfAbsent(cacheKey,(unused)->FastWeightedList.byCountingDuplicates(all(server, pool), RiftGeneratable::identifier));
+        var list = RIFT_TEMPLATE_POOL_CACHE.computeIfAbsent(cacheKey,
+                (unused) -> FastWeightedList.byCountingDuplicates(all(server, pool), RiftGeneratable::identifier));
         return list.random(random);
     }
 
-    private static void tryInvalidateCache(MinecraftServer server) { //some processors contain registry holders which need to be reloaded to work properly, alternatively you could refresh holders used by those processors
-        if(cachedServer==null || !cachedServer.refersTo(server)){
+    private static void tryInvalidateCache(MinecraftServer server) { // some processors contain registry holders which
+                                                                     // need to be reloaded to work properly,
+                                                                     // alternatively you could refresh holders used by
+                                                                     // those processors
+        if (cachedServer == null || !cachedServer.refersTo(server)) {
             RIFT_TEMPLATE_POOL_CACHE.clear();
-            cachedServer= new PhantomReference<>(server,null);
+            cachedServer = new PhantomReference<>(server, null);
         }
     }
 
-    public static List<RiftGeneratable> all(MinecraftServer server, ResourceLocation pool){
+    public static List<RiftGeneratable> all(MinecraftServer server, ResourceLocation pool) {
         var registryAccess = server.registryAccess();
         var manager = server.getStructureManager();
         var startPool = registryAccess.lookupOrThrow(Registries.TEMPLATE_POOL)
-                .get(pool).map(it -> it.value().getShuffledTemplates(RandomSource.create(0))).orElse(Collections.emptyList());
-        return startPool.stream().flatMap(it ->  fromPoolElement((SinglePoolElement) it, manager).stream()).toList();
+                .get(pool)
+                .map(it -> it.value().getShuffledTemplates(RandomSource.create(0)))
+                .orElse(Collections.emptyList());
+        return startPool.stream().flatMap(it -> fromPoolElement((SinglePoolElement) it, manager).stream()).toList();
     }
 
-    public static List<RiftGeneratable> fromPoolElement(SinglePoolElement e, StructureTemplateManager manager){
+    public static List<RiftGeneratable> fromPoolElement(SinglePoolElement e, StructureTemplateManager manager) {
         var template = ((AccessorSinglePoolElement) e).callGetTemplate(manager);
         var id = ((TemplateIdLookup) manager).idForTemplate(template);
         if (id == null) {
@@ -71,24 +76,34 @@ public class RiftTemplates {
 
         var processorsHolder = ((AccessorSinglePoolElement) e).getProcessors();
         var palettes = ((AccessorStructureTemplate) template).getPalettes();
-        var entities = ((AccessorStructureTemplate)template).getEntityInfoList();
+        var entities = ((AccessorStructureTemplate) template).getEntityInfoList();
 
-        return IntStream.range(0, palettes.size()).mapToObj(idx ->
-                fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities, MessageFormat.format("{0}:{1}:{2}", id.getNamespace(), id.getPath(), idx))
-        ).toList();
+        return IntStream.range(0, palettes.size())
+                .mapToObj(
+                        idx -> fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities,
+                                MessageFormat.format("{0}:{1}:{2}", id.getNamespace(), id.getPath(), idx))
+                )
+                .toList();
     }
 
-    public static RiftGeneratable fromPalette(StructureTemplate.Palette palette, Vec3i size, StructureProcessorList processors, List<StructureTemplate.StructureEntityInfo> entities, String identifier){
+    public static RiftGeneratable fromPalette(
+            StructureTemplate.Palette palette,
+            Vec3i size,
+            StructureProcessorList processors,
+            List<StructureTemplate.StructureEntityInfo> entities,
+            String identifier) {
         int chunkCount = Math.ceilDiv(size.getX(), BasicRiftTemplate.CHUNK_WIDTH);
         var blockStates = new BlockState[chunkCount][BasicRiftTemplate.CHUNK_WIDTH * size.getY() * size.getZ()];
         var blockEntities = new HashMap<Vec3i, CompoundTag>();
 
-        palette.blocks().forEach((block)->{
-            if(block instanceof StructureTemplate.StructureBlockInfo(BlockPos pos, BlockState state, @Nullable CompoundTag nbt)){
-                var chunk = pos.getX()/ BasicRiftTemplate.CHUNK_WIDTH;
+        palette.blocks().forEach((block) -> {
+            if (block instanceof StructureTemplate.StructureBlockInfo(BlockPos pos, BlockState state, @Nullable CompoundTag nbt)) {
+                var chunk = pos.getX() / BasicRiftTemplate.CHUNK_WIDTH;
                 var blockStateChunk = blockStates[chunk];
-                blockStateChunk[(pos.getX()%BasicRiftTemplate.CHUNK_WIDTH) + pos.getZ() * BasicRiftTemplate.CHUNK_WIDTH + pos.getY() * BasicRiftTemplate.CHUNK_WIDTH * size.getZ()] = state;
-                if(nbt!=null && !nbt.isEmpty()) {
+                blockStateChunk[(pos.getX() % BasicRiftTemplate.CHUNK_WIDTH)
+                        + pos.getZ() * BasicRiftTemplate.CHUNK_WIDTH
+                        + pos.getY() * BasicRiftTemplate.CHUNK_WIDTH * size.getZ()] = state;
+                if (nbt != null && !nbt.isEmpty()) {
                     blockEntities.put(pos, nbt);
                 }
             }
@@ -101,7 +116,7 @@ public class RiftTemplates {
             var blockChunk = blocks[chunk];
             for (int i = 0; i < blockStateChunk.length; i++) {
                 var state = blockStateChunk[i];
-                if(state != null) {
+                if (state != null) {
                     blockChunk[i] = state.getBlock();
                 }
             }
@@ -109,7 +124,8 @@ public class RiftTemplates {
         var settings = new StructurePlaceSettings();
 
         processors.list().forEach(settings::addProcessor);
-        return new BasicRiftTemplate(blockStates, size, settings, blockEntities, palette.jigsaws(), identifier, entities);
+        return new BasicRiftTemplate(blockStates, size, settings, blockEntities, palette.jigsaws(), identifier,
+                entities);
     }
 
 }

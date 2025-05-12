@@ -103,7 +103,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 ServerLevel serverWorld = ((ServerLevelAccessor) world).getLevel();
                 // if (!blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
                 ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType),
-                        /*serverWorld.random.nextLong()*/random.nextLong());
+                        /* serverWorld.random.nextLong() */random.nextLong());
                 // }
                 return new StructureTemplate.StructureBlockInfo(pos, blockState,
                         tileEntity.saveWithId(world.registryAccess()));
@@ -158,19 +158,30 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
     }
 
     @Override
-    public BlockState processBlockState(BlockState currentState, int x, int y, int z, ServerLevelAccessor world, BlockPos structurePos, CompoundTag nbt, boolean isVisible) {
+    public BlockState processBlockState(
+            BlockState currentState,
+            int x,
+            int y,
+            int z,
+            ServerLevelAccessor world,
+            BlockPos structurePos,
+            CompoundTag nbt,
+            boolean isVisible) {
 
         if ((currentState.is(RIFT_CHEST.get()) || currentState.is(CHEST)) && currentState.hasBlockEntity()) {
             RandomSource random;
             BlockPos pos = new BlockPos(x, y, z);
             random = ProcessorUtil.getRandom(randomType, pos, structurePos, BlockPos.ZERO, world, SEED);
+            // spotless:off
             /*
-             * if (blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) { Direction connectedDirection =
-             * getConnectedDirection(blockInfo.state().rotate((LevelAccessor) world, pos, settings.getRotation()));
-             * random = ProcessorUtil.getRandom(randomType, pos.relative(connectedDirection), piecePos, structurePos,
-             * world, SEED); } else { random = ProcessorUtil.getRandom(randomType, pos, piecePos, structurePos, world,
-             * SEED); }
+             * if (blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
+             *     Direction connectedDirection = getConnectedDirection(blockInfo.state().rotate((LevelAccessor) world, pos, settings.getRotation()));
+             *     random = ProcessorUtil.getRandom(randomType, pos.relative(connectedDirection), piecePos, structurePos, world, SEED);
+             * } else {
+             *     random = ProcessorUtil.getRandom(randomType, pos, piecePos, structurePos, world, SEED);
+             * }
              */
+            // spotless:on
             if (random.nextFloat() < rarity) {
                 RiftChestType chestType = getRandomChestType(random);
                 BlockState blockState = CHEST_TYPES.get(chestType).get().defaultBlockState();
@@ -179,23 +190,23 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 tileEntity.loadWithComponents(nbt, world.registryAccess());
                 // if (!blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
                 ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType),
-                        /*serverWorld.random.nextLong()*/random.nextLong());
+                        /* serverWorld.random.nextLong() */random.nextLong());
                 // }
                 var newNbt = tileEntity.saveWithId(world.registryAccess());
-                for (var key : nbt.getAllKeys().toArray()){
+                for (var key : nbt.getAllKeys().toArray()) {
                     if (!newNbt.getAllKeys().contains(key)) {
                         nbt.remove((String) key);
                     }
                 }
 
-                for (var key : newNbt.getAllKeys()){
+                for (var key : newNbt.getAllKeys()) {
                     nbt.put(key, newNbt.get(key));
                 }
                 return blockState;
             } else {
                 BlockState blockState = replaceOutput.convertBlockState();
 
-                for (var key : nbt.getAllKeys().toArray()){
+                for (var key : nbt.getAllKeys().toArray()) {
                     nbt.remove((String) key);
                 }
                 return blockState;
