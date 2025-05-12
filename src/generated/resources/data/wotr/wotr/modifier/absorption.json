@@ -1,0 +1,56 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:max_absorption",
+          "id": "wotr:absorption",
+          "max_roll": 2.0,
+          "min_roll": 0.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:max_absorption",
+          "id": "wotr:absorption",
+          "max_roll": 3.0,
+          "min_roll": 2.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:max_absorption",
+          "id": "wotr:absorption",
+          "max_roll": 5.0,
+          "min_roll": 3.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:max_absorption",
+          "id": "wotr:absorption",
+          "max_roll": 6.0,
+          "min_roll": 5.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    }
+  ]
+}

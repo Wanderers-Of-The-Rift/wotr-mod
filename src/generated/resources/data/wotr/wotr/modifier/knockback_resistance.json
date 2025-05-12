@@ -1,0 +1,43 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:knockback_resistance",
+          "id": "wotr:knockback_resistance",
+          "max_roll": 1.0,
+          "min_roll": 0.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:knockback_resistance",
+          "id": "wotr:knockback_resistance",
+          "max_roll": 1.0,
+          "min_roll": 1.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:knockback_resistance",
+          "id": "wotr:knockback_resistance",
+          "max_roll": 2.0,
+          "min_roll": 1.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 3
+    }
+  ]
+}

@@ -46,7 +46,7 @@ public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
         }
-        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), level.random)),
+        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), 0, level.random)),
                 Optional.of(runegemData));
     }
 }

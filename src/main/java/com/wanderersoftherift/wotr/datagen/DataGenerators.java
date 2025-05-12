@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDamageTypes;
+import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
 import com.wanderersoftherift.wotr.init.ModRiftThemes;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
 import net.minecraft.core.RegistrySetBuilder;
@@ -31,10 +32,12 @@ public class DataGenerators {
                             ModDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
                 })
                         .add(RegistryEvents.ABILITY_REGISTRY, ModAbilityProvider::bootstrapAbilities)
+                        .add(ModDatapackRegistries.MODIFIER_KEY, ModModifierProvider::bootstrapModifiers)
                         .add(RegistryEvents.OBJECTIVE_REGISTRY, context -> {
                         })
                         .add(ModRiftThemes.RIFT_THEME_KEY, context -> {
                         })
+
         );
         event.createProvider(ModLanguageProvider::new);
         event.createProvider(ModModelProvider::new);
