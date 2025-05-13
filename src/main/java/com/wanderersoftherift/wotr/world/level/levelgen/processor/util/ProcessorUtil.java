@@ -4,7 +4,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.wanderersoftherift.wotr.mixin.InvokerBlockBehaviour;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -231,9 +230,7 @@ public class ProcessorUtil {
     }
 
     public static BlockState copyState(BlockState fromState, BlockState toState) {
-        for (var property : ((Reference2ObjectArrayMap<Property<?>, Comparable<?>>) fromState.getBlock()
-                .defaultBlockState()
-                .getValues()).keySet()/* todo maybe write accessor for key table and use it directly */) {
+        for (var property : fromState.getBlock().defaultBlockState().getValues().keySet()) {
             toState = updateProperty(fromState, toState, property);
         }
         return toState;
