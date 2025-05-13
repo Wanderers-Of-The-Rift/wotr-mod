@@ -1,0 +1,9 @@
+{
+  "values": [
+    "wotr:raw_defense",
+    "wotr:raw_health",
+    "wotr:raw_speed",
+    "wotr:raw_zombie",
+    "wotr:raw_attack"
+  ]
+}

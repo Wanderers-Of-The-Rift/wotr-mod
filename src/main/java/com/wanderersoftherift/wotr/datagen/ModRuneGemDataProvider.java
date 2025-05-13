@@ -19,9 +19,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModRuneGemDataProvider {
+
+    public static Map<ResourceKey<RunegemData>, RunegemData> DATA = new HashMap<>();
+
     public static void bootstrapRuneGems(BootstrapContext<RunegemData> context) {
         HolderGetter<Modifier> lookup = context.lookup(ModDatapackRegistries.MODIFIER_KEY);
         HolderSet.Named<Item> socketablesTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE);
@@ -31,7 +36,8 @@ public class ModRuneGemDataProvider {
         HolderSet.Named<Item> bootsTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_BOOTS_SLOT);
         HolderSet.Named<Item> mainHandTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_MAIN_HAND_SLOT);
         HolderSet.Named<Item> offHandTag = context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.SOCKETABLE_OFF_HAND_SLOT);
-        context.register(getRunegemResourceKey("cut_attack"),
+        //Replace context.register with a separate method, that creates a temporary static DATA table
+        registerRunegem(context, getRunegemResourceKey("cut_attack"),
                 new RunegemData(getTranslatableName("cut_attack"),
                         RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
@@ -67,7 +73,7 @@ public class ModRuneGemDataProvider {
                                         ))
                                 ),
                         RunegemTier.CUT));
-        context.register(getRunegemResourceKey("cut_defense"),
+        registerRunegem(context, getRunegemResourceKey("cut_defense"),
                 new RunegemData(getTranslatableName("cut_defense"),
                         RunegemShape.CIRCLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -100,7 +106,7 @@ public class ModRuneGemDataProvider {
                                 ))),
                         RunegemTier.CUT));
 
-        context.register(getRunegemResourceKey("cut_health"),
+        registerRunegem(context, getRunegemResourceKey("cut_health"),
                 new RunegemData(getTranslatableName("cut_health"),
                         RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
@@ -130,7 +136,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "hybrid_health"))
                                 ))),
                         RunegemTier.CUT));
-        context.register(getRunegemResourceKey("cut_speed"),
+        registerRunegem(context, getRunegemResourceKey("cut_speed"),
                 new RunegemData(getTranslatableName("cut_speed"),
                         RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -153,7 +159,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "attack_speed"))
                                 ))),
                         RunegemTier.CUT));
-        context.register(getRunegemResourceKey("cut_zombie"),
+        registerRunegem(context, getRunegemResourceKey("cut_zombie"),
                 new RunegemData(getTranslatableName("cut_zombie"),
                         RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
@@ -166,7 +172,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 ))),
                         RunegemTier.CUT));
-        context.register(getRunegemResourceKey("framed_attack"),
+        registerRunegem(context, getRunegemResourceKey("framed_attack"),
                 new RunegemData(getTranslatableName("framed_attack"),
                         RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
@@ -205,7 +211,7 @@ public class ModRuneGemDataProvider {
                                 ))
                         ),
                         RunegemTier.FRAMED));
-        context.register(getRunegemResourceKey("framed_defense"),
+        registerRunegem(context, getRunegemResourceKey("framed_defense"),
                 new RunegemData(getTranslatableName("framed_defense"),
                         RunegemShape.CIRCLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -240,7 +246,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 ))),
                         RunegemTier.FRAMED));
-        context.register(getRunegemResourceKey("framed_health"),
+        registerRunegem(context, getRunegemResourceKey("framed_health"),
                 new RunegemData(getTranslatableName("framed_health"),
                         RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
@@ -271,7 +277,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(4, getModifier(lookup, "hybrid_health"))
                                 ))),
                         RunegemTier.FRAMED));
-        context.register(getRunegemResourceKey("framed_speed"),
+        registerRunegem(context, getRunegemResourceKey("framed_speed"),
                 new RunegemData(getTranslatableName("framed_speed"),
                         RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -296,7 +302,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "movement_speed"))
                                 ))),
                         RunegemTier.FRAMED));
-        context.register(getRunegemResourceKey("framed_zombie"),
+        registerRunegem(context, getRunegemResourceKey("framed_zombie"),
                 new RunegemData(getTranslatableName("framed_zombie"),
                         RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
@@ -309,7 +315,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "knockback"))
                                 ))),
                         RunegemTier.FRAMED));
-        context.register(getRunegemResourceKey("polished_attack"),
+        registerRunegem(context, getRunegemResourceKey("polished_attack"),
                 new RunegemData(getTranslatableName("polished_attack"),
                         RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
@@ -348,7 +354,7 @@ public class ModRuneGemDataProvider {
                                 ))
                         ),
                         RunegemTier.POLISHED));
-        context.register(getRunegemResourceKey("polished_defense"),
+        registerRunegem(context, getRunegemResourceKey("polished_defense"),
                 new RunegemData(getTranslatableName("polished_defense"),
                         RunegemShape.CIRCLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -383,7 +389,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 ))),
                         RunegemTier.POLISHED));
-        context.register(getRunegemResourceKey("polished_health"),
+        registerRunegem(context, getRunegemResourceKey("polished_health"),
                 new RunegemData(getTranslatableName("polished_health"),
                         RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
@@ -414,7 +420,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "hybrid_health"))
                                 ))),
                         RunegemTier.POLISHED));
-        context.register(getRunegemResourceKey("polished_speed"),
+        registerRunegem(context, getRunegemResourceKey("polished_speed"),
                 new RunegemData(getTranslatableName("polished_speed"),
                         RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -439,7 +445,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "movement_speed"))
                                 ))),
                         RunegemTier.POLISHED));
-        context.register(getRunegemResourceKey("polished_zombie"),
+        registerRunegem(context, getRunegemResourceKey("polished_zombie"),
                 new RunegemData(getTranslatableName("polished_zombie"),
                         RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
@@ -452,7 +458,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "knockback"))
                                 ))),
                         RunegemTier.POLISHED));
-        context.register(getRunegemResourceKey("raw_attack"),
+        registerRunegem(context, getRunegemResourceKey("raw_attack"),
                 new RunegemData(getTranslatableName("raw_attack"),
                         RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
@@ -488,7 +494,7 @@ public class ModRuneGemDataProvider {
                                 ))
                         ),
                         RunegemTier.RAW));
-        context.register(getRunegemResourceKey("raw_defense"),
+        registerRunegem(context, getRunegemResourceKey("raw_defense"),
                 new RunegemData(getTranslatableName("raw_defense"),
                         RunegemShape.CIRCLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -520,7 +526,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 ))),
                         RunegemTier.RAW));
-        context.register(getRunegemResourceKey("raw_health"),
+        registerRunegem(context, getRunegemResourceKey("raw_health"),
                 new RunegemData(getTranslatableName("raw_health"),
                         RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
@@ -550,7 +556,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "hybrid_health"))
                                 ))),
                         RunegemTier.RAW));
-        context.register(getRunegemResourceKey("raw_speed"),
+        registerRunegem(context, getRunegemResourceKey("raw_speed"),
                 new RunegemData(getTranslatableName("raw_speed"),
                         RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -573,7 +579,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "attack_speed"))
                                 ))),
                         RunegemTier.RAW));
-        context.register(getRunegemResourceKey("raw_zombie"),
+        registerRunegem(context, getRunegemResourceKey("raw_zombie"),
                 new RunegemData(getTranslatableName("raw_zombie"),
                         RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
@@ -586,7 +592,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 ))),
                         RunegemTier.RAW));
-        context.register(getRunegemResourceKey("shaped_attack"),
+        registerRunegem(context, getRunegemResourceKey("shaped_attack"),
                 new RunegemData(getTranslatableName("shaped_attack"),
                         RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
@@ -625,7 +631,7 @@ public class ModRuneGemDataProvider {
                                 ))
                         ),
                         RunegemTier.SHAPED));
-        context.register(getRunegemResourceKey("shaped_defense"),
+        registerRunegem(context, getRunegemResourceKey("shaped_defense"),
                 new RunegemData(getTranslatableName("shaped_defense"),
                         RunegemShape.CIRCLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -657,7 +663,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 ))),
                         RunegemTier.SHAPED));
-        context.register(getRunegemResourceKey("shaped_health"),
+        registerRunegem(context, getRunegemResourceKey("shaped_health"),
                 new RunegemData(getTranslatableName("shaped_health"),
                         RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
@@ -689,7 +695,7 @@ public class ModRuneGemDataProvider {
                                 ))),
                         RunegemTier.SHAPED));
 
-        context.register(getRunegemResourceKey("shaped_speed"),
+        registerRunegem(context, getRunegemResourceKey("shaped_speed"),
                 new RunegemData(getTranslatableName("shaped_speed"),
                         RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
@@ -715,7 +721,7 @@ public class ModRuneGemDataProvider {
                                 ))),
                         RunegemTier.SHAPED));
 
-        context.register(getRunegemResourceKey("shaped_zombie"),
+        registerRunegem(context, getRunegemResourceKey("shaped_zombie"),
                 new RunegemData(getTranslatableName("shaped_zombie"),
                         RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
@@ -728,6 +734,11 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 ))),
                         RunegemTier.SHAPED));
+    }
+
+    private static void registerRunegem(BootstrapContext<RunegemData> context, ResourceKey<RunegemData> resourceKey, RunegemData runegemData) {
+        DATA.put(resourceKey, runegemData);
+        context.register(resourceKey, runegemData);
     }
 
     private static @NotNull MutableComponent getTranslatableName(String id) {

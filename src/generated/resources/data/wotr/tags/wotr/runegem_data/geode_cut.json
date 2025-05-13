@@ -1,0 +1,8 @@
+{
+  "values": [
+    "wotr:cut_speed",
+    "wotr:cut_defense",
+    "wotr:cut_attack",
+    "wotr:cut_health"
+  ]
+}
