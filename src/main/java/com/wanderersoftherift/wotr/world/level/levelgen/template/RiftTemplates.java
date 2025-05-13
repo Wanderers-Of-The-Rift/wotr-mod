@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -22,12 +21,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import javax.annotation.Nullable;
 import java.lang.ref.PhantomReference;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.IntStream;
 
 public class RiftTemplates {
 
@@ -78,12 +77,12 @@ public class RiftTemplates {
         var palettes = ((AccessorStructureTemplate) template).getPalettes();
         var entities = ((AccessorStructureTemplate) template).getEntityInfoList();
 
-        return IntStream.range(0, palettes.size())
-                .mapToObj(
-                        idx -> fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities,
-                                MessageFormat.format("{0}:{1}:{2}", id.getNamespace(), id.getPath(), idx))
-                )
-                .toList();
+        var result = new ArrayList<RiftGeneratable>();
+        for (int idx = 0; idx < palettes.size(); idx++) {
+            result.add(fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities,
+                    MessageFormat.format("{0}:{1}:{2}", id.getNamespace(), id.getPath(), idx)));
+        }
+        return result;
     }
 
     public static RiftGeneratable fromPalette(
@@ -92,35 +91,31 @@ public class RiftTemplates {
             StructureProcessorList processors,
             List<StructureTemplate.StructureEntityInfo> entities,
             String identifier) {
-        int chunkCount = Math.ceilDiv(size.getX(), BasicRiftTemplate.CHUNK_WIDTH);
-        var blockStates = new BlockState[chunkCount][BasicRiftTemplate.CHUNK_WIDTH * size.getY() * size.getZ()];
+        int chunkCount = size.getX() >> 4;
+        if ((size.getX() & 0xf) > 0) {
+            chunkCount++;
+        }
+        var blockStates = new BlockState[chunkCount][size.getY() * size.getZ() << 4];
         var blockEntities = new HashMap<Vec3i, CompoundTag>();
 
-        palette.blocks().forEach((block) -> {
-            if (block instanceof StructureTemplate.StructureBlockInfo(BlockPos pos, BlockState state, @Nullable CompoundTag nbt)) {
-                var chunk = pos.getX() / BasicRiftTemplate.CHUNK_WIDTH;
-                var blockStateChunk = blockStates[chunk];
-                blockStateChunk[(pos.getX() % BasicRiftTemplate.CHUNK_WIDTH)
-                        + pos.getZ() * BasicRiftTemplate.CHUNK_WIDTH
-                        + pos.getY() * BasicRiftTemplate.CHUNK_WIDTH * size.getZ()] = state;
+        List<StructureTemplate.StructureBlockInfo> blockInfos = palette.blocks();
+        BlockState[] blockStateChunk = null;
+        int lastChunkX = 0;
+        for (int i = 0; i < blockInfos.size(); i++) {
+            if (blockInfos.get(
+                    i) instanceof StructureTemplate.StructureBlockInfo(BlockPos pos, BlockState state, @Nullable CompoundTag nbt)) {
+                var chunk = pos.getX() >> 4;
+                if (blockStateChunk == null || chunk != lastChunkX) {
+                    blockStateChunk = blockStates[chunk];
+                    lastChunkX = chunk;
+                }
+                blockStateChunk[(pos.getX() & 0xf) + (pos.getZ() << 4) + (pos.getY() * size.getZ() << 4)] = state;
                 if (nbt != null && !nbt.isEmpty()) {
                     blockEntities.put(pos, nbt);
                 }
             }
-        });
-
-        var blocks = new Block[chunkCount][BasicRiftTemplate.CHUNK_WIDTH * size.getY() * size.getZ()];
-        for (int chunk = 0; chunk < chunkCount; chunk++) {
-
-            var blockStateChunk = blockStates[chunk];
-            var blockChunk = blocks[chunk];
-            for (int i = 0; i < blockStateChunk.length; i++) {
-                var state = blockStateChunk[i];
-                if (state != null) {
-                    blockChunk[i] = state.getBlock();
-                }
-            }
         }
+
         var settings = new StructurePlaceSettings();
 
         processors.list().forEach(settings::addProcessor);

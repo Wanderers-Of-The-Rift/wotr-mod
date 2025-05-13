@@ -26,6 +26,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class BasicRiftTemplate implements RiftGeneratable {
     public static final int CHUNK_WIDTH = 16;
@@ -44,7 +47,7 @@ public class BasicRiftTemplate implements RiftGeneratable {
     private final CompoundTag[] fastTileEntityHashTable;
     private final Vec3i[] fastTileEntityPositionsHashTable;
 
-    private final short[][] hidden;
+    private final Future<short[][]> hidden;
 
     public BasicRiftTemplate(BlockState[][] data, Vec3i size, StructurePlaceSettings settings,
             Map<Vec3i, CompoundTag> tileEntities, List<StructureTemplate.JigsawBlockInfo> jigsaws, String identifier,
@@ -98,11 +101,12 @@ public class BasicRiftTemplate implements RiftGeneratable {
         }
         this.tileEntities = tileEntities;
 
-        hidden = computeHidden(data, size);
+        hidden = CompletableFuture.supplyAsync(() -> computeHidden(data, size), Thread::startVirtualThread);
     }
 
     private static short[][] computeHidden(BlockState[][] data, Vec3i size) {
         var result = new short[data.length][data[0].length / 16];
+        var offsetPos = new BlockPos.MutableBlockPos();
         for (int index1A = 0; index1A < data.length; index1A++) {
             var hiddenChunk = result[index1A];
             var dataChunk = data[index1A];
@@ -110,29 +114,30 @@ public class BasicRiftTemplate implements RiftGeneratable {
             for (int index1B = 0; index1B < dataChunk.length; index1B++) {
                 var blockState = dataChunk[index1B];
                 if (blockState != null) {
-                    var blockPosX = index1A * CHUNK_WIDTH + index1B % CHUNK_WIDTH;
-                    var blockPosY = (index1B / CHUNK_WIDTH) / size.getZ();
-                    var blockPosZ = (index1B / CHUNK_WIDTH) % size.getZ();
-                    var blockPos = new BlockPos(blockPosX, blockPosY, blockPosZ);
+                    var blockPosX = (index1A << 4) + (index1B & 0xf);
+                    var blockPosY = (index1B >> 4) / size.getZ();
+                    var blockPosZ = (index1B >> 4) % size.getZ();
                     var isInvisible = blockState.canOcclude();
-                    for (var direction : DIRECTIONS) {
+                    for (int i = 0; i < DIRECTIONS.size(); i++) {
+                        var direction = DIRECTIONS.get(i);
                         if (!isInvisible) {
                             break;
                         }
-                        var offsetPos = blockPos.relative(direction);
+                        offsetPos.set(blockPosX, blockPosY, blockPosZ);
+                        offsetPos.move(direction);
                         if (offsetPos.getX() < 0 || offsetPos.getX() >= size.getX() || offsetPos.getY() < 0
                                 || offsetPos.getY() >= size.getY() || offsetPos.getZ() < 0
                                 || offsetPos.getZ() >= size.getZ()) {
                             continue;
                         }
-                        var index2A = offsetPos.getX() / CHUNK_WIDTH;
-                        var index2B = offsetPos.getX() % CHUNK_WIDTH + offsetPos.getZ() * CHUNK_WIDTH
-                                + offsetPos.getY() * CHUNK_WIDTH * size.getZ();
+                        var index2A = offsetPos.getX() >> 4;
+                        var index2B = (offsetPos.getX() & 0xf) + (offsetPos.getZ() << 4)
+                                + (offsetPos.getY() * size.getZ() << 4);
                         var blockState2 = data[index2A][index2B];
                         isInvisible = blockState2 != null && blockState2.canOcclude();
                     }
                     if (isInvisible) {
-                        hiddenChunk[index1B / CHUNK_WIDTH] |= (short) (1 << (index1B % CHUNK_WIDTH));
+                        hiddenChunk[(index1B >> 4)] |= (short) (1 << (index1B & 0xf));
                     }
                 }
             }
@@ -172,6 +177,12 @@ public class BasicRiftTemplate implements RiftGeneratable {
         var yLastChunkPosition = 0;
         var zLastChunkPosition = 0;
         RiftProcessedChunk roomChunk = null;
+        short[][] hidden = null;
+        try {
+            hidden = this.hidden.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         RiftProcessedChunk[] roomChunkHashTableCache = new RiftProcessedChunk[32];
         for (int i = 0; i < data.length; i++) {
             var templateChunk = data[i];
@@ -179,11 +190,11 @@ public class BasicRiftTemplate implements RiftGeneratable {
 
             for (int j = 0; j < templateChunk.length; j++) {
                 var blockState = mirror.applyToBlockState(templateChunk[j]);
-                var isVisible = ((hiddenChunk[j / CHUNK_WIDTH] >> (j % CHUNK_WIDTH)) & 1) == 0;
+                var isVisible = ((hiddenChunk[j >> 4] >> (j & 0xf)) & 1) == 0;
                 if (blockState != null) {
-                    var blockPosX = i * CHUNK_WIDTH + j % CHUNK_WIDTH;
-                    var blockPosY = (j / CHUNK_WIDTH) / size.getZ();
-                    var blockPosZ = (j / CHUNK_WIDTH) % size.getZ();
+                    var blockPosX = (i << 4) + (j & 0xf);
+                    var blockPosY = (j >> 4) / size.getZ();
+                    var blockPosZ = (j >> 4) % size.getZ();
 
                     mutablePosition.set(blockPosX, blockPosY, blockPosZ);
                     mirror.applyToMutablePosition(mutablePosition, size.getX() - 1, size.getZ() - 1);

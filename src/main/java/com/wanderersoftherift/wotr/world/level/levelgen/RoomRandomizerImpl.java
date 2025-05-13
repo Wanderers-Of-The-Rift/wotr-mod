@@ -91,11 +91,11 @@ public class RoomRandomizerImpl implements RoomRandomizer {
             TripleMirror mirror,
             Vec3i sizeChunks) {
         return jigsaws.stream()
-                .filter((it) -> it.pool().toString().contains("wotr:rift/ring"))
+                .filter((it) -> it.pool().getNamespace().endsWith("wotr") && it.pool().getPath().contains("rift/ring"))
                 .map(jigsaw -> new RiftSpaceCorridor(
                         mirror.applyToPosition(
-                                new Vec3i(jigsaw.info().pos().getX() / 16, jigsaw.info().pos().getY() / 16,
-                                        jigsaw.info().pos().getZ() / 16),
+                                new Vec3i(jigsaw.info().pos().getX() >> 4, jigsaw.info().pos().getY() >> 4,
+                                        jigsaw.info().pos().getZ() >> 4),
                                 sizeChunks.getX() - 1, sizeChunks.getZ() - 1
                         ), mirror.applyToDirection(JigsawBlock.getFrontFacing(jigsaw.info().state())))
                 )
