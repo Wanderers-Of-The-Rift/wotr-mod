@@ -122,4 +122,18 @@ public record TripleMirror(boolean x, boolean z, boolean diagonal) {
         }
         newNbt.put("Rotation", rotationList);
     }
+
+    public int toInt() {
+        var result = 0;
+        if (x) {
+            result |= 1;
+        }
+        if (z) {
+            result |= 2;
+        }
+        if (diagonal) {
+            result |= 4;
+        }
+        return result;
+    }
 }

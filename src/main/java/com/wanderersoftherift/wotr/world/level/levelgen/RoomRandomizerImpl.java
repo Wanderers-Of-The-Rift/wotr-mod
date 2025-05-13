@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
@@ -101,6 +102,18 @@ public class RoomRandomizerImpl implements RoomRandomizer {
                 .toList();
     }
 
+    record RoomKey(String identifier, TripleMirror t) implements Comparable<RoomKey> {
+
+        @Override
+        public int compareTo(@NotNull RoomRandomizerImpl.RoomKey o) {
+            var strc = identifier.compareTo(o.identifier);
+            if (strc == 0) {
+                return Integer.compare(t.toInt(), o.t.toInt());
+            }
+            return strc;
+        }
+    }
+
     private interface RoomConverter {
         Stream<RoomRiftSpace> convertRoom(RiftGeneratable generatable, @Nullable Vec3i desiredTemplateSize);
     }
@@ -115,9 +128,11 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         public MultiSizeRiftSpaceRandomList(List<RiftGeneratable> templates, RoomConverter converter) {
             for (int i = 0; i < 64; i++) {
                 var desiredTemplateSize = new Vec3i((i & 0b11) + 1, ((i >> 2) & 0b11) + 1, ((i >> 4) & 0b11) + 1);
-                weightedListForSize[i] = FastWeightedList.byCountingDuplicates(templates.stream()
-                        .flatMap(template -> converter.convertRoom(template, desiredTemplateSize))
-                        .toList(), space -> new Pair(space.template().identifier(), space.templateTransform()));
+                weightedListForSize[i] = FastWeightedList.byCountingDuplicates(
+                        templates.stream()
+                                .flatMap(template -> converter.convertRoom(template, desiredTemplateSize))
+                                .toList(),
+                        space -> new RoomKey(space.template().identifier(), space.templateTransform()));
             }
         }
 
@@ -133,7 +148,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         public MonoSizeRiftSpaceRandomList(List<RiftGeneratable> templates, RoomConverter converter) {
             weightedList = FastWeightedList.byCountingDuplicates(
                     templates.stream().flatMap(template -> converter.convertRoom(template, null)).toList(),
-                    space -> new Pair(space.template().identifier(), space.templateTransform()));
+                    space -> new RoomKey(space.template().identifier(), space.templateTransform()));
         }
 
         public RoomRiftSpace random(Vec3i maxSize, RandomSource random) {

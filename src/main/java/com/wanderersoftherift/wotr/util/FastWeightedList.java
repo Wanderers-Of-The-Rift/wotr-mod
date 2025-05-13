@@ -43,7 +43,9 @@ public class FastWeightedList<T> {
         return of(Arrays.stream(lists).flatMap(it -> it.entries()).toArray(Pair[]::new));
     }
 
-    public static <T> FastWeightedList<T> byCountingDuplicates(List<T> entries, Function<T, Object> keyComputation) {
+    public static <T, K extends Comparable<K>> FastWeightedList<T> byCountingDuplicates(
+            List<T> entries,
+            Function<T, K> keyComputation) {
 
         var counted = new HashMap<Object, Pair<T, Integer>>();
         for (var entry : entries) {
@@ -54,6 +56,7 @@ public class FastWeightedList<T> {
         }
         return FastWeightedList.of(counted.entrySet()
                 .stream()
+                .sorted((a, b) -> ((Comparable) a.getKey()).compareTo(b.getKey()))
                 .map(entry -> new Pair((float) (int) entry.getValue().getB(), entry.getValue().getA()))
                 .toArray((size) -> new Pair[size]));
     }
