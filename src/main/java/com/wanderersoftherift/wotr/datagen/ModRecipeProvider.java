@@ -50,7 +50,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("   ")
                 .pattern("PI ")
                 .pattern("BL ")
-                .define('L', ItemTags.OVERWORLD_NATURAL_LOGS)
+                .define('L', ItemTags.LOGS)
                 .define('I', Items.IRON_BLOCK)
                 .define('B', Items.BLAST_FURNACE)
                 .define('P', Items.FLOWER_POT)
