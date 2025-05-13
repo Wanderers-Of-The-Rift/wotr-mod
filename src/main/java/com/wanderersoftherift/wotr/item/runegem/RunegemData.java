@@ -2,7 +2,9 @@ package com.wanderersoftherift.wotr.item.runegem;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.TieredModifier;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public record RunegemData(Component name, RunegemShape shape, List<ModifierGroup> modifierLists, RunegemTier tier) {
 
@@ -26,10 +29,11 @@ public record RunegemData(Component name, RunegemShape shape, List<ModifierGroup
                     RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
             ).apply(inst, RunegemData::new));
 
-    public Optional<TieredModifier> getRandomTieredModifierForItem(ItemStack stack, Level level) {
+    public Optional<TieredModifier> getRandomTieredModifierForItem(ItemStack stack, Level level, Set<Holder<Modifier>> exclusionList) {
         List<TieredModifier> modifiers = modifierLists.stream()
                 .filter(group -> stack.is(group.supportedItems()))
                 .flatMap(group -> group.modifiers.stream())
+                .filter(modifier -> !exclusionList.contains(modifier.modifier()))
                 .distinct()
                 .toList();
         if (modifiers.isEmpty()) {
