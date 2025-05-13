@@ -23,6 +23,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -84,7 +85,8 @@ public final class AbilityBar implements ConfigurableLayer {
     @Override
     public void render(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui || !getConfig().isVisible()) {
+        if (minecraft.options.hideGui || !getConfig().isVisible() || minecraft.gameMode == null
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
         LocalPlayer player = Minecraft.getInstance().player;

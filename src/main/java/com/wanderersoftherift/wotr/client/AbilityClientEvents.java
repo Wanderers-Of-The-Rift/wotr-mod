@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.init.client.ModKeybinds;
 import com.wanderersoftherift.wotr.network.SelectAbilitySlotPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -28,7 +29,9 @@ public final class AbilityClientEvents {
 
     @SubscribeEvent
     public static void processAbilityKeys(ClientTickEvent.Post event) {
-        if (Minecraft.getInstance().player == null) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null || minecraft.gameMode == null
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
 

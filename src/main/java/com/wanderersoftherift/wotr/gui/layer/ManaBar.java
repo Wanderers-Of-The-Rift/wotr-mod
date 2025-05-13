@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Vector2i;
@@ -77,7 +78,8 @@ public class ManaBar implements ConfigurableLayer {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui || !getConfig().isVisible()) {
+        if (minecraft.options.hideGui || !getConfig().isVisible() || minecraft.gameMode == null
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
         LocalPlayer player = minecraft.player;
