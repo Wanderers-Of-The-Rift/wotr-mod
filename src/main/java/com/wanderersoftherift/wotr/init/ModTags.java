@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
+import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -65,6 +67,25 @@ public class ModTags {
 
         private static TagKey<AbstractAbility> createTag(String name) {
             return TagKey.create(RegistryEvents.ABILITY_REGISTRY, ResourceLocation.fromNamespaceAndPath("wotr", name));
+        }
+    }
+
+    public static class RiftThemes {
+
+        public static final TagKey<RiftTheme> RANDOM_SELECTABLE = createTag("random_selectable");
+
+        private static TagKey<RiftTheme> createTag(String name) {
+            return TagKey.create(ModRiftThemes.RIFT_THEME_KEY, ResourceLocation.fromNamespaceAndPath("wotr", name));
+        }
+    }
+
+    public static class Objectives {
+
+        public static final TagKey<ObjectiveType> RANDOM_SELECTABLE = createTag("random_selectable");
+
+        private static TagKey<ObjectiveType> createTag(String name) {
+            return TagKey.create(RegistryEvents.OBJECTIVE_REGISTRY,
+                    ResourceLocation.fromNamespaceAndPath("wotr", name));
         }
     }
 }

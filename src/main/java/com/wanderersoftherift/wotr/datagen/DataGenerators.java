@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDamageTypes;
+import com.wanderersoftherift.wotr.init.ModRiftThemes;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -28,7 +29,12 @@ public class DataGenerators {
                             ModDamageTypes.FIRE_DAMAGE, new DamageType("wotr.fire", DamageScaling.NEVER, 0.0F));
                     bootstrap.register(
                             ModDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
-                }).add(RegistryEvents.ABILITY_REGISTRY, ModAbilityProvider::bootstrapAbilities)
+                })
+                        .add(RegistryEvents.ABILITY_REGISTRY, ModAbilityProvider::bootstrapAbilities)
+                        .add(RegistryEvents.OBJECTIVE_REGISTRY, context -> {
+                        })
+                        .add(ModRiftThemes.RIFT_THEME_KEY, context -> {
+                        })
         );
         event.createProvider(ModLanguageProvider::new);
         event.createProvider(ModModelProvider::new);
@@ -41,6 +47,8 @@ public class DataGenerators {
         event.createProvider((output, lookupProvider) -> new ModItemTagProvider(output, lookupProvider,
                 modBlockTagProvider.contentsGetter()));
         event.createProvider(ModAbilityTagsProvider::new);
+        event.createProvider(ModRiftThemeTagsProvider::new);
+        event.createProvider(ModObjectiveTagsProvider::new);
 
         // event.createProvider(ModAbilityProvider::new);
         event.createProvider(ModRiftThemeRecipeProvider::new);

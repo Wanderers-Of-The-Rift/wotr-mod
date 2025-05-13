@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.ModTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -11,8 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
-
-import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
@@ -62,8 +61,10 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
-        Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme = registryReference.flatMap(x -> x.getRandom(level.getRandom())).orElse(null);
+        Registry<RiftTheme> registry = level.registryAccess().lookupOrThrow(ModRiftThemes.RIFT_THEME_KEY);
+        var riftTheme = registry.get(ModTags.RiftThemes.RANDOM_SELECTABLE)
+                .flatMap(x -> x.getRandomElement(level.getRandom()))
+                .orElse(null);
         if (riftTheme == null) {
             WanderersOfTheRift.LOGGER.error("Failed to get random rift theme");
         }

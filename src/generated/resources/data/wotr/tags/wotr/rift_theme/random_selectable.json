@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "wotr:cave",
+      "required": false
+    },
+    {
+      "id": "wotr:forest",
+      "required": false
+    }
+  ]
+}
