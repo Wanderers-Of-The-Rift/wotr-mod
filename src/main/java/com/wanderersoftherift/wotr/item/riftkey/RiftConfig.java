@@ -3,8 +3,7 @@ package com.wanderersoftherift.wotr.item.riftkey;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.ChatFormatting;
@@ -41,8 +40,8 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
     // spotless:off
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftConfig> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, RiftConfig::tier,
-            ByteBufCodecs.holderRegistry(ModRiftThemes.RIFT_THEME_KEY).apply(ByteBufCodecs::optional), RiftConfig::theme,
-            ByteBufCodecs.holderRegistry(RegistryEvents.OBJECTIVE_REGISTRY).apply(ByteBufCodecs::optional), RiftConfig::objective,
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES).apply(ByteBufCodecs::optional), RiftConfig::theme,
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES).apply(ByteBufCodecs::optional), RiftConfig::objective,
             ByteBufCodecs.INT.apply(ByteBufCodecs::optional), RiftConfig::seed,
             RiftConfig::new);
     // spotless:on

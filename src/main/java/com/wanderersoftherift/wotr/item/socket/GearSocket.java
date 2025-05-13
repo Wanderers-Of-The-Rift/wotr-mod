@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.item.socket;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.modifier.Modifier;
@@ -59,7 +59,7 @@ public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier
                 .filter(Optional::isPresent)
                 .map(inst -> inst.get().modifier())
                 .collect(Collectors.toSet());
-        RunegemData runegemData = runegem.get(ModDataComponentType.RUNEGEM_DATA);
+        RunegemData runegemData = runegem.get(WotrDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) {
             return this;
         }

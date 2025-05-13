@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.client.render.item.properties.select;
 
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -23,7 +23,7 @@ public class SelectRuneGemShape implements SelectItemModelProperty<RunegemShape>
             @Nullable LivingEntity livingEntity,
             int i,
             ItemDisplayContext itemDisplayContext) {
-        RunegemData data = itemStack.get(ModDataComponentType.RUNEGEM_DATA);
+        RunegemData data = itemStack.get(WotrDataComponentType.RUNEGEM_DATA);
         if (data != null && data.shape() != null) {
             return data.shape();
         } else {

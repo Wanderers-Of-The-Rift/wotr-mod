@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.effects;
 
-import com.wanderersoftherift.wotr.init.ModDamageTypes;
+import com.wanderersoftherift.wotr.init.WotrDamageTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +23,7 @@ public class FireBurnEffect extends MobEffect {
 
         Holder<DamageType> damageType = level.registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE)
-                .getOrThrow(ModDamageTypes.FIRE_BURN_DAMAGE);
+                .getOrThrow(WotrDamageTypes.FIRE_BURN_DAMAGE);
         DamageSource damageSource = new DamageSource(damageType);
 
         entity.hurtServer(level, damageSource, 2);

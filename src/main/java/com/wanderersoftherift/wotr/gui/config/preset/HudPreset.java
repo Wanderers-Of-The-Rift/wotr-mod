@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.config.preset;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
-import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
+import com.wanderersoftherift.wotr.init.client.WotrClientRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +28,7 @@ public record HudPreset(ResourceLocation id, Map<ResourceLocation, ElementPreset
      */
     public static Map<ResourceLocation, ElementPreset> fromConfig(RegistryAccess registryAccess) {
         Registry<ConfigurableLayer> registry = registryAccess
-                .lookupOrThrow(ModConfigurableLayers.CONFIGURABLE_LAYER_KEY);
+                .lookupOrThrow(WotrClientRegistries.Keys.CONFIGURABLE_LAYERS);
         return registry.stream()
                 .filter(layer -> !layer.getConfig().isDefault())
                 .collect(Collectors.toMap(registry::getKey,

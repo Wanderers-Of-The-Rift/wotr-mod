@@ -4,8 +4,8 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModEntityDataSerializers;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -32,7 +32,7 @@ import static com.wanderersoftherift.wotr.core.rift.RiftLevelManager.levelExists
  */
 public class RiftPortalEntranceEntity extends RiftPortalEntity {
     private static final EntityDataAccessor<RiftConfig> DATA_RIFT_CONFIG = SynchedEntityData
-            .defineId(RiftPortalEntranceEntity.class, ModEntityDataSerializers.RIFT_CONFIG_SERIALIZER.get());
+            .defineId(RiftPortalEntranceEntity.class, WotrEntityDataSerializers.RIFT_CONFIG_SERIALIZER.get());
     private static final EntityDataAccessor<String> DATA_RIFT_ID = SynchedEntityData
             .defineId(RiftPortalEntranceEntity.class, EntityDataSerializers.STRING);
 
@@ -97,7 +97,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
         RiftData.get(lvl).addPlayer(player.getUUID());
 
         var riftSpawnCoords = getRiftSpawnCoords();
-        player.setData(ModAttachments.PRE_RIFT_STATS, new StatSnapshot(player));
+        player.setData(WotrAttachments.PRE_RIFT_STATS, new StatSnapshot(player));
         player.teleportTo(lvl, riftSpawnCoords.x, riftSpawnCoords.y, riftSpawnCoords.z, Set.of(), player.getYRot(), 0,
                 false);
     }

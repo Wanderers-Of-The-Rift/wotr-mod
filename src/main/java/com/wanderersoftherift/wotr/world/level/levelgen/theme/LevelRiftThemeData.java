@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
-import com.wanderersoftherift.wotr.init.ModTags;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -61,9 +61,9 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
-        Registry<RiftTheme> registry = level.registryAccess().lookupOrThrow(ModRiftThemes.RIFT_THEME_KEY);
+        Registry<RiftTheme> registry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
 
-        return registry.getRandomElementOf(ModTags.RiftThemes.RANDOM_SELECTABLE, level.getRandom())
+        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, level.getRandom())
                 .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
 }

@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
@@ -27,17 +27,17 @@ public interface RuneAnvilContainer extends Container {
     @Override
     default boolean canPlaceItem(int slot, @NotNull ItemStack stack) {
         if (slot == 0) {
-            return stack.has(ModDataComponentType.GEAR_SOCKETS);
+            return stack.has(WotrDataComponentType.GEAR_SOCKETS);
         } else {
             int runegemSlotIndex = slot - 1;
 
-            if (!stack.is(ModItems.RUNEGEM)) {
+            if (!stack.is(WotrItems.RUNEGEM)) {
                 return false;
             }
 
             ItemStack gear = this.getItem(0);
-            GearSockets gearSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
-            RunegemData runegemData = stack.get(ModDataComponentType.RUNEGEM_DATA.get());
+            GearSockets gearSockets = gear.get(WotrDataComponentType.GEAR_SOCKETS.get());
+            RunegemData runegemData = stack.get(WotrDataComponentType.RUNEGEM_DATA.get());
             if (gear.isEmpty() || stack.isEmpty() || gearSockets == null || runegemData == null) {
                 return false;
             }

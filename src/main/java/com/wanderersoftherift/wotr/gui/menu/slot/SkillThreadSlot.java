@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu.slot;
 
-import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +16,7 @@ public class SkillThreadSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.is(ModItems.SKILL_THREAD.get());
+        return stack.is(WotrItems.SKILL_THREAD.get());
     }
 
 }

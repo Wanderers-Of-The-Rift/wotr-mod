@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.wanderersoftherift.wotr.init.ModProcessors.WEIGHTED_REPLACE;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.WEIGHTED_REPLACE;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 
 public class WeightedReplaceProcessor extends StructureProcessor {

@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.loot.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -21,11 +21,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS_FUNCTION;
+import static com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes.RUNEGEMS_FUNCTION;
 
 public class RunegemsFunction extends LootItemConditionalFunction {
     public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> commonFields(inst).and(RegistryCodecs.homogeneousList(ModDatapackRegistries.RUNEGEM_DATA_KEY)
+            inst -> commonFields(inst).and(RegistryCodecs.homogeneousList(WotrRegistries.Keys.RUNEGEM_DATA)
                     .fieldOf("runegems")
                     .forGetter(RunegemsFunction::getRunegems)).apply(inst, RunegemsFunction::new));
 
@@ -53,7 +53,7 @@ public class RunegemsFunction extends LootItemConditionalFunction {
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, ServerLevel level, RandomSource random) {
         Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegems, random);
         randomRunegem.ifPresent(
-                runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
+                runegemDataHolder -> itemStack.set(WotrDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
         return itemStack;
     }
 

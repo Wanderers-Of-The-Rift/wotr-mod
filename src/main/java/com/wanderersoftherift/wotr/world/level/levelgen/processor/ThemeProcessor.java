@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.init.ModProcessors.RIFT_THEME;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.RIFT_THEME;
 
 public class ThemeProcessor extends StructureProcessor {
     public static final MapCodec<ThemeProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
@@ -90,7 +90,8 @@ public class ThemeProcessor extends StructureProcessor {
     }
 
     private List<StructureProcessor> defaultThemeProcessors(ServerLevel world, BlockPos structurePos) {
-        Optional<Registry<RiftTheme>> registryReference = world.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
+        Optional<Registry<RiftTheme>> registryReference = world.registryAccess()
+                .lookup(WotrRegistries.Keys.RIFT_THEMES);
         return registryReference.get()
                 .get(ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "cave"))
                 .get()

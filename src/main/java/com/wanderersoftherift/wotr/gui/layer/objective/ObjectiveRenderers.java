@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPE_REGISTRY;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.ONGOING_OBJECTIVE_TYPES;
 
 public class ObjectiveRenderers {
 
@@ -35,7 +35,7 @@ public class ObjectiveRenderers {
     public static void handleObjectiveStatus(S2CRiftObjectiveStatusPacket packet) {
         if (packet.objective().isPresent()) {
             OngoingObjective objective = packet.objective().get();
-            ResourceLocation key = ONGOING_OBJECTIVE_TYPE_REGISTRY.getKey(objective.getCodec());
+            ResourceLocation key = ONGOING_OBJECTIVE_TYPES.getKey(objective.getCodec());
             Function<OngoingObjective, ObjectiveRenderer> renderer = get(key);
             if (renderer != null) {
                 ObjectiveRenderer.current = renderer.apply(objective);

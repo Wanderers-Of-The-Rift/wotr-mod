@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
-import com.wanderersoftherift.wotr.init.ModEffects;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class AbstractEffect {
-    public static final Codec<AbstractEffect> DIRECT_CODEC = ModEffects.EFFECTS_REGISTRY.byNameCodec()
+    public static final Codec<AbstractEffect> DIRECT_CODEC = WotrRegistries.EFFECTS.byNameCodec()
             .dispatch(AbstractEffect::getCodec, Function.identity());
 
     private final AbstractTargeting targeting;

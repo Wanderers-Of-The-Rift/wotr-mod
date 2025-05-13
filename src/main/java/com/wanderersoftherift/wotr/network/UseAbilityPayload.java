@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.network;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -30,12 +30,12 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
             return;
         }
-        AbilitySlots abilitySlots = player.getData(ModAttachments.ABILITY_SLOTS);
+        AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
-        if (abilityItem.isEmpty() || !abilityItem.has(ModDataComponentType.ABILITY)) {
+        if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
             return;
         }
-        AbstractAbility ability = abilityItem.get(ModDataComponentType.ABILITY).value();
+        AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
         abilitySlots.setSelectedSlot(slot());
 
         if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets

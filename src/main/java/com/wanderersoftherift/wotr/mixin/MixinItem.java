@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +23,7 @@ public abstract class MixinItem {
         }
         ServerLevel serverLevel = (ServerLevel) level;
         GearSockets.generateForItem(stack, level, 1, 1);
-        GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
+        GearImplicits implicits = stack.get(WotrDataComponentType.GEAR_IMPLICITS);
         if (implicits != null) {
             implicits.modifierInstances(stack, serverLevel);
         }

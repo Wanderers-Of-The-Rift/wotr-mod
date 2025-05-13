@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.client.tooltip;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
@@ -77,8 +77,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
             if (socket.modifier().isPresent()) {
                 RunegemData data = new RunegemData(Component.empty(), socket.shape(), null, RunegemTier.RAW);
-                ItemStack fakeStack = new ItemStack(ModItems.RUNEGEM.get());
-                fakeStack.set(ModDataComponentType.RUNEGEM_DATA, data);
+                ItemStack fakeStack = new ItemStack(WotrItems.RUNEGEM.get());
+                fakeStack.set(WotrDataComponentType.RUNEGEM_DATA, data);
 
                 guiGraphics.renderFakeItem(fakeStack, scaledX, scaledY - 1);
             } else {

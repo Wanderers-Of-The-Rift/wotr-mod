@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.item.implicit;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import net.minecraft.core.Holder;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.wanderersoftherift.wotr.init.ModDatapackRegistries.GEAR_IMPLICITS_CONFIG;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.GEAR_IMPLICITS_CONFIG;
 
 public record UnrolledGearImplicits() implements GearImplicits {
 
@@ -37,7 +37,7 @@ public record UnrolledGearImplicits() implements GearImplicits {
             instances.add(ModifierInstance.of(holder, 1, randomSource));
         }
         RolledGearImplicits rolledGearImplicits = new RolledGearImplicits(instances);
-        stack.set(ModDataComponentType.GEAR_IMPLICITS, rolledGearImplicits);
+        stack.set(WotrDataComponentType.GEAR_IMPLICITS, rolledGearImplicits);
         return instances;
     }
 

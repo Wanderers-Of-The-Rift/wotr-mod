@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModEntities;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
@@ -100,7 +100,7 @@ public final class RiftLevelManager {
         if (riftData.isRiftEmpty()) {
             unregisterAndDeleteLevel(player.serverLevel());
         }
-        player.setData(ModAttachments.DIED_IN_RIFT, true);
+        player.setData(WotrAttachments.DIED_IN_RIFT, true);
     }
 
     /**
@@ -197,7 +197,7 @@ public final class RiftLevelManager {
      */
     // TODO: clean it up (maybe move as static method to the entity or the spawner class)
     private static void spawnRiftExit(Level level, Vec3 pos) {
-        RiftPortalExitEntity rift = new RiftPortalExitEntity(ModEntities.RIFT_EXIT.get(), level);
+        RiftPortalExitEntity rift = new RiftPortalExitEntity(WotrEntities.RIFT_EXIT.get(), level);
         rift.setPos(pos);
         rift.setYRot(Direction.UP.toYRot());
         rift.setBillboard(true);

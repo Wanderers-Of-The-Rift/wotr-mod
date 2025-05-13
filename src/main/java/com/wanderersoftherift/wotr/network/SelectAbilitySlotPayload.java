@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -30,7 +30,7 @@ public record SelectAbilitySlotPayload(int slot) implements CustomPacketPayload 
 
     public void handleOnServer(IPayloadContext context) {
         if (context.player() instanceof ServerPlayer player && !player.isSpectator()) {
-            AbilitySlots abilitySlots = player.getData(ModAttachments.ABILITY_SLOTS);
+            AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
             abilitySlots.setSelectedSlot(slot);
         }
     }

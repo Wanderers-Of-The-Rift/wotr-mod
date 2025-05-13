@@ -5,10 +5,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModItems;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -45,16 +44,15 @@ public class RiftKeyCommands extends BaseCommand {
                 .then(Commands.argument(tierArg, IntegerArgumentType.integer(0, 7))
                         .executes(ctx -> configTier(ctx, IntegerArgumentType.getInteger(ctx, tierArg)))))
                 .then(Commands.literal("theme")
-                        .then(Commands.argument(themeArg, ResourceKeyArgument.key(ModRiftThemes.RIFT_THEME_KEY))
+                        .then(Commands.argument(themeArg, ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_THEMES))
                                 .executes(ctx -> configTheme(ctx,
-                                        ResourceKeyArgument.resolveKey(ctx, themeArg, ModRiftThemes.RIFT_THEME_KEY,
+                                        ResourceKeyArgument.resolveKey(ctx, themeArg, WotrRegistries.Keys.RIFT_THEMES,
                                                 ERROR_INVALID_THEME)))))
                 .then(Commands.literal("objective")
-                        .then(Commands
-                                .argument(objectiveArg, ResourceKeyArgument.key(RegistryEvents.OBJECTIVE_REGISTRY))
+                        .then(Commands.argument(objectiveArg, ResourceKeyArgument.key(WotrRegistries.Keys.OBJECTIVES))
                                 .executes(ctx -> configObjective(ctx,
                                         ResourceKeyArgument.resolveKey(ctx, objectiveArg,
-                                                RegistryEvents.OBJECTIVE_REGISTRY, ERROR_INVALID_OBJECTIVE)))))
+                                                WotrRegistries.Keys.OBJECTIVES, ERROR_INVALID_OBJECTIVE)))))
                 .then(Commands.literal("seed")
                         .then(Commands.argument(seedArg, IntegerArgumentType.integer())
                                 .executes(ctx -> configSeed(ctx, IntegerArgumentType.getInteger(ctx, seedArg)))));
@@ -65,8 +63,8 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        RiftConfig config = key.getOrDefault(ModDataComponentType.RIFT_CONFIG, new RiftConfig(tier));
-        key.set(ModDataComponentType.RIFT_CONFIG, config.modify().tier(tier).build());
+        RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(tier));
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().tier(tier).build());
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_tier"), tier), true);
@@ -78,8 +76,8 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        RiftConfig config = key.getOrDefault(ModDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(ModDataComponentType.RIFT_CONFIG, config.modify().theme(theme).build());
+        RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().theme(theme).build());
         context.getSource()
                 .sendSuccess(
                         () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
@@ -93,8 +91,8 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        RiftConfig config = key.getOrDefault(ModDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(ModDataComponentType.RIFT_CONFIG, config.modify().objective(objective).build());
+        RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().objective(objective).build());
         context.getSource()
                 .sendSuccess(() -> Component.translatable(
                         WanderersOfTheRift.translationId("command", "rift_key.set_objective"),
@@ -107,8 +105,8 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        RiftConfig config = key.getOrDefault(ModDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(ModDataComponentType.RIFT_CONFIG, config.modify().seed(seed).build());
+        RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().seed(seed).build());
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_seed"), seed), true);
@@ -120,7 +118,7 @@ public class RiftKeyCommands extends BaseCommand {
         if (player != null) {
             ItemStack heldItem = player.getMainHandItem();
 
-            if (heldItem.getItem() == ModItems.RIFT_KEY.asItem()) {
+            if (heldItem.getItem() == WotrItems.RIFT_KEY.asItem()) {
                 return heldItem;
             }
             context.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));

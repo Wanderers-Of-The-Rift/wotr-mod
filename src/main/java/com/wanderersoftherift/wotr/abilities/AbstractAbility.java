@@ -7,9 +7,9 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
-import com.wanderersoftherift.wotr.init.ModAbilityTypes;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModAttributes;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.network.AbilityCooldownUpdatePayload;
@@ -28,15 +28,15 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.wanderersoftherift.wotr.init.RegistryEvents.ABILITY_REGISTRY;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
 
 public abstract class AbstractAbility {
 
-    public static final Codec<AbstractAbility> DIRECT_CODEC = ModAbilityTypes.ABILITY_TYPES_REGISTRY.byNameCodec()
+    public static final Codec<AbstractAbility> DIRECT_CODEC = WotrRegistries.ABILITY_TYPES.byNameCodec()
             .dispatch(AbstractAbility::getCodec, Function.identity());
-    public static final Codec<Holder<AbstractAbility>> CODEC = LaxRegistryCodec.create(ABILITY_REGISTRY);
+    public static final Codec<Holder<AbstractAbility>> CODEC = LaxRegistryCodec.create(ABILITIES);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs
-            .holderRegistry(ABILITY_REGISTRY);
+            .holderRegistry(ABILITIES);
 
     private final ResourceLocation name;
     private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
@@ -104,17 +104,17 @@ public abstract class AbstractAbility {
     public boolean isOnCooldown(Player player, int slot) {
         // If we registered this ability as one that has a cooldown and the player has a cooldown active for this
         // ability.
-        return player.getData(ModAttachments.ABILITY_COOLDOWNS).isOnCooldown(slot);
+        return player.getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(slot);
 //        return ModAbilities.COOL_DOWN_ATTACHMENTS.containsKey(this.getName()) && p.getData(ModAbilities.COOL_DOWN_ATTACHMENTS.get(this.getName())) > 0;
     }
 
     public void setCooldown(Player player, int slot, float amount) {
         if (this.hasCooldown()) {
             WanderersOfTheRift.LOGGER.info("Setting cooldown for: " + this.getName() + " length: " + amount);
-            PlayerCooldownData cooldowns = player.getData(ModAttachments.ABILITY_COOLDOWNS);
+            PlayerCooldownData cooldowns = player.getData(WotrAttachments.ABILITY_COOLDOWNS);
             int finalCooldown = (int) Math.max(getBaseCooldown() * 0.9F, amount);
             cooldowns.setCooldown(slot, finalCooldown);
-            player.setData(ModAttachments.ABILITY_COOLDOWNS, cooldowns);
+            player.setData(WotrAttachments.ABILITY_COOLDOWNS, cooldowns);
 
             PacketDistributor.sendToPlayer((ServerPlayer) player,
                     new AbilityCooldownUpdatePayload(slot, (int) amount, (int) amount));
@@ -126,7 +126,7 @@ public abstract class AbstractAbility {
     }
 
     public int getActiveCooldown(Player player, int slot) {
-        return player.getData(ModAttachments.ABILITY_COOLDOWNS).getCooldownRemaining(slot);
+        return player.getData(WotrAttachments.ABILITY_COOLDOWNS).getCooldownRemaining(slot);
     }
 
     public float getBaseCooldown() {
@@ -141,16 +141,16 @@ public abstract class AbstractAbility {
     }
 
     public boolean isActive(Player player) {
-        return player.getData(ModAttachments.DURATIONS).isDurationRunning(this.getName());
+        return player.getData(WotrAttachments.DURATIONS).isDurationRunning(this.getName());
     }
 
     public void setDuration(Player player, Holder<Attribute> attribute) {
         // TODO look into combining this and the cooldown
         if (this.hasDuration()) {
             WanderersOfTheRift.LOGGER.info("Setting duration for: " + this.getName());
-            PlayerDurationData durations = player.getData(ModAttachments.DURATIONS);
+            PlayerDurationData durations = player.getData(WotrAttachments.DURATIONS);
             durations.beginDuration(this.getName(), (int) player.getAttributeValue(attribute) * 20);
-            player.setData(ModAttachments.DURATIONS, durations);
+            player.setData(WotrAttachments.DURATIONS, durations);
         }
     }
 
@@ -185,10 +185,10 @@ public abstract class AbstractAbility {
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifierEffect) {
             Holder<Attribute> attribute = attributeModifierEffect.getAttribute();
-            if (ModAttributes.COOLDOWN.equals(attribute) && baseCooldown > 0) {
+            if (WotrAttributes.COOLDOWN.equals(attribute) && baseCooldown > 0) {
                 return true;
             }
-            if (ModAttributes.MANA_COST.equals(attribute) && baseManaCost > 0) {
+            if (WotrAttributes.MANA_COST.equals(attribute) && baseManaCost > 0) {
                 return true;
             }
         }

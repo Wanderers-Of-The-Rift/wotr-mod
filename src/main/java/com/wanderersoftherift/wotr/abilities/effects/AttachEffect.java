@@ -8,8 +8,8 @@ import com.wanderersoftherift.wotr.abilities.effects.predicate.ContinueEffectPre
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TriggerPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -30,7 +30,7 @@ public class AttachEffect extends AbstractEffect {
                             .forGetter(AttachEffect::getTriggerPredicate))
                     .and(ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
                             .forGetter(AttachEffect::getContinuePredicate))
-                    .and(RegistryFixedCodec.create(RegistryEvents.EFFECT_MARKER_REGISTRY)
+                    .and(RegistryFixedCodec.create(WotrRegistries.Keys.EFFECT_MARKERS)
                             .optionalFieldOf("display")
                             .forGetter(AttachEffect::getDisplay))
                     .apply(instance, AttachEffect::new));
@@ -64,7 +64,7 @@ public class AttachEffect extends AbstractEffect {
             applyParticlesToTarget(target);
 
             if (target instanceof LivingEntity livingTarget) {
-                target.getData(ModAttachments.ATTACHED_EFFECTS).attach(livingTarget, this, context);
+                target.getData(WotrAttachments.ATTACHED_EFFECTS).attach(livingTarget, this, context);
             }
         }
     }

@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.loot.functions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.loot.LootUtil;
@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 
-import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.ROLL_GEAR_FUNCTION;
+import static com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes.ROLL_GEAR_FUNCTION;
 
 public class RollGearFunction extends LootItemConditionalFunction {
     public static final MapCodec<RollGearFunction> CODEC = RecordCodecBuilder.mapCodec(
@@ -60,14 +60,14 @@ public class RollGearFunction extends LootItemConditionalFunction {
         RandomSource random = lootContext.getRandom();
 
         itemStack = ItemTagUtil.getRandomItemStackFromTag(itemStack, tagLocation, random);
-        itemStack.set(ModDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
-        GearImplicits implicits = itemStack.get(ModDataComponentType.GEAR_IMPLICITS);
+        itemStack.set(WotrDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
+        GearImplicits implicits = itemStack.get(WotrDataComponentType.GEAR_IMPLICITS);
         if (implicits != null) {
             implicits.modifierInstances(itemStack, lootContext.getLevel());
         }
         int tier = LootUtil.getRiftTierFromContext(lootContext);
         if (tier > 0) {
-            itemStack.set(ModDataComponentType.ITEM_RIFT_TIER, tier);
+            itemStack.set(WotrDataComponentType.ITEM_RIFT_TIER, tier);
         }
         return itemStack;
     }

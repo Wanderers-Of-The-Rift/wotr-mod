@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -113,7 +113,8 @@ public class SpawnPieceCommand {
                             return 0;
                         })
                         .then(Commands.literal("withPOIsAndTheme")
-                                .then(Commands.argument(themeArg, ResourceKeyArgument.key(ModRiftThemes.RIFT_THEME_KEY))
+                                .then(Commands
+                                        .argument(themeArg, ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_THEMES))
                                         .executes(cs -> {
                                             WorldCoordinates worldCoordinates = new WorldCoordinates(
                                                     new WorldCoordinate(false, cs.getSource().getPosition().x()),
@@ -122,7 +123,7 @@ public class SpawnPieceCommand {
                                             spawnPieceFully(cs.getArgument(rlArg, ResourceLocation.class),
                                                     worldCoordinates,
                                                     ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                            ModRiftThemes.RIFT_THEME_KEY, ERROR_INVALID_PROCESSOR),
+                                                            WotrRegistries.Keys.RIFT_THEMES, ERROR_INVALID_PROCESSOR),
                                                     true, cs.getSource().getLevel().getRandom().nextInt(), cs);
                                             return 0;
                                         })
@@ -131,7 +132,7 @@ public class SpawnPieceCommand {
                                                     cs.getArgument(rlArg, ResourceLocation.class),
                                                     Vec3Argument.getCoordinates(cs, locationArg),
                                                     ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                            ModRiftThemes.RIFT_THEME_KEY, ERROR_INVALID_PROCESSOR),
+                                                            WotrRegistries.Keys.RIFT_THEMES, ERROR_INVALID_PROCESSOR),
                                                     true, cs.getSource().getLevel().getRandom().nextInt(), cs);
                                             return 0;
                                         })
@@ -141,7 +142,7 @@ public class SpawnPieceCommand {
                                                                     cs.getArgument(rlArg, ResourceLocation.class),
                                                                     Vec3Argument.getCoordinates(cs, locationArg),
                                                                     ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                                            ModRiftThemes.RIFT_THEME_KEY,
+                                                                            WotrRegistries.Keys.RIFT_THEMES,
                                                                             ERROR_INVALID_PROCESSOR),
                                                                     BoolArgumentType.getBool(cs, terminateArg),
                                                                     cs.getSource().getLevel().getRandom().nextInt(),
@@ -156,7 +157,7 @@ public class SpawnPieceCommand {
                                                                             Vec3Argument.getCoordinates(cs,
                                                                                     locationArg),
                                                                             ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                                                    ModRiftThemes.RIFT_THEME_KEY,
+                                                                                    WotrRegistries.Keys.RIFT_THEMES,
                                                                                     ERROR_INVALID_PROCESSOR),
                                                                             BoolArgumentType.getBool(cs, terminateArg),
                                                                             IntegerArgumentType.getInteger(cs, seedArg),
