@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
@@ -19,6 +20,7 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
@@ -44,6 +46,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 
@@ -59,22 +62,26 @@ public class FastRiftGenerator extends ChunkGenerator {
     public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
-            ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID)
+            ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID),
+            RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
 
-    public RiftLayout layout = null;
-    public RiftRoomGenerator roomGenerator = null;
     private final int layerCount;
+
     private final ResourceLocation customBlockID;
     private final BlockState customBlock;
-
     private final AtomicInteger inFlightChunks = new AtomicInteger(0);
+
     private final AtomicInteger completedChunks = new AtomicInteger(0);
     private final AtomicInteger completedChunksInWindow = new AtomicInteger(0);
     private final AtomicLong lastChunkStart = new AtomicLong(0);
     private long generationStart = 0;
+    private final RiftConfig config;
+    private AtomicReference<RiftLayout> layout = new AtomicReference<>();
+    private AtomicReference<RiftRoomGenerator> roomGenerator = new AtomicReference<>();
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock,
+            RiftConfig config) {
         super(biomeSource);
         this.layerCount = layerCount;
         this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock)
@@ -82,11 +89,31 @@ public class FastRiftGenerator extends ChunkGenerator {
                 .map(Block::defaultBlockState)
                 .orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
+        this.config = config;
     }
 
     @Override
     protected MapCodec<? extends ChunkGenerator> codec() {
         return CODEC;
+    }
+
+    public RiftConfig getRiftConfig() {
+        return config;
+    }
+
+    public RiftLayout getOrCreateLayout(MinecraftServer server) {
+        if (layout.get() == null) {
+            layout.compareAndSet(null,
+                    new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server)));
+        }
+        return layout.get();
+    }
+
+    private RiftRoomGenerator getOrCreateRoomGenerator() {
+        if (roomGenerator.get() == null) {
+            roomGenerator.compareAndSet(null, new RiftRoomGenerator());
+        }
+        return roomGenerator.get();
     }
 
     @Override
@@ -138,9 +165,10 @@ public class FastRiftGenerator extends ChunkGenerator {
         lastChunkStart.updateAndGet((value) -> Math.max(value, time));
         var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
 
-        runRiftGeneration(chunk, randomState, level);
-
-        return CompletableFuture.completedFuture(chunk);
+        return CompletableFuture.supplyAsync(() -> {
+            runRiftGeneration(chunk, randomState, level);
+            return chunk;
+        }, Thread::startVirtualThread);
     }
 
     private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevelAccessor level) {
@@ -152,10 +180,6 @@ public class FastRiftGenerator extends ChunkGenerator {
             completedChunksInWindow.incrementAndGet();
             return;
         }
-        if (layout == null || roomGenerator == null) {
-            layout = new ChaoticRiftLayout(layerCount - 2, new RoomRandomizerImpl(level.getServer()));
-            roomGenerator = new RiftRoomGenerator();
-        }
         var perimeterBlock = customBlock;
         RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount / 2, perimeterBlock);
         RiftSpace.placePerimeterInChunk(chunk, null, -layerCount / 2, perimeterBlock);
@@ -163,9 +187,10 @@ public class FastRiftGenerator extends ChunkGenerator {
         RiftSpace[] spaces = new RiftSpace[layerCount - 2];
         for (int i = 0; i < layerCount - 2; i++) {
             var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount / 2, chunk.getPos().z);
-            var space = layout.getChunkSpace(position, randomState);
+            var space = getOrCreateLayout(level.getServer()).getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level, randomState);
+                chunkFutures[i] = getOrCreateRoomGenerator().getAndRemoveRoomChunk(position, roomSpace, level,
+                        randomState);
                 spaces[i] = space;
             }
         }
@@ -228,8 +253,9 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
+        var layout = this.layout.get();
         if (layout != null) {
-            var currentSpace = layout.getChunkSpace(SectionPos.of(pos), null);
+            var currentSpace = layout.getChunkSpace(SectionPos.of(pos));
             info.add("current space");
             if (currentSpace == null || currentSpace instanceof VoidRiftSpace) {
                 info.add("void");

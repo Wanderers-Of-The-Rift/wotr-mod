@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Vec3i;
-import net.minecraft.world.level.levelgen.RandomState;
 import org.joml.Vector2i;
 
 public class GridTunnelRiftLayout implements RiftLayout {
@@ -16,7 +15,7 @@ public class GridTunnelRiftLayout implements RiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos, RandomState randomState) {
+    public RiftSpace getChunkSpace(Vec3i chunkPos) {
         var gridX = Math.floorDiv(chunkPos.getX(), 3);
         var gridZ = Math.floorDiv(chunkPos.getZ(), 3);
 

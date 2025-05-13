@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -146,7 +147,9 @@ public final class RiftLevelManager {
 
         int typeHeight = 5;
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(ow, (typeHeight + 1) * 4);
+        config = initializeConfig(config, server);
+
+        ChunkGenerator chunkGen = getRiftChunkGenerator(ow, (typeHeight + 1) * 4, config);
         if (chunkGen == null) {
             return null;
         }
@@ -284,13 +287,20 @@ public final class RiftLevelManager {
         level.getServer().overworld().save(null, true, false);
     }
 
-    private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld, int layerCount) {
+    private static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
+        var random = RandomSource.create();
+        int seed = baseConfig.seed().orElseGet(random::nextInt);
+        var riftTheme = baseConfig.theme().orElse(LevelRiftThemeData.getRandomTheme(server, random));
+        return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(), Optional.of(seed));
+    }
+
+    private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld, int layerCount, RiftConfig config) {
         var voidBiome = overworld.registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).orElse(null);
         if (voidBiome == null) {
             return null;
         }
         return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount,
-                ResourceLocation.withDefaultNamespace("bedrock"));
+                ResourceLocation.withDefaultNamespace("bedrock"), config);
     }
 
     private static ServerLevel createRift(
@@ -325,11 +335,10 @@ public final class RiftLevelManager {
         riftData.setConfig(config);
         var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
 
-        Holder<RiftTheme> riftTheme;
-        int maxDepth;
-        riftTheme = config.theme().orElse(LevelRiftThemeData.getRandomTheme(riftLevel));
-        maxDepth = getRiftSize(config.tier());
+        Holder<RiftTheme> riftTheme = config.theme()
+                .orElse(LevelRiftThemeData.getRandomTheme(riftLevel.getServer(), riftLevel.random));
         themeData.setTheme(riftTheme);
+        int maxDepth = getRiftSize(config.tier());
 
         /*
          * placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),

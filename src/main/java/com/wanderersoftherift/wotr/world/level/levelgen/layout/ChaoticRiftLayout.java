@@ -1,17 +1,17 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizer;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
-import net.minecraft.world.level.levelgen.RandomState;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 
@@ -28,10 +28,12 @@ public class ChaoticRiftLayout implements RiftLayout {
 
     private final ConcurrentHashMap<Vector2i, Region> regions = new ConcurrentHashMap<>();
     private final int layerCount;
+    private final int seed;
     private final RoomRandomizer roomRandomizer;
 
-    public ChaoticRiftLayout(int layerCount, RoomRandomizer roomRandomizer) {
+    public ChaoticRiftLayout(int layerCount, int seed, RoomRandomizer roomRandomizer) {
         this.layerCount = layerCount;
+        this.seed = seed;
         this.roomRandomizer = roomRandomizer;
     }
 
@@ -44,12 +46,11 @@ public class ChaoticRiftLayout implements RiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos, RandomState randomState) {
+    public RiftSpace getChunkSpace(Vec3i chunkPos) {
         var region = getOrCreateRegion(chunkPos.getX(), chunkPos.getZ());
-        if (randomState != null) {
-            region.tryGenerate(randomState.getOrCreateRandomFactory(WanderersOfTheRift.id("rift_layout"))
-                    .at(region.origin.getX(), 0, region.origin.getZ()));
-        }
+        var rand = ProcessorUtil.createRandom(
+                ProcessorUtil.getRandomSeed(new BlockPos(region.origin.getX(), 0, region.origin.getZ()), seed));
+        region.tryGenerate(rand);
         return region.getSpaceAt(chunkPos);
     }
 
