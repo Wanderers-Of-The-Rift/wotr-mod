@@ -4,9 +4,9 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:jump_strength",
+          "attribute": "minecraft:movement_speed",
           "id": "wotr:movement_speed",
-          "max_roll": 0.10000000149011612,
+          "max_roll": 0.05000000074505806,
           "min_roll": 0.0,
           "operation": "add_value"
         }
@@ -17,10 +17,10 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:jump_strength",
+          "attribute": "minecraft:movement_speed",
           "id": "wotr:movement_speed",
-          "max_roll": 0.25,
-          "min_roll": 0.10000000149011612,
+          "max_roll": 0.05000000074505806,
+          "min_roll": 0.05000000074505806,
           "operation": "add_value"
         }
       ],
@@ -30,10 +30,10 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:jump_strength",
+          "attribute": "minecraft:movement_speed",
           "id": "wotr:movement_speed",
-          "max_roll": 0.3499999940395355,
-          "min_roll": 0.25,
+          "max_roll": 0.10000000149011612,
+          "min_roll": 0.05000000074505806,
           "operation": "add_value"
         }
       ],

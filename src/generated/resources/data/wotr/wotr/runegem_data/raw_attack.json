@@ -9,7 +9,12 @@
         {
           "modifier": "wotr:heavy_attack",
           "tier": 1
-        },
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot"
+    },
+    {
+      "modifiers": [
         {
           "modifier": "wotr:knockback",
           "tier": 1
@@ -19,7 +24,59 @@
           "tier": 1
         }
       ],
-      "supported_items": "#wotr:socketable"
+      "supported_items": "#wotr:socketable_off_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_attack",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_helmet_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:heavy_attack",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:heavy_knockback",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_chestplate_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:knockback",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:heavy_knockback",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_leggings_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_attack",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_boots_slot"
     }
   ],
   "name": {

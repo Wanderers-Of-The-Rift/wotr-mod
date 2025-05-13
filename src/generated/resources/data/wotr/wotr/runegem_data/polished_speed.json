@@ -3,6 +3,24 @@
     {
       "modifiers": [
         {
+          "modifier": "wotr:attack_speed",
+          "tier": 3
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:attack_speed",
+          "tier": 4
+        }
+      ],
+      "supported_items": "#wotr:socketable_helmet_slot"
+    },
+    {
+      "modifiers": [
+        {
           "modifier": "wotr:jump_height",
           "tier": 2
         },
@@ -12,10 +30,27 @@
         },
         {
           "modifier": "wotr:movement_speed",
-          "tier": 1
+          "tier": 2
         }
       ],
-      "supported_items": "#wotr:socketable"
+      "supported_items": "#wotr:socketable_leggings_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:jump_height",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:attack_speed",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:movement_speed",
+          "tier": 2
+        }
+      ],
+      "supported_items": "#wotr:socketable_boots_slot"
     }
   ],
   "name": {

@@ -3,15 +3,71 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:health",
-          "tier": 2
+          "modifier": "wotr:percent_health",
+          "tier": 4
         },
         {
           "modifier": "wotr:absorption",
-          "tier": 1
+          "tier": 3
         }
       ],
-      "supported_items": "#wotr:socketable"
+      "supported_items": "#wotr:socketable_off_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_health",
+          "tier": 4
+        }
+      ],
+      "supported_items": "#wotr:socketable_helmet_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_health",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:percent_health",
+          "tier": 4
+        }
+      ],
+      "supported_items": "#wotr:socketable_chestplate_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_health",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:percent_health",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:hybrid_health",
+          "tier": 3
+        }
+      ],
+      "supported_items": "#wotr:socketable_leggings_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_health",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:percent_health",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:hybrid_health",
+          "tier": 3
+        }
+      ],
+      "supported_items": "#wotr:socketable_boots_slot"
     }
   ],
   "name": {

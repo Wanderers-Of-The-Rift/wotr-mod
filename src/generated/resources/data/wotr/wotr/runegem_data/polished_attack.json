@@ -4,26 +4,91 @@
       "modifiers": [
         {
           "modifier": "wotr:flat_attack",
-          "tier": 2
+          "tier": 4
         },
         {
           "modifier": "wotr:heavy_attack",
-          "tier": 2
-        },
-        {
-          "modifier": "wotr:knockback",
-          "tier": 2
-        },
-        {
-          "modifier": "wotr:heavy_knockback",
-          "tier": 2
+          "tier": 4
         },
         {
           "modifier": "wotr:sweeping_attack_damage",
-          "tier": 1
+          "tier": 2
         }
       ],
-      "supported_items": "#wotr:socketable"
+      "supported_items": "#wotr:socketable_main_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:knockback",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:heavy_knockback",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:sweeping_attack_damage",
+          "tier": 2
+        }
+      ],
+      "supported_items": "#wotr:socketable_off_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_attack",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:knockback",
+          "tier": 3
+        }
+      ],
+      "supported_items": "#wotr:socketable_helmet_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:heavy_attack",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:heavy_knockback",
+          "tier": 3
+        }
+      ],
+      "supported_items": "#wotr:socketable_chestplate_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:knockback",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:heavy_knockback",
+          "tier": 3
+        }
+      ],
+      "supported_items": "#wotr:socketable_leggings_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:flat_attack",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:knockback",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:sweeping_attack_damage",
+          "tier": 2
+        }
+      ],
+      "supported_items": "#wotr:socketable_boots_slot"
     }
   ],
   "name": {

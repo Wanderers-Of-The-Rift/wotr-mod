@@ -110,9 +110,9 @@ public class ModModifierProvider {
         );
         context.register(getResourceKey("movement_speed"),
                 new Modifier(generateEqualRollSpread(3,
-                        List.of(new ToBeTieredModifierEffect(0, 0.35F,
+                        List.of(new ToBeTieredModifierEffect(0, 0.1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("movement_speed"),
-                                        Attributes.JUMP_STRENGTH, AttributeModifier.Operation.ADD_VALUE)))))
+                                        Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_VALUE)))))
         );
         context.register(getResourceKey("step_height"),
                 new Modifier(generateEqualRollSpread(1,
@@ -152,6 +152,16 @@ public class ModModifierProvider {
                                 WanderersOfTheRift.id("heavy_ability_damage"), ModAttributes.COOLDOWN,
                                 0.5, 1F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
+        context.register(getResourceKey("jump_height"),
+                new Modifier(generateEqualRollSpread(3,
+                        List.of(new ToBeTieredModifierEffect(0, 0.3F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("jump_height"),
+                                        Attributes.JUMP_STRENGTH, AttributeModifier.Operation.ADD_VALUE)),
+                        new ToBeTieredModifierEffect(0, 4,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("fall_reduction"),
+                                        Attributes.SAFE_FALL_DISTANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+
         context.register(getResourceKey("flat_ability_heal_power"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 10F,
