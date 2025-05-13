@@ -41,7 +41,6 @@ public class DataGenerators {
                         })
 
         );
-        event.createProvider(ModLanguageProvider::new);
         event.createProvider(ModModelProvider::new);
 
         event.createProvider(ModDataMapProvider::new);
@@ -69,5 +68,7 @@ public class DataGenerators {
                 lookupProvider));
 
         event.createProvider(ModObjectiveRecipeProvider::new);
+
+        event.createProvider(ModLanguageProvider::new);
     }
 }

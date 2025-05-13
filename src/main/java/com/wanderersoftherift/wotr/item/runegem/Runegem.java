@@ -4,11 +4,14 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.modifier.TieredModifier;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -75,7 +78,20 @@ public class Runegem extends Item {
             TooltipFlag tooltipFlag) {
         if (stack.has(ModDataComponentType.RUNEGEM_DATA)) {
             RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
-
+            if (gemData != null) {
+                tooltipComponents.add(Component.translatable("tooltip.wotr.runegem.shape", gemData.shape().name()));
+                tooltipComponents.add(Component.translatable("tooltip.wotr.runegem.modifiers"));
+                for (RunegemData.ModifierGroup group : gemData.modifierLists()) {
+                    group.supportedItems().unwrapKey().ifPresent(tagKey -> tooltipComponents.add(Component.literal(tagKey.toString()).withStyle(ChatFormatting.AQUA)));
+                    for (TieredModifier tieredModifier : group.modifiers()) {
+                        MutableComponent modifier = Component.translatable(tieredModifier.modifier().getRegisteredName());
+                        modifier.append(" (");
+                        modifier.append(String.valueOf(tieredModifier.tier()));
+                        modifier.append(")");
+                        tooltipComponents.add(modifier);
+                    }
+                }
+            }
         }
     }
 }

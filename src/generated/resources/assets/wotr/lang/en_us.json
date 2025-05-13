@@ -380,6 +380,8 @@
   "tooltip.wotr.rift_key_seed": "Seed: %s",
   "tooltip.wotr.rift_key_theme": "Theme: %s",
   "tooltip.wotr.rift_key_tier": "Tier: %s",
+  "tooltip.wotr.runegem.modifiers": "Modifiers:",
+  "tooltip.wotr.runegem.shape": "Shape: %s",
   "tooltip.wotr.socket": "Sockets: ",
   "wotr.rift.create.failed": "Failed to create rift"
 }

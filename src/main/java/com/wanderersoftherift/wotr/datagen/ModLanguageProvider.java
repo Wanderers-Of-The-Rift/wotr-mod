@@ -198,6 +198,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
+        add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
+        add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -301,6 +303,11 @@ public class ModLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "max_mana"), "Max Mana");
         add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
+        addRunegems();
+    }
+
+    private void addRunegems() {
+        add(WanderersOfTheRift.translationId("runegem", "raw_attack"), "Raw Attack Runegem");
     }
 
     private void addEssenceType(String id, String value) {
