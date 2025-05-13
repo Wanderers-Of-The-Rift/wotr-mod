@@ -1,0 +1,22 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:jump_height",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:attack_speed",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.raw_speed"
+  },
+  "shape": "triangle",
+  "tier": "raw"
+}

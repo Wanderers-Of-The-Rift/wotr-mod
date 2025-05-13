@@ -1,0 +1,22 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.cut_defense"
+  },
+  "shape": "circle",
+  "tier": "cut"
+}

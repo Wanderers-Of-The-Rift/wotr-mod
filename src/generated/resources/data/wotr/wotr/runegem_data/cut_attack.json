@@ -23,8 +23,8 @@
     }
   ],
   "name": {
-    "translate": "runegem.wotr.raw_attack"
+    "translate": "runegem.wotr.cut_attack"
   },
   "shape": "pentagon",
-  "tier": "raw"
+  "tier": "cut"
 }

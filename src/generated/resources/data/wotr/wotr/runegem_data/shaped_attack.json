@@ -4,11 +4,11 @@
       "modifiers": [
         {
           "modifier": "wotr:flat_attack",
-          "tier": 1
+          "tier": 2
         },
         {
           "modifier": "wotr:heavy_attack",
-          "tier": 1
+          "tier": 2
         },
         {
           "modifier": "wotr:knockback",
@@ -17,14 +17,18 @@
         {
           "modifier": "wotr:heavy_knockback",
           "tier": 1
+        },
+        {
+          "modifier": "wotr:sweeping_attack_damage",
+          "tier": 1
         }
       ],
       "supported_items": "#wotr:socketable"
     }
   ],
   "name": {
-    "translate": "runegem.wotr.raw_attack"
+    "translate": "runegem.wotr.shaped_attack"
   },
   "shape": "pentagon",
-  "tier": "raw"
+  "tier": "shaped"
 }

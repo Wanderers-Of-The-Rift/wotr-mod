@@ -4,18 +4,22 @@
       "modifiers": [
         {
           "modifier": "wotr:flat_attack",
-          "tier": 1
+          "tier": 2
         },
         {
           "modifier": "wotr:heavy_attack",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:percent_attack",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:heavy_knockback",
           "tier": 1
         },
         {
           "modifier": "wotr:knockback",
-          "tier": 1
-        },
-        {
-          "modifier": "wotr:heavy_knockback",
           "tier": 1
         }
       ],
@@ -23,8 +27,8 @@
     }
   ],
   "name": {
-    "translate": "runegem.wotr.raw_attack"
+    "translate": "runegem.wotr.shaped_zombie"
   },
-  "shape": "pentagon",
-  "tier": "raw"
+  "shape": "diamond",
+  "tier": "shaped"
 }

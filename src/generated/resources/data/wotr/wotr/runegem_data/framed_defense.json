@@ -1,0 +1,26 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:armor_toughness",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.framed_defense"
+  },
+  "shape": "circle",
+  "tier": "framed"
+}

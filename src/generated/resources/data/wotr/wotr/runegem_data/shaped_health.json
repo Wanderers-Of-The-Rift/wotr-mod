@@ -1,0 +1,22 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:health",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:absorption",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.shaped_health"
+  },
+  "shape": "heart",
+  "tier": "shaped"
+}

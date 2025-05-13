@@ -11,11 +11,15 @@
           "tier": 1
         },
         {
-          "modifier": "wotr:knockback",
+          "modifier": "wotr:percent_attack",
           "tier": 1
         },
         {
           "modifier": "wotr:heavy_knockback",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback",
           "tier": 1
         }
       ],
@@ -23,8 +27,8 @@
     }
   ],
   "name": {
-    "translate": "runegem.wotr.raw_attack"
+    "translate": "runegem.wotr.raw_zombie"
   },
-  "shape": "pentagon",
+  "shape": "diamond",
   "tier": "raw"
 }
