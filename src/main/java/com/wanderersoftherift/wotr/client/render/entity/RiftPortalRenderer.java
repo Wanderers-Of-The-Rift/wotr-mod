@@ -6,9 +6,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.ModShaders;
-import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
+import com.wanderersoftherift.wotr.init.ModAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -127,7 +127,8 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
         state.billboard = entity.isBillboard();
 
         if (entity instanceof RiftPortalEntranceEntity entrance) {
-            state.banned = BannedRiftList.isBannedFrom(entrance.getRiftDimensionId());
+            state.banned = Minecraft.getInstance().player.getData(ModAttachments.BANNED_RIFTS)
+                    .isBannedFrom(entrance.getRiftDimensionId());
         }
     }
 

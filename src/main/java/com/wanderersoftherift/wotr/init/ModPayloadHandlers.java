@@ -4,8 +4,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
-import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.network.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.network.AbilitySlotsContentPayload;
 import com.wanderersoftherift.wotr.network.AbilitySlotsCooldownsPayload;
@@ -21,7 +19,6 @@ import com.wanderersoftherift.wotr.network.UpdateEffectMarkersPayload;
 import com.wanderersoftherift.wotr.network.UseAbilityPayload;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -31,7 +28,6 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ModPayloadHandlers {
@@ -73,70 +69,50 @@ public class ModPayloadHandlers {
 
     @SubscribeEvent
     public static void onPlayerJoinedEvent(PlayerEvent.PlayerLoggedInEvent event) {
-        replicateAbilities(event.getEntity());
-        replicateEffectMarkers(event.getEntity());
-        replicateMana(event.getEntity());
-        replicateBannedRifts(event.getEntity());
+        if (event.getEntity() instanceof ServerPlayer player) {
+            replicateAbilities(player);
+            replicateEffectMarkers(player);
+            replicateMana(player);
+            BannedFromRiftPayload.sendTo(player);
+        }
     }
 
     @SubscribeEvent
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerRespawnEvent event) {
-        replicateAbilities(event.getEntity());
-        replicateEffectMarkers(event.getEntity());
+        if (event.getEntity() instanceof ServerPlayer player) {
+            replicateAbilities(player);
+            replicateEffectMarkers(player);
+            BannedFromRiftPayload.sendTo(player);
+        }
     }
 
     @SubscribeEvent
     public static void onPlayerChangeDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
-        replicateAbilities(event.getEntity());
-        replicateEffectMarkers(event.getEntity());
-        replicateMana(event.getEntity());
+        if (event.getEntity() instanceof ServerPlayer player) {
+            replicateAbilities(player);
+            replicateEffectMarkers(player);
+            replicateMana(player);
+            BannedFromRiftPayload.sendTo(player);
+        }
     }
 
-    private static void replicateMana(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-        PacketDistributor.sendToPlayer(serverPlayer,
-                new ManaChangePayload(serverPlayer.getData(ModAttachments.MANA).getAmount()));
+    private static void replicateMana(ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, new ManaChangePayload(player.getData(ModAttachments.MANA).getAmount()));
     }
 
-    private static void replicateBannedRifts(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-        BannedFromRiftPayload payload = new BannedFromRiftPayload(serverPlayer.serverLevel()
-                .getServer()
-                .levelKeys()
-                .stream()
-                .map(x -> RiftLevelManager.getRiftLevel(x.location()))
-                .filter(Objects::nonNull)
-                .filter(x -> RiftData.get(x).isBannedFromRift(player))
-                .map(x -> x.dimension().location())
-                .toList());
-        PacketDistributor.sendToPlayer(serverPlayer, payload);
-    }
-
-    private static void replicateAbilities(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-
-        AbilitySlots abilitySlots = serverPlayer.getData(ModAttachments.ABILITY_SLOTS);
-        PacketDistributor.sendToPlayer(serverPlayer,
+    private static void replicateAbilities(ServerPlayer player) {
+        AbilitySlots abilitySlots = player.getData(ModAttachments.ABILITY_SLOTS);
+        PacketDistributor.sendToPlayer(player,
                 new AbilitySlotsContentPayload(abilitySlots.getAbilitySlots(), abilitySlots.getSelectedSlot()));
-        PacketDistributor.sendToPlayer(serverPlayer,
+        PacketDistributor.sendToPlayer(player,
                 new AbilitySlotsCooldownsPayload(player.getData(ModAttachments.ABILITY_COOLDOWNS)));
     }
 
-    private static void replicateEffectMarkers(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-
-        AttachedEffectData data = serverPlayer.getData(ModAttachments.ATTACHED_EFFECTS);
+    private static void replicateEffectMarkers(ServerPlayer player) {
+        AttachedEffectData data = player.getData(ModAttachments.ATTACHED_EFFECTS);
         Map<Holder<EffectMarker>, Integer> displayData = data.getDisplayData();
         if (!displayData.isEmpty()) {
-            PacketDistributor.sendToPlayer(serverPlayer,
+            PacketDistributor.sendToPlayer(player,
                     new UpdateEffectMarkersPayload(displayData, Collections.emptyList()));
         }
     }

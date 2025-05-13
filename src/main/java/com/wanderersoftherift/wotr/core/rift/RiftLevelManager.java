@@ -7,7 +7,6 @@ import com.wanderersoftherift.wotr.init.ModEntities;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
-import com.wanderersoftherift.wotr.network.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.SingleBlockGenerator;
@@ -120,7 +119,6 @@ public final class RiftLevelManager {
 
         var respawnPos = riftData.getPortalPos().above();
         riftData.removePlayer(player);
-        PacketDistributor.sendToPlayer(player, new BannedFromRiftPayload(List.of(riftLevel.dimension().location())));
         player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(),
                 Set.of(), player.getRespawnAngle(), 0, true);
         if (riftData.getPlayers().isEmpty()) {

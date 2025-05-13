@@ -2,15 +2,21 @@ package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.init.ModAttachments;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public record BannedFromRiftPayload(List<ResourceLocation> ids) implements CustomPacketPayload {
 
@@ -19,12 +25,25 @@ public record BannedFromRiftPayload(List<ResourceLocation> ids) implements Custo
             ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()), BannedFromRiftPayload::ids,
             BannedFromRiftPayload::new);
 
+    public static void sendTo(ServerPlayer player) {
+        BannedFromRiftPayload payload = new BannedFromRiftPayload(player.serverLevel()
+                .getServer()
+                .levelKeys()
+                .stream()
+                .map(x -> RiftLevelManager.getRiftLevel(x.location()))
+                .filter(Objects::nonNull)
+                .filter(x -> RiftData.get(x).isBannedFromRift(player))
+                .map(x -> x.dimension().location())
+                .toList());
+        PacketDistributor.sendToPlayer(player, payload);
+    }
+
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
     public void handleOnClient(IPayloadContext context) {
-        BannedRiftList.addBannedRifts(ids);
+        context.player().setData(ModAttachments.BANNED_RIFTS, new BannedRiftList(ids));
     }
 }

@@ -1,38 +1,44 @@
 package com.wanderersoftherift.wotr.client.rift;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class BannedRiftList {
 
-    private static final Set<ResourceLocation> bannedRifts = new LinkedHashSet<>();
+    private final Set<ResourceLocation> bannedRifts;
 
-    private BannedRiftList() {
+    public BannedRiftList() {
+        this.bannedRifts = new HashSet<>();
     }
 
-    @SubscribeEvent
-    public static void onStart(ClientPlayerNetworkEvent.LoggingIn event) {
-        clear();
+    public BannedRiftList(Collection<ResourceLocation> bannedRifts) {
+        this.bannedRifts = new HashSet<>(bannedRifts);
     }
 
-    public static void clear() {
-        bannedRifts.clear();
-    }
-
-    public static boolean isBannedFrom(ResourceLocation location) {
+    public boolean isBannedFrom(ResourceLocation location) {
         return bannedRifts.contains(location);
     }
 
-    public static void addBannedRifts(List<ResourceLocation> locations) {
-        bannedRifts.addAll(locations);
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (BannedRiftList) obj;
+        return Objects.equals(this.bannedRifts, that.bannedRifts);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bannedRifts);
+    }
+
+    @Override
+    public String toString() {
+        return "BannedRiftList[" + "bannedRifts=" + bannedRifts + ']';
+    }
+
 }
