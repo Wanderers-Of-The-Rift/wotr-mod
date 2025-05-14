@@ -48,12 +48,13 @@ public class ModRecipeProvider extends RecipeProvider {
 
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, ModBlocks.KEY_FORGE.asItem())
                 .pattern("   ")
-                .pattern(" E ")
-                .pattern(" a ")
-                .define('a', ItemTags.ANVIL)
-                .define('E', Items.ENDER_PEARL)
-                .unlockedBy("has_ender_pearl", this.has(Items.ENDER_PEARL))
-                .unlockedBy("has_anvil", this.has(ItemTags.ANVIL))
+                .pattern("PI ")
+                .pattern("BL ")
+                .define('L', ItemTags.LOGS)
+                .define('I', Items.IRON_BLOCK)
+                .define('B', Items.BLAST_FURNACE)
+                .define('P', Items.FLOWER_POT)
+                .unlockedBy("has_blast_furnace", this.has(Items.BLAST_FURNACE))
                 .save(this.output);
 
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, ModBlocks.ABILITY_BENCH.asItem())
