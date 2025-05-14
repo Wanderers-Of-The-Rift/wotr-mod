@@ -7,6 +7,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.ModShaders;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
+import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
+import com.wanderersoftherift.wotr.init.ModAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,8 +31,12 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
 
     private static final ResourceLocation OUTER_RIFT_LOCATION = WanderersOfTheRift.id("textures/entity/outer_rift.png");
     private static final ResourceLocation INNER_RIFT_LOCATION = WanderersOfTheRift.id("textures/entity/inner_rift.png");
+    private static final ResourceLocation INNER_RIFT_CLOSED_LOCATION = WanderersOfTheRift
+            .id("textures/entity/inner_rift_closed.png");
     private static final RenderType RENDER_TYPE = RiftPortalRenderType.riftPortal(OUTER_RIFT_LOCATION,
             INNER_RIFT_LOCATION);
+    private static final RenderType CLOSED_RENDER_TYPE = RiftPortalRenderType.riftPortal(OUTER_RIFT_LOCATION,
+            INNER_RIFT_CLOSED_LOCATION);
 
     public RiftPortalRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -81,7 +87,7 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
         poseStack.mulPose(new Quaternionf().lookAlong(dir, new Vector3f(0, -1, 0)));
 
         PoseStack.Pose pose = poseStack.last();
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RENDER_TYPE);
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(state.banned ? CLOSED_RENDER_TYPE : RENDER_TYPE);
         vertex(vertexconsumer, pose, packedLight, -0.5f, -0.5f, 0.0f, 0, 1);
         vertex(vertexconsumer, pose, packedLight, 0.5f, -0.5f, 0.0f, 1, 1);
         vertex(vertexconsumer, pose, packedLight, 0.5f, 0.5f, 0.0f, 1, 0);
@@ -119,10 +125,16 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
         super.extractRenderState(entity, state, delta);
         state.facingDir = entity.getDirection();
         state.billboard = entity.isBillboard();
+
+        if (entity instanceof RiftPortalEntranceEntity entrance) {
+            state.banned = Minecraft.getInstance().player.getData(ModAttachments.BANNED_RIFTS)
+                    .isBannedFrom(entrance.getRiftDimensionId());
+        }
     }
 
     public static class RiftRendererEntityState extends EntityRenderState {
         public boolean billboard;
         public Direction facingDir;
+        public boolean banned;
     }
 }

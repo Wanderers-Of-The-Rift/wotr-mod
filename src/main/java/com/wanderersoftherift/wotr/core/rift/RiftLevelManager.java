@@ -125,6 +125,10 @@ public final class RiftLevelManager {
             respawnDimension = riftLevel.getServer().overworld();
         }
 
+        if (!riftData.containsPlayer(player)) {
+            return false;
+        }
+
         var respawnPos = riftData.getPortalPos().above();
         riftData.removePlayer(player);
         player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(),
@@ -147,7 +151,6 @@ public final class RiftLevelManager {
 
         var existingRift = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
         if (existingRift != null) {
-            WanderersOfTheRift.LOGGER.debug("Found existing rift level {}", id);
             return existingRift;
         }
 

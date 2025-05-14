@@ -32,12 +32,15 @@ public class RiftData extends SavedData { // TODO: split this
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
     private final List<UUID> players;
+    private final List<UUID> bannedPlayers;
     private RiftConfig config;
 
-    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players, RiftConfig config) {
+    private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players,
+            List<UUID> bannedPlayers, RiftConfig config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new ArrayList<>(Objects.requireNonNull(players));
+        this.bannedPlayers = new ArrayList<>(Objects.requireNonNull(bannedPlayers));
         this.config = config;
     }
 
@@ -54,7 +57,7 @@ public class RiftData extends SavedData { // TODO: split this
             ResourceKey<Level> portalDimension,
             BlockPos portalPos,
             RiftConfig config) {
-        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of(), config),
+        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of(), List.of(), config),
                 RiftData::load);
     }
 
@@ -63,6 +66,9 @@ public class RiftData extends SavedData { // TODO: split this
         ResourceKey<Level> portalDimension = ResourceKey.create(Registries.DIMENSION, portalDimensionLocation);
         List<UUID> players = new ArrayList<>();
         tag.getList("Players", Tag.TAG_STRING).forEach(player -> players.add(UUID.fromString(player.getAsString())));
+        List<UUID> bannedPlayers = new ArrayList<>();
+        tag.getList("BannedPlayers", Tag.TAG_STRING)
+                .forEach(player -> bannedPlayers.add(UUID.fromString(player.getAsString())));
         RiftConfig config = new RiftConfig(0);
         if (tag.contains("Config")) {
             config = RiftConfig.CODEC
@@ -70,7 +76,7 @@ public class RiftData extends SavedData { // TODO: split this
                     .resultOrPartial(x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid rift config: '{}'", x))
                     .orElse(new RiftConfig(0));
         }
-        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, config);
+        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, config);
     }
 
     @Override
@@ -80,6 +86,9 @@ public class RiftData extends SavedData { // TODO: split this
         ListTag playerTag = new ListTag();
         this.players.forEach(player -> playerTag.add(StringTag.valueOf(player.toString())));
         tag.put("Players", playerTag);
+        ListTag bannedPlayerTag = new ListTag();
+        this.bannedPlayers.forEach(player -> bannedPlayerTag.add(StringTag.valueOf(player.toString())));
+        tag.put("BannedPlayers", bannedPlayerTag);
         if (config != null) {
             tag.put("Config",
                     RiftConfig.CODEC.encode(config, registries.createSerializationContext(NbtOps.INSTANCE), tag)
@@ -110,6 +119,10 @@ public class RiftData extends SavedData { // TODO: split this
         return Collections.unmodifiableList(this.players);
     }
 
+    public List<UUID> getBannedPlayers() {
+        return Collections.unmodifiableList(bannedPlayers);
+    }
+
     public void addPlayer(UUID player) {
         if (this.players.contains(player)) {
             return;
@@ -120,6 +133,7 @@ public class RiftData extends SavedData { // TODO: split this
 
     public void removePlayer(ServerPlayer player) {
         this.players.remove(player.getUUID());
+        this.bannedPlayers.add(player.getUUID());
         this.setDirty();
     }
 
@@ -138,6 +152,10 @@ public class RiftData extends SavedData { // TODO: split this
 
     public boolean containsPlayer(Player player) {
         return players.contains(player.getUUID());
+    }
+
+    public boolean isBannedFromRift(Player player) {
+        return bannedPlayers.contains(player.getUUID());
     }
 
     public boolean isRiftEmpty() {
