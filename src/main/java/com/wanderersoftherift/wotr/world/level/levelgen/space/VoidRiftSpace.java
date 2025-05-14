@@ -6,11 +6,8 @@ import net.minecraft.core.Vec3i;
 
 import java.util.List;
 
-public class VoidRiftSpace implements RiftSpace {
-    @Override
-    public Vec3i origin() {
-        return null;
-    }
+public record VoidRiftSpace(Vec3i origin) implements RiftSpace {
+    public static final VoidRiftSpace INSTANCE = new VoidRiftSpace(Vec3i.ZERO);
 
     @Override
     public Vec3i size() {

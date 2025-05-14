@@ -13,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
-import org.joml.Vector2d;
 import org.joml.Vector2i;
 
 import java.lang.ref.WeakReference;
@@ -86,7 +85,7 @@ public class ChaoticRiftLayout implements RiftLayout {
 
     private class Region {
 
-        private static final RiftSpace VOID_SPACE = new VoidRiftSpace();
+        private static final RiftSpace VOID_SPACE = VoidRiftSpace.INSTANCE;
         private static final IntList MASKS;
 
         public final Vec3i origin;
@@ -138,7 +137,7 @@ public class ChaoticRiftLayout implements RiftLayout {
 
                 for (int z = 0; z < 5; z++) {
                     var roomOrigin = new Vector2i(x * 3 + origin.getX(), z * 3 + origin.getZ());
-                    var category = categorize(new Vector2d(roomOrigin.x + 1.5, roomOrigin.y + 1.5));
+                    var category = categorize(roomOrigin.x + 1.5, roomOrigin.y + 1.5);
                     if (category == 0) {
 
                         var room = roomRandomizer.randomSpace(
@@ -171,8 +170,8 @@ public class ChaoticRiftLayout implements RiftLayout {
         }
 
         // 2 = chaotic, 1 = unstable, 0 = stable
-        private int categorize(Vector2d position) {
-            var chaosiveness = chaosiveness(position.x, position.y);
+        private int categorize(double x, double y) {
+            var chaosiveness = chaosiveness(x, y);
             if (chaosiveness > 2.5) {
                 return 2;
             } else {

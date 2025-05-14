@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.DoubleTag;
@@ -9,18 +9,21 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RiftProcessedRoom {
 
-    public final RoomRiftSpace space;
+    public final RiftSpace space;
     private final AtomicReference<RiftProcessedChunk>[] chunkArray = new AtomicReference[64];
     private final CompletableFuture<Unit> isComplete = new CompletableFuture<>();
     private final Vec3i origin;
 
-    public RiftProcessedRoom(RoomRiftSpace space) {
+    public RiftProcessedRoom(RiftSpace space) {
         this.space = space;
         origin = space.origin();
         for (int i = 0; i < chunkArray.length; i++) {
@@ -65,17 +68,21 @@ public class RiftProcessedRoom {
                 || z2 >= space.size().getZ()) {
             return null;
         }
-        var ref = chunkArray[x2 + (z2 << 2) + (y2 << 4)];
+        return getOrCreateChunk(x2 + (z2 << 2) + (y2 << 4));
+    }
+
+    private RiftProcessedChunk getOrCreateChunk(int index) {
+        var ref = chunkArray[index];
         if (ref == null) {
             return null;
         }
-        var newValue = ref.get();
-        if (newValue != null) {
-            return newValue;
+        var value = ref.get();
+        if (value != null) {
+            return value;
         }
-        newValue = new RiftProcessedChunk(new Vec3i(x, y, z), this);
-        if (ref.compareAndSet(null, newValue)) {
-            return newValue;
+        value = new RiftProcessedChunk(origin.offset(index & 0b11, (index >> 4) & 0b11, (index >> 2) & 0b11), this);
+        if (ref.compareAndSet(null, value)) {
+            return value;
         }
         return ref.get();
     }
@@ -149,5 +156,16 @@ public class RiftProcessedRoom {
 
     public void setBlock(Vec3i basePos, BlockState blockState) {
         setBlock(basePos.getX(), basePos.getY(), basePos.getZ(), blockState);
+    }
+
+    public List<RiftProcessedChunk> getOrCreateAllChunks() {
+        var result = new ArrayList<RiftProcessedChunk>();
+        for (int i = 0; i < 64; i++) {
+            var chunk = getOrCreateChunk(i);
+            if (chunk!=null){
+                result.add(chunk);
+            }
+        }
+        return result;
     }
 }
