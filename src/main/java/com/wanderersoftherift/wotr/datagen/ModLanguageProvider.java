@@ -321,6 +321,12 @@ public class ModLanguageProvider extends LanguageProvider {
         });
     }
 
+    private void addModifiers() {
+        ModModifierProvider.DATA.entrySet().stream().forEach(entry -> {
+            add(WanderersOfTheRift.translationId("modifier", entry.getKey().location().getPath()), snakeCaseToCapitalizedCase(entry.getKey().location().getPath()));
+        });
+    }
+
     private void addEssenceType(String id, String value) {
         add(EssenceValue.ESSENCE_TYPE_PREFIX + "." + WanderersOfTheRift.MODID + "." + id, value);
     }
