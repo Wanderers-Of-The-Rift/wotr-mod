@@ -501,6 +501,7 @@ public class ModRuneGemDataProvider {
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandTag,
                                 List.of(
+                                        new TieredModifier(1, getModifier(lookup, "armor")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 )),new RunegemData.ModifierGroup(
                                 offHandTag,

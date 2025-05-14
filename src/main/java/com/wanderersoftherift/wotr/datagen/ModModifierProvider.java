@@ -130,7 +130,7 @@ public class ModModifierProvider {
         );
         registerModifier(context,getResourceKey("jump_height"),
                 new Modifier(generateEqualRollSpread(3,
-                        List.of(new ToBeTieredModifierEffect(0, 0.3F,
+                        List.of(new ToBeTieredModifierEffect(0, 0.5F,
                                         attributeModifierEffectGetter(WanderersOfTheRift.id("jump_height"),
                                                 Attributes.JUMP_STRENGTH, AttributeModifier.Operation.ADD_VALUE)),
                                 new ToBeTieredModifierEffect(0, 4,

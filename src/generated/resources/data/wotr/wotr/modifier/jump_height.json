@@ -6,7 +6,7 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:jump_strength",
           "id": "wotr:jump_height",
-          "max_roll": 0.10000000149011612,
+          "max_roll": 0.15000000596046448,
           "min_roll": 0.0,
           "operation": "add_value"
         },
@@ -27,8 +27,8 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:jump_strength",
           "id": "wotr:jump_height",
-          "max_roll": 0.20000000298023224,
-          "min_roll": 0.10000000149011612,
+          "max_roll": 0.3499999940395355,
+          "min_roll": 0.15000000596046448,
           "operation": "add_value"
         },
         {
@@ -48,8 +48,8 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:jump_strength",
           "id": "wotr:jump_height",
-          "max_roll": 0.30000001192092896,
-          "min_roll": 0.20000000298023224,
+          "max_roll": 0.5,
+          "min_roll": 0.3499999940395355,
           "operation": "add_value"
         },
         {
