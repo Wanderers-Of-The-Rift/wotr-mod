@@ -6,5 +6,5 @@
     }
   ],
   "output": "wotr:nether",
-  "priority": 10
+  "priority": 0
 }

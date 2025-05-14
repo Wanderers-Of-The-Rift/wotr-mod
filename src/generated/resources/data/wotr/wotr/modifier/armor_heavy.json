@@ -4,7 +4,7 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:max_absorption",
+          "attribute": "minecraft:armor",
           "id": "wotr:armor_heavy",
           "max_roll": 13.5,
           "min_roll": 8.0,
@@ -25,7 +25,7 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:max_absorption",
+          "attribute": "minecraft:armor",
           "id": "wotr:armor_heavy",
           "max_roll": 19.0,
           "min_roll": 13.5,
@@ -46,7 +46,7 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:max_absorption",
+          "attribute": "minecraft:armor",
           "id": "wotr:armor_heavy",
           "max_roll": 24.5,
           "min_roll": 19.0,
@@ -67,7 +67,7 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "minecraft:max_absorption",
+          "attribute": "minecraft:armor",
           "id": "wotr:armor_heavy",
           "max_roll": 30.0,
           "min_roll": 24.5,

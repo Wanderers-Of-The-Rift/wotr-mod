@@ -80,14 +80,14 @@ public class ModModifierProvider {
         registerModifier(context, getResourceKey("armor"),
                 new Modifier(generateEqualRollSpread(4,
                         List.of(new ToBeTieredModifierEffect(2, 20,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("armor"), Attributes.MAX_ABSORPTION,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("armor"), Attributes.ARMOR,
                                         AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("armor_heavy"), new Modifier(generateEqualRollSpread(
-                4, List
-                        .of(new ToBeTieredModifierEffect(8, 30,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("armor_heavy"),
-                                        Attributes.MAX_ABSORPTION, AttributeModifier.Operation.ADD_VALUE))),
+                4,
+                List.of(new ToBeTieredModifierEffect(8, 30,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("armor_heavy"), Attributes.ARMOR,
+                                AttributeModifier.Operation.ADD_VALUE))),
                 List.of(new AttributeModifierEffect(
                         WanderersOfTheRift.id("armor_heavy"), Attributes.MOVEMENT_SPEED, -0.03F, -0.001F,
                         AttributeModifier.Operation.ADD_VALUE))))

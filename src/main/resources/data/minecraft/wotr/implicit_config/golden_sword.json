@@ -1,5 +1,5 @@
 {
   "modifiers": [
-    "wotr:flat_ability_damage"
+    "wotr:ability_damage_flat"
   ]
 }
