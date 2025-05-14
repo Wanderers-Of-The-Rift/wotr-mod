@@ -48,8 +48,8 @@ public class ModModifierProvider {
         registerModifier(context,getResourceKey("armor"),
                 new Modifier(generateEqualRollSpread(4,
                         List.of(new ToBeTieredModifierEffect(2, 20,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("armor"), Attributes.MAX_ABSORPTION,
-                                        AttributeModifier.Operation.ADD_VALUE)))))
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("armor"),
+                                        Attributes.MAX_ABSORPTION, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context,getResourceKey("armor_toughness"),
                 new Modifier(generateEqualRollSpread(2,
@@ -63,69 +63,69 @@ public class ModModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("attack_speed"),
                                         Attributes.ATTACK_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
-        registerModifier(context,getResourceKey("flat_ability_damage"),
+        registerModifier(context,getResourceKey("ability_damage_flat"),
                 new Modifier(generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0, 7F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("flat_ability_damage"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_flat"),
                                         ModAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context,getResourceKey("flat_ability_heal_power"),
+        registerModifier(context,getResourceKey("ability_heal_power_flat"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 10F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("flat_ability_heal_power"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("ability_heal_power_flat"),
                                         ModAttributes.HEAL_POWER, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context,getResourceKey("flat_attack"),
+        registerModifier(context,getResourceKey("attack_flat"),
                 new Modifier(generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0, 11,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("flat_attack"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("attack_flat"),
                                         Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context,getResourceKey("flat_health"),
+        registerModifier(context,getResourceKey("health_flat"),
                 new Modifier(generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0, 12,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("flat_health"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("health_flat"),
                                         Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context,getResourceKey("flat_max_mana"),
+        registerModifier(context,getResourceKey("max_mana_flat"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 50F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("flat_max_mana"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_flat"),
                                         ModAttributes.MAX_MANA, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context,getResourceKey("heavy_ability_damage"),
+        registerModifier(context,getResourceKey("ability_damage_heavy"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 10F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("heavy_ability_damage"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_heavy"),
                                         ModAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE))),
                         List.of(new AttributeModifierEffect(
-                                WanderersOfTheRift.id("heavy_ability_damage"), ModAttributes.COOLDOWN,
+                                WanderersOfTheRift.id("ability_damage_heavy"), ModAttributes.COOLDOWN,
                                 0.5, 1F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
-        registerModifier(context,getResourceKey("heavy_attack"), new Modifier(generateEqualRollSpread(5, List.of(
+        registerModifier(context,getResourceKey("attack_heavy"), new Modifier(generateEqualRollSpread(5, List.of(
                         new ToBeTieredModifierEffect(0, 2F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("heavy_attack"), Attributes.ATTACK_DAMAGE,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("attack_heavy"), Attributes.ATTACK_DAMAGE,
                                         AttributeModifier.Operation.ADD_MULTIPLIED_BASE))),
                 List.of(new AttributeModifierEffect(
-                        WanderersOfTheRift.id("heavy_attack"), Attributes.ATTACK_SPEED,
+                        WanderersOfTheRift.id("attack_heavy"), Attributes.ATTACK_SPEED,
                         -1, -0.5F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
-        registerModifier(context,getResourceKey("heavy_knockback"),
+        registerModifier(context,getResourceKey("knockback_heavy"),
                 new Modifier(generateEqualRollSpread(3,
                         List.of(new ToBeTieredModifierEffect(0, 15F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("heavy_knockback"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("knockback_heavy"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE))),
                         List.of(new AttributeModifierEffect(
-                                WanderersOfTheRift.id("heavy_knockback"), Attributes.ATTACK_SPEED,
+                                WanderersOfTheRift.id("knockback_heavy"), Attributes.ATTACK_SPEED,
                                 -1, -0.5F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
-        registerModifier(context,getResourceKey("hybrid_health"),
+        registerModifier(context,getResourceKey("health_hybrid"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 5,
-                                        attributeModifierEffectGetter(WanderersOfTheRift.id("flat_health"),
+                                        attributeModifierEffectGetter(WanderersOfTheRift.id("health_flat"),
                                                 Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_VALUE)),
                                 new ToBeTieredModifierEffect(0, 0.1F,
-                                        attributeModifierEffectGetter(WanderersOfTheRift.id("hybrid_health"),
+                                        attributeModifierEffectGetter(WanderersOfTheRift.id("health_hybrid"),
                                                 Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context,getResourceKey("jump_height"),
@@ -171,33 +171,33 @@ public class ModModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("movement_speed"),
                                         Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context,getResourceKey("percent_ability_damage"),
+        registerModifier(context,getResourceKey("ability_damage_percent"),
                 new Modifier(generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0, 1F,
-                        attributeModifierEffectGetter(WanderersOfTheRift.id("percent_ability_damage"),
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_percent"),
                                 ModAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
-        registerModifier(context,getResourceKey("percent_ability_heal_power"),
+        registerModifier(context,getResourceKey("ability_heal_power_percent"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 1F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("percent_ability_heal_power"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("ability_heal_power_percent"),
                                         ModAttributes.HEAL_POWER, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
-        registerModifier(context,getResourceKey("percent_attack"),
+        registerModifier(context,getResourceKey("attack_percent"),
                 new Modifier(generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0, 1F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("percent_attack"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("attack_percent"),
                                         Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
-        registerModifier(context,getResourceKey("percent_health"),
+        registerModifier(context,getResourceKey("health_percent"),
                 new Modifier(generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0, 0.2F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("percent_health"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("health_percent"),
                                         Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
-        registerModifier(context,getResourceKey("percent_max_mana"),
+        registerModifier(context,getResourceKey("max_mana_percent"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 0.25F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("percent_max_mana"),
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_percent"),
                                         ModAttributes.MAX_MANA, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context,getResourceKey("projectile_count"),

@@ -5,7 +5,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:flat_health",
+          "id": "wotr:health_flat",
           "max_roll": 1.0,
           "min_roll": 0.0,
           "operation": "add_value"
@@ -13,7 +13,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:hybrid_health",
+          "id": "wotr:health_hybrid",
           "max_roll": 0.0,
           "min_roll": 0.0,
           "operation": "add_multiplied_base"
@@ -26,7 +26,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:flat_health",
+          "id": "wotr:health_flat",
           "max_roll": 2.0,
           "min_roll": 1.0,
           "operation": "add_value"
@@ -34,7 +34,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:hybrid_health",
+          "id": "wotr:health_hybrid",
           "max_roll": 0.05000000074505806,
           "min_roll": 0.0,
           "operation": "add_multiplied_base"
@@ -47,7 +47,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:flat_health",
+          "id": "wotr:health_flat",
           "max_roll": 3.0,
           "min_roll": 2.0,
           "operation": "add_value"
@@ -55,7 +55,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:hybrid_health",
+          "id": "wotr:health_hybrid",
           "max_roll": 0.05000000074505806,
           "min_roll": 0.05000000074505806,
           "operation": "add_multiplied_base"
@@ -68,7 +68,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:flat_health",
+          "id": "wotr:health_flat",
           "max_roll": 4.0,
           "min_roll": 3.0,
           "operation": "add_value"
@@ -76,7 +76,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:hybrid_health",
+          "id": "wotr:health_hybrid",
           "max_roll": 0.10000000149011612,
           "min_roll": 0.05000000074505806,
           "operation": "add_multiplied_base"
@@ -89,7 +89,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:flat_health",
+          "id": "wotr:health_flat",
           "max_roll": 5.0,
           "min_roll": 4.0,
           "operation": "add_value"
@@ -97,7 +97,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
-          "id": "wotr:hybrid_health",
+          "id": "wotr:health_hybrid",
           "max_roll": 0.10000000149011612,
           "min_roll": 0.10000000149011612,
           "operation": "add_multiplied_base"

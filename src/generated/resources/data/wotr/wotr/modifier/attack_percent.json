@@ -5,7 +5,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 0.15000000596046448,
           "min_roll": 0.0,
           "operation": "add_multiplied_base"
@@ -18,7 +18,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 0.30000001192092896,
           "min_roll": 0.15000000596046448,
           "operation": "add_multiplied_base"
@@ -31,7 +31,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 0.44999998807907104,
           "min_roll": 0.30000001192092896,
           "operation": "add_multiplied_base"
@@ -44,7 +44,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 0.550000011920929,
           "min_roll": 0.44999998807907104,
           "operation": "add_multiplied_base"
@@ -57,7 +57,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 0.699999988079071,
           "min_roll": 0.550000011920929,
           "operation": "add_multiplied_base"
@@ -70,7 +70,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 0.8500000238418579,
           "min_roll": 0.699999988079071,
           "operation": "add_multiplied_base"
@@ -83,7 +83,7 @@
         {
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
-          "id": "wotr:percent_attack",
+          "id": "wotr:attack_percent",
           "max_roll": 1.0,
           "min_roll": 0.8500000238418579,
           "operation": "add_multiplied_base"
