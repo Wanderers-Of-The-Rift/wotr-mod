@@ -62,10 +62,7 @@ public interface RiftSpace {
                                 riftSpaceCorridor.position().getZ() + spaceOrigin.getZ(), riftSpaceCorridor.direction())
                         )
                         .toList();
-                var hasCorridorNorth = corridors.stream().anyMatch((it) -> it.direction() == Direction.NORTH);// todo
-                // bidirectional
-                // corridor
-                // check
+                var hasCorridorNorth = corridors.stream().anyMatch((it) -> it.direction() == Direction.NORTH);
                 var hasCorridorWest = corridors.stream().anyMatch((it) -> it.direction() == Direction.WEST);
                 for (int y = level * 16; y < level * 16 + 16; y++) {
                     for (int x = 0; x < 16 && originRelativeZ <= 0; x++) {
