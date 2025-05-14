@@ -304,11 +304,18 @@ public class ModLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
         addRunegems();
+        addModifiers();
     }
 
     private void addRunegems() {
         ModRuneGemDataProvider.DATA.entrySet().stream().forEach(entry -> {
             add(WanderersOfTheRift.translationId("runegem", entry.getKey().location().getPath()), snakeCaseToCapitalizedCase(entry.getKey().location().getPath()) + " Runegem");
+        });
+    }
+
+    private void addModifiers() {
+        ModModifierProvider.DATA.entrySet().stream().forEach(entry -> {
+            add(WanderersOfTheRift.translationId("modifier", entry.getKey().location().getPath()), snakeCaseToCapitalizedCase(entry.getKey().location().getPath()));
         });
     }
 
