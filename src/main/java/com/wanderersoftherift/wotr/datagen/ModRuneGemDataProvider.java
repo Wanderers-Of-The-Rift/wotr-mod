@@ -20,12 +20,13 @@ import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ModRuneGemDataProvider {
 
-    public static Map<ResourceKey<RunegemData>, RunegemData> DATA = new HashMap<>();
+    public static Map<ResourceKey<RunegemData>, RunegemData> DATA = new LinkedHashMap<>();
 
     public static void bootstrapRuneGems(BootstrapContext<RunegemData> context) {
         HolderGetter<Modifier> lookup = context.lookup(ModDatapackRegistries.MODIFIER_KEY);

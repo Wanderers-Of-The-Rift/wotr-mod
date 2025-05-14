@@ -11,6 +11,7 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.TagKey;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class ModRunegemDataTagsProvider extends TagsProvider<RunegemData> {
     public ModRunegemDataTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
@@ -35,21 +36,22 @@ public class ModRunegemDataTagsProvider extends TagsProvider<RunegemData> {
     }
 
     private void geodeTag(RunegemTier tier, TagKey<RunegemData> geodeTag) {
-        ModRuneGemDataProvider.DATA.entrySet().stream()
-                .filter(entry -> entry.getValue().tier() == tier)
-                .filter(entry -> !entry.getKey().location().getPath().contains("zombie"))
-                .filter(entry -> !entry.getKey().location().getPath().contains("skeleton"))
-                .filter(entry -> !entry.getKey().location().getPath().contains("creeper"))
-                .forEach(entry -> {
-                    tag(geodeTag).add(entry.getKey());
-                });
+        ModRuneGemDataProvider.DATA.forEach((key, value) -> {
+            if (value.tier() == tier) {
+                if (key.location().getPath().contains("zombie")
+                        && !key.location().getPath().contains("skeleton")
+                        && !key.location().getPath().contains("creeper")) {
+                    tag(geodeTag).add(key);
+                }
+            }
+        });
     }
 
     private void tierTag(RunegemTier tier, TagKey<RunegemData> tierTag) {
-        ModRuneGemDataProvider.DATA.entrySet().stream()
-                .filter(entry -> entry.getValue().tier() == tier)
-                .forEach(entry -> {
-                    tag(tierTag).add(entry.getKey());
-                });
+        ModRuneGemDataProvider.DATA.forEach((key, value) -> {
+            if (value.tier() == tier) {
+                tag(tierTag).add(key);
+            }
+        });
     }
 }

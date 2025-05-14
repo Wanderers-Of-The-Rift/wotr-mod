@@ -307,7 +307,9 @@ public class ModLanguageProvider extends LanguageProvider {
     }
 
     private void addRunegems() {
-        add(WanderersOfTheRift.translationId("runegem", "raw_attack"), "Raw Attack Runegem");
+        ModRuneGemDataProvider.DATA.entrySet().stream().forEach(entry -> {
+            add(WanderersOfTheRift.translationId("runegem", entry.getKey().location().getPath()), snakeCaseToCapitalizedCase(entry.getKey().location().getPath()) + " Runegem");
+        });
     }
 
     private void addEssenceType(String id, String value) {
@@ -320,6 +322,10 @@ public class ModLanguageProvider extends LanguageProvider {
 
     private static @NotNull String getTranslationString(Block block) {
         String idString = BuiltInRegistries.BLOCK.getKey(block).getPath();
+        return snakeCaseToCapitalizedCase(idString);
+    }
+
+    private static @NotNull String snakeCaseToCapitalizedCase(String idString) {
         StringBuilder sb = new StringBuilder();
         for (String word : idString.toLowerCase(Locale.ROOT).split("_")) {
             sb.append(word.substring(0, 1).toUpperCase(Locale.ROOT));
