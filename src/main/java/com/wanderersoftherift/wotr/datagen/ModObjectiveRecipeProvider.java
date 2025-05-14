@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.codec.DeferrableRegistryCodec;
+import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.datagen.provider.KeyForgeRecipeProvider;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
 import com.wanderersoftherift.wotr.item.riftkey.EssencePredicate;
@@ -19,7 +19,7 @@ public class ModObjectiveRecipeProvider extends KeyForgeRecipeProvider<Holder<Ob
 
     public ModObjectiveRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super("RiftObjectiveRecipe", output, registries, RegistryEvents.RIFT_OBJECTIVE_RECIPE,
-                DeferrableRegistryCodec.create(RegistryEvents.OBJECTIVE_REGISTRY));
+                LaxRegistryCodec.create(RegistryEvents.OBJECTIVE_REGISTRY));
     }
 
     @Override

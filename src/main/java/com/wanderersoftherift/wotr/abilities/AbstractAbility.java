@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
-import com.wanderersoftherift.wotr.codec.DeferrableRegistryCodec;
+import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.init.ModAbilityTypes;
 import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModAttributes;
@@ -34,7 +34,7 @@ public abstract class AbstractAbility {
 
     public static final Codec<AbstractAbility> DIRECT_CODEC = ModAbilityTypes.ABILITY_TYPES_REGISTRY.byNameCodec()
             .dispatch(AbstractAbility::getCodec, Function.identity());
-    public static final Codec<Holder<AbstractAbility>> CODEC = DeferrableRegistryCodec.create(ABILITY_REGISTRY);
+    public static final Codec<Holder<AbstractAbility>> CODEC = LaxRegistryCodec.create(ABILITY_REGISTRY);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITY_REGISTRY);
 

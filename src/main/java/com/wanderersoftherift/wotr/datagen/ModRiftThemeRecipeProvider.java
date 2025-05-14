@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.codec.DeferrableRegistryCodec;
+import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.datagen.provider.KeyForgeRecipeProvider;
 import com.wanderersoftherift.wotr.init.ModRiftThemes;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
@@ -20,7 +20,7 @@ public class ModRiftThemeRecipeProvider extends KeyForgeRecipeProvider<Holder<Ri
 
     public ModRiftThemeRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super("RiftThemeRecipe", output, registries, RegistryEvents.RIFT_THEME_RECIPE,
-                DeferrableRegistryCodec.create(ModRiftThemes.RIFT_THEME_KEY));
+                LaxRegistryCodec.create(ModRiftThemes.RIFT_THEME_KEY));
     }
 
     @Override
