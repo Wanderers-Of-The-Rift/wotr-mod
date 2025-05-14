@@ -144,6 +144,18 @@ public class WanderersOfTheRift {
     }
 
     /**
+     * Helper method to get a translationId string containing any mod id.
+     *
+     * @param category The category of the translationId (becomes a prefix)
+     * @param item     The ResourceLocation item
+     * @return A combination of category, the mod id and the item. e.g. if category is "item" and item is
+     *         "wotr:nosering.description" the result is "item.wotr.nosering.description"
+     */
+    public static String translationId(String category, ResourceLocation item) {
+        return category + "." + item.getNamespace() + "." + item.getPath();
+    }
+
+    /**
      * Helper method to get a {@code TagKey} with our Mod Id and a passed in name
      *
      * @param name the name to create the {@code TagKey} with

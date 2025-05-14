@@ -36,24 +36,41 @@ public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier
         return runegem.isEmpty() || modifier.isEmpty();
     }
 
-    public boolean canBeApplied(ItemStack gear, Level level, RunegemData runegemData, List<GearSocket> existingSockets) {
-        Set<Holder<Modifier>> existingModifiers = existingSockets.stream().filter(socket -> !socket.isEmpty()).map(GearSocket::modifier).filter(Optional::isPresent).map(inst -> inst.get().modifier()).collect(Collectors.toSet());
-        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(gear, level, existingModifiers);
+    public boolean canBeApplied(
+            ItemStack gear,
+            Level level,
+            RunegemData runegemData,
+            List<GearSocket> existingSockets) {
+        Set<Holder<Modifier>> existingModifiers = existingSockets.stream()
+                .filter(socket -> !socket.isEmpty())
+                .map(GearSocket::modifier)
+                .filter(Optional::isPresent)
+                .map(inst -> inst.get().modifier())
+                .collect(Collectors.toSet());
+        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(gear, level,
+                existingModifiers);
         return isEmpty() && this.shape().equals(runegemData.shape()) && tieredModifier.isPresent();
     }
 
     public GearSocket applyRunegem(ItemStack stack, ItemStack runegem, Level level, List<GearSocket> existingSockets) {
-        Set<Holder<Modifier>> existingModifiers = existingSockets.stream().filter(socket -> !socket.isEmpty()).map(GearSocket::modifier).filter(Optional::isPresent).map(inst -> inst.get().modifier()).collect(Collectors.toSet());
+        Set<Holder<Modifier>> existingModifiers = existingSockets.stream()
+                .filter(socket -> !socket.isEmpty())
+                .map(GearSocket::modifier)
+                .filter(Optional::isPresent)
+                .map(inst -> inst.get().modifier())
+                .collect(Collectors.toSet());
         RunegemData runegemData = runegem.get(ModDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) {
             return this;
         }
-        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(stack, level, existingModifiers);
+        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(stack, level,
+                existingModifiers);
         if (tieredModifier.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
             return this;
         }
-        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(tieredModifier.get().modifier(), tieredModifier.get().tier(), level.random)),
+        return new GearSocket(this.shape(), Optional
+                .of(ModifierInstance.of(tieredModifier.get().modifier(), tieredModifier.get().tier(), level.random)),
                 Optional.of(runegemData));
     }
 }

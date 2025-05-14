@@ -42,8 +42,8 @@ public class ModItems {
             registryName -> new Runegem(new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
                             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "runegem")))
-                    .component(ModDataComponentType.RUNEGEM_DATA,
-                            new RunegemData(Component.empty(), RunegemShape.CIRCLE, new ArrayList<>(), RunegemTier.RAW))));
+                    .component(ModDataComponentType.RUNEGEM_DATA, new RunegemData(Component.empty(),
+                            RunegemShape.CIRCLE, new ArrayList<>(), RunegemTier.RAW))));
 
     public static final DeferredItem<Item> RIFT_KEY = ITEMS
             .register("rift_key",

@@ -11,7 +11,6 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.TagKey;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 public class ModRunegemDataTagsProvider extends TagsProvider<RunegemData> {
     public ModRunegemDataTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
@@ -38,8 +37,7 @@ public class ModRunegemDataTagsProvider extends TagsProvider<RunegemData> {
     private void geodeTag(RunegemTier tier, TagKey<RunegemData> geodeTag) {
         ModRuneGemDataProvider.DATA.forEach((key, value) -> {
             if (value.tier() == tier) {
-                if (key.location().getPath().contains("zombie")
-                        && !key.location().getPath().contains("skeleton")
+                if (key.location().getPath().contains("zombie") && !key.location().getPath().contains("skeleton")
                         && !key.location().getPath().contains("creeper")) {
                     tag(geodeTag).add(key);
                 }

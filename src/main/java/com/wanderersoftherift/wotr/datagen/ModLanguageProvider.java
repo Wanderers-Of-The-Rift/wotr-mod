@@ -309,13 +309,15 @@ public class ModLanguageProvider extends LanguageProvider {
 
     private void addRunegems() {
         ModRuneGemDataProvider.DATA.entrySet().stream().forEach(entry -> {
-            add(WanderersOfTheRift.translationId("runegem", entry.getKey().location().getPath()), snakeCaseToCapitalizedCase(entry.getKey().location().getPath()) + " Runegem");
+            add(WanderersOfTheRift.translationId("runegem", entry.getKey().location().getPath()),
+                    snakeCaseToCapitalizedCase(entry.getKey().location().getPath()) + " Runegem");
         });
     }
 
     private void addModifiers() {
         ModModifierProvider.DATA.entrySet().stream().forEach(entry -> {
-            add(WanderersOfTheRift.translationId("modifier", entry.getKey().location().getPath()), snakeCaseToCapitalizedCase(entry.getKey().location().getPath()));
+            add(WanderersOfTheRift.translationId("modifier", entry.getKey().location().getPath()),
+                    snakeCaseToCapitalizedCase(entry.getKey().location().getPath()));
         });
     }
 

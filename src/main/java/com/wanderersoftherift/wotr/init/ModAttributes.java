@@ -41,9 +41,8 @@ public class ModAttributes {
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "ability.heal_amount"), 0, 0,
                     Integer.MAX_VALUE));
     public static final DeferredHolder<Attribute, RangedAttribute> MANA_COST = registerPlayerAttribute(
-            "mana_cost",
-            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "ability.mana_cost"), 0, 0,
-                    Integer.MAX_VALUE));
+            "mana_cost", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "ability.mana_cost"),
+                    0, 0, Integer.MAX_VALUE));
     public static final DeferredHolder<Attribute, RangedAttribute> PROJECTILE_SPREAD = registerPlayerAttribute(
             "projectile_spread",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "projectile_spread"), 0, 0,
@@ -60,7 +59,6 @@ public class ModAttributes {
             "projectile_pierce",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "projectile_pierce"), 0, 0,
                     Integer.MAX_VALUE));
-
 
     /* Mana */
     public static final DeferredHolder<Attribute, RangedAttribute> MAX_MANA = registerPlayerAttribute("max_mana",

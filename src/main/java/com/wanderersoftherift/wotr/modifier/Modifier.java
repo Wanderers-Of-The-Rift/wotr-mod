@@ -56,7 +56,10 @@ public class Modifier {
             float roll,
             ModifierInstance instance,
             ChatFormatting chatFormatting) {
-        return modifierTiers.get(0)
+        if (!modifierTiers.containsKey(instance.tier())) {
+            return List.of();
+        }
+        return modifierTiers.get(instance.tier())
                 .getTooltipComponent(
                         stack, roll, instance, chatFormatting
                 );

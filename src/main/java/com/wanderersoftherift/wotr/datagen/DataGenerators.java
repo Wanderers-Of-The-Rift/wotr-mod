@@ -41,6 +41,7 @@ public class DataGenerators {
                         })
                         .add(ModRiftThemes.RIFT_THEME_KEY, context -> {
                         })
+                        .add(ModDatapackRegistries.RUNEGEM_DATA_KEY, ModRuneGemDataProvider::bootstrapRuneGems)
 
         );
         event.createProvider(ModModelProvider::new);
