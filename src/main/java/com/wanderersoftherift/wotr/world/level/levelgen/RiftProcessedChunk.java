@@ -167,7 +167,7 @@ public class RiftProcessedChunk {
             sectionArray[sectionIndex] = newSection;
 
         } else if (bits != 0) {
-            var shift = (32 - Integer.numberOfLeadingZeros(bits - 1));
+            var shift = Integer.max(32 - Integer.numberOfLeadingZeros(bits - 1), 2);
             var bitsPowerOfTwo = 1 << shift;
 
             var strat = PalettedContainer.Strategy.SECTION_STATES;
