@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.loot.lootmodifiers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public class RemoveEnchantedItemsModifier extends LootModifier {
         // Check if the current level is a rift level and return
         // note this should never be the case, as the conditions from glm should prevent it
         ServerLevel serverlevel = context.getLevel();
-        if (RiftData.isRift(serverlevel)) {
+        if (RiftLevelManager.isRift(serverlevel)) {
             return generatedLoot;
         }
 
