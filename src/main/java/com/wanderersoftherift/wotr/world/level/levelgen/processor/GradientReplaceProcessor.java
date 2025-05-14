@@ -189,19 +189,20 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             LevelReader world,
             BlockPos structurePos,
             boolean isVisible) {
-        if (outputSteps.isEmpty()) {
+        var outputStepCount = outputSteps.size();
+        if (outputStepCount == 0) {
             return null;
         }
-        if (outputSteps.size() == 1 || !isVisible) {
+        if (outputStepCount == 1 || !isVisible) {
             return outputSteps.convertedBlockStates[0];
         }
 
         double noiseValue = Math.abs(getNoiseGen(world, structurePos).noise3_Classic(x * getNoiseScaleX(),
                 y * getNoiseScaleY(), z * getNoiseScaleZ()));
         float stepSize = 0;
-        var sizes = outputSteps.stepSizes;
-        for (int i = 0; i < outputSteps.size(); i++) {
-            stepSize += sizes[i];
+        var stepSizes = outputSteps.stepSizes;
+        for (int i = 0; i < outputStepCount; i++) {
+            stepSize += stepSizes[i];
             if (noiseValue < stepSize) {
                 return outputSteps.convertedBlockStates[i];
             }

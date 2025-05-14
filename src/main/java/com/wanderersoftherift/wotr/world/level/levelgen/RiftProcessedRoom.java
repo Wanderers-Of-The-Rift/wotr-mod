@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -162,7 +161,7 @@ public class RiftProcessedRoom {
         var result = new ArrayList<RiftProcessedChunk>();
         for (int i = 0; i < 64; i++) {
             var chunk = getOrCreateChunk(i);
-            if (chunk!=null){
+            if (chunk != null) {
                 result.add(chunk);
             }
         }

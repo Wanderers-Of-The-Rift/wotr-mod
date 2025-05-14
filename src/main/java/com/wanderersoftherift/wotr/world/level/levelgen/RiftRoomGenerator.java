@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -24,15 +25,17 @@ public class RiftRoomGenerator {
             Vec3i sectionPos,
             RoomRiftSpace space,
             ServerLevelAccessor world,
-            RandomState randomState) {
-        return getOrCreateFutureProcessedRoom(space, world, randomState)
+            RandomState randomState,
+            RiftGeneratable perimeter) {
+        return getOrCreateFutureProcessedRoom(space, world, randomState, perimeter)
                 .thenApply(it -> it.getAndRemoveChunk(sectionPos));
     }
 
     private CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,
             ServerLevelAccessor world,
-            RandomState randomState) {
+            RandomState randomState,
+            RiftGeneratable perimeter) {
         var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
         var processedRoomFuture = structureCache.compute(space.origin(), (key, oldFuture) -> {
             if (oldFuture == null) {
@@ -70,6 +73,9 @@ public class RiftRoomGenerator {
                 RiftGeneratable.generate(template, processedRoom2, world, new Vec3i(1, 1, 1), mirror, world.getServer(),
                         randomSource);
                 processedRoom2.markAsComplete();
+                if (perimeter != null) {
+                    perimeter.processAndPlace(processedRoom2, world, Vec3i.ZERO, mirror);
+                }
                 newFuture.complete(new WeakReference<>(processedRoom2));
                 return processedRoom2;
             }, Thread::startVirtualThread);
@@ -78,11 +84,18 @@ public class RiftRoomGenerator {
         processedRoomFuture.thenAccept((weak) -> {
             var value = weak.get();
             if (value == null) {
-                getOrCreateFutureProcessedRoom(space, world, randomState).thenAccept(newResult::complete);
+                getOrCreateFutureProcessedRoom(space, world, randomState, perimeter).thenAccept(newResult::complete);
             } else {
                 newResult.complete(value);
             }
         });
         return newResult;
+    }
+
+    public Future<RiftProcessedChunk> chunkOf(RiftGeneratable filler, ServerLevelAccessor world, Vec3i i) {
+        var tmpRoom = new RiftProcessedRoom(new VoidRiftSpace(i));
+        filler.processAndPlace(tmpRoom, world, Vec3i.ZERO, TripleMirror.NONE);
+        tmpRoom.markAsComplete();
+        return CompletableFuture.completedFuture(tmpRoom.getAndRemoveChunk(tmpRoom.space.origin()));
     }
 }

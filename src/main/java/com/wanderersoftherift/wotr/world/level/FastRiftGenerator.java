@@ -10,10 +10,11 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.ChaoticRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -40,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -80,6 +80,8 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final RiftConfig config;
     private AtomicReference<RiftLayout> layout = new AtomicReference<>();
     private AtomicReference<RiftRoomGenerator> roomGenerator = new AtomicReference<>();
+    private RiftGeneratable filler;
+    private RiftGeneratable perimeter;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock,
             RiftConfig config) {
@@ -91,6 +93,7 @@ public class FastRiftGenerator extends ChunkGenerator {
                 .orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
         this.config = config;
+        filler = new SingleBlockChunkGeneratable(customBlock);
     }
 
     @Override
@@ -106,6 +109,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         if (layout.get() == null) {
             layout.compareAndSet(null,
                     new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server)));
+            perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();
     }
@@ -164,9 +168,9 @@ public class FastRiftGenerator extends ChunkGenerator {
         }
 
         lastChunkStart.updateAndGet((value) -> Math.max(value, time));
-        var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
 
         return CompletableFuture.supplyAsync(() -> {
+            var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
             runRiftGeneration(chunk, randomState, level);
             return chunk;
         }, Thread::startVirtualThread);
@@ -174,61 +178,36 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevelAccessor level) {
 
-        var threads = new ArrayList<Thread>();
         if (false) { // for testing how quick is generation of empty world
             inFlightChunks.decrementAndGet();
             completedChunks.incrementAndGet();
             completedChunksInWindow.incrementAndGet();
             return;
         }
-        var perimeterBlock = customBlock;
-        RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount / 2, perimeterBlock, CorridorValidator.INVALID);
-        RiftSpace.placePerimeterInChunk(chunk, null, -layerCount / 2, perimeterBlock, CorridorValidator.INVALID);
-        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount - 2];
-        RiftSpace[] spaces = new RiftSpace[layerCount - 2];
+        Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount];
         var layout = getOrCreateLayout(level.getServer());
-        for (int i = 0; i < layerCount - 2; i++) {
-            var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount / 2, chunk.getPos().z);
+        var roomGenerator = getOrCreateRoomGenerator();
+        for (int i = 0; i < layerCount; i++) {
+            var position = new Vec3i(chunk.getPos().x, i - layerCount / 2, chunk.getPos().z);
             var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = getOrCreateRoomGenerator().getAndRemoveRoomChunk(position, roomSpace, level,
-                        randomState);
-                spaces[i] = space;
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level, randomState,
+                        perimeter);
+            } else {
+                chunkFutures[i] = roomGenerator.chunkOf(filler, level, position);
             }
         }
-        for (int i = 0; i < chunkFutures.length; i++) {
-            var generatedRoomChunkFuture = chunkFutures[i];
-
-            var space = spaces[i];
-            if (space == null || space instanceof VoidRiftSpace) {
-                RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock,
-                        CorridorValidator.INVALID);
-            } else if (generatedRoomChunkFuture != null) {
-                try {
-                    RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
-
-                    if (generatedRoomChunk != null) {
-                        threads.add(Thread.startVirtualThread(() -> {
-                            RiftSpace.placePerimeterInRiftChunk(generatedRoomChunk, space, perimeterBlock, layout);
-                            generatedRoomChunk.placeInWorld(chunk, level);
-                        }));
-                    } else {
-                        RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock,
-                                CorridorValidator.INVALID);
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-        }
-
-        for (var thread : threads) {
+        for (Future<RiftProcessedChunk> generatedRoomChunkFuture : chunkFutures) {
             try {
-                thread.join();
-            } catch (InterruptedException e) {
+                RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
+
+                if (generatedRoomChunk != null) {
+                    generatedRoomChunk.placeInWorld(chunk, level);
+                }
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
+
         }
         inFlightChunks.decrementAndGet();
         completedChunks.incrementAndGet();
