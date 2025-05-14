@@ -15,10 +15,6 @@
         {
           "condition": "wotr:partial_loot_table_id",
           "path": "spawners/"
-        },
-        {
-          "condition": "wotr:partial_loot_table_id",
-          "path": "gameplay/"
         }
       ]
     }
