@@ -2,12 +2,9 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
-import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -20,7 +17,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @ParametersAreNonnullByDefault
@@ -46,15 +41,8 @@ public class RiftData extends SavedData { // TODO: split this
         this.config = config;
     }
 
-    public static boolean isRift(Level level) {
-        Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
-        Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
-        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType())
-                .isPresent();
-    }
-
     public static RiftData get(ServerLevel level) {
-        if (!isRift(level)) {
+        if (!RiftLevelManager.isRift(level)) {
             throw new IllegalArgumentException("Not a rift level");
         }
         return level.getDataStorage()

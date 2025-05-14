@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -28,7 +27,7 @@ public class RiftCommands extends BaseCommand {
         ServerPlayer player = ctx.getSource().getPlayer();
         ServerLevel level = ctx.getSource().getLevel();
 
-        if (player != null && RiftData.isRift(level)) {
+        if (player != null && RiftLevelManager.isRift(level)) {
             RiftLevelManager.returnPlayerFromRift(player);
             return 1;
         }

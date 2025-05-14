@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +23,7 @@ public class RiftDifficultyEvents {
         if (event.getLevel().isClientSide() || event.getEntity() instanceof Player) {
             return;
         }
-        if (event.getLevel() instanceof ServerLevel serverLevel && RiftData.isRift(serverLevel)
+        if (event.getLevel() instanceof ServerLevel serverLevel && RiftLevelManager.isRift(serverLevel)
                 && event.getEntity() instanceof LivingEntity livingEntity) {
             applyDifficultyToEntity(livingEntity, serverLevel);
         }

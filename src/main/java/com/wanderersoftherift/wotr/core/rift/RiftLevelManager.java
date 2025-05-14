@@ -28,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.storage.DerivedLevelData;
@@ -65,6 +66,17 @@ public final class RiftLevelManager {
     }
 
     /**
+     * @param level
+     * @return Whether the level is a rift
+     */
+    public static boolean isRift(Level level) {
+        Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
+        Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
+        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType())
+                .isPresent();
+    }
+
+    /**
      * @param id
      * @return The rift level with the given id, if it exists
      */
@@ -72,14 +84,14 @@ public final class RiftLevelManager {
         var server = ServerLifecycleHooks.getCurrentServer();
 
         ServerLevel serverLevel = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
-        if (serverLevel != null && RiftData.isRift(serverLevel)) {
+        if (serverLevel != null && isRift(serverLevel)) {
             return serverLevel;
         }
         return null;
     }
 
     public static void onPlayerDeath(ServerPlayer player, ServerLevel level) {
-        if (!RiftData.isRift(level)) {
+        if (!isRift(level)) {
             return;
         }
         RiftData riftData = RiftData.get(player.serverLevel());
@@ -97,7 +109,7 @@ public final class RiftLevelManager {
      */
     public static boolean returnPlayerFromRift(ServerPlayer player) {
         ServerLevel riftLevel = player.serverLevel();
-        if (!RiftData.isRift(riftLevel)) {
+        if (!isRift(riftLevel)) {
             return false;
         }
 
@@ -220,7 +232,7 @@ public final class RiftLevelManager {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     private static void unregisterAndDeleteLevel(ServerLevel level) {
-        if (!RiftData.isRift(level)) {
+        if (!isRift(level)) {
             return;
         }
         RiftData riftData = RiftData.get(level);
