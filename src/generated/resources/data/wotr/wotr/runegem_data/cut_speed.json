@@ -21,11 +21,11 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:jump_height",
+          "modifier": "wotr:attack_speed",
           "tier": 1
         },
         {
-          "modifier": "wotr:attack_speed",
+          "modifier": "wotr:jump_height",
           "tier": 1
         }
       ],
@@ -34,12 +34,12 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:jump_height",
-          "tier": 1
-        },
-        {
           "modifier": "wotr:attack_speed",
           "tier": 2
+        },
+        {
+          "modifier": "wotr:jump_height",
+          "tier": 1
         }
       ],
       "supported_items": "#wotr:socketable_boots_slot"

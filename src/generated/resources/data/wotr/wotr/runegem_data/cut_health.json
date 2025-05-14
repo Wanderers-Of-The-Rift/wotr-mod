@@ -3,7 +3,7 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:percent_health",
+          "modifier": "wotr:health_percent",
           "tier": 2
         }
       ],
@@ -12,7 +12,7 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 2
         }
       ],
@@ -21,11 +21,11 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 2
         },
         {
-          "modifier": "wotr:percent_health",
+          "modifier": "wotr:health_percent",
           "tier": 2
         }
       ],
@@ -34,16 +34,16 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 2
         },
         {
-          "modifier": "wotr:percent_health",
-          "tier": 2
-        },
-        {
-          "modifier": "wotr:hybrid_health",
+          "modifier": "wotr:health_hybrid",
           "tier": 1
+        },
+        {
+          "modifier": "wotr:health_percent",
+          "tier": 2
         }
       ],
       "supported_items": "#wotr:socketable_leggings_slot"
@@ -51,16 +51,16 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 2
         },
         {
-          "modifier": "wotr:percent_health",
-          "tier": 2
-        },
-        {
-          "modifier": "wotr:hybrid_health",
+          "modifier": "wotr:health_hybrid",
           "tier": 1
+        },
+        {
+          "modifier": "wotr:health_percent",
+          "tier": 2
         }
       ],
       "supported_items": "#wotr:socketable_boots_slot"

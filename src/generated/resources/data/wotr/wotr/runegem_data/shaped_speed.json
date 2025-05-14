@@ -21,11 +21,11 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:jump_height",
+          "modifier": "wotr:attack_speed",
           "tier": 2
         },
         {
-          "modifier": "wotr:attack_speed",
+          "modifier": "wotr:jump_height",
           "tier": 2
         },
         {
@@ -38,12 +38,12 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:jump_height",
-          "tier": 2
-        },
-        {
           "modifier": "wotr:attack_speed",
           "tier": 3
+        },
+        {
+          "modifier": "wotr:jump_height",
+          "tier": 2
         },
         {
           "modifier": "wotr:movement_speed",

@@ -83,6 +83,15 @@ public class ModModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("armor"), Attributes.MAX_ABSORPTION,
                                         AttributeModifier.Operation.ADD_VALUE)))))
         );
+        registerModifier(context, getResourceKey("armor_heavy"), new Modifier(generateEqualRollSpread(
+                4, List
+                        .of(new ToBeTieredModifierEffect(8, 30,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("armor_heavy"),
+                                        Attributes.MAX_ABSORPTION, AttributeModifier.Operation.ADD_VALUE))),
+                List.of(new AttributeModifierEffect(
+                        WanderersOfTheRift.id("armor_heavy"), Attributes.MOVEMENT_SPEED, -0.03F, -0.001F,
+                        AttributeModifier.Operation.ADD_VALUE))))
+        );
         registerModifier(context, getResourceKey("armor_toughness"),
                 new Modifier(generateEqualRollSpread(2,
                         List.of(new ToBeTieredModifierEffect(0, 4,
@@ -241,9 +250,7 @@ public class ModModifierProvider {
             for (ToBeTieredModifierEffect toBeTieredModifierEffect : toBeTieredModifierEffectList) {
                 AbstractModifierEffect modifierEffectTier = getTieredModifierEffect(tiers, i, toBeTieredModifierEffect);
                 modifierEffects.add(modifierEffectTier);
-                for (AbstractModifierEffect untieredModifier : untieredModifiers) {
-                    modifierEffects.add(untieredModifier);
-                }
+                modifierEffects.addAll(untieredModifiers);
             }
             modifierTiers.add(new ModifierTier(i + 1, modifierEffects));
         }

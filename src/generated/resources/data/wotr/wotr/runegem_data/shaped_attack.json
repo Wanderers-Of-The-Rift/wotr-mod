@@ -3,11 +3,11 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_attack",
+          "modifier": "wotr:attack_flat",
           "tier": 3
         },
         {
-          "modifier": "wotr:heavy_attack",
+          "modifier": "wotr:attack_heavy",
           "tier": 3
         },
         {
@@ -24,7 +24,7 @@
           "tier": 3
         },
         {
-          "modifier": "wotr:heavy_knockback",
+          "modifier": "wotr:knockback_heavy",
           "tier": 3
         },
         {
@@ -37,7 +37,7 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_attack",
+          "modifier": "wotr:attack_flat",
           "tier": 2
         },
         {
@@ -50,11 +50,11 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:heavy_attack",
+          "modifier": "wotr:attack_heavy",
           "tier": 2
         },
         {
-          "modifier": "wotr:heavy_knockback",
+          "modifier": "wotr:knockback_heavy",
           "tier": 2
         }
       ],
@@ -67,7 +67,7 @@
           "tier": 3
         },
         {
-          "modifier": "wotr:heavy_knockback",
+          "modifier": "wotr:knockback_heavy",
           "tier": 2
         }
       ],
@@ -76,7 +76,7 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_attack",
+          "modifier": "wotr:attack_flat",
           "tier": 3
         },
         {

@@ -16,12 +16,16 @@
           "tier": 4
         },
         {
-          "modifier": "wotr:knockback_resistance",
-          "tier": 3
+          "modifier": "wotr:armor_heavy",
+          "tier": 4
         },
         {
           "modifier": "wotr:armor_toughness",
           "tier": 2
+        },
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 3
         }
       ],
       "supported_items": "#wotr:socketable_off_hand_slot"
@@ -30,6 +34,10 @@
       "modifiers": [
         {
           "modifier": "wotr:armor",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:armor_heavy",
           "tier": 3
         },
         {
@@ -46,6 +54,10 @@
           "tier": 4
         },
         {
+          "modifier": "wotr:armor_heavy",
+          "tier": 4
+        },
+        {
           "modifier": "wotr:armor_toughness",
           "tier": 1
         }
@@ -59,6 +71,10 @@
           "tier": 3
         },
         {
+          "modifier": "wotr:armor_heavy",
+          "tier": 3
+        },
+        {
           "modifier": "wotr:knockback_resistance",
           "tier": 3
         }
@@ -69,6 +85,10 @@
       "modifiers": [
         {
           "modifier": "wotr:armor",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:armor_heavy",
           "tier": 3
         },
         {

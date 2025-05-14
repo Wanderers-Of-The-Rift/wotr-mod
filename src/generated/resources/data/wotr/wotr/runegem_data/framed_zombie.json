@@ -3,24 +3,24 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_attack",
+          "modifier": "wotr:attack_flat",
           "tier": 4
         },
         {
-          "modifier": "wotr:heavy_attack",
+          "modifier": "wotr:attack_heavy",
           "tier": 4
         },
         {
-          "modifier": "wotr:percent_attack",
+          "modifier": "wotr:attack_percent",
           "tier": 5
-        },
-        {
-          "modifier": "wotr:heavy_knockback",
-          "tier": 2
         },
         {
           "modifier": "wotr:knockback",
           "tier": 3
+        },
+        {
+          "modifier": "wotr:knockback_heavy",
+          "tier": 2
         }
       ],
       "supported_items": "#wotr:socketable"

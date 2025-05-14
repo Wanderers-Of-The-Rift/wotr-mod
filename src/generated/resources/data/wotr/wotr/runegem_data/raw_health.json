@@ -3,7 +3,7 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:percent_health",
+          "modifier": "wotr:health_percent",
           "tier": 1
         }
       ],
@@ -12,7 +12,7 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 1
         }
       ],
@@ -21,11 +21,11 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 1
         },
         {
-          "modifier": "wotr:percent_health",
+          "modifier": "wotr:health_percent",
           "tier": 1
         }
       ],
@@ -34,15 +34,15 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 1
         },
         {
-          "modifier": "wotr:percent_health",
+          "modifier": "wotr:health_hybrid",
           "tier": 1
         },
         {
-          "modifier": "wotr:hybrid_health",
+          "modifier": "wotr:health_percent",
           "tier": 1
         }
       ],
@@ -51,15 +51,15 @@
     {
       "modifiers": [
         {
-          "modifier": "wotr:flat_health",
+          "modifier": "wotr:health_flat",
           "tier": 1
         },
         {
-          "modifier": "wotr:percent_health",
+          "modifier": "wotr:health_hybrid",
           "tier": 1
         },
         {
-          "modifier": "wotr:hybrid_health",
+          "modifier": "wotr:health_percent",
           "tier": 1
         }
       ],

@@ -46,31 +46,31 @@ public class ModRuneGemDataProvider {
         registerRunegem(context, getRunegemResourceKey("cut_attack"), new RunegemData(getTranslatableName("cut_attack"),
                 RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
-                                new TieredModifier(2, getModifier(lookup, "flat_attack")),
-                                new TieredModifier(2, getModifier(lookup, "heavy_attack"))
+                                new TieredModifier(2, getModifier(lookup, "attack_flat")),
+                                new TieredModifier(2, getModifier(lookup, "attack_heavy"))
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "knockback")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(1, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(2, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 ))
                 ), RunegemTier.CUT));
@@ -81,52 +81,56 @@ public class ModRuneGemDataProvider {
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "armor"))
+                                        new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "armor"))
+                                        new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.CUT));
-
         registerRunegem(context, getRunegemResourceKey("cut_health"), new RunegemData(getTranslatableName("cut_health"),
                 RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
-                                new TieredModifier(2, getModifier(lookup, "percent_health"))
+                                new TieredModifier(2, getModifier(lookup, "health_percent"))
                         )), new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_health"))
+                                        new TieredModifier(2, getModifier(lookup, "health_flat"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(2, getModifier(lookup, "percent_health"))
+                                        new TieredModifier(2, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(2, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(1, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(2, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(2, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(2, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(1, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(2, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(2, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("cut_speed"), new RunegemData(getTranslatableName("cut_speed"),
@@ -139,56 +143,56 @@ public class ModRuneGemDataProvider {
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height")),
-                                        new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height")),
-                                        new TieredModifier(2, getModifier(lookup, "attack_speed"))
+                                        new TieredModifier(2, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
                                 ))),
                 RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("cut_zombie"),
                 new RunegemData(getTranslatableName("cut_zombie"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
                                 socketablesTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(2, getModifier(lookup, "percent_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(2, getModifier(lookup, "attack_percent")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("framed_attack"), new RunegemData(
                 getTranslatableName("framed_attack"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
-                                new TieredModifier(5, getModifier(lookup, "flat_attack")),
-                                new TieredModifier(5, getModifier(lookup, "heavy_attack")),
+                                new TieredModifier(5, getModifier(lookup, "attack_flat")),
+                                new TieredModifier(5, getModifier(lookup, "attack_heavy")),
                                 new TieredModifier(3, getModifier(lookup, "sweeping_attack_damage"))
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(5, getModifier(lookup, "knockback")),
-                                        new TieredModifier(5, getModifier(lookup, "heavy_knockback")),
+                                        new TieredModifier(5, getModifier(lookup, "knockback_heavy")),
                                         new TieredModifier(3, getModifier(lookup, "sweeping_attack_damage"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(4, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(4, getModifier(lookup, "knockback"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(4, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(4, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(4, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(5, getModifier(lookup, "knockback")),
-                                        new TieredModifier(4, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(4, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(5, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(5, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(4, getModifier(lookup, "knockback")),
                                         new TieredModifier(3, getModifier(lookup, "sweeping_attack_damage"))
                                 ))
@@ -200,55 +204,60 @@ public class ModRuneGemDataProvider {
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(4, getModifier(lookup, "armor")),
-                                        new TieredModifier(3, getModifier(lookup, "knockback_resistance")),
-                                        new TieredModifier(2, getModifier(lookup, "armor_toughness"))
+                                        new TieredModifier(4, getModifier(lookup, "armor_heavy")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_toughness")),
+                                        new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "armor")),
+                                        new TieredModifier(3, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "armor_toughness"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
                                         new TieredModifier(4, getModifier(lookup, "armor")),
+                                        new TieredModifier(4, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "armor_toughness"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "armor")),
+                                        new TieredModifier(3, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "armor")),
+                                        new TieredModifier(3, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("framed_health"), new RunegemData(
                 getTranslatableName("framed_health"), RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
-                                new TieredModifier(5, getModifier(lookup, "percent_health")),
-                                new TieredModifier(4, getModifier(lookup, "absorption"))
+                                new TieredModifier(4, getModifier(lookup, "absorption")),
+                                new TieredModifier(5, getModifier(lookup, "health_percent"))
                         )), new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(5, getModifier(lookup, "flat_health"))
+                                        new TieredModifier(5, getModifier(lookup, "health_flat"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(5, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(5, getModifier(lookup, "percent_health"))
+                                        new TieredModifier(5, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(5, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(5, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(5, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(4, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(5, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(4, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(5, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(5, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(5, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(4, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(5, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(4, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(5, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("framed_speed"), new RunegemData(
@@ -261,14 +270,14 @@ public class ModRuneGemDataProvider {
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "jump_height")),
                                         new TieredModifier(4, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(3, getModifier(lookup, "jump_height")),
                                         new TieredModifier(3, getModifier(lookup, "movement_speed"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "jump_height")),
                                         new TieredModifier(5, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(3, getModifier(lookup, "jump_height")),
                                         new TieredModifier(3, getModifier(lookup, "movement_speed"))
                                 ))),
                 RunegemTier.FRAMED));
@@ -276,43 +285,43 @@ public class ModRuneGemDataProvider {
                 new RunegemData(getTranslatableName("framed_zombie"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
                                 socketablesTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_attack")),
-                                        new TieredModifier(4, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(5, getModifier(lookup, "percent_attack")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_knockback")),
-                                        new TieredModifier(3, getModifier(lookup, "knockback"))
+                                        new TieredModifier(4, getModifier(lookup, "attack_flat")),
+                                        new TieredModifier(4, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(5, getModifier(lookup, "attack_percent")),
+                                        new TieredModifier(3, getModifier(lookup, "knockback")),
+                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("polished_attack"), new RunegemData(
                 getTranslatableName("polished_attack"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
-                                new TieredModifier(4, getModifier(lookup, "flat_attack")),
-                                new TieredModifier(4, getModifier(lookup, "heavy_attack")),
+                                new TieredModifier(4, getModifier(lookup, "attack_flat")),
+                                new TieredModifier(4, getModifier(lookup, "attack_heavy")),
                                 new TieredModifier(2, getModifier(lookup, "sweeping_attack_damage"))
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(4, getModifier(lookup, "knockback")),
-                                        new TieredModifier(4, getModifier(lookup, "heavy_knockback")),
+                                        new TieredModifier(4, getModifier(lookup, "knockback_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "sweeping_attack_damage"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(3, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(3, getModifier(lookup, "knockback"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(3, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(3, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(3, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(4, getModifier(lookup, "knockback")),
-                                        new TieredModifier(3, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(3, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(4, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(3, getModifier(lookup, "knockback")),
                                         new TieredModifier(2, getModifier(lookup, "sweeping_attack_damage"))
                                 ))
@@ -324,55 +333,60 @@ public class ModRuneGemDataProvider {
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "armor")),
-                                        new TieredModifier(2, getModifier(lookup, "knockback_resistance")),
-                                        new TieredModifier(1, getModifier(lookup, "armor_toughness"))
+                                        new TieredModifier(3, getModifier(lookup, "armor_heavy")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_toughness")),
+                                        new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "armor_toughness"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "armor")),
+                                        new TieredModifier(3, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "armor_toughness"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("polished_health"), new RunegemData(
                 getTranslatableName("polished_health"), RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
-                                new TieredModifier(4, getModifier(lookup, "percent_health")),
-                                new TieredModifier(3, getModifier(lookup, "absorption"))
+                                new TieredModifier(3, getModifier(lookup, "absorption")),
+                                new TieredModifier(4, getModifier(lookup, "health_percent"))
                         )), new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_health"))
+                                        new TieredModifier(4, getModifier(lookup, "health_flat"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(4, getModifier(lookup, "percent_health"))
+                                        new TieredModifier(4, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(4, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(4, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(3, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(4, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(3, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(4, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(4, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(4, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(3, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(4, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(3, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(4, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("polished_speed"), new RunegemData(
@@ -385,14 +399,14 @@ public class ModRuneGemDataProvider {
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(3, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(2, getModifier(lookup, "movement_speed"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(4, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(2, getModifier(lookup, "movement_speed"))
                                 ))),
                 RunegemTier.POLISHED));
@@ -400,41 +414,41 @@ public class ModRuneGemDataProvider {
                 new RunegemData(getTranslatableName("polished_zombie"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
                                 socketablesTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_attack")),
-                                        new TieredModifier(3, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(4, getModifier(lookup, "percent_attack")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_knockback")),
-                                        new TieredModifier(2, getModifier(lookup, "knockback"))
+                                        new TieredModifier(3, getModifier(lookup, "attack_flat")),
+                                        new TieredModifier(3, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(4, getModifier(lookup, "attack_percent")),
+                                        new TieredModifier(2, getModifier(lookup, "knockback")),
+                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("raw_attack"), new RunegemData(getTranslatableName("raw_attack"),
                 RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
-                                new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                new TieredModifier(1, getModifier(lookup, "heavy_attack"))
+                                new TieredModifier(1, getModifier(lookup, "attack_flat")),
+                                new TieredModifier(1, getModifier(lookup, "attack_heavy"))
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(1, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(1, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(1, getModifier(lookup, "knockback"))
                                 ))
                 ), RunegemTier.RAW));
@@ -442,55 +456,61 @@ public class ModRuneGemDataProvider {
                 getTranslatableName("raw_defense"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
                                 new TieredModifier(1, getModifier(lookup, "armor")),
+                                new TieredModifier(1, getModifier(lookup, "armor_heavy")),
                                 new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "armor"))
+                                        new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "armor"))
+                                        new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "armor")),
+                                        new TieredModifier(1, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("raw_health"), new RunegemData(getTranslatableName("raw_health"),
                 RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
-                                new TieredModifier(1, getModifier(lookup, "percent_health"))
+                                new TieredModifier(1, getModifier(lookup, "health_percent"))
                         )), new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_health"))
+                                        new TieredModifier(1, getModifier(lookup, "health_flat"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(1, getModifier(lookup, "percent_health"))
+                                        new TieredModifier(1, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(1, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(1, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(1, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(1, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(1, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(1, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(1, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(1, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("raw_speed"), new RunegemData(getTranslatableName("raw_speed"),
@@ -503,56 +523,56 @@ public class ModRuneGemDataProvider {
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height")),
-                                        new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height")),
-                                        new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
                                 ))),
                 RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("raw_zombie"),
                 new RunegemData(getTranslatableName("raw_zombie"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
                                 socketablesTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "flat_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "percent_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback"))
+                                        new TieredModifier(1, getModifier(lookup, "attack_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(1, getModifier(lookup, "attack_percent")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("shaped_attack"), new RunegemData(
                 getTranslatableName("shaped_attack"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
-                                new TieredModifier(3, getModifier(lookup, "flat_attack")),
-                                new TieredModifier(3, getModifier(lookup, "heavy_attack")),
+                                new TieredModifier(3, getModifier(lookup, "attack_flat")),
+                                new TieredModifier(3, getModifier(lookup, "attack_heavy")),
                                 new TieredModifier(1, getModifier(lookup, "sweeping_attack_damage"))
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "knockback")),
-                                        new TieredModifier(3, getModifier(lookup, "heavy_knockback")),
+                                        new TieredModifier(3, getModifier(lookup, "knockback_heavy")),
                                         new TieredModifier(1, getModifier(lookup, "sweeping_attack_damage"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(2, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(2, getModifier(lookup, "knockback"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(2, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "knockback")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_knockback"))
+                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_attack")),
+                                        new TieredModifier(3, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(2, getModifier(lookup, "knockback")),
                                         new TieredModifier(1, getModifier(lookup, "sweeping_attack_damage"))
                                 ))
@@ -564,55 +584,59 @@ public class ModRuneGemDataProvider {
                         )), new RunegemData.ModifierGroup(
                                 offHandTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "armor"))
+                                        new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "armor"))
+                                        new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "armor")),
+                                        new TieredModifier(2, getModifier(lookup, "armor_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("shaped_health"), new RunegemData(
                 getTranslatableName("shaped_health"), RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
-                                new TieredModifier(3, getModifier(lookup, "percent_health")),
-                                new TieredModifier(1, getModifier(lookup, "absorption"))
+                                new TieredModifier(1, getModifier(lookup, "absorption")),
+                                new TieredModifier(3, getModifier(lookup, "health_percent"))
                         )), new RunegemData.ModifierGroup(
                                 helmetTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_health"))
+                                        new TieredModifier(3, getModifier(lookup, "health_flat"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 chestplateTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(3, getModifier(lookup, "percent_health"))
+                                        new TieredModifier(3, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(3, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(3, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(2, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(3, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(3, getModifier(lookup, "health_percent"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(3, getModifier(lookup, "flat_health")),
-                                        new TieredModifier(3, getModifier(lookup, "percent_health")),
-                                        new TieredModifier(2, getModifier(lookup, "hybrid_health"))
+                                        new TieredModifier(3, getModifier(lookup, "health_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "health_hybrid")),
+                                        new TieredModifier(3, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.SHAPED));
-
         registerRunegem(context, getRunegemResourceKey("shaped_speed"), new RunegemData(
                 getTranslatableName("shaped_speed"), RunegemShape.TRIANGLE, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
@@ -623,27 +647,26 @@ public class ModRuneGemDataProvider {
                                 )),
                         new RunegemData.ModifierGroup(
                                 leggingsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(2, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(2, getModifier(lookup, "movement_speed"))
                                 )),
                         new RunegemData.ModifierGroup(
                                 bootsTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(3, getModifier(lookup, "attack_speed")),
+                                        new TieredModifier(2, getModifier(lookup, "jump_height")),
                                         new TieredModifier(1, getModifier(lookup, "movement_speed"))
                                 ))),
                 RunegemTier.SHAPED));
-
         registerRunegem(context, getRunegemResourceKey("shaped_zombie"),
                 new RunegemData(getTranslatableName("shaped_zombie"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
                                 socketablesTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "flat_attack")),
-                                        new TieredModifier(2, getModifier(lookup, "heavy_attack")),
-                                        new TieredModifier(3, getModifier(lookup, "percent_attack")),
-                                        new TieredModifier(1, getModifier(lookup, "heavy_knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback"))
+                                        new TieredModifier(2, getModifier(lookup, "attack_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "attack_heavy")),
+                                        new TieredModifier(3, getModifier(lookup, "attack_percent")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback")),
+                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.SHAPED));
     }
