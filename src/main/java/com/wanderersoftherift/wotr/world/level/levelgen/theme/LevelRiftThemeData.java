@@ -9,7 +9,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.Optional;
@@ -61,9 +63,9 @@ public class LevelRiftThemeData extends SavedData {
         this.setDirty();
     }
 
-    public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
+    public static Holder<RiftTheme> getRandomTheme(MinecraftServer level, RandomSource rng) {
         Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme = registryReference.flatMap(x -> x.getRandom(level.getRandom())).orElse(null);
+        var riftTheme = registryReference.flatMap(x -> x.getRandom(rng)).orElse(null);
         if (riftTheme == null) {
             WanderersOfTheRift.LOGGER.error("Failed to get random rift theme");
         }
