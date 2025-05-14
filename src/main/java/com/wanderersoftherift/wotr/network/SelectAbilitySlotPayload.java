@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +29,9 @@ public record SelectAbilitySlotPayload(int slot) implements CustomPacketPayload 
     }
 
     public void handleOnServer(IPayloadContext context) {
-        AbilitySlots abilitySlots = context.player().getData(ModAttachments.ABILITY_SLOTS);
-        abilitySlots.setSelectedSlot(slot);
+        if (context.player() instanceof ServerPlayer player && !player.isSpectator()) {
+            AbilitySlots abilitySlots = player.getData(ModAttachments.ABILITY_SLOTS);
+            abilitySlots.setSelectedSlot(slot);
+        }
     }
 }
