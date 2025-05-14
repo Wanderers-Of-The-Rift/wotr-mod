@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.ChaoticRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
@@ -181,13 +182,14 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         var perimeterBlock = customBlock;
-        RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount / 2, perimeterBlock);
-        RiftSpace.placePerimeterInChunk(chunk, null, -layerCount / 2, perimeterBlock);
+        RiftSpace.placePerimeterInChunk(chunk, null, -1 + layerCount / 2, perimeterBlock, CorridorValidator.INVALID);
+        RiftSpace.placePerimeterInChunk(chunk, null, -layerCount / 2, perimeterBlock, CorridorValidator.INVALID);
         Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount - 2];
         RiftSpace[] spaces = new RiftSpace[layerCount - 2];
+        var layout = getOrCreateLayout(level.getServer());
         for (int i = 0; i < layerCount - 2; i++) {
             var position = new Vec3i(chunk.getPos().x, 1 + i - layerCount / 2, chunk.getPos().z);
-            var space = getOrCreateLayout(level.getServer()).getChunkSpace(position);
+            var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = getOrCreateRoomGenerator().getAndRemoveRoomChunk(position, roomSpace, level,
                         randomState);
@@ -199,18 +201,20 @@ public class FastRiftGenerator extends ChunkGenerator {
 
             var space = spaces[i];
             if (space == null || space instanceof VoidRiftSpace) {
-                RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock);
+                RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock,
+                        CorridorValidator.INVALID);
             } else if (generatedRoomChunkFuture != null) {
                 try {
                     RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
 
                     if (generatedRoomChunk != null) {
                         threads.add(Thread.startVirtualThread(() -> {
-                            RiftSpace.placePerimeterInRiftChunk(generatedRoomChunk, space, perimeterBlock);
+                            RiftSpace.placePerimeterInRiftChunk(generatedRoomChunk, space, perimeterBlock, layout);
                             generatedRoomChunk.placeInWorld(chunk, level);
                         }));
                     } else {
-                        RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock);
+                        RiftSpace.placePerimeterInChunk(chunk, space, 1 + i - layerCount / 2, perimeterBlock,
+                                CorridorValidator.INVALID);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 
 public class GridRiftLayout implements RiftLayout {
@@ -16,5 +17,10 @@ public class GridRiftLayout implements RiftLayout {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
+        return true;
     }
 }

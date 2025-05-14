@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
@@ -47,11 +48,40 @@ public class ChaoticRiftLayout implements RiftLayout {
 
     @Override
     public RiftSpace getChunkSpace(Vec3i chunkPos) {
-        var region = getOrCreateRegion(chunkPos.getX(), chunkPos.getZ());
+        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
+    }
+
+    public RiftSpace getChunkSpace(int x, int y, int z) {
+        var region = getOrCreateRegion(x, z);
         var rand = ProcessorUtil.createRandom(
                 ProcessorUtil.getRandomSeed(new BlockPos(region.origin.getX(), 0, region.origin.getZ()), seed));
         region.tryGenerate(rand);
-        return region.getSpaceAt(chunkPos);
+        return region.getSpaceAt(x, y, z);
+    }
+
+    private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
+        var space = getChunkSpace(x, y, z);
+        if (space == null || space instanceof VoidRiftSpace) {
+            return false;
+        }
+        var spaceOrigin = space.origin();
+        var dx = x - spaceOrigin.getX();
+        var dy = y - spaceOrigin.getY();
+        var dz = z - spaceOrigin.getZ();
+        for (var corridor : space.corridors()) {
+            if (corridor.direction() == d && corridor.position().getX() == dx && corridor.position().getY() == dy
+                    && corridor.position().getZ() == dz) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
+
+        return hasCorridorSingle(x, y, z, d)
+                && hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
     private class Region {
@@ -71,8 +101,8 @@ public class ChaoticRiftLayout implements RiftLayout {
             for (int x = 0; x < 15; x++) {
                 for (int z = 0; z < 15; z++) {
                     var idx = z * 15 + x;
-                    var chaosiveness = (int) Double
-                            .min(chaosiveness(new Vector2d(x + origin.getX(), z + origin.getZ())), layerCount / 2.0);
+                    var chaosiveness = (int) Double.min(chaosiveness(x + origin.getX(), z + origin.getZ()),
+                            layerCount / 2.0);
                     emptySpaces[idx] = ((1L << (2 * chaosiveness)) - 1) << (layerCount / 2 - chaosiveness);
                 }
 
@@ -136,13 +166,13 @@ public class ChaoticRiftLayout implements RiftLayout {
             return rooms;
         }
 
-        private double chaosiveness(Vector2d position) {
-            return 1.5 * Math.cosh(0.055 * position.length());
+        private double chaosiveness(double x, double z) {
+            return 1.5 * Math.cosh(0.055 * Math.sqrt(x * x + z * z));
         }
 
         // 2 = chaotic, 1 = unstable, 0 = stable
         private int categorize(Vector2d position) {
-            var chaosiveness = chaosiveness(position);
+            var chaosiveness = chaosiveness(position.x, position.y);
             if (chaosiveness > 2.5) {
                 return 2;
             } else {
@@ -238,12 +268,19 @@ public class ChaoticRiftLayout implements RiftLayout {
         }
 
         public RiftSpace getSpaceAt(Vec3i position) {
-            if (chaosiveness(new Vector2d(position.getX(), position.getZ())) < Math.abs(position.getY())
+            if (chaosiveness(position.getX(), position.getZ()) < Math.abs(position.getY())
                     || isOutsideThisRegion(position.getX(), position.getY(), position.getZ())) {
                 return VOID_SPACE;
             }
             return spaces[(position.getX() - origin.getX()) + (position.getZ() - origin.getZ()) * 15
                     + (position.getY() - origin.getY()) * 225];
+        }
+
+        public RiftSpace getSpaceAt(int x, int y, int z) {
+            if (chaosiveness(x, z) < Math.abs(y) || isOutsideThisRegion(x, y, z)) {
+                return VOID_SPACE;
+            }
+            return spaces[(x - origin.getX()) + (z - origin.getZ()) * 15 + (y - origin.getY()) * 225];
         }
 
         public void setSpaceAt(Vec3i position, RiftSpace space) {
