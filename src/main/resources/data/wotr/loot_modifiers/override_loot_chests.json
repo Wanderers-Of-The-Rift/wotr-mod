@@ -1,33 +1,22 @@
 {
   "type": "wotr:override_loot_chests",
-  "conditions" : [
+  "conditions": [
     {
-      "condition": "neoforge:loot_table_id",
-      "predicate": {
-        "namespace": "minecraft",
-        "path": "chests/*"
-      }
-    },
-    {
-      "condition": "neoforge:loot_table_id",
-      "predicate": {
-        "namespace": "minecraft",
-        "path": "equipment/*"
-      }
-    },
-    {
-      "condition": "neoforge:loot_table_id",
-      "predicate": {
-        "namespace": "minecraft",
-        "path": "spawners/*"
-      }
-    },
-    {
-      "condition": "neoforge:loot_table_id",
-      "predicate": {
-        "namespace": "minecraft",
-        "path": "gameplay/*"
-      }
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "chests/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "equipment/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "spawners/"
+        }
+      ]
     }
   ]
 }

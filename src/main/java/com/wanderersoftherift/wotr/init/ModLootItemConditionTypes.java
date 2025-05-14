@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.loot.predicates.PartialLootTableIdCondition;
 import com.wanderersoftherift.wotr.loot.predicates.RiftLevelCheck;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -13,4 +14,6 @@ public class ModLootItemConditionTypes {
 
     public static final DeferredHolder<LootItemConditionType, LootItemConditionType> RIFT_LEVEL_CHECK = LOOT_ITEM_CONDITION_TYPES
             .register("rift_level_check", () -> new LootItemConditionType(RiftLevelCheck.CODEC));
+    public static final DeferredHolder<LootItemConditionType, LootItemConditionType> PARTIAL_LOOT_TABLE_ID = LOOT_ITEM_CONDITION_TYPES
+            .register("partial_loot_table_id", () -> new LootItemConditionType(PartialLootTableIdCondition.CODEC));
 }

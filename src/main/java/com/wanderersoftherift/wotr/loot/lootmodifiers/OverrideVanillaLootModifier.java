@@ -40,6 +40,7 @@ public class OverrideVanillaLootModifier extends LootModifier {
         if (RiftLevelManager.isRift(serverlevel)) {
             return generatedLoot;
         }
+
         ResourceKey<Level> dimension = context.getLevel().dimension();
 
         // roll rift gear
@@ -59,22 +60,24 @@ public class OverrideVanillaLootModifier extends LootModifier {
             }
         }
 
-        float chance = context.getRandom().nextFloat();
-        // roll runegems per dim
-        if (Level.OVERWORLD.equals(dimension)) {
-            // ow chest is 2.5% drop rate
-            if (chance < 0.025F) {
-                generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
-            }
-        } else if (Level.NETHER.equals(dimension)) {
-            // nether chest is 7.5% drop rate
-            if (chance < 0.075F) {
-                generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
-            }
-        } else if (Level.END.equals(dimension)) {
-            // end chest is 15% drop rate
-            if (chance < 0.15F) {
-                generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+        for (int i = 0; i < 2; i++) {
+            float chance = context.getRandom().nextFloat();
+            // roll runegems per dim
+            if (Level.OVERWORLD.equals(dimension)) {
+                // ow chest is 25% drop rate
+                if (chance < 0.25F) {
+                    generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+                }
+            } else if (Level.NETHER.equals(dimension)) {
+                // nether chest is 50% drop rate
+                if (chance < 0.5F) {
+                    generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+                }
+            } else if (Level.END.equals(dimension)) {
+                // end chest is 75% drop rate
+                if (chance < 0.75F) {
+                    generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+                }
             }
         }
 
