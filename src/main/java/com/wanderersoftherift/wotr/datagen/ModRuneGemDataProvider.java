@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class ModRuneGemDataProvider {
 
-    public static Map<ResourceKey<RunegemData>, RunegemData> DATA = new LinkedHashMap<>();
+    public static final Map<ResourceKey<RunegemData>, RunegemData> DATA = new LinkedHashMap<>();
 
     public static void bootstrapRuneGems(BootstrapContext<RunegemData> context) {
         HolderGetter<Modifier> lookup = context.lookup(ModDatapackRegistries.MODIFIER_KEY);

@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
 
 public class ModModifierProvider {
 
-    public static Map<ResourceKey<Modifier>, Modifier> DATA = new LinkedHashMap<>();
+    public static final Map<ResourceKey<Modifier>, Modifier> DATA = new LinkedHashMap<>();
 
     public static void bootstrapModifiers(BootstrapContext<Modifier> context) {
         registerModifier(context, getResourceKey("ability_aoe"),
