@@ -21,6 +21,7 @@ public class ModRiftThemeTagsProvider extends TagsProvider<RiftTheme> {
     @Override
     protected void addTags(HolderLookup.Provider lookupProvider) {
         tag(ModTags.RiftThemes.RANDOM_SELECTABLE).add(TagEntry.optionalElement(WanderersOfTheRift.id("cave")))
-                .add(TagEntry.optionalElement(WanderersOfTheRift.id("forest")));
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("forest")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("mushroom")));
     }
 }

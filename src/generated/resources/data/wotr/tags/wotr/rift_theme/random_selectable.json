@@ -7,6 +7,10 @@
     {
       "id": "wotr:forest",
       "required": false
+    },
+    {
+      "id": "wotr:mushroom",
+      "required": false
     }
   ]
 }

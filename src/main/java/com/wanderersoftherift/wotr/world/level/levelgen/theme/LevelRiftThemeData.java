@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModRiftThemes;
 import com.wanderersoftherift.wotr.init.ModTags;
 import net.minecraft.core.Holder;
@@ -12,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
@@ -44,7 +44,7 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         RiftTheme.CODEC.encodeStart(NbtOps.INSTANCE, this.getTheme())
                 .resultOrPartial(LOGGER::error)
                 .ifPresent(compound -> tag.put("theme", compound));
@@ -62,12 +62,8 @@ public class LevelRiftThemeData extends SavedData {
 
     public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
         Registry<RiftTheme> registry = level.registryAccess().lookupOrThrow(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme = registry.get(ModTags.RiftThemes.RANDOM_SELECTABLE)
-                .flatMap(x -> x.getRandomElement(level.getRandom()))
-                .orElse(null);
-        if (riftTheme == null) {
-            WanderersOfTheRift.LOGGER.error("Failed to get random rift theme");
-        }
-        return riftTheme;
+
+        return registry.getRandomElementOf(ModTags.RiftThemes.RANDOM_SELECTABLE, level.getRandom())
+                .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
 }
