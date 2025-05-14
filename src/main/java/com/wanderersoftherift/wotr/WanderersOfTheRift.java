@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.commands.AbilityCommands;
+import com.wanderersoftherift.wotr.commands.BugReportCommand;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.EssenceCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
@@ -10,7 +11,6 @@ import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
-import com.wanderersoftherift.wotr.commands.BugReportCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.init.ModAbilityTypes;
 import com.wanderersoftherift.wotr.init.ModAttachments;
