@@ -76,8 +76,7 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 2,
-              "min_tier": 0
+              "max_tier": 2
             }
           ],
           "functions": [
@@ -122,7 +121,6 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 7,
               "min_tier": 5
             }
           ],
