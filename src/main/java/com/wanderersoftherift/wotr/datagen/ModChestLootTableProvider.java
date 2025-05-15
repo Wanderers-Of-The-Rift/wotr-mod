@@ -45,7 +45,8 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                                 .add(LootItem.lootTableItem(Items.IRON_INGOT)
                                         .setWeight(40)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/geode_runegem")).setWeight(20))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/geode_runegem"))
+                                        .setWeight(20))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/ability")).setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_armor"))
                                         .setWeight(5))
@@ -80,7 +81,8 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                                 .add(LootItem.lootTableItem(Items.GOLD_INGOT)
                                         .setWeight(30)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/monster_runegem")).setWeight(25))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/monster_runegem"))
+                                        .setWeight(25))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/ability")).setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_armor"))
                                         .setWeight(5))
@@ -116,8 +118,12 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                         .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_MONSTER).when(riftTier(0, 3)).setWeight(16))
                         .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_MONSTER).when(riftTier(2, 4)).setWeight(8))
                         .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_MONSTER).when(riftTier(3, 5)).setWeight(4))
-                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_MONSTER).when(riftTier(4, 7)).setWeight(2))
-                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_MONSTER).when(riftTier(5, 7)).setWeight(1))));
+                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_MONSTER)
+                                .when(riftTier(4, 7))
+                                .setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_MONSTER)
+                                .when(riftTier(5, 7))
+                                .setWeight(1))));
     }
 
     private void generateAbilityLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {

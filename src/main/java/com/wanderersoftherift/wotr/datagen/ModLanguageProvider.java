@@ -325,6 +325,7 @@ public class ModLanguageProvider extends LanguageProvider {
                     snakeCaseToCapitalizedCase(entry.getKey().location().getPath()));
         });
     }
+
     private void addEssenceType(String id, String value) {
         add(EssenceValue.ESSENCE_TYPE_PREFIX + "." + WanderersOfTheRift.MODID + "." + id, value);
     }

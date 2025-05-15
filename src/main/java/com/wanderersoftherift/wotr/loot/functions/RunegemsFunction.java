@@ -25,10 +25,9 @@ import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS
 
 public class RunegemsFunction extends LootItemConditionalFunction {
     public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> commonFields(inst)
-                    .and(RegistryCodecs.homogeneousList(ModDatapackRegistries.RUNEGEM_DATA_KEY)
-                            .fieldOf("runegems")
-                            .forGetter(RunegemsFunction::getRunegems)).apply(inst, RunegemsFunction::new));
+            inst -> commonFields(inst).and(RegistryCodecs.homogeneousList(ModDatapackRegistries.RUNEGEM_DATA_KEY)
+                    .fieldOf("runegems")
+                    .forGetter(RunegemsFunction::getRunegems)).apply(inst, RunegemsFunction::new));
 
     private final HolderSet<RunegemData> runegems;
 
@@ -58,7 +57,10 @@ public class RunegemsFunction extends LootItemConditionalFunction {
         return itemStack;
     }
 
-    public Optional<Holder<RunegemData>> getRandomRunegem(Level level, HolderSet<RunegemData> runegems, RandomSource random) {
+    public Optional<Holder<RunegemData>> getRandomRunegem(
+            Level level,
+            HolderSet<RunegemData> runegems,
+            RandomSource random) {
         return runegems.getRandomElement(random);
     }
 
