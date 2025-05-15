@@ -165,19 +165,20 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.title", "Dimension Delvers: Accessibility Settings");
-        add("accessibility." + WanderersOfTheRift.MODID + ".menubutton", "DimDelvers Accessibility (tmp)");
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.trypophobia", "Trypophobia");
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.arachnophobia", "Arachnophobia");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.title",
+                "Wanderers of the Rifts: Accessibility Settings");
+        add("accessibility." + WanderersOfTheRift.MODID + ".menubutton", "WotR Accessibility (tmp)");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.trypophobia", "Trypophobia Friendly");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.arachnophobia", "Arachnophobia Friendly");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.flashing_lights", "Flashing Lights");
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.misophonia", "Misophonia");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.misophonia", "Misophonia Friendly");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.high_contrast", "High Contrast");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.hard_of_hearing", "Hard of Hearing");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.reduced_motion", "Reduced Motion");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.trypophobia",
                 "Removes any trypophobia-triggering aspects");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.arachnophobia",
-                "Replaces all the spiders with cute cats!");
+                "Replaces all the spiders with cute turtles!");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.flashing_lights",
                 "Reduces flashing-light effects");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.misophonia",
