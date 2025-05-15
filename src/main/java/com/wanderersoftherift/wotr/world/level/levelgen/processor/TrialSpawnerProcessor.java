@@ -2,11 +2,13 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.TrialSpawnerBlock;
@@ -22,22 +24,33 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import java.util.Optional;
+
 import static com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity.RIFT_PLAYERS;
 import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.TRIAL_SPAWNER;
 
 public class TrialSpawnerProcessor extends StructureProcessor {
-    public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
-            .group(TrialSpawnerConfig.CODEC.fieldOf("config").forGetter(TrialSpawnerProcessor::getSpawnerConfig)
-            ).apply(builder, TrialSpawnerProcessor::new));
+    public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+            TrialSpawnerConfig.CODEC.optionalFieldOf("config").forGetter(TrialSpawnerProcessor::getSpawnerConfig),
+            TrialSpawnerConfig.CODEC.optionalFieldOf("ominous_config")
+                    .forGetter(TrialSpawnerProcessor::getSpawnerConfig)
+    ).apply(builder, TrialSpawnerProcessor::new));
 
-    private final Holder<TrialSpawnerConfig> spawnerConfig;
+    private final Optional<Holder<TrialSpawnerConfig>> spawnerConfig;
+    private final Optional<Holder<TrialSpawnerConfig>> ominousConfig;
 
-    public TrialSpawnerProcessor(Holder<TrialSpawnerConfig> spawnerConfig) {
+    public TrialSpawnerProcessor(Optional<Holder<TrialSpawnerConfig>> spawnerConfig,
+            Optional<Holder<TrialSpawnerConfig>> ominousConfig) {
         this.spawnerConfig = spawnerConfig;
+        this.ominousConfig = ominousConfig;
     }
 
-    public Holder<TrialSpawnerConfig> getSpawnerConfig() {
+    public Optional<Holder<TrialSpawnerConfig>> getSpawnerConfig() {
         return spawnerConfig;
+    }
+
+    public Optional<Holder<TrialSpawnerConfig>> getOminousConfig() {
+        return ominousConfig;
     }
 
     @Override
@@ -72,12 +85,25 @@ public class TrialSpawnerProcessor extends StructureProcessor {
     }
 
     private CompoundTag getBlockEntity(LevelReader world, RiftMobSpawnerBlockEntity blockEntity) {
+        Holder<TrialSpawnerConfig> normalConfig = getFinalNormalConfig(world);
+        Holder<TrialSpawnerConfig> ominousConfig = getFinalOminousConfig(normalConfig);
         TrialSpawner trialSpawner = new TrialSpawner(
-                spawnerConfig, spawnerConfig, new TrialSpawnerData(), 72_000, 9, blockEntity, RIFT_PLAYERS,
+                normalConfig, ominousConfig, new TrialSpawnerData(), 72_000, 9, blockEntity, RIFT_PLAYERS,
                 PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
         trialSpawner.getData().reset();
         blockEntity.setTrialSpawner(trialSpawner);
         return blockEntity.saveWithId(world.registryAccess());
+    }
+
+    private Holder<TrialSpawnerConfig> getFinalNormalConfig(LevelReader world) {
+        return spawnerConfig.orElseGet(() -> world.registryAccess()
+                .lookupOrThrow(Registries.TRIAL_SPAWNER_CONFIG)
+                .get(WanderersOfTheRift.id("rift"))
+                .orElseThrow());
+    }
+
+    private Holder<TrialSpawnerConfig> getFinalOminousConfig(Holder<TrialSpawnerConfig> normalConfig) {
+        return ominousConfig.orElse(normalConfig);
     }
 
     @Override
