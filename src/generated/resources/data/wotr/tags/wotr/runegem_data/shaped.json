@@ -1,9 +1,11 @@
 {
   "values": [
-    "wotr:shaped_attack",
-    "wotr:shaped_defense",
-    "wotr:shaped_health",
-    "wotr:shaped_speed",
-    "wotr:shaped_zombie"
+    "wotr:attack_shaped",
+    "wotr:defense_shaped",
+    "wotr:health_shaped",
+    "wotr:projectile_shaped",
+    "wotr:skeleton_shaped",
+    "wotr:speed_shaped",
+    "wotr:zombie_shaped"
   ]
 }

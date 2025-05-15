@@ -1,5 +1,10 @@
 {
   "values": [
-    "wotr:framed_zombie"
+    "wotr:attack_framed",
+    "wotr:defense_framed",
+    "wotr:health_framed",
+    "wotr:magic_framed",
+    "wotr:projectile_framed",
+    "wotr:speed_framed"
   ]
 }

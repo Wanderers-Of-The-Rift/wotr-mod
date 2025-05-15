@@ -1,10 +1,12 @@
 {
   "values": [
-    "wotr:polished_attack",
-    "wotr:polished_defense",
-    "wotr:polished_health",
-    "wotr:polished_speed",
-    "wotr:polished_zombie",
-    "wotr:polished_magic"
+    "wotr:attack_polished",
+    "wotr:defense_polished",
+    "wotr:health_polished",
+    "wotr:magic_polished",
+    "wotr:projectile_polished",
+    "wotr:skeleton_polished",
+    "wotr:speed_polished",
+    "wotr:zombie_polished"
   ]
 }

@@ -1,10 +1,12 @@
 {
   "values": [
-    "wotr:cut_attack",
-    "wotr:cut_defense",
-    "wotr:cut_health",
-    "wotr:cut_speed",
-    "wotr:cut_zombie",
-    "wotr:cut_magic"
+    "wotr:attack_cut",
+    "wotr:defense_cut",
+    "wotr:health_cut",
+    "wotr:magic_cut",
+    "wotr:projectile_cut",
+    "wotr:skeleton_cut",
+    "wotr:speed_cut",
+    "wotr:zombie_cut"
   ]
 }

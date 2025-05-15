@@ -1,11 +1,13 @@
 {
   "values": [
-    "wotr:raw_attack",
-    "wotr:raw_defense",
-    "wotr:raw_health",
-    "wotr:raw_speed",
-    "wotr:raw_zombie",
-    "wotr:raw_magic",
-    "wotr:shaped_magic"
+    "wotr:attack_raw",
+    "wotr:defense_raw",
+    "wotr:health_raw",
+    "wotr:magic_raw",
+    "wotr:magic_shaped",
+    "wotr:projectile_raw",
+    "wotr:skeleton_raw",
+    "wotr:speed_raw",
+    "wotr:zombie_raw"
   ]
 }

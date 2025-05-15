@@ -32,14 +32,31 @@ public class ModRunegemDataTagsProvider extends TagsProvider<RunegemData> {
         geodeTag(RunegemTier.SHAPED, ModTags.Runegems.GEODE_SHAPED);
         geodeTag(RunegemTier.POLISHED, ModTags.Runegems.GEODE_POLISHED);
         geodeTag(RunegemTier.FRAMED, ModTags.Runegems.GEODE_FRAMED);
+
+        monsterTag(RunegemTier.RAW, ModTags.Runegems.MONSTER_RAW);
+        monsterTag(RunegemTier.CUT, ModTags.Runegems.MONSTER_CUT);
+        monsterTag(RunegemTier.SHAPED, ModTags.Runegems.MONSTER_SHAPED);
+        monsterTag(RunegemTier.POLISHED, ModTags.Runegems.MONSTER_POLISHED);
+        monsterTag(RunegemTier.FRAMED, ModTags.Runegems.MONSTER_FRAMED);
     }
 
     private void geodeTag(RunegemTier tier, TagKey<RunegemData> geodeTag) {
         ModRuneGemDataProvider.DATA.forEach((key, value) -> {
             if (value.tier() == tier) {
-                if (key.location().getPath().contains("zombie") && !key.location().getPath().contains("skeleton")
+                if (!key.location().getPath().contains("zombie") && !key.location().getPath().contains("skeleton")
                         && !key.location().getPath().contains("creeper")) {
                     tag(geodeTag).add(key);
+                }
+            }
+        });
+    }
+
+    private void monsterTag(RunegemTier tier, TagKey<RunegemData> tag) {
+        ModRuneGemDataProvider.DATA.forEach((key, value) -> {
+            if (value.tier() == tier) {
+                if (key.location().getPath().contains("zombie") || key.location().getPath().contains("skeleton")
+                        || key.location().getPath().contains("creeper")) {
+                    tag(tag).add(key);
                 }
             }
         });
