@@ -6,7 +6,7 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:movement_speed",
           "id": "wotr:movement_speed",
-          "max_roll": 0.05000000074505806,
+          "max_roll": 0.029999999329447746,
           "min_roll": 0.0,
           "operation": "add_value"
         }
@@ -19,8 +19,8 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:movement_speed",
           "id": "wotr:movement_speed",
-          "max_roll": 0.05000000074505806,
-          "min_roll": 0.05000000074505806,
+          "max_roll": 0.07000000029802322,
+          "min_roll": 0.029999999329447746,
           "operation": "add_value"
         }
       ],
@@ -33,7 +33,7 @@
           "attribute": "minecraft:movement_speed",
           "id": "wotr:movement_speed",
           "max_roll": 0.10000000149011612,
-          "min_roll": 0.05000000074505806,
+          "min_roll": 0.07000000029802322,
           "operation": "add_value"
         }
       ],

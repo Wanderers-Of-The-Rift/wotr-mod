@@ -269,8 +269,12 @@ public class ModModifierProvider {
             ToBeTieredModifierEffect toBeTieredModifierEffect) {
         float stepSize = (toBeTieredModifierEffect.totalMaxRoll - toBeTieredModifierEffect.totalMinRoll)
                 / (float) tiers;
-        float minRoll = Math.round((toBeTieredModifierEffect.totalMinRoll + (stepSize * tier)) * 20) / 20F;
-        float maxRoll = Math.round((toBeTieredModifierEffect.totalMinRoll + (stepSize * (tier + 1))) * 20) / 20F;
+        float minRoll = Math.round((toBeTieredModifierEffect.totalMinRoll + (stepSize * tier)) * 100) / 100F;
+        float maxRoll = Math.round((toBeTieredModifierEffect.totalMinRoll + (stepSize * (tier + 1))) * 100) / 100F;
+        if (stepSize > 0.1 || stepSize < -0.1) {
+            minRoll = Math.round(minRoll * 20) / 20F;
+            maxRoll = Math.round(maxRoll * 20) / 20F;
+        }
         return toBeTieredModifierEffect.buildModifierEffect.apply(minRoll, maxRoll);
     }
 
