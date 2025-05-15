@@ -50,6 +50,11 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.CUT_RUNEGEM_GEODE, "Runegem Geode (Cut)");
         addItem(ModItems.POLISHED_RUNEGEM_GEODE, "Runegem Geode (Polished)");
         addItem(ModItems.FRAMED_RUNEGEM_GEODE, "Runegem Geode (Framed)");
+        addItem(ModItems.RAW_RUNEGEM_MONSTER, "Monster Runegem (Raw)");
+        addItem(ModItems.SHAPED_RUNEGEM_MONSTER, "Monster Runegem (Shaped)");
+        addItem(ModItems.CUT_RUNEGEM_MONSTER, "Monster Runegem (Cut)");
+        addItem(ModItems.POLISHED_RUNEGEM_MONSTER, "Monster Runegem (Polished)");
+        addItem(ModItems.FRAMED_RUNEGEM_MONSTER, "Monster Runegem (Framed)");
         addItem(ModItems.ABILITY_HOLDER, "Empty Ability");
         addItem(ModItems.SKILL_THREAD, "Skill Thread");
 

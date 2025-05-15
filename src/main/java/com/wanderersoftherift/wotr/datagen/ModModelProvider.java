@@ -103,6 +103,11 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.CUT_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.POLISHED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.FRAMED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.RAW_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SHAPED_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CUT_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.POLISHED_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FRAMED_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BASE_ABILITY_HOLDER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.SKILL_THREAD.get(), ModelTemplates.FLAT_ITEM);
 

@@ -9,10 +9,11 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 2
+              "max_tier": 3,
+              "min_tier": 0
             }
           ],
-          "name": "wotr:raw_runegem_geode",
+          "name": "wotr:raw_runegem_monster",
           "weight": 16
         },
         {
@@ -21,10 +22,10 @@
             {
               "condition": "wotr:rift_level_check",
               "max_tier": 4,
-              "min_tier": 1
+              "min_tier": 2
             }
           ],
-          "name": "wotr:shaped_runegem_geode",
+          "name": "wotr:shaped_runegem_monster",
           "weight": 8
         },
         {
@@ -33,10 +34,10 @@
             {
               "condition": "wotr:rift_level_check",
               "max_tier": 5,
-              "min_tier": 2
+              "min_tier": 3
             }
           ],
-          "name": "wotr:cut_runegem_geode",
+          "name": "wotr:cut_runegem_monster",
           "weight": 4
         },
         {
@@ -44,10 +45,11 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "min_tier": 3
+              "max_tier": 7,
+              "min_tier": 4
             }
           ],
-          "name": "wotr:polished_runegem_geode",
+          "name": "wotr:polished_runegem_monster",
           "weight": 2
         },
         {
@@ -55,14 +57,15 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "min_tier": 4
+              "max_tier": 7,
+              "min_tier": 5
             }
           ],
-          "name": "wotr:framed_runegem_geode"
+          "name": "wotr:framed_runegem_monster"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "wotr:rift/runegem"
+  "random_sequence": "wotr:rift/monster_runegem"
 }
