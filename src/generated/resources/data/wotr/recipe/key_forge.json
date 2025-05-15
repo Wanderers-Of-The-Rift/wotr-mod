@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": "#minecraft:overworld_natural_logs",
-    "I": "minecraft:iron_block",
     "B": "minecraft:blast_furnace",
+    "I": "minecraft:iron_block",
+    "L": "#minecraft:logs",
     "P": "minecraft:flower_pot"
   },
   "pattern": [

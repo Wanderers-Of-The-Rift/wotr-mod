@@ -288,6 +288,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("hud_preset", "default"), "Default");
         add(WanderersOfTheRift.translationId("hud_preset", "minimal"), "Minimal");
+        add(WanderersOfTheRift.translationId("hud_preset", "custom"), "Custom");
 
         add(WanderersOfTheRift.translationId("attribute", "ability.aoe"), "Ability Area of Effect");
         add(WanderersOfTheRift.translationId("attribute", "ability.raw_damage"), "Ability Damage");

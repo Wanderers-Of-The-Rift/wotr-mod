@@ -311,6 +311,7 @@
   "hud.wotr.effect_bar": "Ability Effect Bar",
   "hud.wotr.mana_bar": "Mana Bar",
   "hud.wotr.objective": "Objective",
+  "hud_preset.wotr.custom": "Custom",
   "hud_preset.wotr.default": "Default",
   "hud_preset.wotr.minimal": "Minimal",
   "item.wotr.ability_holder": "Empty Ability",
