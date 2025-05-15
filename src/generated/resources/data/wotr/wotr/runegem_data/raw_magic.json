@@ -1,0 +1,34 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:ability_aoe",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:mana_cost",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:mana_regen_rate",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:projectile_speed",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:projectile_spread",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.raw_magic"
+  },
+  "shape": "square",
+  "tier": "raw"
+}

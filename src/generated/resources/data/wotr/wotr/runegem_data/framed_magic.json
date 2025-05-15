@@ -1,0 +1,34 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:ability_aoe",
+          "tier": 5
+        },
+        {
+          "modifier": "wotr:mana_cost",
+          "tier": 5
+        },
+        {
+          "modifier": "wotr:mana_regen_rate",
+          "tier": 5
+        },
+        {
+          "modifier": "wotr:projectile_speed",
+          "tier": 5
+        },
+        {
+          "modifier": "wotr:projectile_spread",
+          "tier": 5
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.framed_magic"
+  },
+  "shape": "square",
+  "tier": "framed"
+}

@@ -163,6 +163,17 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.CUT));
+        registerRunegem(context, getRunegemResourceKey("cut_magic"),
+                new RunegemData(getTranslatableName("cut_magic"), RunegemShape.SQUARE,
+                        List.of(new RunegemData.ModifierGroup(
+                                socketablesTag, List.of(
+                                new TieredModifier(2, getModifier(lookup, "ability_aoe")),
+                                new TieredModifier(2, getModifier(lookup, "mana_cost")),
+                                new TieredModifier(2, getModifier(lookup, "mana_regen_rate")),
+                                new TieredModifier(2, getModifier(lookup, "projectile_speed")),
+                                new TieredModifier(2, getModifier(lookup, "projectile_spread"))
+                        ))),
+                        RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("framed_attack"), new RunegemData(
                 getTranslatableName("framed_attack"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
@@ -291,6 +302,17 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "knockback")),
                                         new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 ))),
+                        RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("framed_magic"),
+                new RunegemData(getTranslatableName("framed_magic"), RunegemShape.SQUARE,
+                        List.of(new RunegemData.ModifierGroup(
+                                socketablesTag, List.of(
+                                new TieredModifier(5, getModifier(lookup, "ability_aoe")),
+                                new TieredModifier(5, getModifier(lookup, "mana_cost")),
+                                new TieredModifier(5, getModifier(lookup, "mana_regen_rate")),
+                                new TieredModifier(5, getModifier(lookup, "projectile_speed")),
+                                new TieredModifier(5, getModifier(lookup, "projectile_spread"))
+                        ))),
                         RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("polished_attack"), new RunegemData(
                 getTranslatableName("polished_attack"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
@@ -421,6 +443,17 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.POLISHED));
+        registerRunegem(context, getRunegemResourceKey("polished_magic"),
+                new RunegemData(getTranslatableName("polished_magic"), RunegemShape.SQUARE,
+                        List.of(new RunegemData.ModifierGroup(
+                                socketablesTag, List.of(
+                                new TieredModifier(4, getModifier(lookup, "ability_aoe")),
+                                new TieredModifier(4, getModifier(lookup, "mana_cost")),
+                                new TieredModifier(4, getModifier(lookup, "mana_regen_rate")),
+                                new TieredModifier(4, getModifier(lookup, "projectile_speed")),
+                                new TieredModifier(4, getModifier(lookup, "projectile_spread"))
+                        ))),
+                        RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("raw_attack"), new RunegemData(getTranslatableName("raw_attack"),
                 RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
@@ -542,6 +575,17 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback")),
                                         new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 ))),
+                        RunegemTier.RAW));
+        registerRunegem(context, getRunegemResourceKey("raw_magic"),
+                new RunegemData(getTranslatableName("raw_magic"), RunegemShape.SQUARE,
+                        List.of(new RunegemData.ModifierGroup(
+                                socketablesTag, List.of(
+                                new TieredModifier(1, getModifier(lookup, "ability_aoe")),
+                                new TieredModifier(1, getModifier(lookup, "mana_cost")),
+                                new TieredModifier(1, getModifier(lookup, "mana_regen_rate")),
+                                new TieredModifier(1, getModifier(lookup, "projectile_speed")),
+                                new TieredModifier(1, getModifier(lookup, "projectile_spread"))
+                        ))),
                         RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("shaped_attack"), new RunegemData(
                 getTranslatableName("shaped_attack"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
@@ -669,6 +713,17 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.SHAPED));
+        registerRunegem(context, getRunegemResourceKey("shaped_magic"),
+                new RunegemData(getTranslatableName("shaped_magic"), RunegemShape.SQUARE,
+                        List.of(new RunegemData.ModifierGroup(
+                                socketablesTag, List.of(
+                                new TieredModifier(3, getModifier(lookup, "ability_aoe")),
+                                new TieredModifier(3, getModifier(lookup, "mana_cost")),
+                                new TieredModifier(3, getModifier(lookup, "mana_regen_rate")),
+                                new TieredModifier(3, getModifier(lookup, "projectile_speed")),
+                                new TieredModifier(3, getModifier(lookup, "projectile_spread"))
+                        ))),
+                        RunegemTier.RAW));
     }
 
     private static void registerRunegem(

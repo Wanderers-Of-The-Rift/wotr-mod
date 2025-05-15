@@ -1,0 +1,34 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:ability_aoe",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:mana_cost",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:mana_regen_rate",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:projectile_speed",
+          "tier": 4
+        },
+        {
+          "modifier": "wotr:projectile_spread",
+          "tier": 4
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.polished_magic"
+  },
+  "shape": "square",
+  "tier": "polished"
+}

@@ -4,6 +4,7 @@
     "wotr:cut_defense",
     "wotr:cut_health",
     "wotr:cut_speed",
-    "wotr:cut_zombie"
+    "wotr:cut_zombie",
+    "wotr:cut_magic"
   ]
 }

@@ -4,6 +4,7 @@
     "wotr:framed_defense",
     "wotr:framed_health",
     "wotr:framed_speed",
-    "wotr:framed_zombie"
+    "wotr:framed_zombie",
+    "wotr:framed_magic"
   ]
 }
