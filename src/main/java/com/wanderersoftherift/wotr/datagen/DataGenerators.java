@@ -35,8 +35,6 @@ public class DataGenerators {
                 })
                         .add(RegistryEvents.ABILITY_REGISTRY, ModAbilityProvider::bootstrapAbilities)
                         .add(ModDatapackRegistries.MODIFIER_KEY, ModModifierProvider::bootstrapModifiers)
-                        .add(ModDatapackRegistries.RUNEGEM_DATA_KEY,
-                                ModRuneGemDataProvider::bootstrapRuneGems)
                         .add(RegistryEvents.OBJECTIVE_REGISTRY, context -> {
                         })
                         .add(ModRiftThemes.RIFT_THEME_KEY, context -> {

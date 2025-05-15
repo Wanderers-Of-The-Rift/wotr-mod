@@ -18,12 +18,12 @@
             }
           ],
           "name": "minecraft:gold_ingot",
-          "weight": 40
+          "weight": 30
         },
         {
           "type": "minecraft:loot_table",
           "value": "wotr:rift/monster_runegem",
-          "weight": 20
+          "weight": 25
         },
         {
           "type": "minecraft:loot_table",
@@ -72,11 +72,7 @@
           "weight": 10
         }
       ],
-      "rolls": {
-        "type": "minecraft:uniform",
-        "max": 10.0,
-        "min": 6.0
-      }
+      "rolls": 1.0
     }
   ],
   "random_sequence": "wotr:chests/rift_spawner/default"

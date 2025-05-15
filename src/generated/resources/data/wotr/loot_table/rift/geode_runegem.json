@@ -9,8 +9,7 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 3,
-              "min_tier": 0
+              "max_tier": 3
             }
           ],
           "name": "wotr:raw_runegem_geode",
@@ -45,7 +44,6 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 7,
               "min_tier": 4
             }
           ],
@@ -57,7 +55,6 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 7,
               "min_tier": 5
             }
           ],
