@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.init.ModAttachments;
 import com.wanderersoftherift.wotr.init.ModLootContextParams;
+import com.wanderersoftherift.wotr.init.ModTags;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.network.S2CRiftObjectiveStatusPacket;
@@ -49,7 +50,7 @@ public class RiftObjectiveEvents {
                 .orElseGet(() -> event.getLevel()
                         .registryAccess()
                         .lookupOrThrow(RegistryEvents.OBJECTIVE_REGISTRY)
-                        .getRandom(event.getLevel().getRandom())
+                        .getRandomElementOf(ModTags.Objectives.RANDOM_SELECTABLE, event.getLevel().getRandom())
                         .orElseThrow(() -> new IllegalStateException("No objectives available")));
 
         OngoingObjective objective = objectiveType.value().generate(event.getLevel());
