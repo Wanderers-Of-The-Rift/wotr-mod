@@ -15,8 +15,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 public record RiftLevelCheck(int minTier, int maxTier) implements LootItemCondition {
     public static final MapCodec<RiftLevelCheck> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Codec.INT.fieldOf("min_tier").forGetter(RiftLevelCheck::minTier),
-                    Codec.INT.fieldOf("max_tier").forGetter(RiftLevelCheck::maxTier)
+                    Codec.INT.optionalFieldOf("min_tier", 0).forGetter(RiftLevelCheck::minTier),
+                    Codec.INT.optionalFieldOf("max_tier", Integer.MAX_VALUE).forGetter(RiftLevelCheck::maxTier)
             ).apply(instance, RiftLevelCheck::new));
 
     @Override
@@ -39,7 +39,7 @@ public record RiftLevelCheck(int minTier, int maxTier) implements LootItemCondit
 
     public static class Builder implements LootItemCondition.Builder {
         private int minTier = 0;
-        private int maxTier = 0;
+        private int maxTier = Integer.MAX_VALUE;
 
         public Builder min(int min) {
             this.minTier = min;
