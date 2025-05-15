@@ -25,8 +25,9 @@ public class ModRiftThemeRecipeProvider extends KeyForgeRecipeProvider<Holder<Ri
 
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<KeyForgeRecipe<Holder<RiftTheme>>> writer) {
-        writer.accept(KeyForgeRecipe.create(
-                (Holder<RiftTheme>) DeferredHolder.create(ModRiftThemes.RIFT_THEME_KEY, WanderersOfTheRift.id("cave")))
+        writer.accept(KeyForgeRecipe
+                .create((Holder<RiftTheme>) DeferredHolder.create(ModRiftThemes.RIFT_THEME_KEY,
+                        WanderersOfTheRift.id("cave")))
                 .setPriority(-1)
                 .build());
         writer.accept(KeyForgeRecipe
@@ -47,6 +48,19 @@ public class ModRiftThemeRecipeProvider extends KeyForgeRecipeProvider<Holder<Ri
                         new EssencePredicate.Builder(WanderersOfTheRift.id("mushroom")).setMinPercent(50F).build())
                 .setPriority(10)
                 .build());
-
+        writer.accept(KeyForgeRecipe
+                .create((Holder<RiftTheme>) DeferredHolder.create(ModRiftThemes.RIFT_THEME_KEY,
+                        WanderersOfTheRift.id("nether")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("nether")).setMinPercent(50F).build())
+                .setPriority(10)
+                .build());
+        writer.accept(KeyForgeRecipe
+                .create((Holder<RiftTheme>) DeferredHolder.create(ModRiftThemes.RIFT_THEME_KEY,
+                        WanderersOfTheRift.id("noir")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("light")).setMinPercent(50F).build())
+                .setPriority(10)
+                .build());
     }
 }
