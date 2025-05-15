@@ -107,8 +107,12 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                         .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_GEODE).when(riftTier().max(3)).setWeight(16))
                         .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_GEODE).when(riftTier(2, 4)).setWeight(8))
                         .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_GEODE).when(riftTier(3, 5)).setWeight(4))
-                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_GEODE).when(riftTier().min(4)).setWeight(2))
-                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_GEODE).when(riftTier().min(5)).setWeight(1))));
+                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_GEODE)
+                                .when(riftTier().min(4))
+                                .setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_GEODE)
+                                .when(riftTier().min(5))
+                                .setWeight(1))));
     }
 
     private void generateMonsterRunegemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
@@ -118,8 +122,12 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                         .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_MONSTER).when(riftTier().max(3)).setWeight(16))
                         .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_MONSTER).when(riftTier(2, 4)).setWeight(8))
                         .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_MONSTER).when(riftTier(3, 5)).setWeight(4))
-                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_MONSTER).when(riftTier().min(4)).setWeight(2))
-                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_MONSTER).when(riftTier().min(5)).setWeight(1))));
+                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_MONSTER)
+                                .when(riftTier().min(4))
+                                .setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_MONSTER)
+                                .when(riftTier().min(5))
+                                .setWeight(1))));
     }
 
     private void generateAbilityLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
