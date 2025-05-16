@@ -34,7 +34,7 @@ public record UnrolledGearImplicits() implements GearImplicits {
         randomSource.consumeCount(1);
         while (iterator.hasNext()) {
             Holder<Modifier> holder = iterator.next();
-            instances.add(ModifierInstance.of(holder, 0, randomSource));
+            instances.add(ModifierInstance.of(holder, 1, randomSource));
         }
         RolledGearImplicits rolledGearImplicits = new RolledGearImplicits(instances);
         stack.set(ModDataComponentType.GEAR_IMPLICITS, rolledGearImplicits);
