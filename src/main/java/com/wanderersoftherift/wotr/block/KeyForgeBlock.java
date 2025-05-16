@@ -36,7 +36,9 @@ public class KeyForgeBlock extends Block {
             .translatable("container." + WanderersOfTheRift.MODID + ".key_forge");
 
     private static final VoxelShape SHAPE = VoxelShapeUtils.combine(
-            Block.box(3.0, 0.0, 1.0, 13.0, 9.0, 15.0), Block.box(5.0, 9.0, 1.0, 11.0, 14.0, 5.0)
+            Block.box(2.0, 0.0, 6.0, 14.0, 9.0, 16.0),
+            Block.box(4.0, 0.0, 0.0, 12.0, 11.0, 6.0),
+            Block.box(5.0, 11.0, 1.0, 11.0, 16.0, 5.0)
     );
 
     private static final Map<Direction, VoxelShape> SHAPES;

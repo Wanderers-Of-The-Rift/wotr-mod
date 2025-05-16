@@ -1,9 +1,10 @@
 {
+	"parent": "block/block",
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "block/Key_Forge_V2_texture",
-		"particle": "block/Key_Forge_V2_texture"
+		"0": "wotr:block/key_forge",
+		"particle": "wotr:block/key_forge"
 	},
 	"elements": [
 		{
