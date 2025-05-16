@@ -4,7 +4,6 @@
     "wotr:defense_raw",
     "wotr:health_raw",
     "wotr:magic_raw",
-    "wotr:magic_shaped",
     "wotr:projectile_raw",
     "wotr:skeleton_raw",
     "wotr:speed_raw",

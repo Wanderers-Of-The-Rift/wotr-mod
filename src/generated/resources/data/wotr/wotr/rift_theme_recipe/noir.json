@@ -1,10 +1,10 @@
 {
   "essence_reqs": [
     {
-      "essenceType": "wotr:nether",
+      "essenceType": "wotr:light",
       "minPercent": 50.0
     }
   ],
-  "output": "wotr:nether",
+  "output": "wotr:noir",
   "priority": 10
 }
