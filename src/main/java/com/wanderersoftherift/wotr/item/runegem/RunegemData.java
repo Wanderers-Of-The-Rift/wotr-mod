@@ -44,10 +44,6 @@ public record RunegemData(Component name, RunegemShape shape, List<ModifierGroup
         return Optional.of(modifiers.get(level.random.nextInt(modifiers.size())));
     }
 
-    public ResourceLocation getName() {
-        return null;
-    }
-
     public record ModifierGroup(HolderSet<Item> supportedItems, List<TieredModifier> modifiers) {
         public static final Codec<ModifierGroup> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                 RegistryCodecs.homogeneousList(Registries.ITEM)
