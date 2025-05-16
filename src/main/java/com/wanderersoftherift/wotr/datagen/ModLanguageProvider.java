@@ -92,6 +92,8 @@ public class ModLanguageProvider extends LanguageProvider {
         addTheme("forest", "Forest");
         addTheme("processor", "Processor");
         addTheme("mushroom", "Mushroom");
+        addTheme("nether", "Nether");
+        addTheme("noir", "Noir");
 
         ModBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
             // addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));
