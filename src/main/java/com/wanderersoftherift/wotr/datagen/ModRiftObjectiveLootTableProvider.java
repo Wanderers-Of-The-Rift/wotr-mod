@@ -34,7 +34,7 @@ public record ModRiftObjectiveLootTableProvider(HolderLookup.Provider registries
                         .add(LootItem.lootTableItem(ModItems.SKILL_THREAD)
                                 .setWeight(30)
                                 .apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(16, 0.8f))))
-                        .add(NestedLootTable.lootTableReference(getResourceKey("rift/runegem")).setWeight(20))
+                        .add(NestedLootTable.lootTableReference(getResourceKey("rift/geode_runegem")).setWeight(20))
                         .add(LootItem.lootTableItem(Items.NETHERITE_INGOT).setWeight(20))));
         consumer.accept(getResourceKey("rift_objective/fail"), LootTable.lootTable()
                 .withPool(

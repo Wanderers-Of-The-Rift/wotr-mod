@@ -5,10 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
-import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,18 +25,19 @@ import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.RUNEGEMS
 
 public class RunegemsFunction extends LootItemConditionalFunction {
     public static final MapCodec<RunegemsFunction> CODEC = RecordCodecBuilder.mapCodec(
-            inst -> commonFields(inst).and(RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemsFunction::getRunegemTier)
-            ).apply(inst, RunegemsFunction::new));
+            inst -> commonFields(inst).and(RegistryCodecs.homogeneousList(ModDatapackRegistries.RUNEGEM_DATA_KEY)
+                    .fieldOf("runegems")
+                    .forGetter(RunegemsFunction::getRunegems)).apply(inst, RunegemsFunction::new));
 
-    private RunegemTier runegemTier;
+    private final HolderSet<RunegemData> runegems;
 
-    protected RunegemsFunction(List<LootItemCondition> predicates, RunegemTier runegemTier) {
+    protected RunegemsFunction(List<LootItemCondition> predicates, HolderSet<RunegemData> runegems) {
         super(predicates);
-        this.runegemTier = runegemTier;
+        this.runegems = runegems;
     }
 
-    public RunegemTier getRunegemTier() {
-        return runegemTier;
+    public HolderSet<RunegemData> getRunegems() {
+        return runegems;
     }
 
     @Override
@@ -50,22 +51,22 @@ public class RunegemsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, ServerLevel level, RandomSource random) {
-        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegemTier.getTagKey(), random);
+        Optional<Holder<RunegemData>> randomRunegem = getRandomRunegem(level, runegems, random);
         randomRunegem.ifPresent(
                 runegemDataHolder -> itemStack.set(ModDataComponentType.RUNEGEM_DATA, runegemDataHolder.value()));
         return itemStack;
     }
 
-    public Optional<Holder<RunegemData>> getRandomRunegem(Level level, TagKey<RunegemData> tag, RandomSource random) {
-        return level.registryAccess()
-                .lookupOrThrow(ModDatapackRegistries.RUNEGEM_DATA_KEY)
-                .get(tag)
-                .flatMap(holders -> holders.getRandomElement(random));
+    public Optional<Holder<RunegemData>> getRandomRunegem(
+            Level level,
+            HolderSet<RunegemData> runegems,
+            RandomSource random) {
+        return runegems.getRandomElement(random);
     }
 
-    public static LootItemConditionalFunction.Builder<?> setTier(RunegemTier tier) {
+    public static LootItemConditionalFunction.Builder<?> setRunegemOptions(HolderSet<RunegemData> runegems) {
         return simpleBuilder((conditions) -> {
-            return new RunegemsFunction(conditions, tier);
+            return new RunegemsFunction(conditions, runegems);
         });
     }
 }

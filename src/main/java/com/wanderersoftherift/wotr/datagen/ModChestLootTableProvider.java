@@ -32,7 +32,8 @@ import static com.wanderersoftherift.wotr.loot.predicates.RiftLevelCheck.riftTie
 public record ModChestLootTableProvider(HolderLookup.Provider registries) implements LootTableSubProvider {
 
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        generateRunegemLootTable(consumer);
+        generateGeodeRunegemLootTable(consumer);
+        generateMonsterRunegemLootTable(consumer);
         generateAbilityLootTable(consumer);
         generateSocketedVanillaArmorLootTable(consumer);
         generateSocketedVanillaWeaponLootTable(consumer);
@@ -44,14 +45,15 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                                 .add(LootItem.lootTableItem(Items.IRON_INGOT)
                                         .setWeight(40)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/runegem")).setWeight(20))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/geode_runegem"))
+                                        .setWeight(20))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/ability")).setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_armor"))
-                                        .setWeight(20))
+                                        .setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_weapons"))
-                                        .setWeight(20))
+                                        .setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_tools"))
-                                        .setWeight(20))
+                                        .setWeight(5))
                                 .add(LootItem.lootTableItem(Items.EMERALD).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.POTION)
                                         .setWeight(20)
@@ -72,20 +74,59 @@ public record ModChestLootTableProvider(HolderLookup.Provider registries) implem
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))))
 
                 ));
+        consumer.accept(getResourceKey("chests/rift_spawner/default"), LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(LootItem.lootTableItem(Items.GOLD_INGOT)
+                                        .setWeight(30)
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/monster_runegem"))
+                                        .setWeight(25))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/ability")).setWeight(5))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_armor"))
+                                        .setWeight(5))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_weapons"))
+                                        .setWeight(5))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_tools"))
+                                        .setWeight(5))
+                                .add(LootItem.lootTableItem(Items.DIAMOND).setWeight(20))
+                                .add(LootItem.lootTableItem(Items.POTION)
+                                        .setWeight(20)
+                                        .apply(SetPotionFunction.setPotion(Potions.HEALING)))
+                                .add(LootItem.lootTableItem(Items.COOKED_BEEF).setWeight(20))
+                                .add(LootItem.lootTableItem(Items.EXPERIENCE_BOTTLE).setWeight(10))
+
+                ));
     }
 
-    private void generateRunegemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        consumer.accept(getResourceKey("rift/runegem"), LootTable.lootTable()
+    private void generateGeodeRunegemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        consumer.accept(getResourceKey("rift/geode_runegem"), LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
-                        .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_GEODE).when(riftTier().max(2)).setWeight(16))
-                        .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_GEODE).when(riftTier(1, 4)).setWeight(8))
-                        .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_GEODE).when(riftTier(2, 5)).setWeight(4))
+                        .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_GEODE).when(riftTier().max(3)).setWeight(16))
+                        .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_GEODE).when(riftTier(2, 4)).setWeight(8))
+                        .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_GEODE).when(riftTier(3, 5)).setWeight(4))
                         .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_GEODE)
-                                .when(riftTier().min(3))
+                                .when(riftTier().min(4))
                                 .setWeight(2))
                         .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_GEODE)
+                                .when(riftTier().min(5))
+                                .setWeight(1))));
+    }
+
+    private void generateMonsterRunegemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        consumer.accept(getResourceKey("rift/monster_runegem"), LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.RAW_RUNEGEM_MONSTER).when(riftTier().max(3)).setWeight(16))
+                        .add(LootItem.lootTableItem(ModItems.SHAPED_RUNEGEM_MONSTER).when(riftTier(2, 4)).setWeight(8))
+                        .add(LootItem.lootTableItem(ModItems.CUT_RUNEGEM_MONSTER).when(riftTier(3, 5)).setWeight(4))
+                        .add(LootItem.lootTableItem(ModItems.POLISHED_RUNEGEM_MONSTER)
                                 .when(riftTier().min(4))
+                                .setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.FRAMED_RUNEGEM_MONSTER)
+                                .when(riftTier().min(5))
                                 .setWeight(1))));
     }
 

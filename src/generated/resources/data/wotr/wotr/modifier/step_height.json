@@ -1,0 +1,17 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:step_height",
+          "id": "wotr:step_height",
+          "max_roll": 0.5,
+          "min_roll": 0.5,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    }
+  ]
+}

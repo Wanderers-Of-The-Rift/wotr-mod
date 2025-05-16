@@ -27,6 +27,11 @@ public class ModCreativeTabs {
                         output.accept(ModItems.CUT_RUNEGEM_GEODE);
                         output.accept(ModItems.POLISHED_RUNEGEM_GEODE);
                         output.accept(ModItems.FRAMED_RUNEGEM_GEODE);
+                        output.accept(ModItems.RAW_RUNEGEM_MONSTER);
+                        output.accept(ModItems.SHAPED_RUNEGEM_MONSTER);
+                        output.accept(ModItems.CUT_RUNEGEM_MONSTER);
+                        output.accept(ModItems.POLISHED_RUNEGEM_MONSTER);
+                        output.accept(ModItems.FRAMED_RUNEGEM_MONSTER);
                         ModItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());

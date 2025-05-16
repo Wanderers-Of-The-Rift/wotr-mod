@@ -59,7 +59,7 @@ public class AccessibilityOptionsScreen extends Screen {
 
         rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.flashing_lights"),
                 Component.translatable("accessibility.wotr.screen.tooltip.flashing_lights"),
-                ClientConfig.ACCESSIBILITY_FLASHING_LIGHTS));
+                ClientConfig.ACCESSIBILITY_FLASHING_LIGHTS, true));
 
         rowHelper.addChild(this.createConfigButton(Component.translatable("accessibility.wotr.screen.misophonia"),
                 Component.translatable("accessibility.wotr.screen.tooltip.misophonia"),
@@ -111,11 +111,21 @@ public class AccessibilityOptionsScreen extends Screen {
             Component name,
             Component tooltip,
             CycleButton.OnValueChange<Boolean> onChange,
-            boolean initialValue) {
-        return CycleButton.booleanBuilder(Component.translatable("options.off"), Component.translatable("options.on"))
-                .withInitialValue(initialValue)
-                .withTooltip(value -> Tooltip.create(tooltip))
-                .create(name, onChange);
+            boolean initialValue,
+            boolean reverseDisplay) {
+        if (reverseDisplay) {
+            return CycleButton
+                    .booleanBuilder(Component.translatable("options.off"), Component.translatable("options.on"))
+                    .withInitialValue(initialValue)
+                    .withTooltip(value -> Tooltip.create(tooltip))
+                    .create(name, onChange);
+        } else {
+            return CycleButton
+                    .booleanBuilder(Component.translatable("options.on"), Component.translatable("options.off"))
+                    .withInitialValue(initialValue)
+                    .withTooltip(value -> Tooltip.create(tooltip))
+                    .create(name, onChange);
+        }
     }
 
     // Helper for creating a cycle-button based off of a config boolean value, which is modified upon click
@@ -123,9 +133,17 @@ public class AccessibilityOptionsScreen extends Screen {
             Component name,
             Component tooltip,
             ModConfigSpec.BooleanValue booleanValue) {
+        return createConfigButton(name, tooltip, booleanValue, false);
+    }
+
+    private CycleButton<Boolean> createConfigButton(
+            Component name,
+            Component tooltip,
+            ModConfigSpec.BooleanValue booleanValue,
+            boolean reverseDisplay) {
         return createBooleanButton(name, tooltip, ((cycleButton, aBoolean) -> {
             booleanValue.set(!booleanValue.getAsBoolean());
-        }), booleanValue.getAsBoolean());
+        }), booleanValue.getAsBoolean(), reverseDisplay);
     }
 
     @Override

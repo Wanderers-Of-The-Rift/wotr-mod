@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -41,8 +42,8 @@ public class ModItems {
             registryName -> new Runegem(new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
                             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "runegem")))
-                    .component(ModDataComponentType.RUNEGEM_DATA,
-                            new RunegemData(RunegemShape.CIRCLE, new ArrayList<>(), RunegemTier.RAW))));
+                    .component(ModDataComponentType.RUNEGEM_DATA, new RunegemData(Component.empty(),
+                            RunegemShape.CIRCLE, new ArrayList<>(), RunegemTier.RAW))));
 
     public static final DeferredItem<Item> RIFT_KEY = ITEMS
             .register("rift_key",
@@ -50,11 +51,26 @@ public class ModItems {
                             .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("rift_key")))
                             .stacksTo(1)));
 
-    public static final DeferredItem<Item> RAW_RUNEGEM_GEODE = registerRunegemGeode(RunegemTier.RAW);
-    public static final DeferredItem<Item> SHAPED_RUNEGEM_GEODE = registerRunegemGeode(RunegemTier.SHAPED);
-    public static final DeferredItem<Item> CUT_RUNEGEM_GEODE = registerRunegemGeode(RunegemTier.CUT);
-    public static final DeferredItem<Item> POLISHED_RUNEGEM_GEODE = registerRunegemGeode(RunegemTier.POLISHED);
-    public static final DeferredItem<Item> FRAMED_RUNEGEM_GEODE = registerRunegemGeode(RunegemTier.FRAMED);
+    public static final DeferredItem<Item> RAW_RUNEGEM_GEODE = registerLootBox(
+            RunegemTier.RAW.getName() + "_runegem_geode");
+    public static final DeferredItem<Item> SHAPED_RUNEGEM_GEODE = registerLootBox(
+            RunegemTier.SHAPED.getName() + "_runegem_geode");
+    public static final DeferredItem<Item> CUT_RUNEGEM_GEODE = registerLootBox(
+            RunegemTier.CUT.getName() + "_runegem_geode");
+    public static final DeferredItem<Item> POLISHED_RUNEGEM_GEODE = registerLootBox(
+            RunegemTier.POLISHED.getName() + "_runegem_geode");
+    public static final DeferredItem<Item> FRAMED_RUNEGEM_GEODE = registerLootBox(
+            RunegemTier.FRAMED.getName() + "_runegem_geode");
+    public static final DeferredItem<Item> RAW_RUNEGEM_MONSTER = registerLootBox(
+            RunegemTier.RAW.getName() + "_runegem_monster");
+    public static final DeferredItem<Item> SHAPED_RUNEGEM_MONSTER = registerLootBox(
+            RunegemTier.SHAPED.getName() + "_runegem_monster");
+    public static final DeferredItem<Item> CUT_RUNEGEM_MONSTER = registerLootBox(
+            RunegemTier.CUT.getName() + "_runegem_monster");
+    public static final DeferredItem<Item> POLISHED_RUNEGEM_MONSTER = registerLootBox(
+            RunegemTier.POLISHED.getName() + "_runegem_monster");
+    public static final DeferredItem<Item> FRAMED_RUNEGEM_MONSTER = registerLootBox(
+            RunegemTier.FRAMED.getName() + "_runegem_monster");
 
     // Abilities
     public static final DeferredItem<Item> BASE_ABILITY_HOLDER = ITEMS.register("base_ability_holder",
@@ -67,20 +83,18 @@ public class ModItems {
             registryName -> new SkillThread(new Item.Properties().stacksTo(64)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("skill_thread")))));
 
-    private static @NotNull DeferredItem<Item> registerRunegemGeode(RunegemTier tier) {
-        String idString = tier.getName() + "_runegem_geode";
-        return ITEMS.register(idString,
-                registryName -> new Item(new Item.Properties()
-                        .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id(idString)))
-                        .component(DataComponents.CONSUMABLE,
-                                Consumable.builder()
-                                        .consumeSeconds(0.1F)
-                                        .animation(ItemUseAnimation.DRINK)
-                                        .sound(SoundEvents.GENERIC_DRINK)
-                                        .hasConsumeParticles(false)
-                                        .build())
-                        .component(ModDataComponentType.LOOT_BOX, new LootBox(ResourceKey.create(Registries.LOOT_TABLE,
-                                WanderersOfTheRift.id("loot_box/" + tier.getName() + "_runegem_geode"))))));
+    private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
+        return ITEMS.register(idString, registryName -> new Item(new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id(idString)))
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .consumeSeconds(0.1F)
+                                .animation(ItemUseAnimation.DRINK)
+                                .sound(SoundEvents.GENERIC_DRINK)
+                                .hasConsumeParticles(false)
+                                .build())
+                .component(ModDataComponentType.LOOT_BOX, new LootBox(
+                        ResourceKey.create(Registries.LOOT_TABLE, WanderersOfTheRift.id("loot_box/" + idString))))));
     }
 
     public static <T extends Block> DeferredItem<BlockItem> registerSimpleBlockItem(String id, DeferredBlock<T> block) {

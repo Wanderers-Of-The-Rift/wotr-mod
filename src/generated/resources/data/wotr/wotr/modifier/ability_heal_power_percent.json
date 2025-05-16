@@ -1,0 +1,69 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_heal_power",
+          "id": "wotr:ability_heal_power_percent",
+          "max_roll": 0.20000000298023224,
+          "min_roll": 0.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_heal_power",
+          "id": "wotr:ability_heal_power_percent",
+          "max_roll": 0.4000000059604645,
+          "min_roll": 0.20000000298023224,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_heal_power",
+          "id": "wotr:ability_heal_power_percent",
+          "max_roll": 0.6000000238418579,
+          "min_roll": 0.4000000059604645,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_heal_power",
+          "id": "wotr:ability_heal_power_percent",
+          "max_roll": 0.800000011920929,
+          "min_roll": 0.6000000238418579,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_heal_power",
+          "id": "wotr:ability_heal_power_percent",
+          "max_roll": 1.0,
+          "min_roll": 0.800000011920929,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 5
+    }
+  ]
+}

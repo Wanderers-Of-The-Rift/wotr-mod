@@ -1,0 +1,74 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:health_percent",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_off_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:health_flat",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_helmet_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:health_flat",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:health_percent",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_chestplate_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:health_flat",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:health_hybrid",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:health_percent",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_leggings_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:health_flat",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:health_hybrid",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:health_percent",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_boots_slot"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.health_raw"
+  },
+  "shape": "heart",
+  "tier": "raw"
+}

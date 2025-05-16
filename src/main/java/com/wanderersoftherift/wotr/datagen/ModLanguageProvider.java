@@ -50,6 +50,11 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.CUT_RUNEGEM_GEODE, "Runegem Geode (Cut)");
         addItem(ModItems.POLISHED_RUNEGEM_GEODE, "Runegem Geode (Polished)");
         addItem(ModItems.FRAMED_RUNEGEM_GEODE, "Runegem Geode (Framed)");
+        addItem(ModItems.RAW_RUNEGEM_MONSTER, "Monster Runegem (Raw)");
+        addItem(ModItems.SHAPED_RUNEGEM_MONSTER, "Monster Runegem (Shaped)");
+        addItem(ModItems.CUT_RUNEGEM_MONSTER, "Monster Runegem (Cut)");
+        addItem(ModItems.POLISHED_RUNEGEM_MONSTER, "Monster Runegem (Polished)");
+        addItem(ModItems.FRAMED_RUNEGEM_MONSTER, "Monster Runegem (Framed)");
         addItem(ModItems.ABILITY_HOLDER, "Empty Ability");
         addItem(ModItems.SKILL_THREAD, "Skill Thread");
 
@@ -167,19 +172,20 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.title", "Dimension Delvers: Accessibility Settings");
-        add("accessibility." + WanderersOfTheRift.MODID + ".menubutton", "DimDelvers Accessibility (tmp)");
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.trypophobia", "Trypophobia");
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.arachnophobia", "Arachnophobia");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.title",
+                "Wanderers of the Rifts: Accessibility Settings");
+        add("accessibility." + WanderersOfTheRift.MODID + ".menubutton", "WotR Accessibility (tmp)");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.trypophobia", "Trypophobia Friendly");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.arachnophobia", "Arachnophobia Friendly");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.flashing_lights", "Flashing Lights");
-        add("accessibility." + WanderersOfTheRift.MODID + ".screen.misophonia", "Misophonia");
+        add("accessibility." + WanderersOfTheRift.MODID + ".screen.misophonia", "Misophonia Friendly");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.high_contrast", "High Contrast");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.hard_of_hearing", "Hard of Hearing");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.reduced_motion", "Reduced Motion");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.trypophobia",
                 "Removes any trypophobia-triggering aspects");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.arachnophobia",
-                "Replaces all the spiders with cute cats!");
+                "Replaces all the spiders with cute turtles!");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.flashing_lights",
                 "Reduces flashing-light effects");
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.misophonia",
@@ -200,6 +206,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
+        add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
+        add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -290,6 +298,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("hud_preset", "default"), "Default");
         add(WanderersOfTheRift.translationId("hud_preset", "minimal"), "Minimal");
+        add(WanderersOfTheRift.translationId("hud_preset", "custom"), "Custom");
 
         add(WanderersOfTheRift.translationId("attribute", "ability.aoe"), "Ability Area of Effect");
         add(WanderersOfTheRift.translationId("attribute", "ability.raw_damage"), "Ability Damage");
@@ -303,6 +312,22 @@ public class ModLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "max_mana"), "Max Mana");
         add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
+        addRunegems();
+        addModifiers();
+    }
+
+    private void addRunegems() {
+        ModRuneGemDataProvider.DATA.entrySet().stream().forEach(entry -> {
+            add(WanderersOfTheRift.translationId("runegem", entry.getKey().location().getPath()),
+                    snakeCaseToCapitalizedCase(entry.getKey().location().getPath()) + " Runegem");
+        });
+    }
+
+    private void addModifiers() {
+        ModModifierProvider.DATA.entrySet().stream().forEach(entry -> {
+            add(WanderersOfTheRift.translationId("modifier", entry.getKey().location().getPath()),
+                    snakeCaseToCapitalizedCase(entry.getKey().location().getPath()));
+        });
     }
 
     private void addEssenceType(String id, String value) {
@@ -315,6 +340,10 @@ public class ModLanguageProvider extends LanguageProvider {
 
     private static @NotNull String getTranslationString(Block block) {
         String idString = BuiltInRegistries.BLOCK.getKey(block).getPath();
+        return snakeCaseToCapitalizedCase(idString);
+    }
+
+    private static @NotNull String snakeCaseToCapitalizedCase(String idString) {
         StringBuilder sb = new StringBuilder();
         for (String word : idString.toLowerCase(Locale.ROOT).split("_")) {
             sb.append(word.substring(0, 1).toUpperCase(Locale.ROOT));

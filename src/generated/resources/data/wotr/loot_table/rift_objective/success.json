@@ -38,7 +38,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "value": "wotr:rift/runegem",
+          "value": "wotr:rift/geode_runegem",
           "weight": 20
         },
         {

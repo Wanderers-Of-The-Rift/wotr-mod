@@ -1,0 +1,34 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:attack_flat",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:attack_heavy",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:attack_percent",
+          "tier": 3
+        },
+        {
+          "modifier": "wotr:knockback",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback_heavy",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.zombie_shaped"
+  },
+  "shape": "diamond",
+  "tier": "shaped"
+}

@@ -9,7 +9,7 @@
           "functions": [
             {
               "function": "wotr:runegems",
-              "tier": "cut"
+              "runegems": "#wotr:geode_cut"
             }
           ],
           "name": "wotr:runegem"

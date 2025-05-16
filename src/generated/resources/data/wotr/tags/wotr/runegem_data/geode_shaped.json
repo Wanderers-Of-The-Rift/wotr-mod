@@ -1,0 +1,9 @@
+{
+  "values": [
+    "wotr:attack_shaped",
+    "wotr:defense_shaped",
+    "wotr:health_shaped",
+    "wotr:projectile_shaped",
+    "wotr:speed_shaped"
+  ]
+}
