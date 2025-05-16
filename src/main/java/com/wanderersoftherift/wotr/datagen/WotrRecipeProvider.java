@@ -5,6 +5,8 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.crafting.EssencePredicate;
+import com.wanderersoftherift.wotr.item.crafting.KeyForgeRecipe;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
@@ -116,6 +118,77 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .define('I', Items.APPLE)
                 .unlockedBy("has_glass_pane", this.has(Blocks.GLASS_PANE.asItem()))
                 .save(this.output, "wotr:ability_heal");
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("cave")))
+                .setPriority(-1)
+                .save(output, WanderersOfTheRift.id("rift_theme_cave"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("forest")))
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("plant")).setMinPercent(50f).build())
+                .save(output, WanderersOfTheRift.id("rift_theme_forest"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("processor")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("processor")).setMinPercent(1f).build())
+                .save(output, WanderersOfTheRift.id("rift_theme_processor"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("mushroom")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("mushroom")).setMinPercent(50f).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_mushroom"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("nether")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("nether")).setMinPercent(50f).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_nether"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("noir")))
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("light")).setMinPercent(50f).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_noir"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES,
+                                WanderersOfTheRift.id("buzzy_bees")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("life")).setMinPercent(25F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("water")).setMinPercent(5F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("order")).setMinPercent(5F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("plant")).setMinPercent(15F).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_buzzy_bees"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
+                .setPriority(-1)
+                .save(output, WanderersOfTheRift.id("rift_objective_kill"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("stealth")))
+                .setPriority(1)
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("dark")).setMinPercent(5f).build())
+                .save(output, WanderersOfTheRift.id("rift_objective_stealth"));
+
     }
 
     // The runner to add to the data generator

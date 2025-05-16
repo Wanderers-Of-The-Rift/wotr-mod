@@ -30,6 +30,15 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
+    maven {
+        name = 'Shedaniel'
+        url 'https://maven.shedaniel.me'
+        content {
+            includeGroup("me.shedaniel")
+            includeGroup("me.shedaniel.cloth")
+            includeGroup("dev.architectury")
+        }
+    }
 }
 
 base {
@@ -129,15 +138,16 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
+    implementation "dev.architectury:architectury-neoforge:${architectury_version}"
+    implementation "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
     compileOnly "maven.modrinth:sophisticated-core:${sophisticated_core_version}"
     compileOnly "maven.modrinth:sophisticated-backpacks:${sophisticated_backpacks_version}"
 
-    runtimeOnly "curse.maven:cloth-config-348521:${cloth_config_version}"
-    runtimeOnly "curse.maven:architectury-api-419699:${architectury_version}"
     runtimeOnly "curse.maven:sodium-394468:${sodium_version}"
     runtimeOnly "curse.maven:spark-361579:${spark_version}"
     runtimeOnly "curse.maven:jade-324717:${jade_version}"
-    runtimeOnly "curse.maven:roughly-enough-items-310111:${rei_version}"
     runtimeOnly "curse.maven:resourceful-config-714059:${resourceful_config_version}"
     runtimeOnly "curse.maven:structure-layout-optimizer-1087831:${structure_layout_optimizer_version}"
     runtimeOnly "curse.maven:commandstructures-565119:${command_structures_version}"

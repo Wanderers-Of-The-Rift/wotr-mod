@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
-import com.wanderersoftherift.wotr.item.riftkey.KeyForgeRecipe;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
@@ -66,8 +65,6 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("modifier"));
         public static final ResourceKey<Registry<ObjectiveType>> OBJECTIVES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("objective"));
-        public static final ResourceKey<Registry<KeyForgeRecipe>> KEY_FORGE_RECIPES = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("key_forge_recipe"));
         public static final ResourceKey<Registry<RunegemData>> RUNEGEM_DATA = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("runegem_data"));
         public static final ResourceKey<Registry<MapCodec<? extends AbstractEffect>>> EFFECTS = ResourceKey
@@ -117,7 +114,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.KEY_FORGE_RECIPES, KeyForgeRecipe.codec(), KeyForgeRecipe.codec());
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
     }
 }

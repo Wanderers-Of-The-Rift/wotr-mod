@@ -273,6 +273,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("keybinds", "mod_ctrl"), "Ctrl+");
         add(WanderersOfTheRift.translationId("keybinds", "mod_shift"), "Shi+");
 
+        add(WanderersOfTheRift.translationId("rei", "percent.min"), "%s: > %s%%");
+        add(WanderersOfTheRift.translationId("rei", "percent.max"), "%s: < %s%%");
+        add(WanderersOfTheRift.translationId("rei", "absolute.min"), "%s: < %s");
+        add(WanderersOfTheRift.translationId("rei", "absolute.max"), "%s: > %s");
+
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");

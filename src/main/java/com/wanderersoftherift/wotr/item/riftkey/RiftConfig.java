@@ -26,6 +26,7 @@ import java.util.Optional;
  * @param objective The objective of the rift
  * @param seed      Optional, the seed for the rift
  */
+// TODO: Move into core.rift
 public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<Holder<ObjectiveType>> objective,
         Optional<Integer> seed) {
 

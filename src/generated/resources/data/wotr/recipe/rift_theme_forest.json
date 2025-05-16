@@ -1,13 +1,14 @@
 {
+  "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:light",
+      "essenceType": "wotr:plant",
       "minPercent": 50.0
     }
   ],
   "output": {
     "type": "wotr:rift_theme",
-    "value": "wotr:noir"
+    "value": "wotr:forest"
   },
-  "priority": 10
+  "priority": 0
 }
