@@ -545,7 +545,7 @@ public class ModRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "projectile_speed")),
                                         new TieredModifier(3, getModifier(lookup, "projectile_spread"))
                                 ))),
-                        RunegemTier.RAW));
+                        RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("magic_polished"),
                 new RunegemData(getTranslatableName("magic_polished"), RunegemShape.SQUARE,
                         List.of(new RunegemData.ModifierGroup(
