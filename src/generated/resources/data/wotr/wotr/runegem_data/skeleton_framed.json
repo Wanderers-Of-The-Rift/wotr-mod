@@ -1,0 +1,30 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:projectile_pierce",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:projectile_count",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:projectile_speed",
+          "tier": 5
+        },
+        {
+          "modifier": "wotr:projectile_spread",
+          "tier": 5
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.skeleton_framed"
+  },
+  "shape": "diamond",
+  "tier": "framed"
+}

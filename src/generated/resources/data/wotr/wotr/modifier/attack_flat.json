@@ -1,0 +1,95 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 1.5499999523162842,
+          "min_roll": 0.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 3.1500000953674316,
+          "min_roll": 1.5499999523162842,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 4.699999809265137,
+          "min_roll": 3.1500000953674316,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 6.300000190734863,
+          "min_roll": 4.699999809265137,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 7.849999904632568,
+          "min_roll": 6.300000190734863,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 5
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 9.449999809265137,
+          "min_roll": 7.849999904632568,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 6
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:attack_damage",
+          "id": "wotr:attack_flat",
+          "max_roll": 11.0,
+          "min_roll": 9.449999809265137,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 7
+    }
+  ]
+}

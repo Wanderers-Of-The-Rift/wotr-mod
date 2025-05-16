@@ -1,13 +1,17 @@
 {
-  "tier": 1,
-  "modifiers": [
+  "tiers": [
     {
-      "type": "wotr:attribute",
-      "id": "wotr:leather_leggings",
-      "attribute": "wotr:projectile_count",
-      "min_roll": 1,
-      "max_roll": 1,
-      "operation": "add_value"
+      "tier": 1,
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "id": "wotr:leather_leggings",
+          "attribute": "wotr:projectile_count",
+          "min_roll": 1,
+          "max_roll": 1,
+          "operation": "add_value"
+        }
+      ]
     }
   ]
 }

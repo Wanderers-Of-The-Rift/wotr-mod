@@ -2,13 +2,16 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.ModDamageTypes;
+import com.wanderersoftherift.wotr.init.ModDatapackRegistries;
 import com.wanderersoftherift.wotr.init.ModRiftThemes;
 import com.wanderersoftherift.wotr.init.RegistryEvents;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -31,21 +34,21 @@ public class DataGenerators {
                             ModDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
                 })
                         .add(RegistryEvents.ABILITY_REGISTRY, ModAbilityProvider::bootstrapAbilities)
+                        .add(ModDatapackRegistries.MODIFIER_KEY, ModModifierProvider::bootstrapModifiers)
                         .add(RegistryEvents.OBJECTIVE_REGISTRY, context -> {
                         })
                         .add(ModRiftThemes.RIFT_THEME_KEY, context -> {
                         })
+                        .add(ModDatapackRegistries.RUNEGEM_DATA_KEY, ModRuneGemDataProvider::bootstrapRuneGems)
+
         );
-        event.createProvider(ModLanguageProvider::new);
         event.createProvider(ModModelProvider::new);
 
         event.createProvider(ModDataMapProvider::new);
         event.createProvider(ModSoundsProvider::new);
 
         // Tags
-        ModBlockTagProvider modBlockTagProvider = event.createProvider(ModBlockTagProvider::new);
-        event.createProvider((output, lookupProvider) -> new ModItemTagProvider(output, lookupProvider,
-                modBlockTagProvider.contentsGetter()));
+        event.createBlockAndItemTags(ModBlockTagProvider::new, ModItemTagProvider::new);
         event.createProvider(ModAbilityTagsProvider::new);
         event.createProvider(ModRiftThemeTagsProvider::new);
         event.createProvider(ModObjectiveTagsProvider::new);
@@ -64,5 +67,13 @@ public class DataGenerators {
                 lookupProvider));
 
         event.createProvider(ModObjectiveRecipeProvider::new);
+
+        event.createProvider(ModRunegemDataTagsProvider::new);
+
+        event.createProvider(ModLanguageProvider::new);
+    }
+
+    private static void bootStrapItems(BootstrapContext<Item> itemBootstrapContext) {
+
     }
 }

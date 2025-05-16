@@ -55,6 +55,20 @@ public class ModTags {
         public static final TagKey<RunegemData> FRAMED = createTag("framed");
         public static final TagKey<RunegemData> UNIQUE = createTag("unique");
 
+        public static final TagKey<RunegemData> GEODE_RAW = createTag("geode_raw");
+        public static final TagKey<RunegemData> GEODE_CUT = createTag("geode_cut");
+        public static final TagKey<RunegemData> GEODE_SHAPED = createTag("geode_shaped");
+        public static final TagKey<RunegemData> GEODE_POLISHED = createTag("geode_polished");
+        public static final TagKey<RunegemData> GEODE_FRAMED = createTag("geode_framed");
+        public static final TagKey<RunegemData> GEODE_UNIQUE = createTag("geode_unique");
+
+        public static final TagKey<RunegemData> MONSTER_RAW = createTag("monster_raw");
+        public static final TagKey<RunegemData> MONSTER_CUT = createTag("monster_cut");
+        public static final TagKey<RunegemData> MONSTER_SHAPED = createTag("monster_shaped");
+        public static final TagKey<RunegemData> MONSTER_POLISHED = createTag("monster_polished");
+        public static final TagKey<RunegemData> MONSTER_FRAMED = createTag("monster_framed");
+        public static final TagKey<RunegemData> MONSTER_UNIQUE = createTag("monster_unique");
+
         private static TagKey<RunegemData> createTag(String name) {
             return TagKey.create(ModDatapackRegistries.RUNEGEM_DATA_KEY,
                     ResourceLocation.fromNamespaceAndPath("wotr", name));

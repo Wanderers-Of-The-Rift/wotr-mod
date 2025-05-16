@@ -1,0 +1,22 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:projectile_speed",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:projectile_spread",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.skeleton_raw"
+  },
+  "shape": "diamond",
+  "tier": "raw"
+}

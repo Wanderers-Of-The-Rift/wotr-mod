@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.gui.menu.slot.RunegemSlot;
 import com.wanderersoftherift.wotr.init.ModBlocks;
 import com.wanderersoftherift.wotr.init.ModDataComponentType;
 import com.wanderersoftherift.wotr.init.ModMenuTypes;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.mixin.InvokerAbstractContainerMenu;
@@ -16,6 +17,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -139,16 +141,17 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             return;
         }
 
-        List<GearSocket> newSockets = new ArrayList<>();
+        List<GearSocket> newSockets = new ArrayList<>(currentSockets.sockets());
+        Level level = this.playerInventory.player.level();
         for (int i = 0; i < this.activeSocketSlots; i++) {
             RunegemSlot slot = this.socketSlots.get(i);
             GearSocket currentSocket = currentSockets.sockets().get(i);
             ItemStack runegem = slot.getItem();
-            if (runegem.isEmpty()) {
-                newSockets.add(currentSocket);
-            } else {
-                GearSocket newSocket = currentSocket.applyRunegem(gear, runegem, this.playerInventory.player.level());
-                newSockets.add(newSocket);
+            RunegemData runegemData = runegem.get(ModDataComponentType.RUNEGEM_DATA);
+            if (!runegem.isEmpty() && runegemData != null
+                    && currentSocket.canBeApplied(gear, level, runegemData, newSockets)) {
+                GearSocket newSocket = currentSocket.applyRunegem(gear, runegem, level, newSockets);
+                newSockets.set(i, newSocket);
                 slot.set(ItemStack.EMPTY);
                 slot.setLockedSocket(newSocket);
                 slot.setSocket(null);
