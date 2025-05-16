@@ -1,6 +1,6 @@
 {
 	"parent": "block/block",
-	"credit": "Made with Blockbench",
+	"credit": "Req",
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "wotr:block/key_forge",
