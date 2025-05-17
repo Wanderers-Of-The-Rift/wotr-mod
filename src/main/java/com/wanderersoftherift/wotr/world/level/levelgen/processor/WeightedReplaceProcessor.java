@@ -61,7 +61,7 @@ public class WeightedReplaceProcessor extends StructureProcessor {
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
         ProcessorUtil.getRandom(structureRandomType, blockPos, piecePos, structurePos, world, seedAdjustment);
-        if (inputBlockState.matchesBlockstate(blockstate)) {
+        if (!inputBlockState.matchesBlockstate(blockstate)) {
             return blockInfo;
         }
 
