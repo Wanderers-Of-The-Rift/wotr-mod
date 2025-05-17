@@ -5,6 +5,9 @@
       "minPercent": 5.0
     }
   ],
-  "output": "wotr:stealth",
+  "output": {
+    "type": "wotr:rift_objective",
+    "value": "wotr:stealth"
+  },
   "priority": 0
 }

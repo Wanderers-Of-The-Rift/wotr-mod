@@ -3,9 +3,12 @@ package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -27,7 +30,10 @@ public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> proc
 
     public static final Codec<RiftTheme> DIRECT_SYNC_CODEC = Codec.unit(RiftTheme::new);
 
-    public static final Codec<Holder<RiftTheme>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.RIFT_THEMES);
+    public static final Codec<Holder<RiftTheme>> CODEC = LaxRegistryCodec.create(WotrRegistries.Keys.RIFT_THEMES);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<RiftTheme>> STREAM_CODEC = ByteBufCodecs
+            .holderRegistry(WotrRegistries.Keys.RIFT_THEMES);
 
     public RiftTheme() {
         this(Map.of());

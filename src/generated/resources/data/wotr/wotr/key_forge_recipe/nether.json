@@ -5,6 +5,9 @@
       "minPercent": 50.0
     }
   ],
-  "output": "wotr:nether",
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:nether"
+  },
   "priority": 10
 }

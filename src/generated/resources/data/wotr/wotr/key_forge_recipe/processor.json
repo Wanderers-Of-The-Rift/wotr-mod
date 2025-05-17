@@ -5,6 +5,9 @@
       "minPercent": 1.0
     }
   ],
-  "output": "wotr:processor",
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:processor"
+  },
   "priority": 0
 }
