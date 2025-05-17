@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModLootItemConditionTypes;
+import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -34,7 +34,7 @@ public record PartialLootTableIdCondition(Optional<String> nameSpaceFragment,
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootItemConditionTypes.PARTIAL_LOOT_TABLE_ID.get();
+        return WotrLootItemConditionTypes.PARTIAL_LOOT_TABLE_ID.get();
     }
 
     public boolean test(LootContext context) {

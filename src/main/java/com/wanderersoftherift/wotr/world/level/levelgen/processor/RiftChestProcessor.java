@@ -33,9 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.wanderersoftherift.wotr.init.ModBlocks.CHEST_TYPES;
-import static com.wanderersoftherift.wotr.init.ModBlocks.RIFT_CHEST;
-import static com.wanderersoftherift.wotr.init.ModProcessors.RIFT_CHESTS;
+import static com.wanderersoftherift.wotr.init.WotrBlocks.CHEST_TYPES;
+import static com.wanderersoftherift.wotr.init.WotrBlocks.RIFT_CHEST;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.RIFT_CHESTS;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.world.level.block.Blocks.AIR;
 import static net.minecraft.world.level.block.Blocks.CHEST;

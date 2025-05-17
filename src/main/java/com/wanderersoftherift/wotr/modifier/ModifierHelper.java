@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.modifier;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
@@ -32,7 +32,7 @@ public class ModifierHelper {
             EquipmentSlot slot,
             LivingEntity entity,
             ModifierInSlotVisitor visitor) {
-        GearSockets gearSockets = stack.get(ModDataComponentType.GEAR_SOCKETS);
+        GearSockets gearSockets = stack.get(WotrDataComponentType.GEAR_SOCKETS);
         if (gearSockets != null && !gearSockets.isEmpty()) {
             for (GearSocket socket : gearSockets.sockets()) {
                 if (socket.isEmpty()) {
@@ -53,7 +53,7 @@ public class ModifierHelper {
             EquipmentSlot slot,
             LivingEntity entity,
             ModifierInSlotVisitor visitor) {
-        GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
+        GearImplicits implicits = stack.get(WotrDataComponentType.GEAR_IMPLICITS);
         if (implicits != null) {
             List<ModifierInstance> modifierInstances = implicits.modifierInstances(stack, entity.level());
             for (ModifierInstance modifier : modifierInstances) {

@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.loot.predicates;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModLootItemConditionTypes;
+import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import com.wanderersoftherift.wotr.loot.LootUtil;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -21,7 +21,7 @@ public record RiftLevelCheck(int minTier, int maxTier) implements LootItemCondit
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootItemConditionTypes.RIFT_LEVEL_CHECK.get();
+        return WotrLootItemConditionTypes.RIFT_LEVEL_CHECK.get();
     }
 
     public boolean test(LootContext context) {

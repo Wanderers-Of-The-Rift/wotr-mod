@@ -264,6 +264,7 @@
   "command.wotr.rift_key.set_theme": "Rift key theme set to %s",
   "command.wotr.rift_key.set_tier": "Rift key tier set to %s",
   "command.wotr.spawn_piece.generating": "Generating %s",
+  "commands.wotr.ability.invalid": "There is no ability '%s'",
   "container.wotr.ability_bench": "Ability Bench",
   "container.wotr.ability_bench.unlock": "Unlock next choice",
   "container.wotr.ability_bench.upgrade": "Upgrades",

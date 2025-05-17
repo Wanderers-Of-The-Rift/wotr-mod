@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.block;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
-import com.wanderersoftherift.wotr.init.ModBlockEntities;
+import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -61,14 +61,14 @@ public class RiftMobSpawnerBlock extends BaseEntityBlock {
             BlockEntityType<T> blockEntityType) {
         if (level instanceof ServerLevel serverlevel) {
             return createTickerHelper(
-                    blockEntityType, ModBlockEntities.RIFT_MOB_SPAWNER.get(),
+                    blockEntityType, WotrBlockEntities.RIFT_MOB_SPAWNER.get(),
                     (level1, blockPos, blockState1, spawnerBlockEntity) -> spawnerBlockEntity.getTrialSpawner()
                             .tickServer(serverlevel, blockPos,
                                     blockState1.getOptionalValue(BlockStateProperties.OMINOUS).orElse(false))
             );
         } else {
             return createTickerHelper(
-                    blockEntityType, ModBlockEntities.RIFT_MOB_SPAWNER.get(),
+                    blockEntityType, WotrBlockEntities.RIFT_MOB_SPAWNER.get(),
                     (level1, blockPos, blockState1, spawnerBlockEntity) -> spawnerBlockEntity.getTrialSpawner()
                             .tickClient(level1, blockPos,
                                     blockState1.getOptionalValue(BlockStateProperties.OMINOUS).orElse(false))

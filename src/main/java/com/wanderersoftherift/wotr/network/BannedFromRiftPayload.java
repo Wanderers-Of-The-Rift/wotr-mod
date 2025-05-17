@@ -4,7 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -44,6 +44,6 @@ public record BannedFromRiftPayload(List<ResourceLocation> ids) implements Custo
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().setData(ModAttachments.BANNED_RIFTS, new BannedRiftList(ids));
+        context.player().setData(WotrAttachments.BANNED_RIFTS, new BannedRiftList(ids));
     }
 }

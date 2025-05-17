@@ -2,12 +2,12 @@ package com.wanderersoftherift.wotr.gui.menu;
 
 import com.wanderersoftherift.wotr.gui.menu.slot.EssenceInputSlot;
 import com.wanderersoftherift.wotr.gui.menu.slot.KeyOutputSlot;
-import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModDataMaps;
-import com.wanderersoftherift.wotr.init.ModItems;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
+import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import com.wanderersoftherift.wotr.item.riftkey.KeyForgeRecipe;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
@@ -64,7 +64,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     }
 
     public KeyForgeMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
-        super(ModMenuTypes.KEY_FORGE_MENU.get(), containerId);
+        super(WotrMenuTypes.KEY_FORGE_MENU.get(), containerId);
         this.access = access;
         this.tierPercent = DataSlot.standalone();
         this.inputContainer = new SimpleContainer(5) {
@@ -148,7 +148,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(this.access, player, ModBlocks.KEY_FORGE.get());
+        return stillValid(this.access, player, WotrBlocks.KEY_FORGE.get());
     }
 
     @Override
@@ -161,7 +161,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         Object2IntMap<ResourceLocation> essenceMap = new Object2IntArrayMap<>();
         for (int i = 0; i < inputContainer.getContainerSize(); i++) {
             ItemStack input = inputContainer.getItem(i);
-            EssenceValue valueMap = input.getItemHolder().getData(ModDataMaps.ESSENCE_VALUE_DATA);
+            EssenceValue valueMap = input.getItemHolder().getData(WotrDataMaps.ESSENCE_VALUE_DATA);
             if (valueMap == null) {
                 continue;
             }
@@ -178,8 +178,9 @@ public class KeyForgeMenu extends AbstractContainerMenu {
             }
         }
 
-        Holder<RiftTheme> theme = findBestRecipe(RegistryEvents.RIFT_THEME_RECIPE, inputs, essenceMap);
-        Holder<ObjectiveType> objective = findBestRecipe(RegistryEvents.RIFT_OBJECTIVE_RECIPE, inputs, essenceMap);
+        Holder<RiftTheme> theme = findBestRecipe(WotrRegistries.Keys.RIFT_THEME_RECIPES, inputs, essenceMap);
+        Holder<ObjectiveType> objective = findBestRecipe(WotrRegistries.Keys.RIFT_OBJECTIVE_RECIPES, inputs,
+                essenceMap);
         updateTier(totalEssence);
 
         updateOutput(theme, objective);
@@ -226,7 +227,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         }
 
         if (tier > 0 && resultContainer.isEmpty()) {
-            ItemStack output = ModItems.RIFT_KEY.toStack();
+            ItemStack output = WotrItems.RIFT_KEY.toStack();
             resultContainer.setItem(0, output);
         }
         resultContainer.getItem(0).applyComponents(buildKeyComponentPatch(tier, theme, objective));
@@ -243,7 +244,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         if (objective != null) {
             config.objective(objective);
         }
-        return DataComponentPatch.builder().set(ModDataComponentType.RIFT_CONFIG.get(), config.build()).build();
+        return DataComponentPatch.builder().set(WotrDataComponentType.RIFT_CONFIG.get(), config.build()).build();
     }
 
 }

@@ -5,10 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.client.ModShaders;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntity;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.client.WotrShaders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -66,7 +66,7 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
             dir = state.facingDir.getUnitVec3().toVector3f();
         }
 
-        CompiledShaderProgram shader = RenderSystem.setShader(ModShaders.RIFT_PORTAL);
+        CompiledShaderProgram shader = RenderSystem.setShader(WotrShaders.RIFT_PORTAL);
         if (shader != null) {
             Uniform screenSize = shader.getUniform("ScreenSize");
             if (screenSize != null) {
@@ -127,7 +127,7 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
         state.billboard = entity.isBillboard();
 
         if (entity instanceof RiftPortalEntranceEntity entrance) {
-            state.banned = Minecraft.getInstance().player.getData(ModAttachments.BANNED_RIFTS)
+            state.banned = Minecraft.getInstance().player.getData(WotrAttachments.BANNED_RIFTS)
                     .isBannedFrom(entrance.getRiftDimensionId());
         }
     }

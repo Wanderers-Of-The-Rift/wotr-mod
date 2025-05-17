@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -17,15 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.wanderersoftherift.wotr.init.ModModifiers.MODIFIER_KEY;
-
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList)
     ).apply(inst, Modifier::new));
-    public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(MODIFIER_KEY);
+    public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.MODIFIERS);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
-            .holderRegistry(MODIFIER_KEY);
+            .holderRegistry(WotrRegistries.Keys.MODIFIERS);
 
     private final Map<Integer, ModifierTier> modifierTiers;
 

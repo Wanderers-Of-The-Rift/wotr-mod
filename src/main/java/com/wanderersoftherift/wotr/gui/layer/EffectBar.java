@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -58,7 +58,7 @@ public final class EffectBar implements ConfigurableLayer {
             return;
         }
         LocalPlayer player = Minecraft.getInstance().player;
-        EffectDisplayData data = player.getData(ModAttachments.EFFECT_DISPLAY);
+        EffectDisplayData data = player.getData(WotrAttachments.EFFECT_DISPLAY);
         if (data.size() == 0) {
             return;
         }

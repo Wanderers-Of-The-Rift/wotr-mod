@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.loot.lootmodifiers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,8 +17,8 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
-import static com.wanderersoftherift.wotr.init.ModItems.RAW_RUNEGEM_GEODE;
-import static com.wanderersoftherift.wotr.init.ModTags.Items.SOCKETABLE;
+import static com.wanderersoftherift.wotr.init.WotrItems.RAW_RUNEGEM_GEODE;
+import static com.wanderersoftherift.wotr.init.WotrTags.Items.SOCKETABLE;
 
 public class OverrideVanillaLootModifier extends LootModifier {
 
@@ -54,7 +54,7 @@ public class OverrideVanillaLootModifier extends LootModifier {
 
                 }
             }
-            GearImplicits implicits = itemStack.get(ModDataComponentType.GEAR_IMPLICITS);
+            GearImplicits implicits = itemStack.get(WotrDataComponentType.GEAR_IMPLICITS);
             if (implicits != null) {
                 implicits.modifierInstances(itemStack, context.getLevel());
             }

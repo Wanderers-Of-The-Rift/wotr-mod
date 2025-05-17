@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.block;
 
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -47,6 +47,6 @@ public class SpringBlock extends DittoBlock {
 
     @Override
     public DeferredBlock getBlock() {
-        return ModBlocks.SPRING_BLOCK;
+        return WotrBlocks.SPRING_BLOCK;
     }
 }

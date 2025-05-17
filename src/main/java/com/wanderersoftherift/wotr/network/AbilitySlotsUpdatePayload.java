@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -30,7 +30,7 @@ public record AbilitySlotsUpdatePayload(int slot, ItemStack stack) implements Cu
     }
 
     public void handleOnClient(IPayloadContext context) {
-        AbilitySlots abilitySlots = context.player().getData(ModAttachments.ABILITY_SLOTS);
+        AbilitySlots abilitySlots = context.player().getData(WotrAttachments.ABILITY_SLOTS);
         if (slot >= 0 && slot < abilitySlots.getSlots()) {
             abilitySlots.setStackInSlot(slot, stack);
         }

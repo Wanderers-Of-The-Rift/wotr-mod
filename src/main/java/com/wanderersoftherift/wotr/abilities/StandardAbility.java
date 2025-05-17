@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModAttributes;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.network.UseAbilityPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -55,8 +55,8 @@ public class StandardAbility extends AbstractAbility {
         AbilityContext abilityContext = new AbilityContext(player, abilityItem);
         abilityContext.enableModifiers();
         try {
-            int manaCost = (int) abilityContext.getAbilityAttribute(ModAttributes.MANA_COST, getBaseManaCost());
-            ManaData manaData = player.getData(ModAttachments.MANA);
+            int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
+            ManaData manaData = player.getData(WotrAttachments.MANA);
             if (manaCost > 0) {
                 if (manaData.getAmount() < manaCost) {
                     return;
@@ -66,7 +66,7 @@ public class StandardAbility extends AbstractAbility {
                 manaData.useAmount(player, manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
                 this.setCooldown(player, slot,
-                        abilityContext.getAbilityAttribute(ModAttributes.COOLDOWN, getBaseCooldown()));
+                        abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
             } else {
                 PacketDistributor.sendToServer(new UseAbilityPayload(slot));
             }

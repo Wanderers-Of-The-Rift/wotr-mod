@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.client.render.entity;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.wanderersoftherift.wotr.client.ModShaders;
+import com.wanderersoftherift.wotr.init.client.WotrShaders;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 public final class RiftPortalRenderType {
 
     public static final RenderStateShard.ShaderStateShard RIFT_PORTAL_SHADER_STATE = new RenderStateShard.ShaderStateShard(
-            ModShaders.RIFT_PORTAL);
+            WotrShaders.RIFT_PORTAL);
 
     public static final BiFunction<ResourceLocation, ResourceLocation, RenderType> RIFT_PORTAL = Util
             .memoize((tex1, tex2) -> {

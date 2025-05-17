@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.abilities.effects.marker;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,7 +17,7 @@ public class EffectMarkerEvents {
     public static void onClientTick(ClientTickEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && !Minecraft.getInstance().isPaused()) {
-            EffectDisplayData data = player.getData(ModAttachments.EFFECT_DISPLAY);
+            EffectDisplayData data = player.getData(WotrAttachments.EFFECT_DISPLAY);
             data.tick();
         }
     }

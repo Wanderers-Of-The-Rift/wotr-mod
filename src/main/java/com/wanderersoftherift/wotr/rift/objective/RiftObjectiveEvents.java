@@ -5,10 +5,10 @@ import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModLootContextParams;
-import com.wanderersoftherift.wotr.init.ModTags;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
+import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.network.S2CRiftObjectiveStatusPacket;
 import net.minecraft.core.Holder;
@@ -49,8 +49,8 @@ public class RiftObjectiveEvents {
                 .objective()
                 .orElseGet(() -> event.getLevel()
                         .registryAccess()
-                        .lookupOrThrow(RegistryEvents.OBJECTIVE_REGISTRY)
-                        .getRandomElementOf(ModTags.Objectives.RANDOM_SELECTABLE, event.getLevel().getRandom())
+                        .lookupOrThrow(WotrRegistries.Keys.OBJECTIVES)
+                        .getRandomElementOf(WotrTags.Objectives.RANDOM_SELECTABLE, event.getLevel().getRandom())
                         .orElseThrow(() -> new IllegalStateException("No objectives available")));
 
         OngoingObjective objective = objectiveType.value().generate(event.getLevel());
@@ -78,20 +78,20 @@ public class RiftObjectiveEvents {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getEntity().getData(ModAttachments.DIED_IN_RIFT)
+        if (!event.getEntity().getData(WotrAttachments.DIED_IN_RIFT)
                 || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
         player.openMenu(new SimpleMenuProvider(
                 (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                         ContainerLevelAccess.create(player.level(), p.getOnPos()), RiftCompleteMenu.FLAG_FAILED,
-                        player.getData(ModAttachments.PRE_RIFT_STATS).getCustomStatDelta(player)),
+                        player.getData(WotrAttachments.PRE_RIFT_STATS).getCustomStatDelta(player)),
                 Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
         if (player.containerMenu instanceof RiftCompleteMenu menu) {
             // TODO: Do we need rift config for losing a rift?
             generateObjectiveLoot(menu, player, FAIL_TABLE, new RiftConfig(0));
         }
-        player.setData(ModAttachments.DIED_IN_RIFT, false);
+        player.setData(WotrAttachments.DIED_IN_RIFT, false);
     }
 
     @SubscribeEvent
@@ -114,7 +114,7 @@ public class RiftObjectiveEvents {
                         (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                                 ContainerLevelAccess.create(event.getEntity().level(), p.getOnPos()),
                                 success ? RiftCompleteMenu.FLAG_SUCCESS : RiftCompleteMenu.FLAG_SURVIVED,
-                                event.getEntity().getData(ModAttachments.PRE_RIFT_STATS).getCustomStatDelta(player)),
+                                event.getEntity().getData(WotrAttachments.PRE_RIFT_STATS).getCustomStatDelta(player)),
                         Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
 
         if (event.getEntity().containerMenu instanceof RiftCompleteMenu menu) {
@@ -130,7 +130,7 @@ public class RiftObjectiveEvents {
         ServerLevel level = player.serverLevel();
         LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(table);
         LootParams lootParams = new LootParams.Builder(level).withParameter(LootContextParams.THIS_ENTITY, player)
-                .withParameter(ModLootContextParams.RIFT_TIER, riftConfig.tier())
+                .withParameter(WotrLootContextParams.RIFT_TIER, riftConfig.tier())
                 .create(LootContextParamSets.EMPTY);
         lootTable.getRandomItems(lootParams).forEach(item -> menu.addReward(item, player));
     }

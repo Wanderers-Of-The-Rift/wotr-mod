@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.config;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.screen.settings.HudConfigOptionsScreen;
-import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
+import com.wanderersoftherift.wotr.init.client.WotrClientRegistries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.PauseScreen;
@@ -82,7 +82,7 @@ public final class ConfigurableLayerEvents {
     }
 
     private static void mapAdapters() {
-        ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.stream()
+        WotrClientRegistries.CONFIGURABLE_LAYERS.stream()
                 .filter(x -> x instanceof FixedSizeLayerAdapter)
                 .map(FixedSizeLayerAdapter.class::cast)
                 .forEach(x -> {

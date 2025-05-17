@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
@@ -35,11 +35,11 @@ public class RetainInventorySnapshotIdLootModifier extends LootModifier {
             LootContext context) {
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (generatedLoot.size() == 1 && blockEntity != null
-                && blockEntity.components().has(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get())) {
-            UUID blockId = blockEntity.components().get(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get());
+                && blockEntity.components().has(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get())) {
+            UUID blockId = blockEntity.components().get(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get());
             generatedLoot.getFirst()
                     .applyComponents(DataComponentPatch.builder()
-                            .set(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get(), blockId)
+                            .set(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get(), blockId)
                             .build());
         }
         return generatedLoot;

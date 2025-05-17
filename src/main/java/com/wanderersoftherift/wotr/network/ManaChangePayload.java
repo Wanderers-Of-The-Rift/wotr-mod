@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,6 +27,6 @@ public record ManaChangePayload(int newValue) implements CustomPacketPayload {
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().getData(ModAttachments.MANA).setAmount(context.player(), newValue);
+        context.player().getData(WotrAttachments.MANA).setAmount(context.player(), newValue);
     }
 }

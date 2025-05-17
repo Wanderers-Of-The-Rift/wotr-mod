@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.block.blockentity;
 
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
-import com.wanderersoftherift.wotr.init.ModBlockEntities;
+import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -37,7 +37,7 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, T
     private TrialSpawner trialSpawner;
 
     public RiftMobSpawnerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.RIFT_MOB_SPAWNER.get(), pos, state);
+        super(WotrBlockEntities.RIFT_MOB_SPAWNER.get(), pos, state);
         PlayerDetector.EntitySelector entityselector = PlayerDetector.EntitySelector.SELECT_FROM_LEVEL;
         this.trialSpawner = new TrialSpawner(this, RIFT_PLAYERS, entityselector);
     }
