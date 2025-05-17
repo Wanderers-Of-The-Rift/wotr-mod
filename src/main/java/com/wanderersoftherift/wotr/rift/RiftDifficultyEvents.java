@@ -35,6 +35,7 @@ public class RiftDifficultyEvents {
             updateAttribute(mob, Attributes.ATTACK_DAMAGE, getDamageMultiplier(tier));
             updateAttribute(mob, Attributes.MAX_HEALTH, getHealthMultiplier(tier));
             updateAttribute(mob, Attributes.MOVEMENT_SPEED, getSpeedMultiplier(tier));
+            livingEntity.setHealth(livingEntity.getMaxHealth());
         }
     }
 
