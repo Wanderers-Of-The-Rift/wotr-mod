@@ -5,6 +5,9 @@
       "minPercent": 50.0
     }
   ],
-  "output": "wotr:forest",
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:forest"
+  },
   "priority": 0
 }

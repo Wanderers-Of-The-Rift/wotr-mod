@@ -1,9 +1,12 @@
 package com.wanderersoftherift.wotr.item.riftkey;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.codec.DispatchedPair;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,14 +14,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class KeyForgeRecipe<T> {
+public final class KeyForgeRecipe {
     private final int priority;
     private final List<EssencePredicate> essenceRequirements;
     private final List<ItemPredicate> itemRequirements;
 
-    private final T output;
+    private final Output<?> output;
 
-    public KeyForgeRecipe(T output, int priority, List<EssencePredicate> essenceRequirements,
+    private KeyForgeRecipe(Output<?> output, int priority, List<EssencePredicate> essenceRequirements,
             List<ItemPredicate> itemRequirements) {
         this.output = output;
         this.priority = priority;
@@ -26,22 +29,21 @@ public final class KeyForgeRecipe<T> {
         this.itemRequirements = itemRequirements;
     }
 
-    public static <T> Codec<KeyForgeRecipe<T>> codec(Codec<T> outputCodec) {
-        return RecordCodecBuilder
-                .create(instance -> instance
-                        .group(outputCodec.fieldOf("output").forGetter(KeyForgeRecipe::getOutput),
-                                Codec.INT.fieldOf("priority").forGetter(KeyForgeRecipe::getPriority),
-                                EssencePredicate.CODEC.listOf()
-                                        .optionalFieldOf("essence_reqs", List.of())
-                                        .forGetter(KeyForgeRecipe::getEssenceRequirements),
-                                ItemPredicate.CODEC.listOf()
-                                        .optionalFieldOf("item_reqs", List.of())
-                                        .forGetter(KeyForgeRecipe::getItemRequirements))
-                        .apply(instance, KeyForgeRecipe::new));
+    public static Codec<KeyForgeRecipe> codec() {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                Output.codec().fieldOf("output").forGetter(x -> (Output) x.output),
+                Codec.INT.fieldOf("priority").forGetter(KeyForgeRecipe::getPriority),
+                EssencePredicate.CODEC.listOf()
+                        .optionalFieldOf("essence_reqs", List.of())
+                        .forGetter(KeyForgeRecipe::getEssenceRequirements),
+                ItemPredicate.CODEC.listOf()
+                        .optionalFieldOf("item_reqs", List.of())
+                        .forGetter(KeyForgeRecipe::getItemRequirements))
+                .apply(instance, KeyForgeRecipe::new));
     }
 
-    public static <T> Builder<T> create(T output) {
-        return new Builder<>(output);
+    public static <T> Builder<T> create(DataComponentType<T> outputType, T output) {
+        return new Builder<>(outputType, output);
     }
 
     public boolean matches(List<ItemStack> items, Object2IntMap<ResourceLocation> essences) {
@@ -77,11 +79,20 @@ public final class KeyForgeRecipe<T> {
         return Collections.unmodifiableList(itemRequirements);
     }
 
-    public T getOutput() {
-        return output;
+    public DataComponentType<?> getOutputType() {
+        return output.type;
+    }
+
+    public Object getOutput() {
+        return output.value;
+    }
+
+    public void apply(ItemStack stack) {
+        output.apply(stack);
     }
 
     public static final class Builder<T> {
+        private final DataComponentType<T> outputType;
         private final T output;
         private int priority = 0;
 
@@ -91,7 +102,8 @@ public final class KeyForgeRecipe<T> {
         /**
          * @param output The output this recipe produces
          */
-        private Builder(T output) {
+        private Builder(DataComponentType<T> outputType, T output) {
+            this.outputType = outputType;
             this.output = output;
         }
 
@@ -127,9 +139,25 @@ public final class KeyForgeRecipe<T> {
             return this;
         }
 
-        public KeyForgeRecipe<T> build() {
-            return new KeyForgeRecipe<T>(output, priority, essenceRequirements, itemRequirements);
+        public KeyForgeRecipe build() {
+            return new KeyForgeRecipe(new Output<T>(outputType, output), priority, essenceRequirements,
+                    itemRequirements);
         }
 
+    }
+
+    private record Output<U>(DataComponentType<U> type, U value) {
+
+        @SuppressWarnings("unchecked")
+        public static <V> Codec<Output<V>> codec() {
+            return new DispatchedPair<>(DataComponentType.CODEC.fieldOf("type").codec(), "value",
+                    (x) -> (Codec<V>) x.codec())
+                    .xmap(x -> new Output<>((DataComponentType<V>) x.getFirst(), x.getSecond()),
+                            x -> Pair.of(x.type, x.value));
+        }
+
+        public void apply(ItemStack stack) {
+            stack.set(type, value);
+        }
     }
 }

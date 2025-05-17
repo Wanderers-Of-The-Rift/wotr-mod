@@ -58,6 +58,11 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
         this(tier, Optional.of(theme), Optional.empty(), Optional.of(seed));
     }
 
+    /**
+     * @deprecated Rather than having RiftConfig on an item should migrate to using individual data components
+     * @return Components to add to the tooltip
+     */
+    @Deprecated
     public List<Component> getTooltips() {
         List<Component> result = new ArrayList<>();
         result.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)

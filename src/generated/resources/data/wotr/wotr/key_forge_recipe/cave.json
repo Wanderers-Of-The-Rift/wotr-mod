@@ -1,0 +1,7 @@
+{
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:cave"
+  },
+  "priority": -1
+}
