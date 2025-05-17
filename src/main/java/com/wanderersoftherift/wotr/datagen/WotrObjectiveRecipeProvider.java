@@ -6,8 +6,10 @@ import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.riftkey.EssencePredicate;
 import com.wanderersoftherift.wotr.item.riftkey.KeyForgeRecipe;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +18,8 @@ import java.util.function.Consumer;
 public class WotrObjectiveRecipeProvider extends KeyForgeRecipeProvider {
 
     public WotrObjectiveRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super("RiftObjectiveRecipe", output, registries);
+        super("RiftObjectiveRecipe", output, registries,
+                (recipe) -> ResourceLocation.parse(((Holder<?>) recipe.getOutput()).getRegisteredName()));
     }
 
     @Override
