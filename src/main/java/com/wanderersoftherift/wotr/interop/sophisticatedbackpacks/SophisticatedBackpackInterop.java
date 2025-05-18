@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.core.inventory.containers.ContainerItemWrappe
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
 import com.wanderersoftherift.wotr.core.inventory.containers.ItemStackHandlerContainers;
-import com.wanderersoftherift.wotr.init.ModContainerTypes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackItem;
@@ -27,7 +27,7 @@ public final class SophisticatedBackpackInterop {
     }
 
     public static void register(RegisterEvent event) {
-        event.register(ModContainerTypes.CONTAINER_TYPE_KEY, registry -> registry
+        event.register(WotrRegistries.Keys.CONTAINER_TYPES, registry -> registry
                 .register(WanderersOfTheRift.id("sophisticated_storage_backpack"), new SophisticatedBackpackType()));
     }
 

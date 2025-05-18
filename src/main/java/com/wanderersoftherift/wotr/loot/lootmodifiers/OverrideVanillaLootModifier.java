@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.loot.lootmodifiers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,8 +17,8 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
-import static com.wanderersoftherift.wotr.init.ModItems.RAW_RUNEGEM_GEODE;
-import static com.wanderersoftherift.wotr.init.ModTags.Items.SOCKETABLE;
+import static com.wanderersoftherift.wotr.init.WotrItems.RAW_RUNEGEM_GEODE;
+import static com.wanderersoftherift.wotr.init.WotrTags.Items.SOCKETABLE;
 
 public class OverrideVanillaLootModifier extends LootModifier {
 
@@ -37,9 +37,10 @@ public class OverrideVanillaLootModifier extends LootModifier {
         // Check if the current level is a rift level and return
         // note this should never be the case, as the conditions from glm should prevent it
         ServerLevel serverlevel = context.getLevel();
-        if (RiftData.isRift(serverlevel)) {
+        if (RiftLevelManager.isRift(serverlevel)) {
             return generatedLoot;
         }
+
         ResourceKey<Level> dimension = context.getLevel().dimension();
 
         // roll rift gear
@@ -53,28 +54,30 @@ public class OverrideVanillaLootModifier extends LootModifier {
 
                 }
             }
-            GearImplicits implicits = itemStack.get(ModDataComponentType.GEAR_IMPLICITS);
+            GearImplicits implicits = itemStack.get(WotrDataComponentType.GEAR_IMPLICITS);
             if (implicits != null) {
                 implicits.modifierInstances(itemStack, context.getLevel());
             }
         }
 
-        float chance = context.getRandom().nextFloat();
-        // roll runegems per dim
-        if (Level.OVERWORLD.equals(dimension)) {
-            // ow chest is 2.5% drop rate
-            if (chance < 0.025F) {
-                generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
-            }
-        } else if (Level.NETHER.equals(dimension)) {
-            // nether chest is 7.5% drop rate
-            if (chance < 0.075F) {
-                generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
-            }
-        } else if (Level.END.equals(dimension)) {
-            // end chest is 15% drop rate
-            if (chance < 0.15F) {
-                generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+        for (int i = 0; i < 2; i++) {
+            float chance = context.getRandom().nextFloat();
+            // roll runegems per dim
+            if (Level.OVERWORLD.equals(dimension)) {
+                // ow chest is 25% drop rate
+                if (chance < 0.25F) {
+                    generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+                }
+            } else if (Level.NETHER.equals(dimension)) {
+                // nether chest is 50% drop rate
+                if (chance < 0.5F) {
+                    generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+                }
+            } else if (Level.END.equals(dimension)) {
+                // end chest is 75% drop rate
+                if (chance < 0.75F) {
+                    generatedLoot.add(new ItemStack(RAW_RUNEGEM_GEODE.asItem()));
+                }
             }
         }
 

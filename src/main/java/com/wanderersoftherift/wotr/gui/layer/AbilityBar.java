@@ -9,8 +9,8 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.client.ModKeybinds;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
@@ -23,6 +23,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -30,7 +31,7 @@ import org.joml.Vector2ic;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.init.ModAttachments.ABILITY_COOLDOWNS;
+import static com.wanderersoftherift.wotr.init.WotrAttachments.ABILITY_COOLDOWNS;
 
 /**
  * Bar displaying a players selected abilities and their state.
@@ -84,11 +85,12 @@ public final class AbilityBar implements ConfigurableLayer {
     @Override
     public void render(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui || !getConfig().isVisible()) {
+        if (minecraft.options.hideGui || !getConfig().isVisible() || minecraft.gameMode == null
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
         LocalPlayer player = Minecraft.getInstance().player;
-        AbilitySlots abilitySlots = player.getData(ModAttachments.ABILITY_SLOTS);
+        AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         if (abilitySlots.getSlots() == 0) {
             return;
         }
@@ -158,14 +160,14 @@ public final class AbilityBar implements ConfigurableLayer {
     }
 
     private void renderKeyBinds(GuiGraphics graphics, int xOffset, int yOffset, int slot) {
-        if (slot >= ModKeybinds.ABILITY_SLOT_KEYS.size()) {
+        if (slot >= WotrKeyMappings.ABILITY_SLOT_KEYS.size()) {
             return;
         }
-        if (ModKeybinds.ABILITY_SLOT_KEYS.get(slot).isUnbound()) {
+        if (WotrKeyMappings.ABILITY_SLOT_KEYS.get(slot).isUnbound()) {
             return;
         }
         Font font = Minecraft.getInstance().font;
-        Component keyText = getShortKeyDescription(ModKeybinds.ABILITY_SLOT_KEYS.get(slot));
+        Component keyText = getShortKeyDescription(WotrKeyMappings.ABILITY_SLOT_KEYS.get(slot));
         int keyTextWidth = font.width(keyText);
         if (keyTextWidth > 31) {
             keyText = Component.literal("...");

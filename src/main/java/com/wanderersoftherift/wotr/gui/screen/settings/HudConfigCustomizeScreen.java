@@ -1,9 +1,11 @@
 package com.wanderersoftherift.wotr.gui.screen.settings;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
-import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
+import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
+import com.wanderersoftherift.wotr.init.client.WotrClientRegistries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -83,6 +85,8 @@ public class HudConfigCustomizeScreen extends Screen {
 
     @Override
     public void onClose() {
+        HudPresetManager.getInstance().updateCustom(minecraft.getConnection().registryAccess());
+        ClientConfig.HUD_PRESET.set(HudPresetManager.CUSTOM_ID.toString());
         Minecraft.getInstance().setScreen(new HudConfigOptionsScreen());
     }
 
@@ -239,7 +243,7 @@ public class HudConfigCustomizeScreen extends Screen {
     }
 
     private Optional<ConfigurableLayer> findMouseOver(int mouseX, int mouseY, int screenWidth, int screenHeight) {
-        return ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.stream().filter(layer -> {
+        return WotrClientRegistries.CONFIGURABLE_LAYERS.stream().filter(layer -> {
             int width = layer.getConfigWidth();
             int height = layer.getConfigHeight();
             Vector2i pos = layer.getConfig().getPosition(width, height, screenWidth, screenHeight);
@@ -248,7 +252,7 @@ public class HudConfigCustomizeScreen extends Screen {
     }
 
     private void renderConfigurableElements(GuiGraphics guiGraphics) {
-        ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.stream().forEach(layer -> {
+        WotrClientRegistries.CONFIGURABLE_LAYERS.stream().forEach(layer -> {
             int width = layer.getConfigWidth();
             int height = layer.getConfigHeight();
             Vector2i pos = layer.getConfig()

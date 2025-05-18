@@ -1,0 +1,10 @@
+{
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:light",
+      "minPercent": 50.0
+    }
+  ],
+  "output": "wotr:noir",
+  "priority": 10
+}

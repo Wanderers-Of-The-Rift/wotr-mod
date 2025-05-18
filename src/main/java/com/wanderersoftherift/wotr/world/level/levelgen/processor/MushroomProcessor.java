@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModProcessors;
+import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
@@ -109,7 +109,7 @@ public class MushroomProcessor extends StructureProcessor
     }
 
     protected StructureProcessorType<?> getType() {
-        return ModProcessors.MUSHROOMS.get();
+        return WotrProcessors.MUSHROOMS.get();
     }
 
     public List<Block> getExclusionList() {

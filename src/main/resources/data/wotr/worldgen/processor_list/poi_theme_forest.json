@@ -124,11 +124,23 @@
                     "input_state": "wotr:processor_block_1_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:azalea_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:azalea_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.6
                         },
                         {
-                            "output_state": "minecraft:flowering_azalea_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:flowering_azalea_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.4
                         }
                     ]
@@ -272,11 +284,23 @@
                     "input_state": "wotr:processor_block_2_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:azalea_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:azalea_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.7
                         },
                         {
-                            "output_state": "minecraft:flowering_azalea_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:flowering_azalea_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.3
                         }
                     ]
@@ -512,11 +536,23 @@
                     "input_state": "wotr:processor_block_4_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:azalea_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:azalea_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.6
                         },
                         {
-                            "output_state": "minecraft:flowering_azalea_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:flowering_azalea_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.4
                         }
                     ]
@@ -760,7 +796,13 @@
                     "input_state": "wotr:processor_block_6_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:jungle_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:jungle_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 1.0
                         }
                     ]
@@ -1012,7 +1054,13 @@
                     "input_state": "wotr:processor_block_8_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:jungle_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:jungle_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 1.0
                         }
                     ]

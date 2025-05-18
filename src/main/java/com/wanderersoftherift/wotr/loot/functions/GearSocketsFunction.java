@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.loot.functions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.GEAR_SOCKETS_FUNCTION;
+import static com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes.GEAR_SOCKETS_FUNCTION;
 
 public class GearSocketsFunction extends LootItemConditionalFunction {
     public static final MapCodec<GearSocketsFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst)
@@ -51,7 +51,7 @@ public class GearSocketsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, RandomSource random) {
-        itemStack.set(ModDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
+        itemStack.set(WotrDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
         return itemStack;
     }
 

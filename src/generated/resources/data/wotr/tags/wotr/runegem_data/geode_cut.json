@@ -1,0 +1,10 @@
+{
+  "values": [
+    "wotr:attack_cut",
+    "wotr:defense_cut",
+    "wotr:health_cut",
+    "wotr:magic_cut",
+    "wotr:projectile_cut",
+    "wotr:speed_cut"
+  ]
+}

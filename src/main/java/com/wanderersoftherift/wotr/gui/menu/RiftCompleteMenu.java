@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
 import com.google.common.collect.ImmutableList;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
+import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -50,7 +50,7 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
 
     public RiftCompleteMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, int successFlag,
             Object2IntMap<ResourceLocation> riftStats) {
-        super(ModMenuTypes.RIFT_COMPLETE_MENU.get(), containerId);
+        super(WotrMenuTypes.RIFT_COMPLETE_MENU.get(), containerId);
         this.access = access;
         this.rewards = new ItemStackHandler(NUM_REWARD_SLOTS);
 

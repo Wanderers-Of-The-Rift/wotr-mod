@@ -9,7 +9,7 @@
           "functions": [
             {
               "function": "wotr:runegems",
-              "tier": "framed"
+              "runegems": "#wotr:geode_framed"
             }
           ],
           "name": "wotr:runegem"

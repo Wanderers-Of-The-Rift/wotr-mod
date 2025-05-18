@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.preset.ElementPreset;
 import com.wanderersoftherift.wotr.gui.config.preset.HudPreset;
 import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
-import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
+import com.wanderersoftherift.wotr.init.client.WotrClientRegistries;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -44,10 +44,10 @@ public class HudConfigOptionsScreen extends Screen {
                         Component.translatable(WanderersOfTheRift.translationId("button", "hud_presets")),
                         (cycleButton, preset) -> {
                             ClientConfig.HUD_PRESET.set(preset.id().toString());
-                            ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.stream().forEach(layer -> {
+                            WotrClientRegistries.CONFIGURABLE_LAYERS.stream().forEach(layer -> {
                                 layer.getConfig().reset();
                                 ElementPreset elementPreset = preset.elementMap()
-                                        .get(ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.getKey(layer));
+                                        .get(WotrClientRegistries.CONFIGURABLE_LAYERS.getKey(layer));
                                 if (elementPreset != null) {
                                     elementPreset.applyTo(layer.getConfig());
                                 }
@@ -64,10 +64,10 @@ public class HudConfigOptionsScreen extends Screen {
         resetButton = Button
                 .builder(Component.translatable(WanderersOfTheRift.translationId("button", "reset")), button -> {
                     HudPreset preset = presetButton.getValue();
-                    ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.stream().forEach(layer -> {
+                    WotrClientRegistries.CONFIGURABLE_LAYERS.stream().forEach(layer -> {
                         layer.getConfig().reset();
                         ElementPreset elementPreset = preset.elementMap()
-                                .get(ModConfigurableLayers.CONFIGURABLE_LAYER_REGISTRY.getKey(layer));
+                                .get(WotrClientRegistries.CONFIGURABLE_LAYERS.getKey(layer));
                         if (elementPreset != null) {
                             elementPreset.applyTo(layer.getConfig());
                         }

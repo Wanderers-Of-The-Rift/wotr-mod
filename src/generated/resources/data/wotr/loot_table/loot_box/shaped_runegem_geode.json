@@ -9,7 +9,7 @@
           "functions": [
             {
               "function": "wotr:runegems",
-              "tier": "shaped"
+              "runegems": "#wotr:geode_shaped"
             }
           ],
           "name": "wotr:runegem"

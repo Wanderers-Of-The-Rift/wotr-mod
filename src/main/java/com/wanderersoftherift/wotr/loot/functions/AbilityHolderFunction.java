@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.commands.AbilityCommands;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -19,13 +19,13 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes.ABILITY_HOLDER_FUNCTION;
+import static com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes.ABILITY_HOLDER_FUNCTION;
 
 public class AbilityHolderFunction extends LootItemConditionalFunction {
     public static final MapCodec<AbilityHolderFunction> CODEC = RecordCodecBuilder.mapCodec(
             inst -> commonFields(inst).and(Codec.INT.fieldOf("min_level").forGetter(AbilityHolderFunction::getMinLevel))
                     .and(Codec.INT.fieldOf("max_level").forGetter(AbilityHolderFunction::getMaxLevel))
-                    .and(RegistryCodecs.homogeneousList(RegistryEvents.ABILITY_REGISTRY)
+                    .and(RegistryCodecs.homogeneousList(WotrRegistries.Keys.ABILITIES)
                             .fieldOf("abilities")
                             .forGetter(AbilityHolderFunction::getAbilities))
                     .apply(inst, AbilityHolderFunction::new));

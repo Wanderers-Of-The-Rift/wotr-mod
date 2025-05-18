@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -31,8 +31,8 @@ public class InventorySnapshotEvents {
                 || !(event.getEntity() instanceof ServerPlayer serverPlayer)) {
             return;
         }
-        boolean fromRift = RiftData.isRift(level.getServer().getLevel(event.getFrom()));
-        boolean toRift = RiftData.isRift(level.getServer().getLevel(event.getTo()));
+        boolean fromRift = RiftLevelManager.isRift(level.getServer().getLevel(event.getFrom()));
+        boolean toRift = RiftLevelManager.isRift(level.getServer().getLevel(event.getTo()));
         if (!fromRift && toRift) {
             InventorySnapshotSystem.captureSnapshot(serverPlayer);
         } else if (fromRift && !toRift) {

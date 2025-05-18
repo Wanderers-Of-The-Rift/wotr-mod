@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -13,8 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.saveddata.SavedData;
-
-import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
@@ -47,7 +46,7 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         RiftTheme.CODEC.encodeStart(NbtOps.INSTANCE, this.getTheme())
                 .resultOrPartial(LOGGER::error)
                 .ifPresent(compound -> tag.put("theme", compound));
@@ -63,12 +62,10 @@ public class LevelRiftThemeData extends SavedData {
         this.setDirty();
     }
 
-    public static Holder<RiftTheme> getRandomTheme(MinecraftServer level, RandomSource rng) {
-        Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme = registryReference.flatMap(x -> x.getRandom(rng)).orElse(null);
-        if (riftTheme == null) {
-            WanderersOfTheRift.LOGGER.error("Failed to get random rift theme");
-        }
-        return riftTheme;
+    public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, RandomSource rng) {
+        Registry<RiftTheme> registry = server.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
+
+        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, rng)
+                .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
 }

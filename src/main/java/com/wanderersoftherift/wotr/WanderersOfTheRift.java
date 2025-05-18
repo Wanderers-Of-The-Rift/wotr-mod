@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.commands.AbilityCommands;
+import com.wanderersoftherift.wotr.commands.BugReportCommand;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.EssenceCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
@@ -11,34 +12,34 @@ import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
-import com.wanderersoftherift.wotr.init.ModAbilityTypes;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModAttributes;
-import com.wanderersoftherift.wotr.init.ModBlockEntities;
-import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModChunkGenerators;
-import com.wanderersoftherift.wotr.init.ModCommands;
-import com.wanderersoftherift.wotr.init.ModCreativeTabs;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModEffects;
-import com.wanderersoftherift.wotr.init.ModEntities;
-import com.wanderersoftherift.wotr.init.ModEntityDataSerializers;
-import com.wanderersoftherift.wotr.init.ModInputBlockStateTypes;
-import com.wanderersoftherift.wotr.init.ModItems;
-import com.wanderersoftherift.wotr.init.ModLootItemConditionTypes;
-import com.wanderersoftherift.wotr.init.ModLootItemFunctionTypes;
-import com.wanderersoftherift.wotr.init.ModLootModifiers;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
-import com.wanderersoftherift.wotr.init.ModMobEffects;
-import com.wanderersoftherift.wotr.init.ModModifierEffects;
-import com.wanderersoftherift.wotr.init.ModObjectiveTypes;
-import com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes;
-import com.wanderersoftherift.wotr.init.ModOutputBlockStateTypes;
-import com.wanderersoftherift.wotr.init.ModPayloadHandlers;
-import com.wanderersoftherift.wotr.init.ModProcessors;
-import com.wanderersoftherift.wotr.init.ModSoundEvents;
-import com.wanderersoftherift.wotr.init.ModTargetingTypes;
-import com.wanderersoftherift.wotr.init.client.ModConfigurableLayers;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.WotrBlockEntities;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrContainerTypes;
+import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
+import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.init.WotrMobEffects;
+import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
+import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
+import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
+import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
+import com.wanderersoftherift.wotr.init.WotrSoundEvents;
+import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
+import com.wanderersoftherift.wotr.init.ability.WotrEffects;
+import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
+import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
+import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
+import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;
+import com.wanderersoftherift.wotr.init.loot.WotrLootModifiers;
+import com.wanderersoftherift.wotr.init.worldgen.WotrChunkGenerators;
+import com.wanderersoftherift.wotr.init.worldgen.WotrInputBlockStateTypes;
+import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
+import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -64,45 +65,45 @@ public class WanderersOfTheRift {
 
     public WanderersOfTheRift(IEventBus modEventBus, ModContainer modContainer) {
         // Vanilla elements
-        ModAttributes.ATTRIBUTES.register(modEventBus);
-        ModBlocks.BLOCKS.register(modEventBus);
-        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-        ModCommands.COMMAND_ARGUMENT_TYPES.register(modEventBus);
-        ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
-        ModEntities.ENTITIES.register(modEventBus);
-        ModEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(modEventBus);
-        ModItems.ITEMS.register(modEventBus);
-        ModMenuTypes.MENUS.register(modEventBus);
-        ModMobEffects.MOB_EFFECTS.register(modEventBus);
-        ModSoundEvents.SOUND_EVENTS.register(modEventBus);
+        WotrAttributes.ATTRIBUTES.register(modEventBus);
+        WotrBlocks.BLOCKS.register(modEventBus);
+        WotrBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        WotrContainerTypes.CONTAINER_TYPES.register(modEventBus);
+        WotrCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        WotrEntities.ENTITIES.register(modEventBus);
+        WotrEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(modEventBus);
+        WotrItems.ITEMS.register(modEventBus);
+        WotrMenuTypes.MENUS.register(modEventBus);
+        WotrMobEffects.MOB_EFFECTS.register(modEventBus);
+        WotrSoundEvents.SOUND_EVENTS.register(modEventBus);
 
         // Loot
-        ModLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
-        ModLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
-        ModLootItemConditionTypes.LOOT_ITEM_CONDITION_TYPES.register(modEventBus);
+        WotrLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
+        WotrLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
+        WotrLootItemConditionTypes.LOOT_ITEM_CONDITION_TYPES.register(modEventBus);
 
         // Attachments and components
-        ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
-        ModDataComponentType.DATA_COMPONENTS.register(modEventBus);
+        WotrAttachments.ATTACHMENT_TYPES.register(modEventBus);
+        WotrDataComponentType.DATA_COMPONENTS.register(modEventBus);
 
         // Rift generation
-        ModInputBlockStateTypes.INPUT_BLOCKSTATE_TYPES.register(modEventBus);
-        ModOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
-        ModProcessors.PROCESSORS.register(modEventBus);
+        WotrInputBlockStateTypes.INPUT_BLOCKSTATE_TYPES.register(modEventBus);
+        WotrOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
+        WotrProcessors.PROCESSORS.register(modEventBus);
 
         // Abilities
-        ModAbilityTypes.ABILITY_TYPES.register(modEventBus);
-        ModEffects.EFFECTS.register(modEventBus);
-        ModTargetingTypes.TARGETING_TYPES.register(modEventBus);
+        WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
+        WotrEffects.EFFECTS.register(modEventBus);
+        WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
 
-        ModModifierEffects.MODIFIER_EFFECT_TYPES.register(modEventBus);
-        ModObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
-        ModOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
-        ModChunkGenerators.CHUNK_GENERATORS.register(modEventBus);
+        WotrModifierEffectTypes.MODIFIER_EFFECT_TYPES.register(modEventBus);
+        WotrObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
+        WotrOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
+        WotrChunkGenerators.CHUNK_GENERATORS.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
-            ModConfigurableLayers.LAYERS.register(modEventBus);
-            ModConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
+            WotrConfigurableLayers.LAYERS.register(modEventBus);
+            WotrConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
         }
 
         // Register ourselves for server and other game events we are interested in.
@@ -113,7 +114,7 @@ public class WanderersOfTheRift {
 
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);
-        modEventBus.addListener(ModPayloadHandlers::registerPayloadHandlers);
+        modEventBus.addListener(WotrPayloadHandlers::registerPayloadHandlers);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
@@ -140,6 +141,18 @@ public class WanderersOfTheRift {
      */
     public static String translationId(String category, String item) {
         return category + "." + MODID + "." + item;
+    }
+
+    /**
+     * Helper method to get a translationId string containing any mod id.
+     *
+     * @param category The category of the translationId (becomes a prefix)
+     * @param item     The ResourceLocation item
+     * @return A combination of category, the mod id and the item. e.g. if category is "item" and item is
+     *         "wotr:nosering.description" the result is "item.wotr.nosering.description"
+     */
+    public static String translationId(String category, ResourceLocation item) {
+        return category + "." + item.getNamespace() + "." + item.getPath();
     }
 
     /**
@@ -173,6 +186,7 @@ public class WanderersOfTheRift {
         AbilityCommands.register(event.getDispatcher(), event.getBuildContext());
         new RiftKeyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new EssenceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new BugReportCommand().registerCommand(event.getDispatcher(), event.getBuildContext());
         new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new HudCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }

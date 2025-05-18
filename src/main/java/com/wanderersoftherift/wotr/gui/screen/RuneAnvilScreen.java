@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.gui.screen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import com.wanderersoftherift.wotr.gui.menu.slot.RunegemSlot;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
@@ -93,9 +93,10 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
 
         if (!slot.hasItem() && slot instanceof RunegemSlot runegemSlot && runegemSlot.getLockedSocket() != null
                 && runegemSlot.getShape() != null) {
-            ItemStack stack = new ItemStack(ModItems.RUNEGEM.get());
+            ItemStack stack = new ItemStack(WotrItems.RUNEGEM.get());
             RunegemShape shape = runegemSlot.getShape();
-            stack.set(ModDataComponentType.RUNEGEM_DATA, new RunegemData(shape, List.of(), RunegemTier.RAW));
+            stack.set(WotrDataComponentType.RUNEGEM_DATA,
+                    new RunegemData(Component.empty(), shape, List.of(), RunegemTier.RAW));
 
             super.renderSlotContents(guiGraphics, stack, slot, null);
             guiGraphics.blit(RenderType::guiTexturedOverlay, SLOTS, x, y, getSlotOffset(shape, true), 18, 18, 18, 256,

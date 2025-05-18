@@ -2,9 +2,10 @@ package com.wanderersoftherift.wotr.gui.menu;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.slot.RunegemSlot;
-import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.mixin.InvokerAbstractContainerMenu;
@@ -16,6 +17,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +48,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     // Server
     public RuneAnvilMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, boolean isServer,
             Container container) {
-        super(ModMenuTypes.RUNE_ANVIL_MENU.get(), containerId);
+        super(WotrMenuTypes.RUNE_ANVIL_MENU.get(), containerId);
         this.playerInventory = playerInventory;
         this.access = access;
         this.isServer = isServer;
@@ -60,7 +62,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         this.createGearSlot();
         this.createSocketSlots();
 
-        GearSockets gearSockets = this.gearSlot.getItem().get(ModDataComponentType.GEAR_SOCKETS.get());
+        GearSockets gearSockets = this.gearSlot.getItem().get(WotrDataComponentType.GEAR_SOCKETS.get());
         if (gearSockets != null) {
             this.activeSocketSlots = gearSockets.sockets().size();
         }
@@ -121,7 +123,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return AbstractContainerMenu.stillValid(this.access, player, ModBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
+        return AbstractContainerMenu.stillValid(this.access, player, WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
     }
 
     public void apply() {
@@ -134,28 +136,29 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             return;
         }
 
-        GearSockets currentSockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
+        GearSockets currentSockets = gear.get(WotrDataComponentType.GEAR_SOCKETS.get());
         if (currentSockets == null) {
             return;
         }
 
-        List<GearSocket> newSockets = new ArrayList<>();
+        List<GearSocket> newSockets = new ArrayList<>(currentSockets.sockets());
+        Level level = this.playerInventory.player.level();
         for (int i = 0; i < this.activeSocketSlots; i++) {
             RunegemSlot slot = this.socketSlots.get(i);
             GearSocket currentSocket = currentSockets.sockets().get(i);
             ItemStack runegem = slot.getItem();
-            if (runegem.isEmpty()) {
-                newSockets.add(currentSocket);
-            } else {
-                GearSocket newSocket = currentSocket.applyRunegem(gear, runegem, this.playerInventory.player.level());
-                newSockets.add(newSocket);
+            RunegemData runegemData = runegem.get(WotrDataComponentType.RUNEGEM_DATA);
+            if (!runegem.isEmpty() && runegemData != null
+                    && currentSocket.canBeApplied(gear, level, runegemData, newSockets)) {
+                GearSocket newSocket = currentSocket.applyRunegem(gear, runegem, level, newSockets);
+                newSockets.set(i, newSocket);
                 slot.set(ItemStack.EMPTY);
                 slot.setLockedSocket(newSocket);
                 slot.setSocket(null);
             }
         }
         GearSockets newGearSockets = new GearSockets(newSockets);
-        gear.set(ModDataComponentType.GEAR_SOCKETS.get(), newGearSockets);
+        gear.set(WotrDataComponentType.GEAR_SOCKETS.get(), newGearSockets);
     }
 
     private void gearSlotChanged() {
@@ -171,7 +174,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                 socketSlot.setShape(null);
             }
         } else {
-            GearSockets sockets = gear.get(ModDataComponentType.GEAR_SOCKETS.get());
+            GearSockets sockets = gear.get(WotrDataComponentType.GEAR_SOCKETS.get());
             if (sockets == null) {
                 this.activeSocketSlots = 0;
                 return;
@@ -234,7 +237,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
         if (this.playerInventorySlots.contains(slot)) {
             // Inventory -> Container
-            if (stack.has(ModDataComponentType.GEAR_SOCKETS)) {
+            if (stack.has(WotrDataComponentType.GEAR_SOCKETS)) {
                 // Gear
                 if (this.gearSlot.hasItem() || !this.gearSlot.mayPlace(stack)) {
                     return ItemStack.EMPTY;
@@ -245,7 +248,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                 slot.set(stack.copyWithCount(count - 1));
                 return ItemStack.EMPTY;
             }
-            if (stack.has(ModDataComponentType.RUNEGEM_DATA)) {
+            if (stack.has(WotrDataComponentType.RUNEGEM_DATA)) {
                 // Runegems
                 for (Slot socketSlot : this.socketSlots) {
                     if (socketSlot.hasItem() || !socketSlot.mayPlace(stack)) {

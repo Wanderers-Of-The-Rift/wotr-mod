@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.block;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -180,7 +180,7 @@ public class DittoBlock extends BaseEntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if ((blockEntity instanceof DittoBlockEntity dittoBlockEntity)) {
             if (dittoBlockEntity.getTheItem() != ItemStack.EMPTY
-                    && dittoBlockEntity.getTheItem().getItem() != ModBlocks.DITTO_BLOCK.asItem()) {
+                    && dittoBlockEntity.getTheItem().getItem() != WotrBlocks.DITTO_BLOCK.asItem()) {
                 return 15;
             }
         }
@@ -192,6 +192,6 @@ public class DittoBlock extends BaseEntityBlock {
     }
 
     public DeferredBlock getBlock() {
-        return ModBlocks.DITTO_BLOCK;
+        return WotrBlocks.DITTO_BLOCK;
     }
 }

@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -26,8 +26,8 @@ public record AbilityCooldownUpdatePayload(int slot, int cooldownLength, int coo
     }
 
     public void handleOnClient(final IPayloadContext context) {
-        PlayerCooldownData cooldowns = context.player().getData(ModAttachments.ABILITY_COOLDOWNS);
+        PlayerCooldownData cooldowns = context.player().getData(WotrAttachments.ABILITY_COOLDOWNS);
         cooldowns.setCooldown(slot(), cooldownLength(), cooldownRemaining());
-        context.player().setData(ModAttachments.ABILITY_COOLDOWNS, cooldowns);
+        context.player().setData(WotrAttachments.ABILITY_COOLDOWNS, cooldowns);
     }
 }

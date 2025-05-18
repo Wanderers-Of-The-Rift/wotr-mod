@@ -1,7 +1,7 @@
 {
   "loot_tables_to_eject": [
     {
-      "data": "minecraft:spawners/ominous/trial_chamber/consumables",
+      "data": "wotr:chests/rift_spawner/default",
       "weight": 10
     }
   ],

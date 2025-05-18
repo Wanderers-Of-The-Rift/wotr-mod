@@ -22,7 +22,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "value": "wotr:rift/runegem",
+          "value": "wotr:rift/geode_runegem",
           "weight": 20
         },
         {
@@ -33,17 +33,17 @@
         {
           "type": "minecraft:loot_table",
           "value": "wotr:rift/socketed_vanilla_armor",
-          "weight": 20
+          "weight": 5
         },
         {
           "type": "minecraft:loot_table",
           "value": "wotr:rift/socketed_vanilla_weapons",
-          "weight": 20
+          "weight": 5
         },
         {
           "type": "minecraft:loot_table",
           "value": "wotr:rift/socketed_vanilla_tools",
-          "weight": 20
+          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -76,8 +76,7 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 2,
-              "min_tier": 0
+              "max_tier": 2
             }
           ],
           "functions": [
@@ -122,7 +121,6 @@
           "conditions": [
             {
               "condition": "wotr:rift_level_check",
-              "max_tier": 7,
               "min_tier": 5
             }
           ],

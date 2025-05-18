@@ -2,9 +2,12 @@
     "processors": [
         {
             "processor_type": "wotr:spot_gradient",
+            "noise_scale_x":  0.07,
+            "noise_scale_y":  0.03,
+            "noise_scale_z":  0.03,
             "replacements": [
                 {
-                    "input_state": "wotr:processor_block_11",
+                    "input_state": "wotr:processor_block_11_glass",
                     "output_steps": [
                         {
                             "output_state": "minecraft:orange_stained_glass",
@@ -29,7 +32,7 @@
                     ]
                 },
                 {
-                    "input_state": "wotr:processor_block_11_wall",
+                    "input_state": "wotr:processor_block_11_glass_pane",
                     "output_steps": [
                         {
                             "output_state": "minecraft:magenta_stained_glass_pane",
@@ -58,6 +61,10 @@
         {
             "processor_type": "wotr:rift_theme",
             "piece_type": "poi"
+        },
+        {
+            "processor_type": "wotr:trial_spawner",
+            "config": "wotr:rift"
         }
     ]
 }

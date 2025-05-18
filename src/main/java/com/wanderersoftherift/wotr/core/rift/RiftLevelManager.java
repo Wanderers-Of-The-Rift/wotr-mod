@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModEntities;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
@@ -29,6 +29,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.storage.DerivedLevelData;
@@ -66,6 +67,17 @@ public final class RiftLevelManager {
     }
 
     /**
+     * @param level
+     * @return Whether the level is a rift
+     */
+    public static boolean isRift(Level level) {
+        Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
+        Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
+        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType())
+                .isPresent();
+    }
+
+    /**
      * @param id
      * @return The rift level with the given id, if it exists
      */
@@ -73,14 +85,14 @@ public final class RiftLevelManager {
         var server = ServerLifecycleHooks.getCurrentServer();
 
         ServerLevel serverLevel = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
-        if (serverLevel != null && RiftData.isRift(serverLevel)) {
+        if (serverLevel != null && isRift(serverLevel)) {
             return serverLevel;
         }
         return null;
     }
 
     public static void onPlayerDeath(ServerPlayer player, ServerLevel level) {
-        if (!RiftData.isRift(level)) {
+        if (!isRift(level)) {
             return;
         }
         RiftData riftData = RiftData.get(player.serverLevel());
@@ -89,7 +101,7 @@ public final class RiftLevelManager {
         if (riftData.isRiftEmpty()) {
             unregisterAndDeleteLevel(player.serverLevel());
         }
-        player.setData(ModAttachments.DIED_IN_RIFT, true);
+        player.setData(WotrAttachments.DIED_IN_RIFT, true);
     }
 
     /**
@@ -98,7 +110,7 @@ public final class RiftLevelManager {
      */
     public static boolean returnPlayerFromRift(ServerPlayer player) {
         ServerLevel riftLevel = player.serverLevel();
-        if (!RiftData.isRift(riftLevel)) {
+        if (!isRift(riftLevel)) {
             return false;
         }
 
@@ -112,6 +124,10 @@ public final class RiftLevelManager {
         ServerLevel respawnDimension = riftLevel.getServer().getLevel(respawnKey);
         if (respawnDimension == null) {
             respawnDimension = riftLevel.getServer().overworld();
+        }
+
+        if (!riftData.containsPlayer(player)) {
+            return false;
         }
 
         var respawnPos = riftData.getPortalPos().above();
@@ -136,7 +152,6 @@ public final class RiftLevelManager {
 
         var existingRift = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
         if (existingRift != null) {
-            WanderersOfTheRift.LOGGER.debug("Found existing rift level {}", id);
             return existingRift;
         }
 
@@ -187,7 +202,7 @@ public final class RiftLevelManager {
      */
     // TODO: clean it up (maybe move as static method to the entity or the spawner class)
     private static void spawnRiftExit(Level level, Vec3 pos) {
-        RiftPortalExitEntity rift = new RiftPortalExitEntity(ModEntities.RIFT_EXIT.get(), level);
+        RiftPortalExitEntity rift = new RiftPortalExitEntity(WotrEntities.RIFT_EXIT.get(), level);
         rift.setPos(pos);
         rift.setYRot(Direction.UP.toYRot());
         rift.setBillboard(true);
@@ -229,7 +244,7 @@ public final class RiftLevelManager {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     private static void unregisterAndDeleteLevel(ServerLevel level) {
-        if (!RiftData.isRift(level)) {
+        if (!isRift(level)) {
             return;
         }
         RiftData riftData = RiftData.get(level);

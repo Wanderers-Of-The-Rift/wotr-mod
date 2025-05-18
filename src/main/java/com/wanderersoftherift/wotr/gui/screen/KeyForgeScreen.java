@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.screen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.KeyForgeMenu;
-import com.wanderersoftherift.wotr.init.ModDataMaps;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -60,7 +60,7 @@ public class KeyForgeScreen extends AbstractContainerScreen<KeyForgeMenu> {
                     .map(ClientTooltipComponent::showTooltipWithItemInHand)
                     .orElse(false)) {
                 List<Component> tooltips = this.getTooltipFromContainerItem(itemStack);
-                EssenceValue essenceValue = itemStack.getItemHolder().getData(ModDataMaps.ESSENCE_VALUE_DATA);
+                EssenceValue essenceValue = itemStack.getItemHolder().getData(WotrDataMaps.ESSENCE_VALUE_DATA);
                 if (essenceValue != null) {
                     if (essenceValue.values().size() > 1) {
                         tooltips.add(Component.translatable(ESSENCE_HEADER).withColor(Color.GRAY.getRGB()));

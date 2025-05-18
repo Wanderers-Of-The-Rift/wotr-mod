@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.wanderersoftherift.wotr.init.ModProcessors.GRADIENT_SPOT_REPLACE;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.GRADIENT_SPOT_REPLACE;
 
 public class GradientReplaceProcessor extends StructureProcessor implements RiftTemplateProcessor {
     public static final MapCodec<GradientReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(

@@ -4,9 +4,9 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModEntities;
-import com.wanderersoftherift.wotr.init.ModSoundEvents;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -73,7 +73,7 @@ public class RiftKey extends Item {
             Item.@NotNull TooltipContext context,
             @NotNull List<Component> components,
             @NotNull TooltipFlag flag) {
-        RiftConfig riftConfig = stack.get(ModDataComponentType.RIFT_CONFIG);
+        RiftConfig riftConfig = stack.get(WotrDataComponentType.RIFT_CONFIG);
         if (riftConfig != null) {
             components.addAll(riftConfig.getTooltips());
         }
@@ -85,14 +85,14 @@ public class RiftKey extends Item {
     }
 
     private void spawnRift(Level level, Vec3 pos, Direction dir, ItemStack riftKey) {
-        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(ModEntities.RIFT_ENTRANCE.get(), level);
+        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(WotrEntities.RIFT_ENTRANCE.get(), level);
         rift.setPos(pos);
         rift.setYRot(dir.toYRot());
         rift.setBillboard(dir.getAxis().isVertical());
-        if (riftKey.has(ModDataComponentType.RIFT_CONFIG)) {
-            rift.setRiftConfig(riftKey.get(ModDataComponentType.RIFT_CONFIG));
+        if (riftKey.has(WotrDataComponentType.RIFT_CONFIG)) {
+            rift.setRiftConfig(riftKey.get(WotrDataComponentType.RIFT_CONFIG));
         }
         level.addFreshEntity(rift);
-        rift.playSound(ModSoundEvents.RIFT_OPEN.value());
+        rift.playSound(WotrSoundEvents.RIFT_OPEN.value());
     }
 }

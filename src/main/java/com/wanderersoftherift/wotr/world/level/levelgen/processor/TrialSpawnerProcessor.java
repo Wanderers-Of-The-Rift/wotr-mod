@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import static com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity.RIFT_PLAYERS;
-import static com.wanderersoftherift.wotr.init.ModProcessors.TRIAL_SPAWNER;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.TRIAL_SPAWNER;
 
 public class TrialSpawnerProcessor extends StructureProcessor implements RiftTemplateProcessor {
     public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
@@ -51,7 +51,7 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
             StructurePlaceSettings settings,
             @javax.annotation.Nullable StructureTemplate template) {
         if (blockInfo.state().getBlock() instanceof TrialSpawnerBlock) {
-            BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
+            BlockState blockState = WotrBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
             BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(blockInfo.pos(),
                     blockState);
             if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {

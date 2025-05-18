@@ -6,9 +6,9 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.gui.menu.slot.AbilitySlot;
 import com.wanderersoftherift.wotr.gui.menu.slot.SkillThreadSlot;
-import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentPatch;
@@ -47,7 +47,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
             IItemHandler abilities) {
-        super(ModMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
+        super(WotrMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
         this.access = access;
         this.inputContainer = new SimpleContainer(INPUT_SLOTS);
         inputContainer.addListener(this::onAbilitySlotChanged);
@@ -73,15 +73,15 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
         access.execute((level, blockPos) -> {
             ItemStack item = container.getItem(0);
 
-            if (!item.isEmpty() && !item.has(ModDataComponentType.ABILITY_UPGRADE_POOL)) {
-                Holder<AbstractAbility> ability = item.get(ModDataComponentType.ABILITY);
+            if (!item.isEmpty() && !item.has(WotrDataComponentType.ABILITY_UPGRADE_POOL)) {
+                Holder<AbstractAbility> ability = item.get(WotrDataComponentType.ABILITY);
                 RegistryAccess registryAccess = level.registryAccess();
 
                 AbilityUpgradePool upgradePool = new AbilityUpgradePool.Mutable()
                         .generateChoices(registryAccess, ability.value(), 3, level.random,
                                 AbilityUpgradePool.SELECTION_PER_LEVEL)
                         .toImmutable();
-                item.set(ModDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
+                item.set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
             }
         });
     }
@@ -91,7 +91,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      */
     public boolean isAbilityItemPresent() {
         ItemStack item = inputContainer.getItem(0);
-        return !item.isEmpty() && item.has(ModDataComponentType.ABILITY);
+        return !item.isEmpty() && item.has(WotrDataComponentType.ABILITY);
     }
 
     /**
@@ -106,7 +106,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      */
     public @Nullable Holder<AbstractAbility> getAbility() {
         ItemStack item = getAbilityItem();
-        return item.get(ModDataComponentType.ABILITY);
+        return item.get(WotrDataComponentType.ABILITY);
     }
 
     /**
@@ -114,8 +114,8 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      */
     public @Nullable AbilityUpgradePool getUpgradePool() {
         ItemStack item = getAbilityItem();
-        if (!item.isEmpty() && item.has(ModDataComponentType.ABILITY_UPGRADE_POOL)) {
-            return item.get(ModDataComponentType.ABILITY_UPGRADE_POOL);
+        if (!item.isEmpty() && item.has(WotrDataComponentType.ABILITY_UPGRADE_POOL)) {
+            return item.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
         }
         return null;
     }
@@ -166,7 +166,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 return;
             }
             inputContainer.getItem(1).shrink(cost);
-            getAbilityItem().set(ModDataComponentType.ABILITY_UPGRADE_POOL,
+            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL,
                     pool.getMutable()
                             .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
                                     AbilityUpgradePool.SELECTION_PER_LEVEL)
@@ -206,7 +206,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 AbilityUpgradePool.Mutable mutable = pool.getMutable();
                 mutable.selectChoice(choice, selection);
                 DataComponentPatch patch = DataComponentPatch.builder()
-                        .set(ModDataComponentType.ABILITY_UPGRADE_POOL.get(), mutable.toImmutable())
+                        .set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), mutable.toImmutable())
                         .build();
                 getAbilityItem().applyComponents(patch);
             }
@@ -281,7 +281,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(this.access, player, ModBlocks.ABILITY_BENCH.get());
+        return stillValid(this.access, player, WotrBlocks.ABILITY_BENCH.get());
     }
 
 }

@@ -8,13 +8,13 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 import java.util.function.Function;
 
-import static com.wanderersoftherift.wotr.init.ModOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPE_REGISTRY;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.ONGOING_OBJECTIVE_TYPES;
 
 /**
  * OngoingObjective is the base type for tracking ongoing progress and other details for an active objective.
  */
 public interface OngoingObjective {
-    Codec<OngoingObjective> DIRECT_CODEC = ONGOING_OBJECTIVE_TYPE_REGISTRY.byNameCodec()
+    Codec<OngoingObjective> DIRECT_CODEC = ONGOING_OBJECTIVE_TYPES.byNameCodec()
             .dispatch(OngoingObjective::getCodec, Function.identity());
 
     /**

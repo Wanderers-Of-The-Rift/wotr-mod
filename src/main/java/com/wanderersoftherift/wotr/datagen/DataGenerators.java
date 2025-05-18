@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDamageTypes;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrDamageTypes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
@@ -25,36 +25,47 @@ public class DataGenerators {
         event.createDatapackRegistryObjects(
                 new RegistrySetBuilder().add(Registries.DAMAGE_TYPE, bootstrap -> {
                     bootstrap.register(
-                            ModDamageTypes.FIRE_DAMAGE, new DamageType("wotr.fire", DamageScaling.NEVER, 0.0F));
+                            WotrDamageTypes.FIRE_DAMAGE, new DamageType("wotr.fire", DamageScaling.NEVER, 0.0F));
                     bootstrap.register(
-                            ModDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
-                }).add(RegistryEvents.ABILITY_REGISTRY, ModAbilityProvider::bootstrapAbilities)
-        );
-        event.createProvider(ModLanguageProvider::new);
-        event.createProvider(ModModelProvider::new);
+                            WotrDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
+                })
+                        .add(WotrRegistries.Keys.ABILITIES, WotrAbilityProvider::bootstrapAbilities)
+                        .add(WotrRegistries.Keys.MODIFIERS, WotrModifierProvider::bootstrapModifiers)
+                        .add(WotrRegistries.Keys.OBJECTIVES, context -> {
+                        })
+                        .add(WotrRegistries.Keys.RIFT_THEMES, context -> {
+                        })
+                        .add(WotrRegistries.Keys.RUNEGEM_DATA, WotrRuneGemDataProvider::bootstrapRuneGems)
 
-        event.createProvider(ModDataMapProvider::new);
-        event.createProvider(ModSoundsProvider::new);
+        );
+        event.createProvider(WotrModelProvider::new);
+
+        event.createProvider(WotrDataMapProvider::new);
+        event.createProvider(WotrSoundsProvider::new);
 
         // Tags
-        ModBlockTagProvider modBlockTagProvider = event.createProvider(ModBlockTagProvider::new);
-        event.createProvider((output, lookupProvider) -> new ModItemTagProvider(output, lookupProvider,
-                modBlockTagProvider.contentsGetter()));
-        event.createProvider(ModAbilityTagsProvider::new);
+        event.createBlockAndItemTags(WotrBlockTagProvider::new, WotrItemTagProvider::new);
+        event.createProvider(WotrAbilityTagsProvider::new);
+        event.createProvider(WotrRiftThemeTagsProvider::new);
+        event.createProvider(WotrObjectiveTagsProvider::new);
 
         // event.createProvider(ModAbilityProvider::new);
-        event.createProvider(ModRiftThemeRecipeProvider::new);
+        event.createProvider(WotrRiftThemeRecipeProvider::new);
 
-        event.createProvider(ModRecipeProvider.Runner::new);
+        event.createProvider(WotrRecipeProvider.Runner::new);
 
         event.createProvider((output, lookupProvider) -> new LootTableProvider(output, Set.of(), List.of(
-                new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK),
-                new LootTableProvider.SubProviderEntry(ModChestLootTableProvider::new, LootContextParamSets.CHEST),
-                new LootTableProvider.SubProviderEntry(ModRiftObjectiveLootTableProvider::new,
+                new LootTableProvider.SubProviderEntry(WotrBlockLootTableProvider::new, LootContextParamSets.BLOCK),
+                new LootTableProvider.SubProviderEntry(WotrChestLootTableProvider::new, LootContextParamSets.CHEST),
+                new LootTableProvider.SubProviderEntry(WotrRiftObjectiveLootTableProvider::new,
                         LootContextParamSets.EMPTY),
-                new LootTableProvider.SubProviderEntry(ModLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)),
+                new LootTableProvider.SubProviderEntry(WotrLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)),
                 lookupProvider));
 
-        event.createProvider(ModObjectiveRecipeProvider::new);
+        event.createProvider(WotrObjectiveRecipeProvider::new);
+
+        event.createProvider(WotrRunegemDataTagsProvider::new);
+
+        event.createProvider(WotrLanguageProvider::new);
     }
 }

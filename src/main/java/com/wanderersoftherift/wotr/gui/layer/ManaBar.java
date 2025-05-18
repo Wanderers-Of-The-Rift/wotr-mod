@@ -6,8 +6,8 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModAttributes;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Vector2i;
@@ -77,11 +78,12 @@ public class ManaBar implements ConfigurableLayer {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui || !getConfig().isVisible()) {
+        if (minecraft.options.hideGui || !getConfig().isVisible() || minecraft.gameMode == null
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
         LocalPlayer player = minecraft.player;
-        int maxMana = (int) player.getAttributeValue(ModAttributes.MAX_MANA);
+        int maxMana = (int) player.getAttributeValue(WotrAttributes.MAX_MANA);
         if (maxMana == 0) {
             return;
         }
@@ -96,7 +98,7 @@ public class ManaBar implements ConfigurableLayer {
         }
         int frame = Mth.floor(animCounter / TICKS_PER_FRAME);
 
-        ManaData mana = player.getData(ModAttachments.MANA);
+        ManaData mana = player.getData(WotrAttachments.MANA);
 
         renderBar(guiGraphics, pos, mana.getAmount(), maxMana, frame);
         renderTooltip(guiGraphics, pos, mana.getAmount(), maxMana, width, height);

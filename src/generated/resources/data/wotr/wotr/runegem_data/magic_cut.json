@@ -1,0 +1,34 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:ability_aoe",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:mana_cost",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:mana_regen_rate",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:projectile_speed",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:projectile_spread",
+          "tier": 2
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.magic_cut"
+  },
+  "shape": "square",
+  "tier": "cut"
+}

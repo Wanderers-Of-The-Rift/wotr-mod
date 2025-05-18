@@ -782,7 +782,13 @@
           "input_state": "wotr:processor_block_6_glass",
           "output_steps": [
             {
-              "output_state": "minecraft:oak_leaves",
+              "output_state": {
+                "type": "wotr:blockstate",
+                "Name": "minecraft:oak_leaves",
+                "Properties": {
+                  "persistent": "true"
+                }
+              },
               "step_size": 1
             }
           ]

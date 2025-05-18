@@ -2,13 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": "minecraft:ender_pearl",
-    "a": "#minecraft:anvil"
+    "B": "minecraft:blast_furnace",
+    "I": "minecraft:iron_block",
+    "L": "#minecraft:logs",
+    "P": "minecraft:flower_pot"
   },
   "pattern": [
     "   ",
-    " E ",
-    " a "
+    "PI ",
+    "BL "
   ],
   "result": {
     "count": 1,

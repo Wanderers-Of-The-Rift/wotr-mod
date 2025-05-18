@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.block.blockentity;
 import com.google.common.base.Preconditions;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilContainer;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
-import com.wanderersoftherift.wotr.init.ModBlockEntities;
+import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -22,7 +22,7 @@ public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements Ru
     private NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
 
     public RuneAnvilBlockEntity(BlockPos pos, BlockState blockState) {
-        super(ModBlockEntities.RUNE_ANVIL_BLOCK_ENTITY.get(), pos, blockState);
+        super(WotrBlockEntities.RUNE_ANVIL_BLOCK_ENTITY.get(), pos, blockState);
     }
 
     @Override
