@@ -9,6 +9,9 @@
 -->
 
 <module name="Checker">
+    <module name="SuppressionFilter">
+        <property name="file" value="${config_loc}/suppressions.xml"/>
+    </module>
     <module name="SuppressWarningsFilter"/>
     <!-- All Java AST specific tests live under TreeWalker module. -->
     <module name="TreeWalker">

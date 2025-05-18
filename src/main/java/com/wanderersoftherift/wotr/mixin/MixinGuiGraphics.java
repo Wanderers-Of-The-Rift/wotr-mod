@@ -25,8 +25,7 @@ public abstract class MixinGuiGraphics implements WotrGuiGraphics {
     @Shadow
     private ItemStack tooltipStack;
 
-
-    @Unique public void wotrRenderTooltipLeft(
+    @Unique public void wotr$RenderTooltipLeft(
             Font font,
             List<Component> textComponents,
             Optional<TooltipComponent> tooltipComponent,
@@ -35,11 +34,11 @@ public abstract class MixinGuiGraphics implements WotrGuiGraphics {
             int mouseY,
             @Nullable ResourceLocation backgroundTexture) {
         this.tooltipStack = stack;
-        this.wotrRenderTooltipLeft(font, textComponents, tooltipComponent, mouseX, mouseY, backgroundTexture);
+        this.wotr$RenderTooltipLeft(font, textComponents, tooltipComponent, mouseX, mouseY, backgroundTexture);
         this.tooltipStack = ItemStack.EMPTY;
     }
 
-    @Unique public void wotrRenderTooltipLeft(
+    @Unique public void wotr$RenderTooltipLeft(
             Font font,
             List<Component> tooltipLines,
             Optional<TooltipComponent> visualTooltipComponent,
