@@ -24,6 +24,19 @@ public class WotrRiftThemeRecipeProvider extends KeyForgeRecipeProvider<Holder<R
 
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<KeyForgeRecipe<Holder<RiftTheme>>> writer) {
+        writer.accept(KeyForgeRecipe
+                .create((Holder<RiftTheme>) DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES,
+                        WanderersOfTheRift.id("buzzy_bees")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("life")).setMinPercent(25F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("water")).setMinPercent(5F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("order")).setMinPercent(5F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("plant")).setMinPercent(15F).build())
+                .setPriority(10)
+                .build());
         writer.accept(KeyForgeRecipe.create(
                 (Holder<RiftTheme>) DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES,
                         WanderersOfTheRift.id("cave")))
