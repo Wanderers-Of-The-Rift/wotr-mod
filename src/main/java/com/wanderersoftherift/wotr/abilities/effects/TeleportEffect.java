@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.abilities.effects.util.TeleportInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.ClipBlockStateContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
@@ -57,7 +56,7 @@ public class TeleportEffect extends AbstractEffect {
 
             case TARGET -> {
                 for (Entity target : targets) {
-                    if (target == null) continue;
+                    if (target == null) { continue; }
                     applyParticlesToTarget(target);
 
                     WanderersOfTheRift.LOGGER.info("Teleporting Target");

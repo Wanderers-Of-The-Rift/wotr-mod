@@ -8,9 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.phys.Vec3;
 
-import java.util.Optional;
 import java.util.function.IntFunction;
 
 public class TeleportInfo {

@@ -23,10 +23,10 @@ public record PositionInfo(Vec3 position, Mode mode) {
 		// Local is relative to the entity's looking direction
 		LOCAL("local", 2);
 
+		public static final Codec<Mode> CODEC = StringRepresentable.fromEnum(Mode::values);
+
 		private final String name;
 		private final int id;
-
-		public static final Codec<Mode> CODEC = StringRepresentable.fromEnum(Mode::values);
 
 		Mode(String name, int id) {
 			this.name = name;
