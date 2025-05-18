@@ -8,9 +8,11 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
+import com.wanderersoftherift.wotr.mixinextension.WotrGuiGraphics;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -57,14 +59,19 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
             List<Component> tooltip = this.getTooltipFromContainerItem(itemstack);
 
             // TODO-FIX: does not account for tooltip components (like the runegem stuff)
-            int width = tooltip.stream().map(this.font::width).max(Comparator.naturalOrder()).orElse(0) + 8;
+            int tooltipWidth = tooltip.stream().map(this.font::width).max(Comparator.naturalOrder()).orElse(0) + 8;
             int height = tooltip.size() * this.font.lineHeight + (tooltip.size() - 1) + 8;
 
-            int leftX = this.leftPos - width - 25;
-            int rightX = leftX + this.imageWidth + width + 25;
+
+            int leftX = this.leftPos - tooltipWidth - 25;
+            int rightX = leftX + this.imageWidth + tooltipWidth + 25;
             int y = this.topPos + this.imageHeight / 2 - height / 2;
-            guiGraphics.renderTooltip(this.font, tooltip, itemstack.getTooltipImage(), itemstack, leftX, y,
-                    itemstack.get(DataComponents.TOOLTIP_STYLE));
+            List<ClientTooltipComponent> components = net.neoforged.neoforge.client.ClientHooks.gatherTooltipComponents(
+                    itemstack, tooltip, itemstack.getTooltipImage(), mouseX, guiGraphics.guiWidth(), guiGraphics.guiHeight(), this.font);
+            ((WotrGuiGraphics) guiGraphics).wotr$RenderTooltipLeft(this.font, tooltip, itemstack.getTooltipImage(), itemstack, this.leftPos, y,
+                    itemstack.get(DataComponents.TOOLTIP_STYLE)
+            );
+            // TODO: right tooltip shifting to the left on smaller screens for bigger tooltips.
             guiGraphics.renderTooltip(this.font, tooltip, itemstack.getTooltipImage(), itemstack, rightX, y,
                     itemstack.get(DataComponents.TOOLTIP_STYLE)); // TODO: show the edited item tooltip
         }
