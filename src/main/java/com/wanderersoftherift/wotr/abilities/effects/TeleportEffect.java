@@ -56,7 +56,9 @@ public class TeleportEffect extends AbstractEffect {
 
             case TARGET -> {
                 for (Entity target : targets) {
-                    if (target == null) { continue; }
+                    if (target == null) {
+                        continue;
+                    }
                     applyParticlesToTarget(target);
 
                     WanderersOfTheRift.LOGGER.info("Teleporting Target");
