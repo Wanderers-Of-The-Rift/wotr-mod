@@ -1,5 +1,5 @@
 {
-    "fallback": "wotr:rift/poi/terminator",
+    "fallback": "wotr:rift/poi_terminator",
     "elements": [
         {
             "weight": 100,
@@ -292,7 +292,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/3/pris_fountain_pb-4-jyu",
+                "location": "wotr:rift/poi/free/3/pris_fountain_pb-4-k_jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -301,7 +301,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/3/bush_pb-1-jyu",
+                "location": "wotr:rift/poi/free/3/bush_pb-1-k_jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -338,6 +338,15 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/3/bamboo_cap_pb-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/3/pale_oak_pb-1-k_jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

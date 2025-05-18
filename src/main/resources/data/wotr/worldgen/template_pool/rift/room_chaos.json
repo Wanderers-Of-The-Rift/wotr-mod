@@ -207,6 +207,33 @@
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
+        },
+        {
+            "weight": 24,
+            "element": {
+                "location": "wotr:rift/room/chaos/211/two_caves-1-jyu",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 56,
+            "element": {
+                "location": "wotr:rift/room/chaos/321/plumbers_nightmare-1-wh4i3",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 12,
+            "element": {
+                "location": "wotr:rift/room/chaos/111/upside_down_passage-1-wh4i3",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
         }
     ]
 }
