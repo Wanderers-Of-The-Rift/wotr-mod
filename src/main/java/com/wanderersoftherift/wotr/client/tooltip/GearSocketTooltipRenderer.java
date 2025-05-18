@@ -66,14 +66,51 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         return height;
     }
 
-    @Override
+    @Override // TODO: check with final version
     public int getWidth(@NotNull Font font) {
-        int maxWidth = 0;
-        for (GearSocket ignored : this.cmp.gearSocket) {
-            maxWidth += 20; // For each available socket +16 w/ 4px between each
+        boolean isShiftDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT);
 
+        int baseWidth = font.width(getSocketDesc().getString() + "[" +
+                this.cmp.gearSocket().stream().filter(socket -> socket.runegem().isPresent()).count() +
+                "/" + this.cmp.gearSocket().size() + "]");
+
+        int maxWidth = Math.max(0, baseWidth);
+        for (GearSocket socket : this.cmp.gearSocket()) {
+            int modifierTier = socket.modifier().map(m -> m.modifier().value().getTier()).orElse(0);
+
+            if (socket.modifier().isPresent() && socket.runegem().isPresent()) {
+                List<AbstractModifierEffect> effects = socket.modifier().get().modifier().value().getModifierEffects();
+
+                for (AbstractModifierEffect effect : effects) {
+                    TooltipComponent tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(), ChatFormatting.AQUA);
+
+                    String effectText = "";
+
+                    if (tooltip instanceof ImageComponent img) {
+                        effectText = img.base().getString();
+                    }
+                    int width;
+
+                    if(isShiftDown) {
+                        if (effect instanceof AttributeModifierEffect attr) {
+                            effectText = effectText.concat(" (T" + modifierTier + " : " + attr.getMinimumRoll() + " - " + attr.getMaximumRoll() + ")");
+                        } else {
+                            effectText = effectText.concat(" (T " + modifierTier + ")");
+                        }
+                        width = font.width("> " + effectText);
+                    } else {
+                        width = font.width("> " + effectText);
+                    }
+
+                    maxWidth = Math.max(maxWidth, width + 30);
+                }
+            } else {
+                int width = font.width("> (Empty slot)");
+                maxWidth = Math.max(maxWidth, width + 30);
+            }
         }
-        return maxWidth + font.width(getSocketDesc()) + 90;
+
+        return maxWidth;
     }
 
     @Override
