@@ -125,11 +125,23 @@
                     "input_state": "wotr:processor_block_12_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:dark_oak_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:dark_oak_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.5
                         },
                         {
-                            "output_state": "minecraft:spruce_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:spruce_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.5
                         }
                     ]
