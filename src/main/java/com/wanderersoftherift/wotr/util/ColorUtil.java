@@ -9,6 +9,9 @@ import java.util.List;
  * Any common color constants we use (beyond what is in {@link net.minecraft.ChatFormatting})
  */
 public final class ColorUtil {
+    public static final int OFF_BLACK = 0x404040;
+    
+
     public static final List<String> RAINBOW = Arrays.asList(
             "#FF0000",
             "#FF7F00",
