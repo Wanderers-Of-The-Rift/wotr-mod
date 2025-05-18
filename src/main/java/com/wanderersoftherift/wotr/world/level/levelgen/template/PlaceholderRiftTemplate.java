@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class PlaceholderRiftTemplate implements RiftGeneratable {
-    private static final BlockState blockState = ModBlocks.PROCESSOR_BLOCK_1.getBlock().get().defaultBlockState();
+    private static final BlockState blockState = WotrBlocks.PROCESSOR_BLOCK_1.getBlock().get().defaultBlockState();
     private final Vec3i size;
 
     public PlaceholderRiftTemplate(Vec3i size) {

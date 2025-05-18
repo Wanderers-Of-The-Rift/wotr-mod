@@ -119,7 +119,7 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
         ProcessorUtil.getRandom(structureRandomType, new BlockPos(x, y, z), structurePos,
                 BlockPos.ZERO/* rifts always start at portal room, this could be changed to room origin */, world,
                 seedAdjustment);
-        if (inputBlockState.matchesBlockstate(currentState)) {
+        if (!inputBlockState.matchesBlockstate(currentState)) {
             return currentState;
         }
 

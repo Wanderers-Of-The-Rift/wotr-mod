@@ -98,7 +98,7 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
             boolean isVisible) {
 
         if (currentState.getBlock() instanceof TrialSpawnerBlock) {
-            BlockState blockState = ModBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
+            BlockState blockState = WotrBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
             BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock())
                     .newBlockEntity(new BlockPos(x, y, z), blockState);
             return fixNbtReturnState(blockEntity, world, nbt, blockState);

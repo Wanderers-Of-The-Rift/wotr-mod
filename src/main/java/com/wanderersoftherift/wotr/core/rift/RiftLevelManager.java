@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Static manager for handing access to, creation, and destruction of a rift
@@ -72,9 +73,11 @@ public final class RiftLevelManager {
      */
     public static boolean isRift(Level level) {
         Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
-        Optional<Holder.Reference<DimensionType>> riftType = dimTypes.get(RiftDimensionType.RIFT_DIMENSION_TYPE);
-        return riftType.filter(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType())
-                .isPresent();
+        Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPES.stream()
+                .map(dimTypes::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+        return riftTypes.anyMatch(dimensionTypeReference -> dimensionTypeReference.value() == level.dimensionType());
     }
 
     /**
