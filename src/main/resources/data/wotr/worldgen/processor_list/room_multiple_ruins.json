@@ -5,7 +5,7 @@
             "output_list": [
                 {
                     "output_state": "wotr:processor_block_14",
-                    "weight": 10
+                    "weight": 15
                 },
                 {
                     "output_state": {
