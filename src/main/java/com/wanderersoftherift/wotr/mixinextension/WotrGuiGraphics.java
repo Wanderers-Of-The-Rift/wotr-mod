@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WotrGuiGraphics {
-    void wotr$RenderTooltipLeft(
+    void wotrRenderTooltipLeft(
             Font font,
             List<Component> textComponents,
             Optional<TooltipComponent> tooltipComponent,
