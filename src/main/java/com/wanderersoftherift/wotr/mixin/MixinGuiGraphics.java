@@ -25,21 +25,40 @@ public abstract class MixinGuiGraphics implements WotrGuiGraphics {
     @Shadow
     private ItemStack tooltipStack;
 
-    @Unique
-    public void wotr$RenderTooltipLeft(Font font, List<Component> textComponents, Optional<TooltipComponent> tooltipComponent, ItemStack stack, int mouseX, int mouseY, @Nullable ResourceLocation backgroundTexture) {
+    @Unique public void wotr$RenderTooltipLeft(
+            Font font,
+            List<Component> textComponents,
+            Optional<TooltipComponent> tooltipComponent,
+            ItemStack stack,
+            int mouseX,
+            int mouseY,
+            @Nullable ResourceLocation backgroundTexture) {
         this.tooltipStack = stack;
         this.wotr$renderTooltipLeft(font, textComponents, tooltipComponent, mouseX, mouseY, backgroundTexture);
         this.tooltipStack = ItemStack.EMPTY;
     }
 
-    @Unique
-    public void wotr$renderTooltipLeft(Font font, List<Component> tooltipLines, Optional<TooltipComponent> visualTooltipComponent, int mouseX, int mouseY, @Nullable ResourceLocation sprite) {
-        List<ClientTooltipComponent> list = ClientHooks.gatherTooltipComponents(this.tooltipStack, tooltipLines, visualTooltipComponent, mouseX, this.guiWidth(), this.guiHeight(), font);
+    @Unique public void wotr$renderTooltipLeft(
+            Font font,
+            List<Component> tooltipLines,
+            Optional<TooltipComponent> visualTooltipComponent,
+            int mouseX,
+            int mouseY,
+            @Nullable ResourceLocation sprite) {
+        List<ClientTooltipComponent> list = ClientHooks.gatherTooltipComponents(this.tooltipStack, tooltipLines,
+                visualTooltipComponent, mouseX, this.guiWidth(), this.guiHeight(), font);
         this.renderTooltipInternal(font, list, mouseX, mouseY, FixedLeftPositioner.INSTANCE, sprite);
     }
 
     @Shadow
-    private void renderTooltipInternal(Font font, List<ClientTooltipComponent> tooltipLines, int mouseX, int mouseY, ClientTooltipPositioner tooltipPositioner, @Nullable ResourceLocation sprite){}
+    private void renderTooltipInternal(
+            Font font,
+            List<ClientTooltipComponent> tooltipLines,
+            int mouseX,
+            int mouseY,
+            ClientTooltipPositioner tooltipPositioner,
+            @Nullable ResourceLocation sprite) {
+    }
 
     @Shadow
     public int guiWidth() {
