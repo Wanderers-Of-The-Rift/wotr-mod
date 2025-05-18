@@ -80,13 +80,14 @@ public class TeleportEffect extends AbstractEffect {
         Level level = entity.level();
 
         Vec3 worldPosition = teleInfo.getPositionInfo().worldPosition(entity);
-        BlockPos worldBlockPos = new BlockPos((int)worldPosition.x, (int)worldPosition.y, (int)worldPosition.z);
+        BlockPos worldBlockPos = new BlockPos((int) worldPosition.x, (int) worldPosition.y, (int) worldPosition.z);
         boolean isAir = level.getBlockState(worldBlockPos).getBlock() instanceof AirBlock;
 
         if (!isAir || !level.isInWorldBounds(worldBlockPos)) {
-            BlockHitResult result = level.clip(new ClipContext(entity.position(), worldPosition, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
+            BlockHitResult result = level.clip(new ClipContext(entity.position(), worldPosition,
+                    ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
             if (result.getType() == HitResult.Type.BLOCK || !level.isInWorldBounds(worldBlockPos)) {
-                 return result.getLocation();
+                return result.getLocation();
             }
         }
 
