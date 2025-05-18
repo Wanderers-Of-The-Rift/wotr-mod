@@ -148,9 +148,11 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             GearSocket currentSocket = currentSockets.sockets().get(i);
             ItemStack runegem = slot.getItem();
             RunegemData runegemData = runegem.get(WotrDataComponentType.RUNEGEM_DATA);
+            List<GearSocket> existingSockets = new ArrayList<>(newSockets);
+            existingSockets.remove(i);
             if (!runegem.isEmpty() && runegemData != null
-                    && currentSocket.canBeApplied(gear, level, runegemData, newSockets)) {
-                GearSocket newSocket = currentSocket.applyRunegem(gear, runegem, level, newSockets);
+                    && currentSocket.canBeApplied(gear, level, runegemData, existingSockets)) {
+                GearSocket newSocket = currentSocket.applyRunegem(gear, runegem, level, existingSockets);
                 newSockets.set(i, newSocket);
                 slot.set(ItemStack.EMPTY);
                 slot.setLockedSocket(newSocket);
