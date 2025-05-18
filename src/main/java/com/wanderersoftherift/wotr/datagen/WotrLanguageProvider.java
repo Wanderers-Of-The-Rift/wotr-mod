@@ -88,6 +88,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addEssenceType("end", "End");
         addEssenceType("processor", "Processor");
 
+        addTheme("buzzy_bees", "Buzzy Bees");
         addTheme("cave", "Cave");
         addTheme("forest", "Forest");
         addTheme("processor", "Processor");
