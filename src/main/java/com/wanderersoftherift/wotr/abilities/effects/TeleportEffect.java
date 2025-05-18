@@ -9,6 +9,13 @@ import com.wanderersoftherift.wotr.abilities.effects.util.TeleportInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ClipBlockStateContext;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +27,6 @@ public class TeleportEffect extends AbstractEffect {
                     .apply(instance, TeleportEffect::new));
 
     private TeleportInfo teleInfo;
-
-    // TODO look into handling different types of teleports and better handle relative motion
-    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
     public TeleportEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
             TeleportInfo teleInfo) {
@@ -43,32 +47,27 @@ public class TeleportEffect extends AbstractEffect {
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
         applyParticlesToUser(user);
-        for (Entity target : targets) {
-            applyParticlesToTarget(target);
 
-            switch (teleInfo.getTarget()) {
-                case USER -> {
-                    WanderersOfTheRift.LOGGER.info("Teleporting Self");
-                    Entity random = targets.get(user.getRandom().nextIntBetweenInclusive(0, targets.size() - 1));
-                    user.teleportTo(random.getX() + teleInfo.getPosition().x, random.getY() + teleInfo.getPosition().y,
-                            random.getZ() + teleInfo.getPosition().z);
-
-                }
-
-                case TARGET -> {
-                    WanderersOfTheRift.LOGGER.info("Teleporting Target");
-                    if (teleInfo.isRelative().isEmpty()
-                            || (teleInfo.isRelative().isPresent() && teleInfo.isRelative().get())) {
-                        target.teleportRelative(teleInfo.getPosition().x, teleInfo.getPosition().y,
-                                teleInfo.getPosition().z);
-                    } else {
-                        target.teleportTo(teleInfo.getPosition().x, teleInfo.getPosition().y, teleInfo.getPosition().z);
-                    }
-                }
+        switch (teleInfo.getTarget()) {
+            case USER -> {
+                WanderersOfTheRift.LOGGER.info("Teleporting Self");
+                Vec3 position = getPosition(user, teleInfo);
+                user.teleportTo(position.x, position.y, position.z);
             }
 
-            // Then apply children affects to targets
-            super.apply(target, getTargeting().getBlocks(user), context);
+            case TARGET -> {
+                for (Entity target : targets) {
+                    if (target == null) continue;
+                    applyParticlesToTarget(target);
+
+                    WanderersOfTheRift.LOGGER.info("Teleporting Target");
+                    Vec3 position = getPosition(target, teleInfo);
+                    target.teleportTo(position.x, position.y, position.z);
+
+                    // Then apply children affects to targets
+                    super.apply(target, getTargeting().getBlocks(user), context);
+                }
+            }
         }
 
         if (targets.isEmpty()) {
@@ -76,4 +75,20 @@ public class TeleportEffect extends AbstractEffect {
         }
     }
 
+    private Vec3 getPosition(Entity entity, TeleportInfo teleInfo) {
+        Level level = entity.level();
+
+        Vec3 worldPosition = teleInfo.getPositionInfo().worldPosition(entity);
+        BlockPos worldBlockPos = new BlockPos((int)worldPosition.x, (int)worldPosition.y, (int)worldPosition.z);
+        boolean isAir = level.getBlockState(worldBlockPos).getBlock() instanceof AirBlock;
+
+        if (!isAir || !level.isInWorldBounds(worldBlockPos)) {
+            BlockHitResult result = level.clip(new ClipContext(entity.position(), worldPosition, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
+            if (result.getType() == HitResult.Type.BLOCK || !level.isInWorldBounds(worldBlockPos)) {
+                 return result.getLocation();
+            }
+        }
+
+        return worldPosition;
+    }
 }

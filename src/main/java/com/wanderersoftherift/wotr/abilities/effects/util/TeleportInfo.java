@@ -16,26 +16,19 @@ import java.util.function.IntFunction;
 public class TeleportInfo {
     public static final MapCodec<TeleportInfo> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(TeleportTarget.CODEC.fieldOf("teleport_target").forGetter(TeleportInfo::getTarget),
-                    Vec3.CODEC.fieldOf("position").forGetter(TeleportInfo::getPosition),
-                    Codec.BOOL.optionalFieldOf("relative").forGetter(TeleportInfo::isRelative)
+                    PositionInfo.CODEC.fieldOf("position_info").forGetter(TeleportInfo::getPositionInfo)
             ).apply(instance, TeleportInfo::new));
 
     private final TeleportTarget target;
-    private final Vec3 position;
-    private final Optional<Boolean> isRelative;
+    private final PositionInfo positionInfo;
 
-    public TeleportInfo(TeleportTarget target, Vec3 position, Optional<Boolean> isRelative) {
+    public TeleportInfo(TeleportTarget target, PositionInfo positionInfo) {
         this.target = target;
-        this.position = position;
-        this.isRelative = isRelative;
+        this.positionInfo = positionInfo;
     }
 
-    public Optional<Boolean> isRelative() {
-        return this.isRelative;
-    }
-
-    public Vec3 getPosition() {
-        return position;
+    public PositionInfo getPositionInfo() {
+        return this.positionInfo;
     }
 
     public TeleportTarget getTarget() {
