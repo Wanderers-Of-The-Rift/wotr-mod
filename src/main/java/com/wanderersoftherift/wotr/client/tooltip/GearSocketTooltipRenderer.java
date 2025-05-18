@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -20,6 +21,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -144,7 +146,10 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 TooltipComponent c = eff.getTooltipComponent(ItemStack.EMPTY, socket.modifier().map(ModifierInstance::roll).orElse(0.0F), ChatFormatting.AQUA);
 
                 if (c instanceof ImageComponent img) {
-                    cmp.append(Component.literal(img.base().getString()));
+                    //Component cmp1 = ComponentUtil.blendComponent(img.base(), 20.0F, ColorUtil.RAINBOW);
+                    Component cmp1 = ComponentUtil.wavingComponent(img.base(), TextColor.parseColor("#e0ba12").getOrThrow(), 0.2f, 0.5F);
+                    cmp.append(cmp1);
+
                 }
 
                 if (isShiftDown) {
@@ -165,7 +170,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         for (GearSocket ignored : partitioned.get(false)) {
             pFont.drawInBatch(Component.literal(">"), pX + 20, pY - 1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
-            pFont.drawInBatch(Component.literal("(Empty slot)"), pX + 30, pY-1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+            if (isShiftDown) {
+                pFont.drawInBatch(Component.literal("(Empty slot)"), pX + 30, pY - 1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+            } else {
+                pFont.drawInBatch(Component.literal("-"), pX + 30, pY - 1, TextColor.parseColor("#19191a").getOrThrow().getValue(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+            }
             pY+= 20;
         }
     }
@@ -180,6 +189,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         List<GearSocket> sortedSockets = getSortedSockets(partitioned.get(true));
 
+        boolean used = false;
         for (GearSocket socket : sortedSockets) {
             List<AbstractModifierEffect> modifiers = getModifierEffects(socket);
             int val = modifiers.size();
@@ -193,6 +203,14 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             guiGraphics.renderFakeItem(fakeStack, 0,0);
             pose.popPose();
 
+            if (used) {
+                guiGraphics.fill(x + 20, y - 3, x + width - 10, y - 2, 0xFF363535); // main
+                guiGraphics.fill(x + 21, y - 2, x + width - 9, y - 1, 0x40383838); // shadow
+            }
+
+            if(!used) used = true;
+
+
             y+= SOCKET_LINE_HEIGHT;
 
             for (int i = 1; i < val; i++) {
@@ -200,6 +218,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             }
         }
 
+        boolean used01 = false;
         for (GearSocket socket : partitioned.get(false)) {
             guiGraphics.blit(RenderType.GUI_TEXTURED,
                     SHAPE_RESOURCE_LOCATION_MAP.get(socket.shape()),
@@ -208,6 +227,18 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     16, 16,
                     16, 16
             );
+
+            if (used01) {
+//                guiGraphics.fill(x + 20, y - 3, x + width - 10, y - 2, 0xFF363535); // main
+//                guiGraphics.fill(x + 21, y - 2, x + width - 9, y - 1, 0x40383838); // shadow
+
+                guiGraphics.fill(x + 20, y - 3, x + width - 10, y - 2, 0xFF383838); // main
+                guiGraphics.fill(x + 21, y - 2, x + width - 9, y - 1, 0x4019191a); // shadow
+                //
+            }
+
+            if(!used01) used01 = true;
+
             y+= SOCKET_LINE_HEIGHT;
         }
     }
