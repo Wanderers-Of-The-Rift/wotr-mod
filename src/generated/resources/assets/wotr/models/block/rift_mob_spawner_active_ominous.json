@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top_inner_faces",
+  "textures": {
+    "bottom": "wotr:block/rift_mob_spawner_bottom",
+    "side": "wotr:block/rift_mob_spawner_side_active_ominous",
+    "top": "wotr:block/rift_mob_spawner_top_active_ominous"
+  }
+}

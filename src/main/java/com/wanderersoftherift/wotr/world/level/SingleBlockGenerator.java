@@ -58,13 +58,21 @@ public class SingleBlockGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager,
-            StructureManager structureManager, ChunkAccess chunk) {
+    public void applyCarvers(
+            WorldGenRegion level,
+            long seed,
+            RandomState random,
+            BiomeManager biomeManager,
+            StructureManager structureManager,
+            ChunkAccess chunk) {
 
     }
 
     @Override
-    public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random,
+    public void buildSurface(
+            WorldGenRegion level,
+            StructureManager structureManager,
+            RandomState random,
             ChunkAccess chunk) {
 
     }
@@ -80,8 +88,11 @@ public class SingleBlockGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState,
-            StructureManager structureManager, ChunkAccess chunk) {
+    public CompletableFuture<ChunkAccess> fillFromNoise(
+            Blender blender,
+            RandomState randomState,
+            StructureManager structureManager,
+            ChunkAccess chunk) {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = getMinY(); y < getMinY() + getGenDepth(); y++) {

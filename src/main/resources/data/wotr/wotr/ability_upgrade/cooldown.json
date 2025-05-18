@@ -7,8 +7,8 @@
       "type": "wotr:attribute",
       "id": "wotr:ability_upgrade_cooldown",
       "attribute": "wotr:ability_cooldown",
-      "min_roll": -0.1,
-      "max_roll": -0.1,
+      "min_roll": -0.03,
+      "max_roll": -0.03,
       "operation": "add_multiplied_base"
     }
   ]

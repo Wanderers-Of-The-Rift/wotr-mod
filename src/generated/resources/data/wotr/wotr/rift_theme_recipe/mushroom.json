@@ -1,0 +1,10 @@
+{
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:mushroom",
+      "minPercent": 50.0
+    }
+  ],
+  "output": "wotr:mushroom",
+  "priority": 10
+}

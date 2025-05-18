@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.modifier;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
@@ -16,7 +16,10 @@ import java.util.List;
 
 public class ModifierHelper {
 
-    public static void runIterationOnItem(ItemStack stack, EquipmentSlot slot, LivingEntity entity,
+    public static void runIterationOnItem(
+            ItemStack stack,
+            EquipmentSlot slot,
+            LivingEntity entity,
             ModifierHelper.ModifierInSlotVisitor visitor) {
         if (!stack.isEmpty()) {
             runOnImplicits(stack, slot, entity, visitor);
@@ -24,31 +27,38 @@ public class ModifierHelper {
         }
     }
 
-    private static void runOnGearSockets(ItemStack stack, EquipmentSlot slot, LivingEntity entity,
+    private static void runOnGearSockets(
+            ItemStack stack,
+            EquipmentSlot slot,
+            LivingEntity entity,
             ModifierInSlotVisitor visitor) {
-        GearSockets gearSockets = stack.get(ModDataComponentType.GEAR_SOCKETS);
+        GearSockets gearSockets = stack.get(WotrDataComponentType.GEAR_SOCKETS);
         if (gearSockets != null && !gearSockets.isEmpty()) {
             for (GearSocket socket : gearSockets.sockets()) {
                 if (socket.isEmpty()) {
                     continue;
                 }
-                Holder<Modifier> modifier = socket.modifier().get().modifier();
+                ModifierInstance modifierInstance = socket.modifier().get();
+                Holder<Modifier> modifier = modifierInstance.modifier();
                 if (modifier != null) {
                     ModifierSource source = new GearSocketModifierSource(socket, gearSockets, slot, entity);
-                    visitor.accept(modifier, socket.modifier().get().roll(), source);
+                    visitor.accept(modifier, modifierInstance.tier(), modifierInstance.roll(), source);
                 }
             }
         }
     }
 
-    private static void runOnImplicits(ItemStack stack, EquipmentSlot slot, LivingEntity entity,
+    private static void runOnImplicits(
+            ItemStack stack,
+            EquipmentSlot slot,
+            LivingEntity entity,
             ModifierInSlotVisitor visitor) {
-        GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
+        GearImplicits implicits = stack.get(WotrDataComponentType.GEAR_IMPLICITS);
         if (implicits != null) {
             List<ModifierInstance> modifierInstances = implicits.modifierInstances(stack, entity.level());
             for (ModifierInstance modifier : modifierInstances) {
                 ModifierSource source = new GearImplicitModifierSource(implicits, slot, entity);
-                visitor.accept(modifier.modifier(), modifier.roll(), source);
+                visitor.accept(modifier.modifier(), modifier.tier(), modifier.roll(), source);
             }
         }
     }
@@ -60,27 +70,27 @@ public class ModifierHelper {
     }
 
     public static void enableModifier(LivingEntity entity) {
-        runIterationOnEquipment(entity,
-                (modifierHolder, roll, source) -> modifierHolder.value().enableModifier(roll, entity, source));
+        runIterationOnEquipment(entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                .enableModifier(roll, entity, source, tier));
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        runIterationOnItem(stack, slot, entity,
-                (modifierHolder, roll, source) -> modifierHolder.value().enableModifier(roll, entity, source));
+        runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                .enableModifier(roll, entity, source, tier));
     }
 
     public static void disableModifier(LivingEntity entity) {
-        runIterationOnEquipment(entity,
-                (modifierHolder, roll, source) -> modifierHolder.value().disableModifier(roll, entity, source));
+        runIterationOnEquipment(entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                .disableModifier(roll, entity, source, tier));
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        runIterationOnItem(stack, slot, entity,
-                (modifierHolder, roll, source) -> modifierHolder.value().disableModifier(roll, entity, source));
+        runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                .disableModifier(roll, entity, source, tier));
     }
 
     @FunctionalInterface
     public interface ModifierInSlotVisitor {
-        void accept(Holder<Modifier> modifierHolder, float roll, ModifierSource item);
+        void accept(Holder<Modifier> modifierHolder, int tier, float roll, ModifierSource item);
     }
 }

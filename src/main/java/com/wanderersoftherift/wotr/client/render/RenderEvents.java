@@ -78,7 +78,10 @@ public class RenderEvents {
         }
     }
 
-    private static void renderBlockWireFrame(BlockState state, VertexConsumer buffer, PoseStack matrix,
+    private static void renderBlockWireFrame(
+            BlockState state,
+            VertexConsumer buffer,
+            PoseStack matrix,
             RandomSource rand) {
         List<ModelWireframeExtractor.RenderLine> lines = cachedWireFrames.computeIfAbsent(state, key -> {
             BakedModel bakedModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
@@ -89,8 +92,11 @@ public class RenderEvents {
         renderVertexWireFrame(lines, buffer, pose.pose(), pose.normal());
     }
 
-    public static void renderVertexWireFrame(Collection<ModelWireframeExtractor.RenderLine> lines,
-            VertexConsumer buffer, Matrix4f pose, Matrix3f poseNormal) {
+    public static void renderVertexWireFrame(
+            Collection<ModelWireframeExtractor.RenderLine> lines,
+            VertexConsumer buffer,
+            Matrix4f pose,
+            Matrix3f poseNormal) {
         Vector4f pos = new Vector4f();
         Vector3f normal = new Vector3f();
 

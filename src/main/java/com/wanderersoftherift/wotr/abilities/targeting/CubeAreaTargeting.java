@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetPredicate;
-import com.wanderersoftherift.wotr.init.ModAttributes;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.BlockPos;
@@ -19,7 +19,10 @@ import java.util.List;
 public class CubeAreaTargeting extends AbstractTargeting {
     public static final MapCodec<CubeAreaTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).and(Codec.FLOAT.fieldOf("range").forGetter(CubeAreaTargeting::getRange))
-                    .and(Codec.BOOL.optionalFieldOf("include_self", true).forGetter(CubeAreaTargeting::getIncludeSelf))
+                    .and(
+                            Codec.BOOL.optionalFieldOf("include_self", true)
+                                    .forGetter(CubeAreaTargeting::getIncludeSelf)
+                    )
                     .apply(instance, CubeAreaTargeting::new));
 
     private float range = 0;
@@ -36,7 +39,7 @@ public class CubeAreaTargeting extends AbstractTargeting {
     }
 
     private float getRange(AbilityContext context) {
-        return context.getAbilityAttribute(ModAttributes.ABILITY_AOE, range);
+        return context.getAbilityAttribute(WotrAttributes.ABILITY_AOE, range);
     }
 
     public boolean getIncludeSelf() {
@@ -129,6 +132,6 @@ public class CubeAreaTargeting extends AbstractTargeting {
     @Override
     public boolean isRelevant(AbstractModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && ModAttributes.ABILITY_AOE.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.ABILITY_AOE.equals(attributeModifierEffect.getAttribute());
     }
 }

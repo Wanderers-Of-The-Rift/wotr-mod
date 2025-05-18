@@ -10,14 +10,15 @@
     "InvokerAbstractContainerMenu",
     "InvokerBlockBehaviour",
     "MixinEnchantingTableBlock",
+    "MixinItem",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinServerPlayer",
     "MixinSetItemDamageFunction",
-    "MixinSpider",
     "MixinStructureTemplate",
     "MixinWorldDimensions",
-    "TrialSpawnerAccessor"
+    "TrialSpawnerAccessor",
+    "TrialSpawnerBlockEntityAccessor"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",

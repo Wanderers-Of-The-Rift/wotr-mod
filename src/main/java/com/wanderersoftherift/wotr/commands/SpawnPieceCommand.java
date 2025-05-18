@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -69,6 +69,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -89,6 +90,8 @@ public class SpawnPieceCommand {
         String rlArg = "resourcelocationpath";
         String locationArg = "location";
         String themeArg = "theme";
+        String roomArg = "room";
+        String poiArg = "poi";
         String terminateArg = "includeTerminators";
         String processorArg = "processor";
         String rotationArg = "rotation";
@@ -109,8 +112,9 @@ public class SpawnPieceCommand {
                                     Rotation.NONE, Mirror.NONE, 0, cs);
                             return 0;
                         })
-                        .then(Commands.literal("withPOIs")
-                                .then(Commands.argument(themeArg, ResourceKeyArgument.key(ModRiftThemes.RIFT_THEME_KEY))
+                        .then(Commands.literal("withPOIsAndTheme")
+                                .then(Commands
+                                        .argument(themeArg, ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_THEMES))
                                         .executes(cs -> {
                                             WorldCoordinates worldCoordinates = new WorldCoordinates(
                                                     new WorldCoordinate(false, cs.getSource().getPosition().x()),
@@ -119,15 +123,16 @@ public class SpawnPieceCommand {
                                             spawnPieceFully(cs.getArgument(rlArg, ResourceLocation.class),
                                                     worldCoordinates,
                                                     ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                            ModRiftThemes.RIFT_THEME_KEY, ERROR_INVALID_PROCESSOR),
+                                                            WotrRegistries.Keys.RIFT_THEMES, ERROR_INVALID_PROCESSOR),
                                                     true, cs.getSource().getLevel().getRandom().nextInt(), cs);
                                             return 0;
                                         })
                                         .then(Commands.argument(locationArg, Vec3Argument.vec3()).executes(cs -> {
-                                            spawnPieceFully(cs.getArgument(rlArg, ResourceLocation.class),
+                                            spawnPieceFully(
+                                                    cs.getArgument(rlArg, ResourceLocation.class),
                                                     Vec3Argument.getCoordinates(cs, locationArg),
                                                     ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                            ModRiftThemes.RIFT_THEME_KEY, ERROR_INVALID_PROCESSOR),
+                                                            WotrRegistries.Keys.RIFT_THEMES, ERROR_INVALID_PROCESSOR),
                                                     true, cs.getSource().getLevel().getRandom().nextInt(), cs);
                                             return 0;
                                         })
@@ -137,7 +142,7 @@ public class SpawnPieceCommand {
                                                                     cs.getArgument(rlArg, ResourceLocation.class),
                                                                     Vec3Argument.getCoordinates(cs, locationArg),
                                                                     ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                                            ModRiftThemes.RIFT_THEME_KEY,
+                                                                            WotrRegistries.Keys.RIFT_THEMES,
                                                                             ERROR_INVALID_PROCESSOR),
                                                                     BoolArgumentType.getBool(cs, terminateArg),
                                                                     cs.getSource().getLevel().getRandom().nextInt(),
@@ -152,13 +157,95 @@ public class SpawnPieceCommand {
                                                                             Vec3Argument.getCoordinates(cs,
                                                                                     locationArg),
                                                                             ResourceKeyArgument.resolveKey(cs, themeArg,
-                                                                                    ModRiftThemes.RIFT_THEME_KEY,
+                                                                                    WotrRegistries.Keys.RIFT_THEMES,
                                                                                     ERROR_INVALID_PROCESSOR),
                                                                             BoolArgumentType.getBool(cs, terminateArg),
                                                                             IntegerArgumentType.getInteger(cs, seedArg),
                                                                             cs);
                                                                     return 0;
                                                                 }))))))
+                        .then(Commands.literal("withPOIs")
+                                .then(Commands.argument(roomArg, ResourceKeyArgument.key(Registries.PROCESSOR_LIST))
+                                        .then(Commands
+                                                .argument(poiArg, ResourceKeyArgument.key(Registries.PROCESSOR_LIST))
+                                                .executes(cs -> {
+                                                    WorldCoordinates worldCoordinates = new WorldCoordinates(
+                                                            new WorldCoordinate(false,
+                                                                    cs.getSource().getPosition().x()),
+                                                            new WorldCoordinate(false,
+                                                                    cs.getSource().getPosition().y()),
+                                                            new WorldCoordinate(false,
+                                                                    cs.getSource().getPosition().z()));
+                                                    spawnPieceFully(cs.getArgument(rlArg, ResourceLocation.class),
+                                                            worldCoordinates,
+                                                            ResourceKeyArgument.resolveKey(cs, roomArg,
+                                                                    Registries.PROCESSOR_LIST, ERROR_INVALID_PROCESSOR),
+                                                            ResourceKeyArgument.resolveKey(cs, poiArg,
+                                                                    Registries.PROCESSOR_LIST, ERROR_INVALID_PROCESSOR),
+                                                            true, cs.getSource().getLevel().getRandom().nextInt(), cs);
+                                                    return 0;
+                                                })
+                                                .then(Commands.argument(locationArg, Vec3Argument.vec3())
+                                                        .executes(cs -> {
+                                                            spawnPieceFully(
+                                                                    cs.getArgument(rlArg, ResourceLocation.class),
+                                                                    Vec3Argument.getCoordinates(cs, locationArg),
+                                                                    ResourceKeyArgument.resolveKey(cs, roomArg,
+                                                                            Registries.PROCESSOR_LIST,
+                                                                            ERROR_INVALID_PROCESSOR),
+                                                                    ResourceKeyArgument.resolveKey(cs, poiArg,
+                                                                            Registries.PROCESSOR_LIST,
+                                                                            ERROR_INVALID_PROCESSOR),
+                                                                    true,
+                                                                    cs.getSource().getLevel().getRandom().nextInt(),
+                                                                    cs);
+                                                            return 0;
+                                                        })
+                                                        .then(Commands.argument(terminateArg, BoolArgumentType.bool())
+                                                                .executes(cs -> {
+                                                                    spawnPieceFully(
+                                                                            cs.getArgument(rlArg,
+                                                                                    ResourceLocation.class),
+                                                                            Vec3Argument.getCoordinates(cs,
+                                                                                    locationArg),
+                                                                            ResourceKeyArgument.resolveKey(cs, roomArg,
+                                                                                    Registries.PROCESSOR_LIST,
+                                                                                    ERROR_INVALID_PROCESSOR),
+                                                                            ResourceKeyArgument.resolveKey(cs, poiArg,
+                                                                                    Registries.PROCESSOR_LIST,
+                                                                                    ERROR_INVALID_PROCESSOR),
+                                                                            BoolArgumentType.getBool(cs, terminateArg),
+                                                                            cs.getSource()
+                                                                                    .getLevel()
+                                                                                    .getRandom()
+                                                                                    .nextInt(),
+                                                                            cs);
+                                                                    return 0;
+                                                                })
+                                                                .then(Commands
+                                                                        .argument(seedArg,
+                                                                                IntegerArgumentType.integer())
+                                                                        .executes(cs -> {
+                                                                            spawnPieceFully(
+                                                                                    cs.getArgument(rlArg,
+                                                                                            ResourceLocation.class),
+                                                                                    Vec3Argument.getCoordinates(cs,
+                                                                                            locationArg),
+                                                                                    ResourceKeyArgument.resolveKey(cs,
+                                                                                            roomArg,
+                                                                                            Registries.PROCESSOR_LIST,
+                                                                                            ERROR_INVALID_PROCESSOR),
+                                                                                    ResourceKeyArgument.resolveKey(cs,
+                                                                                            poiArg,
+                                                                                            Registries.PROCESSOR_LIST,
+                                                                                            ERROR_INVALID_PROCESSOR),
+                                                                                    BoolArgumentType.getBool(cs,
+                                                                                            terminateArg),
+                                                                                    IntegerArgumentType.getInteger(cs,
+                                                                                            seedArg),
+                                                                                    cs);
+                                                                            return 0;
+                                                                        })))))))
                         .then(Commands.argument(locationArg, Vec3Argument.vec3()).executes(cs -> {
                             spawnPiece(cs.getArgument(rlArg, ResourceLocation.class),
                                     Vec3Argument.getCoordinates(cs, locationArg), null, Rotation.NONE, Mirror.NONE, 0,
@@ -239,8 +326,13 @@ public class SpawnPieceCommand {
         return rlSet;
     }
 
-    public static void spawnPiece(ResourceLocation path, Coordinates coordinates,
-            Holder.Reference<StructureProcessorList> processorList, Rotation rotation, Mirror mirror, int seed,
+    public static void spawnPiece(
+            ResourceLocation path,
+            Coordinates coordinates,
+            Holder.Reference<StructureProcessorList> processorList,
+            Rotation rotation,
+            Mirror mirror,
+            int seed,
             CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         ServerLevel level = cs.getSource().getLevel();
         Player player;
@@ -255,8 +347,12 @@ public class SpawnPieceCommand {
         generateStructurePiece(level, pos, player, path, processors, rotation, mirror, seed, cs);
     }
 
-    public static void spawnPieceFully(ResourceLocation path, Coordinates coordinates,
-            Holder.Reference<RiftTheme> theme, boolean includeTerminators, int seed,
+    public static void spawnPieceFully(
+            ResourceLocation path,
+            Coordinates coordinates,
+            Holder.Reference<RiftTheme> theme,
+            boolean includeTerminators,
+            int seed,
             CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         if (cs.getSource().getEntity() instanceof Player player) {
             player.displayClientMessage(Component.translatable("command.spawn_piece.generating", path.toString()),
@@ -266,8 +362,34 @@ public class SpawnPieceCommand {
         placeStructure(path, pos.mutable(), theme, includeTerminators, seed, cs);
     }
 
-    private static void generateStructurePiece(ServerLevel world, BlockPos pos, Player player, ResourceLocation nbt,
-            StructureProcessorList processorList, Rotation rotation, Mirror mirror, int seed,
+    public static void spawnPieceFully(
+            ResourceLocation path,
+            Coordinates coordinates,
+            Holder<StructureProcessorList> room,
+            Holder<StructureProcessorList> poi,
+            boolean includeTerminators,
+            int seed,
+            CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
+        if (cs.getSource().getEntity() instanceof Player player) {
+            player.displayClientMessage(Component.translatable("command.spawn_piece.generating", path.toString()),
+                    true);
+        }
+        BlockPos pos = coordinates.getBlockPos(cs.getSource());
+        Map<ThemePieceType, Holder<StructureProcessorList>> themeMap = Map.of(ThemePieceType.ROOM, room,
+                ThemePieceType.POI, poi);
+
+        placeStructure(path, pos.mutable(), new Holder.Direct<>(new RiftTheme(themeMap)), includeTerminators, seed, cs);
+    }
+
+    private static void generateStructurePiece(
+            ServerLevel world,
+            BlockPos pos,
+            Player player,
+            ResourceLocation nbt,
+            StructureProcessorList processorList,
+            Rotation rotation,
+            Mirror mirror,
+            int seed,
             CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         if (player != null) {
             player.displayClientMessage(Component.translatable("command.spawn_piece.generating", nbt.toString()), true);
@@ -317,8 +439,13 @@ public class SpawnPieceCommand {
         });
     }
 
-    public static int placeStructure(ResourceLocation template, BlockPos pos, Holder<RiftTheme> theme,
-            boolean includeTerminators, int seed, CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
+    public static int placeStructure(
+            ResourceLocation template,
+            BlockPos pos,
+            Holder<RiftTheme> theme,
+            boolean includeTerminators,
+            int seed,
+            CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         ServerLevel serverlevel = cs.getSource().getLevel();
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
@@ -383,9 +510,14 @@ public class SpawnPieceCommand {
         }
     }
 
-    public static int placeTemplate(ResourceLocation template, BlockPos pos, List<StructureProcessor> processorList,
-            Rotation rotation, Mirror mirror, int seed, CommandContext<CommandSourceStack> cs)
-            throws CommandSyntaxException {
+    public static int placeTemplate(
+            ResourceLocation template,
+            BlockPos pos,
+            List<StructureProcessor> processorList,
+            Rotation rotation,
+            Mirror mirror,
+            int seed,
+            CommandContext<CommandSourceStack> cs) throws CommandSyntaxException {
         ServerLevel serverlevel = cs.getSource().getLevel();
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
@@ -423,10 +555,7 @@ public class SpawnPieceCommand {
     }
 
     private static void checkLoaded(ServerLevel level, ChunkPos start, ChunkPos end) throws CommandSyntaxException {
-        if (ChunkPos.rangeClosed(start, end)
-                .filter(p_313494_ -> !level.isLoaded(p_313494_.getWorldPosition()))
-                .findAny()
-                .isPresent()) {
+        if (ChunkPos.rangeClosed(start, end).anyMatch(pos -> !level.isLoaded(pos.getWorldPosition()))) {
             throw BlockPosArgument.ERROR_NOT_LOADED.create();
         }
     }

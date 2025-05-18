@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -20,10 +20,10 @@ import java.util.Objects;
 public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
-    public static final Codec<AbilitySlots> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
-                    Codec.INT.fieldOf("selected").forGetter(x -> x.selected))
-            .apply(instance, AbilitySlots::new));
+    public static final Codec<AbilitySlots> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
+            Codec.INT.fieldOf("selected").forGetter(x -> x.selected)
+    ).apply(instance, AbilitySlots::new));
 
     private final NonNullList<ItemStack> abilities = NonNullList.withSize(ABILITY_BAR_SIZE, ItemStack.EMPTY);
     private int selected = 0;
@@ -82,8 +82,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
      */
     public AbstractAbility getAbilityInSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty() && stack.has(ModDataComponentType.ABILITY)) {
-            return stack.get(ModDataComponentType.ABILITY).value();
+        if (!stack.isEmpty() && stack.has(WotrDataComponentType.ABILITY)) {
+            return stack.get(WotrDataComponentType.ABILITY).value();
         }
         return null;
     }
@@ -132,7 +132,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return stack.has(ModDataComponentType.ABILITY);
+        return stack.has(WotrDataComponentType.ABILITY);
     }
 
     @Override

@@ -1,48 +1,43 @@
 {
   "type": "wotr:standard_ability",
   "ability_name": "wotr:fireball_ability",
-  "icon": "minecraft:textures/item/fire_charge.png",
-  "cooldown": 20,
-  "mana_cost": 10,
+  "cooldown": 60,
   "effects": [
     {
       "type": "wotr:simple_projectile_effect",
-      "targeting": {
-        "type": "wotr:self_targeting"
-      },
       "config": {
-        "velocity": 1.6,
-        "texture": "minecraft:items/fire_charge",
         "gravity_affected": false,
         "render": {
+          "animations": "wotr:animations/ability/fireball.animations.json",
           "model": "wotr:geo/ability/fireball.geo.json",
-          "texture": "wotr:textures/ability/fireball.png",
-          "animations": "wotr:animations/ability/fireball.animations.json"
-        }
+          "texture": "wotr:textures/ability/fireball.png"
+        },
+        "velocity": 1.6
       },
+      "effects": [
+        {
+          "type": "wotr:damage_effect",
+          "amount": 10.0,
+          "damage_type": "wotr:fire",
+          "targeting": {
+            "type": "wotr:area_targeting",
+            "range": 12.0,
+            "target": {
+              "sentiment": "not_friend"
+            }
+          }
+        }
+      ],
       "particles": {
         "target_block": {
           "type": "minecraft:explosion"
         }
       },
-      "effects": [
-        {
-          "type": "wotr:damage_effect",
-          "targeting": {
-            "type": "wotr:area_targeting",
-            "include_self": true,
-            "range": 12,
-            "target": {
-              "sentiment": "not_friend"
-            }
-          },
-          "amount": 10,
-          "damage_type": "wotr:fire",
-          "effects": [
-
-          ]
-        }
-      ]
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
     }
-  ]
+  ],
+  "icon": "minecraft:textures/item/fire_charge.png",
+  "mana_cost": 10
 }

@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu.slot;
 
-import com.wanderersoftherift.wotr.init.ModDataMaps;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +15,7 @@ public class EssenceInputSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.getItemHolder().getData(ModDataMaps.ESSENCE_VALUE_DATA) != null;
+        return stack.getItemHolder().getData(WotrDataMaps.ESSENCE_VALUE_DATA) != null;
     }
 
 }

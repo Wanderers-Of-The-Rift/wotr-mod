@@ -10,8 +10,8 @@ public record WeightedBlockstateEntry(OutputBlockState outputBlockState, Weight 
 
     public static final Codec<WeightedBlockstateEntry> CODEC = RecordCodecBuilder.create(builder -> builder.group(
             OutputBlockState.DIRECT_CODEC.fieldOf("output_state").forGetter(WeightedBlockstateEntry::outputBlockState),
-            Codec.INT.fieldOf("weight").xmap(Weight::of, Weight::asInt).forGetter(WeightedBlockstateEntry::getWeight))
-            .apply(builder, WeightedBlockstateEntry::new));
+            Codec.INT.fieldOf("weight").xmap(Weight::of, Weight::asInt).forGetter(WeightedBlockstateEntry::getWeight)
+    ).apply(builder, WeightedBlockstateEntry::new));
 
     @Override
     public Weight getWeight() {

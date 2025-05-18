@@ -19,8 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinEnchantingTableBlock {
 
     @Inject(method = "useWithoutItem", at = @At("HEAD"), cancellable = true)
-    private void cancelMenu(BlockState pBlockState, Level pLevel, BlockPos pBlockPos, Player pPlayer,
-            BlockHitResult pBlockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+    private void cancelMenu(
+            BlockState pBlockState,
+            Level pLevel,
+            BlockPos pBlockPos,
+            Player pPlayer,
+            BlockHitResult pBlockHitResult,
+            CallbackInfoReturnable<InteractionResult> cir) {
         if (pPlayer.level().isClientSide()) {
             // Currently a literal because we likely want to change this at some point.
             pPlayer.displayClientMessage(Component.literal(

@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.item.runegem;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.wanderersoftherift.wotr.init.ModTags;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -13,12 +13,12 @@ import java.util.function.IntFunction;
 
 public enum RunegemTier {
 
-    RAW(0, "raw", ModTags.Runegems.RAW),
-    SHAPED(1, "shaped", ModTags.Runegems.SHAPED),
-    CUT(2, "cut", ModTags.Runegems.CUT),
-    POLISHED(3, "polished", ModTags.Runegems.POLISHED),
-    FRAMED(4, "framed", ModTags.Runegems.FRAMED),
-    UNIQUE(5, "unique", ModTags.Runegems.UNIQUE);
+    RAW(0, "raw", WotrTags.Runegems.RAW),
+    CUT(1, "cut", WotrTags.Runegems.CUT),
+    SHAPED(2, "shaped", WotrTags.Runegems.SHAPED),
+    POLISHED(3, "polished", WotrTags.Runegems.POLISHED),
+    FRAMED(4, "framed", WotrTags.Runegems.FRAMED),
+    UNIQUE(5, "unique", WotrTags.Runegems.UNIQUE);
 
     public static final Codec<RunegemTier> CODEC = Codec.STRING.flatComapMap(s -> RunegemTier.byName(s, null),
             d -> DataResult.success(d.getName()));

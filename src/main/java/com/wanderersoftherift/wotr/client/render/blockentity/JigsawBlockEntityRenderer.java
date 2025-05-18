@@ -11,7 +11,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import org.joml.Matrix4f;
 
-import static com.wanderersoftherift.wotr.init.client.ClientRegistryEvents.JIGSAW_NAME_TOGGLE_KEY;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.JIGSAW_NAME_TOGGLE_KEY;
 
 public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBlockEntity> {
 
@@ -19,8 +19,13 @@ public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBloc
     }
 
     @Override
-    public void render(JigsawBlockEntity jigsawBlockEntity, float v, PoseStack poseStack,
-            MultiBufferSource multiBufferSource, int i, int i1) {
+    public void render(
+            JigsawBlockEntity jigsawBlockEntity,
+            float v,
+            PoseStack poseStack,
+            MultiBufferSource multiBufferSource,
+            int i,
+            int i1) {
         if (!JIGSAW_NAME_TOGGLE_KEY.isDown()) {
             return;
         }
@@ -28,7 +33,10 @@ public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBloc
         renderNameTag(name, poseStack, multiBufferSource, i);
     }
 
-    private void renderNameTag(Component displayName, PoseStack poseStack, MultiBufferSource bufferSource,
+    private void renderNameTag(
+            Component displayName,
+            PoseStack poseStack,
+            MultiBufferSource bufferSource,
             int packedLight) {
         poseStack.pushPose();
         poseStack.translate(0.5, 2.5, 0.5);

@@ -19,13 +19,12 @@ import java.util.Optional;
 public record ContinueEffectPredicate(Optional<EntityPredicate> targetPredicate,
         Optional<EntityPredicate> casterPredicate, int duration, int maxTriggerCount) {
 
-    public static final Codec<ContinueEffectPredicate> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(EntityPredicate.CODEC.optionalFieldOf("target").forGetter(ContinueEffectPredicate::targetPredicate),
-                    EntityPredicate.CODEC.optionalFieldOf("caster").forGetter(ContinueEffectPredicate::casterPredicate),
-                    Codec.INT.optionalFieldOf("duration", 0).forGetter(ContinueEffectPredicate::duration),
-                    Codec.INT.optionalFieldOf("max_trigger_count", 0)
-                            .forGetter(ContinueEffectPredicate::maxTriggerCount))
-            .apply(instance, ContinueEffectPredicate::new));
+    public static final Codec<ContinueEffectPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            EntityPredicate.CODEC.optionalFieldOf("target").forGetter(ContinueEffectPredicate::targetPredicate),
+            EntityPredicate.CODEC.optionalFieldOf("caster").forGetter(ContinueEffectPredicate::casterPredicate),
+            Codec.INT.optionalFieldOf("duration", 0).forGetter(ContinueEffectPredicate::duration),
+            Codec.INT.optionalFieldOf("max_trigger_count", 0).forGetter(ContinueEffectPredicate::maxTriggerCount)
+    ).apply(instance, ContinueEffectPredicate::new));
 
     public ContinueEffectPredicate() {
         this(Optional.empty(), Optional.empty(), 0, 1);

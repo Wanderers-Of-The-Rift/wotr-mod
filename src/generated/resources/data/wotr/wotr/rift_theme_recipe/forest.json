@@ -1,0 +1,10 @@
+{
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:plant",
+      "minPercent": 50.0
+    }
+  ],
+  "output": "wotr:forest",
+  "priority": 0
+}

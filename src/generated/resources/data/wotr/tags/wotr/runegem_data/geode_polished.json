@@ -1,0 +1,10 @@
+{
+  "values": [
+    "wotr:attack_polished",
+    "wotr:defense_polished",
+    "wotr:health_polished",
+    "wotr:magic_polished",
+    "wotr:projectile_polished",
+    "wotr:speed_polished"
+  ]
+}

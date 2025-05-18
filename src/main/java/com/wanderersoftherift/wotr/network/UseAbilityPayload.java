@@ -3,13 +3,14 @@ package com.wanderersoftherift.wotr.network;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -26,27 +27,30 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
     }
 
     public void handleOnServer(final IPayloadContext context) {
-        AbilitySlots abilitySlots = context.player().getData(ModAttachments.ABILITY_SLOTS);
-        ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
-        if (abilityItem.isEmpty() || !abilityItem.has(ModDataComponentType.ABILITY)) {
+        if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
             return;
         }
-        AbstractAbility ability = abilityItem.get(ModDataComponentType.ABILITY).value();
+        AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
+        ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
+        if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
+            return;
+        }
+        AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
         abilitySlots.setSelectedSlot(slot());
 
         if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
         {
-            if (!ability.isToggled(context.player())) {
-                ability.onActivate(context.player(), slot(), abilityItem);
+            if (!ability.isToggled(player)) {
+                ability.onActivate(player, slot(), abilityItem);
             } else {
-                ability.onDeactivate(context.player(), slot());
+                ability.onDeactivate(player, slot());
             }
 
-            if (ability.canPlayerUse(context.player())) {
-                ability.toggle(context.player());
+            if (ability.canPlayerUse(player)) {
+                ability.toggle(player);
             }
         } else {
-            ability.onActivate(context.player(), slot(), abilityItem);
+            ability.onActivate(player, slot(), abilityItem);
         }
     }
 }

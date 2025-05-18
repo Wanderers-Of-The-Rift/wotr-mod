@@ -1,0 +1,22 @@
+{
+  "type": "wotr:override_loot_chests",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "chests/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "equipment/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "spawners/"
+        }
+      ]
+    }
+  ]
+}

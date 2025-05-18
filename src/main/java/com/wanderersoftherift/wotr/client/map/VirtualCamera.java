@@ -56,7 +56,12 @@ public class VirtualCamera {
      * @param orbitYaw   the horizontal orbit angle in degrees (azimuth)
      * @param distance   the distance from the origin
      */
-    public void orbitAroundOrigin(float orbitPitch, float orbitYaw, float distance, float targetX, float targetY,
+    public void orbitAroundOrigin(
+            float orbitPitch,
+            float orbitYaw,
+            float distance,
+            float targetX,
+            float targetY,
             float targetZ) {
         // convert degrees to radians for computing stuffs
         float radOrbitPitch = (float) Math.toRadians(Math.clamp(orbitPitch, -89.99, 89.99)); // float math sometimes

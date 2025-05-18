@@ -1,0 +1,26 @@
+{
+  "type": "wotr:remove_enchants_from_loot",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "chests/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "equipment/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "spawners/"
+        },
+        {
+          "condition": "wotr:partial_loot_table_id",
+          "path": "gameplay/"
+        }
+      ]
+    }
+  ]
+}

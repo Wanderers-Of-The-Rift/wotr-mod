@@ -2,18 +2,16 @@ package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
-
-import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
@@ -46,7 +44,7 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         RiftTheme.CODEC.encodeStart(NbtOps.INSTANCE, this.getTheme())
                 .resultOrPartial(LOGGER::error)
                 .ifPresent(compound -> tag.put("theme", compound));
@@ -63,32 +61,9 @@ public class LevelRiftThemeData extends SavedData {
     }
 
     public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
-        Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme = registryReference.flatMap(x -> x.getRandom(level.getRandom())).orElse(null);
-        if (riftTheme == null) {
-            WanderersOfTheRift.LOGGER.error("Failed to get random rift theme");
-        }
-        return riftTheme;
+        Registry<RiftTheme> registry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
+
+        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, level.getRandom())
+                .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
-
-    public static Holder<RiftTheme> fromId(ResourceLocation id, ServerLevel level) {
-        // temp theme mapping
-        if (id.equals(WanderersOfTheRift.id("life"))) {
-            id = WanderersOfTheRift.id("forest");
-            LOGGER.warn("Hardcoded theme: wotr:life -> wotr:forest");
-        }
-        if (id.equals(WanderersOfTheRift.id("earth"))) {
-            id = WanderersOfTheRift.id("cave");
-            LOGGER.warn("Hardcoded theme: wotr:earth -> wotr:cave");
-        }
-        ResourceLocation finalId = id;
-
-        Optional<Registry<RiftTheme>> registryReference = level.registryAccess().lookup(ModRiftThemes.RIFT_THEME_KEY);
-        var riftTheme = registryReference.flatMap(x -> x.get(finalId)).orElse(null);
-        if (riftTheme == null) {
-            WanderersOfTheRift.LOGGER.error("Failed to get rift theme from id: {}", id);
-        }
-        return riftTheme;
-    }
-
 }

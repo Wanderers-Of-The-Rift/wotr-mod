@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -14,54 +14,53 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.wanderersoftherift.wotr.init.ModModifiers.MODIFIER_KEY;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            Codec.INT.fieldOf("tier").forGetter(Modifier::getTier),
-            AbstractModifierEffect.DIRECT_CODEC.listOf().fieldOf("modifiers").forGetter(Modifier::getModifierEffects))
-            .apply(inst, Modifier::new));
-    public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(MODIFIER_KEY);
+            ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList)
+    ).apply(inst, Modifier::new));
+    public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.MODIFIERS);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
-            .holderRegistry(MODIFIER_KEY);
+            .holderRegistry(WotrRegistries.Keys.MODIFIERS);
 
-    private final int tier;
-    private final List<AbstractModifierEffect> modifierEffects;
+    private final Map<Integer, ModifierTier> modifierTiers;
 
-    public Modifier(int tier, List<AbstractModifierEffect> modifierEffects) {
-        this.tier = tier;
-        this.modifierEffects = modifierEffects;
+    public Modifier(List<ModifierTier> modifierTiers) {
+        this.modifierTiers = modifierTiers.stream().collect(Collectors.toMap(ModifierTier::getTier, tier -> tier));
     }
 
-    public int getTier() {
-        return tier;
+    public List<ModifierTier> getModifierTierList() {
+        return modifierTiers.values().stream().toList();
     }
 
-    public List<AbstractModifierEffect> getModifierEffects() {
-        return modifierEffects;
-    }
-
-    public void enableModifier(float roll, Entity entity, ModifierSource source) {
-        for (AbstractModifierEffect effect : modifierEffects) {
-            effect.enableModifier(roll, entity, source);
+    public void enableModifier(float roll, Entity entity, ModifierSource source, int tier) {
+        if (!modifierTiers.containsKey(tier)) {
+            return;
         }
+        modifierTiers.get(tier).enableModifier(roll, entity, source);
     }
 
-    public void disableModifier(float roll, Entity entity, ModifierSource source) {
-        for (AbstractModifierEffect effect : modifierEffects) {
-            effect.disableModifier(roll, entity, source);
+    public void disableModifier(float roll, Entity entity, ModifierSource source, int tier) {
+        if (!modifierTiers.containsKey(tier)) {
+            return;
         }
+        modifierTiers.get(tier).disableModifier(roll, entity, source);
     }
 
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance,
+    public List<TooltipComponent> getTooltipComponent(
+            ItemStack stack,
+            float roll,
+            ModifierInstance instance,
             ChatFormatting chatFormatting) {
-        List<TooltipComponent> tooltipComponents = new ArrayList<>();
-        for (AbstractModifierEffect effect : modifierEffects) {
-            tooltipComponents.add(effect.getTooltipComponent(stack, roll, chatFormatting));
+        if (!modifierTiers.containsKey(instance.tier())) {
+            return List.of();
         }
-        return tooltipComponents;
+        return modifierTiers.get(instance.tier())
+                .getTooltipComponent(
+                        stack, roll, instance, chatFormatting
+                );
     }
 }

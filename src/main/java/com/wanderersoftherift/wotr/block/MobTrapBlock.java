@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.block;
 
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,11 +19,11 @@ public class MobTrapBlock extends TrapBlock {
 
     @Override
     public BlockState getTweak() {
-        return ModBlocks.TRAP_BLOCK.get().defaultBlockState();
+        return WotrBlocks.TRAP_BLOCK.get().defaultBlockState();
     }
 
     @Override
     public DeferredBlock getBlock() {
-        return ModBlocks.MOB_TRAP_BLOCK;
+        return WotrBlocks.MOB_TRAP_BLOCK;
     }
 }

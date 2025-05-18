@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": "#minecraft:anvil",
+    "e": "minecraft:emerald"
+  },
+  "pattern": [
+    " e ",
+    "eae",
+    " e "
+  ],
+  "result": {
+    "count": 1,
+    "id": "wotr:rune_anvil"
+  }
+}

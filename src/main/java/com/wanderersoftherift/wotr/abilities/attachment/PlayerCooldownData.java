@@ -16,8 +16,8 @@ public class PlayerCooldownData {
             Codec.INT.listOf()
                     .<IntList>xmap(IntArrayList::new, FastUtils::toList)
                     .fieldOf("lastCooldowns")
-                    .forGetter(x -> x.lastCooldowns))
-            .apply(instance, PlayerCooldownData::new));
+                    .forGetter(x -> x.lastCooldowns)
+    ).apply(instance, PlayerCooldownData::new));
 
     private final IntList lastCooldowns;
     private final IntList currentCooldowns;

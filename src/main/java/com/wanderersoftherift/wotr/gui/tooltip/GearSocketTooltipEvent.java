@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.gui.tooltip;
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
@@ -31,11 +31,11 @@ public class GearSocketTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.GEAR_SOCKETS)) {
+        if (!stack.has(WotrDataComponentType.GEAR_SOCKETS)) {
             return;
         }
 
-        GearSockets sockets = stack.get(ModDataComponentType.GEAR_SOCKETS);
+        GearSockets sockets = stack.get(WotrDataComponentType.GEAR_SOCKETS);
         if (sockets == null) {
             return;
         }

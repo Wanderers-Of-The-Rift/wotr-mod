@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.block;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.gui.menu.AbilityBenchMenu;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
 import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
@@ -52,7 +52,10 @@ public class AbilityBenchBlock extends Block {
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+    protected @NotNull VoxelShape getShape(
+            BlockState state,
+            @NotNull BlockGetter level,
+            @NotNull BlockPos pos,
             @NotNull CollisionContext context) {
         return SHAPE;
     }
@@ -65,7 +68,7 @@ public class AbilityBenchBlock extends Block {
 
     protected MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
         return new SimpleMenuProvider((containerId, playerInventory, player) -> {
-            AbilitySlots slots = playerInventory.player.getData(ModAttachments.ABILITY_SLOTS);
+            AbilitySlots slots = playerInventory.player.getData(WotrAttachments.ABILITY_SLOTS);
             IItemHandler replicatedSlots = new ChangeAwareItemHandler(slots) {
                 @Override
                 public void onSlotChanged(int slot) {
@@ -78,8 +81,12 @@ public class AbilityBenchBlock extends Block {
         }, CONTAINER_TITLE);
     }
 
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
-            @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(
+            @NotNull BlockState state,
+            Level level,
+            @NotNull BlockPos pos,
+            @NotNull Player player,
+            @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

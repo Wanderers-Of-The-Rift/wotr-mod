@@ -23,20 +23,37 @@ public class RiftDimensionSpecialEffects extends DimensionSpecialEffects {
     }
 
     @Override
-    public boolean renderClouds(@NotNull ClientLevel level, int ticks, float partialTick, double camX, double camY,
-            double camZ, @NotNull Matrix4f modelViewMatrix, @NotNull Matrix4f projectionMatrix) {
+    public boolean renderClouds(
+            @NotNull ClientLevel level,
+            int ticks,
+            float partialTick,
+            double camX,
+            double camY,
+            double camZ,
+            @NotNull Matrix4f modelViewMatrix,
+            @NotNull Matrix4f projectionMatrix) {
         return false;
     }
 
     @Override
-    public boolean renderSky(@NotNull ClientLevel level, int ticks, float partialTick,
-            @NotNull Matrix4f modelViewMatrix, @NotNull Camera camera, @NotNull Matrix4f projectionMatrix,
+    public boolean renderSky(
+            @NotNull ClientLevel level,
+            int ticks,
+            float partialTick,
+            @NotNull Matrix4f modelViewMatrix,
+            @NotNull Camera camera,
+            @NotNull Matrix4f projectionMatrix,
             @NotNull Runnable setupFog) {
         return false;
     }
 
     @Override
-    public boolean renderSnowAndRain(@NotNull ClientLevel level, int ticks, float partialTick, double camX, double camY,
+    public boolean renderSnowAndRain(
+            @NotNull ClientLevel level,
+            int ticks,
+            float partialTick,
+            double camX,
+            double camY,
             double camZ) {
         return false;
     }

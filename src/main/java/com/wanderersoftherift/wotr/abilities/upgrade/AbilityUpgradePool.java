@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.util.FastUtils;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -48,7 +48,7 @@ public class AbilityUpgradePool {
                     .apply(instance, AbilityUpgradePool::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AbilityUpgradePool> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(RegistryEvents.ABILITY_UPGRADE_REGISTRY)
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.ABILITY_UPGRADES)
                     .apply(ByteBufCodecs.list())
                     .apply(ByteBufCodecs.list()),
             x -> x.choices, ByteBufCodecs.INT.apply(ByteBufCodecs.list()).map(IntArrayList::new, FastUtils::toList),
@@ -212,7 +212,10 @@ public class AbilityUpgradePool {
          * @param optionCount    How many options to include in the choice
          * @return This object for method chaining
          */
-        public Mutable generateChoice(RegistryAccess registryAccess, AbstractAbility ability, RandomSource random,
+        public Mutable generateChoice(
+                RegistryAccess registryAccess,
+                AbstractAbility ability,
+                RandomSource random,
                 int optionCount) {
             generateChoices(registryAccess, ability, 1, random, optionCount);
             return this;
@@ -228,8 +231,12 @@ public class AbilityUpgradePool {
          * @param optionCount    How many options to include in each choice
          * @return This object for method chaining
          */
-        public Mutable generateChoices(RegistryAccess registryAccess, AbstractAbility ability, int count,
-                RandomSource random, int optionCount) {
+        public Mutable generateChoices(
+                RegistryAccess registryAccess,
+                AbstractAbility ability,
+                int count,
+                RandomSource random,
+                int optionCount) {
             Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability);
 
             for (int i = 0; i < count; i++) {
@@ -248,9 +255,10 @@ public class AbilityUpgradePool {
             return this;
         }
 
-        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(RegistryAccess registryAccess,
+        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(
+                RegistryAccess registryAccess,
                 AbstractAbility ability) {
-            Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
+            Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(WotrRegistries.Keys.ABILITY_UPGRADES);
             Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
                     .filter(x -> isRelevant(x, ability))
                     .map(upgrades::wrapAsHolder)

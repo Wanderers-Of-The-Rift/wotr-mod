@@ -2,7 +2,8 @@ package com.wanderersoftherift.wotr.block;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +30,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class DittoBlock extends BaseEntityBlock {
     public static final MapCodec<DittoBlock> CODEC = simpleCodec(DittoBlock::new);
     public static final BooleanProperty HAS_ITEM = BooleanProperty.create("has_item");
@@ -39,6 +43,7 @@ public class DittoBlock extends BaseEntityBlock {
         this.registerDefaultState(this.defaultBlockState().setValue(HAS_ITEM, false));
     }
 
+    @Override
     public MapCodec<DittoBlock> codec() {
         return CODEC;
     }
@@ -48,7 +53,12 @@ public class DittoBlock extends BaseEntityBlock {
         return RenderShape.INVISIBLE;
     }
 
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
+    @Override
+    protected InteractionResult useWithoutItem(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
             BlockHitResult hitResult) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (!(blockEntity instanceof DittoBlockEntity dittoBlockEntity)) {
@@ -87,8 +97,15 @@ public class DittoBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    protected InteractionResult useItemOn(ItemStack item, BlockState state, Level level, BlockPos pos, Player player,
-            InteractionHand hand, BlockHitResult result) {
+    @Override
+    protected InteractionResult useItemOn(
+            ItemStack item,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult result) {
         BlockEntity blockEntity1 = level.getBlockEntity(pos);
         if (!(blockEntity1 instanceof DittoBlockEntity dittoBlockEntity)) {
             return InteractionResult.PASS;
@@ -108,14 +125,13 @@ public class DittoBlock extends BaseEntityBlock {
             player.awardStat(Stats.ITEM_USED.get(item.getItem()));
             ItemStack itemstack = item.consumeAndReturn(1, player);
             float fillPercent;
+            dittoBlockEntity.setTheItem(itemstack);
             if (dittoBlockEntity.isEmpty()) {
-                dittoBlockEntity.setTheItem(itemstack);
                 fillPercent = (float) itemstack.getCount() / (float) itemstack.getMaxStackSize();
             } else {
                 if (itemstack1.getItem() != getBlock().asItem()) {
                     Containers.dropContents(level, pos, dittoBlockEntity);
                 }
-                dittoBlockEntity.setTheItem(itemstack);
                 fillPercent = (float) itemstack1.getCount() / (float) itemstack1.getMaxStackSize();
             }
 
@@ -138,28 +154,33 @@ public class DittoBlock extends BaseEntityBlock {
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HAS_ITEM);
     }
 
+    @Override
     @Nullable public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new DittoBlockEntity(pos, state);
     }
 
+    @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         Containers.dropContentsOnDestroy(state, newState, level, pos);
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
+    @Override
     protected boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
+    @Override
     protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if ((blockEntity instanceof DittoBlockEntity dittoBlockEntity)) {
             if (dittoBlockEntity.getTheItem() != ItemStack.EMPTY
-                    && dittoBlockEntity.getTheItem().getItem() != ModBlocks.DITTO_BLOCK.asItem()) {
+                    && dittoBlockEntity.getTheItem().getItem() != WotrBlocks.DITTO_BLOCK.asItem()) {
                 return 15;
             }
         }
@@ -171,6 +192,6 @@ public class DittoBlock extends BaseEntityBlock {
     }
 
     public DeferredBlock getBlock() {
-        return ModBlocks.DITTO_BLOCK;
+        return WotrBlocks.DITTO_BLOCK;
     }
 }

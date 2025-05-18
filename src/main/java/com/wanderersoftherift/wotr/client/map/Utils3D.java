@@ -11,7 +11,10 @@ public class Utils3D {
      * @param worldPos position to translate
      * @param camera   camera to use for translation
      */
-    public static Vector3f projectPoint(Vector3f worldPos, VirtualCamera camera, Vector2i mapPosition,
+    public static Vector3f projectPoint(
+            Vector3f worldPos,
+            VirtualCamera camera,
+            Vector2i mapPosition,
             Vector2i mapSize) {
         int mapWidth = mapSize.x; // this is the width and height of the window we want to draw
         int mapHeight = mapSize.y;
@@ -46,7 +49,12 @@ public class Utils3D {
      * @param camera   camera to use for translation
      */
 
-    public static Vector3f projectPoint(float x, float y, float z, VirtualCamera camera, Vector2i mapPosition,
+    public static Vector3f projectPoint(
+            float x,
+            float y,
+            float z,
+            VirtualCamera camera,
+            Vector2i mapPosition,
             Vector2i mapSize) {
         int mapWidth = mapSize.x; // this is the width and height of the window we want to draw
         int mapHeight = mapSize.y;

@@ -3,8 +3,9 @@ package com.wanderersoftherift.wotr.client.tooltip;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
@@ -116,7 +117,13 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(@NotNull Font pFont, int pX, int pY, @NotNull Matrix4f pMatrix4f, MultiBufferSource.@NotNull BufferSource pBufferSource) {
+    public void renderText(
+            Font pFont,
+            int pX,
+            int pY,
+            @NotNull Matrix4f pMatrix4f,
+            MultiBufferSource.@NotNull BufferSource pBufferSource) {
+
         boolean isShiftDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT);
         boolean isAltDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT);
 
@@ -197,8 +204,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             pose.pushPose();
             pose.translate(x, y, 0);
 
-            ItemStack fakeStack = new ItemStack(ModItems.RUNEGEM.get());
-            fakeStack.set(ModDataComponentType.RUNEGEM_DATA, socket.runegem().isPresent() ? socket.runegem().get() : null); // why ij, it's always present
+            ItemStack fakeStack = new ItemStack(WotrItems.RUNEGEM.get());
+            fakeStack.set(WotrDataComponentType.RUNEGEM_DATA, socket.runegem().isPresent() ? socket.runegem().get() : null); // why ij, it's always present
             fakeStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
             guiGraphics.renderFakeItem(fakeStack, 0,0);
             pose.popPose();

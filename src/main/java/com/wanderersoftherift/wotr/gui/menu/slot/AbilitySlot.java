@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu.slot;
 
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +16,7 @@ public class AbilitySlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.has(ModDataComponentType.ABILITY);
+        return stack.has(WotrDataComponentType.ABILITY);
     }
 
 }

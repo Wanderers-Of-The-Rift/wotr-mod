@@ -11,10 +11,9 @@ public record ParticleInfo(Optional<ParticleOptions> userParticle, Optional<Part
         Optional<ParticleOptions> targetBlockParticle) {
 
     public static final MapCodec<ParticleInfo> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> instance
-                    .group(ParticleTypes.CODEC.optionalFieldOf("user").forGetter(ParticleInfo::userParticle),
-                            ParticleTypes.CODEC.optionalFieldOf("target").forGetter(ParticleInfo::targetParticle),
-                            ParticleTypes.CODEC.optionalFieldOf("target_block")
-                                    .forGetter(ParticleInfo::targetBlockParticle))
-                    .apply(instance, ParticleInfo::new));
+            instance -> instance.group(
+                    ParticleTypes.CODEC.optionalFieldOf("user").forGetter(ParticleInfo::userParticle),
+                    ParticleTypes.CODEC.optionalFieldOf("target").forGetter(ParticleInfo::targetParticle),
+                    ParticleTypes.CODEC.optionalFieldOf("target_block").forGetter(ParticleInfo::targetBlockParticle)
+            ).apply(instance, ParticleInfo::new));
 }

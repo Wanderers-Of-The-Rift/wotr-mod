@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.init.ModTags;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
@@ -15,7 +15,7 @@ public class MixinSetItemDamageFunction {
     // Prevents the log from being spammed whenever this runs
     @Inject(method = "run", at = @At("HEAD"), cancellable = true)
     private void preventConsoleSpam(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
-        if (!stack.is(ModTags.Items.UNBREAKABLE_EXCLUSIONS)) {
+        if (!stack.is(WotrTags.Items.UNBREAKABLE_EXCLUSIONS)) {
             cir.setReturnValue(stack);
         }
     }

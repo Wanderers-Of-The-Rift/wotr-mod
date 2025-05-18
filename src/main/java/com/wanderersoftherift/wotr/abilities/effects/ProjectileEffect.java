@@ -23,7 +23,8 @@ public class ProjectileEffect extends AbstractEffect {
             .commonFields(instance)
             .and(instance.group(
                     ResourceLocation.CODEC.fieldOf("projectile_type").forGetter(ProjectileEffect::getEntityType),
-                    Vec3.CODEC.fieldOf("velocity").forGetter(ProjectileEffect::getVelocity)))
+                    Vec3.CODEC.fieldOf("velocity").forGetter(ProjectileEffect::getVelocity))
+            )
             .apply(instance, ProjectileEffect::new));
 
     private ResourceLocation entityType;

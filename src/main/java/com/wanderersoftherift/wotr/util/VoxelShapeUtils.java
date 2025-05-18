@@ -153,7 +153,10 @@ public class VoxelShapeUtils {
      *
      * @return A combined {@link VoxelShape} based on the input parameters.
      */
-    public static VoxelShape batchCombine(VoxelShape base, BooleanOp function, boolean simplify,
+    public static VoxelShape batchCombine(
+            VoxelShape base,
+            BooleanOp function,
+            boolean simplify,
             Collection<VoxelShape> shapes) {
         VoxelShape combinedShape = base;
         for (VoxelShape shape : shapes) {

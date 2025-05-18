@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.item;
 
-import com.wanderersoftherift.wotr.init.ModItems;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BuilderGlasses extends Item {
     public BuilderGlasses() {
-        super(new Properties().setId(ModItems.BUILDER_GLASSES.getKey()).equippable(EquipmentSlot.HEAD).stacksTo(1));
+        super(new Properties().setId(WotrItems.BUILDER_GLASSES.getKey()).equippable(EquipmentSlot.HEAD).stacksTo(1));
     }
 
     @Override
@@ -44,9 +44,12 @@ public class BuilderGlasses extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            List<Component> tooltipComponents,
             TooltipFlag tooltipFlag) {
-        if (!stack.is(ModItems.BUILDER_GLASSES.get()) || !stack.has(DataComponents.CUSTOM_DATA)) {
+        if (!stack.is(WotrItems.BUILDER_GLASSES.get()) || !stack.has(DataComponents.CUSTOM_DATA)) {
             return;
         }
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);

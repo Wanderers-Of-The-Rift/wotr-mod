@@ -1,0 +1,10 @@
+{
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:dark",
+      "minPercent": 5.0
+    }
+  ],
+  "output": "wotr:stealth",
+  "priority": 0
+}

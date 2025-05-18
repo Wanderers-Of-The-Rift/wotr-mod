@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModProcessors;
+import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
@@ -59,9 +59,13 @@ public class VineProcessor extends StructureProcessor {
     }
 
     @Override
-    public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor serverLevel,
-            BlockPos offset, BlockPos pos, List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
-            List<StructureTemplate.StructureBlockInfo> processedBlockInfos, StructurePlaceSettings settings) {
+    public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(
+            ServerLevelAccessor serverLevel,
+            BlockPos offset,
+            BlockPos pos,
+            List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
             StructureTemplate.StructureBlockInfo newBlockInfo = processFinal(serverLevel, offset, pos, blockInfo,
@@ -71,9 +75,13 @@ public class VineProcessor extends StructureProcessor {
         return newBlockInfos;
     }
 
-    public StructureTemplate.StructureBlockInfo processFinal(LevelReader world, BlockPos piecePos,
-            BlockPos structurePos, StructureTemplate.StructureBlockInfo rawBlockInfo,
-            StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings,
+    public StructureTemplate.StructureBlockInfo processFinal(
+            LevelReader world,
+            BlockPos piecePos,
+            BlockPos structurePos,
+            StructureTemplate.StructureBlockInfo rawBlockInfo,
+            StructureTemplate.StructureBlockInfo blockInfo,
+            StructurePlaceSettings settings,
             List<StructureTemplate.StructureBlockInfo> mapByPos) {
         RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos,
                 world, Optional.empty());
@@ -122,14 +130,16 @@ public class VineProcessor extends StructureProcessor {
         return null;
     }
 
-    private boolean isDirectionPossible(List<StructureTemplate.StructureBlockInfo> pieceBlocks, BlockPos pos,
+    private boolean isDirectionPossible(
+            List<StructureTemplate.StructureBlockInfo> pieceBlocks,
+            BlockPos pos,
             Direction direction) {
         StructureTemplate.StructureBlockInfo block = getBlockInfo(pieceBlocks, pos.mutable().move(direction));
         return isFaceFull(block, direction.getOpposite());
     }
 
     protected StructureProcessorType<?> getType() {
-        return ModProcessors.VINES.get();
+        return WotrProcessors.VINES.get();
     }
 
     public boolean isAttachToWall() {

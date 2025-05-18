@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.theme;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.ModRiftThemes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -15,18 +15,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> processors) {
-    public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder -> builder.group(Codec
-            .mapPair(ThemePieceType.CODEC.fieldOf("piece_type"),
+    public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder -> builder.group(
+            Codec.mapPair(ThemePieceType.CODEC.fieldOf("piece_type"),
                     StructureProcessorType.LIST_CODEC.fieldOf("processors"))
-            .codec()
-            .listOf()
-            .xmap(RiftTheme::fromPairList, RiftTheme::fromMap)
-            .fieldOf("processors")
-            .forGetter(RiftTheme::processors)).apply(builder, RiftTheme::new));
+                    .codec()
+                    .listOf()
+                    .xmap(RiftTheme::fromPairList, RiftTheme::fromMap)
+                    .fieldOf("processors")
+                    .forGetter(RiftTheme::processors)
+    ).apply(builder, RiftTheme::new));
 
     public static final Codec<RiftTheme> DIRECT_SYNC_CODEC = Codec.unit(RiftTheme::new);
 
-    public static final Codec<Holder<RiftTheme>> CODEC = RegistryFixedCodec.create(ModRiftThemes.RIFT_THEME_KEY);
+    public static final Codec<Holder<RiftTheme>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.RIFT_THEMES);
 
     public RiftTheme() {
         this(Map.of());

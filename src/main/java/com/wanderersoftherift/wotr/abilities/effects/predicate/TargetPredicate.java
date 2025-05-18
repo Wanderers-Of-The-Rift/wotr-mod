@@ -15,8 +15,8 @@ public record TargetPredicate(Optional<EntityPredicate> entityPredicate, EntityS
             .group(EntityPredicate.CODEC.optionalFieldOf("entity").forGetter(TargetPredicate::entityPredicate),
                     EntitySentiment.CODEC.optionalFieldOf("sentiment", EntitySentiment.ANY)
                             .forGetter(TargetPredicate::sentiment),
-                    Codec.BOOL.optionalFieldOf("exclude_caster", false).forGetter(TargetPredicate::excludeCaster))
-            .apply(instance, TargetPredicate::new));
+                    Codec.BOOL.optionalFieldOf("exclude_caster", false).forGetter(TargetPredicate::excludeCaster)
+            ).apply(instance, TargetPredicate::new));
 
     public TargetPredicate() {
         this(Optional.empty(), EntitySentiment.ANY, false);

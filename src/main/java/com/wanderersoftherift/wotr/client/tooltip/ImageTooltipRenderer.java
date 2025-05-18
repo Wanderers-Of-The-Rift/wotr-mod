@@ -34,7 +34,11 @@ public class ImageTooltipRenderer implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(Font pFont, int pX, int pY, Matrix4f pMatrix4f,
+    public void renderText(
+            Font pFont,
+            int pX,
+            int pY,
+            Matrix4f pMatrix4f,
             MultiBufferSource.BufferSource pBufferSource) {
         pFont.drawInBatch(component.base(), pX + textureWidth + 2, pY + 1, 0xAABBCC, true, pMatrix4f, pBufferSource,
                 Font.DisplayMode.NORMAL, 0, 15_728_880);

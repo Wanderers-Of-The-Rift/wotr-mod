@@ -27,6 +27,17 @@ public record EssenceValue(Object2IntMap<ResourceLocation> values) {
                 .unmodifiable(new Object2IntArrayMap<>(new ResourceLocation[] { type }, new int[] { value })));
     }
 
+    public EssenceValue(ResourceLocation type1, int value1, ResourceLocation type2, int value2) {
+        this(Object2IntMaps.unmodifiable(
+                new Object2IntArrayMap<>(new ResourceLocation[] { type1, type2 }, new int[] { value1, value2 })));
+    }
+
+    public EssenceValue(ResourceLocation type1, int value1, ResourceLocation type2, int value2, ResourceLocation type3,
+            int value3) {
+        this(Object2IntMaps.unmodifiable(new Object2IntArrayMap<>(new ResourceLocation[] { type1, type2, type3 },
+                new int[] { value1, value2, value3 })));
+    }
+
     /**
      * Map constructor
      */

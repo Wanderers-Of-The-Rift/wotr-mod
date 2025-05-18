@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.tooltip;
 
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import net.minecraft.ChatFormatting;
@@ -26,11 +26,11 @@ public class GearImplicitsTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.GEAR_IMPLICITS)) {
+        if (!stack.has(WotrDataComponentType.GEAR_IMPLICITS)) {
             return;
         }
 
-        GearImplicits implicits = stack.get(ModDataComponentType.GEAR_IMPLICITS);
+        GearImplicits implicits = stack.get(WotrDataComponentType.GEAR_IMPLICITS);
         if (implicits == null) {
             return;
         }

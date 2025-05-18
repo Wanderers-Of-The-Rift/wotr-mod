@@ -22,7 +22,8 @@ public class SummonEffect extends AbstractEffect {
     public static final MapCodec<SummonEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbstractEffect
             .commonFields(instance)
             .and(instance.group(ResourceLocation.CODEC.fieldOf("entity_type").forGetter(SummonEffect::getEntityType),
-                    Codec.INT.fieldOf("amount").forGetter(SummonEffect::getAmount)))
+                    Codec.INT.fieldOf("amount").forGetter(SummonEffect::getAmount))
+            )
             .apply(instance, SummonEffect::new));
 
     private ResourceLocation entityType;

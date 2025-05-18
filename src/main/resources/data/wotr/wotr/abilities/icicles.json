@@ -1,0 +1,40 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:icicles_ability",
+  "cooldown": 10,
+  "effects": [
+    {
+      "type": "wotr:simple_projectile_effect",
+      "config": {
+        "gravity_affected": false,
+        "ground_persist_ticks": 20,
+        "pierce": 1,
+        "projectiles": 3,
+        "render": {
+          "animations": "wotr:animations/ability/icicle.animations.json",
+          "model": "wotr:geo/ability/icicle.geo.json",
+          "texture": "wotr:textures/ability/icicle.png"
+        },
+        "velocity": 1.7
+      },
+      "effects": [
+        {
+          "type": "wotr:damage_effect",
+          "amount": 2.0,
+          "damage_type": "wotr:ice",
+          "targeting": {
+            "type": "wotr:self_targeting",
+            "target": {
+              "sentiment": "not_friend"
+            }
+          }
+        }
+      ],
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/icicle.png",
+  "mana_cost": 2
+}

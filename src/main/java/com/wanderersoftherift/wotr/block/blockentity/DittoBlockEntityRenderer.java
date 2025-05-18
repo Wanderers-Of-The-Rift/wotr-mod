@@ -14,9 +14,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @OnlyIn(Dist.CLIENT)
+@ParametersAreNonnullByDefault
 public class DittoBlockEntityRenderer implements BlockEntityRenderer<DittoBlockEntity> {
     private final BlockRenderDispatcher dispatcher;
 
@@ -30,8 +32,14 @@ public class DittoBlockEntityRenderer implements BlockEntityRenderer<DittoBlockE
     }
 
     @Override
-    public void render(@NotNull DittoBlockEntity blockEntity, float partialTick, PoseStack stack,
-            MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+    @SuppressWarnings("deprecation")
+    public void render(
+            DittoBlockEntity blockEntity,
+            float partialTick,
+            PoseStack stack,
+            MultiBufferSource bufferSource,
+            int packedLight,
+            int packedOverlay) {
         DittoBlock dittoBlock = (DittoBlock) blockEntity.getBlockState().getBlock();
         if (!dittoBlock.shouldRender(blockEntity.getBlockState())) {
             return;

@@ -61,6 +61,7 @@ public abstract class BaseCommand {
      *
      * @param builder The command builder to which subcommands should be added.
      */
-    protected abstract void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder,
+    protected abstract void buildCommand(
+            LiteralArgumentBuilder<CommandSourceStack> builder,
             CommandBuildContext context);
 }
