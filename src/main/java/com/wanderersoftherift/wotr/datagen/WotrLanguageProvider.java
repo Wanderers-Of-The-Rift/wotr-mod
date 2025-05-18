@@ -164,6 +164,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".icicles_ability", "Icicles");
         add("ability." + WanderersOfTheRift.MODID + ".mega_boost", "Mega Boost");
         add("ability." + WanderersOfTheRift.MODID + ".dash", "Dash");
+        add("ability." + WanderersOfTheRift.MODID + ".dash_blink", "Blink");
         add("ability." + WanderersOfTheRift.MODID + ".summon_skeletons", "Summon Skeletons");
         add("ability." + WanderersOfTheRift.MODID + ".test_ability", "Test Ability");
         add("ability." + WanderersOfTheRift.MODID + ".knockback", "Knockback");

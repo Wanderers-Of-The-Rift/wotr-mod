@@ -1,0 +1,69 @@
+{
+  "type": "wotr:standard_ability",
+  "ability_name": "wotr:dash_blink",
+  "cooldown": 150,
+  "effects": [
+    {
+      "type": "wotr:teleport_effect",
+      "targeting": {
+        "type": "wotr:self_targeting"
+      },
+      "tele_info": {
+        "teleport_target": "user",
+        "position_info": {
+          "values": [
+            0.0, 0.0, 3.5
+          ],
+          "mode": "local"
+        },
+        "reset_fall_distance": true,
+        "ignore_walls": false
+      }
+    },
+    {
+      "type": "wotr:movement_effect",
+      "targeting": {
+        "type": "wotr:self_targeting"
+      },
+      "velocity": [
+        0.0,
+        0.04,
+        0.2
+      ]
+    },
+    {
+      "type": "wotr:sound_effect",
+      "sound": {
+        "sound_id": "minecraft:entity.ender_eye.death"
+      },
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    },
+    {
+      "type": "wotr:sound_effect",
+      "sound": {
+        "sound_id": "minecraft:entity.player.teleport"
+      },
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    },
+    {
+      "type": "wotr:status_effect",
+      "status_effect": {
+        "id": "minecraft:slowness",
+        "amplifier": 1,
+        "duration": 30,
+        "ambient": false,
+        "show_particles": false,
+        "show_icon": true
+      },
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    }
+  ],
+  "icon": "minecraft:textures/item/ender_pearl.png",
+  "mana_cost": 15
+}
