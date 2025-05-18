@@ -1,6 +1,463 @@
 {
     "processors": [
         {
+            "processor_type": "wotr:weighted_replace",
+            "output_list": [
+                {
+                    "output_state": "wotr:processor_block_14",
+                    "weight": 10
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "bottom",
+                            "shape": "straight"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "top",
+                            "shape": "outer_left"
+                        }
+                    },
+                    "weight": 1
+                },
+
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "north",
+                            "half": "bottom",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "east",
+                            "half": "top",
+                            "shape": "straight"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "west",
+                            "half": "bottom",
+                            "shape": "inner_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "bottom",
+                            "shape": "outer_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_slab",
+                        "Properties": {
+                            "type": "top"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_slab",
+                        "Properties": {
+                            "type": "bottom"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "bottom",
+                            "shape": "straight"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "top",
+                            "shape": "outer_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "north",
+                            "half": "bottom",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "east",
+                            "half": "top",
+                            "shape": "straight"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "west",
+                            "half": "bottom",
+                            "shape": "inner_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "bottom",
+                            "shape": "outer_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "north",
+                            "half": "top",
+                            "shape": "outer_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "north",
+                            "half": "top",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "north",
+                            "half": "bottom",
+                            "shape": "inner_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "east",
+                            "half": "top",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "east",
+                            "half": "bottom",
+                            "shape": "inner_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "east",
+                            "half": "bottom",
+                            "shape": "outer_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "west",
+                            "half": "top",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "west",
+                            "half": "top",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_stairs",
+                        "Properties": {
+                            "facing": "west",
+                            "half": "bottom",
+                            "shape": "outer_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_slab",
+                        "Properties": {
+                            "type": "top"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "wotr:processor_block_14_slab",
+                        "Properties": {
+                            "type": "bottom"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone"
+                    },
+                    "weight": 2
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "bottom",
+                            "shape": "straight"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_stairs",
+                        "Properties": {
+                            "facing": "north",
+                            "half": "top",
+                            "shape": "inner_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_stairs",
+                        "Properties": {
+                            "facing": "east",
+                            "half": "bottom",
+                            "shape": "outer_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_stairs",
+                        "Properties": {
+                            "facing": "west",
+                            "half": "top",
+                            "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_stairs",
+                        "Properties": {
+                            "facing": "south",
+                            "half": "bottom",
+                            "shape": "outer_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_slab",
+                        "Properties": {
+
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_slab",
+                        "Properties": {
+                            "type": "top"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_cobblestone_slab",
+                        "Properties": {
+                            "type": "bottom"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_stone_bricks"
+                    },
+                    "weight": 2
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_stone_brick_stairs",
+                        "Properties": {
+                            "facing": "north", "half": "top", "shape": "straight"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_stone_brick_stairs",
+                        "Properties": {
+                            "facing": "east", "half": "bottom", "shape": "inner_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_stone_brick_stairs",
+                        "Properties": {
+                            "facing": "north", "half": "top", "shape": "outer_left"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_stone_brick_stairs",
+                        "Properties": {
+                            "facing": "west", "half": "bottom", "shape": "inner_right"
+                        }
+                    },
+                    "weight": 1
+                },
+                {
+                    "output_state": {
+                        "type": "wotr:blockstate",
+                        "Name": "minecraft:mossy_stone_brick_stairs",
+                        "Properties": {
+                            "facing": "south", "half": "bottom", "shape": "outer_right"
+                        }
+                    },
+                    "weight": 1
+                }
+            ],
+            "input_state": "wotr:processor_block_14"
+        },
+        {
             "processor_type": "wotr:spot_gradient",
             "replacements": [
                 {
@@ -125,7 +582,16 @@
                         }
                     ]
                 },
-		{
+                {
+                    "input_state": "wotr:processor_block_14_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:stone_brick_wall",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
                     "input_state": "wotr:processor_block_12",
                     "output_steps": [
                         {
@@ -278,10 +744,6 @@
                     ]
                 }
             ]
-        },
-        {
-            "processor_type": "minecraft:block_age",
-            "mossiness": 0.1
         },
         {
             "processor_type": "wotr:rift_theme",
