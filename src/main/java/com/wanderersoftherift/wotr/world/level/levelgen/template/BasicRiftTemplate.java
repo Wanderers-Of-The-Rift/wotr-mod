@@ -296,7 +296,6 @@ public class BasicRiftTemplate implements RiftGeneratable {
                 }
             }
         }
-        // todo some alternative for StructureTemplate.finalizeProcessing
 
         for (StructureTemplate.StructureEntityInfo it : entities) {
             var newNbt = it.nbt.copy();

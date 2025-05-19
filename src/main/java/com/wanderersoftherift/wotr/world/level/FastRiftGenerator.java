@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static net.minecraft.world.level.block.Blocks.AIR;
 
 /*
- * todo rift tier
+ * todo use rift tier
  */
 
 // https://wiki.fabricmc.net/tutorial:chunkgenerator

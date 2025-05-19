@@ -14,13 +14,15 @@ import java.util.List;
 
 public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator validator) implements RiftGeneratable {
 
+    /*
+     * todo complete rework; should this even be responsible for generating passages?
+     */
     @Override
     public void processAndPlace(
             RiftProcessedRoom destination,
             ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror) {
-        // if (true) return;
         var spaceOrigin = destination.space.origin();
         for (var destinationChunk : destination.getOrCreateAllChunks()) {
             var level = destinationChunk.origin.getY();
