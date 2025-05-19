@@ -68,6 +68,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         payload.processPayloadBlocks(this, destination, world, offset, mirror);
         payload.processPayloadEntities(this, destination, world, offset, mirror);
 
+        var size = mirror.diagonal() ? new Vec3i(size().getZ(), size().getY(), size().getX()) : this.size;
         var processors = finalProcessors;
         for (int k = 0; k < processors.size(); k++) {
             processors.get(k).finalizeRoomProcessing(destination, world, offset, size);
