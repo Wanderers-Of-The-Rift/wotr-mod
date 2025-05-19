@@ -16,6 +16,9 @@ public class WotrREIPluginClient implements REIClientPlugin {
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new KeyForgeDisplayCategory());
         registry.addWorkstations(WotrDisplayCategories.KEY_FORGE, EntryStacks.of(WotrBlocks.KEY_FORGE.toStack()));
+        registry.add(new RuneAnvilDisplayCategory());
+        registry.addWorkstations(WotrDisplayCategories.RUNE_ANVIL,
+                EntryStacks.of(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK.toStack()));
     }
 
     @Override

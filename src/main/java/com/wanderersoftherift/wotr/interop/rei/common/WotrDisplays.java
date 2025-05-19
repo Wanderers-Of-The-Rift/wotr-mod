@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class WotrDisplays {
     public static final ResourceLocation KEY_FORGE_DISPLAY = WanderersOfTheRift.id("key_forge_display");
+    public static final ResourceLocation RUNE_ANVIL_DISPLAY = WanderersOfTheRift.id("runegem_display");
 
     private WotrDisplays() {
     }

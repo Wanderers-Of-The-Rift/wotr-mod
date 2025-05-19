@@ -11,6 +11,9 @@ public final class WotrDisplayCategories {
     public static final CategoryIdentifier<KeyForgeDisplay> KEY_FORGE = CategoryIdentifier.of(WanderersOfTheRift.MODID,
             "key_forge");
 
+    public static final CategoryIdentifier<KeyForgeDisplay> RUNE_ANVIL = CategoryIdentifier.of(WanderersOfTheRift.MODID,
+            "rune_anvil");
+
     private WotrDisplayCategories() {
     }
 }
