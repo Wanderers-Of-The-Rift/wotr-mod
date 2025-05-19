@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
+import com.wanderersoftherift.wotr.util.FastRandomSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -58,6 +60,7 @@ public class VineProcessor extends StructureProcessor
     private final boolean attachToCeiling;
     private final float rarity;
     private final StructureRandomType structureRandomType;
+    private final PositionalRandomFactory rngFactory;
 
     public VineProcessor(boolean attachToWall, boolean attachToCeiling, float rarity,
             StructureRandomType structureRandomType) {
@@ -65,6 +68,7 @@ public class VineProcessor extends StructureProcessor
         this.attachToCeiling = attachToCeiling;
         this.rarity = rarity;
         this.structureRandomType = structureRandomType;
+        rngFactory = FastRandomSource.positional(96451348449641312L);
     }
 
     @Override
@@ -275,7 +279,8 @@ public class VineProcessor extends StructureProcessor
     public VineProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
         // todo make RNG that doesn't trash performance
         return new VineProcessor.ReplacementData(
-                createRandom(getRandomSeed(structurePos, 0L)), structureRandomType == BLOCK
+                rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
+                structureRandomType == BLOCK
         );
     }
 

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
+import com.wanderersoftherift.wotr.util.FastRandomSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -62,6 +64,7 @@ public class MushroomProcessor extends StructureProcessor
     private final float rarity;
     private final StructureRandomType structureRandomType;
     private final StructureRandomType tagStructureRandomType;
+    private final PositionalRandomFactory rngFactory;
 
     public MushroomProcessor(List<Block> exclusionList, float rarity, StructureRandomType structureRandomType,
             StructureRandomType tagStructureRandomType) {
@@ -69,6 +72,7 @@ public class MushroomProcessor extends StructureProcessor
         this.rarity = rarity;
         this.structureRandomType = structureRandomType;
         this.tagStructureRandomType = tagStructureRandomType;
+        rngFactory = FastRandomSource.positional(SEED.orElse(33125144131546418L));
     }
 
     @Override
@@ -200,9 +204,9 @@ public class MushroomProcessor extends StructureProcessor
     public ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
         // todo make RNG that doesn't trash performance
         return new ReplacementData(
-                itemTag, exclusionList, createRandom(getRandomSeed(structurePos, SEED.orElse(0L))),
-                createRandom(getRandomSeed(structurePos, SEED.orElse(0L))), structureRandomType == BLOCK,
-                tagStructureRandomType == BLOCK
+                itemTag, exclusionList, rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
+                rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
+                structureRandomType == BLOCK, tagStructureRandomType == BLOCK
         );
     }
 
