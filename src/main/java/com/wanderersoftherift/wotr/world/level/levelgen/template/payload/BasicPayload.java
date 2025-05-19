@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.JigsawReplace
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,8 +73,28 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                 }
             }
         }
-        return new BasicPayload(blockStates, entities, blockEntities, new CompoundTag[1024], new Vec3i[1024],
-                computeHidden(blockStates, size));
+
+        Map<Vec3i, CompoundTag> tileEntities = new HashMap<>(blockEntities);
+        var fastTileEntityHashTable = new CompoundTag[1024];
+        var fastTileEntityPositionsHashTable = new Vec3i[1024];
+        var iter = tileEntities.entrySet().iterator();
+        while (iter.hasNext()) {
+            var value = iter.next();
+            var hash = hashTileEntityPosition(value.getKey().getX(), value.getKey().getY(), value.getKey().getZ());
+            if (fastTileEntityHashTable[hash] == null) {
+                fastTileEntityHashTable[hash] = value.getValue();
+                fastTileEntityPositionsHashTable[hash] = value.getKey();
+                iter.remove();
+            }
+        }
+        if (tileEntities.isEmpty()) {
+            tileEntities = null;
+        } else if (tileEntities.size() == 1) {
+            var entry = tileEntities.entrySet().stream().findFirst().get();
+            tileEntities = Collections.singletonMap(entry.getKey(), entry.getValue());
+        }
+        return new BasicPayload(blockStates, entities, tileEntities, fastTileEntityHashTable,
+                fastTileEntityPositionsHashTable, computeHidden(blockStates, size));
     }
 
     private static short[][] computeHidden(BlockState[][] data, Vec3i size) {
