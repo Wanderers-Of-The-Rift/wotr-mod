@@ -36,24 +36,26 @@ public class KeyForgeDisplayCategory implements DisplayCategory<KeyForgeDisplay>
 
     @Override
     public int getDisplayWidth(KeyForgeDisplay display) {
-        return DisplayCategory.super.getDisplayWidth(display);
+        return 200;
     }
 
     @Override
     public List<Widget> setupDisplay(KeyForgeDisplay display, Rectangle bounds) {
-        Point startPoint = new Point(bounds.getCenterX() - 31, bounds.getCenterY() - 13);
         List<Widget> widgets = new ArrayList<>();
         widgets.add(Widgets.createRecipeBase(bounds));
-        widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 61, startPoint.y + 5)));
+        widgets.add(
+                Widgets.createResultSlotBackground(new Point(bounds.x + bounds.width - 30, bounds.getCenterY() - 8)));
+
         int offset = 0;
         for (EntryIngredient inputEntry : display.getInputEntries()) {
             widgets.add(Widgets.createSlot(new Point(bounds.x + 5, bounds.y + 5 + offset))
                     .entries(inputEntry)
-                    .backgroundEnabled(false)
+                    .disableBackground()
+                    .disableHighlight()
                     .markInput());
             offset += 10;
         }
-        widgets.add(Widgets.createSlot(new Point(startPoint.x + 61, startPoint.y + 5))
+        widgets.add(Widgets.createSlot(new Point(bounds.x + bounds.width - 30, bounds.getCenterY() - 8))
                 .entries(display.getOutputEntries().get(0))
                 .disableBackground()
                 .markOutput());
