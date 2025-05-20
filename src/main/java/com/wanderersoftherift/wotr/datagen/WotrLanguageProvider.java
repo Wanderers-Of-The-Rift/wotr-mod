@@ -119,7 +119,9 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
-        add("itemGroup." + WanderersOfTheRift.MODID + ".dev", "Wanderers of the Rift (Dev only)");
+        add(WanderersOfTheRift.translationId("itemGroup", "ability"), "Abilities");
+        add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
+        add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
 
         add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
 

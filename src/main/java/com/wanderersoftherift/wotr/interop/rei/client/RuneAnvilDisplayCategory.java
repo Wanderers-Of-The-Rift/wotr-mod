@@ -1,6 +1,9 @@
 package com.wanderersoftherift.wotr.interop.rei.client;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.item.runegem.RunegemData;
+import com.wanderersoftherift.wotr.modifier.TieredModifier;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -9,22 +12,24 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuneAnvilDisplayCategory implements DisplayCategory<KeyForgeDisplay> {
+public class RuneAnvilDisplayCategory implements DisplayCategory<RuneAnvilDisplay> {
 
     @Override
-    public CategoryIdentifier<? extends KeyForgeDisplay> getCategoryIdentifier() {
+    public CategoryIdentifier<? extends RuneAnvilDisplay> getCategoryIdentifier() {
         return WotrDisplayCategories.RUNE_ANVIL;
     }
 
     @Override
     public Component getTitle() {
-        return Component.literal("Rune Anvil");
+        return Component.translatable(WanderersOfTheRift.translationId("block", "rune_anvil"));
     }
 
     @Override
@@ -33,25 +38,42 @@ public class RuneAnvilDisplayCategory implements DisplayCategory<KeyForgeDisplay
     }
 
     @Override
-    public List<Widget> setupDisplay(KeyForgeDisplay display, Rectangle bounds) {
+    public int getDisplayWidth(RuneAnvilDisplay display) {
+        return 175;
+    }
+
+    @Override
+    public int getDisplayHeight() {
+        return 100;
+    }
+
+    @Override
+    public List<Widget> setupDisplay(RuneAnvilDisplay display, Rectangle bounds) {
         List<Widget> widgets = new ArrayList<>();
         widgets.add(Widgets.createRecipeBase(bounds));
-        widgets.add(
-                Widgets.createResultSlotBackground(new Point(bounds.x + bounds.width - 30, bounds.getCenterY() - 8)));
 
         int offset = 0;
         for (EntryIngredient inputEntry : display.getInputEntries()) {
-            widgets.add(Widgets.createSlot(new Point(bounds.x + 5, bounds.y + 5 + offset))
-                    .entries(inputEntry)
-                    .disableBackground()
-                    .disableHighlight()
-                    .markInput());
-            offset += 10;
+            widgets.add(
+                    Widgets.createSlot(new Point(bounds.x + 5, bounds.y + 5 + offset)).entries(inputEntry).markInput());
+            offset += 18;
         }
-        widgets.add(Widgets.createSlot(new Point(bounds.x + bounds.width - 30, bounds.getCenterY() - 8))
-                .entries(display.getOutputEntries().get(0))
-                .disableBackground()
-                .markOutput());
+        offset = 0;
+        for (EntryIngredient outputEntry : display.getOutputEntries()) {
+            for (EntryStack<?> entryStack : outputEntry) {
+                if (entryStack.getValue() instanceof RunegemData.ModifierGroup group) {
+                    for (TieredModifier modifier : group.modifiers()) {
+                        widgets.add(
+                                Widgets.createLabel(new Point(bounds.x + 24, bounds.y + 6 + offset), modifier.getName())
+                                        .leftAligned()
+                                        .shadow(false)
+                                        .color(ChatFormatting.BLACK.getColor(), ChatFormatting.WHITE.getColor()));
+                        offset += 12;
+                    }
+                }
+            }
+
+        }
         return widgets;
     }
 }

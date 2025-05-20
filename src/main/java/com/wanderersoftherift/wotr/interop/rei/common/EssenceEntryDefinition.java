@@ -63,7 +63,7 @@ public class EssenceEntryDefinition implements EntryDefinition<EssencePredicate>
 
     @Override
     public boolean isEmpty(EntryStack<EssencePredicate> entryStack, EssencePredicate value) {
-        return value != null;
+        return value == null;
     }
 
     @Override

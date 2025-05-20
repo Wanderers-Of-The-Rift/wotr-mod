@@ -21,15 +21,35 @@ public class WotrCreativeTabs {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID))
                     .withTabsBefore(CreativeModeTabs.COMBAT)
-                    .icon(WotrBlocks.ABILITY_BENCH::toStack)
+                    .icon(WotrBlocks.KEY_FORGE::toStack)
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
-                        output.accept(WotrItems.ABILITY_HOLDER);
                         output.accept(WotrItems.SKILL_THREAD);
                         WotrItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
+                    })
+                    .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_ABILITY_TAB = CREATIVE_MODE_TABS.register(
+            WanderersOfTheRift.MODID + "_ability",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".ability"))
+                    .withTabsBefore(WOTR_TAB.getId())
+                    .icon(WotrItems.ABILITY_HOLDER::toStack)
+                    .displayItems((parameters, output) -> {
+                        output.accept(WotrItems.ABILITY_HOLDER);
                         parameters.holders().lookup(WotrRegistries.Keys.ABILITIES).ifPresent((abilities) -> {
                             generateAbilityItems(output, abilities);
                         });
+                    })
+                    .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_RUNEGEM_TAB = CREATIVE_MODE_TABS.register(
+            WanderersOfTheRift.MODID + "_runegem",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".runegem"))
+                    .withTabsBefore(WOTR_ABILITY_TAB.getId())
+                    .icon(WotrItems.CUT_RUNEGEM_GEODE::toStack)
+                    .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RAW_RUNEGEM_GEODE);
                         output.accept(WotrItems.SHAPED_RUNEGEM_GEODE);
                         output.accept(WotrItems.CUT_RUNEGEM_GEODE);
@@ -43,6 +63,18 @@ public class WotrCreativeTabs {
                         parameters.holders().lookup(WotrRegistries.Keys.RUNEGEM_DATA).ifPresent((runegems) -> {
                             generateRunegems(output, runegems);
                         });
+                    })
+                    .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_DEV_TAB = CREATIVE_MODE_TABS.register(
+            WanderersOfTheRift.MODID + "_dev",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".dev"))
+                    .withTabsBefore(WOTR_RUNEGEM_TAB.getId())
+                    .icon(() -> WotrBlocks.PROCESSOR_BLOCK_3.getBlock().get().asItem().getDefaultInstance())
+                    .displayItems((parameters, output) -> {
+                        output.accept(WotrItems.BUILDER_GLASSES);
+                        WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
 
@@ -66,15 +98,4 @@ public class WotrCreativeTabs {
         });
     }
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_DEV_TAB = CREATIVE_MODE_TABS.register(
-            WanderersOfTheRift.MODID + "_dev",
-            () -> CreativeModeTab.builder()
-                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".dev"))
-                    .withTabsBefore(CreativeModeTabs.COMBAT)
-                    .icon(() -> WotrBlocks.PROCESSOR_BLOCK_3.getBlock().get().asItem().getDefaultInstance())
-                    .displayItems((parameters, output) -> {
-                        output.accept(WotrItems.BUILDER_GLASSES);
-                        WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
-                    })
-                    .build());
 }

@@ -1,8 +1,7 @@
 package com.wanderersoftherift.wotr.interop.rei.client;
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.interop.rei.common.WotrEntryTypes;
 import com.wanderersoftherift.wotr.item.crafting.display.KeyForgeRecipeDisplay;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -22,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.RecipeDisplayId;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,9 +47,8 @@ public class RuneAnvilDisplay extends BasicDisplay {
                 List.of(EntryIngredients.ofSlotDisplay(display.result())));
     }
 
-    public RuneAnvilDisplay(RunegemData data, ResourceLocation id) {
-        super(List.of(EntryIngredients.of(createRunegem(data))), List.of(EntryIngredients.of(createRunegem(data))),
-                Optional.ofNullable(id));
+    public RuneAnvilDisplay(ItemStack runegem, RunegemData.ModifierGroup modifierGroup) {
+        super(getIngredients(runegem, modifierGroup), getOutput(modifierGroup), Optional.empty());
     }
 
     public RuneAnvilDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs,
@@ -57,10 +56,15 @@ public class RuneAnvilDisplay extends BasicDisplay {
         super(inputs, outputs, id);
     }
 
-    private static ItemStack createRunegem(RunegemData data) {
-        ItemStack runegem = WotrItems.RUNEGEM.toStack();
-        runegem.set(WotrDataComponentType.RUNEGEM_DATA, data);
-        return runegem;
+    private static List<EntryIngredient> getIngredients(ItemStack runegem, RunegemData.ModifierGroup modifierGroup) {
+        List<EntryIngredient> results = new ArrayList<>();
+        results.add(EntryIngredients.of(runegem));
+        results.add(EntryIngredients.ofItemsHolderSet(modifierGroup.supportedItems()));
+        return results;
+    }
+
+    private static List<EntryIngredient> getOutput(RunegemData.ModifierGroup modifierGroup) {
+        return List.of(EntryIngredient.of(EntryStack.of(WotrEntryTypes.MODIFIER_GROUP, modifierGroup)));
     }
 
     @Override

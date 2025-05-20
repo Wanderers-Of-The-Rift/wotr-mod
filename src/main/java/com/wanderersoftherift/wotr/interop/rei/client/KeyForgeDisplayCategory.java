@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.interop.rei.client;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -26,7 +27,7 @@ public class KeyForgeDisplayCategory implements DisplayCategory<KeyForgeDisplay>
 
     @Override
     public Component getTitle() {
-        return Component.literal("Key Forge");
+        return Component.translatable(WanderersOfTheRift.translationId("block", "key_forge"));
     }
 
     @Override
