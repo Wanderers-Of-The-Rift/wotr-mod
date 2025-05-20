@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
 import com.wanderersoftherift.wotr.item.RiftChestType;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.DefaultOutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
@@ -12,7 +13,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Structure
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedRiftChestTypeEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +24,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -63,6 +65,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
     private final float rarity;
     private final List<WeightedRiftChestTypeEntry> chestTypes;
     private final StructureRandomType randomType;
+    private final PositionalRandomFactory randomFactory;
 
     public RiftChestProcessor(ResourceLocation baseLootTable, OutputBlockState replaceOutput, float rarity,
             List<WeightedRiftChestTypeEntry> chestTypes, StructureRandomType randomType) {
@@ -71,6 +74,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
         this.rarity = rarity;
         this.chestTypes = chestTypes;
         this.randomType = randomType;
+        this.randomFactory = new LegacyRandomSource.LegacyPositionalRandomFactory(SEED);
     }
 
     @Override
@@ -165,50 +169,49 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
             int z,
             ServerLevelAccessor world,
             BlockPos structurePos,
-            CompoundTag nbt,
+            Ref<BlockEntity> entityRef,
             boolean isVisible) {
 
-        if ((currentState.is(RIFT_CHEST.get()) || currentState.is(CHEST)) && currentState.hasBlockEntity()) {
-            RandomSource random;
+        if (currentState.is(RIFT_CHEST.get()) && currentState.hasBlockEntity()) {
             BlockPos pos = new BlockPos(x, y, z);
-            random = ProcessorUtil.getRandom(randomType, pos, structurePos, BlockPos.ZERO, world, SEED);
-            // spotless:off
-            /*
-             * if (blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
-             *     Direction connectedDirection = getConnectedDirection(blockInfo.state().rotate((LevelAccessor) world, pos, settings.getRotation()));
-             *     random = ProcessorUtil.getRandom(randomType, pos.relative(connectedDirection), piecePos, structurePos, world, SEED);
-             * } else {
-             *     random = ProcessorUtil.getRandom(randomType, pos, piecePos, structurePos, world, SEED);
-             * }
-             */
-            // spotless:on
+            RandomSource random = ProcessorUtil.getRandom(randomType, pos, structurePos, BlockPos.ZERO, world, SEED);
             if (random.nextFloat() < rarity) {
                 RiftChestType chestType = getRandomChestType(random);
                 BlockState blockState = CHEST_TYPES.get(chestType).get().defaultBlockState();
                 blockState = copyProperties(blockState, currentState);
-                BlockEntity tileEntity = ((RiftChestEntityBlock) blockState.getBlock()).newBlockEntity(pos, blockState);
-                tileEntity.loadWithComponents(nbt, world.registryAccess());
-                // if (!blockInfo.state().getValue(TYPE).equals(ChestType.LEFT)) {
-                ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType),
-                        /* serverWorld.random.nextLong() */random.nextLong());
-                // }
-                var newNbt = tileEntity.saveWithId(world.registryAccess());
-                for (var key : nbt.getAllKeys().toArray()) {
-                    if (!newNbt.getAllKeys().contains(key)) {
-                        nbt.remove((String) key);
-                    }
-                }
-
-                for (var key : newNbt.getAllKeys()) {
-                    nbt.put(key, newNbt.get(key));
+                BlockEntity tileEntity = entityRef.getValue();
+                if (tileEntity instanceof RandomizableContainerBlockEntity container) {
+                    container.setLootTable(getLootTable(chestType), random.nextLong());
                 }
                 return blockState;
             } else {
                 BlockState blockState = replaceOutput.convertBlockState();
 
-                for (var key : nbt.getAllKeys().toArray()) {
-                    nbt.remove((String) key);
+                entityRef.setValue(null);
+                return blockState;
+            }
+        }
+        if (currentState.is(CHEST) && currentState.hasBlockEntity()) {
+            BlockPos pos = new BlockPos(x, y, z);
+            RandomSource random = ProcessorUtil.getRandom(randomType, pos, structurePos, BlockPos.ZERO, world, SEED);
+            if (random.nextFloat() < rarity) {
+                RiftChestType chestType = getRandomChestType(random);
+                var block = (RiftChestEntityBlock) CHEST_TYPES.get(chestType).get();
+                BlockState blockState = block.defaultBlockState();
+                blockState = copyProperties(blockState, currentState);
+                BlockEntity oldTileEntity = entityRef.getValue();
+                BlockEntity tileEntity = block.newBlockEntity(pos, blockState);
+                tileEntity.loadWithComponents(oldTileEntity.saveWithoutMetadata(world.registryAccess()),
+                        world.registryAccess());
+                if (tileEntity instanceof RandomizableContainerBlockEntity container) {
+                    container.setLootTable(getLootTable(chestType), random.nextLong());
                 }
+                entityRef.setValue(tileEntity);
+                return blockState;
+            } else {
+                BlockState blockState = replaceOutput.convertBlockState();
+
+                entityRef.setValue(null);
                 return blockState;
             }
         }

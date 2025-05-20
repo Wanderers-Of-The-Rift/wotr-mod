@@ -5,17 +5,18 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
 import com.wanderersoftherift.wotr.util.OpenSimplex2F;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -110,7 +111,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             @Nullable StructureTemplate template) {
 
         var newBlockState = processBlockState(blockInfo.state(), blockInfo.pos().getX(), blockInfo.pos().getX(),
-                blockInfo.pos().getX(), (ServerLevel) world, piecePos, blockInfo.nbt(), true);
+                blockInfo.pos().getX(), (ServerLevel) world, piecePos, null, true);
 
         return new StructureTemplate.StructureBlockInfo(blockInfo.pos(), newBlockState, blockInfo.nbt());
     }
@@ -123,7 +124,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             int z,
             ServerLevelAccessor world,
             BlockPos structurePos,
-            CompoundTag nbt,
+            Ref<BlockEntity> entityRef,
             boolean isVisible) {
         Block block = blockstate.getBlock();
         var blockHash = hashBlock(block);

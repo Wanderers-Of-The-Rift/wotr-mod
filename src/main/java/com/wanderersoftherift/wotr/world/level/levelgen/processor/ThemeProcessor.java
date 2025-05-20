@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -11,11 +12,11 @@ import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -179,13 +180,13 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             int z,
             ServerLevelAccessor world,
             BlockPos structurePos,
-            CompoundTag nbt,
+            Ref<BlockEntity> entityRef,
             boolean isVisible) {
         var processors = getThemeTemplateProcessors(world.getLevel(), structurePos);
 
         for (int i = 0; i < processors.size() && currentState != null; i++) {
             currentState = processors.get(i)
-                    .processBlockState(currentState, x, y, z, world, structurePos, nbt, isVisible);
+                    .processBlockState(currentState, x, y, z, world, structurePos, entityRef, isVisible);
         }
         return currentState;
 

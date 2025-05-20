@@ -1,13 +1,15 @@
 package com.wanderersoftherift.wotr.mixin;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftTemplateProcessor;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.JigsawReplacementProcessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,14 +26,13 @@ public class MixinJigsawReplacementProcessor implements RiftTemplateProcessor {
             int z,
             ServerLevelAccessor world,
             BlockPos structurePos,
-            CompoundTag nbt,
+            Ref<BlockEntity> nbt,
             boolean isVisible) {
 
         if (currentState.is(Blocks.JIGSAW)) {
-            if (nbt == null) {
-                return currentState;
-            } else {
-                String finalState = nbt.getString("final_state");
+            var entity = nbt.getValue();
+            if (entity instanceof JigsawBlockEntity jigsaw) {
+                String finalState = jigsaw.getFinalState();
 
                 BlockState blockstate1;
                 try {
@@ -42,18 +43,15 @@ public class MixinJigsawReplacementProcessor implements RiftTemplateProcessor {
                     return null;
                 }
 
-                var added = nbt.getAllKeys().toArray();
-                for (var key : added) {
-                    nbt.remove((String) key);
-                }
+                nbt.setValue(null);
+
                 if (blockstate1.is(Blocks.STRUCTURE_VOID)) {
                     return null;
                 } else {
                     return blockstate1;
                 }
             }
-        } else {
-            return currentState;
         }
+        return currentState;
     }
 }

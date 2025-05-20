@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.util.Ref;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -94,22 +95,45 @@ public class TrialSpawnerProcessor extends StructureProcessor implements RiftTem
             int z,
             ServerLevelAccessor world,
             BlockPos structurePos,
-            CompoundTag nbt,
+            Ref<BlockEntity> entityRef,
             boolean isVisible) {
 
         if (currentState.getBlock() instanceof TrialSpawnerBlock) {
-            BlockState blockState = WotrBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
-            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock())
-                    .newBlockEntity(new BlockPos(x, y, z), blockState);
-            return fixNbtReturnState(blockEntity, world, nbt, blockState);
+            var riftSpawnerBlock = WotrBlocks.RIFT_MOB_SPAWNER.get();
+            BlockState blockState = riftSpawnerBlock.defaultBlockState();
+
+            var newBlockEntity = (RiftMobSpawnerBlockEntity) riftSpawnerBlock.newBlockEntity(new BlockPos(x, y, z),
+                    blockState);
+            TrialSpawner trialSpawner = new TrialSpawner(
+                    spawnerConfig, spawnerConfig, new TrialSpawnerData(), 72_000, 9, newBlockEntity, RIFT_PLAYERS,
+                    PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
+            trialSpawner.getData().reset();
+            newBlockEntity.setTrialSpawner(trialSpawner);
+            entityRef.setValue(newBlockEntity);
+            return blockState;
 
         }
 
-        if (currentState.getBlock() instanceof RiftMobSpawnerBlock block) {
-            BlockEntity blockEntity = block.newBlockEntity(new BlockPos(x, y, z), currentState);
-            return fixNbtReturnState(blockEntity, world, nbt, currentState);
+        if (currentState.getBlock() instanceof RiftMobSpawnerBlock riftSpawnerBlock) {
+            if (entityRef.getValue() instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
+
+                TrialSpawner trialSpawner = new TrialSpawner(
+                        spawnerConfig, spawnerConfig, new TrialSpawnerData(), 72_000, 9, spawnerBlockEntity,
+                        RIFT_PLAYERS, PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
+                trialSpawner.getData().reset();
+                spawnerBlockEntity.setTrialSpawner(trialSpawner);
+            } else {
+                var newBlockEntity = (RiftMobSpawnerBlockEntity) riftSpawnerBlock.newBlockEntity(new BlockPos(x, y, z),
+                        currentState);
+                TrialSpawner trialSpawner = new TrialSpawner(
+                        spawnerConfig, spawnerConfig, new TrialSpawnerData(), 72_000, 9, newBlockEntity, RIFT_PLAYERS,
+                        PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
+                trialSpawner.getData().reset();
+                newBlockEntity.setTrialSpawner(trialSpawner);
+                entityRef.setValue(newBlockEntity);
+            }
         }
-        return currentState; // todo implement with nbt (or maybe with TileEntities)
+        return currentState;
     }
 
     private BlockState fixNbtReturnState(

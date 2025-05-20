@@ -1,8 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
+import com.wanderersoftherift.wotr.util.Ref;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /*
@@ -16,6 +17,6 @@ public interface RiftTemplateProcessor {
             int z,
             ServerLevelAccessor world,
             BlockPos structurePos,
-            CompoundTag nbt,
+            Ref<BlockEntity> entityRef,
             boolean isVisible);
 }

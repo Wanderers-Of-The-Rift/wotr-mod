@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template.payload;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -11,7 +12,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.JigsawReplacementProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -226,34 +229,31 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                         }
                         if (nbt == null) {
                             nbt = emptyNBT;
-                        } else {
-                            nbt = nbt.copy();
                         }
                     } else {
                         nbt = emptyNBT;
                     }
+                    BlockEntity entity = null;
+                    if (nbt != null && !nbt.isEmpty() && nbt.get("id") instanceof StringTag) {
+                        entity = BlockEntity.loadStatic(mutablePosition, blockState, nbt, world.registryAccess());
+                    }
+                    var entityRef = new Ref<BlockEntity>(entity);
                     blockState = ((RiftTemplateProcessor) JigsawReplacementProcessor.INSTANCE).processBlockState(
                             blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world,
-                            offset, nbt, isVisible);
+                            offset, entityRef, isVisible);
                     for (int k = 0; k < processors.size() && blockState != null; k++) {
                         blockState = processors.get(k)
                                 .processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(),
-                                        mutablePosition.getZ(), world, offset, nbt, isVisible);
+                                        mutablePosition.getZ(), world, offset, entityRef, isVisible);
                     }
                     if (blockState == null) {
                         continue;
                     }
                     roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = blockState;
 
-                    if (!emptyNBT.isEmpty()) {
-                        nbt = nbt.copy();
-                        var added = emptyNBT.getAllKeys().toArray();
-                        for (var key : added) {
-                            emptyNBT.remove((String) key);
-                        }
-                    }
-                    if (!nbt.isEmpty() && blockState.hasBlockEntity()) {
-                        roomChunk.blockNBT[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = nbt;
+                    entity = entityRef.getValue();
+                    if (entity != null && blockState.hasBlockEntity()) {
+                        roomChunk.blockEntities.add(entity);
                     }
                 }
             }

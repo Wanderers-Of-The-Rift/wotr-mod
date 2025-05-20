@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -26,9 +27,9 @@ public class RiftProcessedChunk {
 
     public final Vec3i origin;
     public final BlockState[] blocks = new BlockState[4096];
-    public final CompoundTag[] blockNBT = new CompoundTag[4096];
     public final RiftProcessedRoom parentRoom;
     public final ArrayList<CompoundTag> entities = new ArrayList<>();
+    public final ArrayList<BlockEntity> blockEntities = new ArrayList<BlockEntity>(4096);
 
     public RiftProcessedChunk(Vec3i origin, RiftProcessedRoom parentRoom) {
         this.origin = origin;
@@ -38,27 +39,15 @@ public class RiftProcessedChunk {
     public void placeInWorld(ChunkAccess chunk, ServerLevelAccessor level) {
         var mutablePosition = new BlockPos.MutableBlockPos();
         swapMinecraftSection(chunk.getSections(), origin.getY() - chunk.getMinY() / 16);
-        for (int index = 0; index < 4096; index++) {
-            var block = blocks[index];
-            if (block == null) {
-                continue;
-            }
-            // chunk.setBlockState(mutablePosition, block, false);
-            var nbt = blockNBT[index];
-            if (block.hasBlockEntity() && nbt != null && level != null) {
-                var x = (index & 0xf) | (origin.getX() << 4);
-                var z = ((index >> 4) & 0xf) | (origin.getZ() << 4);
-                var y = ((index >> 8) & 0xf) | (origin.getY() << 4);
-                nbt.putInt("x", x);
-                nbt.putInt("y", y);
-                nbt.putInt("z", z);
-                mutablePosition.set(x, y, z);
-                chunk.setBlockEntityNbt(nbt);
-                level.getBlockEntity(mutablePosition);
+        for (int idx = 0; idx < blockEntities.size(); idx++) {
+
+            var entity = blockEntities.get(idx);
+            if (entity != null && level != null) {
+                chunk.setBlockEntity(entity);
             }
         }
-        for (int i = 0; i < entities.size(); i++) {
-            var entityNBT = entities.get(i);
+        for (int idx = 0; idx < entities.size(); idx++) {
+            var entityNBT = entities.get(idx);
             EntityType.create(entityNBT, level.getLevel(), EntitySpawnReason.STRUCTURE).ifPresent((entity) -> {
 
                 if (entity instanceof Mob mob) {

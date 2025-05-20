@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -10,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
@@ -56,8 +58,9 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
 
                     var nbt = new CompoundTag();
                     var info = new StructureTemplate.StructureBlockInfo(mutablePosition, blockState, nbt);
+                    var entity = new Ref<BlockEntity>(null);
                     var newBlockState = themeProcessor.processBlockState(blockState, mutablePosition.getX(),
-                            mutablePosition.getY(), mutablePosition.getZ(), world, offset, nbt, true);
+                            mutablePosition.getY(), mutablePosition.getZ(), world, offset, entity, true);
                     if (newBlockState == null) {
                         continue;
                     }
