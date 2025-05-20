@@ -31,7 +31,8 @@ import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.RIFT_THEME;
 
-public class ThemeProcessor extends StructureProcessor implements RiftTemplateProcessor, RiftFinalProcessor, RiftAdjacencyProcessor<ThemeProcessor.ThemeAdjacencyData> {
+public class ThemeProcessor extends StructureProcessor implements RiftTemplateProcessor, RiftFinalProcessor,
+        RiftAdjacencyProcessor<ThemeProcessor.ThemeAdjacencyData> {
     public static final MapCodec<ThemeProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
             .group(ThemePieceType.CODEC.fieldOf("piece_type").forGetter(ThemeProcessor::getThemePieceType)
             ).apply(builder, ThemeProcessor::new));
@@ -56,7 +57,7 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             StructureTemplate.StructureBlockInfo blockInfo,
             StructurePlaceSettings settings,
             @Nullable StructureTemplate template) {
-        if(!(world instanceof ServerLevelAccessor sa)){
+        if (!(world instanceof ServerLevelAccessor sa)) {
             return blockInfo;
         }
         List<StructureProcessor> processors = getThemeProcessors(sa.getLevel(), structurePos);
@@ -119,9 +120,7 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         return new ArrayList<>();
     }
 
-    private List<RiftAdjacencyProcessor<?>> getRiftAdjacencyProcessors(
-            ServerLevel world,
-            BlockPos structurePos) {
+    private List<RiftAdjacencyProcessor<?>> getRiftAdjacencyProcessors(ServerLevel world, BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
         if (world != null && currentCache != null && currentCache.level.refersTo(world)) {
             return currentCache.airReplaceProcessors;
@@ -221,12 +220,13 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     @Override
     public ThemeAdjacencyData createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world) {
-        return new ThemeAdjacencyData(getRiftAdjacencyProcessors(world.getLevel(), structurePos).stream().map((it)->RiftAdjacencyProcessor.ProcessorDataPair.create(it,structurePos,pieceSize,world)).toList());
+        return new ThemeAdjacencyData(getRiftAdjacencyProcessors(world.getLevel(), structurePos).stream()
+                .map((it) -> RiftAdjacencyProcessor.ProcessorDataPair.create(it, structurePos, pieceSize, world))
+                .toList());
     }
 
     private record ThemeCache(PhantomReference<LevelReader> level, List<RiftTemplateProcessor> templateProcessors,
-            List<RiftFinalProcessor> finalProcessors,
-            List<RiftAdjacencyProcessor<?>> airReplaceProcessors) {
+            List<RiftFinalProcessor> finalProcessors, List<RiftAdjacencyProcessor<?>> airReplaceProcessors) {
     }
 
     public record ThemeAdjacencyData(List<? extends ProcessorDataPair<?>> list) {

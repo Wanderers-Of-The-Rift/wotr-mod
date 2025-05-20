@@ -72,7 +72,7 @@ public class FastRandomSource implements RandomSource {
     @Override
     public int nextInt(int i) {
         return (int) Math.floorMod(nextLong(), (long) i);
-    } //no idea how well this works
+    } // no idea how well this works
 
     @Override
     public long nextLong() {
@@ -90,24 +90,24 @@ public class FastRandomSource implements RandomSource {
     public float nextFloat() {
         var d = ((float) (nextLong() << 2));
         var dBits = Float.floatToIntBits(d);
-        dBits-=64<<23;
+        dBits -= 64 << 23;
         d = Float.intBitsToFloat(dBits);
-        return d+0.5f;
+        return d + 0.5f;
     }
 
     @Override
     public double nextDouble() {
         var d = ((double) (nextLong() << 2));
         var dBits = Double.doubleToLongBits(d);
-        dBits-=64L<<52;
+        dBits -= 64L << 52;
         d = Double.longBitsToDouble(dBits);
-        return d+0.5;
+        return d + 0.5;
     }
 
     public double nextDoubleSigned() {
         var d = ((double) (nextLong() << 2));
         var dBits = Double.doubleToLongBits(d);
-        dBits-=63L<<52;
+        dBits -= 63L << 52;
         d = Double.longBitsToDouble(dBits);
         return d;
     }

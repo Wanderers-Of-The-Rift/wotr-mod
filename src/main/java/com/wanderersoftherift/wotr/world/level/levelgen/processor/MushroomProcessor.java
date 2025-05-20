@@ -184,7 +184,8 @@ public class MushroomProcessor extends StructureProcessor
         var old = directions[6];
         if (!isHidden && !old.isAir()) {
             var up = directions[1];
-            boolean validUp = (up == null || up.isAir()) && data.recalculateChance() <= rarity && isFaceFullFast(old, BlockPos.ZERO, Direction.UP);
+            boolean validUp = (up == null || up.isAir()) && data.recalculateChance() <= rarity
+                    && isFaceFullFast(old, BlockPos.ZERO, Direction.UP);
             if (validUp) {
                 directions[1] = data.recalculateBlock().defaultBlockState();
                 return 2;

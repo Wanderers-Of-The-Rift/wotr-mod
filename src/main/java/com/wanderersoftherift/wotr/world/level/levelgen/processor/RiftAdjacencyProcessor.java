@@ -59,7 +59,8 @@ public interface RiftAdjacencyProcessor<T> {
         public static <T> ProcessorDataPair<T> create(
                 RiftAdjacencyProcessor<T> processor,
                 BlockPos structurePos,
-                Vec3i pieceSize, ServerLevelAccessor world) {
+                Vec3i pieceSize,
+                ServerLevelAccessor world) {
             return new ProcessorDataPair<>(processor, processor.createData(structurePos, pieceSize, world));
         }
 

@@ -73,6 +73,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
             ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror) {
+        // todo create a mask of blocks modified by this template
         var structurePos = new BlockPos(room.space.origin().multiply(16)).offset(placementShift);
         payload.processPayloadBlocks(this, room, world, structurePos, mirror);
         payload.processPayloadEntities(this, room, world, structurePos, mirror);
@@ -83,15 +84,15 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         var pairs = new RiftAdjacencyProcessor.ProcessorDataPair<?>[processors.size()];
 
         for (int i = 0; i < pairs.length; i++) {
-            pairs[i] = RiftAdjacencyProcessor.ProcessorDataPair.create(processors.get(i), structurePos,
-                    pieceSize, world);
+            pairs[i] = RiftAdjacencyProcessor.ProcessorDataPair.create(processors.get(i), structurePos, pieceSize,
+                    world);
         }
 
         var directionBlocksArray = new BlockState[7];
         var preloaded = new BlockState[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
         var saveMask = new boolean[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
-        RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY(),
-                structurePos.getZ(), pieceSize, preloaded[0], saveMask[0]);
+        RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY(), structurePos.getZ(),
+                pieceSize, preloaded[0], saveMask[0]);
         for (int y = 0; y < pieceSize.getY(); y++) {
             RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1,
                     structurePos.getZ(), pieceSize, preloaded[(y + 1) & 3], saveMask[(y + 1) & 3]);
@@ -197,10 +198,9 @@ public class PayloadRiftTemplate implements RiftGeneratable {
 
         }
 
-        RiftAdjacencyProcessor.saveLayer(room, structurePos.getX(),
-                structurePos.getY() + pieceSize.getY() - 1, structurePos.getZ(), pieceSize,
-                preloaded[(pieceSize.getY() - 1) & 3], saveMask[(pieceSize.getY() - 1) & 3]);
-
+        RiftAdjacencyProcessor.saveLayer(room, structurePos.getX(), structurePos.getY() + pieceSize.getY() - 1,
+                structurePos.getZ(), pieceSize, preloaded[(pieceSize.getY() - 1) & 3],
+                saveMask[(pieceSize.getY() - 1) & 3]);
 
         var finalProcessors = this.finalProcessors;
         for (int k = 0; k < finalProcessors.size(); k++) {

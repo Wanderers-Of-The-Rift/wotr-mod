@@ -47,8 +47,7 @@ import static net.minecraft.core.Direction.values;
 import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;
 
-public class VineProcessor extends StructureProcessor
-        implements RiftAdjacencyProcessor<VineProcessor.ReplacementData> {
+public class VineProcessor extends StructureProcessor implements RiftAdjacencyProcessor<VineProcessor.ReplacementData> {
     public static final MapCodec<VineProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(Codec.BOOL.optionalFieldOf("attach_to_wall", true).forGetter(VineProcessor::isAttachToWall),
@@ -296,7 +295,7 @@ public class VineProcessor extends StructureProcessor
                             if (shape == null) {
                                 shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                             }
-                            if (isFaceFullFast(shape, direction)){
+                            if (isFaceFullFast(shape, direction)) {
                                 BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
                                 directionBlocks[i] = VINE.defaultBlockState().setValue(property, true);
                                 result |= 1 << i;

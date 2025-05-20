@@ -278,7 +278,7 @@ public class AttachmentProcessor extends StructureProcessor
             if (requiresUp) {
                 var block = directions[0];
                 if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
-                    if(shape==null) {
+                    if (shape == null) {
                         shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                     }
                     if (isFaceFullFast(shape, Direction.DOWN)) {
@@ -290,7 +290,7 @@ public class AttachmentProcessor extends StructureProcessor
             if (requiresDown) {
                 var block = directions[1];
                 if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
-                    if(shape==null) {
+                    if (shape == null) {
                         shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                     }
                     if (isFaceFullFast(shape, Direction.UP)) {
@@ -305,7 +305,7 @@ public class AttachmentProcessor extends StructureProcessor
                     var ordinal = side.ordinal();
                     var directionBlock = directions[ordinal];
                     if ((directionBlock != null && directionBlock.isAir()) && data.recalculateChance() <= rarity) {
-                        if(shape==null) {
+                        if (shape == null) {
                             shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                         }
                         if (isFaceFullFast(shape, side)) {
@@ -320,7 +320,10 @@ public class AttachmentProcessor extends StructureProcessor
     }
 
     @Override
-    public AttachmentProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world) {
+    public AttachmentProcessor.ReplacementData createData(
+            BlockPos structurePos,
+            Vec3i pieceSize,
+            ServerLevelAccessor world) {
         return new AttachmentProcessor.ReplacementData(
                 rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK
