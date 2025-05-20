@@ -163,8 +163,7 @@ public class WotrRecipeProvider extends RecipeProvider {
 
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),
-                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES,
-                                WanderersOfTheRift.id("buzzy_bees")))
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("buzzy_bees")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("life")).setMinPercent(25F).build())
                 .withEssenceReq(

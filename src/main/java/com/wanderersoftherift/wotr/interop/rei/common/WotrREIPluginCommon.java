@@ -1,10 +1,13 @@
 package com.wanderersoftherift.wotr.interop.rei.common;
 
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.recipe.WotrRecipeTypes;
 import com.wanderersoftherift.wotr.interop.rei.client.KeyForgeDisplay;
 import com.wanderersoftherift.wotr.interop.rei.client.RuneAnvilDisplay;
 import com.wanderersoftherift.wotr.item.crafting.KeyForgeRecipe;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
+import me.shedaniel.rei.api.common.entry.comparison.EntryComparator;
+import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry;
 import me.shedaniel.rei.api.common.entry.type.EntryTypeRegistry;
 import me.shedaniel.rei.api.common.plugins.REICommonPlugin;
 import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
@@ -32,4 +35,8 @@ public class WotrREIPluginCommon implements REICommonPlugin {
                 .fill(recipe -> new KeyForgeDisplay(recipe.value(), recipe.id().location()));
     }
 
+    @Override
+    public void registerItemComparators(ItemComparatorRegistry registry) {
+        registry.register(EntryComparator.itemComponents(), WotrItems.RUNEGEM.get());
+    }
 }

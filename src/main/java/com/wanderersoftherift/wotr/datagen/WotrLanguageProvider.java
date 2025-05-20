@@ -275,6 +275,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("keybinds", "mod_ctrl"), "Ctrl+");
         add(WanderersOfTheRift.translationId("keybinds", "mod_shift"), "Shi+");
 
+        add(WanderersOfTheRift.translationId("rei", "rolls_label"), "Rolls:");
         add(WanderersOfTheRift.translationId("rei", "percent.min"), "%s: > %s%%");
         add(WanderersOfTheRift.translationId("rei", "percent.max"), "%s: < %s%%");
         add(WanderersOfTheRift.translationId("rei", "absolute.min"), "%s: < %s");

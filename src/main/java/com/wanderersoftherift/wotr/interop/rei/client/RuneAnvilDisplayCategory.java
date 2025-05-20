@@ -59,6 +59,13 @@ public class RuneAnvilDisplayCategory implements DisplayCategory<RuneAnvilDispla
             offset += 18;
         }
         offset = 0;
+        widgets.add(Widgets
+                .createLabel(new Point(bounds.x + 24, bounds.y + 6 + offset),
+                        Component.translatable(WanderersOfTheRift.translationId("rei", "rolls_label")))
+                .leftAligned()
+                .color(ChatFormatting.BLACK.getColor(), ChatFormatting.WHITE.getColor())
+                .shadow(false));
+        offset += 14;
         for (EntryIngredient outputEntry : display.getOutputEntries()) {
             for (EntryStack<?> entryStack : outputEntry) {
                 if (entryStack.getValue() instanceof RunegemData.ModifierGroup group) {
@@ -67,7 +74,7 @@ public class RuneAnvilDisplayCategory implements DisplayCategory<RuneAnvilDispla
                                 Widgets.createLabel(new Point(bounds.x + 24, bounds.y + 6 + offset), modifier.getName())
                                         .leftAligned()
                                         .shadow(false)
-                                        .color(ChatFormatting.BLACK.getColor(), ChatFormatting.WHITE.getColor()));
+                                        .color(ChatFormatting.DARK_GRAY.getColor(), ChatFormatting.GRAY.getColor()));
                         offset += 12;
                     }
                 }

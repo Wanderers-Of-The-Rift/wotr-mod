@@ -84,9 +84,11 @@ public class RiftKey extends Item {
             return;
         }
 
-        int tier = stack.getOrDefault(WotrDataComponentType.ITEM_RIFT_TIER, 0);
-        components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
-                .withColor(ChatFormatting.GRAY.getColor()));
+        if (stack.has(WotrDataComponentType.ITEM_RIFT_TIER)) {
+            int tier = stack.getOrDefault(WotrDataComponentType.ITEM_RIFT_TIER, 0);
+            components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
+                    .withColor(ChatFormatting.GRAY.getColor()));
+        }
 
         Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RIFT_THEME);
         if (riftTheme != null) {

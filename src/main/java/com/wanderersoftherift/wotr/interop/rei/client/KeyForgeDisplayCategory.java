@@ -11,7 +11,12 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +53,19 @@ public class KeyForgeDisplayCategory implements DisplayCategory<KeyForgeDisplay>
                 Widgets.createResultSlotBackground(new Point(bounds.x + bounds.width - 30, bounds.getCenterY() - 8)));
 
         int offset = 0;
+        if (display.getOutputEntries().get(0).get(0).getValue() instanceof ItemStack stack) {
+            List<Component> tooltipLines = stack.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level),
+                    null, TooltipFlag.NORMAL);
+            if (tooltipLines.size() > 1) {
+                widgets.add(Widgets
+                        .createLabel(new Point(bounds.x + 5, bounds.y + 5 + offset), tooltipLines.get(1).plainCopy())
+                        .leftAligned()
+                        .shadow(false)
+                        .color(ChatFormatting.BLACK.getColor(), ChatFormatting.WHITE.getColor()));
+                offset += 12;
+            }
+        }
+
         for (EntryIngredient inputEntry : display.getInputEntries()) {
             widgets.add(Widgets.createSlot(new Point(bounds.x + 5, bounds.y + 5 + offset))
                     .entries(inputEntry)

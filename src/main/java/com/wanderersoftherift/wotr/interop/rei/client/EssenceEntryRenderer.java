@@ -35,28 +35,28 @@ public class EssenceEntryRenderer implements EntryRenderer<EssencePredicate> {
             graphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("rei", "percent.min"), essenceType,
                             entry.getValue().minPercent()),
-                    bounds.x, bounds.y + offset, ChatFormatting.BLACK.getColor(), false);
+                    bounds.x, bounds.y + offset, ChatFormatting.DARK_GRAY.getColor(), false);
             offset += font.lineHeight;
         }
         if (entry.getValue().maxPercent() < 100) {
             graphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("rei", "percent.max"), essenceType,
                             entry.getValue().maxPercent()),
-                    bounds.x, bounds.y + offset, ChatFormatting.BLACK.getColor(), false);
+                    bounds.x, bounds.y + offset, ChatFormatting.DARK_GRAY.getColor(), false);
             offset += font.lineHeight;
         }
         if (entry.getValue().min() > 0) {
             graphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("rei", "absolute.min"), essenceType,
                             entry.getValue().min()),
-                    bounds.x, bounds.y + offset, ChatFormatting.BLACK.getColor(), false);
+                    bounds.x, bounds.y + offset, ChatFormatting.DARK_GRAY.getColor(), false);
             offset += font.lineHeight;
         }
         if (entry.getValue().max() < Integer.MAX_VALUE) {
             graphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("rei", "absolute.max"), essenceType,
                             entry.getValue().max()),
-                    bounds.x, bounds.y + offset, ChatFormatting.BLACK.getColor(), false);
+                    bounds.x, bounds.y + offset, ChatFormatting.DARK_GRAY.getColor(), false);
             offset += font.lineHeight;
         }
     }
