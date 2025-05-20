@@ -14,7 +14,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -23,8 +22,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,18 +34,21 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Pr
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomSeed;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.shapeForFaceFullCheck;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
+import static net.minecraft.core.Direction.DOWN;
 import static net.minecraft.core.Direction.EAST;
 import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.SOUTH;
 import static net.minecraft.core.Direction.UP;
 import static net.minecraft.core.Direction.WEST;
+import static net.minecraft.core.Direction.values;
 import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;
 
 public class VineProcessor extends StructureProcessor
-        implements ReplaceAirBySurroundingRiftProcessor<VineProcessor.ReplacementData> {
+        implements ReplaceThisOrAdjacentRiftProcessor<VineProcessor.ReplacementData> {
     public static final MapCodec<VineProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(Codec.BOOL.optionalFieldOf("attach_to_wall", true).forGetter(VineProcessor::isAttachToWall),
@@ -55,6 +59,7 @@ public class VineProcessor extends StructureProcessor
                                     .forGetter(VineProcessor::getStructureRandomType))
                     .apply(builder, VineProcessor::new));
     private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
+    private static final List<Direction> DIRECTIONS = Arrays.stream(values()).toList();
 
     private final boolean attachToWall;
     private final boolean attachToCeiling;
@@ -255,29 +260,63 @@ public class VineProcessor extends StructureProcessor
     }
 
     @Override
-    public BlockState replace(
-            VineProcessor.ReplacementData data,
-            BlockState up,
-            BlockState down,
-            BlockState north,
-            BlockState south,
-            BlockState east,
-            BlockState west,
-            BlockState... directions) {
-        if (data.recalculateChance() <= rarity) {
-            var direction = selectDirection(directions);
-            if (direction == null) {
-                return Blocks.AIR.defaultBlockState();
+    public int replace(ReplacementData data, BlockState[] directionBlocks, boolean isHidden) {
+        var old = directionBlocks[6];
+        var result = 0;
+        if (!isHidden && !old.isAir()) {
+            VoxelShape shape = null;
+            if (attachToCeiling) {
+                var otherBlock = directionBlocks[0];
+                if (otherBlock == null || otherBlock.isAir()) {
+
+                    shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                    if (isFaceFullFast(shape, DOWN) && data.recalculateChance() < rarity) {
+                        BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
+                        directionBlocks[0] = VINE.defaultBlockState().setValue(property, true);
+                        result |= 1;
+
+                    }
+                } else if (otherBlock.getBlock() == VINE) {
+
+                    shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                    if (isFaceFullFast(shape, DOWN) && data.recalculateChance() < rarity) {
+                        BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
+                        directionBlocks[0] = otherBlock.setValue(property, true);
+                        result |= 1;
+                    }
+                }
             }
-            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction);
-            return VINE.defaultBlockState().setValue(property, true);
+            if (attachToWall) {
+                for (int i = 2; i < 6; i++) {
+                    var otherBlock = directionBlocks[i];
+                    var direction = DIRECTIONS.get(i);
+                    if (otherBlock == null || otherBlock.isAir()) {
+                        if (shape == null) {
+                            shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                        }
+                        if (isFaceFullFast(shape, direction) && data.recalculateChance() < rarity) {
+                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
+                            directionBlocks[i] = VINE.defaultBlockState().setValue(property, true);
+                            result |= 1 << i;
+                        }
+                    } else if (otherBlock.getBlock() == VINE) {
+                        if (shape == null) {
+                            shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                        }
+                        if (isFaceFullFast(shape, direction) && data.recalculateChance() < rarity) {
+                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
+                            directionBlocks[i] = otherBlock.setValue(property, true);
+                            result |= 1 << i;
+                        }
+                    }
+                }
+            }
         }
-        return Blocks.AIR.defaultBlockState();
+        return result;
     }
 
     @Override
     public VineProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
-        // todo make RNG that doesn't trash performance
         return new VineProcessor.ReplacementData(
                 rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK

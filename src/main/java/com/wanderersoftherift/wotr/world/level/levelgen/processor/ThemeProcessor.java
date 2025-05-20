@@ -115,7 +115,7 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         return new ArrayList<>();
     }
 
-    private List<ReplaceAirBySurroundingRiftProcessor<?>> getAirReplaceTemplateProcessors(
+    private List<ReplaceThisOrAdjacentRiftProcessor<?>> getAirReplaceTemplateProcessors(
             LevelReader world,
             BlockPos structurePos) {
         var currentCache = lastThemeTemplateProcessorCache;
@@ -145,8 +145,8 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
                 newCache.finalProcessors.add(riftTemplateProcessor);
                 used = true;
             }
-            if (processor instanceof ReplaceAirBySurroundingRiftProcessor<?> replaceAirBySurroundingRiftProcessor) {
-                newCache.airReplaceProcessors.add(replaceAirBySurroundingRiftProcessor);
+            if (processor instanceof ReplaceThisOrAdjacentRiftProcessor<?> replaceThisOrAdjacentRiftProcessor) {
+                newCache.airReplaceProcessors.add(replaceThisOrAdjacentRiftProcessor);
                 used = true;
             }
             if (!used) {
@@ -199,42 +199,125 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
             Vec3i pieceSize) {
 
         var processors = getAirReplaceTemplateProcessors(world.getLevel(), structurePos);
-        var pairs = new ReplaceAirBySurroundingRiftProcessor.ProcessorDataPair<?>[processors.size()];
+        var pairs = new ReplaceThisOrAdjacentRiftProcessor.ProcessorDataPair<?>[processors.size()];
         for (int i = 0; i < pairs.length; i++) {
-            pairs[i] = ReplaceAirBySurroundingRiftProcessor.ProcessorDataPair.create(processors.get(i), structurePos,
+            pairs[i] = ReplaceThisOrAdjacentRiftProcessor.ProcessorDataPair.create(processors.get(i), structurePos,
                     pieceSize);
         }
 
-        var directionBlocksArray = new BlockState[6];
+        var directionBlocksArray = new BlockState[7];
         var preloaded = new BlockState[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
-        preloadLayer(room, structurePos.getX(), structurePos.getY(), structurePos.getZ(), pieceSize, preloaded[0]);
+        var saveMask = new boolean[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
+        ReplaceThisOrAdjacentRiftProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY(),
+                structurePos.getZ(), pieceSize, preloaded[0], saveMask[0]);
         for (int y = 0; y < pieceSize.getY(); y++) {
-            preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1, structurePos.getZ(), pieceSize,
-                    preloaded[(y + 1) & 3]);
+            ReplaceThisOrAdjacentRiftProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1,
+                    structurePos.getZ(), pieceSize, preloaded[(y + 1) & 3], saveMask[(y + 1) & 3]);
+            var pre = preloaded[y & 3];
+            var sav = saveMask[y & 3];
             for (int z = 0; z < pieceSize.getZ(); z++) {
+                var preDown = preloaded[(y - 1) & 3][z + 1];
+                var preUp = preloaded[(y + 1) & 3][z + 1];
+                var preNorth = pre[z];
+                var preSouth = pre[z + 2];
+                var preCenter = pre[z + 1];
+                var savDown = saveMask[(y - 1) & 3][z + 1];
+                var savUp = saveMask[(y + 1) & 3][z + 1];
+                var savNorth = sav[z];
+                var savSouth = sav[z + 2];
+                var savCenter = sav[z + 1];
                 for (int x = 0; x < pieceSize.getX(); x++) {
 
-                    BlockState currentState = preloaded[y & 3][z + 1][x + 1];
-                    if (currentState != null && currentState.isAir()) {
-                        var down = directionBlocksArray[0] = preloaded[(y - 1) & 3][z + 1][x + 1];
-                        var up = directionBlocksArray[1] = preloaded[(y + 1) & 3][z + 1][x + 1];
-                        var north = directionBlocksArray[2] = preloaded[y & 3][z][x + 1];
-                        var south = directionBlocksArray[3] = preloaded[y & 3][z + 2][x + 1];
-                        var west = directionBlocksArray[4] = preloaded[y & 3][z + 1][x];
-                        var east = directionBlocksArray[5] = preloaded[y & 3][z + 1][x + 2];
+                    BlockState currentState = preCenter[x + 1];
+                    if (currentState != null) { // todo get hidden from template
+                        // var hidden = true;
+                        var midair = true;
+                        var block = directionBlocksArray[0] = preDown[x + 1];
+                        if (block != null) {
+                            // hidden &= block.canOcclude();
+                            midair &= block.isAir();
+                        }
+                        block = directionBlocksArray[1] = preUp[x + 1];
+                        if (block != null) {
+                            // hidden &= block.canOcclude();
+                            midair &= block.isAir();
+                        }
+                        block = directionBlocksArray[2] = preNorth[x + 1];
+                        if (block != null) {
+                            // hidden &= block.canOcclude();
+                            midair &= block.isAir();
+                        }
+                        block = directionBlocksArray[3] = preSouth[x + 1];
+                        if (block != null) {
+                            // hidden &= block.canOcclude();
+                            midair &= block.isAir();
+                        }
+                        block = directionBlocksArray[4] = preCenter[x];
+                        if (block != null) {
+                            // hidden &= block.canOcclude();
+                            midair &= block.isAir();
+                        }
+                        block = directionBlocksArray[5] = preCenter[x + 2];
+                        if (block != null) {
+                            // hidden &= block.canOcclude();
+                            midair &= block.isAir();
+                        }
+
+                        if (/* hidden || */midair) {
+                            continue;
+                        }
+                        directionBlocksArray[6] = currentState;
+                        int modifyMask = 0;
                         for (int i = 0; i < pairs.length; i++) {
-                            var pair = pairs[i];
-                            currentState = pair.run(up, down, north, south, east, west, directionBlocksArray);
-                            if (currentState == null || !currentState.isAir()) {
-                                break;
+                            modifyMask |= pairs[i].run(directionBlocksArray, false);
+                        }
+                        if (modifyMask != 0) {
+                            if ((modifyMask & 0b111) != 0) {
+                                if ((modifyMask & 0b1) != 0) {
+                                    preDown[x + 1] = directionBlocksArray[0];
+                                    savDown[x + 1] = true;
+                                }
+                                if ((modifyMask & 0b10) != 0) {
+                                    preUp[x + 1] = directionBlocksArray[1];
+                                    savUp[x + 1] = true;
+                                }
+                                if ((modifyMask & 0b100) != 0) {
+                                    preNorth[x + 1] = directionBlocksArray[2];
+                                    savNorth[x + 1] = true;
+                                }
+                            }
+                            if ((modifyMask & 0b111000) != 0) {
+                                if ((modifyMask & 0b1000) != 0) {
+                                    preSouth[x + 1] = directionBlocksArray[3];
+                                    savSouth[x + 1] = true;
+                                }
+                                if ((modifyMask & 0b10000) != 0) {
+                                    preCenter[x] = directionBlocksArray[4];
+                                    savCenter[x] = true;
+                                }
+                                if ((modifyMask & 0b100000) != 0) {
+                                    preCenter[x + 2] = directionBlocksArray[5];
+                                    savCenter[x + 2] = true;
+                                }
+                            }
+
+                            if ((modifyMask & 0b1000000) != 0) {
+                                preCenter[x + 1] = directionBlocksArray[6];
+                                savCenter[x + 1] = true;
                             }
                         }
-                        room.setBlock(x + structurePos.getX(), y + structurePos.getY(), z + structurePos.getZ(),
-                                currentState);
+
                     }
                 }
             }
+            ReplaceThisOrAdjacentRiftProcessor.saveLayer(room, structurePos.getX(), structurePos.getY() + y - 1,
+                    structurePos.getZ(), pieceSize, preloaded[(y - 1) & 3], saveMask[(y - 1) & 3]);
+
         }
+
+        ReplaceThisOrAdjacentRiftProcessor.saveLayer(room, structurePos.getX(),
+                structurePos.getY() + pieceSize.getY() - 1, structurePos.getZ(), pieceSize,
+                preloaded[(pieceSize.getY() - 1) & 3], saveMask[(pieceSize.getY() - 1) & 3]);
 
         var processors2 = getFinalTemplateProcessors(world.getLevel(), structurePos);
 
@@ -243,24 +326,8 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
         }
     }
 
-    private static void preloadLayer(
-            RiftProcessedRoom room,
-            int xOffset,
-            int yOffset,
-            int zOffset,
-            Vec3i pieceSize,
-            BlockState[][] preloading) {
-        for (int z = 0; z < pieceSize.getZ(); z++) {
-            var z2 = z + zOffset;
-            for (int x = 0; x < pieceSize.getX(); x++) {
-                var state = room.getBlock(x + xOffset, yOffset, z2);
-                preloading[z + 1][x + 1] = state;
-            }
-        }
-    }
-
     private record ThemeCache(PhantomReference<LevelReader> level, List<RiftTemplateProcessor> templateProcessors,
             List<RiftFinalProcessor> finalProcessors,
-            List<ReplaceAirBySurroundingRiftProcessor<?>> airReplaceProcessors) {
+            List<ReplaceThisOrAdjacentRiftProcessor<?>> airReplaceProcessors) {
     }
 }

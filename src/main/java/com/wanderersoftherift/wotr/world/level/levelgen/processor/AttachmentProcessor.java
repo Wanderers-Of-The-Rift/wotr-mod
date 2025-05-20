@@ -14,7 +14,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -32,12 +31,13 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Pr
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getRandomSeed;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.shapeForFaceFullCheck;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.Plane;
 
 public class AttachmentProcessor extends StructureProcessor
-        implements ReplaceAirBySurroundingRiftProcessor<AttachmentProcessor.ReplacementData> {
+        implements ReplaceThisOrAdjacentRiftProcessor<AttachmentProcessor.ReplacementData> {
     public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
             Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
@@ -58,6 +58,7 @@ public class AttachmentProcessor extends StructureProcessor
     private final StructureRandomType structureRandomType;
     private final Optional<Long> seed;
     private final PositionalRandomFactory rngFactory;
+    private final boolean useOldProcessor;
 
     public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown,
             float rarity, StructureRandomType structureRandomType, Optional<Long> seed) {
@@ -69,6 +70,15 @@ public class AttachmentProcessor extends StructureProcessor
         this.structureRandomType = structureRandomType;
         this.seed = seed;
         rngFactory = FastRandomSource.positional(seed.orElse(75614611648616L));
+
+        var totalSides = requiresSides;
+        if (requiresDown) {
+            totalSides++;
+        }
+        if (requiresUp) {
+            totalSides++;
+        }
+        useOldProcessor = totalSides > 1;
     }
 
     @Override
@@ -191,14 +201,11 @@ public class AttachmentProcessor extends StructureProcessor
                         if (roll <= rarity) {
                             int sideCount = requiresSides;
                             BlockState newBlock;
-                            for (int i = 0; i < HORIZONTAL.size(); i++) {
+                            for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
                                 var side = HORIZONTAL.get(i);
-                                if (sideCount <= 0) {
-                                    break;
-                                }
                                 newBlock = room.getBlock(x2 + side.getStepX(), y2, z2 + side.getStepZ());
                                 bp.set(x2 + side.getStepX(), y2, z2 + side.getStepZ());
-                                if (newBlock != null && !isFaceFullFast(newBlock, bp, side.getOpposite())) {
+                                if (newBlock != null && isFaceFullFast(newBlock, bp, side.getOpposite())) {
                                     sideCount--;
                                 }
                             }
@@ -230,46 +237,78 @@ public class AttachmentProcessor extends StructureProcessor
     }
 
     @Override
-    public BlockState replace(
-            AttachmentProcessor.ReplacementData data,
-            BlockState up,
-            BlockState down,
-            BlockState north,
-            BlockState south,
-            BlockState east,
-            BlockState west,
-            BlockState[] directions) {
-        if (data.recalculateChance() <= rarity) {
-            int sideCount = requiresSides;
-            for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
-                var side = HORIZONTAL.get(i);
-                var directionBlock = directions[side.ordinal()];
-                if (directionBlock != null && isFaceFullFast(directionBlock, BlockPos.ZERO, side.getOpposite())) {
-                    sideCount--;
+    public int replace(ReplacementData data, BlockState[] directions, boolean isHidden) { // todo this is not equivalent
+                                                                                          // to the old processor
+        var old = directions[6];
+        var result = 0;
+        if (useOldProcessor) {
+            if (old.isAir() && data.recalculateChance() <= rarity) {
+                int sideCount = requiresSides;
+
+                if (requiresDown) {
+                    var block = directions[0];
+                    if (block != null && !isFaceFullFast(block, BlockPos.ZERO, Direction.UP)) {
+                        return 0;
+                    }
+                }
+                if (requiresUp) {
+                    var block = directions[1];
+                    if (block != null && !isFaceFullFast(block, BlockPos.ZERO, Direction.DOWN)) {
+                        return 0;
+                    }
+                }
+
+                for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
+                    var side = HORIZONTAL.get(i);
+                    var directionBlock = directions[side.ordinal()];
+                    if (directionBlock != null && isFaceFullFast(directionBlock, BlockPos.ZERO, side.getOpposite())) {
+                        sideCount--;
+                    }
+                }
+
+                if (sideCount > 0) {
+                    return 0;
+                }
+
+                directions[6] = blockState;
+                return 0b1000000;
+            }
+        } else if (!isHidden && !old.isAir()) {
+            var shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+            if (requiresUp) {
+                var block = directions[0];
+                if ((block != null && block.isAir()) && isFaceFullFast(shape, Direction.DOWN)
+                        && data.recalculateChance() <= rarity) {
+                    directions[0] = blockState;
+                    result |= 1;
                 }
             }
-
-            if (sideCount > 0) {
-                return Blocks.AIR.defaultBlockState();
+            if (requiresDown) {
+                var block = directions[1];
+                if ((block != null && block.isAir()) && isFaceFullFast(shape, Direction.UP)
+                        && data.recalculateChance() <= rarity) {
+                    directions[1] = blockState;
+                    result |= 2;
+                }
             }
-
-            boolean validUp = !requiresUp || up == null || isFaceFullFast(up, BlockPos.ZERO, Direction.DOWN);
-            if (!validUp) {
-                return Blocks.AIR.defaultBlockState();
+            if (requiresSides > 0) {
+                for (int i = 0; i < HORIZONTAL.size(); i++) {
+                    var side = HORIZONTAL.get(i);
+                    var ord = side.ordinal();
+                    var directionBlock = directions[ord];
+                    if ((directionBlock != null && directionBlock.isAir()) && isFaceFullFast(shape, side)
+                            && data.recalculateChance() <= rarity) {
+                        directions[ord] = blockState;
+                        result |= 1 << ord;
+                    }
+                }
             }
-
-            boolean validDown = !requiresDown || down == null || isFaceFullFast(down, BlockPos.ZERO, Direction.UP);
-            if (!validDown) {
-                return Blocks.AIR.defaultBlockState();
-            }
-            return blockState;
         }
-        return Blocks.AIR.defaultBlockState();
+        return result;
     }
 
     @Override
     public AttachmentProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
-        // todo make RNG that doesn't trash performance
         return new AttachmentProcessor.ReplacementData(
                 rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK

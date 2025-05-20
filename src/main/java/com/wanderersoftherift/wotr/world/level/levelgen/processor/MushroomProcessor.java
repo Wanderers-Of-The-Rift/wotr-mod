@@ -18,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -44,7 +43,7 @@ import static net.minecraft.core.Direction.UP;
 import static net.neoforged.neoforge.common.Tags.Items.MUSHROOMS;
 
 public class MushroomProcessor extends StructureProcessor
-        implements ReplaceAirBySurroundingRiftProcessor<MushroomProcessor.ReplacementData> {
+        implements ReplaceThisOrAdjacentRiftProcessor<MushroomProcessor.ReplacementData> {
     public static final MapCodec<MushroomProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(BuiltInRegistries.BLOCK.byNameCodec()
@@ -181,23 +180,17 @@ public class MushroomProcessor extends StructureProcessor
     }
 
     @Override
-    public BlockState replace(
-            ReplacementData data,
-            BlockState up,
-            BlockState down,
-            BlockState north,
-            BlockState south,
-            BlockState east,
-            BlockState west,
-            BlockState[] asArray) {
-        if (data.recalculateChance() <= rarity) {
-            boolean validDown = down == null || isFaceFullFast(down, BlockPos.ZERO, Direction.UP);
-            if (!validDown) {
-                return Blocks.AIR.defaultBlockState();
+    public int replace(ReplacementData data, BlockState[] directions, boolean isHidden) {
+        var old = directions[6];
+        if (!isHidden && !old.isAir() && data.recalculateChance() <= rarity) {
+            var up = directions[1];
+            boolean validUp = (up == null || up.isAir()) && isFaceFullFast(old, BlockPos.ZERO, Direction.UP);
+            if (validUp) {
+                directions[1] = data.recalculateBlock().defaultBlockState();
+                return 2;
             }
-            return data.recalculateBlock().defaultBlockState();
         }
-        return Blocks.AIR.defaultBlockState();
+        return 0;
     }
 
     @Override

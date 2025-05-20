@@ -197,6 +197,26 @@ public class ProcessorUtil {
         return Block.isFaceFull(overallShape, direction);
     }
 
+    public static VoxelShape shapeForFaceFullCheck(BlockState state, BlockPos pos) {
+        if (state.isAir() || state.getBlock() instanceof LiquidBlock) {
+            return null;
+        }
+        return ((InvokerBlockBehaviour) state.getBlock()).invokeGetShape(state, null, pos, CollisionContext.empty());
+    }
+
+    public static boolean isFaceFullFast(VoxelShape overallShape, Direction direction) {
+        if (overallShape == null) {
+            return false;
+        }
+        if (overallShape == Shapes.block()) {
+            return true;
+        }
+        if (overallShape == Shapes.empty()) {
+            return false;
+        }
+        return Block.isFaceFull(overallShape, direction);
+    }
+
     public static StructureTemplate.Palette getCurrentPalette(List<StructureTemplate.Palette> palettes) {
         int i = palettes.size();
         if (i == 0) {
