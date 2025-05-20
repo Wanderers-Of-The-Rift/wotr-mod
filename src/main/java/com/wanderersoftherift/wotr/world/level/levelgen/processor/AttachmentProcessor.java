@@ -37,7 +37,7 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.St
 import static net.minecraft.core.Direction.Plane;
 
 public class AttachmentProcessor extends StructureProcessor
-        implements ReplaceThisOrAdjacentRiftProcessor<AttachmentProcessor.ReplacementData> {
+        implements RiftAdjacencyProcessor<AttachmentProcessor.ReplacementData> {
     public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
             Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
@@ -237,8 +237,7 @@ public class AttachmentProcessor extends StructureProcessor
     }
 
     @Override
-    public int replace(ReplacementData data, BlockState[] directions, boolean isHidden) { // todo this is not equivalent
-                                                                                          // to the old processor
+    public int processAdjacency(ReplacementData data, BlockState[] directions, boolean isHidden) {
         var old = directions[6];
         var result = 0;
         if (useOldProcessor) {
@@ -308,7 +307,7 @@ public class AttachmentProcessor extends StructureProcessor
     }
 
     @Override
-    public AttachmentProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
+    public AttachmentProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world) {
         return new AttachmentProcessor.ReplacementData(
                 rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK

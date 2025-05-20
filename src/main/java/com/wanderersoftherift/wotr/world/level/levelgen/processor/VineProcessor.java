@@ -48,7 +48,7 @@ import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;
 
 public class VineProcessor extends StructureProcessor
-        implements ReplaceThisOrAdjacentRiftProcessor<VineProcessor.ReplacementData> {
+        implements RiftAdjacencyProcessor<VineProcessor.ReplacementData> {
     public static final MapCodec<VineProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(Codec.BOOL.optionalFieldOf("attach_to_wall", true).forGetter(VineProcessor::isAttachToWall),
@@ -260,7 +260,7 @@ public class VineProcessor extends StructureProcessor
     }
 
     @Override
-    public int replace(ReplacementData data, BlockState[] directionBlocks, boolean isHidden) {
+    public int processAdjacency(ReplacementData data, BlockState[] directionBlocks, boolean isHidden) {
         var old = directionBlocks[6];
         var result = 0;
         if (!isHidden && !old.isAir()) {
@@ -316,7 +316,7 @@ public class VineProcessor extends StructureProcessor
     }
 
     @Override
-    public VineProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
+    public VineProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world) {
         return new VineProcessor.ReplacementData(
                 rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK

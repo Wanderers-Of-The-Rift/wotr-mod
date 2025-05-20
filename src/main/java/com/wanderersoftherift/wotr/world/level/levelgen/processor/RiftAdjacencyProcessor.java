@@ -3,15 +3,16 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface ReplaceThisOrAdjacentRiftProcessor<T> {
+public interface RiftAdjacencyProcessor<T> {
 
     // the blocks are mostly used just for checking if their faces are full so it might be better te pass results of
     // isFaceFull instead of actual blocks
-    int replace(T data, BlockState[] asArray, boolean isHidden);
+    int processAdjacency(T data, BlockState[] asArray, boolean isHidden);
 
-    T createData(BlockPos structurePos, Vec3i pieceSize);
+    T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
 
     static void preloadLayer(
             RiftProcessedRoom room,
@@ -54,16 +55,16 @@ public interface ReplaceThisOrAdjacentRiftProcessor<T> {
         }
     }
 
-    public static record ProcessorDataPair<T>(ReplaceThisOrAdjacentRiftProcessor<T> processor, T data) {
+    public static record ProcessorDataPair<T>(RiftAdjacencyProcessor<T> processor, T data) {
         public static <T> ProcessorDataPair<T> create(
-                ReplaceThisOrAdjacentRiftProcessor<T> processor,
+                RiftAdjacencyProcessor<T> processor,
                 BlockPos structurePos,
-                Vec3i pieceSize) {
-            return new ProcessorDataPair<>(processor, processor.createData(structurePos, pieceSize));
+                Vec3i pieceSize, ServerLevelAccessor world) {
+            return new ProcessorDataPair<>(processor, processor.createData(structurePos, pieceSize, world));
         }
 
         public int run(BlockState[] asArray, boolean isHidden) {
-            return processor.replace(data, asArray, isHidden);
+            return processor.processAdjacency(data, asArray, isHidden);
         }
     }
 }

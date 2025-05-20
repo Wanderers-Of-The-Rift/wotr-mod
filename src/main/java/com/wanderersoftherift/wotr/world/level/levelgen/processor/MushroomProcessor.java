@@ -43,7 +43,7 @@ import static net.minecraft.core.Direction.UP;
 import static net.neoforged.neoforge.common.Tags.Items.MUSHROOMS;
 
 public class MushroomProcessor extends StructureProcessor
-        implements ReplaceThisOrAdjacentRiftProcessor<MushroomProcessor.ReplacementData> {
+        implements RiftAdjacencyProcessor<MushroomProcessor.ReplacementData> {
     public static final MapCodec<MushroomProcessor> CODEC = RecordCodecBuilder
             .mapCodec(builder -> builder
                     .group(BuiltInRegistries.BLOCK.byNameCodec()
@@ -180,7 +180,7 @@ public class MushroomProcessor extends StructureProcessor
     }
 
     @Override
-    public int replace(ReplacementData data, BlockState[] directions, boolean isHidden) {
+    public int processAdjacency(ReplacementData data, BlockState[] directions, boolean isHidden) {
         var old = directions[6];
         if (!isHidden && !old.isAir() && data.recalculateChance() <= rarity) {
             var up = directions[1];
@@ -194,8 +194,7 @@ public class MushroomProcessor extends StructureProcessor
     }
 
     @Override
-    public ReplacementData createData(BlockPos structurePos, Vec3i pieceSize) {
-        // todo make RNG that doesn't trash performance
+    public ReplacementData createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world) {
         return new ReplacementData(
                 itemTag, exclusionList, rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
