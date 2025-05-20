@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -273,32 +274,44 @@ public class AttachmentProcessor extends StructureProcessor
                 return 0b1000000;
             }
         } else if (!isHidden && !old.isAir()) {
-            var shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+            VoxelShape shape = null;
             if (requiresUp) {
                 var block = directions[0];
-                if ((block != null && block.isAir()) && isFaceFullFast(shape, Direction.DOWN)
-                        && data.recalculateChance() <= rarity) {
-                    directions[0] = blockState;
-                    result |= 1;
+                if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
+                    if(shape==null) {
+                        shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                    }
+                    if (isFaceFullFast(shape, Direction.DOWN)) {
+                        directions[0] = blockState;
+                        result |= 1;
+                    }
                 }
             }
             if (requiresDown) {
                 var block = directions[1];
-                if ((block != null && block.isAir()) && isFaceFullFast(shape, Direction.UP)
-                        && data.recalculateChance() <= rarity) {
-                    directions[1] = blockState;
-                    result |= 2;
+                if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
+                    if(shape==null) {
+                        shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                    }
+                    if (isFaceFullFast(shape, Direction.UP)) {
+                        directions[1] = blockState;
+                        result |= 2;
+                    }
                 }
             }
             if (requiresSides > 0) {
                 for (int i = 0; i < HORIZONTAL.size(); i++) {
                     var side = HORIZONTAL.get(i);
-                    var ord = side.ordinal();
-                    var directionBlock = directions[ord];
-                    if ((directionBlock != null && directionBlock.isAir()) && isFaceFullFast(shape, side)
-                            && data.recalculateChance() <= rarity) {
-                        directions[ord] = blockState;
-                        result |= 1 << ord;
+                    var ordinal = side.ordinal();
+                    var directionBlock = directions[ordinal];
+                    if ((directionBlock != null && directionBlock.isAir()) && data.recalculateChance() <= rarity) {
+                        if(shape==null) {
+                            shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                        }
+                        if (isFaceFullFast(shape, side)) {
+                            directions[ordinal] = blockState;
+                            result |= 1 << ordinal;
+                        }
                     }
                 }
             }

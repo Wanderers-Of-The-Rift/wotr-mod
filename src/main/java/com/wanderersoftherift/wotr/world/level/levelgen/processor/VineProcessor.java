@@ -268,21 +268,22 @@ public class VineProcessor extends StructureProcessor
             if (attachToCeiling) {
                 var otherBlock = directionBlocks[0];
                 if (otherBlock == null || otherBlock.isAir()) {
-
-                    shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
-                    if (isFaceFullFast(shape, DOWN) && data.recalculateChance() < rarity) {
-                        BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
-                        directionBlocks[0] = VINE.defaultBlockState().setValue(property, true);
-                        result |= 1;
-
+                    if (data.recalculateChance() < rarity) {
+                        shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                        if (isFaceFullFast(shape, DOWN)) {
+                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
+                            directionBlocks[0] = VINE.defaultBlockState().setValue(property, true);
+                            result |= 1;
+                        }
                     }
                 } else if (otherBlock.getBlock() == VINE) {
-
-                    shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
-                    if (isFaceFullFast(shape, DOWN) && data.recalculateChance() < rarity) {
-                        BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
-                        directionBlocks[0] = otherBlock.setValue(property, true);
-                        result |= 1;
+                    if (data.recalculateChance() < rarity) {
+                        shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                        if (isFaceFullFast(shape, DOWN)) {
+                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
+                            directionBlocks[0] = otherBlock.setValue(property, true);
+                            result |= 1;
+                        }
                     }
                 }
             }
@@ -291,22 +292,26 @@ public class VineProcessor extends StructureProcessor
                     var otherBlock = directionBlocks[i];
                     var direction = DIRECTIONS.get(i);
                     if (otherBlock == null || otherBlock.isAir()) {
-                        if (shape == null) {
-                            shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
-                        }
-                        if (isFaceFullFast(shape, direction) && data.recalculateChance() < rarity) {
-                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
-                            directionBlocks[i] = VINE.defaultBlockState().setValue(property, true);
-                            result |= 1 << i;
+                        if (data.recalculateChance() < rarity) {
+                            if (shape == null) {
+                                shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                            }
+                            if (isFaceFullFast(shape, direction)){
+                                BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
+                                directionBlocks[i] = VINE.defaultBlockState().setValue(property, true);
+                                result |= 1 << i;
+                            }
                         }
                     } else if (otherBlock.getBlock() == VINE) {
-                        if (shape == null) {
-                            shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
-                        }
-                        if (isFaceFullFast(shape, direction) && data.recalculateChance() < rarity) {
-                            BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
-                            directionBlocks[i] = otherBlock.setValue(property, true);
-                            result |= 1 << i;
+                        if (data.recalculateChance() < rarity) {
+                            if (shape == null) {
+                                shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                            }
+                            if (isFaceFullFast(shape, direction)) {
+                                BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
+                                directionBlocks[i] = otherBlock.setValue(property, true);
+                                result |= 1 << i;
+                            }
                         }
                     }
                 }
