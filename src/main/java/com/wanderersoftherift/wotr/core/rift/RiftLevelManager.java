@@ -24,6 +24,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomSequences;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -342,6 +343,7 @@ public final class RiftLevelManager {
         placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
                 maxDepth, new BlockPos(0, 2, 0));
 
+        riftLevel.getGameRules().getRule(GameRules.RULE_DOFIRETICK).set(false, riftLevel.getServer());
         return riftLevel;
     }
 
