@@ -148,6 +148,15 @@
         {
             "weight": 100,
             "element": {
+                "location": "wotr:rift/room/stable/333/forst-1-rachael",
+                "processors": "wotr:room_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
                 "location": "wotr:rift/room/stable/333/openopencave-1-jyu",
                 "processors": "wotr:room_theme_default",
                 "projection": "rigid",
