@@ -3,8 +3,7 @@ package com.wanderersoftherift.wotr.util;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
-// very basic non-thread-safe rng
-// not great but good-enough, probably better than MOJANK LegacyRandomSource
+@Deprecated
 public class FastRandomSource implements RandomSource {
     private static final long XOR_CONSTANT = 7987674492471257550L;
     private long seed;
@@ -77,7 +76,7 @@ public class FastRandomSource implements RandomSource {
     @Override
     public long nextLong() {
         var generated = (FibonacciHashing.GOLDEN_RATIO_LONG * seed) ^ XOR_CONSTANT;
-        seed += (generated >>> 55) + 1;
+        seed += (generated >>> 50) + 1;
         return generated;
     }
 

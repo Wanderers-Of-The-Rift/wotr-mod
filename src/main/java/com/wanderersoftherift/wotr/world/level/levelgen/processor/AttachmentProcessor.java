@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
-import com.wanderersoftherift.wotr.util.FastRandomSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
@@ -15,7 +14,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -58,7 +56,6 @@ public class AttachmentProcessor extends StructureProcessor
     private final float rarity;
     private final StructureRandomType structureRandomType;
     private final Optional<Long> seed;
-    private final PositionalRandomFactory rngFactory;
     private final boolean useOldProcessor;
 
     public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown,
@@ -70,7 +67,6 @@ public class AttachmentProcessor extends StructureProcessor
         this.rarity = rarity;
         this.structureRandomType = structureRandomType;
         this.seed = seed;
-        rngFactory = FastRandomSource.positional(seed.orElse(75614611648616L));
 
         var totalSides = requiresSides;
         if (requiresDown) {
@@ -325,7 +321,8 @@ public class AttachmentProcessor extends StructureProcessor
             Vec3i pieceSize,
             ServerLevelAccessor world) {
         return new AttachmentProcessor.ReplacementData(
-                rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
+                ProcessorUtil.getRiftRandomFactory(world, seed.orElse(94513147161L))
+                        .at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK
         );
     }

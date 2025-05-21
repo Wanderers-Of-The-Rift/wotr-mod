@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
-import com.wanderersoftherift.wotr.util.FastRandomSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -64,7 +62,6 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
     private final boolean attachToCeiling;
     private final float rarity;
     private final StructureRandomType structureRandomType;
-    private final PositionalRandomFactory rngFactory;
 
     public VineProcessor(boolean attachToWall, boolean attachToCeiling, float rarity,
             StructureRandomType structureRandomType) {
@@ -72,7 +69,6 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
         this.attachToCeiling = attachToCeiling;
         this.rarity = rarity;
         this.structureRandomType = structureRandomType;
-        rngFactory = FastRandomSource.positional(96451348449641312L);
     }
 
     @Override
@@ -322,7 +318,8 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
     @Override
     public VineProcessor.ReplacementData createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world) {
         return new VineProcessor.ReplacementData(
-                rngFactory.at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
+                ProcessorUtil.getRiftRandomFactory(world, 461131846161L)
+                        .at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
                 structureRandomType == BLOCK
         );
     }

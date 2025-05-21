@@ -56,7 +56,6 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                 WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
             }
         }
-
         this.templateProcessors = ImmutableList.copyOf(templateProcessors);
         this.finalProcessors = ImmutableList.copyOf(finalProcessors);
         this.adjacencyProcessors = ImmutableList.copyOf(adjacencyProcessors);
@@ -116,37 +115,31 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                         // var hidden = true;
                         var midair = true;
                         var block = directionBlocksArray[0] = preDown[x + 1];
-                        if (block != null) {
-                            // hidden &= block.canOcclude();
-                            midair &= block.isAir();
-                        }
+                        /*
+                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
+                         */
                         block = directionBlocksArray[1] = preUp[x + 1];
-                        if (block != null) {
-                            // hidden &= block.canOcclude();
-                            midair &= block.isAir();
-                        }
+                        /*
+                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
+                         */
                         block = directionBlocksArray[2] = preNorth[x + 1];
-                        if (block != null) {
-                            // hidden &= block.canOcclude();
-                            midair &= block.isAir();
-                        }
+                        /*
+                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
+                         */
                         block = directionBlocksArray[3] = preSouth[x + 1];
-                        if (block != null) {
-                            // hidden &= block.canOcclude();
-                            midair &= block.isAir();
-                        }
+                        /*
+                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
+                         */
                         block = directionBlocksArray[4] = preCenter[x];
-                        if (block != null) {
-                            // hidden &= block.canOcclude();
-                            midair &= block.isAir();
-                        }
+                        /*
+                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
+                         */
                         block = directionBlocksArray[5] = preCenter[x + 2];
-                        if (block != null) {
-                            // hidden &= block.canOcclude();
-                            midair &= block.isAir();
-                        }
+                        /*
+                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
+                         */
 
-                        if (/* hidden || */midair) {
+                        if (/* hidden || */midair && false) {
                             continue;
                         }
                         directionBlocksArray[6] = currentState;

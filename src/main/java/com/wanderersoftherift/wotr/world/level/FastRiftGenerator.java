@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
-import com.wanderersoftherift.wotr.util.FastRandomSource;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
@@ -83,8 +83,8 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final AtomicLong lastChunkStart = new AtomicLong(0);
     private long generationStart = 0;
     private final RiftConfig config;
-    private AtomicReference<RiftLayout> layout = new AtomicReference<>();
-    private AtomicReference<RiftRoomGenerator> roomGenerator = new AtomicReference<>();
+    private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
+    private final AtomicReference<RiftRoomGenerator> roomGenerator = new AtomicReference<>();
     private RiftGeneratable filler;
     private RiftGeneratable perimeter;
 
@@ -128,7 +128,8 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
-        runCorridorBlender(chunk, FastRandomSource.positional(this.getRiftConfig().seed().orElse(0) + 496_415), level);
+        runCorridorBlender(chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                this.getRiftConfig().seed().orElse(0) + 496_415), level);
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
@@ -182,12 +183,12 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         return CompletableFuture.supplyAsync(() -> {
             var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
-            runRiftGeneration(chunk, randomState, level);
+            runRiftGeneration(chunk, level);
             return chunk;
         }, Thread::startVirtualThread);
     }
 
-    private void runRiftGeneration(ChunkAccess chunk, RandomState randomState, ServerLevelAccessor level) {
+    private void runRiftGeneration(ChunkAccess chunk, ServerLevelAccessor level) {
 
         if (false) { // for testing how quick is generation of empty world
             inFlightChunks.decrementAndGet();
@@ -203,7 +204,9 @@ public class FastRiftGenerator extends ChunkGenerator {
             var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level,
-                        FastRandomSource.positional(this.getRiftConfig().seed().orElse(0) + 949_616_156), perimeter);
+                        RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                                this.getRiftConfig().seed().orElse(0) + 949_616_156),
+                        perimeter);
             } else {
                 chunkFutures[i] = roomGenerator.chunkOf(filler, level, position);
             }

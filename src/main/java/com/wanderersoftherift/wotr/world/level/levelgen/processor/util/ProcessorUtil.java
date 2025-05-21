@@ -4,24 +4,30 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.wanderersoftherift.wotr.mixin.InvokerBlockBehaviour;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -56,6 +62,13 @@ public class ProcessorUtil {
 
     private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
 
+    public static PositionalRandomFactory getRiftRandomFactory(LevelAccessor level, long salt) {
+        var riftSeed = ((FastRiftGenerator) ((ServerChunkCache) level.getChunkSource()).getGenerator()).getRiftConfig()
+                .seed()
+                .orElse(0);
+        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(6), riftSeed + salt);
+    }
+
     public static RandomSource getRandom(
             StructureRandomType type,
             BlockPos blockPos,
@@ -63,9 +76,8 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
-        RandomSource randomSource = RandomSource
-                .create(getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
-        randomSource.consumeCount(3);
+        RandomSource randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+                getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
         return randomSource;
     }
 
@@ -76,11 +88,13 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
+        var riftSeed = ((FastRiftGenerator) ((ServerChunkCache) ((ServerLevelAccessor) world).getChunkSource())
+                .getGenerator()).getRiftConfig().seed().orElse(0);
         return switch (type) {
-            case BLOCK -> getRandomSeed(blockPos, processorSeed);
-            case PIECE -> getRandomSeed(piecePos, processorSeed);
-            case STRUCTURE -> getRandomSeed(structurePos, processorSeed);
-            case WORLD -> ((WorldGenLevel) world).getSeed() + processorSeed;
+            case BLOCK -> getRandomSeed(blockPos, processorSeed) + riftSeed;
+            case PIECE -> getRandomSeed(piecePos, processorSeed) + riftSeed;
+            case STRUCTURE -> getRandomSeed(structurePos, processorSeed) + riftSeed;
+            case WORLD -> ((WorldGenLevel) world).getSeed() + processorSeed + riftSeed;
         };
     }
 
