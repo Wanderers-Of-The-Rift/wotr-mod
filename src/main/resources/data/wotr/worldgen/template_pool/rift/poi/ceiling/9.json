@@ -36,6 +36,33 @@
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/9/suspended_library-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/9/hanging_greenhouse-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/9/hay_stack-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
         }
     ]
 }

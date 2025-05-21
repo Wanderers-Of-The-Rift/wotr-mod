@@ -45,6 +45,51 @@
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/7/glow_berry_farm-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/7/nether_wart_farm-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/7/sweet_berry_farm-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/bamboo_farm-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/celing/nether_farm-1-alex642",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
         }
     ]
 }

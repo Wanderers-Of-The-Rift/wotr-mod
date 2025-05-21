@@ -4,7 +4,43 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/portal/tropical_fish-1-mal",
+                "location": "wotr:rift/poi/portal/13/tropical_fish-1-mal",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/portal/13/ship-1-wout",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/portal/13/bouncey_castle-1-wout",
+                "processors": "wotr:poi_13_to_wool",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/portal/13/big_fish-1-wout",
+                "processors": "wotr:poi_multiple_tropical",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/portal/13/palm_island-1-wout",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

@@ -85,7 +85,7 @@
         {
             "weight": 56,
             "element": {
-                "location": "wotr:rift/room/chaos/321/main_feet_fallingfoor-1-rachelrose",
+                "location": "wotr:rift/room/chaos/321/fallingfoor-1-rachelrose",
                 "processors": "wotr:room_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -218,6 +218,24 @@
             }
         },
         {
+            "weight": 24,
+            "element": {
+                "location": "wotr:rift/room/chaos/211/sneaky_caves-1-mal",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 44,
+            "element": {
+                "location": "wotr:rift/room/chaos/311/void_cracks-1-rachaelrose",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
             "weight": 56,
             "element": {
                 "location": "wotr:rift/room/chaos/321/plumbers_nightmare-1-wh4i3",
@@ -230,6 +248,15 @@
             "weight": 12,
             "element": {
                 "location": "wotr:rift/room/chaos/111/upside_down_passage-1-wh4i3",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 24,
+            "element": {
+                "location": "wotr:rift/room/chaos/121/tears-1-rachaelrose",
                 "processors": "wotr:room_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
