@@ -10,6 +10,7 @@
     "InvokerAbstractContainerMenu",
     "InvokerBlockBehaviour",
     "MixinEnchantingTableBlock",
+    "MixinGameRules",
     "MixinItem",
     "MixinItemStack",
     "MixinLivingEntity",

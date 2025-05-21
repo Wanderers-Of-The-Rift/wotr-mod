@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
+import com.wanderersoftherift.wotr.mixinextension.WotRGameRules;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.SingleBlockGenerator;
@@ -26,13 +27,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
-import net.minecraft.world.level.storage.DerivedLevelData;
+import net.minecraft.world.level.storage.PrimaryLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -323,9 +325,23 @@ public final class RiftLevelManager {
         }
 
         int seed = config.seed().orElseGet(() -> new Random().nextInt());
+        LevelSettings levelSettings = worldData.getLevelSettings();
+        LevelSettings riftLevelSettings = new LevelSettings(
+                "rift",
+                levelSettings.gameType(),
+                levelSettings.hardcore(),
+                levelSettings.difficulty(),
+                levelSettings.allowCommands(),
+                levelSettings.gameRules(),
+                levelSettings.getDataConfiguration(),
+                levelSettings.getLifecycle()
+        );
+
+        PrimaryLevelData primaryLevelData = new PrimaryLevelData(worldData.getLevelSettings(), worldData.worldGenOptions(), PrimaryLevelData.SpecialWorldProperty.NONE, worldData.worldGenSettingsLifecycle());
+        ((WotRGameRules)primaryLevelData.getGameRules()).wotrMakeMutable();
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
-                new DerivedLevelData(worldData, worldData.overworldData()),
+                primaryLevelData,
                 ResourceKey.create(Registries.DIMENSION, id), stem, chunkProgressListener, false, 0L, List.of(), false,
                 RandomSequences.factory(seed).constructor().get());
         var riftData = RiftData.get(riftLevel);
@@ -343,7 +359,7 @@ public final class RiftLevelManager {
         placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
                 maxDepth, new BlockPos(0, 2, 0));
 
-        riftLevel.getGameRules().getRule(GameRules.RULE_DOFIRETICK).set(false, riftLevel.getServer());
+        ((WotRGameRules) riftLevel.getGameRules()).wotrSetRuleFresh(GameRules.RULE_DOFIRETICK, GameRules.BooleanValue.create(false).createRule()).set(false, riftLevel.getServer());
         return riftLevel;
     }
 
