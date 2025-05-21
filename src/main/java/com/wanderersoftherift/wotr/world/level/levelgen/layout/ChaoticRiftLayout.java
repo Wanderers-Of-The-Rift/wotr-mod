@@ -80,7 +80,7 @@ public class ChaoticRiftLayout implements RiftLayout {
     public boolean validateCorridor(int x, int y, int z, Direction d) {
 
         return hasCorridorSingle(x, y, z, d)
-                && hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
+                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
     private class Region {

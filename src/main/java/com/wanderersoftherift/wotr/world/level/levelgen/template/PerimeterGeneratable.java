@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,9 +13,6 @@ import java.util.List;
 
 public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator validator) implements RiftGeneratable {
 
-    /*
-     * todo complete rework; should this even be responsible for generating passages?
-     */
     @Override
     public void processAndPlace(
             RiftProcessedRoom destination,
@@ -29,36 +25,27 @@ public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator 
             var originRelativeX = destinationChunk.origin.getX() - spaceOrigin.getX();
             var originRelativeY = level - spaceOrigin.getY();
             var originRelativeZ = destinationChunk.origin.getZ() - spaceOrigin.getZ();
-            var corridors = destination.space.corridors()
-                    .stream()
-                    .filter((corridor) -> corridor.position().getX() + spaceOrigin.getX() == destinationChunk.origin
-                            .getX() && corridor.position().getZ() + spaceOrigin.getZ() == destinationChunk.origin.getZ()
-                            && corridor.position().getY() + spaceOrigin.getY() == level)
-                    .filter(riftSpaceCorridor -> validator.validateCorridor(
-                            riftSpaceCorridor.position().getX() + spaceOrigin.getX(),
-                            riftSpaceCorridor.position().getY() + spaceOrigin.getY(),
-                            riftSpaceCorridor.position().getZ() + spaceOrigin.getZ(), riftSpaceCorridor.direction())
-                    )
-                    .toList();
-            var hasCorridorNorth = corridors.stream().anyMatch((it) -> it.direction() == Direction.NORTH);
-            var hasCorridorWest = corridors.stream().anyMatch((it) -> it.direction() == Direction.WEST);
-            for (int y = level * 16; y < level * 16 + 16; y++) {
-                for (int x = 0; x < 16 && originRelativeZ <= 0; x++) {
-                    if (!hasCorridorNorth || x <= 6 || x >= 10 || y <= 5 + level * 16 || y >= 11 + level * 16) {
-                        destinationChunk.setBlockState(x, y, 0, perimeterBlock);
-                    }
-                }
-                for (int z = 0; z < 16 && originRelativeX <= 0; z++) {
-                    if (!hasCorridorWest || z <= 6 || z >= 10 || y <= 5 + level * 16 || y >= 11 + level * 16) {
+            var levelBlock = level << 4;
+            if (originRelativeX == 0) {
+                for (int y = levelBlock; y < levelBlock + 16; y++) {
+                    for (int z = 0; z < 16; z++) {
                         destinationChunk.setBlockState(0, y, z, perimeterBlock);
                     }
                 }
-                for (int xz = 0; xz < 256 && originRelativeY <= 0 && y <= level * 16; xz++) {
+            }
+            if (originRelativeZ == 0) {
+                for (int y = levelBlock; y < levelBlock + 16; y++) {
+                    for (int x = 0; x < 16; x++) {
+                        destinationChunk.setBlockState(x, y, 0, perimeterBlock);
+                    }
+                }
+            }
+            if (originRelativeY == 0) {
+                for (int xz = 0; xz < 256; xz++) {
                     var z = (xz >>> 4) & 0xf;
                     var x = xz & 0xf;
-                    destinationChunk.setBlockState(x, y, z, perimeterBlock);
+                    destinationChunk.setBlockState(x, levelBlock, z, perimeterBlock);
                 }
-
             }
         }
     }
@@ -75,6 +62,6 @@ public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator 
 
     @Override
     public String identifier() {
-        return "wotr:builtin:single_block";
+        return "wotr:builtin:perimeter";
     }
 }

@@ -3,8 +3,10 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
+import com.wanderersoftherift.wotr.util.FastRandomSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Block;
@@ -35,6 +38,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +53,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static net.minecraft.core.Direction.NORTH;
+import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.AIR;
 
 /*
@@ -122,6 +128,12 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     @Override
+    public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
+        runCorridorBlender(chunk, FastRandomSource.positional(this.getRiftConfig().seed().orElse(0) + 496_415), level);
+        super.applyBiomeDecoration(level, chunk, structureManager);
+    }
+
+    @Override
     public void applyCarvers(
             WorldGenRegion level,
             long seed,
@@ -191,7 +203,9 @@ public class FastRiftGenerator extends ChunkGenerator {
             var position = new Vec3i(chunk.getPos().x, i - layerCount / 2, chunk.getPos().z);
             var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level, randomState,
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level,
+                        randomState.getOrCreateRandomFactory(
+                                WanderersOfTheRift.id("rift")) /* todo replace with something based on seed */,
                         perimeter);
             } else {
                 chunkFutures[i] = roomGenerator.chunkOf(filler, level, position);
@@ -212,6 +226,43 @@ public class FastRiftGenerator extends ChunkGenerator {
         inFlightChunks.decrementAndGet();
         completedChunks.incrementAndGet();
         completedChunksInWindow.incrementAndGet();
+    }
+
+    private void runCorridorBlender(ChunkAccess chunk, PositionalRandomFactory randomState, WorldGenLevel level) {
+        var rng = randomState.at(chunk.getPos().x, 0, chunk.getPos().z);
+        var layout = getOrCreateLayout(level.getServer());
+        for (int i = 0; i < layerCount; i++) {
+            var chunkX = chunk.getPos().x;
+            var chunkY = i - layerCount / 2;
+            var chunkZ = chunk.getPos().z;
+            var corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, NORTH);
+            if (corridor) {
+                for (int x = 0; x < 5; x++) {
+                    for (int y = 0; y < 7; y++) {
+                        var pos = new BlockPos((chunkX << 4) + x + 6, (chunkY << 4) + 5 + y, chunkZ << 4);
+                        var state = level.getBlockState(pos.south());
+                        if (rng.nextBoolean()) {
+                            state = level.getBlockState(pos.north());
+                        }
+                        level.setBlock(pos, state, 0);
+                    }
+                }
+            }
+            corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, WEST);
+            if (corridor) {
+                for (int z = 0; z < 5; z++) {
+                    for (int y = 0; y < 7; y++) {
+                        var pos = new BlockPos((chunkX << 4), (chunkY << 4) + 5 + y, (chunkZ << 4) + z + 6);
+                        var state = level.getBlockState(pos.east());
+                        if (rng.nextBoolean()) {
+                            state = level.getBlockState(pos.west());
+                        }
+                        level.setBlock(pos, state, 0);
+                    }
+                }
+            }
+
+        }
     }
 
     @Override
