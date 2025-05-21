@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.FastRandomSource;
@@ -204,9 +203,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level,
-                        randomState.getOrCreateRandomFactory(
-                                WanderersOfTheRift.id("rift")) /* todo replace with something based on seed */,
-                        perimeter);
+                        FastRandomSource.positional(this.getRiftConfig().seed().orElse(0) + 949_616_156), perimeter);
             } else {
                 chunkFutures[i] = roomGenerator.chunkOf(filler, level, position);
             }
@@ -228,8 +225,8 @@ public class FastRiftGenerator extends ChunkGenerator {
         completedChunksInWindow.incrementAndGet();
     }
 
-    private void runCorridorBlender(ChunkAccess chunk, PositionalRandomFactory randomState, WorldGenLevel level) {
-        var rng = randomState.at(chunk.getPos().x, 0, chunk.getPos().z);
+    private void runCorridorBlender(ChunkAccess chunk, PositionalRandomFactory randomFactory, WorldGenLevel level) {
+        var rng = randomFactory.at(chunk.getPos().x, 0, chunk.getPos().z);
         var layout = getOrCreateLayout(level.getServer());
         for (int i = 0; i < layerCount; i++) {
             var chunkX = chunk.getPos().x;

@@ -1,13 +1,12 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CompletableFuture;
@@ -25,16 +24,16 @@ public class RiftRoomGenerator {
             Vec3i sectionPos,
             RoomRiftSpace space,
             ServerLevelAccessor world,
-            RandomState randomState,
+            PositionalRandomFactory randomFactory,
             RiftGeneratable perimeter) {
-        return getOrCreateFutureProcessedRoom(space, world, randomState, perimeter)
+        return getOrCreateFutureProcessedRoom(space, world, randomFactory, perimeter)
                 .thenApply(it -> it.getAndRemoveChunk(sectionPos));
     }
 
     private CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,
             ServerLevelAccessor world,
-            RandomState randomState,
+            PositionalRandomFactory randomFactory,
             RiftGeneratable perimeter) {
         var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
         var processedRoomFuture = structureCache.compute(space.origin(), (key, oldFuture) -> {
@@ -59,7 +58,6 @@ public class RiftRoomGenerator {
             return CompletableFuture.supplyAsync(() -> {
                 var processedRoom2 = new RiftProcessedRoom(space);
                 var origin = processedRoom2.space.origin();
-                var randomFactory = randomState.getOrCreateRandomFactory(WanderersOfTheRift.id("rift"));
                 var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
                 var mirror = space.templateTransform();
                 if (mirror == null) {
@@ -84,7 +82,7 @@ public class RiftRoomGenerator {
         processedRoomFuture.thenAccept((weak) -> {
             var value = weak.get();
             if (value == null) {
-                getOrCreateFutureProcessedRoom(space, world, randomState, perimeter).thenAccept(newResult::complete);
+                getOrCreateFutureProcessedRoom(space, world, randomFactory, perimeter).thenAccept(newResult::complete);
             } else {
                 newResult.complete(value);
             }
