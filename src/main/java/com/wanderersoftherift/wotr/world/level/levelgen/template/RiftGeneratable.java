@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
+import com.wanderersoftherift.wotr.util.JavaRandomFromRandomSource;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import net.minecraft.core.Direction;
@@ -12,7 +13,9 @@ import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public interface RiftGeneratable {
 
@@ -35,9 +38,18 @@ public interface RiftGeneratable {
             Vec3i placementShift,
             TripleMirror mirror,
             MinecraftServer server,
-            RandomSource random) {
+            RandomSource random,
+            long[] mask) {
+        if (collidesWithMask(generatable, mask, placementShift, mirror)) {
+            return;
+        }
+        if (mask == null) {
+            mask = new long[16 * 16 * 16];
+        }
+        var jigsawList = new ArrayList<>(generatable.jigsaws());
+        Collections.shuffle(jigsawList, JavaRandomFromRandomSource.of(random));
 
-        for (var jigsaw : generatable.jigsaws()) {
+        for (var jigsaw : jigsawList) {
             var pool = jigsaw.pool();
             if (isPoolBlacklisted(pool)) {
                 continue;
@@ -89,9 +101,124 @@ public interface RiftGeneratable {
                             .multiply(-1));
 
             generate(next, destination, world, newPlacementShift.relative(simplifiedDirection1), nextMirror, server,
-                    random);
+                    random, mask);
         }
+        writeCollisionMask(generatable, mask, placementShift, mirror);
         generatable.processAndPlace(destination, world, placementShift, mirror);
+    }
+
+    static boolean collidesWithMask(
+            RiftGeneratable riftGeneratable,
+            long[] mask,
+            Vec3i placementShift,
+            TripleMirror mirror) {
+        if (mask == null) {
+            return false;
+        }
+        var size = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(riftGeneratable.size(), 0, 0);
+        for (int y = 0; y < size.getY(); y += 4) {
+            for (int z = 0; z < size.getZ(); z += 4) {
+                for (int x = 0; x < size.getX(); x += 4) {
+                    var lx = (x + placementShift.getX()) >> 2;
+                    var ly = (y + placementShift.getY()) >> 2;
+                    var lz = (z + placementShift.getZ()) >> 2;
+                    if (lx < 0 || ly < 0 || lz < 0) {
+                        continue;
+                    }
+                    var maskedValue = mask[lx | (ly << 8) | (lz << 4)];
+                    if (maskedValue == 0) {
+                        continue;
+                    }
+                    var newMask = -1L;
+                    var newMaskX = 0;
+                    for (int passX = 0; passX < 4; passX++) {
+                        var actualX = passX + (lx << 2);
+                        if (actualX >= placementShift.getX() && actualX < placementShift.getX() + size.getX()) {
+                            newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
+                        }
+                    }
+                    newMask &= newMaskX;
+                    ;
+                    if ((maskedValue & newMask) == 0) {
+                        continue;
+                    }
+                    var newMaskY = 0;
+                    for (int passY = 0; passY < 4; passY++) {
+                        var actualY = passY + (ly << 2);
+                        if (actualY >= placementShift.getY() && actualY < placementShift.getY() + size.getY()) {
+                            newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
+                        }
+                    }
+                    newMask &= newMaskY;
+                    if ((maskedValue & newMask) == 0) {
+                        continue;
+                    }
+                    var newMaskZ = 0;
+                    for (int passZ = 0; passZ < 4; passZ++) {
+                        var actualZ = passZ + (lz << 2);
+                        if (actualZ >= placementShift.getZ() && actualZ < placementShift.getZ() + size.getZ()) {
+                            newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 4);
+                        }
+                    }
+                    newMask &= newMaskZ;
+                    if ((maskedValue & newMask) == 0) {
+                        continue;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    static void writeCollisionMask(
+            RiftGeneratable riftGeneratable,
+            long[] mask,
+            Vec3i placementShift,
+            TripleMirror mirror) {
+        if (mask == null) {
+            return;
+        }
+        var size = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(riftGeneratable.size(), 0, 0);
+        for (int y = 0; y < size.getY(); y += 4) {
+            for (int z = 0; z < size.getZ(); z += 4) {
+                for (int x = 0; x < size.getX(); x += 4) {
+                    var lx = (x + placementShift.getX()) >> 2;
+                    var ly = (y + placementShift.getY()) >> 2;
+                    var lz = (z + placementShift.getZ()) >> 2;
+                    if (lx < 0 || ly < 0 || lz < 0) {
+                        continue;
+                    }
+                    var newMask = -1L;
+                    var newMaskX = 0;
+                    for (int passX = 0; passX < 4; passX++) {
+                        var actualX = passX + (lx << 2);
+                        if (actualX >= placementShift.getX() && actualX < placementShift.getX() + size.getX()) {
+                            newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
+                        }
+                    }
+                    newMask &= newMaskX;
+                    ;
+                    var newMaskY = 0;
+                    for (int passY = 0; passY < 4; passY++) {
+                        var actualY = passY + (ly << 2);
+                        if (actualY >= placementShift.getY() && actualY < placementShift.getY() + size.getY()) {
+                            newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
+                        }
+                    }
+                    newMask &= newMaskY;
+                    var newMaskZ = 0;
+                    for (int passZ = 0; passZ < 4; passZ++) {
+                        var actualZ = passZ + (lz << 2);
+                        if (actualZ >= placementShift.getZ() && actualZ < placementShift.getZ() + size.getZ()) {
+                            newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 4);
+                        }
+                    }
+                    newMask &= newMaskZ;
+                    mask[lx | (ly << 8) | (lz << 4)] = newMask;
+                }
+            }
+        }
     }
 
     private static int setOrClearBit(int value, int bit, boolean set) {

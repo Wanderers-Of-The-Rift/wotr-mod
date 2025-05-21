@@ -114,4 +114,8 @@ public class RandomSourceFromJavaRandom implements RandomSource {
     public double nextGaussian() {
         return javaRandom.nextGaussian();
     }
+
+    public RandomGenerator getJavaRandom() {
+        return this.javaRandom;
+    }
 }

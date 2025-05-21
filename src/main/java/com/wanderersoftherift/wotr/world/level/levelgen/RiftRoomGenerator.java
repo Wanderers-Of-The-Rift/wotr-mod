@@ -69,7 +69,7 @@ public class RiftRoomGenerator {
                     throw new IllegalStateException("template should not be null");
                 }
                 RiftGeneratable.generate(template, processedRoom2, world, new Vec3i(1, 1, 1), mirror, world.getServer(),
-                        randomSource);
+                        randomSource, null);
                 processedRoom2.markAsComplete();
                 if (perimeter != null) {
                     perimeter.processAndPlace(processedRoom2, world, Vec3i.ZERO, mirror);
