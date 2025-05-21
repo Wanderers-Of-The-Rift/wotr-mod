@@ -36,21 +36,21 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, R
                             && !player.isSpectator()
             ).stream().map(Entity::getUUID).toList();
 
-    private RiftMobSpawner trialSpawner;
+    private RiftMobSpawner riftMobSpawner;
 
     public RiftMobSpawnerBlockEntity(BlockPos pos, BlockState state) {
         super(WotrBlockEntities.RIFT_MOB_SPAWNER.get(), pos, state);
         PlayerDetector.EntitySelector entityselector = PlayerDetector.EntitySelector.SELECT_FROM_LEVEL;
-        this.trialSpawner = new RiftMobSpawner(this, RIFT_PLAYERS, entityselector);
+        this.riftMobSpawner = new RiftMobSpawner(this, RIFT_PLAYERS, entityselector);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider lookup) {
         super.loadAdditional(tag, lookup);
-        this.trialSpawner.codec()
+        this.riftMobSpawner.codec()
                 .parse(lookup.createSerializationContext(NbtOps.INSTANCE), tag)
                 .resultOrPartial(LOGGER::error)
-                .ifPresent(trialSpawner -> this.trialSpawner = trialSpawner);
+                .ifPresent(riftMobSpawner -> this.riftMobSpawner = riftMobSpawner);
         if (this.level != null) {
             this.markUpdated();
         }
@@ -59,10 +59,10 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, R
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider lookup) {
         super.saveAdditional(tag, lookup);
-        this.trialSpawner.codec()
-                .encodeStart(lookup.createSerializationContext(NbtOps.INSTANCE), this.trialSpawner)
+        this.riftMobSpawner.codec()
+                .encodeStart(lookup.createSerializationContext(NbtOps.INSTANCE), this.riftMobSpawner)
                 .ifSuccess(success -> tag.merge((CompoundTag) success))
-                .ifError(tagError -> LOGGER.warn("Failed to encode TrialSpawner {}", tagError.message()));
+                .ifError(tagError -> LOGGER.warn("Failed to encode RiftMobSpawner {}", tagError.message()));
     }
 
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
@@ -71,7 +71,7 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, R
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider lookup) {
-        return this.trialSpawner.getData().getUpdateTag(this.getBlockState().getValue(RiftMobSpawnerBlock.STATE));
+        return this.riftMobSpawner.getData().getUpdateTag(this.getBlockState().getValue(RiftMobSpawnerBlock.STATE));
     }
 
     @Override
@@ -79,17 +79,17 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, R
         if (this.level == null) {
             Util.logAndPauseIfInIde("Expected non-null level");
         } else {
-            this.trialSpawner.overrideEntityToSpawn(entityType, this.level);
+            this.riftMobSpawner.overrideEntityToSpawn(entityType, this.level);
             this.setChanged();
         }
     }
 
-    public RiftMobSpawner getTrialSpawner() {
-        return this.trialSpawner;
+    public RiftMobSpawner getRiftMobSpawner() {
+        return this.riftMobSpawner;
     }
 
-    public void setTrialSpawner(RiftMobSpawner trialSpawner) {
-        this.trialSpawner = trialSpawner;
+    public void setRiftMobSpawner(RiftMobSpawner riftMobSpawner) {
+        this.riftMobSpawner = riftMobSpawner;
     }
 
     @Override

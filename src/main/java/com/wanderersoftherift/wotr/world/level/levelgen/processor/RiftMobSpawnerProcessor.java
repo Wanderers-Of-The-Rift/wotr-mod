@@ -27,20 +27,20 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity.RIFT_PLAYERS;
-import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.TRIAL_SPAWNER;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.RIFT_MOB_SPAWNER;
 
-public class TrialSpawnerProcessor extends StructureProcessor {
-    public static final MapCodec<TrialSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-            TrialSpawnerConfig.CODEC.optionalFieldOf("config").forGetter(TrialSpawnerProcessor::getSpawnerConfig),
+public class RiftMobSpawnerProcessor extends StructureProcessor {
+    public static final MapCodec<RiftMobSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+            TrialSpawnerConfig.CODEC.optionalFieldOf("config").forGetter(RiftMobSpawnerProcessor::getSpawnerConfig),
             TrialSpawnerConfig.CODEC.optionalFieldOf("ominous_config")
-                    .forGetter(TrialSpawnerProcessor::getSpawnerConfig)
-    ).apply(builder, TrialSpawnerProcessor::new));
+                    .forGetter(RiftMobSpawnerProcessor::getSpawnerConfig)
+    ).apply(builder, RiftMobSpawnerProcessor::new));
 
     private final Optional<Holder<TrialSpawnerConfig>> spawnerConfig;
     private final Optional<Holder<TrialSpawnerConfig>> ominousConfig;
 
-    public TrialSpawnerProcessor(Optional<Holder<TrialSpawnerConfig>> spawnerConfig,
-            Optional<Holder<TrialSpawnerConfig>> ominousConfig) {
+    public RiftMobSpawnerProcessor(Optional<Holder<TrialSpawnerConfig>> spawnerConfig,
+                                   Optional<Holder<TrialSpawnerConfig>> ominousConfig) {
         this.spawnerConfig = spawnerConfig;
         this.ominousConfig = ominousConfig;
     }
@@ -87,11 +87,11 @@ public class TrialSpawnerProcessor extends StructureProcessor {
     private CompoundTag getBlockEntity(LevelReader world, RiftMobSpawnerBlockEntity blockEntity) {
         Holder<TrialSpawnerConfig> normalConfig = getFinalNormalConfig(world);
         Holder<TrialSpawnerConfig> ominousConfig = getFinalOminousConfig(normalConfig);
-        RiftMobSpawner trialSpawner = new RiftMobSpawner(
+        RiftMobSpawner riftMobSpawner = new RiftMobSpawner(
                 normalConfig, ominousConfig, new RiftMobSpawnerData(), 72_000, 9, blockEntity, RIFT_PLAYERS,
                 PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
-        trialSpawner.getData().reset();
-        blockEntity.setTrialSpawner(trialSpawner);
+        riftMobSpawner.getData().reset();
+        blockEntity.setRiftMobSpawner(riftMobSpawner);
         return blockEntity.saveWithId(world.registryAccess());
     }
 
@@ -108,6 +108,6 @@ public class TrialSpawnerProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return TRIAL_SPAWNER.get();
+        return RIFT_MOB_SPAWNER.get();
     }
 }

@@ -28,7 +28,7 @@ public class RiftMobSpawnerBlockEntityRenderer implements BlockEntityRenderer<Ri
             int packedOverlay) {
         Level level = blockEntity.getLevel();
         if (level != null) {
-            RiftMobSpawner spawner = blockEntity.getTrialSpawner();
+            RiftMobSpawner spawner = blockEntity.getRiftMobSpawner();
             RiftMobSpawnerData spawnerdata = spawner.getData();
             Entity entity = spawnerdata.getOrCreateDisplayEntity(spawner, level, spawner.getState());
             if (entity != null) {

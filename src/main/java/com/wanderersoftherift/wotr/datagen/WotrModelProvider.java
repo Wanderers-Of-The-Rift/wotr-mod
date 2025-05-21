@@ -63,7 +63,7 @@ public class WotrModelProvider extends ModelProvider {
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.TRAP_BLOCK, blockModels);
 
-        createTrialSpawner(blockModels, itemModels);
+        createRiftMobSpawner(blockModels, itemModels);
 
         ResourceLocation abilityBenchModel = WanderersOfTheRift.id("block/ability_bench");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
@@ -297,7 +297,7 @@ public class WotrModelProvider extends ModelProvider {
                 TexturedModel.COLUMN_HORIZONTAL_ALT);
     }
 
-    public void createTrialSpawner(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
+    public void createRiftMobSpawner(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         Block block = WotrBlocks.RIFT_MOB_SPAWNER.get();
         TextureMapping texturemapping = TextureMapping.trialSpawner(block, "_side_inactive", "_top_inactive");
         TextureMapping texturemapping1 = TextureMapping.trialSpawner(block, "_side_active", "_top_active");

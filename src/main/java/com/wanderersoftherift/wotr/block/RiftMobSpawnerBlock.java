@@ -62,14 +62,14 @@ public class RiftMobSpawnerBlock extends BaseEntityBlock {
         if (level instanceof ServerLevel serverlevel) {
             return createTickerHelper(
                     blockEntityType, WotrBlockEntities.RIFT_MOB_SPAWNER.get(),
-                    (level1, blockPos, blockState1, spawnerBlockEntity) -> spawnerBlockEntity.getTrialSpawner()
+                    (level1, blockPos, blockState1, spawnerBlockEntity) -> spawnerBlockEntity.getRiftMobSpawner()
                             .tickServer(serverlevel, blockPos,
                                     blockState1.getOptionalValue(BlockStateProperties.OMINOUS).orElse(false))
             );
         } else {
             return createTickerHelper(
                     blockEntityType, WotrBlockEntities.RIFT_MOB_SPAWNER.get(),
-                    (level1, blockPos, blockState1, spawnerBlockEntity) -> spawnerBlockEntity.getTrialSpawner()
+                    (level1, blockPos, blockState1, spawnerBlockEntity) -> spawnerBlockEntity.getRiftMobSpawner()
                             .tickClient(level1, blockPos,
                                     blockState1.getOptionalValue(BlockStateProperties.OMINOUS).orElse(false))
             );
