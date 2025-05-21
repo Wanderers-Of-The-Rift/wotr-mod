@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.block;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.riftmobspawner.RiftMobSpawnerState;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,13 +29,13 @@ import java.util.List;
 
 public class RiftMobSpawnerBlock extends BaseEntityBlock {
     public static final MapCodec<RiftMobSpawnerBlock> CODEC = simpleCodec(RiftMobSpawnerBlock::new);
-    public static final EnumProperty<TrialSpawnerState> STATE = BlockStateProperties.TRIAL_SPAWNER_STATE;
+    public static final EnumProperty<RiftMobSpawnerState> STATE = RiftMobSpawnerBlockEntity.SPAWNER_STATE;
     public static final BooleanProperty OMINOUS = BlockStateProperties.OMINOUS;
 
     public RiftMobSpawnerBlock(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(STATE, TrialSpawnerState.INACTIVE)
+                .setValue(STATE, RiftMobSpawnerState.INACTIVE)
                 .setValue(OMINOUS, Boolean.valueOf(false)));
     }
 
