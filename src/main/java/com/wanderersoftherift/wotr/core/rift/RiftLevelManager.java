@@ -327,23 +327,19 @@ public final class RiftLevelManager {
         int seed = config.seed().orElseGet(() -> new Random().nextInt());
         LevelSettings levelSettings = worldData.getLevelSettings();
         LevelSettings riftLevelSettings = new LevelSettings(
-                "rift",
-                levelSettings.gameType(),
-                levelSettings.hardcore(),
-                levelSettings.difficulty(),
-                levelSettings.allowCommands(),
-                levelSettings.gameRules(),
-                levelSettings.getDataConfiguration(),
+                "rift", levelSettings.gameType(), levelSettings.hardcore(), levelSettings.difficulty(),
+                levelSettings.allowCommands(), levelSettings.gameRules(), levelSettings.getDataConfiguration(),
                 levelSettings.getLifecycle()
         );
 
-        PrimaryLevelData primaryLevelData = new PrimaryLevelData(worldData.getLevelSettings(), worldData.worldGenOptions(), PrimaryLevelData.SpecialWorldProperty.NONE, worldData.worldGenSettingsLifecycle());
-        ((WotRGameRules)primaryLevelData.getGameRules()).wotrMakeMutable();
+        PrimaryLevelData primaryLevelData = new PrimaryLevelData(worldData.getLevelSettings(),
+                worldData.worldGenOptions(), PrimaryLevelData.SpecialWorldProperty.NONE,
+                worldData.worldGenSettingsLifecycle());
+        ((WotRGameRules) primaryLevelData.getGameRules()).wotrMakeMutable();
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
-                primaryLevelData,
-                ResourceKey.create(Registries.DIMENSION, id), stem, chunkProgressListener, false, 0L, List.of(), false,
-                RandomSequences.factory(seed).constructor().get());
+                primaryLevelData, ResourceKey.create(Registries.DIMENSION, id), stem, chunkProgressListener, false, 0L,
+                List.of(), false, RandomSequences.factory(seed).constructor().get());
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
@@ -359,7 +355,9 @@ public final class RiftLevelManager {
         placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
                 maxDepth, new BlockPos(0, 2, 0));
 
-        ((WotRGameRules) riftLevel.getGameRules()).wotrSetRuleFresh(GameRules.RULE_DOFIRETICK, GameRules.BooleanValue.create(false).createRule()).set(false, riftLevel.getServer());
+        ((WotRGameRules) riftLevel.getGameRules())
+                .wotrSetRuleFresh(GameRules.RULE_DOFIRETICK, GameRules.BooleanValue.create(false).createRule())
+                .set(false, riftLevel.getServer());
         return riftLevel;
     }
 
