@@ -5,8 +5,8 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.AttachmentProc
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.GradientReplaceProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.MushroomProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftChestProcessor;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftMobSpawnerProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.VineProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.WeightedReplaceProcessor;
 import net.minecraft.core.registries.Registries;

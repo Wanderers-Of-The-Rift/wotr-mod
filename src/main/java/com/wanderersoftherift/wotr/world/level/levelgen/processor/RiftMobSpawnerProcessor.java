@@ -40,7 +40,7 @@ public class RiftMobSpawnerProcessor extends StructureProcessor {
     private final Optional<Holder<TrialSpawnerConfig>> ominousConfig;
 
     public RiftMobSpawnerProcessor(Optional<Holder<TrialSpawnerConfig>> spawnerConfig,
-                                   Optional<Holder<TrialSpawnerConfig>> ominousConfig) {
+            Optional<Holder<TrialSpawnerConfig>> ominousConfig) {
         this.spawnerConfig = spawnerConfig;
         this.ominousConfig = ominousConfig;
     }

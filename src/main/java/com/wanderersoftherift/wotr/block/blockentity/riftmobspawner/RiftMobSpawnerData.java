@@ -31,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerConfig;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -140,7 +139,7 @@ public class RiftMobSpawnerData {
     public void tryDetectPlayers(ServerLevel level, BlockPos pos, RiftMobSpawner spawner) {
         boolean flag = (pos.asLong() + level.getGameTime()) % 20L != 0L;
         if (!flag) {
-            if (!TrialSpawnerState.COOLDOWN.equals(spawner.getState()) || !spawner.isOminous()) {
+            if (!RiftMobSpawnerState.COOLDOWN.equals(spawner.getState()) || !spawner.isOminous()) {
                 List<UUID> list = spawner.getPlayerDetector()
                         .detect(level, spawner.getEntitySelector(), pos, (double) spawner.getRequiredPlayerRange(),
                                 true);
@@ -161,7 +160,7 @@ public class RiftMobSpawnerData {
                     flag1 = false;
                 }
 
-                if (!TrialSpawnerState.COOLDOWN.equals(spawner.getState()) || flag1) {
+                if (!RiftMobSpawnerState.COOLDOWN.equals(spawner.getState()) || flag1) {
                     boolean flag2 = spawner.getData().detectedPlayers.isEmpty();
                     List<UUID> list1;
                     if (flag2) {
