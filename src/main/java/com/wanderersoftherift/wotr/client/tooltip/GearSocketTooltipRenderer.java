@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
