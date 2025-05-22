@@ -15,6 +15,7 @@ import org.lwjgl.glfw.GLFW;
 public class WotrKeyMappings {
 
     public static final String ABILITY_CATEGORY = WanderersOfTheRift.translationId("key", "categories.ability");
+    public static final String MISC_CATEGORY = WanderersOfTheRift.translationId("key", "categories.misc");
 
     public static final KeyMapping ABILITY_1_KEY = new KeyMapping(WanderersOfTheRift.translationId("key", "ability.1"),
             KeyConflictContext.IN_GAME, InputConstants.UNKNOWN, ABILITY_CATEGORY);
@@ -62,7 +63,7 @@ public class WotrKeyMappings {
 
     public static final KeyMapping SHOW_TOOLTIP_INFO = new KeyMapping(
             WanderersOfTheRift.translationId("key", "tooltip.show_tooltip_info"), KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, WanderersOfTheRift.translationId("key", "categories.misc"));
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_SHIFT, MISC_CATEGORY);
 
     public static final KeyMapping JIGSAW_NAME_TOGGLE_KEY = new KeyMapping(
             "key." + WanderersOfTheRift.id("jigsaw_name_toggle"), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
