@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
@@ -25,6 +26,12 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK.get())
+                .add(WotrBlocks.KEY_FORGE.get())
+                .add(WotrBlocks.ABILITY_BENCH.get())
+                .add(WotrBlocks.RIFT_SPAWNER.get());
+
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(family -> {
             if (family.getVariant(BlockFamily.Variant.STAIRS) != null) {
                 tag(STAIRS).add(family.getVariant(BlockFamily.Variant.STAIRS).get());
