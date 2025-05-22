@@ -23,13 +23,17 @@ public class ComponentUtil {
 
     /**
      *
-     * @param base base Component
+     * @param base      base Component
      * @param baseColor base color to be used
      * @param frequency how fast the wave moves across the text
      * @param amplitude how much brighter it gets at peak
      * @return
      */
-    public static MutableComponent wavingComponent(Component base, TextColor baseColor, float frequency, float amplitude) {
+    public static MutableComponent wavingComponent(
+            Component base,
+            TextColor baseColor,
+            float frequency,
+            float amplitude) {
         String text = base.getString();
         MutableComponent result = Component.empty();
 
@@ -41,7 +45,6 @@ public class ComponentUtil {
 
             // Compute brightness factor in a wave pattern
             float wave = (float) Math.sin((time - i) * frequency) * amplitude + 1f;
-
 
             result.append(Component.literal(String.valueOf(c))
                     .withStyle(base.getStyle().withColor(ColorUtil.brightenColor(baseRGB, wave))));

@@ -19,7 +19,7 @@ public class GradientMixer {
     }
 
     public int getColor(float time) {
-        if(segments.isEmpty() || durationTotal == 0) {
+        if (segments.isEmpty() || durationTotal == 0) {
             return 0xFFFFFF; // white fallback
         }
 
@@ -46,7 +46,6 @@ public class GradientMixer {
 
         return 0xFFFFFF; // fallback, shouldnt be hit
     }
-
 
     private record ColorSegment(int color, float duration) {
     }
