@@ -29,7 +29,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;
 import java.util.List;
@@ -61,8 +60,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     public int getHeight(@NotNull Font font) {
         int baseHeight = font.lineHeight + 2;
 
-        if(!isKeyDown()) {
-            baseHeight+= font.lineHeight + 2;
+        if (!isKeyDown()) {
+            baseHeight += font.lineHeight + 2;
         }
 
         int contentHeight = cmp.gearSocket()
@@ -78,7 +77,12 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         int used = (int) cmp.gearSocket().stream().filter(s -> s.runegem().isPresent()).count();
 
         int maxWidth = font.width(getSocketDesc().getString() + "[" + used + "/" + cmp.gearSocket().size() + "]");
-        maxWidth = Math.max(maxWidth, font.width(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()).getString()));
+        maxWidth = Math
+                .max(maxWidth,
+                        font.width(Component
+                                .translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
+                                        WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())
+                                .getString()));
 
         for (GearSocket socket : cmp.gearSocket()) {
             List<ModifierTier> tiers = getModifierTiers(socket);
@@ -108,14 +112,14 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         boolean isKeyDown = isKeyDown();
 
-        if(!isKeyDown()) {
-            pFont.drawInBatch(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()),
-                    pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0,
-                    15_728_880);
+        if (!isKeyDown()) {
+            pFont.drawInBatch(
+                    Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
+                            WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()),
+                    pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource,
+                    Font.DisplayMode.NORMAL, 0, 15_728_880);
             pY += pFont.lineHeight + 2;
         }
-
-
 
         pFont.drawInBatch(
                 getSocketDesc().copy()
@@ -187,7 +191,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         PoseStack pose = guiGraphics.pose();
         y += 10;
 
-        if(!isKeyDown()) {
+        if (!isKeyDown()) {
             y += font.lineHeight + 2;
         }
 
@@ -236,7 +240,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     /*------ Helpers ------*/
 
     private static boolean isKeyDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getValue());
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(),
+                WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getValue());
     }
 
     private static void drawSocketLine(GuiGraphics gui, int x, int y, int width) {
