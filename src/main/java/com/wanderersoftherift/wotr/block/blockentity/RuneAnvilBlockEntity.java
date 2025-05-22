@@ -6,8 +6,11 @@ import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -38,6 +41,19 @@ public class RuneAnvilBlockEntity extends BaseContainerBlockEntity implements Ru
     @Override
     protected void setItems(@NotNull NonNullList<ItemStack> nonNullList) {
         this.items = nonNullList;
+    }
+
+    @Override
+    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.saveAdditional(tag, provider);
+        ContainerHelper.saveAllItems(tag, this.items, provider);
+    }
+
+    @Override
+    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(tag, provider);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tag, this.items, provider);
     }
 
     @Override
