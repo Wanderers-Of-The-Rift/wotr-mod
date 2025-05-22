@@ -34,6 +34,22 @@ public interface RiftAdjacencyProcessor<T> {
         }
     }
 
+    static void preloadMerged(
+            RiftProcessedRoom room,
+            int xOffset,
+            int yOffset,
+            int zOffset,
+            Vec3i pieceSize,
+            boolean[][] booleans) {
+        for (int z = 0; z < pieceSize.getZ(); z++) {
+            var z2 = z + zOffset;
+            var bo = booleans[z];
+            for (int x = 0; x < pieceSize.getX(); x++) {
+                bo[x] = room.getMerged(x + xOffset, yOffset, z2);
+            }
+        }
+    }
+
     static void saveLayer(
             RiftProcessedRoom room,
             int xOffset,
