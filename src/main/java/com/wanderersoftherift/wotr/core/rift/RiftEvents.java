@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.core.rift;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrTags;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
@@ -21,11 +23,14 @@ public class RiftEvents {
         if (!RiftLevelManager.isRift(event.getLevel())) {
             return;
         }
-        if (event.getItemStack().is(WotrTags.Items.BANNED_IN_RIFT)) {
+        if (event.getItemStack().is(WotrTags.Items.BANNED_IN_RIFT)
+                || (event.getItemStack().getItem() instanceof BlockItem blockItem
+                        && blockItem.getBlock().defaultBlockState().is(WotrTags.Blocks.BANNED_IN_RIFT))) {
             event.setUseItem(TriState.FALSE);
-        } else if (event.getItemStack().getItem() instanceof BlockItem blockItem
-                && blockItem.getBlock().defaultBlockState().is(WotrTags.Blocks.BANNED_IN_RIFT)) {
-            event.setUseItem(TriState.FALSE);
+            event.getEntity()
+                    .displayClientMessage(
+                            Component.translatable(WanderersOfTheRift.translationId("message", "disabled_in_rifts")),
+                            true);
         }
     }
 
