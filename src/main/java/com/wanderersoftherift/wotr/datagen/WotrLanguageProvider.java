@@ -208,6 +208,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
+        add("tooltip." + WanderersOfTheRift.MODID + ".empty_socket", "(Empty Slot)");
+        add("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", "Hold [%s] for additional information");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
@@ -254,6 +256,7 @@ public class WotrLanguageProvider extends LanguageProvider {
                 "Heals an additional heart");
 
         add(WotrKeyMappings.ABILITY_CATEGORY, "Abilities");
+        add(WotrKeyMappings.MISC_CATEGORY, "Wanderers of the Rift: Misc");
         add(WotrKeyMappings.ABILITY_1_KEY.getName(), "Use Ability 1");
         add(WotrKeyMappings.ABILITY_2_KEY.getName(), "Use Ability 2");
         add(WotrKeyMappings.ABILITY_3_KEY.getName(), "Use Ability 3");
@@ -266,6 +269,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WotrKeyMappings.PREV_ABILITY_KEY.getName(), "Select Previous Ability");
         add(WotrKeyMappings.NEXT_ABILITY_KEY.getName(), "Select Next Ability");
         add(WotrKeyMappings.USE_ABILITY_KEY.getName(), "Use Selected Ability");
+        add(WotrKeyMappings.SHOW_TOOLTIP_INFO.getName(), "Show Additional Tooltip Info");
 
         add(WanderersOfTheRift.translationId("keybinds", "l_alt"), "LAlt");
         add(WanderersOfTheRift.translationId("keybinds", "r_alt"), "RAlt");
