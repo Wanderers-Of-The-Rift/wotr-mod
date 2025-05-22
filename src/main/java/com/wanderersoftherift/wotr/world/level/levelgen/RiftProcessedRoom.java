@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -139,6 +140,31 @@ public class RiftProcessedRoom {
             return null;
         }
         return chunk.getBlockStatePure(x & 0xf, y & 0xf, z & 0xf);
+    }
+
+    public boolean getMerged(int x, int y, int z) {
+        var chunkX = x >> 4;
+        var chunkY = y >> 4;
+        var chunkZ = z >> 4;
+        var chunk = getChunk(chunkX, chunkY, chunkZ);
+        if (chunk == null) {
+            return false;
+        }
+        return ((chunk.hidden[((y & 0xf) << 4) | (z & 0xf)] >> (x & 0xf)) & 1) != 0
+                || ((chunk.newlyAdded[((y & 0xf) << 4) | (z & 0xf)] >> (x & 0xf)) & 1) == 0;
+    }
+
+    public void clearNewFlags() {
+        for (var chunkAtomic : chunkArray) {
+            if (chunkAtomic == null) {
+                continue;
+            }
+            var chunk = chunkAtomic.get();
+            if (chunk == null) {
+                continue;
+            }
+            Arrays.fill(chunk.newlyAdded, (short) 0);
+        }
     }
 
     public BlockState getBlock(Vec3i pos) {

@@ -43,6 +43,7 @@ public interface RiftGeneratable {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
+        destination.clearNewFlags();
         if (mask == null) {
             mask = new long[16 * 16 * 16];
         }

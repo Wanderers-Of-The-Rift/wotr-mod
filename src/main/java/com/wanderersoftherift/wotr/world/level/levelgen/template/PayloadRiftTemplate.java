@@ -72,7 +72,6 @@ public class PayloadRiftTemplate implements RiftGeneratable {
             ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror) {
-        // todo create a mask of blocks modified by this template
         var structurePos = new BlockPos(room.space.origin().multiply(16)).offset(placementShift);
         payload.processPayloadBlocks(this, room, world, structurePos, mirror);
         payload.processPayloadEntities(this, room, world, structurePos, mirror);
@@ -90,14 +89,18 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         var directionBlocksArray = new BlockState[7];
         var preloaded = new BlockState[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
         var saveMask = new boolean[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
+        var mergetFlags = new boolean[pieceSize.getZ() + 2][pieceSize.getX() + 2];
         RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY(), structurePos.getZ(),
                 pieceSize, preloaded[0], saveMask[0]);
         for (int y = 0; y < pieceSize.getY(); y++) {
             RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1,
                     structurePos.getZ(), pieceSize, preloaded[(y + 1) & 3], saveMask[(y + 1) & 3]);
+            RiftAdjacencyProcessor.preloadMerged(room, structurePos.getX(), structurePos.getY() + y,
+                    structurePos.getZ(), pieceSize, mergetFlags);
             var pre = preloaded[y & 3];
             var sav = saveMask[y & 3];
             for (int z = 0; z < pieceSize.getZ(); z++) {
+                var mergeCenter = mergetFlags[z];
                 var preDown = preloaded[(y - 1) & 3][z + 1];
                 var preUp = preloaded[(y + 1) & 3][z + 1];
                 var preNorth = pre[z];
@@ -109,39 +112,19 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                 var savSouth = sav[z + 2];
                 var savCenter = sav[z + 1];
                 for (int x = 0; x < pieceSize.getX(); x++) {
-
+                    if (mergeCenter[x]) {
+                        continue;
+                    }
                     BlockState currentState = preCenter[x + 1];
-                    if (currentState != null) { // todo get hidden from template
-                        // var hidden = true;
-                        var midair = true;
-                        var block = directionBlocksArray[0] = preDown[x + 1];
-                        /*
-                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
-                         */
-                        block = directionBlocksArray[1] = preUp[x + 1];
-                        /*
-                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
-                         */
-                        block = directionBlocksArray[2] = preNorth[x + 1];
-                        /*
-                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
-                         */
-                        block = directionBlocksArray[3] = preSouth[x + 1];
-                        /*
-                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
-                         */
-                        block = directionBlocksArray[4] = preCenter[x];
-                        /*
-                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
-                         */
-                        block = directionBlocksArray[5] = preCenter[x + 2];
-                        /*
-                         * if (block != null) { // hidden &= block.canOcclude(); midair &= block.isAir(); }
-                         */
+                    if (currentState != null) {
 
-                        if (/* hidden || */midair && false) {
-                            continue;
-                        }
+                        var midair = true;
+                        directionBlocksArray[0] = preDown[x + 1];
+                        directionBlocksArray[1] = preUp[x + 1];
+                        directionBlocksArray[2] = preNorth[x + 1];
+                        directionBlocksArray[3] = preSouth[x + 1];
+                        directionBlocksArray[4] = preCenter[x];
+                        directionBlocksArray[5] = preCenter[x + 2];
                         directionBlocksArray[6] = currentState;
                         int modifyMask = 0;
                         for (int i = 0; i < pairs.length; i++) {

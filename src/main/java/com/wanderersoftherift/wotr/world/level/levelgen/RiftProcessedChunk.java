@@ -27,6 +27,8 @@ public class RiftProcessedChunk {
 
     public final Vec3i origin;
     public final BlockState[] blocks = new BlockState[4096];
+    public final short[] hidden = new short[256];
+    public final short[] newlyAdded = new short[256];
     public final RiftProcessedRoom parentRoom;
     public final ArrayList<CompoundTag> entities = new ArrayList<>();
     public final ArrayList<BlockEntity> blockEntities = new ArrayList<BlockEntity>(4096);
