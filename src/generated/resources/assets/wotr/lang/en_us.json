@@ -357,6 +357,7 @@
   "keybinds.wotr.mod_shift": "Shi+",
   "keybinds.wotr.r_alt": "RAlt",
   "keybinds.wotr.r_ctrl": "RCtrl",
+  "message.wotr.disabled_in_rifts": "Disabled in rifts",
   "modifier.wotr.ability_aoe": "Ability Aoe",
   "modifier.wotr.ability_cooldown": "Ability Cooldown",
   "modifier.wotr.ability_damage_flat": "Ability Damage Flat",

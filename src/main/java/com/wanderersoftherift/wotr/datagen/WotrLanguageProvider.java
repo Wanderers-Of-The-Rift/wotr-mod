@@ -316,6 +316,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
         addRunegems();
         addModifiers();
+
+        add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
     }
 
     private void addRunegems() {
