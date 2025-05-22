@@ -166,7 +166,7 @@ public class ChaoticRiftLayout implements RiftLayout {
         }
 
         private double chaosiveness(double x, double z) {
-            return 1.5 * Math.cosh(0.055 * Math.sqrt(x * x + z * z));
+            return 1.5 * Math.cosh(0.11 * Math.sqrt(x * x + z * z));
         } // todo move to interface
 
         // 2 = chaotic, 1 = unstable, 0 = stable
