@@ -119,7 +119,12 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 MutableComponent component = Component.literal("");
                 var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(), ChatFormatting.AQUA);
                 if (tooltip instanceof ImageComponent img) {
-                    component.append(ComponentUtil.wavingComponent(img.base(), TextColor.parseColor("#e0ba12").getOrThrow(), 0.2f, 0.5f));
+                    if(tier == getModifierTiers(socket).size()) {
+                        component.append(ComponentUtil.wavingComponent(img.base(), TextColor.parseColor("#e0ba12").getOrThrow(), 0.125f, 0.5f));
+                    } else {
+                        component.append(img.base().copy().withColor(TextColor.parseColor("#e0ba12").getOrThrow().getValue()));
+                    }
+
                 }
                 if (isShiftDown) {
                     component.append(getTierInfo(effect, tier));
