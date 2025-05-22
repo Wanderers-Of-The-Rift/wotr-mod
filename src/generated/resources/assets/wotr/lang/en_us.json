@@ -352,6 +352,8 @@
   "key.wotr.ability.previous": "Select Previous Ability",
   "key.wotr.ability.use_selected": "Use Selected Ability",
   "key.wotr.categories.ability": "Abilities",
+  "key.wotr.categories.misc": "Wanderers of the Rift: Misc",
+  "key.wotr.tooltip.show_tooltip_info": "Show Additional Tooltip Info",
   "keybinds.wotr.l_alt": "LAlt",
   "keybinds.wotr.l_ctrl": "LCtrl",
   "keybinds.wotr.mod_alt": "Alt+",
@@ -474,6 +476,7 @@
   "tooltip.wotr.rift_key_tier": "Tier: %s",
   "tooltip.wotr.runegem.modifiers": "Modifiers:",
   "tooltip.wotr.runegem.shape": "Shape: %s",
+  "tooltip.wotr.show_extra_info": "Hold [%s] for additional information",
   "tooltip.wotr.socket": "Sockets: ",
   "wotr.rift.create.failed": "Failed to create rift"
 }

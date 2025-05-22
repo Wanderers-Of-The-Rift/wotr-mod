@@ -4,6 +4,5 @@
     "bottom": "wotr:block/rift_mob_spawner_bottom",
     "side": "wotr:block/rift_mob_spawner_side_active_ominous",
     "top": "wotr:block/rift_mob_spawner_top_ejecting_reward_ominous"
-  },
-  "render_type": "cutout"
+  }
 }
