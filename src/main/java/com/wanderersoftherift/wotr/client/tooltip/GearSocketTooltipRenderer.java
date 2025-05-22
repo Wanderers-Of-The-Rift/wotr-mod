@@ -59,6 +59,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     @Override
     public int getHeight(@NotNull Font font) {
         int baseHeight = font.lineHeight + 2;
+
+        if(!isKeyDown()) {
+            baseHeight+= font.lineHeight + 2;
+        }
+
         int contentHeight = cmp.gearSocket()
                 .stream()
                 .mapToInt(socket -> SOCKET_LINE_HEIGHT * getModifierEffectsCount(socket))
@@ -68,10 +73,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public int getWidth(@NotNull Font font) {
-        boolean isShiftDown = isShiftDown();
+        boolean isShiftDown = isKeyDown();
         int used = (int) cmp.gearSocket().stream().filter(s -> s.runegem().isPresent()).count();
 
         int maxWidth = font.width(getSocketDesc().getString() + "[" + used + "/" + cmp.gearSocket().size() + "]");
+        maxWidth = Math.max(maxWidth, font.width(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()).getString()));
 
         for (GearSocket socket : cmp.gearSocket()) {
             List<ModifierTier> tiers = getModifierTiers(socket);
@@ -99,9 +105,16 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             @NotNull Matrix4f pMatrix4f,
             MultiBufferSource.@NotNull BufferSource pBufferSource) {
 
-        boolean isShiftDown = isShiftDown();
-        boolean isAltDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(),
-                GLFW.GLFW_KEY_LEFT_ALT);
+        boolean isKeyDown = isKeyDown();
+
+        if(!isKeyDown()) {
+            pFont.drawInBatch(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()),
+                    pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0,
+                    15_728_880);
+            pY += pFont.lineHeight + 2;
+        }
+
+
 
         pFont.drawInBatch(
                 getSocketDesc().copy()
@@ -142,7 +155,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     }
 
                 }
-                if (isShiftDown) {
+                if (isKeyDown) {
                     component.append(getTierInfo(effect, tier));
                 }
 
@@ -156,13 +169,13 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             pFont.drawInBatch(Component.literal(">"), pX + 20, pY - 1, 5_592_405, true, pMatrix4f, pBufferSource,
                     Font.DisplayMode.NORMAL, 0, 15_728_880);
             Component display;
-            if (isShiftDown) {
+            if (isKeyDown) {
                 display = Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".empty_socket");
             } else {
                 display = Component.literal("-");
             }
             pFont.drawInBatch(display, pX + 30, pY - 1,
-                    isShiftDown ? 5_592_405 : TextColor.parseColor("#19191a").getOrThrow().getValue(), true, pMatrix4f,
+                    isKeyDown ? 5_592_405 : TextColor.parseColor("#19191a").getOrThrow().getValue(), true, pMatrix4f,
                     pBufferSource, Font.DisplayMode.NORMAL, 0, 15_728_880);
             pY += 20;
         }
@@ -172,6 +185,10 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     public void renderImage(@NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphics guiGraphics) {
         PoseStack pose = guiGraphics.pose();
         y += 10;
+
+        if(!isKeyDown()) {
+            y += font.lineHeight + 2;
+        }
 
         Map<Boolean, List<GearSocket>> partitioned = cmp.gearSocket()
                 .stream()
@@ -217,8 +234,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     /*------ Helpers ------*/
 
-    private static boolean isShiftDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT);
+    private static boolean isKeyDown() {
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getValue());
     }
 
     private static void drawSocketLine(GuiGraphics gui, int x, int y, int width) {
