@@ -250,7 +250,7 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                         continue;
                     }
                     roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = blockState;
-                    var idx = zWithinChunk | (yWithinChunk << 4); //todo maybe re-add mid-air flag
+                    var idx = zWithinChunk | (yWithinChunk << 4); // todo maybe re-add mid-air flag
                     var mask = (short) (1 << xWithinChunk);
                     roomChunk.newlyAdded[idx] |= mask;
                     if (!isVisible) {
