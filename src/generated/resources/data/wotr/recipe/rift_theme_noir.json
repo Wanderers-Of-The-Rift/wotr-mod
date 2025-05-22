@@ -1,10 +1,14 @@
 {
+  "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
       "essenceType": "wotr:light",
       "minPercent": 50.0
     }
   ],
-  "output": "wotr:noir",
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:noir"
+  },
   "priority": 10
 }

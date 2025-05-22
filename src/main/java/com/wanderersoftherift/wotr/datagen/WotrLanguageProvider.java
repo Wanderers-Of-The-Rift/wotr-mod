@@ -119,7 +119,9 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
-        add("itemGroup." + WanderersOfTheRift.MODID + ".dev", "Wanderers of the Rift (Dev only)");
+        add(WanderersOfTheRift.translationId("itemGroup", "ability"), "Abilities");
+        add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
+        add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
 
         add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
 
@@ -272,6 +274,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("keybinds", "mod_alt"), "Alt+");
         add(WanderersOfTheRift.translationId("keybinds", "mod_ctrl"), "Ctrl+");
         add(WanderersOfTheRift.translationId("keybinds", "mod_shift"), "Shi+");
+
+        add(WanderersOfTheRift.translationId("rei", "rolls_label"), "Rolls:");
+        add(WanderersOfTheRift.translationId("rei", "percent.min"), "%s: > %s%%");
+        add(WanderersOfTheRift.translationId("rei", "percent.max"), "%s: < %s%%");
+        add(WanderersOfTheRift.translationId("rei", "absolute.min"), "%s: < %s");
+        add(WanderersOfTheRift.translationId("rei", "absolute.max"), "%s: > %s");
 
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");

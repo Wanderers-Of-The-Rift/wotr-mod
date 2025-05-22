@@ -8,8 +8,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,6 +29,12 @@ public record RunegemData(Component name, RunegemShape shape, List<ModifierGroup
             ModifierGroup.CODEC.listOf().fieldOf("modifier_options").forGetter(RunegemData::modifierLists),
             RunegemTier.CODEC.fieldOf("tier").forGetter(RunegemData::tier)
     ).apply(inst, RunegemData::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, RunegemData> STREAM_CODEC = StreamCodec.composite(
+            ComponentSerialization.STREAM_CODEC, RunegemData::name, RunegemShape.STREAM_CODEC, RunegemData::shape,
+            ModifierGroup.STREAM_CODEC.apply(ByteBufCodecs.list()), RunegemData::modifierLists,
+            RunegemTier.STREAM_CODEC, RunegemData::tier, RunegemData::new
+    );
 
     public Optional<TieredModifier> getRandomTieredModifierForItem(
             ItemStack stack,
@@ -50,6 +59,11 @@ public record RunegemData(Component name, RunegemShape shape, List<ModifierGroup
                         .forGetter(ModifierGroup::supportedItems),
                 TieredModifier.CODEC.listOf().fieldOf("modifiers").forGetter(ModifierGroup::modifiers))
                 .apply(inst, ModifierGroup::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, ModifierGroup> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.holderSet(Registries.ITEM), ModifierGroup::supportedItems,
+                TieredModifier.STREAM_CODEC.apply(ByteBufCodecs.list()), ModifierGroup::modifiers, ModifierGroup::new
+        );
 
     }
 

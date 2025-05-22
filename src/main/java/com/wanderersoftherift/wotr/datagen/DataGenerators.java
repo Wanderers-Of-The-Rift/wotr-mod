@@ -49,9 +49,6 @@ public class DataGenerators {
         event.createProvider(WotrRiftThemeTagsProvider::new);
         event.createProvider(WotrObjectiveTagsProvider::new);
 
-        // event.createProvider(ModAbilityProvider::new);
-        event.createProvider(WotrRiftThemeRecipeProvider::new);
-
         event.createProvider(WotrRecipeProvider.Runner::new);
 
         event.createProvider((output, lookupProvider) -> new LootTableProvider(output, Set.of(), List.of(
@@ -61,8 +58,6 @@ public class DataGenerators {
                         LootContextParamSets.EMPTY),
                 new LootTableProvider.SubProviderEntry(WotrLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)),
                 lookupProvider));
-
-        event.createProvider(WotrObjectiveRecipeProvider::new);
 
         event.createProvider(WotrRunegemDataTagsProvider::new);
 

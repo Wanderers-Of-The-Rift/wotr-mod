@@ -36,6 +36,11 @@ import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootModifiers;
+import com.wanderersoftherift.wotr.init.recipe.WotrRecipeCategories;
+import com.wanderersoftherift.wotr.init.recipe.WotrRecipeDisplayTypes;
+import com.wanderersoftherift.wotr.init.recipe.WotrRecipeSerializers;
+import com.wanderersoftherift.wotr.init.recipe.WotrRecipeTypes;
+import com.wanderersoftherift.wotr.init.recipe.WotrSlotDisplayTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrChunkGenerators;
 import com.wanderersoftherift.wotr.init.worldgen.WotrInputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
@@ -100,6 +105,13 @@ public class WanderersOfTheRift {
         WotrObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
         WotrOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
         WotrChunkGenerators.CHUNK_GENERATORS.register(modEventBus);
+
+        // Recipes
+        WotrRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+        WotrRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        WotrRecipeCategories.RECIPE_BOOK_CATEGORIES.register(modEventBus);
+        WotrSlotDisplayTypes.SLOT_DISPLAY_TYPES.register(modEventBus);
+        WotrRecipeDisplayTypes.RECIPE_DISPLAY_TYPES.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);
