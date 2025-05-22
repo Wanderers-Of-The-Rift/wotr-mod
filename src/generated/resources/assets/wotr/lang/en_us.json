@@ -463,6 +463,7 @@
   "stat.wotr.result.survived": "Escaped",
   "stat.wotr.time": "Time in rift: ",
   "subtitles.wotr.rift_open": "Rift Opens",
+  "tooltip.wotr.empty_socket": "(Empty Slot)",
   "tooltip.wotr.essence_header": "Essence:",
   "tooltip.wotr.essence_value": "Essence: %s %s",
   "tooltip.wotr.implicit": "Implicit: ",
