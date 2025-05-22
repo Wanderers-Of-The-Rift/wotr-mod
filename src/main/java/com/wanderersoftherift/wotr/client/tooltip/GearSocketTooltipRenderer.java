@@ -33,8 +33,6 @@ import org.lwjgl.glfw.GLFW;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//TODO: Get rid of literals
-//TODO: Cleanup
 //TODO: Icons for modifiers
 @SuppressWarnings("DataFlowIssue")
 public class GearSocketTooltipRenderer implements ClientTooltipComponent {
@@ -67,7 +65,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public int getWidth(@NotNull Font font) {
-        boolean isShift = isShiftDown();
+        boolean isShiftDown = isShiftDown();
         int used = (int) cmp.gearSocket().stream().filter(s -> s.runegem().isPresent()).count();
 
         int maxWidth = font.width(getSocketDesc().getString() + "[" + used + "/" + cmp.gearSocket().size() + "]");
@@ -78,7 +76,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 int tier = socket.modifier().get().tier();
                 ModifierTier modifier = tiers.get(tier - 1);
                 for (AbstractModifierEffect effect : getModifierEffects(modifier)) {
-                    String text = getEffectText(effect, tier, isShift);
+                    String text = getEffectText(effect, tier, isShiftDown);
                     maxWidth = Math.max(maxWidth, font.width("> " + text) + 30);
                 }
             } else {
@@ -132,7 +130,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             }
         }
 
-        for (GearSocket socket : partitioned.get(false)) {
+        for (GearSocket ignored : partitioned.get(false)) {
             pFont.drawInBatch(Component.literal(">"), pX + 20, pY - 1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             Component display = isShiftDown ? Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".empty_socket") : Component.literal("-");
             pFont.drawInBatch(display, pX + 30, pY - 1,
