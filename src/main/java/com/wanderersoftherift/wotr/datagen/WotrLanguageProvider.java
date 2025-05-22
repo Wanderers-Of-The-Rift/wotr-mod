@@ -208,6 +208,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
+        add("tooltip." + WanderersOfTheRift.MODID + ".empty_socket", "(Empty Slot)");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");

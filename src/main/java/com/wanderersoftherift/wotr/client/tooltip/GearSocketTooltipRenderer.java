@@ -82,7 +82,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                     maxWidth = Math.max(maxWidth, font.width("> " + text) + 30);
                 }
             } else {
-                maxWidth = Math.max(maxWidth, font.width("> (Empty slot)") + 30);
+                maxWidth = Math.max(maxWidth, font.width("> " + Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".empty_socket").getString()) + 30);
             }
         }
         return maxWidth;
@@ -134,7 +134,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         for (GearSocket socket : partitioned.get(false)) {
             pFont.drawInBatch(Component.literal(">"), pX + 20, pY - 1, 5592405, true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-            Component display = isShiftDown ? Component.literal("(Empty slot)") : Component.literal("-");
+            Component display = isShiftDown ? Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".empty_socket") : Component.literal("-");
             pFont.drawInBatch(display, pX + 30, pY - 1,
                     isShiftDown ? 5592405 : TextColor.parseColor("#19191a").getOrThrow().getValue(), true, pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             pY += 20;
