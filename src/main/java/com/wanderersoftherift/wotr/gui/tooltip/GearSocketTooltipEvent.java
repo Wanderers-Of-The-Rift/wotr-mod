@@ -44,16 +44,6 @@ public class GearSocketTooltipEvent {
         List<TooltipComponent> toAdd = new ArrayList<>();
         toAdd.add(new GearSocketTooltipRenderer.GearSocketComponent(stack, socketList));
 
-//        for (GearSocket socket : socketList) {
-//
-//            if (!socket.isEmpty()) {
-//                List<TooltipComponent> tooltipComponents = socket.modifier()
-//                        .get()
-//                        .getTooltipComponent(stack, ChatFormatting.RED);
-//                toAdd.addAll(tooltipComponents);
-//            }
-//        }
-
         for (int i = 0; i < toAdd.size(); i++) {
             list.add(i + 1, Either.right(toAdd.get(i)));
         }
