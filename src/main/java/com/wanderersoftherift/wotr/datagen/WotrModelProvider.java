@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
-import com.wanderersoftherift.wotr.block.blockentity.riftmobspawner.RiftMobSpawner;
 import com.wanderersoftherift.wotr.client.render.item.ability.AbilitySpecialRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
@@ -326,9 +325,7 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.multiVariant(block)
                         .with(
-                                PropertyDispatch
-                                        .properties(RiftMobSpawnerBlock.STATE,
-                                                BlockStateProperties.OMINOUS)
+                                PropertyDispatch.properties(RiftMobSpawnerBlock.STATE, BlockStateProperties.OMINOUS)
                                         .generate(
                                                 (state, isActive) -> {
                                                     return switch (state) {

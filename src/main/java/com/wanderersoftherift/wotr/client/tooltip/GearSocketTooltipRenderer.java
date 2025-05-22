@@ -30,7 +30,11 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 //TODO: Icons for modifiers
@@ -264,7 +268,9 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             base = "";
         }
 
-        if (!isShiftDown) return base;
+        if (!isShiftDown) {
+            return base;
+        }
 
         return base + getTierInfoString(effect, tier);
     }
