@@ -2,9 +2,12 @@ package com.wanderersoftherift.wotr.rift.objective;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.LevelAccessor;
 
 import java.util.function.Function;
@@ -15,7 +18,9 @@ import java.util.function.Function;
 public interface ObjectiveType {
     Codec<ObjectiveType> DIRECT_CODEC = WotrRegistries.OBJECTIVE_TYPES.byNameCodec()
             .dispatch(ObjectiveType::getCodec, Function.identity());
-    Codec<Holder<ObjectiveType>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.OBJECTIVES);
+    Codec<Holder<ObjectiveType>> CODEC = LaxRegistryCodec.create(WotrRegistries.Keys.OBJECTIVES);
+    StreamCodec<RegistryFriendlyByteBuf, Holder<ObjectiveType>> STREAM_CODEC = ByteBufCodecs
+            .holderRegistry(WotrRegistries.Keys.OBJECTIVES);
 
     /**
      * @return A codec for the objective type implementation

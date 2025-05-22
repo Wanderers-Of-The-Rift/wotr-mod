@@ -1,0 +1,8 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "output": {
+    "type": "wotr:rift_objective",
+    "value": "wotr:kill"
+  },
+  "priority": -1
+}

@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.block.blockentity;
 
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
+import com.wanderersoftherift.wotr.block.blockentity.riftmobspawner.RiftMobSpawner;
+import com.wanderersoftherift.wotr.block.blockentity.riftmobspawner.RiftMobSpawnerState;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -15,14 +17,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.Spawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.trialspawner.PlayerDetector;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawner;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
-public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, TrialSpawner.StateAccessor {
+public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, RiftMobSpawner.StateAccessor {
+    public static final EnumProperty<RiftMobSpawnerState> SPAWNER_STATE = EnumProperty.create("rift_mob_spawner_state",
+            RiftMobSpawnerState.class);;
     public static final PlayerDetector RIFT_PLAYERS = (
             level,
             entitySelector,
@@ -34,21 +36,21 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, T
                             && !player.isSpectator()
             ).stream().map(Entity::getUUID).toList();
 
-    private TrialSpawner trialSpawner;
+    private RiftMobSpawner riftMobSpawner;
 
     public RiftMobSpawnerBlockEntity(BlockPos pos, BlockState state) {
         super(WotrBlockEntities.RIFT_MOB_SPAWNER.get(), pos, state);
         PlayerDetector.EntitySelector entityselector = PlayerDetector.EntitySelector.SELECT_FROM_LEVEL;
-        this.trialSpawner = new TrialSpawner(this, RIFT_PLAYERS, entityselector);
+        this.riftMobSpawner = new RiftMobSpawner(this, RIFT_PLAYERS, entityselector);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider lookup) {
         super.loadAdditional(tag, lookup);
-        this.trialSpawner.codec()
+        this.riftMobSpawner.codec()
                 .parse(lookup.createSerializationContext(NbtOps.INSTANCE), tag)
                 .resultOrPartial(LOGGER::error)
-                .ifPresent(trialSpawner -> this.trialSpawner = trialSpawner);
+                .ifPresent(riftMobSpawner -> this.riftMobSpawner = riftMobSpawner);
         if (this.level != null) {
             this.markUpdated();
         }
@@ -57,10 +59,10 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, T
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider lookup) {
         super.saveAdditional(tag, lookup);
-        this.trialSpawner.codec()
-                .encodeStart(lookup.createSerializationContext(NbtOps.INSTANCE), this.trialSpawner)
+        this.riftMobSpawner.codec()
+                .encodeStart(lookup.createSerializationContext(NbtOps.INSTANCE), this.riftMobSpawner)
                 .ifSuccess(success -> tag.merge((CompoundTag) success))
-                .ifError(tagError -> LOGGER.warn("Failed to encode TrialSpawner {}", tagError.message()));
+                .ifError(tagError -> LOGGER.warn("Failed to encode RiftMobSpawner {}", tagError.message()));
     }
 
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
@@ -69,7 +71,7 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, T
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider lookup) {
-        return this.trialSpawner.getData().getUpdateTag(this.getBlockState().getValue(RiftMobSpawnerBlock.STATE));
+        return this.riftMobSpawner.getData().getUpdateTag(this.getBlockState().getValue(RiftMobSpawnerBlock.STATE));
     }
 
     @Override
@@ -77,33 +79,32 @@ public class RiftMobSpawnerBlockEntity extends BlockEntity implements Spawner, T
         if (this.level == null) {
             Util.logAndPauseIfInIde("Expected non-null level");
         } else {
-            this.trialSpawner.overrideEntityToSpawn(entityType, this.level);
+            this.riftMobSpawner.overrideEntityToSpawn(entityType, this.level);
             this.setChanged();
         }
     }
 
-    public TrialSpawner getTrialSpawner() {
-        return this.trialSpawner;
+    public RiftMobSpawner getRiftMobSpawner() {
+        return this.riftMobSpawner;
     }
 
-    public void setTrialSpawner(TrialSpawner trialSpawner) {
-        this.trialSpawner = trialSpawner;
+    public void setRiftMobSpawner(RiftMobSpawner riftMobSpawner) {
+        this.riftMobSpawner = riftMobSpawner;
     }
 
     @Override
-    public TrialSpawnerState getState() {
-        if (!this.getBlockState().hasProperty(BlockStateProperties.TRIAL_SPAWNER_STATE)) {
-            return TrialSpawnerState.INACTIVE;
+    public RiftMobSpawnerState getState() {
+        if (!this.getBlockState().hasProperty(SPAWNER_STATE)) {
+            return RiftMobSpawnerState.INACTIVE;
         } else {
-            return this.getBlockState().getValue(BlockStateProperties.TRIAL_SPAWNER_STATE);
+            return this.getBlockState().getValue(SPAWNER_STATE);
         }
     }
 
     @Override
-    public void setState(Level level, TrialSpawnerState spawnerState) {
+    public void setState(Level level, RiftMobSpawnerState spawnerState) {
         this.setChanged();
-        level.setBlockAndUpdate(this.worldPosition,
-                this.getBlockState().setValue(BlockStateProperties.TRIAL_SPAWNER_STATE, spawnerState));
+        level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(SPAWNER_STATE, spawnerState));
     }
 
     @Override

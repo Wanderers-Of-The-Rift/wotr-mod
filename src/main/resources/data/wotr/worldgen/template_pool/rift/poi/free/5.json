@@ -1,5 +1,5 @@
 {
-    "fallback": "wotr:rift/poi/terminator",
+    "fallback": "wotr:rift/poi_terminator",
     "elements": [
         {
             "weight": 100,
@@ -229,7 +229,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/5/pris_fountain_pb-3-jyu",
+                "location": "wotr:rift/poi/free/5/pris_fountain_pb-3-k_jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -238,7 +238,52 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/5/sculc_altar_pb-1-jyu",
+                "location": "wotr:rift/poi/free/5/sculc_altar_pb-1-grimm_jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/henge_pb-1-k_jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/5/outpost-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/5/outpost-2-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/5/arch-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/5/gazebo-1-jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

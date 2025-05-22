@@ -16,12 +16,11 @@
     "MixinServerPlayer",
     "MixinSetItemDamageFunction",
     "MixinStructureTemplate",
-    "MixinWorldDimensions",
-    "TrialSpawnerAccessor",
-    "TrialSpawnerBlockEntityAccessor"
+    "MixinWorldDimensions"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",
+    "MixinGuiGraphics",
     "MixinMinecraft"
   ],
   "injectors": {

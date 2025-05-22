@@ -2,10 +2,13 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +27,19 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(HolderLookup.@NotNull Provider provider) {
+        // spotless:off
+        tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK.get())
+                .add(WotrBlocks.KEY_FORGE.get())
+                .add(WotrBlocks.ABILITY_BENCH.get())
+                .add(WotrBlocks.RIFT_SPAWNER.get());
+
+        tag(WotrTags.Blocks.BANNED_IN_RIFT)
+                .add(WotrBlocks.RIFT_SPAWNER.get())
+                .add(WotrBlocks.ABILITY_BENCH.get());
+        // spotless:on
+
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(family -> {
             if (family.getVariant(BlockFamily.Variant.STAIRS) != null) {
                 tag(STAIRS).add(family.getVariant(BlockFamily.Variant.STAIRS).get());
