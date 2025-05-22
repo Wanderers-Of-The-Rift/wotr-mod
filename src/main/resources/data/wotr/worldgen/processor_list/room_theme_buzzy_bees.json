@@ -562,7 +562,13 @@
                             "step_size": 0.4
                         },
                         {
-                            "output_state": "minecraft:pale_oak_leaves",
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:pale_oak_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
                             "step_size": 0.2
                         },
                         {
