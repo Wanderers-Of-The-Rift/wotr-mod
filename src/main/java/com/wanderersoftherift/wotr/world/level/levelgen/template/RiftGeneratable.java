@@ -130,39 +130,53 @@ public interface RiftGeneratable {
                         continue;
                     }
                     var newMask = -1L;
-                    var newMaskX = 0;
-                    for (int passX = 0; passX < 4; passX++) {
-                        var actualX = passX + (lx << 2);
-                        if (actualX >= placementShift.getX() && actualX < placementShift.getX() + size.getX()) {
-                            newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
+                    if (placementShift.getX() > (lx << 2) || placementShift.getX() + size.getX() < (lx << 2) + 4) {
+                        var newMaskX = 0L;
+                        for (int passX = 0; passX < 4; passX++) {
+                            var actualX = passX + (lx << 2);
+                            if (actualX >= placementShift.getX()) {
+                                if (actualX >= placementShift.getX() + size.getX()) {
+                                    break;
+                                }
+                                newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
+                            }
+                        }
+                        newMask &= newMaskX;
+                        if ((maskedValue & newMask) == 0) {
+                            continue;
                         }
                     }
-                    newMask &= newMaskX;
-                    ;
-                    if ((maskedValue & newMask) == 0) {
-                        continue;
-                    }
-                    var newMaskY = 0;
-                    for (int passY = 0; passY < 4; passY++) {
-                        var actualY = passY + (ly << 2);
-                        if (actualY >= placementShift.getY() && actualY < placementShift.getY() + size.getY()) {
-                            newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
+                    if (placementShift.getY() > (ly << 2) || placementShift.getY() + size.getY() < (ly << 2) + 4) {
+                        var newMaskY = 0L;
+                        for (int passY = 0; passY < 4; passY++) {
+                            var actualY = passY + (ly << 2);
+                            if (actualY >= placementShift.getY()) {
+                                if (actualY >= placementShift.getY() + size.getY()) {
+                                    break;
+                                }
+                                newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
+                            }
+                        }
+                        newMask &= newMaskY;
+                        if ((maskedValue & newMask) == 0) {
+                            continue;
                         }
                     }
-                    newMask &= newMaskY;
-                    if ((maskedValue & newMask) == 0) {
-                        continue;
-                    }
-                    var newMaskZ = 0;
-                    for (int passZ = 0; passZ < 4; passZ++) {
-                        var actualZ = passZ + (lz << 2);
-                        if (actualZ >= placementShift.getZ() && actualZ < placementShift.getZ() + size.getZ()) {
-                            newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 4);
+                    if (placementShift.getZ() > (lz << 2) || placementShift.getZ() + size.getZ() < (lz << 2) + 4) {
+                        var newMaskZ = 0L;
+                        for (int passZ = 0; passZ < 4; passZ++) {
+                            var actualZ = passZ + (lz << 2);
+                            if (actualZ >= placementShift.getZ()) {
+                                if (actualZ >= placementShift.getZ() + size.getZ()) {
+                                    break;
+                                }
+                                newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 2);
+                            }
                         }
-                    }
-                    newMask &= newMaskZ;
-                    if ((maskedValue & newMask) == 0) {
-                        continue;
+                        newMask &= newMaskZ;
+                        if ((maskedValue & newMask) == 0) {
+                            continue;
+                        }
                     }
                     return true;
                 }
@@ -190,32 +204,46 @@ public interface RiftGeneratable {
                         continue;
                     }
                     var newMask = -1L;
-                    var newMaskX = 0;
-                    for (int passX = 0; passX < 4; passX++) {
-                        var actualX = passX + (lx << 2);
-                        if (actualX >= placementShift.getX() && actualX < placementShift.getX() + size.getX()) {
-                            newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
+                    var newMaskX = 0L;
+                    if (placementShift.getX() > (lx << 2) || placementShift.getX() + size.getX() < (lx << 2) + 4) {
+                        for (int passX = 0; passX < 4; passX++) {
+                            var actualX = passX + (lx << 2);
+                            if (actualX >= placementShift.getX()) {
+                                if (actualX >= placementShift.getX() + size.getX()) {
+                                    break;
+                                }
+                                newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
+                            }
                         }
+                        newMask &= newMaskX;
                     }
-                    newMask &= newMaskX;
-                    ;
-                    var newMaskY = 0;
-                    for (int passY = 0; passY < 4; passY++) {
-                        var actualY = passY + (ly << 2);
-                        if (actualY >= placementShift.getY() && actualY < placementShift.getY() + size.getY()) {
-                            newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
+                    var newMaskY = 0L;
+                    if (placementShift.getY() > (ly << 2) || placementShift.getY() + size.getY() < (ly << 2) + 4) {
+                        for (int passY = 0; passY < 4; passY++) {
+                            var actualY = passY + (ly << 2);
+                            if (actualY >= placementShift.getY()) {
+                                if (actualY >= placementShift.getY() + size.getY()) {
+                                    break;
+                                }
+                                newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
+                            }
                         }
+                        newMask &= newMaskY;
                     }
-                    newMask &= newMaskY;
-                    var newMaskZ = 0;
-                    for (int passZ = 0; passZ < 4; passZ++) {
-                        var actualZ = passZ + (lz << 2);
-                        if (actualZ >= placementShift.getZ() && actualZ < placementShift.getZ() + size.getZ()) {
-                            newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 4);
+                    var newMaskZ = 0L;
+                    if (placementShift.getZ() > (lz << 2) || placementShift.getZ() + size.getZ() < (lz << 2) + 4) {
+                        for (int passZ = 0; passZ < 4; passZ++) {
+                            var actualZ = passZ + (lz << 2);
+                            if (actualZ >= placementShift.getZ()) {
+                                if (actualZ >= placementShift.getZ() + size.getZ()) {
+                                    break;
+                                }
+                                newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 2);
+                            }
                         }
+                        newMask &= newMaskZ;
                     }
-                    newMask &= newMaskZ;
-                    mask[lx | (ly << 8) | (lz << 4)] = newMask;
+                    mask[lx | (ly << 8) | (lz << 4)] |= newMask;
                 }
             }
         }
