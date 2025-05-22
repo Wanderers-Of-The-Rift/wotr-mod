@@ -15,7 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinFireBlock {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    private void wotr$OnTickFireBlock(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource, CallbackInfo ci) {
+    private void wotr$OnTickFireBlock(
+            BlockState blockState,
+            ServerLevel serverLevel,
+            BlockPos blockPos,
+            RandomSource randomSource,
+            CallbackInfo ci) {
         if (RiftLevelManager.isRift(serverLevel)) {
             ci.cancel();
         }
