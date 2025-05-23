@@ -95,6 +95,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addTheme("mushroom", "Mushroom");
         addTheme("nether", "Nether");
         addTheme("noir", "Noir");
+        addTheme("skyris", "Skyris");
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
             // addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));

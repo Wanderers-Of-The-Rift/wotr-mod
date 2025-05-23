@@ -176,6 +176,16 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_buzzy_bees"));
 
         KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("skyris")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("life")).setMinPercent(25F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("air")).setMinPercent(15F).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_skyris"));
+
+        KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_OBJECTIVE.get(),
                         DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
                 .setPriority(-1)

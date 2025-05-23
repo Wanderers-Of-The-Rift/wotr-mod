@@ -1,0 +1,18 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:life",
+      "minPercent": 25.0
+    },
+    {
+      "essenceType": "wotr:air",
+      "minPercent": 15.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:skyris"
+  },
+  "priority": 10
+}
