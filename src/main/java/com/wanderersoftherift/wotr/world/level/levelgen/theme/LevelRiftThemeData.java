@@ -32,10 +32,12 @@ public class LevelRiftThemeData extends SavedData {
                 .computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
     }
 
+    //TODO: Check this for potential error, causing cascading null issue
     public static LevelRiftThemeData create() {
         return new LevelRiftThemeData(null);
     }
 
+    //TODO: Check this for potential error, causing cascading null issue
     public static LevelRiftThemeData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         Holder<RiftTheme> theme = RiftTheme.CODEC.parse(NbtOps.INSTANCE, tag.get("theme"))
                 .resultOrPartial(LOGGER::error)
