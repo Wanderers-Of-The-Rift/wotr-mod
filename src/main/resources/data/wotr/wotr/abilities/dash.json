@@ -10,9 +10,21 @@
       },
       "velocity": [
         0.0,
-        0.4000000059604645,
+        0.0,
         1.0
       ]
+    },
+    {
+      "type": "wotr:movement_effect",
+      "targeting": {
+        "type": "wotr:self_targeting"
+      },
+      "velocity": [
+        0.0,
+        0.4,
+        0.0
+      ],
+      "relativeFrame": "absolute"
     },
     {
       "type": "wotr:sound_effect",

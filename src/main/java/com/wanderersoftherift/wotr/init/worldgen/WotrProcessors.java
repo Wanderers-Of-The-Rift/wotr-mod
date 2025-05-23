@@ -5,8 +5,8 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.AttachmentProc
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.GradientReplaceProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.MushroomProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftChestProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftMobSpawnerProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.TrialSpawnerProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.VineProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.WeightedReplaceProcessor;
 import net.minecraft.core.registries.Registries;
@@ -34,6 +34,6 @@ public class WotrProcessors {
             () -> () -> MushroomProcessor.CODEC);
     public static final Supplier<StructureProcessorType<RiftChestProcessor>> RIFT_CHESTS = PROCESSORS
             .register("rift_chests", () -> () -> RiftChestProcessor.CODEC);
-    public static final Supplier<StructureProcessorType<TrialSpawnerProcessor>> TRIAL_SPAWNER = PROCESSORS
-            .register("trial_spawner", () -> () -> TrialSpawnerProcessor.CODEC);
+    public static final Supplier<StructureProcessorType<RiftMobSpawnerProcessor>> RIFT_MOB_SPAWNER = PROCESSORS
+            .register("trial_spawner", () -> () -> RiftMobSpawnerProcessor.CODEC);
 }

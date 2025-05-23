@@ -1,12 +1,14 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,6 +22,9 @@ public class WotrItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         // spotless:off
+
+        tag(Tags.Items.HIDDEN_FROM_RECIPE_VIEWERS)
+                .add(WotrItems.BASE_ABILITY_HOLDER.get());
 
         /* Handles all the socketable Armor */
         tag(WotrTags.Items.SOCKETABLE_HELMET_SLOT)

@@ -17,9 +17,11 @@
         "MixinChunkAccess",
         "MixinChunkMap",
         "MixinEnchantingTableBlock",
+        "MixinFireBlock",
         "MixinItem",
         "MixinItemStack",
         "MixinJigsawReplacementProcessor",
+        "MixinLavaFluid",
         "MixinLivingEntity",
         "MixinOctahedralGroup",
         "MixinProtoChunk",
@@ -34,6 +36,7 @@
     ],
     "client": [
         "MixinAccessibilityOptionsScreen",
+        "MixinGuiGraphics",
         "MixinMinecraft"
     ],
     "injectors": {

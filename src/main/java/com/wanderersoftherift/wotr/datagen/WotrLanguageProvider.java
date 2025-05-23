@@ -119,7 +119,9 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
-        add("itemGroup." + WanderersOfTheRift.MODID + ".dev", "Wanderers of the Rift (Dev only)");
+        add(WanderersOfTheRift.translationId("itemGroup", "ability"), "Abilities");
+        add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
+        add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
 
         add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
 
@@ -206,6 +208,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
+        add("tooltip." + WanderersOfTheRift.MODID + ".empty_socket", "(Empty Slot)");
+        add("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", "Hold [%s] for additional information");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
@@ -252,6 +256,7 @@ public class WotrLanguageProvider extends LanguageProvider {
                 "Heals an additional heart");
 
         add(WotrKeyMappings.ABILITY_CATEGORY, "Abilities");
+        add(WotrKeyMappings.MISC_CATEGORY, "Wanderers of the Rift: Misc");
         add(WotrKeyMappings.ABILITY_1_KEY.getName(), "Use Ability 1");
         add(WotrKeyMappings.ABILITY_2_KEY.getName(), "Use Ability 2");
         add(WotrKeyMappings.ABILITY_3_KEY.getName(), "Use Ability 3");
@@ -264,6 +269,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WotrKeyMappings.PREV_ABILITY_KEY.getName(), "Select Previous Ability");
         add(WotrKeyMappings.NEXT_ABILITY_KEY.getName(), "Select Next Ability");
         add(WotrKeyMappings.USE_ABILITY_KEY.getName(), "Use Selected Ability");
+        add(WotrKeyMappings.SHOW_TOOLTIP_INFO.getName(), "Show Additional Tooltip Info");
 
         add(WanderersOfTheRift.translationId("keybinds", "l_alt"), "LAlt");
         add(WanderersOfTheRift.translationId("keybinds", "r_alt"), "RAlt");
@@ -272,6 +278,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("keybinds", "mod_alt"), "Alt+");
         add(WanderersOfTheRift.translationId("keybinds", "mod_ctrl"), "Ctrl+");
         add(WanderersOfTheRift.translationId("keybinds", "mod_shift"), "Shi+");
+
+        add(WanderersOfTheRift.translationId("rei", "rolls_label"), "Rolls:");
+        add(WanderersOfTheRift.translationId("rei", "percent.min"), "%s: > %s%%");
+        add(WanderersOfTheRift.translationId("rei", "percent.max"), "%s: < %s%%");
+        add(WanderersOfTheRift.translationId("rei", "absolute.min"), "%s: < %s");
+        add(WanderersOfTheRift.translationId("rei", "absolute.max"), "%s: > %s");
 
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
@@ -316,6 +328,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
         addRunegems();
         addModifiers();
+
+        add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
     }
 
     private void addRunegems() {

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
+import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
 import com.wanderersoftherift.wotr.client.render.item.ability.AbilitySpecialRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
@@ -63,7 +64,7 @@ public class WotrModelProvider extends ModelProvider {
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.TRAP_BLOCK, blockModels);
 
-        createTrialSpawner(blockModels, itemModels);
+        createRiftMobSpawner(blockModels, itemModels);
 
         ResourceLocation abilityBenchModel = WanderersOfTheRift.id("block/ability_bench");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
@@ -297,7 +298,7 @@ public class WotrModelProvider extends ModelProvider {
                 TexturedModel.COLUMN_HORIZONTAL_ALT);
     }
 
-    public void createTrialSpawner(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
+    public void createRiftMobSpawner(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         Block block = WotrBlocks.RIFT_MOB_SPAWNER.get();
         TextureMapping texturemapping = TextureMapping.trialSpawner(block, "_side_inactive", "_top_inactive");
         TextureMapping texturemapping1 = TextureMapping.trialSpawner(block, "_side_active", "_top_active");
@@ -324,9 +325,7 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.multiVariant(block)
                         .with(
-                                PropertyDispatch
-                                        .properties(BlockStateProperties.TRIAL_SPAWNER_STATE,
-                                                BlockStateProperties.OMINOUS)
+                                PropertyDispatch.properties(RiftMobSpawnerBlock.STATE, BlockStateProperties.OMINOUS)
                                         .generate(
                                                 (state, isActive) -> {
                                                     return switch (state) {

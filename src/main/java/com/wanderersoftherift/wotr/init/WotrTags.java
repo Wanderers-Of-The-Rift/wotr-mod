@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 public class WotrTags {
 
     public static class Blocks {
+        public static final TagKey<Block> BANNED_IN_RIFT = createTag("banned_in_rift");
 
         private static TagKey<Block> createTag(String name) {
             return BlockTags.create(WanderersOfTheRift.id(name));
@@ -22,6 +23,8 @@ public class WotrTags {
     }
 
     public static class Items {
+        public static final TagKey<Item> BANNED_IN_RIFT = createTag("banned_in_rift");
+
         public static final TagKey<Item> UNBREAKABLE_EXCLUSIONS = createTag("unbreakable_exclusions");
         public static final TagKey<Item> SOCKETABLE = createTag("socketable");
         public static final TagKey<Item> SOCKETABLE_HELMET_SLOT = createTag("socketable_helmet_slot");
