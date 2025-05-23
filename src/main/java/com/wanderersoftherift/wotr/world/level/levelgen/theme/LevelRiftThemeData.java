@@ -13,17 +13,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 import static com.wanderersoftherift.wotr.WanderersOfTheRift.LOGGER;
 
 public class LevelRiftThemeData extends SavedData {
 
     public static final Codec<LevelRiftThemeData> CODEC = RecordCodecBuilder
-            .create(inst -> inst.group(RiftTheme.CODEC.fieldOf("theme").forGetter(LevelRiftThemeData::getTheme))
+            .create(inst -> inst.group(RiftTheme.CODEC.optionalFieldOf("theme").forGetter(LevelRiftThemeData::getTheme))
                     .apply(inst, LevelRiftThemeData::new));
 
-    private Holder<RiftTheme> theme;
+    private Optional<Holder<RiftTheme>> theme;
 
-    public LevelRiftThemeData(Holder<RiftTheme> theme) {
+    public LevelRiftThemeData(Optional<Holder<RiftTheme>> theme) {
         this.theme = theme;
     }
 
@@ -32,32 +34,34 @@ public class LevelRiftThemeData extends SavedData {
                 .computeIfAbsent(new Factory<>(LevelRiftThemeData::create, LevelRiftThemeData::load), "rift_theme");
     }
 
-    //TODO: Check this for potential error, causing cascading null issue
     public static LevelRiftThemeData create() {
-        return new LevelRiftThemeData(null);
+        return new LevelRiftThemeData(Optional.empty());
     }
 
-    //TODO: Check this for potential error, causing cascading null issue
-    public static LevelRiftThemeData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-        Holder<RiftTheme> theme = RiftTheme.CODEC.parse(NbtOps.INSTANCE, tag.get("theme"))
+    public static LevelRiftThemeData load(CompoundTag tag, HolderLookup.Provider registries) {
+        return CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("theme"))
                 .resultOrPartial(LOGGER::error)
-                .orElse(null);
-        return new LevelRiftThemeData(theme);
+                .orElse(new LevelRiftThemeData(Optional.empty()));
     }
 
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
-        RiftTheme.CODEC.encodeStart(NbtOps.INSTANCE, this.getTheme())
+        CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), this)
                 .resultOrPartial(LOGGER::error)
                 .ifPresent(compound -> tag.put("theme", compound));
         return tag;
     }
 
-    public Holder<RiftTheme> getTheme() {
+    public Optional<Holder<RiftTheme>> getTheme() {
         return theme;
     }
 
     public void setTheme(Holder<RiftTheme> theme) {
+        this.theme = Optional.of(theme);
+        this.setDirty();
+    }
+
+    public void setTheme(Optional<Holder<RiftTheme>> theme) {
         this.theme = theme;
         this.setDirty();
     }

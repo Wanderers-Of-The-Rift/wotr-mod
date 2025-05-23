@@ -81,8 +81,8 @@ public class ThemeProcessor extends StructureProcessor {
     private List<StructureProcessor> getThemeProcessors(LevelReader world, BlockPos structurePos) {
         if (world instanceof ServerLevel serverLevel) {
             LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-            if (riftThemeData.getTheme() != null) {
-                return riftThemeData.getTheme().value().getProcessors(themePieceType);
+            if (riftThemeData.getTheme().isPresent()) {
+                return riftThemeData.getTheme().get().value().getProcessors(themePieceType);
             }
             return defaultThemeProcessors(serverLevel, structurePos);
         }

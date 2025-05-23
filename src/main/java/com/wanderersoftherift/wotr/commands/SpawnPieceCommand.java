@@ -450,7 +450,7 @@ public class SpawnPieceCommand {
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
         LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverlevel);
-        Holder<RiftTheme> originalTheme = riftThemeData.getTheme();
+        Optional<Holder<RiftTheme>> originalTheme = riftThemeData.getTheme();
         riftThemeData.setTheme(theme);
         try {
             Optional<StructureTemplate> optionalTemplate = structuretemplatemanager.get(template);
