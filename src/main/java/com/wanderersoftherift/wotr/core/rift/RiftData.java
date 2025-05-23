@@ -2,8 +2,10 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -20,11 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -33,14 +31,16 @@ public class RiftData extends SavedData { // TODO: split this
     private BlockPos portalPos;
     private final List<UUID> players;
     private final List<UUID> bannedPlayers;
+    private Optional<Holder<RiftTheme>> theme;
     private RiftConfig config;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players,
-            List<UUID> bannedPlayers, RiftConfig config) {
+                     List<UUID> bannedPlayers, Optional<Holder<RiftTheme>> theme, RiftConfig config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new ArrayList<>(Objects.requireNonNull(players));
         this.bannedPlayers = new ArrayList<>(Objects.requireNonNull(bannedPlayers));
+        this.theme = theme;
         this.config = config;
     }
 
@@ -57,7 +57,7 @@ public class RiftData extends SavedData { // TODO: split this
             ResourceKey<Level> portalDimension,
             BlockPos portalPos,
             RiftConfig config) {
-        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of(), List.of(), config),
+        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(), config),
                 RiftData::load);
     }
 
@@ -76,7 +76,7 @@ public class RiftData extends SavedData { // TODO: split this
                     .resultOrPartial(x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid rift config: '{}'", x))
                     .orElse(new RiftConfig(0));
         }
-        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, config);
+        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, Optional.empty(), config);
     }
 
     @Override
@@ -156,6 +156,20 @@ public class RiftData extends SavedData { // TODO: split this
 
     public boolean isBannedFromRift(Player player) {
         return bannedPlayers.contains(player.getUUID());
+    }
+
+    public Optional<Holder<RiftTheme>> getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Optional<Holder<RiftTheme>> theme) {
+        this.theme = theme;
+        this.setDirty();
+    }
+
+    public void setTheme(Holder<RiftTheme> theme) {
+        this.theme = Optional.of(theme);
+        this.setDirty();
     }
 
     public boolean isRiftEmpty() {
