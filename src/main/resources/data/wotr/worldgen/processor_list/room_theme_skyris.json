@@ -931,7 +931,7 @@
 
     {
       "processor_type": "wotr:attachment",
-      "requires_sides": 1,
+      "requires_sides": 0,
       "requires_up": true,
       "rarity": 0.1,
       "blockstate": {
@@ -944,16 +944,16 @@
     },
     {
       "processor_type": "wotr:attachment",
-      "requires_sides": 1,
+      "requires_sides": 0,
       "requires_down": true,
-      "rarity": 0.05,
+      "rarity": 0.01,
       "blockstate": {
         "Name": "minecraft:soul_lantern"
       }
     },
     {
       "processor_type": "wotr:attachment",
-      "requires_sides": 1,
+      "requires_sides": 0,
       "requires_up": true,
       "rarity": 0.05,
       "blockstate": {
