@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
@@ -80,9 +80,9 @@ public class ThemeProcessor extends StructureProcessor {
 
     private List<StructureProcessor> getThemeProcessors(LevelReader world, BlockPos structurePos) {
         if (world instanceof ServerLevel serverLevel) {
-            LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-            if (riftThemeData.getTheme() != null) {
-                return riftThemeData.getTheme().value().getProcessors(themePieceType);
+            RiftData riftData = RiftData.get(serverLevel);
+            if (riftData.getTheme().isPresent()) {
+                return riftData.getTheme().get().value().getProcessors(themePieceType);
             }
             return defaultThemeProcessors(serverLevel, structurePos);
         }

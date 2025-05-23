@@ -4,13 +4,14 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.SingleBlockGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -331,13 +332,10 @@ public final class RiftLevelManager {
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
         riftData.setConfig(config);
-        var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
 
-        Holder<RiftTheme> riftTheme;
+        riftData.setTheme(config.theme().orElse(getRandomTheme(riftLevel)));
         int maxDepth;
-        riftTheme = config.theme().orElse(LevelRiftThemeData.getRandomTheme(riftLevel));
         maxDepth = getRiftSize(config.tier());
-        themeData.setTheme(riftTheme);
 
         placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
                 maxDepth, new BlockPos(0, 2, 0));
@@ -375,4 +373,10 @@ public final class RiftLevelManager {
         };
     }
 
+    public static Holder<RiftTheme> getRandomTheme(ServerLevel level) {
+        Registry<RiftTheme> registry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
+
+        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, level.getRandom())
+                .orElseThrow(() -> new IllegalStateException("No rift themes available"));
+    }
 }
