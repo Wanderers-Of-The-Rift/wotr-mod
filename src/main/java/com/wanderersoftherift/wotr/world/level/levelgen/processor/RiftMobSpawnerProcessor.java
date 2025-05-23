@@ -19,7 +19,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.TrialSpawnerBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.trialspawner.PlayerDetector;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawner;
 import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerConfig;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -129,7 +128,9 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
 
         if (currentState.getBlock() instanceof TrialSpawnerBlock) {
             var riftSpawnerBlock = WotrBlocks.RIFT_MOB_SPAWNER.get();
-            BlockState blockState = riftSpawnerBlock.defaultBlockState().setValue(RiftMobSpawnerBlock.STATE, RiftMobSpawnerState.INACTIVE);;
+            BlockState blockState = riftSpawnerBlock.defaultBlockState()
+                    .setValue(RiftMobSpawnerBlock.STATE, RiftMobSpawnerState.INACTIVE);
+            ;
 
             var newBlockEntity = (RiftMobSpawnerBlockEntity) riftSpawnerBlock.newBlockEntity(new BlockPos(x, y, z),
                     blockState);
@@ -137,7 +138,7 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
                     normalConfig, ominousConfig, new RiftMobSpawnerData(), 72_000, 9, newBlockEntity, RIFT_PLAYERS,
                     PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
             riftMobSpawner.getData().reset();
-            newBlockEntity.setTrialSpawner(riftMobSpawner);
+            newBlockEntity.setRiftMobSpawner(riftMobSpawner);
             entityRef.setValue(newBlockEntity);
             return blockState;
 
@@ -148,9 +149,9 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
             RiftMobSpawnerBlockEntity newBlockEntity;
             if (entityRef.getValue() instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
                 riftMobSpawner = new RiftMobSpawner(
-                        normalConfig, ominousConfig, new TrialSpawnerData(), 72_000, 9, spawnerBlockEntity,
+                        normalConfig, ominousConfig, new RiftMobSpawnerData(), 72_000, 9, spawnerBlockEntity,
                         RIFT_PLAYERS, PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
-                newBlockEntity = riftMobSpawner;
+                newBlockEntity = spawnerBlockEntity;
             } else {
                 newBlockEntity = (RiftMobSpawnerBlockEntity) riftSpawnerBlock.newBlockEntity(new BlockPos(x, y, z),
                         currentState);
@@ -160,7 +161,7 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
                 entityRef.setValue(newBlockEntity);
             }
             riftMobSpawner.getData().reset();
-            newBlockEntity.setTrialSpawner(riftMobSpawner);
+            newBlockEntity.setRiftMobSpawner(riftMobSpawner);
             currentState = currentState.setValue(RiftMobSpawnerBlock.STATE, RiftMobSpawnerState.INACTIVE);
         }
         return currentState;

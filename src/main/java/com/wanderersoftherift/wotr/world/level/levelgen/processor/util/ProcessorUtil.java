@@ -20,7 +20,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -62,7 +61,7 @@ public class ProcessorUtil {
 
     private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
 
-    private static long getRiftSeed(LevelAccessor level){
+    private static long getRiftSeed(LevelAccessor level) {
 
         var riftSeed = 0L;
         if (((ServerChunkCache) level.getChunkSource()).getGenerator() instanceof FastRiftGenerator riftGenerator) {
