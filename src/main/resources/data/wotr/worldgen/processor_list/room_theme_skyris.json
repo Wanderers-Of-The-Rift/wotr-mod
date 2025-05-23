@@ -954,6 +954,15 @@
     {
       "processor_type": "wotr:attachment",
       "requires_sides": 0,
+      "requires_down": true,
+      "rarity": 0.01,
+      "blockstate": {
+        "Name": "minecraft:potted_blue_orchid"
+      }
+    },
+    {
+      "processor_type": "wotr:attachment",
+      "requires_sides": 0,
       "requires_up": true,
       "rarity": 0.05,
       "blockstate": {
