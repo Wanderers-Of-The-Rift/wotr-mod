@@ -62,11 +62,20 @@ public class ProcessorUtil {
 
     private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
 
+    private static long getRiftSeed(LevelAccessor level){
+
+        var riftSeed = 0L;
+        if (((ServerChunkCache) level.getChunkSource()).getGenerator() instanceof FastRiftGenerator riftGenerator) {
+            var cfgSeed = riftGenerator.getRiftConfig().seed();
+            if (cfgSeed.isPresent()) {
+                riftSeed = cfgSeed.get();
+            }
+        }
+        return riftSeed;
+    }
+
     public static PositionalRandomFactory getRiftRandomFactory(LevelAccessor level, long salt) {
-        var riftSeed = ((FastRiftGenerator) ((ServerChunkCache) level.getChunkSource()).getGenerator()).getRiftConfig()
-                .seed()
-                .orElse(0);
-        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(6), riftSeed + salt);
+        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(6), getRiftSeed(level) + salt);
     }
 
     public static RandomSource getRandom(
@@ -88,8 +97,7 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
-        var riftSeed = ((FastRiftGenerator) ((ServerChunkCache) ((ServerLevelAccessor) world).getChunkSource())
-                .getGenerator()).getRiftConfig().seed().orElse(0);
+        var riftSeed = getRiftSeed((LevelAccessor) world);
         return switch (type) {
             case BLOCK -> getRandomSeed(blockPos, processorSeed) + riftSeed;
             case PIECE -> getRandomSeed(piecePos, processorSeed) + riftSeed;
@@ -243,19 +251,27 @@ public class ProcessorUtil {
     public static StructureTemplate.StructureBlockInfo getBlockInfo(
             List<StructureTemplate.StructureBlockInfo> mapByPos,
             BlockPos pos) {
+        int index = getBlockIndex(mapByPos, pos);
+        if (index < 0) {
+            return null;
+        }
+        return mapByPos.get(index);
+    }
+
+    public static int getBlockIndex(List<StructureTemplate.StructureBlockInfo> mapByPos, BlockPos pos) {
         BlockPos firstPos = mapByPos.getFirst().pos();
         BlockPos lastPos = mapByPos.getLast().pos();
         if (!isPosBetween(pos, firstPos, lastPos)) {
-            return null;
+            return -1;
         }
         int width = lastPos.getX() + 1 - firstPos.getX();
         int height = lastPos.getY() + 1 - firstPos.getY();
         int index = (pos.getX() - firstPos.getX()) + (pos.getY() - firstPos.getY()) * width
                 + (pos.getZ() - firstPos.getZ()) * width * height;
         if (index < 0 || index >= mapByPos.size()) {
-            return null;
+            return -1;
         }
-        return mapByPos.get(index);
+        return index;
     }
 
     private static boolean isPosBetween(BlockPos pos, BlockPos firstPos, BlockPos lastPos) {
