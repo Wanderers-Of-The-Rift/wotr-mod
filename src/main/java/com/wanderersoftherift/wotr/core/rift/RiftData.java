@@ -76,7 +76,13 @@ public class RiftData extends SavedData { // TODO: split this
                     .resultOrPartial(x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid rift config: '{}'", x))
                     .orElse(new RiftConfig(0));
         }
-        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, Optional.empty(), config);
+        Optional<Holder<RiftTheme>> theme = Optional.empty();
+        if (tag.contains("Theme")) {
+            theme = RiftTheme.CODEC
+                    .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.getCompound("Theme"))
+                    .resultOrPartial(x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid rift theme: '{}'", x));
+        }
+        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, theme, config);
     }
 
     @Override
@@ -94,6 +100,9 @@ public class RiftData extends SavedData { // TODO: split this
                     RiftConfig.CODEC.encode(config, registries.createSerializationContext(NbtOps.INSTANCE), tag)
                             .getOrThrow());
         }
+        theme.ifPresent(riftThemeHolder -> tag.put("Theme",
+                RiftTheme.CODEC.encode(riftThemeHolder, registries.createSerializationContext(NbtOps.INSTANCE), tag)
+                        .getOrThrow()));
         return tag;
     }
 
