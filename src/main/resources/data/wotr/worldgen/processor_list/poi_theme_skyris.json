@@ -15,7 +15,13 @@
               "step_size": 0.1
             },
             {
-              "output_state": "biomeswevegone:blue_enchanted_leaves",
+              "output_state": {
+                "type": "wotr:blockstate",
+                "Name": "biomeswevegone:blue_enchanted_leaves",
+                "Properties": {
+                  "persistent": "true"
+                }
+              },
               "step_size": 0.3
             }
           ]
