@@ -34,8 +34,7 @@ public class LaxRegistryCodec<E> implements Codec<Holder<E>> {
     }
 
     public <T> DataResult<T> encode(Holder<E> holder, DynamicOps<T> ops, T value) {
-        if(holder == null)
-        {
+        if (holder == null) {
             return DataResult.error(
                     () -> "Holder is null for " + this.registryKey + " so cannot be serialized");
         }

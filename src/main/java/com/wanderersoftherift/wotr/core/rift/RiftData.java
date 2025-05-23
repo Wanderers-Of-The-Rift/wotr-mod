@@ -22,7 +22,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -35,7 +40,7 @@ public class RiftData extends SavedData { // TODO: split this
     private RiftConfig config;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players,
-                     List<UUID> bannedPlayers, Optional<Holder<RiftTheme>> theme, RiftConfig config) {
+            List<UUID> bannedPlayers, Optional<Holder<RiftTheme>> theme, RiftConfig config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new ArrayList<>(Objects.requireNonNull(players));
@@ -57,7 +62,8 @@ public class RiftData extends SavedData { // TODO: split this
             ResourceKey<Level> portalDimension,
             BlockPos portalPos,
             RiftConfig config) {
-        return new SavedData.Factory<>(() -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(), config),
+        return new SavedData.Factory<>(
+                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(), config),
                 RiftData::load);
     }
 
@@ -82,7 +88,8 @@ public class RiftData extends SavedData { // TODO: split this
                     .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.getCompound("Theme"))
                     .resultOrPartial(x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid rift theme: '{}'", x));
         }
-        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, theme, config);
+        return new RiftData(portalDimension, BlockPos.of(tag.getLong("PortalPos")), players, bannedPlayers, theme,
+                config);
     }
 
     @Override
