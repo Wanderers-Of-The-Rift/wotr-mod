@@ -1,0 +1,9 @@
+{
+  "price" : {
+    "wotr:boondongle": 10
+  },
+  "outputItem" : {
+    "id": "minecraft:enchanted_book",
+    "count": 1
+  }
+}
