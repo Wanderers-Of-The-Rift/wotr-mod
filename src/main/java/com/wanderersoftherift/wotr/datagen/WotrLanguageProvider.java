@@ -158,6 +158,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("container." + WanderersOfTheRift.MODID + ".rift_chest", "Rift Chest");
         add("container." + WanderersOfTheRift.MODID + ".key_forge", "Key Forge");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench", "Ability Bench");
+        add(WanderersOfTheRift.translationId("container", "trading"), "%s Trader");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
@@ -359,6 +360,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         addModifiers();
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
+
+        add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
+        add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
     }
 
     private void addRunegems() {

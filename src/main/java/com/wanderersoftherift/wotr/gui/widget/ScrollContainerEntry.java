@@ -19,6 +19,10 @@ public interface ScrollContainerEntry extends GuiEventListener, Renderable, Layo
      */
     int getHeight(int width);
 
+    void setWidth(int width);
+
+    void setHeight(int height);
+
     default @NotNull ScreenRectangle getRectangle() {
         return new ScreenRectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
