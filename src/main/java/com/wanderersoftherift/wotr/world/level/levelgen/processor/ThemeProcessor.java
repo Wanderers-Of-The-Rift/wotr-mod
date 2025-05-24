@@ -3,10 +3,10 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
@@ -89,11 +89,11 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private List<StructureProcessor> getThemeProcessors(ServerLevel world, BlockPos structurePos) {
         if (world instanceof ServerLevel serverLevel) {
-            LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-            var result = (riftThemeData.getTheme() != null)
-                    ? riftThemeData.getTheme().value().getProcessors(themePieceType)
-                    : defaultThemeProcessors(serverLevel, structurePos);
-            return result;
+            RiftData riftData = RiftData.get(serverLevel);
+            if (riftData.getTheme().isPresent()) {
+                return riftData.getTheme().get().value().getProcessors(themePieceType);
+            }
+            return defaultThemeProcessors(serverLevel, structurePos);
         }
         return new ArrayList<>();
     }
@@ -132,10 +132,8 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
     }
 
     private ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos) {
-        LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverLevel);
-        var structureProcessors = (riftThemeData.getTheme() != null)
-                ? riftThemeData.getTheme().value().getProcessors(themePieceType)
-                : defaultThemeProcessors(serverLevel, structurePos);
+        var riftThemeData = RiftData.get(serverLevel);
+        var structureProcessors = riftThemeData.getTheme().map(it->it.value().getProcessors(themePieceType)).orElse(defaultThemeProcessors(serverLevel, structurePos));
         var newCache = new ThemeCache(new PhantomReference<>(serverLevel, null), new ArrayList<>(), new ArrayList<>(),
                 new ArrayList<>());
         for (var processor : structureProcessors) {

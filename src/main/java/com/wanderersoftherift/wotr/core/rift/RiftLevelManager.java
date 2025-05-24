@@ -4,13 +4,14 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -308,7 +309,7 @@ public final class RiftLevelManager {
     private static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
         var random = RandomSource.create();
         int seed = baseConfig.seed().orElseGet(random::nextInt);
-        var riftTheme = baseConfig.theme().orElse(LevelRiftThemeData.getRandomTheme(server, random));
+        var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, random));
         return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(), Optional.of(seed));
     }
 
@@ -351,11 +352,8 @@ public final class RiftLevelManager {
         riftData.setPortalDimension(portalDimension);
         riftData.setPortalPos(portalPos);
         riftData.setConfig(config);
-        var themeData = LevelRiftThemeData.getFromLevel(riftLevel);
 
-        Holder<RiftTheme> riftTheme = config.theme()
-                .orElse(LevelRiftThemeData.getRandomTheme(riftLevel.getServer(), riftLevel.random));
-        themeData.setTheme(riftTheme);
+        riftData.setTheme(config.theme().orElse(getRandomTheme(riftLevel.getServer(), riftLevel.random)));
         int maxDepth = getRiftSize(config.tier());
 
         /*
@@ -395,4 +393,10 @@ public final class RiftLevelManager {
         };
     }
 
+    public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, RandomSource random) {
+        Registry<RiftTheme> registry = server.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
+
+        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, random)
+                .orElseThrow(() -> new IllegalStateException("No rift themes available"));
+    }
 }

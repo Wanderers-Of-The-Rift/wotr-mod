@@ -34,6 +34,11 @@ public class LaxRegistryCodec<E> implements Codec<Holder<E>> {
     }
 
     public <T> DataResult<T> encode(Holder<E> holder, DynamicOps<T> ops, T value) {
+        if (holder == null) {
+            return DataResult.error(
+                    () -> "Holder is null for " + this.registryKey + " so cannot be serialized");
+        }
+
         return holder.unwrap()
                 .map(key -> ResourceLocation.CODEC.encode(key.location(), ops, value), item -> DataResult.error(
                         () -> "Resource location not available for " + this.registryKey + " so cannot be serialized"));

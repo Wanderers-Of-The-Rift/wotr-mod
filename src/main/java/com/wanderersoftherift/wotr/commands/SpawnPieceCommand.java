@@ -9,9 +9,9 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.LevelRiftThemeData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.ResourceLocationException;
@@ -449,9 +449,9 @@ public class SpawnPieceCommand {
         ServerLevel serverlevel = cs.getSource().getLevel();
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
-        LevelRiftThemeData riftThemeData = LevelRiftThemeData.getFromLevel(serverlevel);
-        Holder<RiftTheme> originalTheme = riftThemeData.getTheme();
-        riftThemeData.setTheme(theme);
+        RiftData riftData = RiftData.get(serverlevel);
+        Optional<Holder<RiftTheme>> originalTheme = riftData.getTheme();
+        riftData.setTheme(theme);
         try {
             Optional<StructureTemplate> optionalTemplate = structuretemplatemanager.get(template);
             if (optionalTemplate.isEmpty()) {
@@ -506,7 +506,7 @@ public class SpawnPieceCommand {
             return 0;
 
         } finally {
-            riftThemeData.setTheme(originalTheme);
+            riftData.setTheme(originalTheme);
         }
     }
 

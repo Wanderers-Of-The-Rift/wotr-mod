@@ -12,3 +12,9 @@ If you're interested in contributing to the project, you can fork the repository
 
 If you want a more involved role in the project, involving branches on the main repository and involvement
 in design discussions, join our discord: https://discord.com/invite/woldsvaults
+
+You can add pre-commit hooks for formatting and linting by running:
+
+```sh
+git config core.hooksPath .githooks
+```
