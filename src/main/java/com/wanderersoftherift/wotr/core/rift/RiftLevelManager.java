@@ -10,7 +10,7 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
-import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
+import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;

@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network;
+package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import io.netty.buffer.ByteBuf;

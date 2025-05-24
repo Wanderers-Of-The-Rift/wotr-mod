@@ -162,6 +162,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
         add(WanderersOfTheRift.translationId("container", "rift_complete"), "Rift Overview");
+        add(WanderersOfTheRift.translationId("container", "rift_complete.reward"), "Rewards");
 
         add(WanderersOfTheRift.translationId("stat", "result"), "Result: ");
         add(WanderersOfTheRift.translationId("stat", "result.success"), "Success");
@@ -283,7 +284,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("ability_upgrade", "healing_power.description"),
                 "Heals an additional heart");
 
-        add(WotrKeyMappings.ABILITY_CATEGORY, "Abilities");
+        add(WotrKeyMappings.ABILITY_CATEGORY, "Wanderers of the Rift: Abilities");
         add(WotrKeyMappings.MISC_CATEGORY, "Wanderers of the Rift: Misc");
         add(WotrKeyMappings.ABILITY_1_KEY.getName(), "Use Ability 1");
         add(WotrKeyMappings.ABILITY_2_KEY.getName(), "Use Ability 2");

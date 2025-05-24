@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network;
+package com.wanderersoftherift.wotr.network.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
