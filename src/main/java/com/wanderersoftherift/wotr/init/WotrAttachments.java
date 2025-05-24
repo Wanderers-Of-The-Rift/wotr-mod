@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
+import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
 import net.minecraft.world.item.ItemStack;
@@ -67,5 +68,9 @@ public class WotrAttachments {
             .register("effect_display", () -> AttachmentType.builder(() -> new EffectDisplayData()).build());
     public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
             () -> AttachmentType.builder(ManaData::new).serialize(ManaData.CODEC).build());
+
+    /// Guilds
+    public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
+            () -> AttachmentType.builder(Wallet::new).serialize(Wallet.CODEC).copyOnDeath().build());
 
 }
