@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.network.UseAbilityPayload;
+import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,23 +18,25 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class StandardAbility extends AbstractAbility {
 
     public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> instance
-                    .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
-                            ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
-                            Codec.INT.fieldOf("cooldown").forGetter(ability -> (int) ability.getBaseCooldown()),
-                            Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
-                            Codec.list(AbstractEffect.DIRECT_CODEC)
-                                    .optionalFieldOf("effects", Collections.emptyList())
-                                    .forGetter(StandardAbility::getEffects)
-                    ).apply(instance, StandardAbility::new));
+            instance -> instance.group(
+                    ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
+                    ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
+                    ResourceLocation.CODEC.optionalFieldOf("smallIcon").forGetter(StandardAbility::getSmallIcon),
+                    Codec.INT.fieldOf("cooldown").forGetter(ability -> (int) ability.getBaseCooldown()),
+                    Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
+                    Codec.list(AbstractEffect.DIRECT_CODEC)
+                            .optionalFieldOf("effects", Collections.emptyList())
+                            .forGetter(StandardAbility::getEffects)
+            ).apply(instance, StandardAbility::new));
 
-    public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
-            List<AbstractEffect> effects) {
-        super(resourceLocation, icon, effects, baseCooldown);
+    public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon,
+            Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost, List<AbstractEffect> effects) {
+        super(resourceLocation, icon, smallIcon, effects, baseCooldown);
         setBaseManaCost(manaCost);
     }
 

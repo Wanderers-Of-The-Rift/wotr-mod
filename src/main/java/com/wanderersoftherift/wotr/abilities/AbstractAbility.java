@@ -11,7 +11,7 @@ import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import com.wanderersoftherift.wotr.network.AbilityCooldownUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
@@ -40,6 +41,7 @@ public abstract class AbstractAbility {
 
     private final ResourceLocation name;
     private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
+    private Optional<ResourceLocation> smallIcon = Optional.empty();
     private Component displayName;
 
     private final List<AbstractEffect> effects;
@@ -49,11 +51,12 @@ public abstract class AbstractAbility {
     private Holder<Attribute> durationAttribute = null;
     private boolean isToggle = false;
 
-    public AbstractAbility(ResourceLocation abilityName, ResourceLocation icon, List<AbstractEffect> effects,
-            int baseCooldown) {
+    public AbstractAbility(ResourceLocation abilityName, ResourceLocation icon, Optional<ResourceLocation> smallIcon,
+            List<AbstractEffect> effects, int baseCooldown) {
         this.name = abilityName;
         this.effects = effects;
         this.icon = icon;
+        this.smallIcon = smallIcon;
         this.displayName = Component.translatable("ability." + getName().getNamespace() + "." + getName().getPath());
         this.baseCooldown = baseCooldown;
     }
@@ -66,6 +69,10 @@ public abstract class AbstractAbility {
 
     public ResourceLocation getIcon() {
         return icon;
+    }
+
+    public Optional<ResourceLocation> getSmallIcon() {
+        return smallIcon;
     }
 
     public List<AbstractEffect> getEffects() {

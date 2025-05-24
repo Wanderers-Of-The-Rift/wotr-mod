@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.layer.objective;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.network.S2CRiftObjectiveStatusPacket;
+import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import net.minecraft.resources.ResourceLocation;
 
