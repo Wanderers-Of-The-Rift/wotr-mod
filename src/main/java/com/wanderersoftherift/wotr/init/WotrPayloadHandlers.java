@@ -17,6 +17,8 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.SetEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
+import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -77,6 +79,12 @@ public class WotrPayloadHandlers {
                 new C2SRuneAnvilApplyPacket.C2SRuneAnvilApplyPacketHandler());
         registrar.playToClient(S2CLevelListUpdatePacket.TYPE, S2CLevelListUpdatePacket.STREAM_CODEC,
                 new S2CLevelListUpdatePacket.S2CLevelListUpdatePacketHandler());
+
+        // Guild
+        registrar.playToClient(WalletReplicationPayload.TYPE, WalletReplicationPayload.STREAM_CODEC,
+                WalletReplicationPayload::handleOnClient);
+        registrar.playToClient(WalletUpdatePayload.TYPE, WalletUpdatePayload.STREAM_CODEC,
+                WalletUpdatePayload::handleOnClient);
     }
 
     @SubscribeEvent
@@ -85,6 +93,7 @@ public class WotrPayloadHandlers {
             replicateAbilities(player);
             replicateEffectMarkers(player);
             replicateMana(player);
+            replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
         }
     }
@@ -94,6 +103,7 @@ public class WotrPayloadHandlers {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
             replicateEffectMarkers(player);
+            replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
         }
     }
@@ -104,6 +114,7 @@ public class WotrPayloadHandlers {
             replicateAbilities(player);
             replicateEffectMarkers(player);
             replicateMana(player);
+            replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
         }
     }
@@ -127,6 +138,10 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new UpdateEffectMarkersPayload(displayData, Collections.emptyList()));
         }
+    }
+
+    private static void replicateWallet(ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, new WalletReplicationPayload(player.getData(WotrAttachments.WALLET)));
     }
 
 }
