@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.item.LootBox;
+import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -53,6 +54,9 @@ public class WotrDataComponentType {
             "rift_objective", ObjectiveType.CODEC, ObjectiveType.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_SEED = register(
             "rift_seed", Codec.INT, ByteBufCodecs.INT);
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CurrencyProvider>> CURRENCY_PROVIDER = register(
+            "currency_provider", CurrencyProvider.CODEC, CurrencyProvider.STREAM_CODEC);
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(
             String name,

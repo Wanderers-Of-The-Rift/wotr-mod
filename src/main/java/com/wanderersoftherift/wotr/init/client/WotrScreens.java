@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.gui.screen.AbilityBenchScreen;
 import com.wanderersoftherift.wotr.gui.screen.KeyForgeScreen;
 import com.wanderersoftherift.wotr.gui.screen.RiftCompleteScreen;
 import com.wanderersoftherift.wotr.gui.screen.RuneAnvilScreen;
+import com.wanderersoftherift.wotr.gui.screen.TradingScreen;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,5 +21,6 @@ public class WotrScreens {
         event.register(WotrMenuTypes.KEY_FORGE_MENU.get(), KeyForgeScreen::new);
         event.register(WotrMenuTypes.ABILITY_BENCH_MENU.get(), AbilityBenchScreen::new);
         event.register(WotrMenuTypes.RIFT_COMPLETE_MENU.get(), RiftCompleteScreen::new);
+        event.register(WotrMenuTypes.TRADING_MENU.get(), TradingScreen::new);
     }
 }

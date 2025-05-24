@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.guild.currency.ServerWallet;
+import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -11,6 +13,8 @@ import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -27,7 +31,22 @@ public class DebugCommands extends BaseCommand {
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
+        builder.then(Commands.literal("openTradingMenu").executes(this::openTradingMenu));
 
+    }
+
+    private int openTradingMenu(CommandContext<CommandSourceStack> context) {
+        if (context.getSource().getPlayer() != null) {
+            context.getSource()
+                    .getPlayer()
+                    .openMenu(new SimpleMenuProvider(
+                            ((containerId, playerInventory, player) -> new TradingMenu(containerId, playerInventory,
+                                    ContainerLevelAccess.create(player.level(), player.getOnPos()),
+                                    new ServerWallet(context.getSource().getPlayer()))),
+                            Component.translatable(WanderersOfTheRift.translationId("container", "trading"), "Guild")));
+            return 1;
+        }
+        return 0;
     }
 
     private int devWorld(CommandContext<CommandSourceStack> stack) {

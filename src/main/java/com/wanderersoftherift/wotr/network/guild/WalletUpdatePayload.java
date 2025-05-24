@@ -32,6 +32,6 @@ public record WalletUpdatePayload(Map<Holder<Currency>, Integer> update) impleme
 
     public void handleOnClient(final IPayloadContext context) {
         Wallet wallet = context.player().getData(WotrAttachments.WALLET.get());
-        update.forEach((currency, amount) -> wallet.set(currency, amount, null));
+        update.forEach(wallet::set);
     }
 }
