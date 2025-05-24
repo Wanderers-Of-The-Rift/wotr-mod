@@ -12,7 +12,7 @@ import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import com.wanderersoftherift.wotr.network.AbilityCooldownUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;

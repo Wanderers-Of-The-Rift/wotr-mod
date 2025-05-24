@@ -1,16 +1,6 @@
 package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
-import com.wanderersoftherift.wotr.commands.AbilityCommands;
-import com.wanderersoftherift.wotr.commands.BugReportCommand;
-import com.wanderersoftherift.wotr.commands.DebugCommands;
-import com.wanderersoftherift.wotr.commands.EssenceCommands;
-import com.wanderersoftherift.wotr.commands.HudCommands;
-import com.wanderersoftherift.wotr.commands.InventorySnapshotCommands;
-import com.wanderersoftherift.wotr.commands.RiftCommands;
-import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
-import com.wanderersoftherift.wotr.commands.RiftMapCommands;
-import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
@@ -51,15 +41,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -117,12 +104,6 @@ public class WanderersOfTheRift {
             WotrConfigurableLayers.LAYERS.register(modEventBus);
             WotrConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
         }
-
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (Wotr) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like
-        // onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);
@@ -185,21 +166,5 @@ public class WanderersOfTheRift {
         ModList.get()
                 .getModContainerById("sophisticatedbackpacks")
                 .ifPresent(x -> SophisticatedBackpackInterop.register(event));
-    }
-
-    @SubscribeEvent
-    private void registerCommands(RegisterCommandsEvent event) {
-        InventorySnapshotCommands.register(event.getDispatcher(), event.getBuildContext());
-        SpawnPieceCommand.register(event.getDispatcher(), event.getBuildContext());
-        if (FMLEnvironment.dist.isClient()) {
-            RiftMapCommands.register(event.getDispatcher(), event.getBuildContext());
-        }
-        new DebugCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        AbilityCommands.register(event.getDispatcher(), event.getBuildContext());
-        new RiftKeyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new EssenceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new BugReportCommand().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new HudCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 }

@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
 import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
-import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
