@@ -11,19 +11,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * QuickMover provides a simple API for defining the {@link AbstractContainerMenu#quickMoveStack} implementation.
+ */
 public final class QuickMover {
     public static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
     public static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
 
-    private final AbstractContainerMenu menu;
     private final List<SlotMover> slotMovers;
 
-    private QuickMover(AbstractContainerMenu menu, List<SlotMover> slotMovers) {
+    private QuickMover(List<SlotMover> slotMovers) {
         this.slotMovers = ImmutableList.copyOf(slotMovers);
-        this.menu = menu;
     }
 
-    public ItemStack quickMove(Player player, int slotIndex) {
+    /**
+     * Undertakes a quickMove as defined when the QuickMover was created
+     * 
+     * @param menu
+     * @param player
+     * @param slotIndex
+     * @return The residual content of the slot being moved that could still be moved
+     */
+    public ItemStack quickMove(AbstractContainerMenu menu, Player player, int slotIndex) {
         Slot slot = menu.slots.get(slotIndex);
         if (!slot.hasItem()) {
             return ItemStack.EMPTY;
@@ -37,7 +46,7 @@ public final class QuickMover {
                 if (moveAction.onlyIfNoOtherValid && result != MoveResult.NO_MOVE) {
                     break;
                 }
-                MoveResult newResult = moveItemStackTo(slotStack, moveAction.startSlot,
+                MoveResult newResult = moveItemStackTo(menu, slotStack, moveAction.startSlot,
                         moveAction.startSlot + moveAction.count, moveAction.reverse);
                 if (newResult == MoveResult.MOVED
                         || (newResult == MoveResult.VALID_BUT_FULL && result != MoveResult.MOVED)) {
@@ -70,6 +79,7 @@ public final class QuickMover {
      * @return The result of the move
      */
     private MoveResult moveItemStackTo(
+            AbstractContainerMenu menu,
             @NotNull ItemStack stack,
             int startIndex,
             int endIndex,
@@ -139,8 +149,8 @@ public final class QuickMover {
         return result;
     }
 
-    public static QuickMover.Builder create(AbstractContainerMenu menu) {
-        return new QuickMover.Builder(menu);
+    public static QuickMover.Builder create() {
+        return new QuickMover.Builder();
     }
 
     private static class SlotMover {
@@ -163,12 +173,10 @@ public final class QuickMover {
         private static final int UNSET = -1;
 
         private int playerSlotsStart = UNSET;
-        private AbstractContainerMenu menu;
 
         private List<SlotMover> slotMovers = new ArrayList<>();
 
-        private Builder(AbstractContainerMenu menu) {
-            this.menu = menu;
+        private Builder() {
         }
 
         /**
@@ -208,7 +216,7 @@ public final class QuickMover {
          * @return The finalised QuickMover
          */
         public QuickMover build() {
-            return new QuickMover(menu, slotMovers);
+            return new QuickMover(slotMovers);
         }
 
         public class SlotMoverBuilder {

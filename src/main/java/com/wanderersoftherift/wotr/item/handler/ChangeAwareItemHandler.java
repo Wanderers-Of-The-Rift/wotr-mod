@@ -14,7 +14,7 @@ public abstract class ChangeAwareItemHandler implements IItemHandlerModifiable {
         this.parent = parent;
     }
 
-    public abstract void onSlotChanged(int slot);
+    public abstract void onSlotChanged(int slot, ItemStack oldStack, ItemStack newStack);
 
     @Override
     public int getSlots() {
@@ -28,18 +28,20 @@ public abstract class ChangeAwareItemHandler implements IItemHandlerModifiable {
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+        ItemStack original = parent.getStackInSlot(slot).copy();
         ItemStack result = parent.insertItem(slot, stack, simulate);
         if (!simulate && !result.equals(stack)) {
-            onSlotChanged(slot);
+            onSlotChanged(slot, original, parent.getStackInSlot(slot));
         }
         return result;
     }
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+        ItemStack original = parent.getStackInSlot(slot).copy();
         ItemStack result = parent.extractItem(slot, amount, simulate);
         if (!simulate && !result.isEmpty()) {
-            onSlotChanged(slot);
+            onSlotChanged(slot, original, parent.getStackInSlot(slot));
         }
         return result;
     }
@@ -55,7 +57,8 @@ public abstract class ChangeAwareItemHandler implements IItemHandlerModifiable {
     }
 
     public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+        ItemStack original = parent.getStackInSlot(slot).copy();
         parent.setStackInSlot(slot, stack);
-        onSlotChanged(slot);
+        onSlotChanged(slot, original, stack);
     }
 }

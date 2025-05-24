@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
-import com.wanderersoftherift.wotr.network.SelectAbilitySlotPayload;
+import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
