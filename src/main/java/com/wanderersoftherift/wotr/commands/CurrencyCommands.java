@@ -9,12 +9,16 @@ import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.Map;
 
 public class CurrencyCommands extends BaseCommand {
 
@@ -44,7 +48,8 @@ public class CurrencyCommands extends BaseCommand {
 
     private int setCurrency(CommandContext<CommandSourceStack> ctx, Holder<Currency> currency, int amount) {
         Wallet wallet = ctx.getSource().getPlayer().getData(WotrAttachments.WALLET.get());
-        wallet.set(currency, amount, ctx.getSource().getPlayer());
+        wallet.set(currency, amount);
+        PacketDistributor.sendToPlayer(ctx.getSource().getPlayer(), new WalletUpdatePayload(Map.of(currency, amount)));
         return 1;
     }
 }

@@ -77,6 +77,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.FRAMED_RUNEGEM_MONSTER, "Monster Runegem (Framed)");
         addItem(WotrItems.ABILITY_HOLDER, "Empty Ability");
         addItem(WotrItems.SKILL_THREAD, "Skill Thread");
+        addItem(WotrItems.CURRENCY_BAG, "Currency Bag");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
@@ -158,6 +159,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("container." + WanderersOfTheRift.MODID + ".rift_chest", "Rift Chest");
         add("container." + WanderersOfTheRift.MODID + ".key_forge", "Key Forge");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench", "Ability Bench");
+        add(WanderersOfTheRift.translationId("container", "trading"), "%s Trader");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
@@ -243,6 +245,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
+        add(WanderersOfTheRift.translationId("tooltip", "currency_bag"), "Gain %s when consumed");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -360,6 +363,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         addModifiers();
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
+        add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
+
+        add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
+        add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
     }
 
     private void addRunegems() {
