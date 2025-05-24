@@ -1,0 +1,12 @@
+{
+  "processors": [
+    {
+      "piece_type": "poi",
+      "processors": "wotr:poi_theme_desert"
+    },
+    {
+      "piece_type": "room",
+      "processors": "wotr:room_theme_desert"
+    }
+  ]
+}
