@@ -2,16 +2,20 @@ package com.wanderersoftherift.wotr.gui.screen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.TradeOffering;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
@@ -28,15 +32,16 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/trading/background.png");
 
-    private static final int BACKGROUND_WIDTH = 276;
+    private static final int BACKGROUND_WIDTH = 324;
     private static final int BACKGROUND_HEIGHT = 166;
     private static final int BORDER_X = 5;
 
     private ScrollContainerWidget<TradeOption> tradeOptions;
+    private ScrollContainerWidget<CurrencyDisplay> currencies;
 
     public TradingScreen(TradingMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 276;
+        this.imageWidth = 324;
         this.imageHeight = 166;
         this.inventoryLabelY = this.imageHeight - 94;
         this.inventoryLabelX = 107;
@@ -53,6 +58,11 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
                         .map(x -> new TradeOption(tradeRegistry.wrapAsHolder(x), font, this::selectTrade))
                         .toList());
         addRenderableWidget(tradeOptions);
+
+        Wallet wallet = minecraft.player.getData(WotrAttachments.WALLET.get());
+        currencies = new ScrollContainerWidget<>(leftPos + 276, topPos + 18, 43, 140,
+                wallet.availableCurrencies().stream().map(x -> new CurrencyDisplay(font, wallet, x)).toList());
+        addRenderableWidget(currencies);
     }
 
     private void selectTrade(Holder<TradeOffering> trade) {
@@ -69,6 +79,45 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth,
                 this.imageHeight, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+    }
+
+    public static class CurrencyDisplay extends AbstractWidget implements ScrollContainerEntry {
+        private Font font;
+        private Wallet wallet;
+        private Holder<Currency> currency;
+
+        public CurrencyDisplay(Font font, Wallet wallet, Holder<Currency> currency) {
+            super(0, 0, 0, 0, Component.empty());
+            this.font = font;
+            this.wallet = wallet;
+            this.currency = currency;
+            setTooltip(Tooltip.create(Currency.getDisplayName(currency)));
+        }
+
+        @Override
+        public int getHeight(int width) {
+            return 18;
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            return false;
+        }
+
+        @Override
+        protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+            guiGraphics.blit(RenderType::guiTextured, currency.value().icon(), getX(), getY(), 0, 0, 16, 16, 16, 16);
+
+            int amount = wallet.get(currency);
+            String amountString = Integer.toString(amount);
+            guiGraphics.drawString(font, amountString, getX() + 17, getY() + 16 - font.lineHeight - 2,
+                    ChatFormatting.WHITE.getColor(), true);
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+
+        }
     }
 
     private static class TradeOption extends AbstractButton implements ScrollContainerEntry {
