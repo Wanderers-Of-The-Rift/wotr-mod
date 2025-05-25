@@ -3,12 +3,13 @@ package com.wanderersoftherift.wotr.gui.screen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
-import com.wanderersoftherift.wotr.core.guild.trading.TradeOffering;
+import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.network.guild.SelectTradePayload;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -24,6 +25,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.Consumer;
 
@@ -35,6 +37,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     private static final int BACKGROUND_WIDTH = 324;
     private static final int BACKGROUND_HEIGHT = 166;
     private static final int BORDER_X = 5;
+    private static final int ICON_SIZE = 16;
 
     private ScrollContainerWidget<TradeOption> tradeOptions;
     private ScrollContainerWidget<CurrencyDisplay> currencies;
@@ -51,8 +54,8 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     @Override
     protected void init() {
         super.init();
-        Registry<TradeOffering> tradeRegistry = minecraft.level.registryAccess()
-                .lookupOrThrow(WotrRegistries.Keys.TRADE_OFFERINGS);
+        Registry<TradeListing> tradeRegistry = minecraft.level.registryAccess()
+                .lookupOrThrow(WotrRegistries.Keys.TRADE_LISTING);
         tradeOptions = new ScrollContainerWidget<>(leftPos + 5, topPos + 18, 95, 140,
                 tradeRegistry.stream()
                         .map(x -> new TradeOption(tradeRegistry.wrapAsHolder(x), font, this::selectTrade))
@@ -65,8 +68,8 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         addRenderableWidget(currencies);
     }
 
-    private void selectTrade(Holder<TradeOffering> trade) {
-
+    private void selectTrade(Holder<TradeListing> trade) {
+        PacketDistributor.sendToServer(new SelectTradePayload(trade));
     }
 
     @Override
@@ -82,9 +85,9 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     }
 
     public static class CurrencyDisplay extends AbstractWidget implements ScrollContainerEntry {
-        private Font font;
-        private Wallet wallet;
-        private Holder<Currency> currency;
+        private final Font font;
+        private final Wallet wallet;
+        private final Holder<Currency> currency;
 
         public CurrencyDisplay(Font font, Wallet wallet, Holder<Currency> currency) {
             super(0, 0, 0, 0, Component.empty());
@@ -96,7 +99,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 
         @Override
         public int getHeight(int width) {
-            return 18;
+            return ICON_SIZE + 2;
         }
 
         @Override
@@ -106,12 +109,16 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 
         @Override
         protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            guiGraphics.blit(RenderType::guiTextured, currency.value().icon(), getX(), getY(), 0, 0, 16, 16, 16, 16);
+            guiGraphics.blit(RenderType::guiTextured, currency.value().icon(), getX(), getY(), 0, 0, ICON_SIZE,
+                    ICON_SIZE, ICON_SIZE, ICON_SIZE);
 
             int amount = wallet.get(currency);
             String amountString = Integer.toString(amount);
-            guiGraphics.drawString(font, amountString, getX() + 17, getY() + 16 - font.lineHeight - 2,
+            guiGraphics.drawString(font, amountString, getX() + 10, getY() + ICON_SIZE - font.lineHeight,
                     ChatFormatting.WHITE.getColor(), true);
+
+            isHovered = mouseX >= getX() && mouseX < getX() + ICON_SIZE && mouseY >= getY()
+                    && mouseY < getY() + ICON_SIZE;
         }
 
         @Override
@@ -129,13 +136,13 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         private static final ResourceLocation HOVERED_BUTTON = WanderersOfTheRift
                 .id("textures/gui/container/ability_bench/hovered_choice_button.png");
 
-        private final Holder<TradeOffering> offering;
+        private final Holder<TradeListing> listing;
         private final Font font;
-        private final Consumer<Holder<TradeOffering>> onSelect;
+        private final Consumer<Holder<TradeListing>> onSelect;
 
-        public TradeOption(Holder<TradeOffering> offering, Font font, Consumer<Holder<TradeOffering>> onSelect) {
+        public TradeOption(Holder<TradeListing> listing, Font font, Consumer<Holder<TradeListing>> onSelect) {
             super(0, 0, 0, 0, Component.empty());
-            this.offering = offering;
+            this.listing = listing;
             this.font = font;
             this.onSelect = onSelect;
         }
@@ -147,7 +154,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 
         @Override
         public void onPress() {
-            onSelect.accept(offering);
+            onSelect.accept(listing);
         }
 
         @Override
@@ -155,18 +162,21 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
             super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
             guiGraphics.blit(RenderType::guiTextured,
                     ResourceLocation.withDefaultNamespace("textures/gui/sprites/container/villager/trade_arrow.png"),
-                    getX() + getWidth() - 36, getY() + 2, 0, 0, 16, 16, 16, 16);
-            guiGraphics.renderFakeItem(offering.value().getOutputItem(), getX() + getWidth() - 18, getY() + 2);
+                    getX() + getWidth() - 36, getY() + 2, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            guiGraphics.renderFakeItem(listing.value().getOutputItem(), getX() + getWidth() - ICON_SIZE - 2,
+                    getY() + 2);
+            guiGraphics.renderItemDecorations(font, listing.value().getOutputItem(),
+                    getX() + getWidth() - ICON_SIZE - 2, getY() + 2);
             int xOffset = getX() + 3;
-            for (Object2IntMap.Entry<Holder<Currency>> entry : offering.value().getPrice().object2IntEntrySet()) {
+            for (Object2IntMap.Entry<Holder<Currency>> entry : listing.value().getPrice().object2IntEntrySet()) {
                 String cost = Integer.toString(entry.getIntValue());
                 guiGraphics.drawString(font, cost, xOffset, getY() + (21 - font.lineHeight) / 2,
                         ChatFormatting.WHITE.getColor(), true);
                 xOffset += font.width(cost) + 2;
 
-                guiGraphics.blit(RenderType::guiTextured, entry.getKey().value().icon(), xOffset, getY() + 2, 0, 0, 16,
-                        16, 16, 16);
-                xOffset += 18;
+                guiGraphics.blit(RenderType::guiTextured, entry.getKey().value().icon(), xOffset, getY() + 2, 0, 0,
+                        ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+                xOffset += ICON_SIZE + 2;
             }
         }
 

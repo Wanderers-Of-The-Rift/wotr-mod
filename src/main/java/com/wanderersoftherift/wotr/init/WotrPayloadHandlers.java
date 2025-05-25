@@ -17,6 +17,7 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.SetEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
+import com.wanderersoftherift.wotr.network.guild.SelectTradePayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
@@ -85,6 +86,8 @@ public class WotrPayloadHandlers {
                 WalletReplicationPayload::handleOnClient);
         registrar.playToClient(WalletUpdatePayload.TYPE, WalletUpdatePayload.STREAM_CODEC,
                 WalletUpdatePayload::handleOnClient);
+        registrar.playToServer(SelectTradePayload.TYPE, SelectTradePayload.STREAM_CODEC,
+                SelectTradePayload::handleOnServer);
     }
 
     @SubscribeEvent

@@ -10,12 +10,12 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
-public class TradeOffering {
+public class TradeListing {
 
-    public static final Codec<TradeOffering> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.unboundedMap(Currency.CODEC, Codec.INT).fieldOf("price").forGetter(TradeOffering::getPrice),
-            ItemStack.CODEC.fieldOf("outputItem").forGetter(TradeOffering::getOutputItem)
-    ).apply(instance, TradeOffering::new));
+    public static final Codec<TradeListing> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.unboundedMap(Currency.CODEC, Codec.INT).fieldOf("price").forGetter(TradeListing::getPrice),
+            ItemStack.CODEC.fieldOf("outputItem").forGetter(TradeListing::getOutputItem)
+    ).apply(instance, TradeListing::new));
 
     // TODO: Guild the entry is for
 
@@ -28,7 +28,7 @@ public class TradeOffering {
     // Output
     private final ItemStack outputItem;
 
-    public TradeOffering(Map<Holder<Currency>, Integer> price, ItemStack outputItem) {
+    public TradeListing(Map<Holder<Currency>, Integer> price, ItemStack outputItem) {
         this.price = new Object2IntArrayMap<>(price);
         this.outputItem = outputItem.copy();
     }
@@ -58,8 +58,8 @@ public class TradeOffering {
             return this;
         }
 
-        public TradeOffering build() {
-            return new TradeOffering(price, outputItem);
+        public TradeListing build() {
+            return new TradeListing(price, outputItem);
         }
     }
 

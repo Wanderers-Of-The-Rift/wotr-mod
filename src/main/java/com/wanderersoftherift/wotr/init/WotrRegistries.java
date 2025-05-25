@@ -8,7 +8,7 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.trading.TradeOffering;
+import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -61,8 +61,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("container_type"));
         public static final ResourceKey<Registry<Currency>> CURRENCIES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("currency"));
-        public static final ResourceKey<Registry<TradeOffering>> TRADE_OFFERINGS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("trade_offering"));
+        public static final ResourceKey<Registry<TradeListing>> TRADE_LISTING = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("trade_listing"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
         public static final ResourceKey<Registry<ImplicitConfig>> GEAR_IMPLICITS_CONFIG = ResourceKey
@@ -122,6 +122,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.TRADE_OFFERINGS, TradeOffering.CODEC, TradeOffering.CODEC);
+        event.dataPackRegistry(Keys.TRADE_LISTING, TradeListing.CODEC, TradeListing.CODEC);
     }
 }

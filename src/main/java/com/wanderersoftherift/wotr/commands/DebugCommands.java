@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.guild.currency.ServerWallet;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
@@ -40,7 +41,8 @@ public class DebugCommands extends BaseCommand {
                     .getPlayer()
                     .openMenu(new SimpleMenuProvider(
                             ((containerId, playerInventory, player) -> new TradingMenu(containerId, playerInventory,
-                                    ContainerLevelAccess.create(player.level(), player.getOnPos()))),
+                                    ContainerLevelAccess.create(player.level(), player.getOnPos()),
+                                    new ServerWallet(context.getSource().getPlayer()))),
                             Component.translatable(WanderersOfTheRift.translationId("container", "trading"), "Guild")));
             return 1;
         }
