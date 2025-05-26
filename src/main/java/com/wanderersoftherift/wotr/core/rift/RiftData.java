@@ -50,9 +50,6 @@ public class RiftData extends SavedData { // TODO: split this
     }
 
     public static RiftData get(ServerLevel level) {
-        if (!RiftLevelManager.isRift(level)) {
-            throw new IllegalArgumentException("Not a rift level");
-        }
         return level.getDataStorage()
                 .computeIfAbsent(factory(level.getServer().overworld().dimension(),
                         level.getServer().overworld().getSharedSpawnPos(), new RiftConfig(0)), "rift_data");
