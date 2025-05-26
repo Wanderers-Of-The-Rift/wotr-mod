@@ -25,6 +25,7 @@ public class TradingMenu extends AbstractContainerMenu {
     private final ChangeAwareItemHandler purchaseItem;
     private final SlotItemHandler purchaseSlot;
     private final WalletAccessor wallet;
+    private final QuickMover quickMover;
     private Holder<TradeListing> currentTrade;
     private boolean updatingTrade = false;
 
@@ -56,12 +57,13 @@ public class TradingMenu extends AbstractContainerMenu {
         this.addSlot(purchaseSlot);
 
         addStandardInventorySlots(playerInventory, 108, 84);
+
+        quickMover = QuickMover.create(this).forPlayerSlots(1).forSlot(0).tryMoveToPlayer().build();
     }
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        // TODO
-        return ItemStack.EMPTY;
+        return quickMover.quickMove(player, index);
     }
 
     @Override
