@@ -186,6 +186,16 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_desert"));
 
         KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("swamp")))
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("water")).setMinPercent(10F).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("earth")).setMinPercent(40F).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_swamp"));
+
+        KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_OBJECTIVE.get(),
                         DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
                 .setPriority(-1)
