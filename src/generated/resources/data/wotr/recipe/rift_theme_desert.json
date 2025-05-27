@@ -3,11 +3,11 @@
   "essence_reqs": [
     {
       "essenceType": "wotr:death",
-      "minPercent": 5.0
+      "minPercent": 15.0
     },
     {
       "essenceType": "wotr:earth",
-      "minPercent": 20.0
+      "minPercent": 35.0
     }
   ],
   "output": {

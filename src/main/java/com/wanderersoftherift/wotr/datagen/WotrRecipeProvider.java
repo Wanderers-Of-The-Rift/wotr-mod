@@ -179,9 +179,9 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("desert")))
                 .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("death")).setMinPercent(5F).build())
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("death")).setMinPercent(15F).build())
                 .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("earth")).setMinPercent(20F).build())
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("earth")).setMinPercent(35F).build())
                 .setPriority(10)
                 .save(output, WanderersOfTheRift.id("rift_theme_desert"));
 
