@@ -63,7 +63,19 @@ public class TradingMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return quickMover.quickMove(player, index);
+        ItemStack stack = quickMover.quickMove(player, index);
+        // If quick move has left residual, move it to the player's hand or drop it (alternatively we could take a bit
+        // back)
+        int remaining = purchaseItem.getStackInSlot(0).getCount();
+        if (currentTrade != null && remaining > 0 && remaining < currentTrade.value().getOutputItem().getCount()) {
+            ItemStack residual = purchaseItem.extractItem(0, remaining, false);
+            if (getCarried().getCount() == 0) {
+                setCarried(residual);
+            } else {
+                player.drop(residual, false);
+            }
+        }
+        return stack;
     }
 
     @Override
