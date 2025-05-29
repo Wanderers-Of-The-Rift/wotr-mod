@@ -34,6 +34,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.wanderersoftherift.wotr.init.WotrBlocks.CHEST_TYPES;
@@ -67,6 +68,8 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
     private final StructureRandomType randomType;
     private final PositionalRandomFactory randomFactory;
 
+    private final List<ResourceKey<LootTable>> lootTableCache;
+
     public RiftChestProcessor(ResourceLocation baseLootTable, OutputBlockState replaceOutput, float rarity,
             List<WeightedRiftChestTypeEntry> chestTypes, StructureRandomType randomType) {
         this.baseLootTable = baseLootTable;
@@ -75,6 +78,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
         this.chestTypes = chestTypes;
         this.randomType = randomType;
         this.randomFactory = new LegacyRandomSource.LegacyPositionalRandomFactory(SEED);
+        lootTableCache = Arrays.stream(RiftChestType.values()).map(type -> getLootTable(type)).toList();
     }
 
     @Override
@@ -181,7 +185,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 blockState = copyProperties(blockState, currentState);
                 BlockEntity tileEntity = entityRef.getValue();
                 if (tileEntity instanceof RandomizableContainerBlockEntity container) {
-                    container.setLootTable(getLootTable(chestType), random.nextLong());
+                    container.setLootTable(lootTableCache.get(chestType.ordinal()), random.nextLong());
                 }
                 return blockState;
             } else {
@@ -204,7 +208,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 tileEntity.loadWithComponents(oldTileEntity.saveWithoutMetadata(world.registryAccess()),
                         world.registryAccess());
                 if (tileEntity instanceof RandomizableContainerBlockEntity container) {
-                    container.setLootTable(getLootTable(chestType), random.nextLong());
+                    container.setLootTable(lootTableCache.get(chestType.ordinal()), random.nextLong());
                 }
                 entityRef.setValue(tileEntity);
                 return blockState;
