@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.util.TemplateIdLookup;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.TemplateIdLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;

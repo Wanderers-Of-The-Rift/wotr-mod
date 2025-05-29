@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 import com.wanderersoftherift.wotr.mixin.AccessorSinglePoolElement;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureTemplate;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
-import com.wanderersoftherift.wotr.util.TemplateIdLookup;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.TemplateIdLookup;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.payload.BasicPayload;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.payload.LazyPayload;
 import net.minecraft.core.Vec3i;
