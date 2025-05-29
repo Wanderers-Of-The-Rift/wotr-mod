@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizer;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.InfiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
@@ -30,11 +31,13 @@ public class ChaoticRiftLayout implements RiftLayout {
     private final int layerCount;
     private final int seed;
     private final RoomRandomizer roomRandomizer;
+    private final InfiniteRiftShape riftShape;
 
-    public ChaoticRiftLayout(int layerCount, int seed, RoomRandomizer roomRandomizer) {
+    public ChaoticRiftLayout(int layerCount, int seed, RoomRandomizer roomRandomizer, InfiniteRiftShape riftShape) {
         this.layerCount = layerCount;
         this.seed = seed;
         this.roomRandomizer = roomRandomizer;
+        this.riftShape = riftShape;
     }
 
     private Region getOrCreateRegion(int x, int z) {
@@ -100,7 +103,7 @@ public class ChaoticRiftLayout implements RiftLayout {
             for (int x = 0; x < 15; x++) {
                 for (int z = 0; z < 15; z++) {
                     var idx = z * 15 + x;
-                    var chaosiveness = (int) Double.min(chaosiveness(x + origin.getX(), z + origin.getZ()),
+                    var chaosiveness = (int) Double.min(riftShape.chaosiveness(x + origin.getX(), z + origin.getZ()),
                             layerCount / 2.0);
                     emptySpaces[idx] = ((1L << (2 * chaosiveness)) - 1) << (layerCount / 2 - chaosiveness);
                 }
@@ -137,7 +140,7 @@ public class ChaoticRiftLayout implements RiftLayout {
 
                 for (int z = 0; z < 5; z++) {
                     var roomOrigin = new Vector2i(x * 3 + origin.getX(), z * 3 + origin.getZ());
-                    var category = categorize(roomOrigin.x + 1.5, roomOrigin.y + 1.5);
+                    var category = riftShape.categorize(roomOrigin.x + 1.5, roomOrigin.y + 1.5);
                     if (category == 0) {
 
                         var room = roomRandomizer.randomSpace(
@@ -163,24 +166,6 @@ public class ChaoticRiftLayout implements RiftLayout {
                         new Vec3i(1, 1, 1)));
             }
             return rooms;
-        }
-
-        private double chaosiveness(double x, double z) {
-            return 1.5 * Math.cosh(0.11 * Math.sqrt(x * x + z * z));
-        } // todo move to interface
-
-        // 2 = chaotic, 1 = unstable, 0 = stable
-        private int categorize(double x, double y) { // todo move to interface
-            var chaosiveness = chaosiveness(x, y);
-            if (chaosiveness > 2.5) {
-                return 2;
-            } else {
-                if (chaosiveness > 1.75) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
         }
 
         private RiftSpace nextChaoticSpace(RiftSpaceCorridor corridor, RandomSource randomSource, Vec3i roomPosition) {
@@ -267,7 +252,7 @@ public class ChaoticRiftLayout implements RiftLayout {
         }
 
         public RiftSpace getSpaceAt(Vec3i position) {
-            if (chaosiveness(position.getX(), position.getZ()) < Math.abs(position.getY())
+            if (riftShape.chaosiveness(position.getX(), position.getZ()) < Math.abs(position.getY())
                     || isOutsideThisRegion(position.getX(), position.getY(), position.getZ())) {
                 return VOID_SPACE;
             }
@@ -276,7 +261,7 @@ public class ChaoticRiftLayout implements RiftLayout {
         }
 
         public RiftSpace getSpaceAt(int x, int y, int z) {
-            if (chaosiveness(x, z) < Math.abs(y) || isOutsideThisRegion(x, y, z)) {
+            if (riftShape.chaosiveness(x, z) < Math.abs(y) || isOutsideThisRegion(x, y, z)) {
                 return VOID_SPACE;
             }
             return spaces[(x - origin.getX()) + (z - origin.getZ()) * 15 + (y - origin.getY()) * 225];
