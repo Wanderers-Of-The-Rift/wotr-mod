@@ -78,6 +78,18 @@ public class MushroomProcessor extends StructureProcessor
             List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
             List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
             StructurePlaceSettings settings) {
+        return RiftAdjacencyProcessor.backportFinalizeProcessing(this, serverLevel, offset, pos, originalBlockInfos,
+                processedBlockInfos, settings);
+    }
+
+    @Deprecated
+    public List<StructureTemplate.StructureBlockInfo> oldFinalizeProcessing(
+            ServerLevelAccessor serverLevel,
+            BlockPos offset,
+            BlockPos pos,
+            List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
             newBlockInfos.add(processFinal(serverLevel, offset, pos, blockInfo, settings, processedBlockInfos));

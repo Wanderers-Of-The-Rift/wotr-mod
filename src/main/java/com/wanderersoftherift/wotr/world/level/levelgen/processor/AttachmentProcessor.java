@@ -86,6 +86,18 @@ public class AttachmentProcessor extends StructureProcessor
             List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
             List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
             StructurePlaceSettings settings) {
+        return RiftAdjacencyProcessor.backportFinalizeProcessing(this, serverLevel, offset, pos, originalBlockInfos,
+                processedBlockInfos, settings);
+    }
+
+    @Deprecated
+    public List<StructureTemplate.StructureBlockInfo> oldFinalizeProcessing(
+            ServerLevelAccessor serverLevel,
+            BlockPos offset,
+            BlockPos pos,
+            List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructurePlaceSettings settings) {
         List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
         for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
             StructureTemplate.StructureBlockInfo newBlockInfo = processFinal(serverLevel, offset, pos, blockInfo,
@@ -191,43 +203,43 @@ public class AttachmentProcessor extends StructureProcessor
                     var y2 = y + structurePos.getY();
                     var z2 = z + structurePos.getZ();
                     var currentState = room.getBlock(x2, y2, z2);
-                    if (currentState != null && currentState.isAir()) {
-                        if (blockRandomFlag) {
-                            roll = random.nextFloat();
-                        }
-                        if (roll <= rarity) {
-                            int sideCount = requiresSides;
-                            BlockState newBlock;
-                            for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
-                                var side = HORIZONTAL.get(i);
-                                newBlock = room.getBlock(x2 + side.getStepX(), y2, z2 + side.getStepZ());
-                                bp.set(x2 + side.getStepX(), y2, z2 + side.getStepZ());
-                                if (newBlock != null && isFaceFullFast(newBlock, bp, side.getOpposite())) {
-                                    sideCount--;
-                                }
-                            }
-
-                            if (sideCount > 0) {
-                                continue;
-                            }
-                            newBlock = room.getBlock(x2, y2 + 1, z2);
-                            bp.set(x2, y2 + 1, z2);
-                            boolean validUp = !requiresUp || newBlock == null
-                                    || isFaceFullFast(newBlock, bp, Direction.DOWN);
-                            if (!validUp) {
-                                continue;
-                            }
-                            newBlock = room.getBlock(x2, y2 - 1, z2);
-                            bp.setY(y2 - 1);
-                            boolean validDown = !requiresDown || newBlock == null
-                                    || isFaceFullFast(newBlock, bp, Direction.UP);
-                            if (!validDown) {
-                                continue;
-                            }
-                            room.setBlock(x2, y2, z2, blockState);
-
+                    if (currentState == null || !currentState.isAir()) {
+                        continue;
+                    }
+                    if (blockRandomFlag) {
+                        roll = random.nextFloat();
+                    }
+                    if (roll > rarity) {
+                        continue;
+                    }
+                    int sideCount = requiresSides;
+                    BlockState newBlock;
+                    for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
+                        var side = HORIZONTAL.get(i);
+                        newBlock = room.getBlock(x2 + side.getStepX(), y2, z2 + side.getStepZ());
+                        bp.set(x2 + side.getStepX(), y2, z2 + side.getStepZ());
+                        if (newBlock != null && isFaceFullFast(newBlock, bp, side.getOpposite())) {
+                            sideCount--;
                         }
                     }
+
+                    if (sideCount > 0) {
+                        continue;
+                    }
+                    newBlock = room.getBlock(x2, y2 + 1, z2);
+                    bp.set(x2, y2 + 1, z2);
+                    boolean validUp = !requiresUp || newBlock == null || isFaceFullFast(newBlock, bp, Direction.DOWN);
+                    if (!validUp) {
+                        continue;
+                    }
+                    newBlock = room.getBlock(x2, y2 - 1, z2);
+                    bp.setY(y2 - 1);
+                    boolean validDown = !requiresDown || newBlock == null || isFaceFullFast(newBlock, bp, Direction.UP);
+                    if (!validDown) {
+                        continue;
+                    }
+                    room.setBlock(x2, y2, z2, blockState);
+
                 }
             }
         }
@@ -269,7 +281,9 @@ public class AttachmentProcessor extends StructureProcessor
                 directions[6] = blockState;
                 return 0b1000000;
             }
-        } else if (!isHidden && !old.isAir()) {
+            return 0;
+        }
+        if (!isHidden && !old.isAir()) {
             VoxelShape shape = null;
             if (requiresUp) {
                 var block = directions[0];
@@ -295,20 +309,22 @@ public class AttachmentProcessor extends StructureProcessor
                     }
                 }
             }
-            if (requiresSides > 0) {
-                for (int i = 0; i < HORIZONTAL.size(); i++) {
-                    var side = HORIZONTAL.get(i);
-                    var ordinal = side.ordinal();
-                    var directionBlock = directions[ordinal];
-                    if ((directionBlock != null && directionBlock.isAir()) && data.recalculateChance() <= rarity) {
-                        if (shape == null) {
-                            shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
-                        }
-                        if (isFaceFullFast(shape, side)) {
-                            directions[ordinal] = blockState;
-                            result |= 1 << ordinal;
-                        }
-                    }
+            if (requiresSides <= 0) {
+                return result;
+            }
+            for (int i = 0; i < HORIZONTAL.size(); i++) {
+                var side = HORIZONTAL.get(i);
+                var ordinal = side.ordinal();
+                var directionBlock = directions[ordinal];
+                if ((directionBlock == null || !directionBlock.isAir()) || !(data.recalculateChance() <= rarity)) {
+                    continue;
+                }
+                if (shape == null) {
+                    shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                }
+                if (isFaceFullFast(shape, side)) {
+                    directions[ordinal] = blockState;
+                    result |= 1 << ordinal;
                 }
             }
         }
