@@ -35,7 +35,7 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
     public static final MapCodec<RiftMobSpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             TrialSpawnerConfig.CODEC.optionalFieldOf("config").forGetter(RiftMobSpawnerProcessor::getSpawnerConfig),
             TrialSpawnerConfig.CODEC.optionalFieldOf("ominous_config")
-                    .forGetter(RiftMobSpawnerProcessor::getSpawnerConfig)
+                    .forGetter(RiftMobSpawnerProcessor::getOminousConfig)
     ).apply(builder, RiftMobSpawnerProcessor::new));
 
     private final Optional<Holder<TrialSpawnerConfig>> spawnerConfig;
@@ -130,7 +130,6 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
             var riftSpawnerBlock = WotrBlocks.RIFT_MOB_SPAWNER.get();
             BlockState blockState = riftSpawnerBlock.defaultBlockState()
                     .setValue(RiftMobSpawnerBlock.STATE, RiftMobSpawnerState.INACTIVE);
-            ;
 
             var newBlockEntity = (RiftMobSpawnerBlockEntity) riftSpawnerBlock.newBlockEntity(new BlockPos(x, y, z),
                     blockState);
