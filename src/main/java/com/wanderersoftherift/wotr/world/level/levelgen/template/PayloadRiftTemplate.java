@@ -2,7 +2,9 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftAdjacencyProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftFinalProcessor;
@@ -10,7 +12,9 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftTemplatePr
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.JigsawReplacementProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.NopProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
@@ -205,6 +209,47 @@ public class PayloadRiftTemplate implements RiftGeneratable {
 
     public List<StructureProcessor> getEntityProcessor() {
         return entityProcessor;
+    }
+
+    public void processBlock(
+            BlockState blockState,
+            BlockPos.MutableBlockPos mutablePosition,
+            ServerLevelAccessor world,
+            BlockPos offset,
+            BlockEntity entity,
+            boolean isVisible,
+            RiftProcessedChunk roomChunk) {
+        var x = mutablePosition.getX();
+        var y = mutablePosition.getY();
+        var z = mutablePosition.getZ();
+        var processors = templateProcessors;
+        var entityRef = new Ref<BlockEntity>(entity);
+        blockState = ((RiftTemplateProcessor) JigsawReplacementProcessor.INSTANCE).processBlockState(
+                blockState, x, y, z, world, offset, entityRef, isVisible);
+        if (blockState == null) {
+            return;
+        }
+        for (int k = 0; k < processors.size(); k++) {
+            blockState = processors.get(k).processBlockState(blockState, x, y, z, world, offset, entityRef, isVisible);
+            if (blockState == null) {
+                return;
+            }
+        }
+        var xWithinChunk = x & 0xf;
+        var yWithinChunk = y & 0xf;
+        var zWithinChunk = z & 0xf;
+        roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = blockState;
+        var idx = zWithinChunk | (yWithinChunk << 4); // todo maybe re-add mid-air flag
+        var mask = (short) (1 << xWithinChunk);
+        roomChunk.newlyAdded[idx] |= mask;
+        if (!isVisible) {
+            roomChunk.hidden[idx] |= mask;
+        }
+
+        entity = entityRef.getValue();
+        if (entity != null && blockState.hasBlockEntity()) {
+            roomChunk.blockEntities.add(entity);
+        }
     }
 
     public static interface TemplatePayload {

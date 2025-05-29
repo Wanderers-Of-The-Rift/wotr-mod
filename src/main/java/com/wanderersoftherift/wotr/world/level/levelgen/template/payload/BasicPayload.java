@@ -2,11 +2,9 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template.payload;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
-import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftTemplateProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PayloadRiftTemplate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,6 +26,7 @@ import java.util.Map;
 public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
     public static final int CHUNK_WIDTH = 16;
     private static final ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
+    private static final CompoundTag EMPTY_TAG = new CompoundTag();
 
     private final BlockState[][] data;
     private final List<StructureTemplate.StructureEntityInfo> entities;
@@ -109,32 +108,33 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
 
             for (int index1B = 0; index1B < dataChunk.length; index1B++) {
                 var blockState = dataChunk[index1B];
-                if (blockState != null) {
-                    var blockPosX = (index1A << 4) + (index1B & 0xf);
-                    var blockPosY = (index1B >> 4) / size.getZ();
-                    var blockPosZ = (index1B >> 4) % size.getZ();
-                    var isInvisible = blockState.canOcclude();
-                    for (int i = 0; i < DIRECTIONS.size(); i++) {
-                        var direction = DIRECTIONS.get(i);
-                        if (!isInvisible) {
-                            break;
-                        }
-                        offsetPos.set(blockPosX, blockPosY, blockPosZ);
-                        offsetPos.move(direction);
-                        if (offsetPos.getX() < 0 || offsetPos.getX() >= size.getX() || offsetPos.getY() < 0
-                                || offsetPos.getY() >= size.getY() || offsetPos.getZ() < 0
-                                || offsetPos.getZ() >= size.getZ()) {
-                            continue;
-                        }
-                        var index2A = offsetPos.getX() >> 4;
-                        var index2B = (offsetPos.getX() & 0xf) + (offsetPos.getZ() << 4)
-                                + (offsetPos.getY() * size.getZ() << 4);
-                        var blockState2 = data[index2A][index2B];
-                        isInvisible = blockState2 != null && blockState2.canOcclude();
+                if (blockState == null) {
+                    continue;
+                }
+                var blockPosX = (index1A << 4) + (index1B & 0xf);
+                var blockPosY = (index1B >> 4) / size.getZ();
+                var blockPosZ = (index1B >> 4) % size.getZ();
+                var isInvisible = blockState.canOcclude();
+                for (int i = 0; i < DIRECTIONS.size(); i++) {
+                    var direction = DIRECTIONS.get(i);
+                    if (!isInvisible) {
+                        break;
                     }
-                    if (isInvisible) {
-                        hiddenChunk[(index1B >> 4)] |= (short) (1 << (index1B & 0xf));
+                    offsetPos.set(blockPosX, blockPosY, blockPosZ);
+                    offsetPos.move(direction);
+                    if (offsetPos.getX() < 0 || offsetPos.getX() >= size.getX() || offsetPos.getY() < 0
+                            || offsetPos.getY() >= size.getY() || offsetPos.getZ() < 0
+                            || offsetPos.getZ() >= size.getZ()) {
+                        continue;
                     }
+                    var index2A = offsetPos.getX() >> 4;
+                    var index2B = (offsetPos.getX() & 0xf) + (offsetPos.getZ() << 4)
+                            + (offsetPos.getY() * size.getZ() << 4);
+                    var blockState2 = data[index2A][index2B];
+                    isInvisible = blockState2 != null && blockState2.canOcclude();
+                }
+                if (isInvisible) {
+                    hiddenChunk[(index1B >> 4)] |= (short) (1 << (index1B & 0xf));
                 }
             }
         }
@@ -145,10 +145,6 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
         return ((x + (y << 6) + (z << 12)) * FibonacciHashing.GOLDEN_RATIO_INT) >>> 22;
     }
 
-    private static int hashRoomChunkPosition(int x, int y, int z) {
-        return ((x + (y << 2) + (z << 4)) * FibonacciHashing.GOLDEN_RATIO_INT) >>> 27;
-    }
-
     @Override
     public void processPayloadBlocks(
             PayloadRiftTemplate template,
@@ -157,16 +153,13 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
             BlockPos offset,
             TripleMirror mirror) {
         var size = template.size();
-        var processors = template.getTemplateProcessors();
 
-        var emptyNBT = new CompoundTag();
         var mutablePosition = new BlockPos.MutableBlockPos();
         var xLastChunkPosition = 0;
         var yLastChunkPosition = 0;
         var zLastChunkPosition = 0;
         RiftProcessedChunk roomChunk = null;
         short[][] hidden = this.hidden;
-        RiftProcessedChunk[] roomChunkHashTableCache = new RiftProcessedChunk[32];
         for (int i = 0; i < data.length; i++) {
             var templateChunk = data[i];
             var hiddenChunk = hidden[i];
@@ -192,79 +185,47 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                         xLastChunkPosition = xChunkPosition;
                         yLastChunkPosition = yChunkPosition;
                         zLastChunkPosition = zChunkPosition;
-                        var hash = hashRoomChunkPosition(xChunkPosition, yChunkPosition, zChunkPosition);
-                        var hashTableCached = roomChunkHashTableCache[hash];
-                        if (hashTableCached != null && hashTableCached.origin.getX() == xChunkPosition
-                                && hashTableCached.origin.getY() == yChunkPosition
-                                && hashTableCached.origin.getZ() == zChunkPosition) {
-                            roomChunk = hashTableCached;
-                        } else {
-                            roomChunk = (roomChunkHashTableCache[hash] = destination.getOrCreateChunk(xChunkPosition,
-                                    yChunkPosition, zChunkPosition));
-                            if (roomChunk == null) {
-                                destination.getOrCreateChunk(xChunkPosition, yChunkPosition, zChunkPosition);
-                                continue;
-                            }
+                        roomChunk = destination.getOrCreateChunk(xChunkPosition, yChunkPosition, zChunkPosition);
+                        if (roomChunk == null) {
+                            continue;
                         }
                     }
-                    var xWithinChunk = mutablePosition.getX() & 0xf;
-                    var yWithinChunk = mutablePosition.getY() & 0xf;
-                    var zWithinChunk = mutablePosition.getZ() & 0xf;
-                    if (roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] != null) {
+                    if (roomChunk.blocks[(mutablePosition.getX() & 0xf) | ((mutablePosition.getZ() & 0xf) << 4)
+                            | ((mutablePosition.getY() & 0xf) << 8)] != null) {
                         continue;
                     }
 
-                    var tileEntityHash = hashTileEntityPosition(blockPosX, blockPosY, blockPosZ);
-                    var nbt = fastTileEntityHashTable[tileEntityHash];
-                    if (nbt != null) {
-                        var position = fastTileEntityPositionsHashTable[tileEntityHash];
-                        if (position.getX() != blockPosX || position.getY() != blockPosY
-                                || position.getZ() != blockPosZ) {
-                            if (tileEntities == null) {
-                                nbt = null;
-                            } else {
-                                var blockPos = new Vec3i(blockPosX, blockPosY, blockPosZ);
-                                nbt = tileEntities.get(blockPos);
-                            }
-                        }
-                        if (nbt == null) {
-                            nbt = emptyNBT;
-                        }
-                    } else {
-                        nbt = emptyNBT;
-                    }
+                    var nbt = getTileEntity(blockPosX, blockPosY, blockPosZ);
                     BlockEntity entity = null;
-                    if (nbt != null && !nbt.isEmpty() && nbt.get("id") instanceof StringTag) {
+                    if (!nbt.isEmpty() && nbt.get("id") instanceof StringTag) {
                         entity = BlockEntity.loadStatic(mutablePosition, blockState, nbt, world.registryAccess());
                     }
-                    var entityRef = new Ref<BlockEntity>(entity);
-                    blockState = ((RiftTemplateProcessor) JigsawReplacementProcessor.INSTANCE).processBlockState(
-                            blockState, mutablePosition.getX(), mutablePosition.getY(), mutablePosition.getZ(), world,
-                            offset, entityRef, isVisible);
-                    for (int k = 0; k < processors.size() && blockState != null; k++) {
-                        blockState = processors.get(k)
-                                .processBlockState(blockState, mutablePosition.getX(), mutablePosition.getY(),
-                                        mutablePosition.getZ(), world, offset, entityRef, isVisible);
-                    }
-                    if (blockState == null) {
-                        continue;
-                    }
-                    roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = blockState;
-                    var idx = zWithinChunk | (yWithinChunk << 4); // todo maybe re-add mid-air flag
-                    var mask = (short) (1 << xWithinChunk);
-                    roomChunk.newlyAdded[idx] |= mask;
-                    if (!isVisible) {
-                        roomChunk.hidden[idx] |= mask;
-                    }
-
-                    entity = entityRef.getValue();
-                    if (entity != null && blockState.hasBlockEntity()) {
-                        roomChunk.blockEntities.add(entity);
-                    }
+                    template.processBlock(blockState, mutablePosition, world, offset, entity, isVisible, roomChunk);
                 }
             }
         }
 
+    }
+
+    private CompoundTag getTileEntity(int blockPosX, int blockPosY, int blockPosZ) {
+        var tileEntityHash = hashTileEntityPosition(blockPosX, blockPosY, blockPosZ);
+        var nbt = fastTileEntityHashTable[tileEntityHash];
+        if (nbt == null) {
+            return EMPTY_TAG;
+        }
+        var position = fastTileEntityPositionsHashTable[tileEntityHash];
+        if (position.getX() != blockPosX || position.getY() != blockPosY || position.getZ() != blockPosZ) {
+            if (tileEntities == null) {
+                nbt = null;
+            } else {
+                var blockPos = new Vec3i(blockPosX, blockPosY, blockPosZ);
+                nbt = tileEntities.get(blockPos);
+            }
+        }
+        if (nbt == null) {
+            return EMPTY_TAG;
+        }
+        return nbt;
     }
 
     @Override
