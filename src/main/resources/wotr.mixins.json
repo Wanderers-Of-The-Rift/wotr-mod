@@ -25,6 +25,7 @@
         "MixinLivingEntity",
         "MixinOctahedralGroup",
         "MixinProtoChunk",
+        "MixinRegionFileVersion",
         "MixinServerPlayer",
         "MixinSetItemDamageFunction",
         "MixinStairBlock",
