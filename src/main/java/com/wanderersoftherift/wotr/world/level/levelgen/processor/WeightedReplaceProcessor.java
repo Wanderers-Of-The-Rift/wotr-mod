@@ -3,23 +3,23 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedBlockstateEntry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import oshi.util.tuples.Pair;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -40,6 +40,7 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
     ).apply(builder, WeightedReplaceProcessor::new));
 
     private final List<WeightedBlockstateEntry> weightList;
+    private final FastWeightedList<OutputBlockState> fastWeightList;
     private final InputBlockState inputBlockState;
     private final StructureRandomType structureRandomType;
     private final long seedAdjustment;
@@ -50,6 +51,10 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
         this.inputBlockState = inputBlockState;
         this.structureRandomType = structureRandomType;
         this.seedAdjustment = seedAdjustment;
+        var weightedData = weightList.stream()
+                .map(it -> new Pair<>((float) it.getWeight().asInt(), it.outputBlockState()))
+                .toArray(Pair[]::new);
+        fastWeightList = FastWeightedList.of(weightedData);
     }
 
     @Override
@@ -63,12 +68,12 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
             @Nullable StructureTemplate template) {
         BlockState blockstate = blockInfo.state();
         BlockPos blockPos = blockInfo.pos();
-        ProcessorUtil.getRandom(structureRandomType, blockPos, piecePos, structurePos, world, seedAdjustment);
         if (!inputBlockState.matchesBlockstate(blockstate)) {
             return blockInfo;
         }
 
-        BlockState newBlockState = getReplacementBlock(world);
+        BlockState newBlockState = getReplacementBlock(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                structurePos);
         if (newBlockState == null) {
             return blockInfo;
         }
@@ -77,12 +82,11 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
         return new StructureTemplate.StructureBlockInfo(blockPos, newBlockState, blockInfo.nbt());
     }
 
-    private BlockState getReplacementBlock(LevelReader world) {
-        if (world instanceof WorldGenLevel worldGenLevel) {
-            return WeightedRandom.getRandomItem(worldGenLevel.getRandom(), weightList)
-                    .orElse(new WeightedBlockstateEntry(null, Weight.of(1)))
-                    .outputBlockState()
-                    .convertBlockState();
+    private BlockState getReplacementBlock(LevelReader world, int x, int y, int z, BlockPos structurePos) {
+        if (!fastWeightList.isEmpty()) {
+            var rng = ProcessorUtil.getRandom(structureRandomType, new BlockPos(x, y, z), structurePos, BlockPos.ZERO,
+                    world, seedAdjustment);
+            return fastWeightList.random(rng).convertBlockState();
         }
         return null;
     }
@@ -117,14 +121,11 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
             BlockPos structurePos,
             Ref<BlockEntity> entityRef,
             boolean isVisible) {
-        ProcessorUtil.getRandom(structureRandomType, new BlockPos(x, y, z), structurePos,
-                BlockPos.ZERO/* rifts always start at portal room, this could be changed to room origin */, world,
-                seedAdjustment);
         if (!inputBlockState.matchesBlockstate(currentState)) {
             return currentState;
         }
 
-        BlockState newBlockState = getReplacementBlock(world);
+        BlockState newBlockState = getReplacementBlock(world, x, y, z, structurePos);
         if (newBlockState == null) {
             return currentState;
         }

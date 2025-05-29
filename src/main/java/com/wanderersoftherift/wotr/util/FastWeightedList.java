@@ -76,4 +76,8 @@ public class FastWeightedList<T> {
         }
         return null;
     }
+
+    public boolean isEmpty() {
+        return totalWeight == 0f || weights.isEmpty();
+    }
 }
