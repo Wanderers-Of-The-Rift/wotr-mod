@@ -1,7 +1,5 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import net.jpountz.lz4.LZ4BlockOutputStream;
-import net.jpountz.lz4.LZ4Factory;
 import net.minecraft.world.level.chunk.storage.RegionFileVersion;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
