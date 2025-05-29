@@ -133,7 +133,9 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
 
     private ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos) {
         var riftThemeData = RiftData.get(serverLevel);
-        var structureProcessors = riftThemeData.getTheme().map(it->it.value().getProcessors(themePieceType)).orElse(defaultThemeProcessors(serverLevel, structurePos));
+        var structureProcessors = riftThemeData.getTheme()
+                .map(it -> it.value().getProcessors(themePieceType))
+                .orElse(defaultThemeProcessors(serverLevel, structurePos));
         var newCache = new ThemeCache(new PhantomReference<>(serverLevel, null), new ArrayList<>(), new ArrayList<>(),
                 new ArrayList<>());
         for (var processor : structureProcessors) {

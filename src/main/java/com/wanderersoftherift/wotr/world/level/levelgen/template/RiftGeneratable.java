@@ -60,48 +60,49 @@ public interface RiftGeneratable {
                 continue;
             }
 
-            var simplifiedDirection1 = simplifiedDirection(jigsaw, mirror);
-            var simplifiedDirection1Opposite = simplifiedDirection1.getOpposite();
+            var parentPrimaryDirection = simplifiedDirection(jigsaw, mirror);
+            var parentOppositeDirection = parentPrimaryDirection.getOpposite();
 
-            var jigsaw2List = next.jigsaws()
+            var childJigsawList = next.jigsaws()
                     .stream()
                     .filter(
                             (otherJigsaw) -> {
                                 var otherSimplifiedDirection = simplifiedDirection(otherJigsaw, TripleMirror.NONE);
+                                var areDirectionsOpposing = parentOppositeDirection == otherSimplifiedDirection;
+                                var areDirectionsHorizontal = parentPrimaryDirection.getStepY() == 0
+                                        && otherSimplifiedDirection.getStepY() == 0;
                                 return otherJigsaw.name().equals(jigsaw.target())
-                                        && (simplifiedDirection1Opposite == otherSimplifiedDirection
-                                                || (simplifiedDirection1.getStepY() == 0 && otherSimplifiedDirection
-                                                        .getStepY() == 0 /* checks if both directions are horizontal */));
+                                        && (areDirectionsOpposing || areDirectionsHorizontal);
                             })
                     .toList();
 
-            if (jigsaw2List.isEmpty()) {
+            if (childJigsawList.isEmpty()) {
                 continue;// todo possibly multiple attempts
             }
-            var jigsaw2 = jigsaw2List.get(random.nextInt(jigsaw2List.size()));
-            var simplifiedDirection2 = simplifiedDirection(jigsaw2, TripleMirror.NONE);
+            var childJigsaw = childJigsawList.get(random.nextInt(childJigsawList.size()));
+            var childPrimaryDirection = simplifiedDirection(childJigsaw, TripleMirror.NONE);
             var nextMirrorInt = random.nextInt(8);
-            if (simplifiedDirection1.getAxis() == Direction.Axis.Y) {
-                if (simplifiedDirection2 != simplifiedDirection1Opposite) {
+            if (parentPrimaryDirection.getAxis() == Direction.Axis.Y) {
+                if (childPrimaryDirection != parentOppositeDirection) {
                     continue;
                 }
                 if (jigsaw.jointType() == JigsawBlockEntity.JointType.ALIGNED
-                        && jigsaw2.jointType() == JigsawBlockEntity.JointType.ALIGNED) {
+                        && childJigsaw.jointType() == JigsawBlockEntity.JointType.ALIGNED) {
                     nextMirrorInt = mirrorCorrection(auxiliaryDirection(jigsaw, mirror),
-                            auxiliaryDirection(jigsaw2, TripleMirror.NONE), nextMirrorInt, false);
+                            auxiliaryDirection(childJigsaw, TripleMirror.NONE), nextMirrorInt, false);
                 }
             } else {
-                nextMirrorInt = mirrorCorrection(simplifiedDirection1, simplifiedDirection2, nextMirrorInt, true);
+                nextMirrorInt = mirrorCorrection(parentPrimaryDirection, childPrimaryDirection, nextMirrorInt, true);
             }
             var nextMirror = new TripleMirror(nextMirrorInt);
             var newPlacementShift = placementShift
                     .offset(mirror.applyToPosition(jigsaw.info().pos(), generatable.size().getX() - 1,
                             generatable.size().getZ() - 1))
                     .offset(nextMirror
-                            .applyToPosition(jigsaw2.info().pos(), next.size().getX() - 1, next.size().getZ() - 1)
+                            .applyToPosition(childJigsaw.info().pos(), next.size().getX() - 1, next.size().getZ() - 1)
                             .multiply(-1));
 
-            generate(next, destination, world, newPlacementShift.relative(simplifiedDirection1), nextMirror, server,
+            generate(next, destination, world, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server,
                     random, mask);
         }
         writeCollisionMask(generatable, mask, placementShift, mirror);
@@ -131,53 +132,20 @@ public interface RiftGeneratable {
                         continue;
                     }
                     var newMask = -1L;
-                    if (placementShift.getX() > (lx << 2) || placementShift.getX() + size.getX() < (lx << 2) + 4) {
-                        var newMaskX = 0L;
-                        for (int passX = 0; passX < 4; passX++) {
-                            var actualX = passX + (lx << 2);
-                            if (actualX >= placementShift.getX()) {
-                                if (actualX >= placementShift.getX() + size.getX()) {
-                                    break;
-                                }
-                                newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
-                            }
-                        }
-                        newMask &= newMaskX;
-                        if ((maskedValue & newMask) == 0) {
-                            continue;
-                        }
+                    newMask &= riftGeneratable.buildMaskAxis(placementShift.getX() - (lx << 2), size.getX(),
+                            0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L, 0);
+                    if ((maskedValue & newMask) == 0) {
+                        continue;
                     }
-                    if (placementShift.getY() > (ly << 2) || placementShift.getY() + size.getY() < (ly << 2) + 4) {
-                        var newMaskY = 0L;
-                        for (int passY = 0; passY < 4; passY++) {
-                            var actualY = passY + (ly << 2);
-                            if (actualY >= placementShift.getY()) {
-                                if (actualY >= placementShift.getY() + size.getY()) {
-                                    break;
-                                }
-                                newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
-                            }
-                        }
-                        newMask &= newMaskY;
-                        if ((maskedValue & newMask) == 0) {
-                            continue;
-                        }
+                    newMask &= riftGeneratable.buildMaskAxis(placementShift.getZ() - (lz << 2), size.getZ(),
+                            0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L, 2);
+                    if ((maskedValue & newMask) == 0) {
+                        continue;
                     }
-                    if (placementShift.getZ() > (lz << 2) || placementShift.getZ() + size.getZ() < (lz << 2) + 4) {
-                        var newMaskZ = 0L;
-                        for (int passZ = 0; passZ < 4; passZ++) {
-                            var actualZ = passZ + (lz << 2);
-                            if (actualZ >= placementShift.getZ()) {
-                                if (actualZ >= placementShift.getZ() + size.getZ()) {
-                                    break;
-                                }
-                                newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 2);
-                            }
-                        }
-                        newMask &= newMaskZ;
-                        if ((maskedValue & newMask) == 0) {
-                            continue;
-                        }
+                    newMask &= riftGeneratable.buildMaskAxis(placementShift.getY() - (ly << 2), size.getY(),
+                            0b1111_1111_1111_1111L, 4);
+                    if ((maskedValue & newMask) == 0) {
+                        continue;
                     }
                     return true;
                 }
@@ -205,49 +173,35 @@ public interface RiftGeneratable {
                         continue;
                     }
                     var newMask = -1L;
-                    var newMaskX = 0L;
-                    if (placementShift.getX() > (lx << 2) || placementShift.getX() + size.getX() < (lx << 2) + 4) {
-                        for (int passX = 0; passX < 4; passX++) {
-                            var actualX = passX + (lx << 2);
-                            if (actualX >= placementShift.getX()) {
-                                if (actualX >= placementShift.getX() + size.getX()) {
-                                    break;
-                                }
-                                newMaskX |= 0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L << passX;
-                            }
-                        }
-                        newMask &= newMaskX;
-                    }
-                    var newMaskY = 0L;
-                    if (placementShift.getY() > (ly << 2) || placementShift.getY() + size.getY() < (ly << 2) + 4) {
-                        for (int passY = 0; passY < 4; passY++) {
-                            var actualY = passY + (ly << 2);
-                            if (actualY >= placementShift.getY()) {
-                                if (actualY >= placementShift.getY() + size.getY()) {
-                                    break;
-                                }
-                                newMaskY |= 0b1111_1111_1111_1111L << (passY << 4);
-                            }
-                        }
-                        newMask &= newMaskY;
-                    }
-                    var newMaskZ = 0L;
-                    if (placementShift.getZ() > (lz << 2) || placementShift.getZ() + size.getZ() < (lz << 2) + 4) {
-                        for (int passZ = 0; passZ < 4; passZ++) {
-                            var actualZ = passZ + (lz << 2);
-                            if (actualZ >= placementShift.getZ()) {
-                                if (actualZ >= placementShift.getZ() + size.getZ()) {
-                                    break;
-                                }
-                                newMaskZ |= 0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L << (passZ << 2);
-                            }
-                        }
-                        newMask &= newMaskZ;
-                    }
+                    newMask &= riftGeneratable.buildMaskAxis(placementShift.getX() - (lx << 2), size.getX(),
+                            0b0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001L, 0);
+                    newMask &= riftGeneratable.buildMaskAxis(placementShift.getZ() - (lz << 2), size.getZ(),
+                            0b0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111_0000_0000_0000_1111L, 2);
+                    newMask &= riftGeneratable.buildMaskAxis(placementShift.getY() - (ly << 2), size.getY(),
+                            0b1111_1111_1111_1111L, 4);
                     mask[lx | (ly << 8) | (lz << 4)] |= newMask;
                 }
             }
         }
+    }
+
+    private long buildMaskAxis(int shiftSubtract, int size, long mask, int maskShiftShift) {
+        var shiftSizeSubtract = shiftSubtract + size;
+        if (shiftSubtract <= 0 && shiftSizeSubtract >= 4) {
+            return -1;
+        }
+        var newMask = 0L;
+        for (int passZ = 0; passZ < 4; passZ++) {
+            var maskShift = passZ << maskShiftShift;
+            if (passZ < shiftSubtract) {
+                continue;
+            }
+            if (passZ >= shiftSizeSubtract) {
+                break;
+            }
+            newMask |= mask << maskShift;
+        }
+        return newMask;
     }
 
     private static int setOrClearBit(int value, int bit, boolean set) {

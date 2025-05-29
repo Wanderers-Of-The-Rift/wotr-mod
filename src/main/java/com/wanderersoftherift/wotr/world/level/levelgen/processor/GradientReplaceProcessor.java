@@ -139,13 +139,14 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         }
         for (var entry : multiOutputState) {
 
-            if (entry.getA().matchesBlockstateAssumingBlockEqual(blockstate)) {
-                var steps = entry.getB();
-                if (steps.isEmpty()) {
-                    return blockstate;
-                }
-                return getOutputBlockState(steps, world, structurePos, x, y, z, blockstate, isVisible);
+            if (!entry.getA().matchesBlockstateAssumingBlockEqual(blockstate)) {
+                continue;
             }
+            var steps = entry.getB();
+            if (steps.isEmpty()) {
+                return blockstate;
+            }
+            return getOutputBlockState(steps, world, structurePos, x, y, z, blockstate, isVisible);
         }
         return blockstate;
     }
@@ -172,13 +173,11 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         if (world != null && currentCache != null && currentCache.getA().refersTo(world)) {
             return currentCache.getB();
         }
-        OpenSimplex2F noiseGen = null;
-        if (world instanceof ServerLevelAccessor serverLevelAccessor) {
-            noiseGen = getNoiseGen(serverLevelAccessor.getLevel().getSeed() + seedAdjustment);
-            lastNoiseCache = new Pair(new PhantomReference<>(world, null), noiseGen);
-        } else {
-            noiseGen = getNoiseGen(structurePos.asLong() + seedAdjustment);
+        if (!(world instanceof ServerLevelAccessor serverLevelAccessor)) {
+            return getNoiseGen(structurePos.asLong() + seedAdjustment);
         }
+        var noiseGen = getNoiseGen(serverLevelAccessor.getLevel().getSeed() + seedAdjustment);
+        lastNoiseCache = new Pair(new PhantomReference<>(world, null), noiseGen);
         return noiseGen;
     }
 

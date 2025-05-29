@@ -81,7 +81,6 @@ public class ChaoticRiftLayout implements RiftLayout {
 
     @Override
     public boolean validateCorridor(int x, int y, int z, Direction d) {
-
         return hasCorridorSingle(x, y, z, d)
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
@@ -109,7 +108,6 @@ public class ChaoticRiftLayout implements RiftLayout {
                 }
 
             }
-            // Arrays.fill(emptySpaces, (1L << layerCount) - 1);
         }
 
         public void generate(RandomSource randomSource) {
@@ -122,10 +120,11 @@ public class ChaoticRiftLayout implements RiftLayout {
 
                     for (var corridor : space.corridors()) {
                         var nextSpace = nextChaoticSpace(corridor, randomSource, space.origin());
-                        if (nextSpace != null /* && tryPlaceSpace(nextSpace) */) {
-                            placeSpace(nextSpace);
-                            nextSpaces.add(nextSpace);
+                        if (nextSpace == null /* && tryPlaceSpace(nextSpace) */) {
+                            continue;
                         }
+                        placeSpace(nextSpace);
+                        nextSpaces.add(nextSpace);
                     }
                 }
             }
@@ -141,23 +140,21 @@ public class ChaoticRiftLayout implements RiftLayout {
                 for (int z = 0; z < 5; z++) {
                     var roomOrigin = new Vector2i(x * 3 + origin.getX(), z * 3 + origin.getZ());
                     var category = riftShape.categorize(roomOrigin.x + 1.5, roomOrigin.y + 1.5);
-                    if (category == 0) {
-
-                        var room = roomRandomizer.randomSpace(
-                                (roomOrigin.x() == -1 && roomOrigin.y() == -1) ? RoomRiftSpace.RoomType.PORTAL
-                                        : RoomRiftSpace.RoomType.STABLE,
-                                random, new Vec3i(3, 3, 3));
-                        room = room.offset(roomOrigin.x, -room.corridors().getFirst().position().getY(), roomOrigin.y);
-                        if (tryPlaceSpace(room)) {
-                            rooms.add(room);
-                        }
+                    RoomRiftSpace room;
+                    if (roomOrigin.x() == -1 && roomOrigin.y() == -1) {
+                        room = roomRandomizer.randomSpace(
+                                RoomRiftSpace.RoomType.PORTAL, random, new Vec3i(3, 3, 3));
+                    } else if (category == 0) {
+                        room = roomRandomizer.randomSpace(
+                                RoomRiftSpace.RoomType.STABLE, random, new Vec3i(3, 3, 3));
                     } else if (category == 1) {
-                        var room = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.UNSTABLE, random,
-                                new Vec3i(3, 3, 3));
-                        room = room.offset(roomOrigin.x, -room.corridors().getFirst().position().getY(), roomOrigin.y);
-                        if (tryPlaceSpace(room)) {
-                            rooms.add(room);
-                        }
+                        room = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.UNSTABLE, random, new Vec3i(3, 3, 3));
+                    } else {
+                        continue;
+                    }
+                    room = room.offset(roomOrigin.x, -room.corridors().getFirst().position().getY(), roomOrigin.y);
+                    if (tryPlaceSpace(room)) {
+                        rooms.add(room);
                     }
                 }
             }
@@ -182,47 +179,48 @@ public class ChaoticRiftLayout implements RiftLayout {
                 int depth = 0;
                 for (; depth < 3 && ((slices[depth] & mask) == mask); depth++) {
                 }
-                if (depth != 0) {
-
-                    var position = combination & 0b1111;
-                    var size = combination >> 4;
-                    var x = (position & 3) - 2;
-                    var y = (position >> 2) - 2;
-                    var width = ((size & 0x1) | ((size & 0x4) >> 1)) + 1;
-                    var height = (((size & 0x2) >> 1) | ((size & 0x8) >> 2)) + 1;
-
-                    var tangentDirection = corridor.direction().getClockWise();
-                    var roomSize = new Vec3i(
-                            depth * Math.abs(corridor.direction().getStepX())
-                                    + width * Math.abs(tangentDirection.getStepX()),
-                            height, depth * Math.abs(corridor.direction().getStepZ())
-                                    + width * Math.abs(tangentDirection.getStepZ()));
-                    var space = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.CHAOS, randomSource, roomSize);
-                    var spaceOffsetX = roomPosition.getX() + corridor.position().getX();
-                    var spaceOffsetY = roomPosition.getY() + corridor.position().getY();
-                    var spaceOffsetZ = roomPosition.getZ() + corridor.position().getZ();
-                    spaceOffsetY += y;
-                    switch (corridor.direction()) {
-                        case NORTH -> {
-                            spaceOffsetX += x;
-                            spaceOffsetZ -= roomSize.getZ();
-                        }
-                        case SOUTH -> {
-                            spaceOffsetX -= width - 1 + x;
-                            spaceOffsetZ += 1;
-                        }
-                        case WEST -> {
-                            spaceOffsetZ -= x + width - 1;
-                            spaceOffsetX -= roomSize.getX();
-                        }
-                        case EAST -> {
-                            spaceOffsetZ += x;
-                            spaceOffsetX += 1;
-                        }
-                    }
-                    var result = space.offset(spaceOffsetX, spaceOffsetY, spaceOffsetZ);
-                    return result;
+                if (depth == 0) {
+                    continue;
                 }
+
+                var position = combination & 0b1111;
+                var size = combination >> 4;
+                var x = (position & 3) - 2;
+                var y = (position >> 2) - 2;
+                var width = ((size & 0x1) | ((size & 0x4) >> 1)) + 1;
+                var height = (((size & 0x2) >> 1) | ((size & 0x8) >> 2)) + 1;
+
+                var tangentDirection = corridor.direction().getClockWise();
+                var roomSize = new Vec3i(
+                        depth * Math.abs(corridor.direction().getStepX())
+                                + width * Math.abs(tangentDirection.getStepX()),
+                        height, depth * Math.abs(corridor.direction().getStepZ())
+                                + width * Math.abs(tangentDirection.getStepZ()));
+                var space = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.CHAOS, randomSource, roomSize);
+                var spaceOffsetX = roomPosition.getX() + corridor.position().getX();
+                var spaceOffsetY = roomPosition.getY() + corridor.position().getY();
+                var spaceOffsetZ = roomPosition.getZ() + corridor.position().getZ();
+                spaceOffsetY += y;
+                switch (corridor.direction()) {
+                    case NORTH -> {
+                        spaceOffsetX += x;
+                        spaceOffsetZ -= roomSize.getZ();
+                    }
+                    case SOUTH -> {
+                        spaceOffsetX -= width - 1 + x;
+                        spaceOffsetZ += 1;
+                    }
+                    case WEST -> {
+                        spaceOffsetZ -= x + width - 1;
+                        spaceOffsetX -= roomSize.getX();
+                    }
+                    case EAST -> {
+                        spaceOffsetZ += x;
+                        spaceOffsetX += 1;
+                    }
+                }
+                var result = space.offset(spaceOffsetX, spaceOffsetY, spaceOffsetZ);
+                return result;
             }
             return null;
         }
@@ -316,10 +314,9 @@ public class ChaoticRiftLayout implements RiftLayout {
         }
 
         public void tryGenerate(RandomSource random) {
-            if (generatorThread.get() == null && random != null) {
-                if (generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
-                    generate(random);
-                }
+            if (generatorThread.get() == null && random != null
+                    && generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
+                generate(random);
             }
             try {
                 generationCompletion.get();
