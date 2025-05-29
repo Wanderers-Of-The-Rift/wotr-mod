@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import org.joml.Vector2i;
 
+@Deprecated
 public class GridTunnelRiftLayout implements RiftLayout {
     private final Vector2i period;
     private final Vector2i split;

@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.Collection;
 import java.util.List;
 
+@Deprecated
 public record LegacyPerimeterGeneratable(BlockState perimeterBlock, CorridorValidator validator)
         implements RiftGeneratable {
 

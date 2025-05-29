@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 
+@Deprecated
 public class GridRiftLayout implements RiftLayout {
 
     @Override

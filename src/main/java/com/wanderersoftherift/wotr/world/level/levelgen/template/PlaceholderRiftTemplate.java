@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.Collection;
 import java.util.List;
 
+@Deprecated
 public class PlaceholderRiftTemplate implements RiftGeneratable {
     private static final BlockState blockState = WotrBlocks.PROCESSOR_BLOCK_1.getBlock().get().defaultBlockState();
     private final Vec3i size;

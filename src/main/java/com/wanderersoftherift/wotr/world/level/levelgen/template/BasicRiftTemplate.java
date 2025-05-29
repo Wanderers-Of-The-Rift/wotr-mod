@@ -33,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+@Deprecated
 public class BasicRiftTemplate implements RiftGeneratable {
     public static final int CHUNK_WIDTH = 16;
     private static final ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
