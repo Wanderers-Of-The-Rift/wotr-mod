@@ -11,9 +11,12 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 
-public record Currency(ResourceLocation icon) {
+import java.util.Optional;
+
+public record Currency(ResourceLocation icon, Optional<ResourceLocation> smallIcon) {
     public static final Codec<Currency> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("icon").forGetter(Currency::icon)
+            ResourceLocation.CODEC.fieldOf("icon").forGetter(Currency::icon),
+            ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(Currency::smallIcon)
     ).apply(instance, Currency::new));
 
     public static final Codec<Holder<Currency>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.CURRENCIES);
@@ -24,4 +27,5 @@ public record Currency(ResourceLocation icon) {
         ResourceLocation loc = ResourceLocation.parse(currency.getRegisteredName());
         return Component.translatable("currency." + loc.getNamespace() + "." + loc.getPath());
     }
+
 }

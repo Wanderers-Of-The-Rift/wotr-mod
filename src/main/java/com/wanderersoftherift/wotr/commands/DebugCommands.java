@@ -3,12 +3,19 @@ package com.wanderersoftherift.wotr.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.ServerWallet;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -20,6 +27,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class DebugCommands extends BaseCommand {
 
@@ -32,7 +40,20 @@ public class DebugCommands extends BaseCommand {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
         builder.then(Commands.literal("openTradingMenu").executes(this::openTradingMenu));
+        builder.then(Commands.literal("giveCurrencyBag").executes(this::giveCurrencyBag));
 
+    }
+
+    private int giveCurrencyBag(CommandContext<CommandSourceStack> context) {
+        ItemStack item = WotrItems.CURRENCY_BAG.toStack(3);
+        Registry<Currency> currencies = context.getSource()
+                .getLevel()
+                .registryAccess()
+                .lookupOrThrow(WotrRegistries.Keys.CURRENCIES);
+        Optional<Holder.Reference<Currency>> random = currencies.getRandom(context.getSource().getLevel().random);
+        item.set(WotrDataComponentType.CURRENCY_PROVIDER, new CurrencyProvider(random.get(), 10));
+        context.getSource().getPlayer().addItem(item);
+        return 1;
     }
 
     private int openTradingMenu(CommandContext<CommandSourceStack> context) {

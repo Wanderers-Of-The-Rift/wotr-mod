@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.init.client;
 
+import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.client.render.item.decorator.DecoratorSource;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -16,10 +18,16 @@ public final class WotrClientRegistries {
     public static final Registry<ConfigurableLayer> CONFIGURABLE_LAYERS = new RegistryBuilder<>(
             Keys.CONFIGURABLE_LAYERS).create();
 
+    public static final Registry<MapCodec<? extends DecoratorSource>> DECORATOR_SOURCES = new RegistryBuilder<>(
+            Keys.DECORATOR_SOURCES).create();
+
     public static final class Keys {
 
         public static final ResourceKey<Registry<ConfigurableLayer>> CONFIGURABLE_LAYERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("configurable_layer"));
+
+        public static final ResourceKey<Registry<MapCodec<? extends DecoratorSource>>> DECORATOR_SOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("decorator_source"));
 
         private Keys() {
         }
@@ -31,5 +39,6 @@ public final class WotrClientRegistries {
     @SubscribeEvent
     public static void registerRegistries(NewRegistryEvent event) {
         event.register(CONFIGURABLE_LAYERS);
+        event.register(DECORATOR_SOURCES);
     }
 }

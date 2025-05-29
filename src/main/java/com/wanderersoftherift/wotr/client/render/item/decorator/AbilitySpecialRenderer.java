@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.client.render.item.ability;
+package com.wanderersoftherift.wotr.client.render.item.decorator;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
