@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Mixin(StructureTemplate.class)
@@ -41,15 +42,9 @@ public class MixinStructureTemplate {
     }
 
     private static void sortByPos(List<StructureTemplate.StructureBlockInfo> blockInfos) {
-        blockInfos.sort((o1, o2) -> {
-            if (o1.pos().getZ() == o2.pos().getZ()) {
-                if (o1.pos().getY() == o2.pos().getY()) {
-                    return o1.pos().getX() - o2.pos().getX();
-                }
-                return o1.pos().getY() - o2.pos().getY();
-            }
-            return o1.pos().getZ() - o2.pos().getZ();
-        });
+        blockInfos.sort(Comparator.comparingInt((StructureTemplate.StructureBlockInfo o) -> o.pos().getY())
+                .thenComparingInt(o -> o.pos().getZ())
+                .thenComparingInt(o -> o.pos().getX()));
     }
 
 }

@@ -264,9 +264,9 @@ public class ProcessorUtil {
             return -1;
         }
         int width = lastPos.getX() + 1 - firstPos.getX();
-        int height = lastPos.getY() + 1 - firstPos.getY();
-        int index = (pos.getX() - firstPos.getX()) + (pos.getY() - firstPos.getY()) * width
-                + (pos.getZ() - firstPos.getZ()) * width * height;
+        int depth = lastPos.getZ() + 1 - firstPos.getZ();
+        int index = (pos.getX() - firstPos.getX()) + (pos.getZ() - firstPos.getZ()) * width
+                + (pos.getY() - firstPos.getY()) * width * depth;
         if (index < 0 || index >= mapByPos.size()) {
             return -1;
         }
@@ -274,8 +274,8 @@ public class ProcessorUtil {
     }
 
     private static boolean isPosBetween(BlockPos pos, BlockPos firstPos, BlockPos lastPos) {
-        return pos.getX() > firstPos.getX() && pos.getX() < lastPos.getX() && pos.getY() > firstPos.getY()
-                && pos.getY() < lastPos.getY() && pos.getZ() > firstPos.getZ() && pos.getZ() < lastPos.getZ();
+        return pos.getX() >= firstPos.getX() && pos.getX() <= lastPos.getX() && pos.getY() >= firstPos.getY()
+                && pos.getY() <= lastPos.getY() && pos.getZ() >= firstPos.getZ() && pos.getZ() < lastPos.getZ();
     }
 
     public static BlockState copyState(BlockState fromState, BlockState toState) {
