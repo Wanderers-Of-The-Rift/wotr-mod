@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Math;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -33,21 +35,21 @@ import java.util.Objects;
 /**
  * Special renderer for rendering an icon on an item
  */
-public final class DecoratorSpecialRenderer implements SpecialModelRenderer<ResourceLocation> {
+public final class EmblemSpecialRenderer implements SpecialModelRenderer<ResourceLocation> {
     private final Holder<Item> baseItem;
     private final float scale;
     private final Vector3fc offset;
-    private final DecoratorSource decorator;
+    private final EmblemProvider emblemProvider;
     private final Map<ResourceLocation, RenderType> renderTypes = new LinkedHashMap<>();
 
     /**
      * @param baseItem An item that is rendered for the non-ability portion
      */
-    public DecoratorSpecialRenderer(Holder<Item> baseItem, DecoratorSource decorator, float scale, Vector3fc offset) {
+    public EmblemSpecialRenderer(Holder<Item> baseItem, EmblemProvider emblemProvider, float scale, Vector3fc offset) {
         this.baseItem = baseItem;
         this.scale = scale;
         this.offset = offset;
-        this.decorator = decorator;
+        this.emblemProvider = emblemProvider;
     }
 
     @Override
@@ -62,6 +64,7 @@ public final class DecoratorSpecialRenderer implements SpecialModelRenderer<Reso
 
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
+        poseStack.rotateAround(new Quaternionf().rotationZYX(0, Math.PI_f, 0), 0, 0, 0);
 
         // We render the base item with the FIXED content, because this item is already being rendered with the display
         // context
@@ -86,7 +89,7 @@ public final class DecoratorSpecialRenderer implements SpecialModelRenderer<Reso
 
     private RenderType getRenderType(ResourceLocation icon) {
         return renderTypes.computeIfAbsent(icon,
-                resourceLocation -> RenderType.create("currency_icon_" + icon.getNamespace() + "__" + icon.getPath(),
+                resourceLocation -> RenderType.create("emblem_" + icon.getNamespace() + "__" + icon.getPath(),
                         DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 786_432, true, false,
                         RenderType.CompositeState.builder()
                                 .setLightmapState(RenderStateShard.LIGHTMAP)
@@ -116,7 +119,7 @@ public final class DecoratorSpecialRenderer implements SpecialModelRenderer<Reso
 
     @Override
     public @Nullable ResourceLocation extractArgument(@NotNull ItemStack stack) {
-        return decorator.getIcon(stack);
+        return emblemProvider.getIcon(stack);
     }
 
     public Holder<Item> baseItem() {
@@ -136,10 +139,11 @@ public final class DecoratorSpecialRenderer implements SpecialModelRenderer<Reso
         if (obj == this) {
             return true;
         }
-        if (obj instanceof DecoratorSpecialRenderer other) {
+        if (obj instanceof EmblemSpecialRenderer other) {
             return Objects.equals(this.baseItem, other.baseItem)
                     && Float.floatToIntBits(this.scale) == Float.floatToIntBits(other.scale)
-                    && Objects.equals(this.offset, other.offset) && Objects.equals(this.decorator, other.decorator);
+                    && Objects.equals(this.offset, other.offset)
+                    && Objects.equals(this.emblemProvider, other.emblemProvider);
         }
         return false;
     }
@@ -151,16 +155,16 @@ public final class DecoratorSpecialRenderer implements SpecialModelRenderer<Reso
 
     @Override
     public String toString() {
-        return "CurrencyBagSpecialRenderer[" + "baseItem=" + baseItem + ", " + "scale=" + scale + ", " + "offset="
-                + offset + ']';
+        return "EmblemSpecialRenderer[" + "baseItem=" + baseItem + ", " + "scale=" + scale + ", " + "offset=" + offset
+                + ']';
     }
 
-    public record Unbaked(Holder<Item> base, DecoratorSource decoratorSource, float scale, float xOffset, float yOffset,
+    public record Unbaked(Holder<Item> base, EmblemProvider emblemProvider, float scale, float xOffset, float yOffset,
             float zOffset) implements SpecialModelRenderer.Unbaked {
 
         public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Item.CODEC.fieldOf("base_item").forGetter(Unbaked::base),
-                DecoratorSource.CODEC.fieldOf("decorator").forGetter(Unbaked::decoratorSource),
+                EmblemProvider.CODEC.fieldOf("emblemProvider").forGetter(Unbaked::emblemProvider),
                 Codec.FLOAT.optionalFieldOf("scale", 0.5f).forGetter(Unbaked::scale),
                 Codec.FLOAT.optionalFieldOf("x_offset", 0f).forGetter(Unbaked::xOffset),
                 Codec.FLOAT.optionalFieldOf("y_offset", 0f).forGetter(Unbaked::yOffset),
@@ -174,7 +178,7 @@ public final class DecoratorSpecialRenderer implements SpecialModelRenderer<Reso
 
         @Override
         public SpecialModelRenderer<?> bake(@NotNull EntityModelSet modelSet) {
-            return new DecoratorSpecialRenderer(base, decoratorSource, scale, new Vector3f(xOffset, yOffset, zOffset));
+            return new EmblemSpecialRenderer(base, emblemProvider, scale, new Vector3f(xOffset, yOffset, zOffset));
         }
     }
 }

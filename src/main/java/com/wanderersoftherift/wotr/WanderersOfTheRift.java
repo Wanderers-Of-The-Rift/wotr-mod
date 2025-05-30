@@ -23,7 +23,7 @@ import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
-import com.wanderersoftherift.wotr.init.client.WotrDecoratorSources;
+import com.wanderersoftherift.wotr.init.client.WotrEmblemProviders;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootModifiers;
@@ -104,7 +104,7 @@ public class WanderersOfTheRift {
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);
             WotrConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
-            WotrDecoratorSources.SOURCES.register(modEventBus);
+            WotrEmblemProviders.PROVIDERS.register(modEventBus);
         }
 
         modEventBus.addListener(this::loadInterop);

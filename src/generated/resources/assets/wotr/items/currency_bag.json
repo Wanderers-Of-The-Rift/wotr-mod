@@ -5,13 +5,12 @@
     "model": {
       "type": "wotr:currency_bag",
       "base_item": "wotr:base_currency_bag",
-      "decorator": {
+      "emblemProvider": {
         "type": "wotr:currency",
         "currency": {}
       },
-      "x_offset": -0.0,
       "y_offset": -0.125,
-      "z_offset": 0.045
+      "z_offset": -0.045
     }
   }
 }

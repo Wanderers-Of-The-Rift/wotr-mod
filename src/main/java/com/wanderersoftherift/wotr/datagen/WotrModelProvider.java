@@ -4,9 +4,9 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
-import com.wanderersoftherift.wotr.client.render.item.decorator.AbilitySpecialRenderer;
-import com.wanderersoftherift.wotr.client.render.item.decorator.CurrencyDecorator;
-import com.wanderersoftherift.wotr.client.render.item.decorator.DecoratorSpecialRenderer;
+import com.wanderersoftherift.wotr.client.render.item.decorator.AbilityEmblemProvider;
+import com.wanderersoftherift.wotr.client.render.item.decorator.CurrencyEmblemProvider;
+import com.wanderersoftherift.wotr.client.render.item.decorator.EmblemSpecialRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrItems;
@@ -191,12 +191,13 @@ public class WotrModelProvider extends ModelProvider {
 
         itemModels.itemModelOutput.accept(WotrItems.ABILITY_HOLDER.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_ability_holder"),
-                        new AbilitySpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER)));
+                        new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER, new AbilityEmblemProvider(),
+                                0.5f, 0f, 0f, 0f)));
 
         itemModels.itemModelOutput.accept(WotrItems.CURRENCY_BAG.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_currency_bag"),
-                        new DecoratorSpecialRenderer.Unbaked(WotrItems.BASE_CURRENCY_BAG, new CurrencyDecorator(), 0.5f,
-                                -0.0f, -0.125f, 0.045f)));
+                        new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_CURRENCY_BAG, new CurrencyEmblemProvider(),
+                                0.5f, 0.0f, -0.125f, -0.045f)));
 
         this.generateRunegemItem(WotrItems.RUNEGEM.get(), itemModels);
 

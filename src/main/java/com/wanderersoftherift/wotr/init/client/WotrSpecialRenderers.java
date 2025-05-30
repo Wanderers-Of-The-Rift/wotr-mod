@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.init.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.render.item.decorator.AbilitySpecialRenderer;
-import com.wanderersoftherift.wotr.client.render.item.decorator.DecoratorSpecialRenderer;
+import com.wanderersoftherift.wotr.client.render.item.decorator.EmblemSpecialRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -19,6 +19,6 @@ public class WotrSpecialRenderers {
                 // The map codec
                 AbilitySpecialRenderer.Unbaked.MAP_CODEC);
         event.register(
-                WanderersOfTheRift.id("currency_bag"), DecoratorSpecialRenderer.Unbaked.MAP_CODEC);
+                WanderersOfTheRift.id("currency_bag"), EmblemSpecialRenderer.Unbaked.MAP_CODEC);
     }
 }

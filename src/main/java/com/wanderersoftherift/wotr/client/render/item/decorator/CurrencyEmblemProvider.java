@@ -8,8 +8,9 @@ import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-public class CurrencyDecorator implements DecoratorSource {
-    public static final MapCodec<CurrencyDecorator> CODEC = Codec.unit(new CurrencyDecorator()).fieldOf("currency");
+public class CurrencyEmblemProvider implements EmblemProvider {
+    public static final MapCodec<CurrencyEmblemProvider> CODEC = Codec.unit(new CurrencyEmblemProvider())
+            .fieldOf("currency");
 
     @Override
     public ResourceLocation getIcon(ItemStack stack) {
@@ -22,7 +23,7 @@ public class CurrencyDecorator implements DecoratorSource {
     }
 
     @Override
-    public MapCodec<? extends DecoratorSource> type() {
+    public MapCodec<? extends EmblemProvider> type() {
         return CODEC;
     }
 }

@@ -8,11 +8,11 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
 
-public interface DecoratorSource {
-    Codec<DecoratorSource> CODEC = WotrClientRegistries.DECORATOR_SOURCES.byNameCodec()
-            .dispatch(DecoratorSource::type, Function.identity());
+public interface EmblemProvider {
+    Codec<EmblemProvider> CODEC = WotrClientRegistries.EMBLEM_PROVIDERS.byNameCodec()
+            .dispatch(EmblemProvider::type, Function.identity());
 
     ResourceLocation getIcon(ItemStack item);
 
-    MapCodec<? extends DecoratorSource> type();
+    MapCodec<? extends EmblemProvider> type();
 }
