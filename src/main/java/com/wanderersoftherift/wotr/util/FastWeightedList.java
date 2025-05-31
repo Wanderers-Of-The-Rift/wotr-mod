@@ -28,13 +28,16 @@ public class FastWeightedList<T> {
     }
 
     public static <T> Codec<FastWeightedList<T>> codec(Codec<T> valueCodec) {
-        return Codec.unboundedMap(valueCodec, Codec.FLOAT).xmap(map->of(map.entrySet().stream().map(it->new Pair<>(it.getValue(), it.getKey())).toArray(Pair[]::new)),list->{
-            var result = new HashMap<T,Float>();
-            for (int i = 0; i < list.weights.size(); i++) {
-                result.put(list.values.get(i), list.weights.getFloat(i));
-            }
-            return result;
-        });
+        return Codec.unboundedMap(valueCodec, Codec.FLOAT)
+                .xmap(map -> of(
+                        map.entrySet().stream().map(it -> new Pair<>(it.getValue(), it.getKey())).toArray(Pair[]::new)),
+                        list -> {
+                            var result = new HashMap<T, Float>();
+                            for (int i = 0; i < list.weights.size(); i++) {
+                                result.put(list.values.get(i), list.weights.getFloat(i));
+                            }
+                            return result;
+                        });
     }
 
     public static <T> FastWeightedList<T> of(Pair<Float, T>... entries) {
@@ -77,6 +80,9 @@ public class FastWeightedList<T> {
     }
 
     public T random(RandomSource rng) {
+        if (weights.size() == 1) {
+            return values.getFirst();
+        }
         return forRoll(rng.nextFloat());
     }
 
