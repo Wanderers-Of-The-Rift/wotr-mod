@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 public class RoomRandomizerImpl implements RoomRandomizer {
 
+    // todo invalidate if data pack changes
     private static Pair<PhantomReference<MinecraftServer>, EnumMap<RoomRiftSpace.RoomType, RiftSpaceHolder>> cache;
     private final MinecraftServer server;
 

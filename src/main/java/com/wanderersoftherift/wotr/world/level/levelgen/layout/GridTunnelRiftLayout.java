@@ -26,6 +26,7 @@ public class GridTunnelRiftLayout implements RiftLayout {
 
         RiftSpace space;
 
+        // space would have to be provided by RoomRandomizer for this to work properly
         if (isTunnelX && isTunnelZ) {
             space = null;
         } else if (isTunnelX) {

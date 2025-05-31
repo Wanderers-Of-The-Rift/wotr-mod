@@ -12,6 +12,11 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * old way of placing bedrock around the room bedrock placement superseded by PerimeterGeneratable corridor placement
+ * superseded by FastRiftGenerator.runCorridorBlender
+ */
+
 @Deprecated
 public record LegacyPerimeterGeneratable(BlockState perimeterBlock, CorridorValidator validator)
         implements RiftGeneratable {

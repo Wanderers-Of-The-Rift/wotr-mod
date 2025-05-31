@@ -17,12 +17,11 @@ import java.util.Objects;
 
 public interface RiftAdjacencyProcessor<T> {
 
-    // the blocks are mostly used just for checking if their faces are full so it might be better te pass results of
-    // isFaceFull instead of actual blocks
     int processAdjacency(T data, BlockState[] asArray, boolean isHidden);
 
     T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
 
+    // todo smarter way of loading the data
     static void preloadLayer(
             RiftProcessedRoom room,
             int xOffset,

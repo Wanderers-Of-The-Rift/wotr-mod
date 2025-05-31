@@ -33,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+// superseded by PayloadRiftTemplate
 @Deprecated
 public class BasicRiftTemplate implements RiftGeneratable {
     public static final int CHUNK_WIDTH = 16;

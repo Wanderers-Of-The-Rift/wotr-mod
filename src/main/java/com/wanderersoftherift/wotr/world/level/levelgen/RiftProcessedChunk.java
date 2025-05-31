@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
+/**
+ * temporary storage for blocks before they are placed in the world
+ */
 public class RiftProcessedChunk {
 
     public final Vec3i origin;
@@ -89,7 +92,7 @@ public class RiftProcessedChunk {
     }
 
     /**
-     * this should at some point replace placeInWorld
+     * turns this chunk into LevelSection, then swaps it with existing section in the world
      */
     public void swapMinecraftSection(LevelChunkSection[] sectionArray, int sectionIndex) {
         var air = Blocks.AIR.defaultBlockState();

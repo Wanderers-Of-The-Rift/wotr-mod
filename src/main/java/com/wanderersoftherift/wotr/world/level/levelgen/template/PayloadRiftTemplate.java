@@ -97,6 +97,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY(), structurePos.getZ(),
                 pieceSize, preloaded[0], saveMask[0]);
         for (int y = 0; y < pieceSize.getY(); y++) {
+            // todo merge the preloads
             RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1,
                     structurePos.getZ(), pieceSize, preloaded[(y + 1) & 3], saveMask[(y + 1) & 3]);
             RiftAdjacencyProcessor.preloadMerged(room, structurePos.getX(), structurePos.getY() + y,

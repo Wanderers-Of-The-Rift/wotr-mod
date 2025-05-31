@@ -35,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.GRADIENT_SPOT_REPLACE;
 
+// todo split this
 public class GradientReplaceProcessor extends StructureProcessor implements RiftTemplateProcessor {
     public static final MapCodec<GradientReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             InputToOutputs.CODEC.listOf()

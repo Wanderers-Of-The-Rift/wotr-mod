@@ -12,6 +12,7 @@ public class GridRiftLayout implements RiftLayout {
     public RiftSpace getChunkSpace(Vec3i chunkPos) {
         var gridX = chunkPos.getX() / 3;
         var gridZ = chunkPos.getZ() / 3;
+        // space would have to be provided by RoomRandomizer for this to work properly
         var s = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), 3, 1, RoomRiftSpace.RoomType.STABLE);
         if (chunkPos.getY() >= -1 && chunkPos.getY() <= 1) {
             return s;

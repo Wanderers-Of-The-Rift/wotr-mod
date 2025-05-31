@@ -11,6 +11,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * places bedrock around the room
+ */
 public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator validator) implements RiftGeneratable {
 
     @Override

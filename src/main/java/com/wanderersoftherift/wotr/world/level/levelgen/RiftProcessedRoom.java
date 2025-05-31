@@ -16,6 +16,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * temporary storage for blocks before they are placed in the world
+ */
 public class RiftProcessedRoom {
 
     public final RiftSpace space;

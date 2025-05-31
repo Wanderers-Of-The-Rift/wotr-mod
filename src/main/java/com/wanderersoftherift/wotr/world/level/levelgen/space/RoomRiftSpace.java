@@ -17,6 +17,8 @@ public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> co
         return center.offset(-size.getX() / 2, -size.getY() / 2, -size.getZ() / 2);
     }
 
+    // old method for creating rooms, doesn't initialize RoomRiftSpace.template so don't use it
+    @Deprecated
     public static RoomRiftSpace basicRiftSpace(Vec3i center, int levels, int tunnelLevel, RoomType type) {
         return new RoomRiftSpace(new Vec3i(3, levels, 3), center.offset(1, levels / 2, 1), List.of(
                 new RiftSpaceCorridor(new Vec3i(1, tunnelLevel, 0), Direction.NORTH),
@@ -26,6 +28,8 @@ public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> co
         ), type, null, TripleMirror.NONE);
     }
 
+    // old method for creating rooms, doesn't initialize RoomRiftSpace.template so don't use it
+    @Deprecated
     public static RoomRiftSpace chaoticRiftSpace(Vec3i origin, Vec3i size) {
         var corridors = new ArrayList<RiftSpaceCorridor>(2 * size.getY() * (size.getX() + size.getZ()));
         for (int y = 0; y < size.getY(); y++) {
