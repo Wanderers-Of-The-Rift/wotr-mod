@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.util;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatImmutableList;
 import net.minecraft.util.RandomSource;
@@ -24,6 +25,16 @@ public class FastWeightedList<T> {
         this.values = values;
         this.weights = weights;
         this.totalWeight = (float) weights.doubleStream().sum();
+    }
+
+    public static <T> Codec<FastWeightedList<T>> codec(Codec<T> valueCodec) {
+        return Codec.unboundedMap(valueCodec, Codec.FLOAT).xmap(map->of(map.entrySet().stream().map(it->new Pair<>(it.getValue(), it.getKey())).toArray(Pair[]::new)),list->{
+            var result = new HashMap<T,Float>();
+            for (int i = 0; i < list.weights.size(); i++) {
+                result.put(list.values.get(i), list.weights.getFloat(i));
+            }
+            return result;
+        });
     }
 
     public static <T> FastWeightedList<T> of(Pair<Float, T>... entries) {
@@ -66,7 +77,11 @@ public class FastWeightedList<T> {
     }
 
     public T random(RandomSource rng) {
-        var selected = rng.nextDouble() * totalWeight;
+        return forRoll(rng.nextFloat());
+    }
+
+    public T forRoll(float roll) {
+        var selected = roll * totalWeight;
         for (int i = 0; i < weights.size(); i++) {
             var weight = weights.getFloat(i);
             if (weight > selected) {
