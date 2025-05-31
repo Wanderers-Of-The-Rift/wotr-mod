@@ -39,7 +39,6 @@ public class RiftProcessedChunk {
     }
 
     public void placeInWorld(ChunkAccess chunk, ServerLevelAccessor level) {
-        var mutablePosition = new BlockPos.MutableBlockPos();
         swapMinecraftSection(chunk.getSections(), origin.getY() - chunk.getMinY() / 16);
         for (int idx = 0; idx < blockEntities.size(); idx++) {
 
@@ -119,97 +118,66 @@ public class RiftProcessedChunk {
         }
         var bits = 32 - Integer.numberOfLeadingZeros(size - 1);
 
-        var reg = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
-        if (bits > 8) {
-            bits = 32 - Integer.numberOfLeadingZeros(reg.size() - 1);
-            var shift = (32 - Integer.numberOfLeadingZeros(bits - 1));
-            var bitsPowerOfTwo = 1 << shift;
-
+        var registry = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
+        if (bits == 0) {
             var strat = PalettedContainer.Strategy.SECTION_STATES;
-            var config = strat.<BlockState>getConfiguration(reg, bitsPowerOfTwo);
-
-            var longs = new long[4096 / (64 >> shift)];
-
-            var valuesPerLong = 64 >> shift;
-            for (int i = 0; i < longs.length; i++) {
-                var value = 0L;
-                for (int j = valuesPerLong - 1; j >= 0; j--) {
-                    value <<= bitsPowerOfTwo;
-                    var idx = i * valuesPerLong + j;
-                    var state = blocks[idx];
-                    if (state == null) {
-                        state = air;
-                    }
-                    value |= reg.getId(state);
-
-                }
-                longs[i] = value;
-            }
-
-            var storage = new SimpleBitStorage(bitsPowerOfTwo, 4096, longs);
-
-            var stateList = new ArrayList<BlockState>(size);
-            for (int i = 0; i < size; i++) {
-                stateList.add(uniqueStatesList[i]);
-            }
-
-            var newPalettedContainer = new PalettedContainer<BlockState>(reg, strat, config, storage, stateList);
-            var newSection = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
-            sectionArray[sectionIndex] = newSection;
-
-        } else if (bits != 0) {
-            var shift = Integer.max(32 - Integer.numberOfLeadingZeros(bits - 1), 2);
-            var bitsPowerOfTwo = 1 << shift;
-
-            var strat = PalettedContainer.Strategy.SECTION_STATES;
-            var config = strat.<BlockState>getConfiguration(reg, bitsPowerOfTwo);
-
-            var longs = new long[4096 / (64 >> shift)];
-
-            var valuesPerLong = 64 >> shift;
-            for (int i = 0; i < longs.length; i++) {
-                var value = 0L;
-                for (int j = valuesPerLong - 1; j >= 0; j--) {
-                    value <<= bitsPowerOfTwo;
-                    var idx = i * valuesPerLong + j;
-                    var state = blocks[idx];
-                    if (state == null) {
-                        state = air;
-                    }
-                    var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
-                    var state2 = uniqueStatesHashTable[uniqueIdx];
-                    if (state2 == null) {
-                        // should not be possible
-                    } else if (state2 != state) {
-                        value |= uniqueStatesFallback.get(state);
-                    } else {
-                        value |= uniqueStatesIndexHashTable[uniqueIdx];
-                    }
-                }
-                longs[i] = value;
-            }
-
-            var storage = new SimpleBitStorage(bitsPowerOfTwo, 4096, longs);
-
-            var stateList = new ArrayList<BlockState>(size);
-            for (int i = 0; i < size; i++) {
-                stateList.add(uniqueStatesList[i]);
-            }
-
-            var newPalettedContainer = new PalettedContainer<BlockState>(reg, strat, config, storage, stateList);
-            var newSection = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
-            sectionArray[sectionIndex] = newSection;
-
-        } else {
-
-            var strat = PalettedContainer.Strategy.SECTION_STATES;
-            var config = strat.<BlockState>getConfiguration(reg, 0);
+            var config = strat.<BlockState>getConfiguration(registry, 0);
             var storage = new ZeroBitStorage(4096);
-            var newPalettedContainer = new PalettedContainer<BlockState>(reg, strat, config, storage,
+            var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage,
                     List.of(uniqueStatesList[0]));
-            var newSection = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
-            sectionArray[sectionIndex] = newSection;
-            // var palette = new SingleValuePalette<BlockState>()
+            sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
+            return;
         }
+
+        var useRegistry = bits > 8;
+        if (useRegistry) {
+            bits = 32 - Integer.numberOfLeadingZeros(registry.size() - 1);
+        }
+
+        var shift = Integer.max(32 - Integer.numberOfLeadingZeros(bits - 1), 2);
+        var bitsPowerOfTwo = 1 << shift;
+
+        var strat = PalettedContainer.Strategy.SECTION_STATES;
+        var config = strat.<BlockState>getConfiguration(registry, bitsPowerOfTwo);
+
+        var longs = new long[4096 / (64 >> shift)];
+
+        var valuesPerLong = 64 >> shift;
+        for (int i = 0; i < longs.length; i++) {
+            var value = 0L;
+            for (int j = valuesPerLong - 1; j >= 0; j--) {
+                value <<= bitsPowerOfTwo;
+                var idx = i * valuesPerLong + j;
+                var state = blocks[idx];
+                if (state == null) {
+                    state = air;
+                }
+                if (useRegistry) {
+                    value |= registry.getId(state);
+                    continue;
+                }
+                var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
+                var state2 = uniqueStatesHashTable[uniqueIdx];
+                if (state2 == null) {
+                    // should not be possible
+                } else if (state2 != state) {
+                    value |= uniqueStatesFallback.get(state);
+                } else {
+                    value |= uniqueStatesIndexHashTable[uniqueIdx];
+                }
+
+            }
+            longs[i] = value;
+        }
+
+        var storage = new SimpleBitStorage(bitsPowerOfTwo, 4096, longs);
+
+        var stateList = new ArrayList<BlockState>(size);
+        for (int i = 0; i < size; i++) {
+            stateList.add(uniqueStatesList[i]);
+        }
+
+        var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage, stateList);
+        sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
     }
 }
