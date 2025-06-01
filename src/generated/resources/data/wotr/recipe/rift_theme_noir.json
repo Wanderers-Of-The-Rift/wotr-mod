@@ -3,7 +3,7 @@
   "essence_reqs": [
     {
       "essenceType": "wotr:light",
-      "minPercent": 50.0
+      "minPercent": 25.0
     }
   ],
   "output": {
