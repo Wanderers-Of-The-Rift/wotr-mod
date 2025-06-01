@@ -1,6 +1,7 @@
 {
   "id" : "wotr:aoe",
-  "icon" : "wotr:textures/item/runegem/shape/circle.png",
+  "icon" : "wotr:textures/ability/upgrade/aoe.png",
+  "indicator" : "positive_increase",
   "maxCount" : 3,
   "effects": [
     {

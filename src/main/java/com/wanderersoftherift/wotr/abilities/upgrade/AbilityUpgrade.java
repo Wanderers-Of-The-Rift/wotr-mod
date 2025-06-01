@@ -26,6 +26,8 @@ public final class AbilityUpgrade {
             .create(instance -> instance
                     .group(ResourceLocation.CODEC.fieldOf("id").forGetter(AbilityUpgrade::id),
                             ResourceLocation.CODEC.fieldOf("icon").forGetter(AbilityUpgrade::icon),
+                            ModifierIndicator.CODEC.optionalFieldOf("indicator", ModifierIndicator.NEUTRAL)
+                                    .forGetter(AbilityUpgrade::indicator),
                             Codec.INT.fieldOf("maxCount").forGetter(AbilityUpgrade::maxCount),
                             AbstractModifierEffect.DIRECT_CODEC.listOf()
                                     .optionalFieldOf("effects", Collections.emptyList())
@@ -34,6 +36,7 @@ public final class AbilityUpgrade {
 
     private final ResourceLocation id;
     private final ResourceLocation icon;
+    private final ModifierIndicator indicator;
     private final int maxCount;
     private final List<AbstractModifierEffect> modifierEffects;
     private final Component name;
@@ -45,10 +48,11 @@ public final class AbilityUpgrade {
      * @param maxCount        Maximum instances of this upgrade an ability can have
      * @param modifierEffects A list of modifier effects this upgrade applies
      */
-    public AbilityUpgrade(ResourceLocation id, ResourceLocation icon, int maxCount,
+    public AbilityUpgrade(ResourceLocation id, ResourceLocation icon, ModifierIndicator indicator, int maxCount,
             List<AbstractModifierEffect> modifierEffects) {
         this.id = id;
         this.icon = icon;
+        this.indicator = indicator;
         this.maxCount = maxCount;
         this.modifierEffects = ImmutableList.copyOf(modifierEffects);
         this.name = Component.translatable("ability_upgrade." + id.getNamespace() + "." + id.getPath() + ".name");
@@ -82,6 +86,13 @@ public final class AbilityUpgrade {
      */
     public ResourceLocation icon() {
         return icon;
+    }
+
+    /**
+     * @return indicator type for the upgrade
+     */
+    public ModifierIndicator indicator() {
+        return indicator;
     }
 
     /**

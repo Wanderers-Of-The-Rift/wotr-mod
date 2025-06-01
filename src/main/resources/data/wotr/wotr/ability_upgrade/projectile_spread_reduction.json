@@ -1,6 +1,7 @@
 {
   "id" : "wotr:projectile_spread",
-  "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "icon" : "wotr:textures/ability/upgrade/projectile-spread.png",
+  "indicator" : "positive_decrease",
   "maxCount" : 5,
   "effects": [
     {
