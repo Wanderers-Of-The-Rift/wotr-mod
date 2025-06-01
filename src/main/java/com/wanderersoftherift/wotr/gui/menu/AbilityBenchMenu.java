@@ -5,13 +5,13 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
-import com.wanderersoftherift.wotr.block.blockentity.LargeCountItemHandler;
-import com.wanderersoftherift.wotr.block.blockentity.LargeSlotItemHandler;
 import com.wanderersoftherift.wotr.gui.menu.slot.AbilitySlot;
+import com.wanderersoftherift.wotr.gui.menu.slot.LargeSlotItemHandler;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentPatch;
@@ -309,6 +309,8 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
         return stillValid(this.access, player, WotrBlocks.ABILITY_BENCH.get());
     }
 
+    // Changed to correctly respect ItemHandlers not providing live editable stacks
+    @Override
     protected boolean moveItemStackTo(
             @NotNull ItemStack stack,
             int startIndex,

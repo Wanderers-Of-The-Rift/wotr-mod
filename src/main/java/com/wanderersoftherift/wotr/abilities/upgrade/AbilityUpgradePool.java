@@ -62,7 +62,7 @@ public class AbilityUpgradePool {
      * The cost for unlocking each level
      */
     public static final IntList COST_PER_LEVEL = new IntArrayList(
-            new int[] { 0, 1, 1, 1, 2, 2, 3, 4, 5, 7 }); // , 9, 12, 16, 21, 28 });
+            new int[] { 0, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28 });
 
     protected final List<List<Holder<AbilityUpgrade>>> choices;
     protected final IntList selectedUpgrades;
@@ -143,6 +143,14 @@ public class AbilityUpgradePool {
         }
     }
 
+    /**
+     * Checks if it is still possible to level up this ability - even if the ability is not max level there might not be
+     * enough upgrades to continue to level it.
+     * 
+     * @param registryAccess
+     * @param ability
+     * @return Whether it still possible to level up this ability
+     */
     public boolean canLevelUp(RegistryAccess registryAccess, AbstractAbility ability) {
         return getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()
                 && !determineChoices(registryAccess, ability, choices).isEmpty();

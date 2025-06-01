@@ -1,9 +1,12 @@
-package com.wanderersoftherift.wotr.block.blockentity;
+package com.wanderersoftherift.wotr.item.handler;
 
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An item handler for holding large amounts of a single item
+ */
 public class LargeCountItemHandler implements IItemHandlerModifiable {
 
     private final ItemStack itemType;
@@ -17,13 +20,26 @@ public class LargeCountItemHandler implements IItemHandlerModifiable {
         this.itemType = itemType;
     }
 
+    /**
+     * @return The amount of the item currently held
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     * @param count The amount of the item being held
+     */
     public void setCount(int count) {
         this.count = Math.clamp(count, 0, maxCount);
         listener.run();
+    }
+
+    /**
+     * @param listener The listener to be executed on change
+     */
+    public void registerChangeListener(Runnable listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -93,9 +109,5 @@ public class LargeCountItemHandler implements IItemHandlerModifiable {
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         return ItemStack.isSameItemSameComponents(itemType, stack);
-    }
-
-    public void registerChangeListener(Runnable listener) {
-        this.listener = listener;
     }
 }

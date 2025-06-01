@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
+import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -21,6 +22,9 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Entity for the ability bench block, to store skill thread
+ */
 public class AbilityBenchBlockEntity extends BlockEntity {
 
     public static final int THREAD_STORAGE = 256;
