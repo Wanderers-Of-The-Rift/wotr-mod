@@ -1,8 +1,8 @@
-package com.wanderersoftherift.wotr.world.level.levelgen.processor.util;
+package com.wanderersoftherift.wotr.mixinextension;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public interface TemplateIdLookup {
-    ResourceLocation idForTemplate(StructureTemplate template);
+    ResourceLocation wotr$idForTemplate(StructureTemplate template);
 }

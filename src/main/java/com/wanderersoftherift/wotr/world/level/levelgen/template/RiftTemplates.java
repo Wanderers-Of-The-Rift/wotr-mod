@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.wanderersoftherift.wotr.mixin.AccessorSinglePoolElement;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureTemplate;
+import com.wanderersoftherift.wotr.mixinextension.TemplateIdLookup;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.TemplateIdLookup;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.payload.BasicPayload;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.payload.LazyPayload;
 import net.minecraft.core.Vec3i;
@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RiftTemplates {
 
+    // todo invalidate if data pack changes
     private static final Map<String, FastWeightedList<RiftGeneratable>> RIFT_TEMPLATE_POOL_CACHE = new ConcurrentHashMap<>();
 
     private static PhantomReference<MinecraftServer> cachedServer;
@@ -64,7 +65,7 @@ public class RiftTemplates {
 
     public static List<RiftGeneratable> fromPoolElement(SinglePoolElement e, StructureTemplateManager manager) {
         var template = ((AccessorSinglePoolElement) e).callGetTemplate(manager);
-        var id = ((TemplateIdLookup) manager).idForTemplate(template);
+        var id = ((TemplateIdLookup) manager).wotr$idForTemplate(template);
         if (id == null) {
             return Collections.emptyList();
         }

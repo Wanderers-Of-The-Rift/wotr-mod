@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.TemplateIdLookup;
+import com.wanderersoftherift.wotr.mixinextension.TemplateIdLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -18,7 +18,7 @@ public class MixinStructureTemplateManager implements TemplateIdLookup {
     private Map<ResourceLocation, Optional<StructureTemplate>> structureRepository;
 
     @Override
-    public ResourceLocation idForTemplate(StructureTemplate template) {
+    public ResourceLocation wotr$idForTemplate(StructureTemplate template) {
         return structureRepository.entrySet()
                 .stream()
                 .filter((it) -> it.getValue().isPresent() && it.getValue().get() == template)
