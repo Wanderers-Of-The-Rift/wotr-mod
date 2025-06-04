@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
@@ -113,8 +114,10 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(),
-                    new RoomRandomizerImpl(server), new BasicInfiniteRiftShape()));
+            layout.compareAndSet(null,
+                    new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,
+                            roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase())),
+                            new BasicInfiniteRiftShape()));
             perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();

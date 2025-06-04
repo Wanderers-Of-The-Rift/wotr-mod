@@ -1,12 +1,10 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
@@ -28,9 +26,11 @@ public class RoomRandomizerImpl implements RoomRandomizer {
     // todo invalidate if data pack changes
     private static Pair<PhantomReference<MinecraftServer>, EnumMap<RoomRiftSpace.RoomType, RiftSpaceHolder>> cache;
     private final MinecraftServer server;
+    private final RoomTemplatePoolProvider roomTemplatePoolProvider;
 
-    public RoomRandomizerImpl(MinecraftServer server) {
+    public RoomRandomizerImpl(MinecraftServer server, RoomTemplatePoolProvider roomTemplatePoolProvider) {
         this.server = server;
+        this.roomTemplatePoolProvider = roomTemplatePoolProvider;
     }
 
     @Override
@@ -52,8 +52,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
     }
 
     private RiftSpaceHolder createSpaceHolder(RoomRiftSpace.RoomType roomType) {
-        var templates = RiftTemplates.all(server,
-                WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase()));
+        var templates = roomTemplatePoolProvider.getTemplates(server, roomType);
         if (roomType == RoomRiftSpace.RoomType.CHAOS) {
             return new MultiSizeRiftSpaceRandomList(templates,
                     ((generatable, desiredTemplateSize) -> convertRoom(generatable, desiredTemplateSize, roomType)));
