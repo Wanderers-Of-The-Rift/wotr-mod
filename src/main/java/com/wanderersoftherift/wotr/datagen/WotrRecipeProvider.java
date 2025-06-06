@@ -165,7 +165,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("mesa")))
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("earth")).setMinPercent(50f).build())
-                    .setPriority(10)
+                .setPriority(10)
                 .save(output, WanderersOfTheRift.id("rift_theme_mesa"));
 
         KeyForgeRecipe
