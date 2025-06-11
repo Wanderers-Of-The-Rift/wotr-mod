@@ -20,6 +20,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
@@ -75,6 +76,17 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .define('a', ItemTags.ANVIL)
                 .define('e', Items.EMERALD)
                 .unlockedBy("has_rune", this.has(WotrItems.RUNEGEM))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, WotrItems.RIFT_KEY)
+                .pattern("   ")
+                .pattern("H=o")
+                .pattern(" >>")
+                .define('H', ItemTags.PLANKS)
+                .define('=', Items.IRON_INGOT)
+                .define('o', ItemTags.WOODEN_BUTTONS)
+                .define('>', Items.IRON_SWORD)
+                .unlockedBy("has_iron", this.has(Items.IRON_INGOT))
                 .save(this.output);
 
         ItemStack dodgeSkillGem = WotrItems.ABILITY_HOLDER.toStack();
@@ -320,26 +332,26 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(this.output);
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("cave")))
                 .setPriority(-1)
                 .save(output, WanderersOfTheRift.id("rift_theme_cave"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("forest")))
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("plant")).setMinPercent(50f).build())
                 .save(output, WanderersOfTheRift.id("rift_theme_forest"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("processor")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("processor")).setMin(1).build())
                 .save(output, WanderersOfTheRift.id("rift_theme_processor"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("mushroom")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("mushroom")).setMinPercent(50f).build())
@@ -347,7 +359,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_mushroom"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("nether")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("nether")).setMinPercent(50f).build())
@@ -355,21 +367,21 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_nether"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("noir")))
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("light")).setMinPercent(25f).build())
                 .setPriority(10)
                 .save(output, WanderersOfTheRift.id("rift_theme_noir"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("mesa")))
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("earth")).setMinPercent(50f).build())
                 .setPriority(10)
                 .save(output, WanderersOfTheRift.id("rift_theme_mesa"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("buzzy_bees")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("honey")).setMinPercent(25F).build())
@@ -377,7 +389,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_buzzy_bees"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("desert")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("death")).setMinPercent(15F).build())
@@ -387,7 +399,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_desert"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_THEME.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("swamp")))
                 .withEssenceReq(
                         new EssencePredicate.Builder(WanderersOfTheRift.id("water")).setMinPercent(10F).build())
@@ -397,13 +409,13 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_theme_swamp"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_OBJECTIVE.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_OBJECTIVE.get(),
                         DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
                 .setPriority(-1)
                 .save(output, WanderersOfTheRift.id("rift_objective_kill"));
 
         KeyForgeRecipe
-                .create(WotrDataComponentType.RIFT_OBJECTIVE.get(),
+                .create(Ingredient.of(WotrItems.RIFT_KEY), WotrDataComponentType.RIFT_OBJECTIVE.get(),
                         DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("stealth")))
                 .setPriority(1)
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("dark")).setMinPercent(5f).build())

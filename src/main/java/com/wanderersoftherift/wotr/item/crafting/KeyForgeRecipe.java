@@ -55,14 +55,16 @@ import java.util.Map;
  */
 public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
 
+    private final Ingredient inputItem;
     private final int priority;
     private final List<EssencePredicate> essenceRequirements;
     private final List<Ingredient> itemRequirements;
 
     private final DataComponentApplier<?> output;
 
-    private KeyForgeRecipe(DataComponentApplier<?> output, int priority, List<EssencePredicate> essenceRequirements,
-            List<Ingredient> itemRequirements) {
+    private KeyForgeRecipe(Ingredient input, DataComponentApplier<?> output, int priority,
+            List<EssencePredicate> essenceRequirements, List<Ingredient> itemRequirements) {
+        this.inputItem = input;
         this.output = output;
         this.priority = priority;
         this.essenceRequirements = essenceRequirements;
@@ -71,6 +73,7 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
 
     public static MapCodec<KeyForgeRecipe> codec() {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Ingredient.CODEC.fieldOf("input").forGetter(KeyForgeRecipe::getInput),
                 DataComponentApplier.codec().fieldOf("output").forGetter(x -> (DataComponentApplier) x.output),
                 Codec.INT.fieldOf("priority").forGetter(KeyForgeRecipe::getPriority),
                 EssencePredicate.CODEC.listOf()
@@ -83,21 +86,29 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
     }
 
     public static StreamCodec<RegistryFriendlyByteBuf, KeyForgeRecipe> streamCodec() {
+        // spotless:off
         return StreamCodec.composite(
-                DataComponentApplier.streamCodec(), KeyForgeRecipe::getOutputObject, ByteBufCodecs.INT,
-                KeyForgeRecipe::getPriority, EssencePredicate.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                KeyForgeRecipe::getEssenceRequirements, Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                KeyForgeRecipe::getItemRequirements, KeyForgeRecipe::new
+                Ingredient.CONTENTS_STREAM_CODEC, KeyForgeRecipe::getInput,
+                DataComponentApplier.streamCodec(), KeyForgeRecipe::getOutputObject,
+                ByteBufCodecs.INT, KeyForgeRecipe::getPriority,
+                EssencePredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), KeyForgeRecipe::getEssenceRequirements,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), KeyForgeRecipe::getItemRequirements,
+                KeyForgeRecipe::new
         );
+        // spotless:on
     }
 
-    public static <T> Builder<T> create(DataComponentType<T> outputType, T output) {
-        return new Builder<>(outputType, output);
+    public static <T> Builder<T> create(Ingredient input, DataComponentType<T> outputType, T output) {
+        return new Builder<>(input, outputType, output);
     }
 
     @Override
     public @NotNull RecipeType<? extends Recipe<EssenceRecipeInput>> getType() {
         return WotrRecipeTypes.KEY_FORGE_RECIPE.get();
+    }
+
+    public Ingredient getInput() {
+        return inputItem;
     }
 
     /**
@@ -147,6 +158,9 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
 
     @Override
     public boolean matches(@NotNull EssenceRecipeInput input, @NotNull Level level) {
+        if (!inputItem.test(input.getInputItem())) {
+            return false;
+        }
         for (EssencePredicate essenceReq : essenceRequirements) {
             if (!essenceReq.match(input)) {
                 return false;
@@ -154,8 +168,8 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
         }
         for (Ingredient itemReq : itemRequirements) {
             boolean met = false;
-            for (int i = 0; i < input.size(); i++) {
-                ItemStack item = input.getItem(i);
+            for (int i = 0; i < input.essenceSourceCount(); i++) {
+                ItemStack item = input.getEssenceSource(i);
                 if (itemReq.test(item)) {
                     met = true;
                     break;
@@ -215,6 +229,7 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
     }
 
     public static final class Builder<T> implements RecipeBuilder {
+        private final Ingredient input;
         private final DataComponentType<T> resultType;
         private final T result;
         private int priority = 0;
@@ -229,7 +244,8 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
         /**
          * @param output The output this recipe produces
          */
-        private Builder(DataComponentType<T> outputType, T output) {
+        private Builder(Ingredient input, DataComponentType<T> outputType, T output) {
+            this.input = input;
             this.resultType = outputType;
             this.result = output;
         }
@@ -272,8 +288,8 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
         }
 
         public KeyForgeRecipe build() {
-            return new KeyForgeRecipe(new DataComponentApplier<T>(resultType, result), priority, essenceRequirements,
-                    itemRequirements);
+            return new KeyForgeRecipe(input, new DataComponentApplier<T>(resultType, result), priority,
+                    essenceRequirements, itemRequirements);
         }
 
         @Override
@@ -329,7 +345,7 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
                 criteria.forEach(builder::addCriterion);
                 advancement = builder.build(key.location().withPrefix("recipes/"));
             }
-            KeyForgeRecipe recipe = new KeyForgeRecipe(new DataComponentApplier<T>(resultType, result), priority,
+            KeyForgeRecipe recipe = new KeyForgeRecipe(input, new DataComponentApplier<T>(resultType, result), priority,
                     essenceRequirements, itemRequirements);
             output.accept(key, recipe, advancement);
         }

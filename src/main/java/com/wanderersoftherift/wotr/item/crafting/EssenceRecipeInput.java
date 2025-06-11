@@ -17,15 +17,17 @@ import java.util.List;
  */
 public class EssenceRecipeInput implements RecipeInput {
 
-    private final List<ItemStack> items;
+    private final ItemStack input;
+    private final List<ItemStack> essenceSources;
     private final int totalEssence;
     private final Object2IntMap<ResourceLocation> essenceCounts;
 
     /**
      * @param essenceSources The items providing essence for the recipe
      */
-    public EssenceRecipeInput(List<ItemStack> essenceSources) {
-        this.items = essenceSources;
+    public EssenceRecipeInput(ItemStack input, List<ItemStack> essenceSources) {
+        this.input = input;
+        this.essenceSources = essenceSources;
 
         int totalEssence = 0;
         essenceCounts = new Object2IntArrayMap<>();
@@ -48,12 +50,28 @@ public class EssenceRecipeInput implements RecipeInput {
 
     @Override
     public @NotNull ItemStack getItem(int index) {
-        return items.get(index);
+        if (index == 0) {
+            return input;
+        } else {
+            return essenceSources.get(index - 1);
+        }
     }
 
     @Override
     public int size() {
-        return items.size();
+        return essenceSources.size() + 1;
+    }
+
+    public ItemStack getInputItem() {
+        return input;
+    }
+
+    public ItemStack getEssenceSource(int index) {
+        return essenceSources.get(index);
+    }
+
+    public int essenceSourceCount() {
+        return essenceSources.size();
     }
 
     /**

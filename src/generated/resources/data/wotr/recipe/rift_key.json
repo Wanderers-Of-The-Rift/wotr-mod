@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "=": "minecraft:iron_ingot",
+    ">": "minecraft:iron_sword",
+    "H": "#minecraft:planks",
+    "o": "#minecraft:wooden_buttons"
+  },
+  "pattern": [
+    "   ",
+    "H=o",
+    " >>"
+  ],
+  "result": {
+    "count": 1,
+    "id": "wotr:rift_key"
+  }
+}

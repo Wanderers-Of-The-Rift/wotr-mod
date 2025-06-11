@@ -1,5 +1,6 @@
 {
   "type": "wotr:key_forge_recipe",
+  "input": "wotr:rift_key",
   "output": {
     "type": "wotr:rift_objective",
     "value": "wotr:kill"

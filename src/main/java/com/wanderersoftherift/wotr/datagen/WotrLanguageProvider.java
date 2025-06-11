@@ -33,7 +33,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK, "Rune Anvil");
         addBlock(WotrBlocks.RIFT_CHEST, "Rift Chest");
         addBlock(WotrBlocks.RIFT_SPAWNER, "Rift Spawner");
-        addBlock(WotrBlocks.KEY_FORGE, "Key Forge");
+        addBlock(WotrBlocks.KEY_FORGE, "Essence Infuser");
         addBlock(WotrBlocks.DITTO_BLOCK, "Ditto Block");
         addBlock(WotrBlocks.SPRING_BLOCK, "Spring Block");
         addBlock(WotrBlocks.TRAP_BLOCK, "Trap Block");
@@ -64,7 +64,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(WotrItems.RUNEGEM, "Runegem");
-        addItem(WotrItems.RIFT_KEY, "Rift Key");
+        addItem(WotrItems.RIFT_KEY, "Seam Ripper");
         addItem(WotrItems.RAW_RUNEGEM_GEODE, "Runegem Geode (Raw)");
         addItem(WotrItems.SHAPED_RUNEGEM_GEODE, "Runegem Geode (Shaped)");
         addItem(WotrItems.CUT_RUNEGEM_GEODE, "Runegem Geode (Cut)");
@@ -151,12 +151,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
         add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
 
-        add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
+        add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Seam Ripper of %s");
 
         add("container." + WanderersOfTheRift.MODID + ".rune_anvil", "Rune Anvil");
         add("container." + WanderersOfTheRift.MODID + ".rune_anvil.apply", "Apply");
         add("container." + WanderersOfTheRift.MODID + ".rift_chest", "Rift Chest");
-        add("container." + WanderersOfTheRift.MODID + ".key_forge", "Key Forge");
+        add("container." + WanderersOfTheRift.MODID + ".key_forge", "Essence Infuser");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench", "Ability Bench");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
@@ -181,12 +181,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".invalid_player", "Player is null!");
         add("command." + WanderersOfTheRift.MODID + ".get_item_stack_components.success",
                 "Item Components available for '%1$s'");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_tier", "Rift key tier set to %s");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_theme", "Rift key theme set to %s");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_objective", "Rift key objective set to %s");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_seed", "Rift key seed set to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_tier", "Seam Ripper tier set to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_theme", "Seam Ripper theme set to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_objective", "Seam Ripper objective set to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_seed", "Seam Ripper seed set to %s");
         add("command." + WanderersOfTheRift.MODID + ".invalid_theme", "Invalid theme '%s'");
-        add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item",
+                "You must hold a Seam Ripper in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
 

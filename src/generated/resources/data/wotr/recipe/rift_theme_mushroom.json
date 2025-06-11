@@ -6,6 +6,7 @@
       "min_percent": 50.0
     }
   ],
+  "input": "wotr:rift_key",
   "output": {
     "type": "wotr:rift_theme",
     "value": "wotr:mushroom"
