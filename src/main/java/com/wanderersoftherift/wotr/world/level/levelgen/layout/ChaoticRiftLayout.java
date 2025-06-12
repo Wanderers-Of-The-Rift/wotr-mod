@@ -101,10 +101,13 @@ public class ChaoticRiftLayout implements RiftLayout {
             this.origin = origin;
             for (int x = 0; x < 15; x++) {
                 for (int z = 0; z < 15; z++) {
-                    var idx = z * 15 + x;
-                    var chaosiveness = (int) Double.min(riftShape.chaosiveness(x + origin.getX(), z + origin.getZ()),
-                            layerCount / 2.0);
-                    emptySpaces[idx] = ((1L << (2 * chaosiveness)) - 1) << (layerCount / 2 - chaosiveness);
+                    var idx = (z * 15) + x;
+
+                    for (int y = 0; y < layerCount; y++) {
+                        if (riftShape.isPositionValid(x + origin.getX(), y - (layerCount / 2), z + origin.getZ())) {
+                            emptySpaces[idx] |= 1L << y;
+                        }
+                    }
                 }
 
             }

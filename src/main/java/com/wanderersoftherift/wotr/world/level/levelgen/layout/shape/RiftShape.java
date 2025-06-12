@@ -8,4 +8,8 @@ public interface RiftShape {
 
     // 2 = chaotic, 1 = unstable, 0 = stable
     int categorize(double x, double y);
+
+    default boolean isPositionValid(int x, int y, int z) {
+        return chaosiveness(x, z) > abs(y);
+    }
 }
