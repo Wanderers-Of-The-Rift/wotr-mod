@@ -190,38 +190,61 @@ public class ChaoticRiftLayout implements RiftLayout {
                 var size = combination >> 4;
                 var x = (position & 3) - 2;
                 var y = (position >> 2) - 2;
-                var width = ((size & 0x1) | ((size & 0x4) >> 1)) + 1;
-                var height = (((size & 0x2) >> 1) | ((size & 0x8) >> 2)) + 1;
+                var maxWidth = ((size & 0x1) | ((size & 0x4) >> 1)) + 1;
+                var maxHeight = (((size & 0x2) >> 1) | ((size & 0x8) >> 2)) + 1;
 
                 var tangentDirection = corridor.direction().getClockWise();
-                var roomSize = new Vec3i(
+                var maxRoomSize = new Vec3i(
                         depth * Math.abs(corridor.direction().getStepX())
-                                + width * Math.abs(tangentDirection.getStepX()),
-                        height, depth * Math.abs(corridor.direction().getStepZ())
-                                + width * Math.abs(tangentDirection.getStepZ()));
-                var space = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.CHAOS, randomSource, roomSize);
+                                + maxWidth * Math.abs(tangentDirection.getStepX()),
+                        maxHeight, depth * Math.abs(corridor.direction().getStepZ())
+                                + maxWidth * Math.abs(tangentDirection.getStepZ()));
+
+                var space = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.CHAOS, randomSource, maxRoomSize);
                 var spaceOffsetX = roomPosition.getX() + corridor.position().getX();
                 var spaceOffsetY = roomPosition.getY() + corridor.position().getY();
                 var spaceOffsetZ = roomPosition.getZ() + corridor.position().getZ();
+                var altYOffset = spaceOffsetY + 1 - (space.origin().getY() + space.size().getY());
                 spaceOffsetY += y;
                 switch (corridor.direction()) {
                     case NORTH -> {
+                        var altXOffset = spaceOffsetX + 1 - (space.origin().getX() + space.size().getX());
                         spaceOffsetX += x;
-                        spaceOffsetZ -= roomSize.getZ();
+                        spaceOffsetZ -= space.size().getZ();
+                        if (spaceOffsetX < altXOffset) {
+                            spaceOffsetX = altXOffset;
+                        }
                     }
                     case SOUTH -> {
-                        spaceOffsetX -= width - 1 + x;
+                        var altXOffset = spaceOffsetX + 1 - (space.origin().getX() + space.size().getX());
+                        spaceOffsetX -= maxWidth - 1 + x;
                         spaceOffsetZ += 1;
+                        if (spaceOffsetX < altXOffset) {
+                            spaceOffsetX = altXOffset;
+                        }
                     }
                     case WEST -> {
-                        spaceOffsetZ -= x + width - 1;
-                        spaceOffsetX -= roomSize.getX();
+                        var altZOffset = spaceOffsetZ + 1 - (space.origin().getZ() + space.size().getZ());
+                        spaceOffsetZ -= x + maxWidth - 1;
+                        spaceOffsetX -= space.size().getX();
+                        if (spaceOffsetZ < altZOffset) {
+                            spaceOffsetZ = altZOffset;
+                        }
                     }
                     case EAST -> {
+                        var altZOffset = spaceOffsetZ + 1 - (space.origin().getZ() + space.size().getZ());
                         spaceOffsetZ += x;
                         spaceOffsetX += 1;
+                        if (spaceOffsetZ < altZOffset) {
+                            spaceOffsetZ = altZOffset;
+                        }
                     }
                 }
+
+                if (spaceOffsetY < altYOffset) {
+                    spaceOffsetY = altYOffset;
+                }
+
                 var result = space.offset(spaceOffsetX, spaceOffsetY, spaceOffsetZ);
                 return result;
             }
@@ -246,7 +269,7 @@ public class ChaoticRiftLayout implements RiftLayout {
                 positionZ -= origin.getZ();
                 var emptySpacesColumn = emptySpaces[positionX + positionZ * 15];
                 var shiftedColumn = sliceStartY < 0 ? (emptySpacesColumn << -sliceStartY)
-                        : (emptySpacesColumn >> sliceStartY);
+                        : (emptySpacesColumn >>> sliceStartY);
                 result |= (int) ((0x1f & shiftedColumn) << (x * 5 + 10));
             }
             return result;
