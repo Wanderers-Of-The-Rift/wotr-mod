@@ -1,0 +1,18 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:death",
+      "minPercent": 15.0
+    },
+    {
+      "essenceType": "wotr:earth",
+      "minPercent": 35.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:desert"
+  },
+  "priority": 10
+}
