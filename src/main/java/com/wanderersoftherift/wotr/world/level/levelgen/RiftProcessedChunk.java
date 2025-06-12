@@ -68,12 +68,12 @@ public class RiftProcessedChunk {
     }
 
     public void setBlockState(int x, int y, int z, BlockState blockState) {
-        var index = x + z * 16 + (y - origin.getY() * 16) * 256;
+        var index = x + (z << 4) + ((y - (origin.getY() << 4)) << 8);
         blocks[index] = blockState;
     }
 
     public void setBlockStatePure(int x, int y, int z, BlockState blockState) {
-        var index = x + z * 16 + y * 256;
+        var index = x + (z << 4) + (y << 8);
         blocks[index] = blockState;
     }
 
@@ -82,12 +82,12 @@ public class RiftProcessedChunk {
     }
 
     public BlockState getBlockState(int x, int y, int z) {
-        var index = x + z * 16 + (y - origin.getY() * 16) * 256;
+        var index = x + (z << 4) + ((y - (origin.getY() << 4)) << 8);
         return blocks[index];
     }
 
     public BlockState getBlockStatePure(int x, int y, int z) {
-        var index = x + z * 16 + y * 256;
+        var index = x + (z << 4) + (y << 8);
         return blocks[index];
     }
 
