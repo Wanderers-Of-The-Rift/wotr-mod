@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.shape;
 
-public interface InfiniteRiftShape {
+import static java.lang.Math.abs;
+
+public interface RiftShape {
 
     double chaosiveness(double x, double z);
 

@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.shape;
 
-public class BasicInfiniteRiftShape implements InfiniteRiftShape {
+public class BasicRiftShape implements RiftShape {
 
     @Override
     public double chaosiveness(double x, double z) {

@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.InfiniteRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
@@ -31,9 +31,9 @@ public class ChaoticRiftLayout implements RiftLayout {
     private final int layerCount;
     private final int seed;
     private final RoomRandomizer roomRandomizer;
-    private final InfiniteRiftShape riftShape;
+    private final RiftShape riftShape;
 
-    public ChaoticRiftLayout(int layerCount, int seed, RoomRandomizer roomRandomizer, InfiniteRiftShape riftShape) {
+    public ChaoticRiftLayout(int layerCount, int seed, RoomRandomizer roomRandomizer, RiftShape riftShape) {
         this.layerCount = layerCount;
         this.seed = seed;
         this.roomRandomizer = roomRandomizer;

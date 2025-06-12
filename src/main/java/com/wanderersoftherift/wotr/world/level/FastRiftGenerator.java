@@ -12,7 +12,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.ChaoticRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicInfiniteRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
@@ -117,7 +117,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             layout.compareAndSet(null,
                     new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,
                             roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase())),
-                            new BasicInfiniteRiftShape()));
+                            new BasicRiftShape()));
             perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();
