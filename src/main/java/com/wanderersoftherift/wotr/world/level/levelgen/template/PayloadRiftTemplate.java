@@ -92,20 +92,19 @@ public class PayloadRiftTemplate implements RiftGeneratable {
 
         var directionBlocksArray = new BlockState[7];
         var preloaded = new BlockState[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
-        var saveMask = new boolean[4][pieceSize.getZ() + 2][pieceSize.getX() + 2];
-        var mergetFlags = new boolean[pieceSize.getZ() + 2][pieceSize.getX() + 2];
+        var saveMask = new long[4][pieceSize.getZ() + 2];
+        var mergedFlags = new long[2][pieceSize.getZ() + 2];
         RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY(), structurePos.getZ(),
-                pieceSize, preloaded[0], saveMask[0]);
+                pieceSize, preloaded[0], saveMask[0], mergedFlags[0]);
         for (int y = 0; y < pieceSize.getY(); y++) {
-            // todo merge the preloads
             RiftAdjacencyProcessor.preloadLayer(room, structurePos.getX(), structurePos.getY() + y + 1,
-                    structurePos.getZ(), pieceSize, preloaded[(y + 1) & 3], saveMask[(y + 1) & 3]);
-            RiftAdjacencyProcessor.preloadMerged(room, structurePos.getX(), structurePos.getY() + y,
-                    structurePos.getZ(), pieceSize, mergetFlags);
+                    structurePos.getZ(), pieceSize, preloaded[(y + 1) & 3], saveMask[(y + 1) & 3],
+                    mergedFlags[(y + 1) & 1]);
             var pre = preloaded[y & 3];
             var sav = saveMask[y & 3];
+            var mer = mergedFlags[y & 1];
             for (int z = 0; z < pieceSize.getZ(); z++) {
-                var mergeCenter = mergetFlags[z];
+                var mergeCenter = mer[z + 1];
                 var preDown = preloaded[(y - 1) & 3][z + 1];
                 var preUp = preloaded[(y + 1) & 3][z + 1];
                 var preNorth = pre[z];
@@ -117,7 +116,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                 var savSouth = sav[z + 2];
                 var savCenter = sav[z + 1];
                 for (int x = 0; x < pieceSize.getX(); x++) {
-                    if (mergeCenter[x]) {
+                    if (((mergeCenter >> (x + 1)) & 1) != 0) {
                         continue;
                     }
                     BlockState currentState = preCenter[x + 1];
@@ -139,40 +138,45 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                             if ((modifyMask & 0b111) != 0) {
                                 if ((modifyMask & 0b1) != 0) {
                                     preDown[x + 1] = directionBlocksArray[0];
-                                    savDown[x + 1] = true;
+                                    savDown |= 1L << (x + 1);
                                 }
                                 if ((modifyMask & 0b10) != 0) {
                                     preUp[x + 1] = directionBlocksArray[1];
-                                    savUp[x + 1] = true;
+                                    savUp |= 1L << (x + 1);
                                 }
                                 if ((modifyMask & 0b100) != 0) {
                                     preNorth[x + 1] = directionBlocksArray[2];
-                                    savNorth[x + 1] = true;
+                                    savNorth |= 1L << (x + 1);
                                 }
                             }
                             if ((modifyMask & 0b111000) != 0) {
                                 if ((modifyMask & 0b1000) != 0) {
                                     preSouth[x + 1] = directionBlocksArray[3];
-                                    savSouth[x + 1] = true;
+                                    savSouth |= 1L << (x + 1);
                                 }
                                 if ((modifyMask & 0b10000) != 0) {
                                     preCenter[x] = directionBlocksArray[4];
-                                    savCenter[x] = true;
+                                    savCenter |= 1L << x;
                                 }
                                 if ((modifyMask & 0b100000) != 0) {
                                     preCenter[x + 2] = directionBlocksArray[5];
-                                    savCenter[x + 2] = true;
+                                    savCenter |= 1L << (x + 2);
                                 }
                             }
 
                             if ((modifyMask & 0b1000000) != 0) {
                                 preCenter[x + 1] = directionBlocksArray[6];
-                                savCenter[x + 1] = true;
+                                savCenter |= 1L << (x + 1);
                             }
                         }
 
                     }
                 }
+                saveMask[(y - 1) & 3][z + 1] = savDown;
+                saveMask[(y + 1) & 3][z + 1] = savUp;
+                sav[z] = savNorth;
+                sav[z + 2] = savSouth;
+                sav[z + 1] = savCenter;
             }
             RiftAdjacencyProcessor.saveLayer(room, structurePos.getX(), structurePos.getY() + y - 1,
                     structurePos.getZ(), pieceSize, preloaded[(y - 1) & 3], saveMask[(y - 1) & 3]);

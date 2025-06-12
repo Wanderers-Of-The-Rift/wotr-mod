@@ -21,7 +21,6 @@ public interface RiftAdjacencyProcessor<T> {
 
     T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
 
-    // todo smarter way of loading the data
     static void preloadLayer(
             RiftProcessedRoom room,
             int xOffset,
@@ -29,31 +28,57 @@ public interface RiftAdjacencyProcessor<T> {
             int zOffset,
             Vec3i pieceSize,
             BlockState[][] preloading,
-            boolean[][] booleans) {
-        for (int z = 0; z < pieceSize.getZ(); z++) {
-            var z2 = z + zOffset;
-            var bo = booleans[z + 1];
-            var pre = preloading[z + 1];
-            for (int x = 0; x < pieceSize.getX(); x++) {
-                var state = room.getBlock(x + xOffset, yOffset, z2);
-                pre[x + 1] = state;
-                bo[x + 1] = false;
+            long[] saveFlags,
+            long[] mergedFlags) {
+        var yOffsetMasked = yOffset & 0xf;
+        var yOffsetMaskedShift = yOffsetMasked << 4;
+        for (int chunkZ = 0; chunkZ <= ((pieceSize.getZ() - 1) >> 4); chunkZ++) {
+            var z2Delta = chunkZ << 4;
+            var z3Delta = 0;
+            if (chunkZ == 0) {
+                z3Delta += zOffset & 0xf;
+            } else {
+                z2Delta -= zOffset & 0xf;
             }
-        }
-    }
-
-    static void preloadMerged(
-            RiftProcessedRoom room,
-            int xOffset,
-            int yOffset,
-            int zOffset,
-            Vec3i pieceSize,
-            boolean[][] booleans) {
-        for (int z = 0; z < pieceSize.getZ(); z++) {
-            var z2 = z + zOffset;
-            var bo = booleans[z];
-            for (int x = 0; x < pieceSize.getX(); x++) {
-                bo[x] = room.getMerged(x + xOffset, yOffset, z2);
+            for (int chunkX = 0; chunkX <= ((pieceSize.getX() - 1) >> 4); chunkX++) {
+                var chunk = room.getChunk(chunkX + (xOffset >> 4), yOffset >> 4, chunkZ + (zOffset >> 4));
+                var x2Delta = chunkX << 4;
+                var x3Delta = 0;
+                if (chunkX == 0) {
+                    x3Delta += xOffset & 0xf;
+                } else {
+                    x2Delta -= xOffset & 0xf;
+                }
+                if (chunk == null) {
+                    continue;
+                }
+                for (int z = 0; true; z++) {
+                    var z2 = z + z2Delta;
+                    var z3 = z + z3Delta;
+                    if ((z3 >= 16) || (z2 >= pieceSize.getZ())) {
+                        break;
+                    }
+                    saveFlags[z2 + 1] = 0;
+                    var pre = preloading[z2 + 1];
+                    var mer = mergedFlags[z2 + 1];
+                    for (int x = 0; true; x++) {
+                        var x2 = x + x2Delta;
+                        var x3 = x + x3Delta;
+                        if ((x3 >= 16) || (x2 >= pieceSize.getX())) {
+                            break;
+                        }
+                        var state = chunk.getBlockStatePure(x3, yOffsetMasked, z3);
+                        pre[x2 + 1] = state;
+                        var merg = (((chunk.hidden[yOffsetMaskedShift | z3] >> x3) & 1) != 0)
+                                || (((chunk.newlyAdded[yOffsetMaskedShift | z3] >> x3) & 1) == 0);
+                        var bits = 1 << (x2 + 1);
+                        mer &= ~bits;
+                        if (merg) {
+                            mer |= bits;
+                        }
+                    }
+                    mergedFlags[z2 + 1] = mer;
+                }
             }
         }
     }
@@ -65,15 +90,55 @@ public interface RiftAdjacencyProcessor<T> {
             int zOffset,
             Vec3i pieceSize,
             BlockState[][] preloading,
-            boolean[][] booleans) {
-        for (int z = 0; z < pieceSize.getZ(); z++) {
-            var z2 = z + zOffset;
-            var bo = booleans[z + 1];
-            var pre = preloading[z + 1];
-            for (int x = 0; x < pieceSize.getX(); x++) {
-                if (bo[x + 1]) {
-                    var state = pre[x + 1];
-                    room.setBlock(x + xOffset, yOffset, z2, state);
+            long[] saveFlags) {
+        var yOffsetMasked = yOffset & 0xf;
+        for (int chunkZ = 0; chunkZ <= ((pieceSize.getZ() - 1) >> 4); chunkZ++) {
+            var z2Delta = chunkZ << 4;
+            var z3Delta = 0;
+            if (chunkZ == 0) {
+                z3Delta += zOffset & 0xf;
+            } else {
+                z2Delta -= zOffset & 0xf;
+            }
+            for (int chunkX = 0; chunkX <= ((pieceSize.getX() - 1) >> 4); chunkX++) {
+                var chunk = room.getChunk(chunkX + (xOffset >> 4), yOffset >> 4, chunkZ + (zOffset >> 4));
+                var x2Delta = chunkX << 4;
+                var x3Delta = 0;
+                if (chunkX == 0) {
+                    x3Delta += xOffset & 0xf;
+                } else {
+                    x2Delta -= xOffset & 0xf;
+                }
+                if (chunk == null) {
+                    continue;
+                }
+                for (int z = 0; true; z++) {
+                    var z2 = z + z2Delta;
+                    var z3 = z + z3Delta;
+                    if ((z3 >= 16) || (z2 >= pieceSize.getZ())) {
+                        break;
+                    }
+                    var sav = saveFlags[z2 + 1];
+                    if (sav == 0) {
+                        continue;
+                    }
+                    var pre = preloading[z2 + 1];
+
+                    for (int x = 0; true; x++) {
+                        var x2 = x + x2Delta;
+                        var x3 = x + x3Delta;
+                        if ((x3 >= 16) || (x2 >= pieceSize.getX())) {
+                            break;
+                        }
+
+                        var remainingFlags = (sav >> (x2 + 1));
+                        if (remainingFlags == 0) {
+                            break;
+                        }
+                        if ((remainingFlags & 1) != 0) {
+                            chunk.setBlockStatePure(x3, yOffsetMasked, z3, pre[x2 + 1]);
+                        }
+                    }
                 }
             }
         }
