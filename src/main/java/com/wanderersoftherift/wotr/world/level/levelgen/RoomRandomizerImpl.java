@@ -67,8 +67,8 @@ public class RoomRandomizerImpl implements RoomRandomizer {
             @Nullable Vec3i desiredTemplateSize,
             RoomRiftSpace.RoomType type) { // todo maybe double weight if only one diagonal mirror is applicable
         var sizeBlocks = generatable.size();
-        var sizeChunks = new Vec3i((sizeBlocks.getX() + 1) / 16, (sizeBlocks.getY() + 1) / 16,
-                (sizeBlocks.getZ() + 1) / 16);
+        var sizeChunks = new Vec3i(Math.ceilDiv(sizeBlocks.getX(), 16), Math.ceilDiv(sizeBlocks.getY(), 16),
+                Math.ceilDiv(sizeBlocks.getZ(), 16));
         var baseStream = IntStream.range(0, 8).mapToObj((mirrorPermutation) -> {
             var mirror = new TripleMirror(mirrorPermutation);
             var modifiedSize = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(sizeChunks, 0, 0);

@@ -34,16 +34,18 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
     private final CompoundTag[] fastTileEntityHashTable;
     private final Vec3i[] fastTileEntityPositionsHashTable;
     private final short[][] hidden;
+    private final Vec3i size;
 
     public BasicPayload(BlockState[][] data, List<StructureTemplate.StructureEntityInfo> entities,
             Map<Vec3i, CompoundTag> tileEntities, CompoundTag[] fastTileEntityHashTable,
-            Vec3i[] fastTileEntityPositionsHashTable, short[][] hidden) {
+            Vec3i[] fastTileEntityPositionsHashTable, short[][] hidden, Vec3i size) {
         this.data = data;
         this.entities = entities;
         this.tileEntities = tileEntities;
         this.fastTileEntityHashTable = fastTileEntityHashTable;
         this.fastTileEntityPositionsHashTable = fastTileEntityPositionsHashTable;
         this.hidden = hidden;
+        this.size = size;
     }
 
     public static BasicPayload of(
@@ -96,7 +98,7 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
             tileEntities = Collections.singletonMap(entry.getKey(), entry.getValue());
         }
         return new BasicPayload(blockStates, entities, tileEntities, fastTileEntityHashTable,
-                fastTileEntityPositionsHashTable, computeHidden(blockStates, size));
+                fastTileEntityPositionsHashTable, computeHidden(blockStates, size), size);
     }
 
     private static short[][] computeHidden(BlockState[][] data, Vec3i size) {
@@ -152,7 +154,6 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
             ServerLevelAccessor world,
             BlockPos offset,
             TripleMirror mirror) {
-        var size = template.size();
 
         var mutablePosition = new BlockPos.MutableBlockPos();
         var xLastChunkPosition = 0;

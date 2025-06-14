@@ -130,8 +130,10 @@ public class RiftProcessedRoom {
         listtag.add(DoubleTag.valueOf(info.pos.z));
         nbt.put("Pos", listtag);
         nbt.remove("UUID");
-        this.getOrCreateChunk(new Vec3i(position.getX() >> 4, position.getY() >> 4, position.getZ() >> 4)).entities
-                .add(nbt);
+        var chunk = this.getOrCreateChunk(new Vec3i(position.getX() >> 4, position.getY() >> 4, position.getZ() >> 4));
+        if (chunk != null) {
+            chunk.entities.add(nbt);
+        }
     }
 
     public BlockState getBlock(int x, int y, int z) {

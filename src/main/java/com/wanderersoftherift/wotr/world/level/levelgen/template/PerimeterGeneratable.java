@@ -23,6 +23,16 @@ public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator 
             Vec3i placementShift,
             TripleMirror mirror) {
         var spaceOrigin = destination.space.origin();
+        var template = destination.space.template();
+        if (template == null) {
+            return;
+        }
+
+        var border = new Vec3i(
+                15 - ((template.size().getX() - 1) & 0xf), 15 - ((template.size().getY() - 1) & 0xf),
+                15 - ((template.size().getZ() - 1) & 0xf)
+        );
+
         for (var destinationChunk : destination.getOrCreateAllChunks()) {
             var level = destinationChunk.origin.getY();
             var originRelativeX = destinationChunk.origin.getX() - spaceOrigin.getX();
@@ -32,14 +42,18 @@ public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator 
             if (originRelativeX == 0) {
                 for (int y = levelBlock; y < levelBlock + 16; y++) {
                     for (int z = 0; z < 16; z++) {
-                        destinationChunk.setBlockState(0, y, z, perimeterBlock);
+                        for (int x = 0; x < border.getZ(); x++) {
+                            destinationChunk.setBlockState(x, y, z, perimeterBlock);
+                        }
                     }
                 }
             }
             if (originRelativeZ == 0) {
                 for (int y = levelBlock; y < levelBlock + 16; y++) {
                     for (int x = 0; x < 16; x++) {
-                        destinationChunk.setBlockState(x, y, 0, perimeterBlock);
+                        for (int z = 0; z < border.getZ(); z++) {
+                            destinationChunk.setBlockState(x, y, z, perimeterBlock);
+                        }
                     }
                 }
             }
@@ -47,7 +61,9 @@ public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator 
                 for (int xz = 0; xz < 256; xz++) {
                     var z = (xz >>> 4) & 0xf;
                     var x = xz & 0xf;
-                    destinationChunk.setBlockState(x, levelBlock, z, perimeterBlock);
+                    for (int y = 0; y < border.getZ(); y++) {
+                        destinationChunk.setBlockState(x, levelBlock + y, z, perimeterBlock);
+                    }
                 }
             }
         }
