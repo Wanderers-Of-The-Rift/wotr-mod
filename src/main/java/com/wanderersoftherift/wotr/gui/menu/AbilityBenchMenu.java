@@ -23,7 +23,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -44,6 +43,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
     private final DataSlot canLevel;
+    private final QuickMover mover;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory,
@@ -65,6 +65,20 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
         canLevel = DataSlot.standalone();
         addDataSlot(canLevel);
+
+        mover = QuickMover.create(this)
+                .forPlayerSlots(INPUT_SLOTS)
+                .tryMoveTo(0, INPUT_SLOTS)
+                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+                .forSlot(0)
+                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+                .tryMoveToPlayer()
+                .forSlot(1)
+                .tryMoveToPlayer()
+                .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+                .tryMoveTo(0)
+                .tryMoveToPlayer()
+                .build();
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -255,127 +269,11 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack slotStack = slot.getItem().copy();
-        ItemStack resultStack = slotStack.copy();
-        if (slot instanceof AbilitySlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_SLOTS,
-                    INPUT_SLOTS + PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, false)) {
-                if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, true)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        } else if (index == 1) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (index < INPUT_SLOTS + PLAYER_SLOTS) {
-            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false) && !this.moveItemStackTo(slotStack,
-                    INPUT_SLOTS + PLAYER_SLOTS, PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, true)) {
-                // Move from player inventory to hotbar
-                if (index < INPUT_SLOTS + PLAYER_INVENTORY_SLOTS) {
-                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_INVENTORY_SLOTS,
-                            INPUT_SLOTS + PLAYER_SLOTS, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                // Move from hotbar to player inventory
-                else if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_INVENTORY_SLOTS, false)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        } else {
-            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false)) {
-                if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, PLAYER_SLOTS, true)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        }
-        if (slotStack.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.set(slotStack);
-        }
-        slot.onQuickCraft(resultStack, slotStack);
-
-        return resultStack;
+        return mover.quickMove(player, index);
     }
 
     @Override
     public boolean stillValid(@NotNull Player player) {
         return stillValid(this.access, player, WotrBlocks.ABILITY_BENCH.get());
-    }
-
-    // Changed to correctly respect ItemHandlers not providing live editable stacks
-    @Override
-    protected boolean moveItemStackTo(
-            @NotNull ItemStack stack,
-            int startIndex,
-            int endIndex,
-            boolean reverseDirection) {
-        boolean result = false;
-        int i = startIndex;
-        if (reverseDirection) {
-            i = endIndex - 1;
-        }
-
-        if (stack.isStackable()) {
-            while (!stack.isEmpty() && (reverseDirection ? i >= startIndex : i < endIndex)) {
-                Slot slot = this.slots.get(i);
-                ItemStack itemstack = slot.getItem().copy();
-                if (!itemstack.isEmpty() && ItemStack.isSameItemSameComponents(stack, itemstack)) {
-                    int j = itemstack.getCount() + stack.getCount();
-                    int k = slot.getMaxStackSize(itemstack);
-                    if (j <= k) {
-                        stack.setCount(0);
-                        itemstack.setCount(j);
-                        slot.set(itemstack);
-                        result = true;
-                    } else if (itemstack.getCount() < k) {
-                        stack.shrink(k - itemstack.getCount());
-                        itemstack.setCount(k);
-                        slot.set(itemstack);
-                        result = true;
-                    }
-                }
-
-                if (reverseDirection) {
-                    i--;
-                } else {
-                    i++;
-                }
-            }
-        }
-
-        if (!stack.isEmpty()) {
-            if (reverseDirection) {
-                i = endIndex - 1;
-            } else {
-                i = startIndex;
-            }
-
-            while (reverseDirection ? i >= startIndex : i < endIndex) {
-                Slot slot = this.slots.get(i);
-                ItemStack itemstack = slot.getItem();
-                if (itemstack.isEmpty() && slot.mayPlace(stack)) {
-                    int l = slot.getMaxStackSize(stack);
-                    ItemStack split = stack.split(Math.min(stack.getCount(), l));
-                    slot.setByPlayer(split);
-                    result = true;
-                    break;
-                }
-
-                if (reverseDirection) {
-                    i--;
-                } else {
-                    i++;
-                }
-            }
-        }
-
-        return result;
     }
 }

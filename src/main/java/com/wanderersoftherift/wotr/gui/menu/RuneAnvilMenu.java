@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.slot.RunegemSlot;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -39,6 +38,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     private final Container container;
     private Slot gearSlot;
     private int activeSocketSlots = 0;
+    private final QuickMover mover;
 
     // Client
     public RuneAnvilMenu(int containerId, Inventory playerInventory) {
@@ -55,6 +55,13 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         this.container = container;
 
         this.createSlots();
+
+        mover = QuickMover.create(this)
+                .forPlayerSlots(0)
+                .tryMoveTo(QuickMover.PLAYER_SLOTS, 7)
+                .forSlots(QuickMover.PLAYER_SLOTS, 7)
+                .tryMoveToPlayer()
+                .build();
     }
 
     private void createSlots() {
@@ -223,56 +230,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        if (index >= this.slots.size()) {
-            // this should never happen
-            WanderersOfTheRift.LOGGER.error("RuneAnvilMenu: quickMoveStack: index out of bounds");
-            return ItemStack.EMPTY;
-        }
-
-        Slot slot = this.slots.get(index);
-        if (!slot.hasItem()) {
-            // trying to move an empty slot?
-            return ItemStack.EMPTY;
-        }
-
-        ItemStack stack = slot.getItem();
-
-        if (this.playerInventorySlots.contains(slot)) {
-            // Inventory -> Container
-            if (stack.has(WotrDataComponentType.GEAR_SOCKETS)) {
-                // Gear
-                if (this.gearSlot.hasItem() || !this.gearSlot.mayPlace(stack)) {
-                    return ItemStack.EMPTY;
-                }
-
-                int count = stack.getCount();
-                this.gearSlot.set(stack.copyWithCount(1));
-                slot.set(stack.copyWithCount(count - 1));
-                return ItemStack.EMPTY;
-            }
-            if (stack.has(WotrDataComponentType.RUNEGEM_DATA)) {
-                // Runegems
-                for (Slot socketSlot : this.socketSlots) {
-                    if (socketSlot.hasItem() || !socketSlot.mayPlace(stack)) {
-                        continue;
-                    }
-
-                    int count = stack.getCount();
-                    socketSlot.set(stack.copyWithCount(1));
-                    slot.set(stack.copyWithCount(count - 1));
-                    return ItemStack.EMPTY;
-                }
-            }
-        } else {
-            // Container -> Inventory
-            Inventory inventory = player.getInventory();
-            if (inventory.add(stack)) {
-                slot.set(ItemStack.EMPTY);
-                return ItemStack.EMPTY;
-            }
-            return ItemStack.EMPTY;
-        }
-        return ItemStack.EMPTY;
+        return mover.quickMove(player, index);
     }
 
     public @NotNull ItemStack getGearSlotItem() {

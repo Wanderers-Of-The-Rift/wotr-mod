@@ -13,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -43,6 +42,7 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
     private final ItemStackHandler rewards;
     private final DataSlot resultStatus;
     private final List<DataSlot> stats = new ArrayList<>();
+    private final QuickMover mover;
 
     public RiftCompleteMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL, 0, new Object2IntArrayMap<>());
@@ -70,6 +70,12 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
             addDataSlot(statSlot);
             stats.add(statSlot);
         }
+
+        mover = QuickMover.create(this)
+                .forPlayerSlots(NUM_REWARD_SLOTS)
+                .forSlots(0, NUM_REWARD_SLOTS)
+                .tryMoveToPlayer()
+                .build();
     }
 
     public int getStat(int index) {
@@ -82,36 +88,7 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack slotStack = slot.getItem();
-        ItemStack resultStack = slotStack.copy();
-        if (index < NUM_REWARD_SLOTS) {
-            if (!this.moveItemStackTo(slotStack, NUM_REWARD_SLOTS, NUM_REWARD_SLOTS + PLAYER_SLOTS, true)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        // Move from player inventory to hotbar
-        else if (index < NUM_REWARD_SLOTS + PLAYER_INVENTORY_SLOTS) {
-            if (!this.moveItemStackTo(slotStack, NUM_REWARD_SLOTS + PLAYER_INVENTORY_SLOTS,
-                    NUM_REWARD_SLOTS + PLAYER_SLOTS, false)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        // Move from hotbar to player inventory
-        else if (!this.moveItemStackTo(slotStack, NUM_REWARD_SLOTS, NUM_REWARD_SLOTS + PLAYER_INVENTORY_SLOTS, false)) {
-            return ItemStack.EMPTY;
-        }
-
-        if (slotStack.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-
-        return resultStack;
+        return mover.quickMove(player, index);
     }
 
     @Override
