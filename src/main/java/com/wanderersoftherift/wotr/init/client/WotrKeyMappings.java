@@ -66,8 +66,8 @@ public class WotrKeyMappings {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_SHIFT, MISC_CATEGORY);
 
     public static final KeyMapping JIGSAW_NAME_TOGGLE_KEY = new KeyMapping(
-            "key." + WanderersOfTheRift.id("jigsaw_name_toggle"), InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN,
-            "key.categories.misc");
+            WanderersOfTheRift.translationId("key", "jigsaw_name_toggle"), KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MISC_CATEGORY);
 
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
@@ -78,7 +78,6 @@ public class WotrKeyMappings {
         event.register(NEXT_ABILITY_KEY);
         event.register(USE_ABILITY_KEY);
         event.register(SHOW_TOOLTIP_INFO);
-
         event.register(JIGSAW_NAME_TOGGLE_KEY);
     }
 
