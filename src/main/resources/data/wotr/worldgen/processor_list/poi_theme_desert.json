@@ -7,12 +7,8 @@
           "input_state": "wotr:processor_block_1",
           "output_steps": [
             {
-              "output_state": "minecraft:sandstone",
-              "step_size": 0.5
-            },
-            {
               "output_state": "minecraft:smooth_sandstone",
-              "step_size": 0.5
+              "step_size": 1
             }
           ]
         },
@@ -30,11 +26,7 @@
           "output_steps": [
             {
               "output_state": "minecraft:cut_sandstone_slab",
-              "step_size": 0.5
-            },
-            {
-              "output_state": "minecraft:smooth_sandstone_slab",
-              "step_size": 0.5
+              "step_size": 1
             }
           ]
         },
@@ -346,11 +338,7 @@
           "output_steps": [
             {
               "output_state": "minecraft:cut_red_sandstone",
-              "step_size": 0.5
-            },
-            {
-              "output_state": "minecraft:cut_red_sandstone",
-              "step_size": 0.5
+              "step_size": 1
             }
           ]
         },
@@ -368,11 +356,7 @@
           "output_steps": [
             {
               "output_state": "minecraft:cut_red_sandstone_slab",
-              "step_size": 0.5
-            },
-            {
-              "output_state": "minecraft:smooth_red_sandstone_slab",
-              "step_size": 0.5
+              "step_size": 1
             }
           ]
         },
@@ -654,7 +638,7 @@
           "input_state": "wotr:processor_block_6_glass",
           "output_steps": [
             {
-              "output_state": "minecraft:glass",
+              "output_state": "minecraft:birch_leaves",
               "step_size": 1
             }
           ]

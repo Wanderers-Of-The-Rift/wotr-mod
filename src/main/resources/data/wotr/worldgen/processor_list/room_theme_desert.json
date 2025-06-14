@@ -654,7 +654,7 @@
           "input_state": "wotr:processor_block_6_glass",
           "output_steps": [
             {
-              "output_state": "minecraft:glass",
+              "output_state": "minecraft:birch_leaves",
               "step_size": 1
             }
           ]
