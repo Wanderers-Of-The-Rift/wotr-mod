@@ -88,7 +88,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     public RiftSpace getSpaceAt(int x, int y, int z) {
-        if (riftShape.chaosiveness(x, z) < Math.abs(y) || !riftShape.isPositionValid(x, y, z)) {
+        if (!riftShape.isPositionValid(x, y, z)) {
             return VOID_SPACE;
         }
         var origin = riftShape.getBoxStart();

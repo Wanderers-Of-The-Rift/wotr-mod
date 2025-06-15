@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.StartRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
@@ -119,9 +120,10 @@ public class FastRiftGenerator extends ChunkGenerator {
             var randomizer = new RoomRandomizerImpl(server,
                     roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase()));
             layout.compareAndSet(null, new LayeredFiniteRiftLayout(
-                    RiftShape.boxed(new BasicRiftShape(), new Vec3i(-10, -10, -10), new Vec3i(20, 20, 20)),
+                    RiftShape.boxed(new BasicRiftShape(), new Vec3i(-10, -10, -10), new Vec3i(21, 21, 21)),
                     config.seed().orElseThrow(), List.of(
-                            new StartRoomLayer(randomizer)
+                            new StartRoomLayer(randomizer), new RingLayer(randomizer, 5, RoomRiftSpace.RoomType.STABLE),
+                            new RingLayer(randomizer, 10, RoomRiftSpace.RoomType.UNSTABLE)
                     ))
             /*
              * new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,
