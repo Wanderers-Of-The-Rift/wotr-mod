@@ -272,6 +272,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WotrKeyMappings.NEXT_ABILITY_KEY.getName(), "Select Next Ability");
         add(WotrKeyMappings.USE_ABILITY_KEY.getName(), "Use Selected Ability");
         add(WotrKeyMappings.SHOW_TOOLTIP_INFO.getName(), "Show Additional Tooltip Info");
+        add(WotrKeyMappings.JIGSAW_NAME_TOGGLE_KEY.getName(), "Show Jigsaw Block Info");
 
         add(WanderersOfTheRift.translationId("keybinds", "l_alt"), "LAlt");
         add(WanderersOfTheRift.translationId("keybinds", "r_alt"), "RAlt");
