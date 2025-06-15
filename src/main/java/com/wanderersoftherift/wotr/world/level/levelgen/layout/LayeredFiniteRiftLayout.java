@@ -146,6 +146,11 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         return true;
     }
 
+    @Override
+    public long[] getEmptySpaces() {
+        return emptySpaces;
+    }
+
     private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
         var space = getChunkSpace(x, y, z);
         if (space == null || space instanceof VoidRiftSpace) {
