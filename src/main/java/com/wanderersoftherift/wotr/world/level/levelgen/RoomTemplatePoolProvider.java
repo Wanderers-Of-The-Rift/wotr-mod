@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import java.util.List;
 
 public interface RoomTemplatePoolProvider {
+    @Deprecated
     ResourceLocation getPool(RoomRiftSpace.RoomType type);
 
     default List<RiftGeneratable> getTemplates(MinecraftServer server, RoomRiftSpace.RoomType type) {
