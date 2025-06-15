@@ -10,13 +10,12 @@ import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.StartRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicRiftShape;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
@@ -120,8 +119,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         if (layout.get() == null) {
             var randomizer = new RoomRandomizerImpl(server,
                     roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase()));
-            layout.compareAndSet(null, new LayeredFiniteRiftLayout(
-                    RiftShape.boxed(new BasicRiftShape(), new Vec3i(-10, -10, -10), new Vec3i(21, 21, 21)),
+            layout.compareAndSet(null, new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(),
                     config.seed().orElseThrow(), List.of(
                             new StartRoomLayer(randomizer), new RingLayer(randomizer, 5, RoomRiftSpace.RoomType.STABLE),
                             new RingLayer(randomizer, 10, RoomRiftSpace.RoomType.UNSTABLE), new ChaosLayer(randomizer)

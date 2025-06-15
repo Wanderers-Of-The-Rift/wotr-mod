@@ -25,6 +25,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
+/*
+* Use LayeredInfiniteRiftLayout instead
+* */
+@Deprecated
 public class ChaoticRiftLayout implements RiftLayout {
 
     private final ConcurrentHashMap<Vector2i, Region> regions = new ConcurrentHashMap<>();
