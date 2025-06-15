@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Vec3i;
@@ -58,7 +57,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
                     maxHeight, depth * Math.abs(corridor.direction().getStepZ())
                             + maxWidth * Math.abs(tangentDirection.getStepZ()));
 
-            var space = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.CHAOS, randomSource, maxRoomSize);
+            var space = roomRandomizer.randomSpace(randomSource, maxRoomSize);
             var spaceOffsetX = roomPosition.getX() + corridor.position().getX();
             var spaceOffsetY = roomPosition.getY() + corridor.position().getY();
             var spaceOffsetZ = roomPosition.getZ() + corridor.position().getZ();
@@ -148,7 +147,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
             RandomSource source,
             ArrayList<RiftSpace> allSpaces) {
         if (allSpaces.isEmpty()) {
-            var room = roomRandomizer.randomSpace(RoomRiftSpace.RoomType.CHAOS, source, new Vec3i(1, 1, 1));
+            var room = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
             room = room.offset(section.sectionShape().getBoxStart().getX() + 1, 0,
                     section.sectionShape().getBoxStart().getZ() + 1);
             allSpaces.add(room);

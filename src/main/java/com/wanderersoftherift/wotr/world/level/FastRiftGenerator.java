@@ -117,12 +117,16 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            var randomizer = new RoomRandomizerImpl(server,
-                    roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase()));
             layout.compareAndSet(null, new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(),
                     config.seed().orElseThrow(), List.of(
-                            new StartRoomLayer(randomizer), new RingLayer(randomizer, 5, RoomRiftSpace.RoomType.STABLE),
-                            new RingLayer(randomizer, 10, RoomRiftSpace.RoomType.UNSTABLE), new ChaosLayer(randomizer)
+                            new StartRoomLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_portal"),
+                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY)),
+                            new RingLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_stable"),
+                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5),
+                            new RingLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_unstable"),
+                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10),
+                            new ChaosLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_chaos"),
+                                    RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
                     ))
             /*
              * new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,

@@ -35,8 +35,8 @@ public class GridTunnelRiftLayout implements RiftLayout {
         } else if (isTunnelZ) {
             space = RoomRiftSpace.chaoticRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), new Vec3i(3, 1, 1));
         } else {
-            space = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), 3, 1,
-                    RoomRiftSpace.RoomType.STABLE);
+            space = RoomRiftSpace.basicRiftSpace(new Vec3i(gridX * 3, 1, gridZ * 3), 3, 1
+            );
         }
         if (chunkPos.getY() >= -1 && chunkPos.getY() <= 1) {
             return space;

@@ -8,8 +8,7 @@ import net.minecraft.core.Vec3i;
 import java.util.ArrayList;
 import java.util.List;
 
-public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> corridors,
-        com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace.RoomType type, RiftGeneratable template,
+public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> corridors, RiftGeneratable template,
         TripleMirror templateTransform) implements RiftSpace {
 
     @Override
@@ -19,13 +18,13 @@ public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> co
 
     // old method for creating rooms, doesn't initialize RoomRiftSpace.template so don't use it
     @Deprecated
-    public static RoomRiftSpace basicRiftSpace(Vec3i center, int levels, int tunnelLevel, RoomType type) {
+    public static RoomRiftSpace basicRiftSpace(Vec3i center, int levels, int tunnelLevel) {
         return new RoomRiftSpace(new Vec3i(3, levels, 3), center.offset(1, levels / 2, 1), List.of(
                 new RiftSpaceCorridor(new Vec3i(1, tunnelLevel, 0), Direction.NORTH),
                 new RiftSpaceCorridor(new Vec3i(1, tunnelLevel, 2), Direction.SOUTH),
                 new RiftSpaceCorridor(new Vec3i(2, tunnelLevel, 1), Direction.EAST),
                 new RiftSpaceCorridor(new Vec3i(0, tunnelLevel, 1), Direction.WEST)
-        ), type, null, TripleMirror.NONE);
+        ), null, TripleMirror.NONE);
     }
 
     // old method for creating rooms, doesn't initialize RoomRiftSpace.template so don't use it
@@ -43,13 +42,14 @@ public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> co
             }
         }
         return new RoomRiftSpace(size, origin.offset(size.getX() / 2, size.getY() / 2, size.getZ() / 2), corridors,
-                RoomType.CHAOS, null, TripleMirror.NONE);
+                null, TripleMirror.NONE);
     }
 
     public RoomRiftSpace offset(int x, int y, int z) {
-        return new RoomRiftSpace(size, center.offset(x, y, z), corridors, type, template, templateTransform);
+        return new RoomRiftSpace(size, center.offset(x, y, z), corridors, template, templateTransform);
     }
 
+    @Deprecated
     public static enum RoomType {
         CHAOS,
         UNSTABLE,

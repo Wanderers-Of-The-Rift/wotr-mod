@@ -12,13 +12,10 @@ import java.util.ArrayList;
 public class RingLayer implements LayeredRiftLayout.LayoutLayer {
     private final RoomRandomizer roomRandomizer;
     private final int radius;
-    @Deprecated
-    private final RoomRiftSpace.RoomType roomType;
 
-    public RingLayer(RoomRandomizer roomRandomizer, int radius, RoomRiftSpace.RoomType roomType) {
+    public RingLayer(RoomRandomizer roomRandomizer, int radius) {
         this.roomRandomizer = roomRandomizer;
         this.radius = radius;
-        this.roomType = roomType;
     }
 
     @Override
@@ -40,7 +37,7 @@ public class RingLayer implements LayeredRiftLayout.LayoutLayer {
 
         for (int x = startX; x < size.getX(); x += 3) {
             for (int z = startZ; z < size.getZ(); z += 3) {
-                RoomRiftSpace room = roomRandomizer.randomSpace(roomType, source, new Vec3i(3, 3, 3));
+                RoomRiftSpace room = roomRandomizer.randomSpace(source, new Vec3i(3, 3, 3));
                 room = room.offset(x, -room.corridors().getFirst().position().getY(), z);
                 if ((x + 1) * (x + 1) + (z + 1) * (z + 1) < radius * radius && section.tryPlaceSpace(room)) {
                     allSpaces.add(room);

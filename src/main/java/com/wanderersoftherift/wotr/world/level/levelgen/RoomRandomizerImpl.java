@@ -5,7 +5,9 @@ import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.JigsawBlock;
@@ -16,56 +18,51 @@ import oshi.util.tuples.Pair;
 import javax.annotation.Nullable;
 import java.lang.ref.PhantomReference;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class RoomRandomizerImpl implements RoomRandomizer {
 
     // todo invalidate if data pack changes
-    private static Pair<PhantomReference<MinecraftServer>, EnumMap<RoomRiftSpace.RoomType, RiftSpaceHolder>> cache;
+    public static final RiftSpaceHolderFactory MULTI_SIZE_SPACE_HOLDER_FACTORY = MultiSizeRiftSpaceRandomList::new;
+    public static final RiftSpaceHolderFactory SINGLE_SIZE_SPACE_HOLDER_FACTORY = MonoSizeRiftSpaceRandomList::new;
+    @SuppressWarnings("StaticVariableName")
+    static Pair<PhantomReference<MinecraftServer>, Map<ResourceLocation, RiftSpaceHolder>> POOL_CACHE;
     private final MinecraftServer server;
-    private final RoomTemplatePoolProvider roomTemplatePoolProvider;
+    private final ResourceLocation pool;
+    private final RiftSpaceHolderFactory factory;
 
-    public RoomRandomizerImpl(MinecraftServer server, RoomTemplatePoolProvider roomTemplatePoolProvider) {
+    public RoomRandomizerImpl(MinecraftServer server, ResourceLocation pool, RiftSpaceHolderFactory factory) {
         this.server = server;
-        this.roomTemplatePoolProvider = roomTemplatePoolProvider;
+        this.pool = pool;
+        this.factory = factory;
     }
 
     @Override
-    public RoomRiftSpace randomSpace(RoomRiftSpace.RoomType roomType, RandomSource randomSource, Vec3i maximumSize) {
-        return getOrCreateSpaceHolder(roomType).random(maximumSize, randomSource);
+    public RoomRiftSpace randomSpace(RandomSource randomSource, Vec3i maximumSize) {
+        return getOrCreateSpaceHolder().random(maximumSize, randomSource);
     }
 
-    private RiftSpaceHolder getOrCreateSpaceHolder(RoomRiftSpace.RoomType roomType) {
-        var lastCache = cache;
+    private RiftSpaceHolder getOrCreateSpaceHolder() {
+        var lastCache = POOL_CACHE;
         if (lastCache != null && lastCache.getA().refersTo(server)) {
-            return lastCache.getB().get(roomType);
+            return lastCache.getB().computeIfAbsent(pool, (arg) -> createSpaceHolder());
         }
-        var map = new EnumMap<RoomRiftSpace.RoomType, RiftSpaceHolder>(RoomRiftSpace.RoomType.class);
-        for (var type : RoomRiftSpace.RoomType.values()) {
-            map.computeIfAbsent(type, this::createSpaceHolder);
-        }
-        cache = new Pair<>(new PhantomReference<>(server, null), map);
-        return map.get(roomType);
+        var map = new ConcurrentHashMap<ResourceLocation, RiftSpaceHolder>();
+        map.computeIfAbsent(pool, (arg) -> createSpaceHolder());
+        POOL_CACHE = new Pair<>(new PhantomReference<>(server, null), map);
+        return map.get(pool);
     }
 
-    private RiftSpaceHolder createSpaceHolder(RoomRiftSpace.RoomType roomType) {
-        var templates = roomTemplatePoolProvider.getTemplates(server, roomType);
-        if (roomType == RoomRiftSpace.RoomType.CHAOS) {
-            return new MultiSizeRiftSpaceRandomList(templates,
-                    ((generatable, desiredTemplateSize) -> convertRoom(generatable, desiredTemplateSize, roomType)));
-        } else {
-            return new MonoSizeRiftSpaceRandomList(templates,
-                    ((generatable, desiredTemplateSize) -> convertRoom(generatable, desiredTemplateSize, roomType)));
-        }
+    private RiftSpaceHolder createSpaceHolder() {
+        return factory.create(RiftTemplates.all(server, pool), RoomRandomizerImpl::convertRoom);
     }
 
-    private static Stream<RoomRiftSpace> convertRoom(
-            RiftGeneratable generatable,
-            @Nullable Vec3i desiredTemplateSize,
-            RoomRiftSpace.RoomType type) { // todo maybe double weight if only one diagonal mirror is applicable
+    // todo maybe double weight if only one diagonal mirror is applicable
+    private static Stream<RoomRiftSpace> convertRoom(RiftGeneratable generatable, @Nullable Vec3i desiredTemplateSize) {
         var sizeBlocks = generatable.size();
         var sizeChunks = new Vec3i(Math.ceilDiv(sizeBlocks.getX(), 16), Math.ceilDiv(sizeBlocks.getY(), 16),
                 Math.ceilDiv(sizeBlocks.getZ(), 16));
@@ -74,7 +71,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
             var modifiedSize = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(sizeChunks, 0, 0);
             return new RoomRiftSpace(modifiedSize,
                     new Vec3i(modifiedSize.getX() / 2, modifiedSize.getY() / 2, modifiedSize.getZ() / 2),
-                    computeCorridors(generatable.jigsaws(), mirror, sizeChunks), type, generatable, mirror
+                    computeCorridors(generatable.jigsaws(), mirror, sizeChunks), generatable, mirror
             );
         });
         if (desiredTemplateSize != null) {
@@ -114,11 +111,15 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         }
     }
 
+    public static interface RiftSpaceHolderFactory {
+        RiftSpaceHolder create(List<RiftGeneratable> templates, RoomConverter converter);
+    }
+
     private interface RoomConverter {
         Stream<RoomRiftSpace> convertRoom(RiftGeneratable generatable, @Nullable Vec3i desiredTemplateSize);
     }
 
-    private interface RiftSpaceHolder {
+    interface RiftSpaceHolder {
         RoomRiftSpace random(Vec3i maxSize, RandomSource random);
     }
 

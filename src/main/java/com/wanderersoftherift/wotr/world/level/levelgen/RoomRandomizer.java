@@ -6,8 +6,5 @@ import net.minecraft.util.RandomSource;
 
 public interface RoomRandomizer {
 
-    RoomRiftSpace randomSpace(
-            @Deprecated RoomRiftSpace.RoomType roomType /* use randomizer per room type instead */,
-            RandomSource source,
-            Vec3i maximumSize);
+    RoomRiftSpace randomSpace(RandomSource source, Vec3i maximumSize);
 }
