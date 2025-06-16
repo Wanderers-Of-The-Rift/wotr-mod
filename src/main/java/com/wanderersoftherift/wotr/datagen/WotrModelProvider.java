@@ -65,6 +65,23 @@ public class WotrModelProvider extends ModelProvider {
         createBlockStatesForTrapBlock(WotrBlocks.TRAP_BLOCK, blockModels);
 
         blockModels.createTrivialCube(WotrBlocks.NOGRAVGRAVEL.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVSAND.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get());
 
         createRiftMobSpawner(blockModels, itemModels);
 

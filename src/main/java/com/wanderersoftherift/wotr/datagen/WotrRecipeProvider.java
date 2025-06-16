@@ -119,16 +119,185 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_glass_pane", this.has(Blocks.GLASS_PANE.asItem()))
                 .save(this.output, "wotr:ability_heal");
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGRAVEL.asItem())
-                .pattern("G")
-                .pattern("H")
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGRAVEL.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
                 .define('G', Items.GRAVEL)
                 .define('H', Items.HONEYCOMB)
                 .unlockedBy("has_gravel", this.has(Items.GRAVEL))
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVSAND.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.SAND)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.SAND))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
 
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.WHITE_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.WHITE_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.ORANGE_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.ORANGE_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.MAGENTA_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.MAGENTA_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.LIGHT_BLUE_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.LIGHT_BLUE_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.YELLOW_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.YELLOW_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.LIME_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.LIME_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.PINK_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.PINK_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.GRAY_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.GRAY_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.LIGHT_GRAY_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.LIGHT_GRAY_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.CYAN_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.CYAN_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.PURPLE_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.PURPLE_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.BLUE_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.BLUE_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.BROWN_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.BROWN_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.GREEN_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.GREEN_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVREDCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.RED_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.RED_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.BLACK_CONCRETE_POWDER)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.BLACK_CONCRETE_POWDER))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
 
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),

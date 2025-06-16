@@ -1,14 +1,22 @@
 package com.wanderersoftherift.wotr.datagen;
 
+import com.jcraft.jorbis.Block;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import org.jetbrains.annotations.NotNull;
+
+
 
 import java.util.concurrent.CompletableFuture;
 
@@ -36,7 +44,31 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
                 .add(WotrBlocks.RIFT_SPAWNER.get());
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
-                .add(WotrBlocks.NOGRAVGRAVEL.get());
+                .add(WotrBlocks.NOGRAVGRAVEL.get())
+                .add(WotrBlocks.NOGRAVSAND.get())
+                .add(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get())
+                .add(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get());
+
+        tag(BlockTags.BAMBOO_PLANTABLE_ON)
+                .add(WotrBlocks.NOGRAVGRAVEL.get())
+                .add(WotrBlocks.NOGRAVSAND.get());
+
+        tag(BlockTags.SAND)
+                .add(WotrBlocks.NOGRAVGRAVEL.get())
+                .add(WotrBlocks.NOGRAVSAND.get());
 
 
         tag(WotrTags.Blocks.BANNED_IN_RIFT)
