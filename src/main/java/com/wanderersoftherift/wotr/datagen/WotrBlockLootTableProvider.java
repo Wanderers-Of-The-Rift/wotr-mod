@@ -33,6 +33,9 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(WotrBlocks.MOB_TRAP_BLOCK.get());
         dropSelf(WotrBlocks.SPRING_BLOCK.get());
         add(WotrBlocks.RIFT_MOB_SPAWNER.get(), noDrop());
+
+        add(WotrBlocks.NOGRAVGRAVEL.get(), createSingleItemTable(net.minecraft.world.level.block.Blocks.GRAVEL));
+
     }
 
     @Override

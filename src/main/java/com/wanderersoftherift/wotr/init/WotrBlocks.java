@@ -245,4 +245,12 @@ public class WotrBlocks {
         return ResourceKey.create(Registries.BLOCK,
                 ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, name));
     }
+
+    public static final DeferredBlock<Block> NOGRAVGRAVEL = registerBlock("nograv_gravel",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .setId(blockId("nograv_gravel"))
+                    .strength(0.6F)
+                    .sound(SoundType.GRAVEL)));
+
+
 }

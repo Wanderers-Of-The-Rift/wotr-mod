@@ -35,6 +35,10 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
                 .add(WotrBlocks.ABILITY_BENCH.get())
                 .add(WotrBlocks.RIFT_SPAWNER.get());
 
+        tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(WotrBlocks.NOGRAVGRAVEL.get());
+
+
         tag(WotrTags.Blocks.BANNED_IN_RIFT)
                 .add(WotrBlocks.RIFT_SPAWNER.get())
                 .add(WotrBlocks.ABILITY_BENCH.get());

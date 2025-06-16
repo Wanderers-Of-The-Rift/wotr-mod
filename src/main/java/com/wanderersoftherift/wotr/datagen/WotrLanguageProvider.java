@@ -40,7 +40,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.PLAYER_TRAP_BLOCK, "Player Trap Block");
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
-
+        addBlock(WotrBlocks.NOGRAVGRAVEL, "No Gravity Gravel");
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(WotrItems.RUNEGEM, "Runegem");

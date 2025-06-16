@@ -119,6 +119,17 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_glass_pane", this.has(Blocks.GLASS_PANE.asItem()))
                 .save(this.output, "wotr:ability_heal");
 
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGRAVEL.asItem())
+                .pattern("G")
+                .pattern("H")
+                .define('G', Items.GRAVEL)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.GRAVEL))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
+
+
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("cave")))

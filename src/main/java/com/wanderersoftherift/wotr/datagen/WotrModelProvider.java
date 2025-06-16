@@ -64,6 +64,8 @@ public class WotrModelProvider extends ModelProvider {
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.TRAP_BLOCK, blockModels);
 
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVGRAVEL.get());
+
         createRiftMobSpawner(blockModels, itemModels);
 
         ResourceLocation abilityBenchModel = WanderersOfTheRift.id("block/ability_bench");
