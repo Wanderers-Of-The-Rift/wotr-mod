@@ -62,14 +62,12 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
                 .add(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get())
                 .add(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get());
 
-        tag(BlockTags.BAMBOO_PLANTABLE_ON)
-                .add(WotrBlocks.NOGRAVGRAVEL.get())
-                .add(WotrBlocks.NOGRAVSAND.get());
-
         tag(BlockTags.SAND)
-                .add(WotrBlocks.NOGRAVGRAVEL.get())
                 .add(WotrBlocks.NOGRAVSAND.get());
 
+        tag(BlockTags.DIRT)
+                .add(WotrBlocks.NOGRAVGRAVEL.get())
+                .add(WotrBlocks.NOGRAVSAND.get());
 
         tag(WotrTags.Blocks.BANNED_IN_RIFT)
                 .add(WotrBlocks.RIFT_SPAWNER.get())
