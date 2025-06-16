@@ -60,7 +60,6 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER, "No Gravity Red Concrete Powder");
         addBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER, "No Gravity Black Concrete Powder");
 
-
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
         addItem(WotrItems.RUNEGEM, "Runegem");

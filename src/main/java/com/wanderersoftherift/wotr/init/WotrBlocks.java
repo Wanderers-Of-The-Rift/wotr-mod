@@ -132,23 +132,14 @@ public class WotrBlocks {
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<Block> NOGRAVGRAVEL = registerBlock("nograv_gravel",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .setId(blockId("nograv_gravel"))
-                    .strength(0.6F)
-                    .sound(SoundType.GRAVEL)));
+    public static final DeferredBlock<Block> NOGRAVGRAVEL = registerBlock("nograv_gravel", () -> new Block(
+            BlockBehaviour.Properties.of().setId(blockId("nograv_gravel")).strength(0.6F).sound(SoundType.GRAVEL)));
 
-    public static final DeferredBlock<Block> NOGRAVSAND = registerBlock("nograv_sand",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .setId(blockId("nograv_sand"))
-                    .strength(0.6F)
-                    .sound(SoundType.SAND)));
+    public static final DeferredBlock<Block> NOGRAVSAND = registerBlock("nograv_sand", () -> new Block(
+            BlockBehaviour.Properties.of().setId(blockId("nograv_sand")).strength(0.6F).sound(SoundType.SAND)));
 
-    public static final DeferredBlock<Block> NOGRAVREDSAND = registerBlock("nograv_red_sand",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .setId(blockId("nograv_red_sand"))
-                    .strength(0.6F)
-                    .sound(SoundType.SAND)));
+    public static final DeferredBlock<Block> NOGRAVREDSAND = registerBlock("nograv_red_sand", () -> new Block(
+            BlockBehaviour.Properties.of().setId(blockId("nograv_red_sand")).strength(0.6F).sound(SoundType.SAND)));
 
     public static final DeferredBlock<Block> NOGRAVWHITECONCRETEPOWDER = registerBlock("nograv_white_concrete_powder",
             () -> new Block(BlockBehaviour.Properties.of()
@@ -162,13 +153,15 @@ public class WotrBlocks {
                     .strength(0.6F)
                     .sound(SoundType.SAND)));
 
-    public static final DeferredBlock<Block> NOGRAVMAGENTACONCRETEPOWDER = registerBlock("nograv_magenta_concrete_powder",
+    public static final DeferredBlock<Block> NOGRAVMAGENTACONCRETEPOWDER = registerBlock(
+            "nograv_magenta_concrete_powder",
             () -> new Block(BlockBehaviour.Properties.of()
                     .setId(blockId("nograv_magenta_concrete_powder"))
                     .strength(0.6F)
                     .sound(SoundType.SAND)));
 
-    public static final DeferredBlock<Block> NOGRAVLIGHTBLUECONCRETEPOWDER = registerBlock("nograv_light_blue_concrete_powder",
+    public static final DeferredBlock<Block> NOGRAVLIGHTBLUECONCRETEPOWDER = registerBlock(
+            "nograv_light_blue_concrete_powder",
             () -> new Block(BlockBehaviour.Properties.of()
                     .setId(blockId("nograv_light_blue_concrete_powder"))
                     .strength(0.6F)
@@ -198,7 +191,8 @@ public class WotrBlocks {
                     .strength(0.6F)
                     .sound(SoundType.SAND)));
 
-    public static final DeferredBlock<Block> NOGRAVLIGHTGRAYCONCRETEPOWDER = registerBlock("nograv_light_gray_concrete_powder",
+    public static final DeferredBlock<Block> NOGRAVLIGHTGRAYCONCRETEPOWDER = registerBlock(
+            "nograv_light_gray_concrete_powder",
             () -> new Block(BlockBehaviour.Properties.of()
                     .setId(blockId("nograv_light_gray_concrete_powder"))
                     .strength(0.6F)

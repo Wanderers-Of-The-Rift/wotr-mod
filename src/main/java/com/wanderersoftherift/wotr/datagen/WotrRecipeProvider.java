@@ -149,7 +149,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -159,7 +160,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -169,7 +171,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -179,7 +182,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -189,7 +193,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -229,7 +234,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -249,7 +255,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -269,7 +276,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -279,7 +287,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
@@ -299,7 +308,8 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(), 8)
+        ShapedRecipeBuilder
+                .shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")
                 .pattern("GGG")
