@@ -42,6 +42,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.NOGRAVGRAVEL, "No Gravity Gravel");
         addBlock(WotrBlocks.NOGRAVSAND, "No Gravity Sand");
+        addBlock(WotrBlocks.NOGRAVREDSAND, "No Gravity Red Sand");
         addBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER, "No Gravity White Concrete Powder");
         addBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER, "No Gravity Orange Concrete Powder");
         addBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER, "No Gravity Magenta Concrete Powder");

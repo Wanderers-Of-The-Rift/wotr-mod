@@ -139,6 +139,16 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
                 .save(this.output);
 
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVREDSAND.get(), 8)
+                .pattern("GGG")
+                .pattern("GHG")
+                .pattern("GGG")
+                .define('G', Items.RED_SAND)
+                .define('H', Items.HONEYCOMB)
+                .unlockedBy("has_gravel", this.has(Items.RED_SAND))
+                .unlockedBy("has_honeycomb", this.has(Items.HONEYCOMB))
+                .save(this.output);
+
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.BUILDING_BLOCKS, WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(), 8)
                 .pattern("GGG")
                 .pattern("GHG")

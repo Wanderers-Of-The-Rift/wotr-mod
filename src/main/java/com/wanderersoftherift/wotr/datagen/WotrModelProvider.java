@@ -66,6 +66,7 @@ public class WotrModelProvider extends ModelProvider {
 
         blockModels.createTrivialCube(WotrBlocks.NOGRAVGRAVEL.get());
         blockModels.createTrivialCube(WotrBlocks.NOGRAVSAND.get());
+        blockModels.createTrivialCube(WotrBlocks.NOGRAVREDSAND.get());
         blockModels.createTrivialCube(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get());
         blockModels.createTrivialCube(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get());
         blockModels.createTrivialCube(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get());

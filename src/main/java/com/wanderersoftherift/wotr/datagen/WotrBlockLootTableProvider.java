@@ -37,6 +37,7 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
 
         add(WotrBlocks.NOGRAVGRAVEL.get(), createSingleItemTable(Blocks.GRAVEL));
         add(WotrBlocks.NOGRAVSAND.get(), createSingleItemTable(Blocks.SAND));
+        add(WotrBlocks.NOGRAVREDSAND.get(), createSingleItemTable(Blocks.RED_SAND));
         add(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(), createSingleItemTable(Blocks.WHITE_CONCRETE_POWDER));
         add(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(), createSingleItemTable(Blocks.ORANGE_CONCRETE_POWDER));
         add(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(), createSingleItemTable(Blocks.MAGENTA_CONCRETE_POWDER));

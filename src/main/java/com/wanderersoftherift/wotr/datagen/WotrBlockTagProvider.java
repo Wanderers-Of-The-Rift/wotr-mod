@@ -46,6 +46,7 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(WotrBlocks.NOGRAVGRAVEL.get())
                 .add(WotrBlocks.NOGRAVSAND.get())
+                .add(WotrBlocks.NOGRAVREDSAND.get())
                 .add(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get())
                 .add(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get())
                 .add(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get())
@@ -63,11 +64,11 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
                 .add(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get());
 
         tag(BlockTags.SAND)
-                .add(WotrBlocks.NOGRAVSAND.get());
+                .add(WotrBlocks.NOGRAVSAND.get())
+                .add(WotrBlocks.NOGRAVREDSAND.get());
 
         tag(BlockTags.DIRT)
-                .add(WotrBlocks.NOGRAVGRAVEL.get())
-                .add(WotrBlocks.NOGRAVSAND.get());
+                .add(WotrBlocks.NOGRAVGRAVEL.get());
 
         tag(WotrTags.Blocks.BANNED_IN_RIFT)
                 .add(WotrBlocks.RIFT_SPAWNER.get())

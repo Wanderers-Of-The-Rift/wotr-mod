@@ -258,6 +258,12 @@ public class WotrBlocks {
                     .strength(0.6F)
                     .sound(SoundType.SAND)));
 
+    public static final DeferredBlock<Block> NOGRAVREDSAND = registerBlock("nograv_red_sand",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .setId(blockId("nograv_red_sand"))
+                    .strength(0.6F)
+                    .sound(SoundType.SAND)));
+
     public static final DeferredBlock<Block> NOGRAVWHITECONCRETEPOWDER = registerBlock("nograv_white_concrete_powder",
             () -> new Block(BlockBehaviour.Properties.of()
                     .setId(blockId("nograv_white_concrete_powder"))
