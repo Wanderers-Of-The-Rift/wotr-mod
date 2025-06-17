@@ -1,6 +1,7 @@
 {
   "id" : "wotr:projectile_count",
-  "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "icon" : "wotr:textures/ability/upgrade/projectile.png",
+  "indicator" : "positive_increase",
   "maxCount" : 4,
   "effects": [
     {
