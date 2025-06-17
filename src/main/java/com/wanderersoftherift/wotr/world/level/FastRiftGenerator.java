@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.BoxedLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.StartRoomLayer;
@@ -117,17 +118,23 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(),
-                    config.seed().orElseThrow(), List.of(
-                            new StartRoomLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_portal"),
-                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY)),
-                            new RingLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_stable"),
-                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5),
-                            new RingLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_unstable"),
-                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10),
-                            new ChaosLayer(new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_chaos"),
-                                    RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
-                    ))
+            layout.compareAndSet(null,
+                    new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(), config.seed().orElseThrow(),
+                            List.of(
+                                    new BoxedLayer(new Vec3i(-10, -2, -10), new Vec3i(20, 4, 20),
+                                            new StartRoomLayer(new RoomRandomizerImpl(
+                                                    server, WanderersOfTheRift.id("rift/room_portal"),
+                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY)),
+                                            new RingLayer(new RoomRandomizerImpl(
+                                                    server, WanderersOfTheRift.id("rift/room_stable"),
+                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5),
+                                            new RingLayer(new RoomRandomizerImpl(
+                                                    server, WanderersOfTheRift.id("rift/room_unstable"),
+                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10)),
+                                    new ChaosLayer(
+                                            new RoomRandomizerImpl(server, WanderersOfTheRift.id("rift/room_chaos"),
+                                                    RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
+                            ))
             /*
              * new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,
              * roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase())), new
