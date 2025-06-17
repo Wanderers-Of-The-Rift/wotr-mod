@@ -100,9 +100,12 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+        if (!isItemValid(slot, stack)) {
+            return stack;
+        }
         if (abilities.get(slot).isEmpty()) {
             if (!simulate) {
-                abilities.set(slot, stack.split(1));
+                abilities.set(slot, stack.copy().split(1));
                 return stack;
             } else {
                 ItemStack residual = stack.copy();

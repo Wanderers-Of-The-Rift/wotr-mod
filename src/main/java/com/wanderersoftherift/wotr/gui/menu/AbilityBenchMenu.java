@@ -4,11 +4,14 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
 import com.wanderersoftherift.wotr.gui.menu.slot.AbilitySlot;
-import com.wanderersoftherift.wotr.gui.menu.slot.SkillThreadSlot;
+import com.wanderersoftherift.wotr.gui.menu.slot.LargeSlotItemHandler;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentPatch;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -39,23 +43,28 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
+    private final DataSlot canLevel;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL,
-                new ItemStackHandler(AbilitySlots.ABILITY_BAR_SIZE));
+        this(containerId, playerInventory,
+                new LargeCountItemHandler(WotrItems.SKILL_THREAD.toStack(1), AbilityBenchBlockEntity.THREAD_STORAGE),
+                ContainerLevelAccess.NULL, new ItemStackHandler(AbilitySlots.ABILITY_BAR_SIZE));
     }
 
-    public AbilityBenchMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
-            IItemHandler abilities) {
+    public AbilityBenchMenu(int containerId, Inventory playerInventory, IItemHandler persistentStore,
+            ContainerLevelAccess access, IItemHandler abilities) {
         super(WotrMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
         this.access = access;
         this.inputContainer = new SimpleContainer(INPUT_SLOTS);
         inputContainer.addListener(this::onAbilitySlotChanged);
         addSlot(new AbilitySlot(inputContainer, 0, 32, 17));
-        addSlot(new SkillThreadSlot(inputContainer, 1, 297, 7));
+        addSlot(new LargeSlotItemHandler(persistentStore, 0, 297, 7));
 
         addStandardInventorySlots(playerInventory, 32, 154);
         addPlayerAbilitySlots(abilities, 4, 46);
+
+        canLevel = DataSlot.standalone();
+        addDataSlot(canLevel);
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -82,6 +91,18 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                                 AbilityUpgradePool.SELECTION_PER_LEVEL)
                         .toImmutable();
                 item.set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
+            }
+
+            if (item.isEmpty()) {
+                canLevel.set(0);
+            } else {
+                AbilityUpgradePool upgradePool = getUpgradePool();
+                Holder<AbstractAbility> ability = getAbility();
+                if (upgradePool.canLevelUp(level.registryAccess(), ability.value())) {
+                    canLevel.set(1);
+                } else {
+                    canLevel.set(0);
+                }
             }
         });
     }
@@ -131,19 +152,18 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      * @return Whether the ability could be leveled up (ignoring currency availability)
      */
     public boolean canLevelUp() {
-        AbilityUpgradePool pool = getUpgradePool();
-        if (pool != null) {
-            return pool.getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size();
-        }
-        return false;
+        return canLevel.get() == 1;
     }
 
     /**
      * @return How much currency is required for the next level
      */
     public int costForNextLevel() {
+        if (!canLevelUp()) {
+            return 0;
+        }
         AbilityUpgradePool pool = getUpgradePool();
-        if (pool != null) {
+        if (pool != null && pool.getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()) {
             return AbilityUpgradePool.COST_PER_LEVEL.getInt(pool.getChoiceCount());
         }
         return 65;
@@ -166,11 +186,17 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 return;
             }
             inputContainer.getItem(1).shrink(cost);
-            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL,
-                    pool.getMutable()
-                            .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
-                                    AbilityUpgradePool.SELECTION_PER_LEVEL)
-                            .toImmutable());
+            AbilityUpgradePool updatedPool = pool.getMutable()
+                    .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
+                            AbilityUpgradePool.SELECTION_PER_LEVEL)
+                    .toImmutable();
+            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL, updatedPool);
+
+            if (updatedPool.canLevelUp(serverLevel.registryAccess(), getAbility().value())) {
+                canLevel.set(1);
+            } else {
+                canLevel.set(0);
+            }
         });
     }
 
@@ -233,7 +259,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
         if (!slot.hasItem()) {
             return ItemStack.EMPTY;
         }
-        ItemStack slotStack = slot.getItem();
+        ItemStack slotStack = slot.getItem().copy();
         ItemStack resultStack = slotStack.copy();
         if (slot instanceof AbilitySlot) {
             if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_SLOTS,
@@ -242,12 +268,10 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             }
-            slot.onQuickCraft(slotStack, resultStack);
-        } else if (slot instanceof SkillThreadSlot) {
+        } else if (index == 1) {
             if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, true)) {
                 return ItemStack.EMPTY;
             }
-            slot.onQuickCraft(slotStack, resultStack);
         } else if (index < INPUT_SLOTS + PLAYER_SLOTS) {
             if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false) && !this.moveItemStackTo(slotStack,
                     INPUT_SLOTS + PLAYER_SLOTS, PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, true)) {
@@ -273,8 +297,9 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
         if (slotStack.isEmpty()) {
             slot.set(ItemStack.EMPTY);
         } else {
-            slot.setChanged();
+            slot.set(slotStack);
         }
+        slot.onQuickCraft(resultStack, slotStack);
 
         return resultStack;
     }
@@ -284,4 +309,73 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
         return stillValid(this.access, player, WotrBlocks.ABILITY_BENCH.get());
     }
 
+    // Changed to correctly respect ItemHandlers not providing live editable stacks
+    @Override
+    protected boolean moveItemStackTo(
+            @NotNull ItemStack stack,
+            int startIndex,
+            int endIndex,
+            boolean reverseDirection) {
+        boolean result = false;
+        int i = startIndex;
+        if (reverseDirection) {
+            i = endIndex - 1;
+        }
+
+        if (stack.isStackable()) {
+            while (!stack.isEmpty() && (reverseDirection ? i >= startIndex : i < endIndex)) {
+                Slot slot = this.slots.get(i);
+                ItemStack itemstack = slot.getItem().copy();
+                if (!itemstack.isEmpty() && ItemStack.isSameItemSameComponents(stack, itemstack)) {
+                    int j = itemstack.getCount() + stack.getCount();
+                    int k = slot.getMaxStackSize(itemstack);
+                    if (j <= k) {
+                        stack.setCount(0);
+                        itemstack.setCount(j);
+                        slot.set(itemstack);
+                        result = true;
+                    } else if (itemstack.getCount() < k) {
+                        stack.shrink(k - itemstack.getCount());
+                        itemstack.setCount(k);
+                        slot.set(itemstack);
+                        result = true;
+                    }
+                }
+
+                if (reverseDirection) {
+                    i--;
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        if (!stack.isEmpty()) {
+            if (reverseDirection) {
+                i = endIndex - 1;
+            } else {
+                i = startIndex;
+            }
+
+            while (reverseDirection ? i >= startIndex : i < endIndex) {
+                Slot slot = this.slots.get(i);
+                ItemStack itemstack = slot.getItem();
+                if (itemstack.isEmpty() && slot.mayPlace(stack)) {
+                    int l = slot.getMaxStackSize(stack);
+                    ItemStack split = stack.split(Math.min(stack.getCount(), l));
+                    slot.setByPlayer(split);
+                    result = true;
+                    break;
+                }
+
+                if (reverseDirection) {
+                    i--;
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        return result;
+    }
 }
