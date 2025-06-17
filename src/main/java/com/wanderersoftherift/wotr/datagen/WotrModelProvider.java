@@ -96,6 +96,81 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
                 .with(createFacingDispatchFromUpModel()));
 
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAVEL.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/gravel"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVSAND.get(), TexturedModel.CUBE.updateTexture(mapping -> mapping
+                .put(TextureSlot.ALL, ResourceLocation.fromNamespaceAndPath("minecraft", "block/sand"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVREDSAND.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_sand"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/white_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/orange_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/magenta_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/light_blue_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/yellow_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/lime_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/pink_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/gray_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/light_gray_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/cyan_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/purple_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/blue_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/brown_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/green_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/red_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.fromNamespaceAndPath("minecraft", "block/black_concrete_powder"))));
+
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
 
