@@ -59,7 +59,7 @@ public class WotrBlockTagProvider extends BlockTagsProvider {
                 .add(WotrBlocks.NOGRAVSAND.get())
                 .add(WotrBlocks.NOGRAVREDSAND.get());
 
-        tag(BlockTags.DIRT)
+        tag(BlockTags.BAMBOO_PLANTABLE_ON)
                 .add(WotrBlocks.NOGRAVGRAVEL.get());
 
         tag(WotrTags.Blocks.BANNED_IN_RIFT)

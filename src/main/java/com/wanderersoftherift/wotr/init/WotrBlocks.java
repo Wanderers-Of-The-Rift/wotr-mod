@@ -1,18 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.block.AbilityBenchBlock;
-import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
-import com.wanderersoftherift.wotr.block.DittoBlock;
-import com.wanderersoftherift.wotr.block.KeyForgeBlock;
-import com.wanderersoftherift.wotr.block.MobTrapBlock;
-import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
-import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
-import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
-import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
-import com.wanderersoftherift.wotr.block.RuneAnvilEntityBlock;
-import com.wanderersoftherift.wotr.block.SpringBlock;
-import com.wanderersoftherift.wotr.block.TrapBlock;
+import com.wanderersoftherift.wotr.block.*;
 import com.wanderersoftherift.wotr.item.RiftChestType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
