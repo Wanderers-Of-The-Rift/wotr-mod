@@ -95,6 +95,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addTheme("mushroom", "Mushroom");
         addTheme("nether", "Nether");
         addTheme("noir", "Noir");
+        addTheme("mesa", "Mesa");
         addTheme("desert", "Desert");
         addTheme("swamp", "Swamp");
 

@@ -696,7 +696,7 @@
           "input_state": "wotr:processor_block_6_directional_pillar",
           "output_steps": [
             {
-              "output_state": "minecraft:stripped_oak_wood",
+              "output_state": "minecraft:oak_wood",
               "step_size": 1.0
             }
           ]
@@ -797,7 +797,13 @@
           "input_state": "wotr:processor_block_6_glass",
           "output_steps": [
             {
-              "output_state": "minecraft:glass",
+              "output_state": {
+                "type": "wotr:blockstate",
+                "Name": "minecraft:oak_leaves",
+                "Properties": {
+                  "persistent": "true"
+                }
+              },
               "step_size": 1.0
             }
           ]

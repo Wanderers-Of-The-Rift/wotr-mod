@@ -686,7 +686,7 @@
           "input_state": "wotr:processor_block_6_directional_pillar",
           "output_steps": [
             {
-              "output_state": "minecraft:stripped_oak_log",
+              "output_state": "minecraft:oak_log",
               "step_size": 1
             }
           ]
