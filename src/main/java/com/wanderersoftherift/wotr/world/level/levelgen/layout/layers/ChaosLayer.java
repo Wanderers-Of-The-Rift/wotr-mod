@@ -146,12 +146,16 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
             LayeredRiftLayout.LayoutSection section,
             RandomSource source,
             ArrayList<RiftSpace> allSpaces) {
-        if (allSpaces.isEmpty()) {
-            var room = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
-            room = room.offset(section.sectionShape().getBoxStart().getX() + 1, 0,
-                    section.sectionShape().getBoxStart().getZ() + 1);
-            allSpaces.add(room);
-        }
+        // if (allSpaces.isEmpty()) {
+        var room = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
+        room = room.offset(section.sectionShape().getBoxStart().getX() + 1, -2,
+                section.sectionShape().getBoxStart().getZ() + 1);
+        var room2 = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
+        room2 = room2.offset(section.sectionShape().getBoxStart().getX() + 1, 2,
+                section.sectionShape().getBoxStart().getZ() + 1);
+        allSpaces.add(room);
+        allSpaces.add(room2);
+        // }
 
         var currentSpaces = Collections.<RiftSpace>emptyList();
         var nextSpaces = new ArrayList(allSpaces);

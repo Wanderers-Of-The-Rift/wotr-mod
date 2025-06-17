@@ -4,7 +4,7 @@ public class BasicRiftShape implements RiftShape {
 
     @Override
     public double chaosiveness(double x, double z) {
-        return 1.5 * Math.cosh(0.11 * Math.sqrt(x * x + z * z));
+        return 1 + 1.5 * Math.cosh(0.11 * Math.sqrt(x * x + z * z));
     }
 
     // 2 = chaotic, 1 = unstable, 0 = stable
