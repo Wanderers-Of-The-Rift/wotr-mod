@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.world.level.levelgen;
+package com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers;
 
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Vec3i;

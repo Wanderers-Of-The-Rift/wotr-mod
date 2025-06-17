@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.LegacyRoomRandomizer;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.LegacyRoomRandomizer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;

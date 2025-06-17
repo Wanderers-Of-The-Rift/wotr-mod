@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.world.level.levelgen;
+package com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers;
 
 import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.util.TripleMirror;

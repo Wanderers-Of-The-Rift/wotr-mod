@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.layers;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.RoomRandomizer;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
