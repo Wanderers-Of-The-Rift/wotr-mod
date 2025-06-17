@@ -1,0 +1,18 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:water",
+      "minPercent": 10.0
+    },
+    {
+      "essenceType": "wotr:earth",
+      "minPercent": 40.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:swamp"
+  },
+  "priority": 10
+}

@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.block;
 
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -140,7 +140,7 @@ public class TrapBlock extends DittoBlock {
     }
 
     public BlockState getTweak() {
-        return ModBlocks.PLAYER_TRAP_BLOCK.get().defaultBlockState();
+        return WotrBlocks.PLAYER_TRAP_BLOCK.get().defaultBlockState();
     }
 
     @Override
@@ -150,6 +150,6 @@ public class TrapBlock extends DittoBlock {
 
     @Override
     public DeferredBlock getBlock() {
-        return ModBlocks.TRAP_BLOCK;
+        return WotrBlocks.TRAP_BLOCK;
     }
 }

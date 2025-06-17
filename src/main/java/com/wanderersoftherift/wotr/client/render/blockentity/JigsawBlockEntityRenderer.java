@@ -11,7 +11,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import org.joml.Matrix4f;
 
-import static com.wanderersoftherift.wotr.init.client.ClientRegistryEvents.JIGSAW_NAME_TOGGLE_KEY;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.JIGSAW_NAME_TOGGLE_KEY;
 
 public class JigsawBlockEntityRenderer implements BlockEntityRenderer<JigsawBlockEntity> {
 

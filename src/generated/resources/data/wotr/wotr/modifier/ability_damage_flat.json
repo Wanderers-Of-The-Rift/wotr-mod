@@ -1,0 +1,95 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 1.0,
+          "min_roll": 0.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 2.0,
+          "min_roll": 1.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 3.0,
+          "min_roll": 2.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 4.0,
+          "min_roll": 3.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 5.0,
+          "min_roll": 4.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 5
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 6.0,
+          "min_roll": 5.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 6
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:ability_raw_damage",
+          "id": "wotr:ability_damage_flat",
+          "max_roll": 7.0,
+          "min_roll": 6.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 7
+    }
+  ]
+}

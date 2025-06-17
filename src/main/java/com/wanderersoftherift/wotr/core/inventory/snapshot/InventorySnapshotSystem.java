@@ -5,9 +5,9 @@ import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
 import com.wanderersoftherift.wotr.core.inventory.containers.DirectContainerItemWrapper;
 import com.wanderersoftherift.wotr.core.inventory.containers.NonContainerWrapper;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.ModContainerTypes;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,7 +40,7 @@ import java.util.UUID;
 public final class InventorySnapshotSystem {
 
     private static final DataComponentPatch REMOVE_SNAPSHOT_ID_PATCH = DataComponentPatch.builder()
-            .remove(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get())
+            .remove(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get())
             .build();
 
     private InventorySnapshotSystem() {
@@ -53,7 +53,7 @@ public final class InventorySnapshotSystem {
      */
     public static void captureSnapshot(ServerPlayer player) {
         clearItemIds(player);
-        player.setData(ModAttachments.INVENTORY_SNAPSHOT, new InventorySnapshotBuilder(player).build());
+        player.setData(WotrAttachments.INVENTORY_SNAPSHOT, new InventorySnapshotBuilder(player).build());
     }
 
     /**
@@ -63,7 +63,7 @@ public final class InventorySnapshotSystem {
      */
     public static void clearSnapshot(ServerPlayer player) {
         clearItemIds(player);
-        player.setData(ModAttachments.INVENTORY_SNAPSHOT, new InventorySnapshot());
+        player.setData(WotrAttachments.INVENTORY_SNAPSHOT, new InventorySnapshot());
     }
 
     /**
@@ -74,7 +74,7 @@ public final class InventorySnapshotSystem {
      * @param event
      */
     public static void retainSnapshotItemsOnDeath(ServerPlayer player, LivingDropsEvent event) {
-        InventorySnapshot snapshot = player.getData(ModAttachments.INVENTORY_SNAPSHOT);
+        InventorySnapshot snapshot = player.getData(WotrAttachments.INVENTORY_SNAPSHOT);
         if (snapshot.isEmpty()) {
             return;
         }
@@ -84,7 +84,8 @@ public final class InventorySnapshotSystem {
         event.getDrops().clear();
         event.getDrops().addAll(refiner.dropItems);
 
-        player.setData(ModAttachments.RESPAWN_ITEMS, refiner.retainItems);
+        player.setData(WotrAttachments.RESPAWN_ITEMS, refiner.retainItems);
+        player.setData(WotrAttachments.INVENTORY_SNAPSHOT, new InventorySnapshot());
     }
 
     /**
@@ -93,7 +94,7 @@ public final class InventorySnapshotSystem {
      * @param player
      */
     public static void restoreItemsOnRespawn(ServerPlayer player) {
-        for (ItemStack item : player.getData(ModAttachments.RESPAWN_ITEMS)) {
+        for (ItemStack item : player.getData(WotrAttachments.RESPAWN_ITEMS)) {
             if (!player.getInventory().add(item)) {
                 item.applyComponents(REMOVE_SNAPSHOT_ID_PATCH);
                 player.level()
@@ -101,7 +102,7 @@ public final class InventorySnapshotSystem {
                                 player.position().z, item));
             }
         }
-        player.setData(ModAttachments.RESPAWN_ITEMS, new ArrayList<>());
+        player.setData(WotrAttachments.RESPAWN_ITEMS, new ArrayList<>());
         clearItemIds(player);
     }
 
@@ -111,7 +112,7 @@ public final class InventorySnapshotSystem {
         private final List<ItemStack> items = new ArrayList<>();
 
         private final DataComponentPatch addSnapshotIdPatch = DataComponentPatch.builder()
-                .set(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get(), snapshotId)
+                .set(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get(), snapshotId)
                 .build();
 
         /**
@@ -121,7 +122,7 @@ public final class InventorySnapshotSystem {
          * @return A new InventorySnapshot
          */
         public InventorySnapshotBuilder(ServerPlayer player) {
-            containerTypes = player.level().registryAccess().lookupOrThrow(ModContainerTypes.CONTAINER_TYPE_KEY);
+            containerTypes = player.level().registryAccess().lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
             for (ItemStack item : player.getInventory().items) {
                 captureItem(new DirectContainerItemWrapper(item));
             }
@@ -166,7 +167,7 @@ public final class InventorySnapshotSystem {
         public RespawnItemsCalculator(ServerPlayer player, InventorySnapshot snapshot,
                 Collection<ItemEntity> heldItems) {
             this.player = player;
-            this.containerTypes = player.level().registryAccess().lookupOrThrow(ModContainerTypes.CONTAINER_TYPE_KEY);
+            this.containerTypes = player.level().registryAccess().lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
             this.snapshotItems = new ArrayList<>(snapshot.items());
             this.snapshotId = snapshot.id();
             processInventoryItems(heldItems);
@@ -204,8 +205,8 @@ public final class InventorySnapshotSystem {
         }
 
         private boolean shouldRetainNonStackable(ItemStack item) {
-            return item.getComponents().has(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get())
-                    && snapshotId.equals(item.getComponents().get(ModDataComponentType.INVENTORY_SNAPSHOT_ID.get()));
+            return item.getComponents().has(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get())
+                    && snapshotId.equals(item.getComponents().get(WotrDataComponentType.INVENTORY_SNAPSHOT_ID.get()));
         }
 
         // If we're retaining the container
@@ -283,7 +284,7 @@ public final class InventorySnapshotSystem {
     private static void clearItemIds(ServerPlayer player) {
         Registry<ContainerType> containerTypes = player.getServer()
                 .registryAccess()
-                .lookupOrThrow(ModContainerTypes.CONTAINER_TYPE_KEY);
+                .lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
         for (ItemStack item : player.getInventory().items) {
             clearItemIds(containerTypes, new DirectContainerItemWrapper(item));
         }

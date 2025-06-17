@@ -1,0 +1,69 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_speed",
+          "id": "wotr:projectile_speed",
+          "max_roll": 0.019999999552965164,
+          "min_roll": 0.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_speed",
+          "id": "wotr:projectile_speed",
+          "max_roll": 0.03999999910593033,
+          "min_roll": 0.019999999552965164,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_speed",
+          "id": "wotr:projectile_speed",
+          "max_roll": 0.05999999865889549,
+          "min_roll": 0.03999999910593033,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_speed",
+          "id": "wotr:projectile_speed",
+          "max_roll": 0.07999999821186066,
+          "min_roll": 0.05999999865889549,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:projectile_speed",
+          "id": "wotr:projectile_speed",
+          "max_roll": 0.10000000149011612,
+          "min_roll": 0.07999999821186066,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 5
+    }
+  ]
+}

@@ -10,17 +10,19 @@
     "InvokerAbstractContainerMenu",
     "InvokerBlockBehaviour",
     "MixinEnchantingTableBlock",
+    "MixinFireBlock",
+    "MixinItem",
     "MixinItemStack",
+    "MixinLavaFluid",
     "MixinLivingEntity",
     "MixinServerPlayer",
     "MixinSetItemDamageFunction",
-    "MixinSpider",
     "MixinStructureTemplate",
-    "MixinWorldDimensions",
-    "TrialSpawnerAccessor"
+    "MixinWorldDimensions"
   ],
   "client": [
     "MixinAccessibilityOptionsScreen",
+    "MixinGuiGraphics",
     "MixinMinecraft"
   ],
   "injectors": {

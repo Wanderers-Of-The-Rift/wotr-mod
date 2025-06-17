@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if ! ./gradlew spotlessCheck --quiet; then
+    echo "Spotless check failed. Run './gradlew spotlessApply' to fix formatting issues."
+    exit 1
+fi
+
+
+if ! ./gradlew checkstyleMain --quiet; then
+    echo "Checkstyle failed. Please fix the issues before committing."
+    exit 1
+fi
+
+echo "✓ Pre-commit checks passed."
+

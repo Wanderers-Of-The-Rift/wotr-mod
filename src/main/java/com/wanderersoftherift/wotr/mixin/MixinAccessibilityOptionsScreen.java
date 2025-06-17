@@ -22,7 +22,7 @@ public class MixinAccessibilityOptionsScreen extends Screen {
                 .builder(Component.translatable("accessibility.wotr.menubutton"), (button) -> {
                     if (this.minecraft != null) {
                         this.minecraft.setScreen(
-                                new com.wanderersoftherift.wotr.gui.screen.AccessibilityOptionsScreen(screen));
+                                new com.wanderersoftherift.wotr.gui.screen.settings.AccessibilityOptionsScreen(screen));
                     }
                 })
                 .pos(5, 5)

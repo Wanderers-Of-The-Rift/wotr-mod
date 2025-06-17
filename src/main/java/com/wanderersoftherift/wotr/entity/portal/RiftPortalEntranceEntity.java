@@ -3,13 +3,16 @@ package com.wanderersoftherift.wotr.entity.portal;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
-import com.wanderersoftherift.wotr.init.ModEntityDataSerializers;
+import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -29,10 +32,11 @@ import static com.wanderersoftherift.wotr.core.rift.RiftLevelManager.levelExists
  */
 public class RiftPortalEntranceEntity extends RiftPortalEntity {
     private static final EntityDataAccessor<RiftConfig> DATA_RIFT_CONFIG = SynchedEntityData
-            .defineId(RiftPortalEntranceEntity.class, ModEntityDataSerializers.RIFT_CONFIG_SERIALIZER.get());
+            .defineId(RiftPortalEntranceEntity.class, WotrEntityDataSerializers.RIFT_CONFIG_SERIALIZER.get());
+    private static final EntityDataAccessor<String> DATA_RIFT_ID = SynchedEntityData
+            .defineId(RiftPortalEntranceEntity.class, EntityDataSerializers.STRING);
 
     private boolean generated = false;
-    private ResourceLocation riftDimensionID = WanderersOfTheRift.id("rift_" + UUID.randomUUID());
 
     public RiftPortalEntranceEntity(EntityType<? extends RiftPortalEntranceEntity> entityType, Level level) {
         super(entityType, level);
@@ -43,28 +47,27 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_RIFT_CONFIG, new RiftConfig(0));
+        builder.define(DATA_RIFT_ID, WanderersOfTheRift.id("rift_" + UUID.randomUUID()).toString());
     }
 
-    public ResourceLocation getRiftDimensionID() {
-        return riftDimensionID;
+    public ResourceLocation getRiftDimensionId() {
+        return ResourceLocation.parse(entityData.get(DATA_RIFT_ID));
     }
 
-    public void setRiftDimensionID(ResourceLocation riftDimensionID) {
-        this.riftDimensionID = riftDimensionID;
+    private void setRiftDimensionId(String id) {
+        if (id != null) {
+            this.entityData.set(DATA_RIFT_ID, id);
+        }
     }
 
     public boolean isGenerated() {
         return generated;
     }
 
-    public void setGenerated(boolean generated) {
-        this.generated = generated;
-    }
-
     @Override
     public void tick() {
         if (generated) {
-            if (!levelExists(getRiftDimensionID())) {
+            if (!levelExists(getRiftDimensionId())) {
                 this.remove(RemovalReason.DISCARDED);
                 return;
             }
@@ -75,7 +78,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
     @Override
     protected void onPlayerInPortal(ServerPlayer player, ServerLevel level) {
         BlockPos pos = blockPosition();
-        ResourceLocation riftId = this.getRiftDimensionID();
+        ResourceLocation riftId = this.getRiftDimensionId();
         var plDir = player.getDirection().getOpposite();
         var axis = plDir.getAxis();
         var axisDir = plDir.getAxisDirection().getStep();
@@ -86,11 +89,15 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
             player.displayClientMessage(Component.translatable(WanderersOfTheRift.MODID + ".rift.create.failed"), true);
             return;
         }
-        this.setGenerated(true);
+        generated = true;
+        if (RiftData.get(lvl).isBannedFromRift(player)) {
+            return;
+        }
+
         RiftData.get(lvl).addPlayer(player.getUUID());
 
         var riftSpawnCoords = getRiftSpawnCoords();
-
+        player.setData(WotrAttachments.PRE_RIFT_STATS, new StatSnapshot(player));
         player.teleportTo(lvl, riftSpawnCoords.x, riftSpawnCoords.y, riftSpawnCoords.z, Set.of(), player.getYRot(), 0,
                 false);
     }
@@ -121,7 +128,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
                     .orElse(new RiftConfig(0)));
         }
         if (tag.contains("riftDimensionID")) {
-            setRiftDimensionID(ResourceLocation.parse(tag.getString("riftDimensionID")));
+            setRiftDimensionId(tag.getString("riftDimensionID"));
         }
         if (tag.contains("generated")) {
             generated = tag.getBoolean("generated");
@@ -136,12 +143,14 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
                         .encode(getRiftConfig(),
                                 this.level().registryAccess().createSerializationContext(NbtOps.INSTANCE), tag)
                         .getOrThrow());
-        tag.putString("riftDimensionID", getRiftDimensionID().toString());
+        tag.putString("riftDimensionID", getRiftDimensionId().toString());
         tag.putBoolean("generated", generated);
     }
 
     public void setRiftConfig(RiftConfig config) {
-        this.entityData.set(DATA_RIFT_CONFIG, config);
+        if (config != null) {
+            this.entityData.set(DATA_RIFT_CONFIG, config);
+        }
     }
 
     public RiftConfig getRiftConfig() {

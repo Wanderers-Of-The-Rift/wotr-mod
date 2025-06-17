@@ -1,0 +1,66 @@
+{
+    "processors": [
+        {
+            "processor_type": "wotr:spot_gradient",
+      		"noise_scale_x":  0.01,
+      		"noise_scale_y":  0.01,
+      		"noise_scale_z":  0.01,
+            "replacements": [
+                {
+                    "input_state": "wotr:processor_block_14",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:orange_wool",
+                            "step_size": 0.06
+                        },
+                        {
+                            "output_state": "minecraft:yellow_wool",
+                            "step_size": 0.12
+                        },
+                        {
+                            "output_state": "minecraft:blue_wool",
+                            "step_size": 0.19
+                        },
+                        {
+                            "output_state": "minecraft:black_wool",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:pink_wool",
+                            "step_size": 0.38
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_15",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:white_wool",
+                            "step_size": 0.06
+                        },
+                        {
+                            "output_state": "minecraft:lime_wool",
+                            "step_size": 0.12
+                        },
+                        {
+                            "output_state": "minecraft:yellow_wool",
+                            "step_size": 0.19
+                        },
+                        {
+                            "output_state": "minecraft:red_wool",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:light_blue_wool",
+                            "step_size": 0.38
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "processor_type": "wotr:rift_theme",
+            "piece_type": "poi"
+        }
+    ]
+}

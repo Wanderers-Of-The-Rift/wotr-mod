@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.network;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
-import com.wanderersoftherift.wotr.init.ModAttachments;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -30,9 +30,9 @@ public record UpdateEffectMarkersPayload(Map<Holder<EffectMarker>, Integer> upda
     public static final StreamCodec<RegistryFriendlyByteBuf, UpdateEffectMarkersPayload> STREAM_CODEC = StreamCodec
             .composite(
                     ByteBufCodecs.map(LinkedHashMap::new,
-                            ByteBufCodecs.holderRegistry(RegistryEvents.EFFECT_MARKER_REGISTRY), ByteBufCodecs.INT),
+                            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.EFFECT_MARKERS), ByteBufCodecs.INT),
                     UpdateEffectMarkersPayload::updates,
-                    ByteBufCodecs.holderRegistry(RegistryEvents.EFFECT_MARKER_REGISTRY).apply(ByteBufCodecs.list()),
+                    ByteBufCodecs.holderRegistry(WotrRegistries.Keys.EFFECT_MARKERS).apply(ByteBufCodecs.list()),
                     UpdateEffectMarkersPayload::remove, UpdateEffectMarkersPayload::new);
 
     @Override
@@ -41,7 +41,7 @@ public record UpdateEffectMarkersPayload(Map<Holder<EffectMarker>, Integer> upda
     }
 
     public void handleOnClient(IPayloadContext context) {
-        EffectDisplayData data = context.player().getData(ModAttachments.EFFECT_DISPLAY);
+        EffectDisplayData data = context.player().getData(WotrAttachments.EFFECT_DISPLAY);
         for (var entry : updates.entrySet()) {
             data.setMarker(entry.getKey(), entry.getValue());
         }

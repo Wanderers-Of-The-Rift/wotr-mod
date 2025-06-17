@@ -1,10 +1,64 @@
 {
-    "fallback": "wotr:rift/poi/terminator",
+    "fallback": "wotr:rift/poi_terminator",
     "elements": [
         {
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/ceiling/5/overhang-1-wout",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/5/overhang-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/5/overhang-2-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/5/stonebricks-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/5/hanging-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/5/hanging_coffin-1-alex642",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/ceiling/5/hang_chest-2-mal",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

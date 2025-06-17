@@ -1,0 +1,8 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:cave"
+  },
+  "priority": -1
+}

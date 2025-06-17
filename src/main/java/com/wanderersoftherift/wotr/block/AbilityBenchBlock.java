@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.block;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.gui.menu.AbilityBenchMenu;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
 import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
@@ -38,8 +38,12 @@ public class AbilityBenchBlock extends Block {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     private static final Component CONTAINER_TITLE = Component
             .translatable("container." + WanderersOfTheRift.MODID + ".ability_bench");
-    private static final VoxelShape SHAPE = VoxelShapeUtils.combine(Block.box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0),
-            Block.box(2.0, 1.0, 2.0, 14.0, 12.0, 14.0), Block.box(0.0, 12.0, 0.0, 16.0, 15.0, 16.0));
+    // spotless:off
+    private static final VoxelShape SHAPE = VoxelShapeUtils.combine(
+            Block.box(1.0, 0.0, 1.0, 15.0, 2.0, 15.0),
+            Block.box(2.0, 2.0, 2.0, 14.0, 12.0, 14.0),
+            Block.box(0.0, 12.0, 0.0, 16.0, 15.0, 16.0));
+    // spotless:on
 
     public AbilityBenchBlock(Properties properties) {
         super(properties);
@@ -68,7 +72,7 @@ public class AbilityBenchBlock extends Block {
 
     protected MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
         return new SimpleMenuProvider((containerId, playerInventory, player) -> {
-            AbilitySlots slots = playerInventory.player.getData(ModAttachments.ABILITY_SLOTS);
+            AbilitySlots slots = playerInventory.player.getData(WotrAttachments.ABILITY_SLOTS);
             IItemHandler replicatedSlots = new ChangeAwareItemHandler(slots) {
                 @Override
                 public void onSlotChanged(int slot) {

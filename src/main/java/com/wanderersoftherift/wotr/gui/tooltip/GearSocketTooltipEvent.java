@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.gui.tooltip;
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
@@ -31,11 +31,11 @@ public class GearSocketTooltipEvent {
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
-        if (!stack.has(ModDataComponentType.GEAR_SOCKETS)) {
+        if (!stack.has(WotrDataComponentType.GEAR_SOCKETS)) {
             return;
         }
 
-        GearSockets sockets = stack.get(ModDataComponentType.GEAR_SOCKETS);
+        GearSockets sockets = stack.get(WotrDataComponentType.GEAR_SOCKETS);
         if (sockets == null) {
             return;
         }
@@ -43,16 +43,6 @@ public class GearSocketTooltipEvent {
 
         List<TooltipComponent> toAdd = new ArrayList<>();
         toAdd.add(new GearSocketTooltipRenderer.GearSocketComponent(stack, socketList));
-
-        for (GearSocket socket : socketList) {
-
-            if (!socket.isEmpty()) {
-                List<TooltipComponent> tooltipComponents = socket.modifier()
-                        .get()
-                        .getTooltipComponent(stack, ChatFormatting.RED);
-                toAdd.addAll(tooltipComponents);
-            }
-        }
 
         for (int i = 0; i < toAdd.size(); i++) {
             list.add(i + 1, Either.right(toAdd.get(i)));

@@ -1,0 +1,66 @@
+{
+    "processors": [
+        {
+            "processor_type": "wotr:spot_gradient",
+		"noise_scale_x":  0.2,
+      		"noise_scale_y":  0.2,
+      		"noise_scale_z":  0.2,
+            "replacements": [
+                {
+                    "input_state": "wotr:processor_block_13",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:lime_wool",
+                            "step_size": 0.1
+                        },
+                        {
+                            "output_state": "minecraft:yellow_wool",
+                            "step_size": 0.15
+                        },
+                        {
+                            "output_state": "minecraft:magenta_wool",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:orange_wool",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:light_blue_wool",
+                            "step_size": 0.3
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_13_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:lime_carpet",
+                            "step_size": 0.1
+                        },
+                        {
+                            "output_state": "minecraft:yellow_carpet",
+                            "step_size": 0.15
+                        },
+                        {
+                            "output_state": "minecraft:magenta_carpet",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:orange_carpet",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:light_blue_carpet",
+                            "step_size": 0.3
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "processor_type": "wotr:rift_theme",
+            "piece_type": "poi"
+        }
+    ]
+}

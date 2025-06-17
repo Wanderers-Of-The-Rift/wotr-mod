@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.util.FastUtils;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -48,7 +48,7 @@ public class AbilityUpgradePool {
                     .apply(instance, AbilityUpgradePool::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AbilityUpgradePool> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(RegistryEvents.ABILITY_UPGRADE_REGISTRY)
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.ABILITY_UPGRADES)
                     .apply(ByteBufCodecs.list())
                     .apply(ByteBufCodecs.list()),
             x -> x.choices, ByteBufCodecs.INT.apply(ByteBufCodecs.list()).map(IntArrayList::new, FastUtils::toList),
@@ -258,7 +258,7 @@ public class AbilityUpgradePool {
         private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(
                 RegistryAccess registryAccess,
                 AbstractAbility ability) {
-            Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
+            Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(WotrRegistries.Keys.ABILITY_UPGRADES);
             Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
                     .filter(x -> isRelevant(x, ability))
                     .map(upgrades::wrapAsHolder)

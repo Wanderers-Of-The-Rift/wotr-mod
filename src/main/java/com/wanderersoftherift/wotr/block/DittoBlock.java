@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.block;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,8 +24,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
@@ -36,11 +34,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class DittoBlock extends BaseEntityBlock {
     public static final MapCodec<DittoBlock> CODEC = simpleCodec(DittoBlock::new);
-    public static final BooleanProperty HAS_ITEM = BooleanProperty.create("has_item");
 
     public DittoBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(HAS_ITEM, false));
+        this.registerDefaultState(this.defaultBlockState());
     }
 
     @Override
@@ -74,25 +71,9 @@ public class DittoBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
-        ItemStack itemstack = getBlock().toStack();
-        if (itemInBlock.getItem() != getBlock().asItem()) {
-            Containers.dropContents(level, pos, dittoBlockEntity);
-        } else {
-            return InteractionResult.PASS;
-        }
-        dittoBlockEntity.setTheItem(itemstack);
-
-        level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1.0F, 0.5F);
-        if (level instanceof ServerLevel sLevel) {
-            sLevel.sendParticles(ParticleTypes.DUST_PLUME, (double) pos.getX() + 0.5, (double) pos.getY() + 1.2,
-                    (double) pos.getZ() + 0.5, 7, 0.0, 0.0, 0.0, 0.0);
-        }
-
-        dittoBlockEntity.setChanged();
-        level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-
-        level.setBlock(pos, dittoBlockEntity.getBlockState()
-                .setValue(HAS_ITEM, !dittoBlockEntity.getBlockState().getValue(HAS_ITEM)), 3);
+        ItemStack originalItem = dittoBlockEntity.getTheItem();
+        ItemStack newItemstack = ItemStack.EMPTY;
+        updateSetItem(level, pos, player, dittoBlockEntity, newItemstack, originalItem);
 
         return InteractionResult.SUCCESS;
     }
@@ -120,33 +101,11 @@ public class DittoBlock extends BaseEntityBlock {
                 return InteractionResult.PASS;
             }
         }
-        ItemStack itemstack1 = dittoBlockEntity.getTheItem();
-        if (!item.isEmpty() && (itemstack1.isEmpty() || !ItemStack.isSameItemSameComponents(itemstack1, item))) {
+        ItemStack originalItem = dittoBlockEntity.getTheItem();
+        if (!item.isEmpty() && (originalItem.isEmpty() || !ItemStack.isSameItemSameComponents(originalItem, item))) {
             player.awardStat(Stats.ITEM_USED.get(item.getItem()));
-            ItemStack itemstack = item.consumeAndReturn(1, player);
-            float fillPercent;
-            dittoBlockEntity.setTheItem(itemstack);
-            if (dittoBlockEntity.isEmpty()) {
-                fillPercent = (float) itemstack.getCount() / (float) itemstack.getMaxStackSize();
-            } else {
-                if (itemstack1.getItem() != getBlock().asItem()) {
-                    Containers.dropContents(level, pos, dittoBlockEntity);
-                }
-                fillPercent = (float) itemstack1.getCount() / (float) itemstack1.getMaxStackSize();
-            }
-
-            level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1.0F,
-                    0.7F + 0.5F * fillPercent);
-            if (level instanceof ServerLevel sLevel) {
-                sLevel.sendParticles(ParticleTypes.DUST_PLUME, (double) pos.getX() + 0.5, (double) pos.getY() + 1.2,
-                        (double) pos.getZ() + 0.5, 7, 0.0, 0.0, 0.0, 0.0);
-            }
-
-            dittoBlockEntity.setChanged();
-            level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-
-            level.setBlock(pos, dittoBlockEntity.getBlockState()
-                    .setValue(HAS_ITEM, !dittoBlockEntity.getBlockState().getValue(HAS_ITEM)), 3);
+            ItemStack newItemstack = item.consumeAndReturn(1, player);
+            updateSetItem(level, pos, player, dittoBlockEntity, newItemstack, originalItem);
 
             return InteractionResult.SUCCESS;
         } else {
@@ -154,9 +113,35 @@ public class DittoBlock extends BaseEntityBlock {
         }
     }
 
+    private static void updateSetItem(
+            Level level,
+            BlockPos pos,
+            Player player,
+            DittoBlockEntity dittoBlockEntity,
+            ItemStack newItemstack,
+            ItemStack oldItemstack) {
+        float fillPercent;
+        Containers.dropContents(level, pos, dittoBlockEntity);
+        dittoBlockEntity.setTheItem(newItemstack);
+        if (dittoBlockEntity.isEmpty()) {
+            fillPercent = (float) newItemstack.getCount() / (float) newItemstack.getMaxStackSize();
+        } else {
+            fillPercent = (float) oldItemstack.getCount() / (float) oldItemstack.getMaxStackSize();
+        }
+
+        level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1.0F,
+                0.7F + 0.5F * fillPercent);
+        if (level instanceof ServerLevel sLevel) {
+            sLevel.sendParticles(ParticleTypes.DUST_PLUME, (double) pos.getX() + 0.5, (double) pos.getY() + 1.2,
+                    (double) pos.getZ() + 0.5, 7, 0.0, 0.0, 0.0, 0.0);
+        }
+
+        dittoBlockEntity.setChanged();
+        level.sendBlockUpdated(pos, dittoBlockEntity.getBlockState(), dittoBlockEntity.getBlockState(), 3);
+    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HAS_ITEM);
     }
 
     @Override
@@ -180,7 +165,7 @@ public class DittoBlock extends BaseEntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if ((blockEntity instanceof DittoBlockEntity dittoBlockEntity)) {
             if (dittoBlockEntity.getTheItem() != ItemStack.EMPTY
-                    && dittoBlockEntity.getTheItem().getItem() != ModBlocks.DITTO_BLOCK.asItem()) {
+                    && dittoBlockEntity.getTheItem().getItem() != WotrBlocks.DITTO_BLOCK.asItem()) {
                 return 15;
             }
         }
@@ -192,6 +177,6 @@ public class DittoBlock extends BaseEntityBlock {
     }
 
     public DeferredBlock getBlock() {
-        return ModBlocks.DITTO_BLOCK;
+        return WotrBlocks.DITTO_BLOCK;
     }
 }

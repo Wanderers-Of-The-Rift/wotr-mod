@@ -8,10 +8,10 @@ import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
-import com.wanderersoftherift.wotr.client.ModShaders;
 import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapRoomEffects;
 import com.wanderersoftherift.wotr.client.map.VirtualCamera;
+import com.wanderersoftherift.wotr.init.client.WotrShaders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
 import org.joml.Vector2i;
@@ -94,7 +94,7 @@ public class MapRenderer3D {
         float screenWidth = Minecraft.getInstance().getWindow().getWidth();
         float screenHeight = Minecraft.getInstance().getWindow().getHeight();
 
-        CompiledShaderProgram shader = RenderSystem.setShader(ModShaders.RIFT_MAPPER);
+        CompiledShaderProgram shader = RenderSystem.setShader(WotrShaders.RIFT_MAPPER);
         if (shader != null) {
             Uniform screenSize = shader.getUniform("ScreenSize");
             if (screenSize != null) {

@@ -1,5 +1,5 @@
 {
-    "fallback": "wotr:rift/poi/terminator",
+    "fallback": "wotr:rift/poi_terminator",
     "elements": [
         {
             "weight": 100,
@@ -32,7 +32,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/7/trees-3-k",
-                "processors": "wotr:poi_theme_default",
+                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -50,7 +50,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/7/tree-1-mal",
-                "processors": "wotr:poi_theme_default",
+                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -122,6 +122,15 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/7/ostrich-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/7/library-1-alex642",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -203,6 +212,78 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/free/7/lavagate-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/spring-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/tent-4-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/sculk_fossil-1-alex642",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/lush_fossil-1-alex642",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/pillars-1-grimm",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/dual_coffin-1-alex642",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/pb_woodfort-1-k_mal",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/7/pris_fountain_pb-2-k_jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

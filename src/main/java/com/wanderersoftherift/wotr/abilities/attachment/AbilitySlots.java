@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -82,8 +82,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
      */
     public AbstractAbility getAbilityInSlot(int slot) {
         ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty() && stack.has(ModDataComponentType.ABILITY)) {
-            return stack.get(ModDataComponentType.ABILITY).value();
+        if (!stack.isEmpty() && stack.has(WotrDataComponentType.ABILITY)) {
+            return stack.get(WotrDataComponentType.ABILITY).value();
         }
         return null;
     }
@@ -132,7 +132,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return stack.has(ModDataComponentType.ABILITY);
+        return stack.has(WotrDataComponentType.ABILITY);
     }
 
     @Override

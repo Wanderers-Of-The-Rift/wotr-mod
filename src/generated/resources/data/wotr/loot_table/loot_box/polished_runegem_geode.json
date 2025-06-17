@@ -9,7 +9,7 @@
           "functions": [
             {
               "function": "wotr:runegems",
-              "tier": "polished"
+              "runegems": "#wotr:geode_polished"
             }
           ],
           "name": "wotr:runegem"

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.wanderersoftherift.wotr.init.ModProcessors.GRADIENT_SPOT_REPLACE;
+import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.GRADIENT_SPOT_REPLACE;
 
 public class GradientReplaceProcessor extends StructureProcessor {
     public static final MapCodec<GradientReplaceProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(

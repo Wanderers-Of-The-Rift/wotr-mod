@@ -2,7 +2,9 @@ package com.wanderersoftherift.wotr.item.runegem;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.modifier.TieredModifier;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -12,9 +14,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,14 +45,47 @@ public class Runegem extends Item {
     }
 
     @Override
+    public Component getName(ItemStack stack) {
+        RunegemData gemData = stack.get(WotrDataComponentType.RUNEGEM_DATA);
+        if (gemData != null) {
+            return gemData.name();
+        }
+        return super.getName(stack);
+    }
+
+    @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        if (stack.has(ModDataComponentType.RUNEGEM_DATA)) {
-            RunegemData gemData = stack.get(ModDataComponentType.RUNEGEM_DATA);
+        if (stack.has(WotrDataComponentType.RUNEGEM_DATA)) {
+            RunegemData gemData = stack.get(WotrDataComponentType.RUNEGEM_DATA);
             ImageComponent fancyComponent = new ImageComponent(stack, Component.empty(),
                     TIER_RESOURCE_LOCATION_MAP.get(Objects.requireNonNull(gemData).tier()));
             return Optional.of(fancyComponent);
         }
 
         return super.getTooltipImage(stack);
+    }
+
+    @Override
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            List<Component> tooltipComponents,
+            TooltipFlag tooltipFlag) {
+        if (stack.has(WotrDataComponentType.RUNEGEM_DATA)) {
+            RunegemData gemData = stack.get(WotrDataComponentType.RUNEGEM_DATA);
+            if (gemData != null) {
+                tooltipComponents.add(Component.translatable("tooltip.wotr.runegem.shape", gemData.shape().name()));
+                tooltipComponents.add(Component.translatable("tooltip.wotr.runegem.modifiers"));
+                for (RunegemData.ModifierGroup group : gemData.modifierLists()) {
+                    group.supportedItems()
+                            .unwrapKey()
+                            .ifPresent(tagKey -> tooltipComponents
+                                    .add(Component.literal(tagKey.toString()).withStyle(ChatFormatting.AQUA)));
+                    for (TieredModifier tieredModifier : group.modifiers()) {
+                        tooltipComponents.add(tieredModifier.getName());
+                    }
+                }
+            }
+        }
     }
 }

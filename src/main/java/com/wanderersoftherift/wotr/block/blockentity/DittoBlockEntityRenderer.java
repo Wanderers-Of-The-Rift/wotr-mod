@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -44,9 +45,10 @@ public class DittoBlockEntityRenderer implements BlockEntityRenderer<DittoBlockE
         if (!dittoBlock.shouldRender(blockEntity.getBlockState())) {
             return;
         }
-        if ((blockEntity.getTheItem().getItem() instanceof BlockItem)
-                && blockEntity.getTheItem().getItem() != dittoBlock.getBlock().asItem()) {
-            BlockState blockstate = ((BlockItem) blockEntity.getTheItem().getItem()).getBlock().defaultBlockState();
+        ItemStack theItem = blockEntity.getTheItem();
+        if (!theItem.isEmpty() && theItem.getItem() instanceof BlockItem
+                && theItem.getItem() != dittoBlock.getBlock().asItem()) {
+            BlockState blockstate = ((BlockItem) theItem.getItem()).getBlock().defaultBlockState();
             if (blockEntity.getLevel() == null) {
                 return;
             }

@@ -15,17 +15,17 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
 
-import static com.wanderersoftherift.wotr.init.ModModifierEffects.MODIFIER_EFFECT_KEY;
-import static com.wanderersoftherift.wotr.init.ModModifierEffects.MODIFIER_TYPE_REGISTRY;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.MODIFIER_EFFECTS;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.MODIFIER_TYPES;
 
 public abstract class AbstractModifierEffect {
-    public static final Codec<AbstractModifierEffect> DIRECT_CODEC = MODIFIER_TYPE_REGISTRY.byNameCodec()
+    public static final Codec<AbstractModifierEffect> DIRECT_CODEC = MODIFIER_TYPES.byNameCodec()
             .dispatch(AbstractModifierEffect::getCodec, Function.identity());
 
-    public static final Codec<Holder<AbstractModifierEffect>> CODEC = RegistryFixedCodec.create(MODIFIER_EFFECT_KEY);
+    public static final Codec<Holder<AbstractModifierEffect>> CODEC = RegistryFixedCodec.create(MODIFIER_EFFECTS);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractModifierEffect>> STREAM_CODEC = ByteBufCodecs
-            .holderRegistry(MODIFIER_EFFECT_KEY);
+            .holderRegistry(MODIFIER_EFFECTS);
 
     public abstract MapCodec<? extends AbstractModifierEffect> getCodec();
 

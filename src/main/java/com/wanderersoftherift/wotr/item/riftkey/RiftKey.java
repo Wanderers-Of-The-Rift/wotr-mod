@@ -4,12 +4,17 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModEntities;
-import com.wanderersoftherift.wotr.init.ModSoundEvents;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrSoundEvents;
+import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -73,9 +78,39 @@ public class RiftKey extends Item {
             Item.@NotNull TooltipContext context,
             @NotNull List<Component> components,
             @NotNull TooltipFlag flag) {
-        RiftConfig riftConfig = stack.get(ModDataComponentType.RIFT_CONFIG);
+        RiftConfig riftConfig = stack.get(WotrDataComponentType.RIFT_CONFIG);
         if (riftConfig != null) {
             components.addAll(riftConfig.getTooltips());
+            return;
+        }
+
+        if (stack.has(WotrDataComponentType.ITEM_RIFT_TIER)) {
+            int tier = stack.getOrDefault(WotrDataComponentType.ITEM_RIFT_TIER, 0);
+            components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
+                    .withColor(ChatFormatting.GRAY.getColor()));
+        }
+
+        Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RIFT_THEME);
+        if (riftTheme != null) {
+            ResourceLocation themeId = ResourceLocation.parse(riftTheme.getRegisteredName());
+            Component themeName = Component
+                    .translatable("rift_theme." + themeId.getNamespace() + "." + themeId.getPath());
+            components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", themeName)
+                    .withColor(ChatFormatting.GRAY.getColor()));
+        }
+        Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RIFT_OBJECTIVE);
+        if (objective != null) {
+            ResourceLocation objectiveLoc = ResourceLocation.parse(objective.getRegisteredName());
+            Component objectiveName = Component
+                    .translatable("objective." + objectiveLoc.getNamespace() + "." + objectiveLoc.getPath() + ".name");
+            components.add(
+                    Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", objectiveName)
+                            .withColor(ChatFormatting.GRAY.getColor()));
+        }
+        Integer seed = stack.get(WotrDataComponentType.RIFT_SEED);
+        if (seed != null) {
+            components.add(Component.translatable(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), seed)
+                    .withColor(ChatFormatting.GRAY.getColor()));
         }
     }
 
@@ -85,14 +120,25 @@ public class RiftKey extends Item {
     }
 
     private void spawnRift(Level level, Vec3 pos, Direction dir, ItemStack riftKey) {
-        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(ModEntities.RIFT_ENTRANCE.get(), level);
+        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(WotrEntities.RIFT_ENTRANCE.get(), level);
         rift.setPos(pos);
         rift.setYRot(dir.toYRot());
         rift.setBillboard(dir.getAxis().isVertical());
-        if (riftKey.has(ModDataComponentType.RIFT_CONFIG)) {
-            rift.setRiftConfig(riftKey.get(ModDataComponentType.RIFT_CONFIG));
-        }
+        rift.setRiftConfig(generateConfig(riftKey));
         level.addFreshEntity(rift);
-        rift.playSound(ModSoundEvents.RIFT_OPEN.value());
+        rift.playSound(WotrSoundEvents.RIFT_OPEN.value());
+    }
+
+    private RiftConfig generateConfig(ItemStack stack) {
+        RiftConfig riftConfig = stack.get(WotrDataComponentType.RIFT_CONFIG);
+        if (riftConfig != null) {
+            return riftConfig;
+        }
+        int tier = stack.getOrDefault(WotrDataComponentType.ITEM_RIFT_TIER, 0);
+        Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RIFT_THEME);
+        Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RIFT_OBJECTIVE);
+        Integer seed = stack.get(WotrDataComponentType.RIFT_SEED);
+        return new RiftConfig(tier, Optional.ofNullable(riftTheme), Optional.ofNullable(objective),
+                Optional.ofNullable(seed));
     }
 }

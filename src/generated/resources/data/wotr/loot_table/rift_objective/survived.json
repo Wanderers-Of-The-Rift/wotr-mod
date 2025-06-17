@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [],
+      "rolls": 0.0
+    }
+  ],
+  "random_sequence": "wotr:rift_objective/survived"
+}

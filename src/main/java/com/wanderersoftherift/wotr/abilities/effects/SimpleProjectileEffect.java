@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
-import com.wanderersoftherift.wotr.init.ModAttributes;
-import com.wanderersoftherift.wotr.init.ModEntities;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.BlockPos;
@@ -59,7 +59,7 @@ public class SimpleProjectileEffect extends AbstractEffect {
             // Target to me has always been more of a frame of reference for the effect not what the effect actually
             // "targets" but we can change this later if we want to make the change towards it being the actual target.
             for (Entity target : targetEntities) {
-                EntityType<?> type = ModEntities.SIMPLE_EFFECT_PROJECTILE.get();
+                EntityType<?> type = WotrEntities.SIMPLE_EFFECT_PROJECTILE.get();
                 int numberOfProjectiles = getNumberOfProjectiles(context);
 
                 float spread = getSpread(context);
@@ -82,11 +82,11 @@ public class SimpleProjectileEffect extends AbstractEffect {
     }
 
     private float getSpread(AbilityContext context) {
-        return context.getAbilityAttribute(ModAttributes.PROJECTILE_SPREAD, 15);
+        return context.getAbilityAttribute(WotrAttributes.PROJECTILE_SPREAD, 15);
     }
 
     private int getNumberOfProjectiles(AbilityContext context) {
-        return (int) context.getAbilityAttribute(ModAttributes.PROJECTILE_COUNT, config.projectiles());
+        return (int) context.getAbilityAttribute(WotrAttributes.PROJECTILE_COUNT, config.projectiles());
     }
 
     private void spawnProjectile(Entity user, EntityType<?> type, float angle, AbilityContext context) {
@@ -96,10 +96,10 @@ public class SimpleProjectileEffect extends AbstractEffect {
             projectileEntity.setPos(user.getEyePosition());
             projectileEntity.setOwner(context.caster());
             projectileEntity.setEffect(this);
-            projectileEntity.configure(config);
+            projectileEntity.configure(config, context);
 
             projectileEntity.shootFromRotation(user, user.getXRot(), user.getYRot() + angle, 0,
-                    context.getAbilityAttribute(ModAttributes.PROJECTILE_SPEED, config.velocity()), 0);
+                    context.getAbilityAttribute(WotrAttributes.PROJECTILE_SPEED, config.velocity()), 0);
 
             context.level().addFreshEntity(simpleProjectile);
         }
@@ -120,8 +120,9 @@ public class SimpleProjectileEffect extends AbstractEffect {
     protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
             Holder<Attribute> attribute = attributeModifier.getAttribute();
-            return ModAttributes.PROJECTILE_SPREAD.equals(attribute) || ModAttributes.PROJECTILE_COUNT.equals(attribute)
-                    || ModAttributes.PROJECTILE_SPEED.equals(attribute);
+            return WotrAttributes.PROJECTILE_SPREAD.equals(attribute)
+                    || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
+                    || WotrAttributes.PROJECTILE_SPEED.equals(attribute);
         }
         return false;
     }

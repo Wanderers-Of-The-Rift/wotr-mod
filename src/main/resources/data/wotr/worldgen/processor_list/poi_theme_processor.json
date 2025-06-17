@@ -1,0 +1,15 @@
+{
+  "processors": [
+    {
+      "processor_type": "wotr:rift_chests",
+      "base_loot_table": "wotr:chests/",
+      "rarity": 0.6,
+      "chest_types": [
+        {
+          "chest_type": "wooden",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

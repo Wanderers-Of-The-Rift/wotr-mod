@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.block.blockentity;
 
-import com.wanderersoftherift.wotr.init.ModBlockEntities;
-import com.wanderersoftherift.wotr.init.ModBlocks;
+import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
@@ -33,13 +32,18 @@ public class DittoBlockEntity extends BlockEntity
     private ItemStack item;
 
     public DittoBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.DITTO_BLOCK_ENTITY.get(), pos, state);
-        this.item = new ItemStack(ModBlocks.DITTO_BLOCK);
+        super(WotrBlockEntities.DITTO_BLOCK_ENTITY.get(), pos, state);
+        this.item = ItemStack.EMPTY;
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
+        if (item.isEmpty()) {
+            tag.putBoolean("empty", true);
+        } else {
+            tag.putBoolean("empty", false);
+        }
         if (!this.trySaveLootTable(tag) && !this.item.isEmpty()) {
             tag.put("item", this.item.save(provider));
         }
@@ -128,4 +132,5 @@ public class DittoBlockEntity extends BlockEntity
     @NotNull public BlockEntity getContainerBlockEntity() {
         return this;
     }
+
 }

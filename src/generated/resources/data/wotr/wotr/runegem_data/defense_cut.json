@@ -1,0 +1,95 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:armor_heavy",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_off_hand_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:armor_heavy",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_helmet_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 2
+        },
+        {
+          "modifier": "wotr:armor_heavy",
+          "tier": 2
+        }
+      ],
+      "supported_items": "#wotr:socketable_chestplate_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:armor_heavy",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_leggings_slot"
+    },
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:armor",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:armor_heavy",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:knockback_resistance",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_boots_slot"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.defense_cut"
+  },
+  "shape": "circle",
+  "tier": "cut"
+}

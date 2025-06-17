@@ -3,17 +3,21 @@ package com.wanderersoftherift.wotr.item.socket;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
+import com.wanderersoftherift.wotr.modifier.TieredModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier, Optional<RunegemData> runegem) {
 
@@ -32,21 +36,41 @@ public record GearSocket(RunegemShape shape, Optional<ModifierInstance> modifier
         return runegem.isEmpty() || modifier.isEmpty();
     }
 
-    public boolean canBeApplied(RunegemData runegemData) {
-        return isEmpty() && this.shape().equals(runegemData.shape());
+    public boolean canBeApplied(
+            ItemStack gear,
+            Level level,
+            RunegemData runegemData,
+            List<GearSocket> existingSockets) {
+        Set<Holder<Modifier>> existingModifiers = existingSockets.stream()
+                .filter(socket -> !socket.isEmpty())
+                .map(GearSocket::modifier)
+                .filter(Optional::isPresent)
+                .map(inst -> inst.get().modifier())
+                .collect(Collectors.toSet());
+        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(gear, level,
+                existingModifiers);
+        return isEmpty() && this.shape().equals(runegemData.shape()) && tieredModifier.isPresent();
     }
 
-    public GearSocket applyRunegem(ItemStack stack, ItemStack runegem, Level level) {
-        RunegemData runegemData = runegem.get(ModDataComponentType.RUNEGEM_DATA);
+    public GearSocket applyRunegem(ItemStack stack, ItemStack runegem, Level level, List<GearSocket> existingSockets) {
+        Set<Holder<Modifier>> existingModifiers = existingSockets.stream()
+                .filter(socket -> !socket.isEmpty())
+                .map(GearSocket::modifier)
+                .filter(Optional::isPresent)
+                .map(inst -> inst.get().modifier())
+                .collect(Collectors.toSet());
+        RunegemData runegemData = runegem.get(WotrDataComponentType.RUNEGEM_DATA);
         if (runegemData == null) {
-            return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
+            return this;
         }
-        Optional<Holder<Modifier>> modifierHolder = runegemData.getRandomModifierForItem(stack, level);
-        if (modifierHolder.isEmpty()) {
+        Optional<TieredModifier> tieredModifier = runegemData.getRandomTieredModifierForItem(stack, level,
+                existingModifiers);
+        if (tieredModifier.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("Failed to get random modifier for runegem: " + stack);
-            return new GearSocket(this.shape(), Optional.empty(), Optional.empty());
+            return this;
         }
-        return new GearSocket(this.shape(), Optional.of(ModifierInstance.of(modifierHolder.get(), level.random)),
+        return new GearSocket(this.shape(), Optional
+                .of(ModifierInstance.of(tieredModifier.get().modifier(), tieredModifier.get().tier(), level.random)),
                 Optional.of(runegemData));
     }
 }

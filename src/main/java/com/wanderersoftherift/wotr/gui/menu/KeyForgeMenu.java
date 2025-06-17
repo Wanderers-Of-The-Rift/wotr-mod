@@ -2,21 +2,16 @@ package com.wanderersoftherift.wotr.gui.menu;
 
 import com.wanderersoftherift.wotr.gui.menu.slot.EssenceInputSlot;
 import com.wanderersoftherift.wotr.gui.menu.slot.KeyOutputSlot;
-import com.wanderersoftherift.wotr.init.ModBlocks;
-import com.wanderersoftherift.wotr.init.ModDataComponentType;
-import com.wanderersoftherift.wotr.init.ModDataMaps;
-import com.wanderersoftherift.wotr.init.ModItems;
-import com.wanderersoftherift.wotr.init.ModMenuTypes;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
-import com.wanderersoftherift.wotr.item.essence.EssenceValue;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
-import com.wanderersoftherift.wotr.item.riftkey.ThemeRecipe;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
+import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
+import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.init.recipe.WotrRecipeTypes;
+import com.wanderersoftherift.wotr.item.crafting.EssenceRecipeInput;
+import com.wanderersoftherift.wotr.item.crafting.KeyForgeRecipe;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -28,12 +23,13 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
@@ -61,7 +57,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     }
 
     public KeyForgeMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
-        super(ModMenuTypes.KEY_FORGE_MENU.get(), containerId);
+        super(WotrMenuTypes.KEY_FORGE_MENU.get(), containerId);
         this.access = access;
         this.tierPercent = DataSlot.standalone();
         this.inputContainer = new SimpleContainer(5) {
@@ -145,7 +141,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(this.access, player, ModBlocks.KEY_FORGE.get());
+        return stillValid(this.access, player, WotrBlocks.KEY_FORGE.get());
     }
 
     @Override
@@ -154,46 +150,41 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     }
 
     private void update() {
-        int totalEssence = 0;
-        Object2IntMap<ResourceLocation> essenceMap = new Object2IntArrayMap<>();
-        for (int i = 0; i < inputContainer.getContainerSize(); i++) {
-            ItemStack input = inputContainer.getItem(i);
-            EssenceValue valueMap = input.getItemHolder().getData(ModDataMaps.ESSENCE_VALUE_DATA);
-            if (valueMap == null) {
-                continue;
+        access.execute((level, pos) -> {
+            List<ItemStack> inputs = new ArrayList<>();
+            for (int slot = 0; slot < inputContainer.getContainerSize(); slot++) {
+                if (!inputContainer.getItem(slot).isEmpty()) {
+                    inputs.add(inputContainer.getItem(slot));
+                }
             }
-            for (Object2IntMap.Entry<ResourceLocation> entry : valueMap.values().object2IntEntrySet()) {
-                essenceMap.mergeInt(entry.getKey(), entry.getIntValue() * input.getCount(), Integer::sum);
-                totalEssence += entry.getIntValue() * input.getCount();
-            }
-        }
-
-        Holder<RiftTheme> theme = calculateTheme(essenceMap);
-        updateTier(totalEssence);
-
-        updateOutput(theme);
+            EssenceRecipeInput recipeInput = new EssenceRecipeInput(inputs);
+            updateTier(recipeInput.getTotalEssence());
+            updateOutput(recipeInput);
+        });
     }
 
-    private Holder<RiftTheme> calculateTheme(Object2IntMap<ResourceLocation> essenceMap) {
-        List<ItemStack> inputs = new ArrayList<>();
-        for (int slot = 0; slot < inputContainer.getContainerSize(); slot++) {
-            if (!inputContainer.getItem(slot).isEmpty()) {
-                inputs.add(inputContainer.getItem(slot));
-            }
-        }
-
-        AtomicReference<Holder<RiftTheme>> riftThemeHolder = new AtomicReference<>();
+    private ItemStack applyKeyforgeRecipes(ItemStack riftKey, EssenceRecipeInput input) {
         access.execute((level, pos) -> {
-            riftThemeHolder.set(level.registryAccess()
-                    .lookupOrThrow(RegistryEvents.RIFT_THEME_RECIPE)
-                    .stream()
-                    .sorted(Comparator.comparingInt(ThemeRecipe::getPriority).reversed())
-                    .filter(x -> x.matches(inputs, essenceMap))
-                    .map(ThemeRecipe::getTheme)
-                    .findFirst()
-                    .orElse(null));
+            Object2IntMap<DataComponentType<?>> priorities = new Object2IntArrayMap<>();
+            Map<DataComponentType<?>, KeyForgeRecipe> recipes = new LinkedHashMap<>();
+
+            for (RecipeHolder<KeyForgeRecipe> recipeHolder : level.getServer()
+                    .getRecipeManager()
+                    .recipeMap()
+                    .byType(WotrRecipeTypes.KEY_FORGE_RECIPE.get())) {
+                KeyForgeRecipe recipe = recipeHolder.value();
+                if (priorities.getOrDefault(recipe.getOutputType(), Integer.MIN_VALUE) < recipe.getPriority()
+                        && recipe.matches(input, level)) {
+                    recipes.put(recipe.getOutputType(), recipe);
+                    priorities.put(recipe.getOutputType(), recipe.getPriority());
+                }
+            }
+
+            for (KeyForgeRecipe value : recipes.values()) {
+                value.apply(riftKey);
+            }
         });
-        return riftThemeHolder.get();
+        return riftKey;
     }
 
     private void updateTier(int totalEssence) {
@@ -211,23 +202,19 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         tierPercent.set(result);
     }
 
-    private void updateOutput(Holder<RiftTheme> theme) {
+    private void updateOutput(EssenceRecipeInput input) {
         int tier = tierPercent.get() / 100;
-        if ((tier == 0 || theme == null) && !resultContainer.isEmpty()) {
+        if (tier == 0 && !resultContainer.isEmpty()) {
             resultContainer.clearContent();
             return;
         }
 
-        if (tier > 0 && resultContainer.isEmpty()) {
-            ItemStack output = ModItems.RIFT_KEY.toStack();
+        if (tier > 0) {
+            ItemStack output = WotrItems.RIFT_KEY.toStack();
+            output.set(WotrDataComponentType.ITEM_RIFT_TIER, tier);
+            output = applyKeyforgeRecipes(output, input);
             resultContainer.setItem(0, output);
         }
-        resultContainer.getItem(0).applyComponents(buildKeyComponentPatch(tier, theme));
-    }
-
-    private DataComponentPatch buildKeyComponentPatch(int tier, Holder<RiftTheme> theme) {
-        RiftConfig config = new RiftConfig(tier, theme);
-        return DataComponentPatch.builder().set(ModDataComponentType.RIFT_CONFIG.get(), config).build();
     }
 
 }

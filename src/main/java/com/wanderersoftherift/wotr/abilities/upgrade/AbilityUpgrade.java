@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities.upgrade;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.RegistryEvents;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class AbilityUpgrade {
 
     public static final Codec<Holder<AbilityUpgrade>> REGISTRY_CODEC = RegistryFixedCodec
-            .create(RegistryEvents.ABILITY_UPGRADE_REGISTRY);
+            .create(WotrRegistries.Keys.ABILITY_UPGRADES);
 
     public static final Codec<AbilityUpgrade> CODEC = RecordCodecBuilder
             .create(instance -> instance

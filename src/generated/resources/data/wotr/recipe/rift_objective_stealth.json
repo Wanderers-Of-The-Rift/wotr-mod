@@ -1,0 +1,14 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:dark",
+      "minPercent": 5.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_objective",
+    "value": "wotr:stealth"
+  },
+  "priority": 1
+}

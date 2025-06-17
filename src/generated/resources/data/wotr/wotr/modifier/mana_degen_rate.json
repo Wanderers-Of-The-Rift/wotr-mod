@@ -1,0 +1,69 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:mana_degen_rate",
+          "id": "wotr:mana_degen_rate",
+          "max_roll": 0.05000000074505806,
+          "min_roll": 0.0,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:mana_degen_rate",
+          "id": "wotr:mana_degen_rate",
+          "max_roll": 0.10000000149011612,
+          "min_roll": 0.05000000074505806,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:mana_degen_rate",
+          "id": "wotr:mana_degen_rate",
+          "max_roll": 0.15000000596046448,
+          "min_roll": 0.10000000149011612,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:mana_degen_rate",
+          "id": "wotr:mana_degen_rate",
+          "max_roll": 0.20000000298023224,
+          "min_roll": 0.15000000596046448,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:mana_degen_rate",
+          "id": "wotr:mana_degen_rate",
+          "max_roll": 0.25,
+          "min_roll": 0.20000000298023224,
+          "operation": "add_multiplied_base"
+        }
+      ],
+      "tier": 5
+    }
+  ]
+}

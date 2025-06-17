@@ -4,7 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.wanderersoftherift.wotr.init.ModDataMaps;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -39,7 +39,7 @@ public class EssenceCommands extends BaseCommand {
             Gson gson = new Gson();
             gson.toJson(registry.stream()
                     .map(Item::builtInRegistryHolder)
-                    .filter(x -> x.getData(ModDataMaps.ESSENCE_VALUE_DATA) == null)
+                    .filter(x -> x.getData(WotrDataMaps.ESSENCE_VALUE_DATA) == null)
                     .map(Holder::getRegisteredName)
                     .toList(), writer);
         } catch (IOException e) {
@@ -52,7 +52,7 @@ public class EssenceCommands extends BaseCommand {
         Registry<Item> registry = cmd.getSource().getServer().registryAccess().lookupOrThrow(Registries.ITEM);
         List<ResourceLocation> types = registry.stream()
                 .map(Item::builtInRegistryHolder)
-                .map(x -> x.getData(ModDataMaps.ESSENCE_VALUE_DATA))
+                .map(x -> x.getData(WotrDataMaps.ESSENCE_VALUE_DATA))
                 .filter(Objects::nonNull)
                 .flatMap(x -> x.values().keySet().stream())
                 .distinct()
@@ -67,7 +67,7 @@ public class EssenceCommands extends BaseCommand {
 
             List<Holder.Reference<Item>> items = registry.stream().map(Item::builtInRegistryHolder).toList();
             for (var item : items) {
-                EssenceValue data = item.getData(ModDataMaps.ESSENCE_VALUE_DATA);
+                EssenceValue data = item.getData(WotrDataMaps.ESSENCE_VALUE_DATA);
                 if (data == null) {
                     continue;
                 }

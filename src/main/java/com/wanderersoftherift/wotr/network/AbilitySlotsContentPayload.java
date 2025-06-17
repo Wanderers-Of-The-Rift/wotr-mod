@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.init.ModAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -32,7 +32,7 @@ public record AbilitySlotsContentPayload(List<ItemStack> abilitySlots, int selec
     }
 
     public void handleOnClient(IPayloadContext context) {
-        AbilitySlots playerSlots = context.player().getData(ModAttachments.ABILITY_SLOTS);
+        AbilitySlots playerSlots = context.player().getData(WotrAttachments.ABILITY_SLOTS);
         for (int i = 0; i < abilitySlots.size() && i < playerSlots.getSlots(); i++) {
             playerSlots.setStackInSlot(i, abilitySlots.get(i));
         }
