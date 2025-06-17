@@ -273,7 +273,7 @@
       "wotr:fabric": 2
     },
     "minecraft:activator_rail": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:allium": {
       "wotr:plant": 2
@@ -572,7 +572,7 @@
       "wotr:earth": 1
     },
     "minecraft:clock": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:closed_eyeblossom": {
       "wotr:dark": 1,
@@ -621,10 +621,10 @@
       "wotr:water": 1
     },
     "minecraft:comparator": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:compass": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:composter": {
       "wotr:plant": 7
@@ -669,7 +669,7 @@
       "wotr:earth": 2
     },
     "minecraft:crafter": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:crafting_table": {
       "wotr:plant": 8
@@ -724,7 +724,7 @@
       "wotr:crystal": 4
     },
     "minecraft:daylight_detector": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:dead_brain_coral": {
       "wotr:plant": 1
@@ -807,7 +807,7 @@
       "wotr:earth": 1
     },
     "minecraft:detector_rail": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:diamond": {
       "wotr:crystal": 1
@@ -863,7 +863,7 @@
       "wotr:mind": 1
     },
     "minecraft:dispenser": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:dragon_breath": {
       "wotr:end": 1
@@ -883,7 +883,7 @@
       "wotr:earth": 2
     },
     "minecraft:dropper": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:dune_armor_trim_smithing_template": {
       "wotr:mind": 1
@@ -1050,7 +1050,7 @@
       "wotr:earth": 16
     },
     "minecraft:furnace_minecart": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:ghast_tear": {
       "wotr:death": 1,
@@ -1551,7 +1551,7 @@
       "wotr:plant": 16
     },
     "minecraft:observer": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:obsidian": {
       "wotr:earth": 4,
@@ -1648,7 +1648,7 @@
       "wotr:plant": 2
     },
     "minecraft:piston": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:podzol": {
       "wotr:earth": 2,
@@ -1756,7 +1756,7 @@
       "wotr:water": 4
     },
     "minecraft:powered_rail": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:prismarine": {
       "wotr:crystal": 4
@@ -1906,7 +1906,7 @@
       "wotr:energy": 1
     },
     "minecraft:repeater": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:resin_block": {
       "wotr:crystal": 9,
@@ -2115,7 +2115,7 @@
       "wotr:plant": 1
     },
     "minecraft:sticky_piston": {
-      "wotr:mechancial": 1
+      "wotr:mechanical": 1
     },
     "minecraft:stone_axe": {
       "wotr:death": 1,

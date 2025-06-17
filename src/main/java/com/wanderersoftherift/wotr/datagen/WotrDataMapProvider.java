@@ -56,7 +56,7 @@ public class WotrDataMapProvider extends DataMapProvider {
         ResourceLocation slime = WanderersOfTheRift.id("slime");
         ResourceLocation fabric = WanderersOfTheRift.id("fabric");
         ResourceLocation mind = WanderersOfTheRift.id("mind");
-        ResourceLocation mechanical = WanderersOfTheRift.id("mechancial");
+        ResourceLocation mechanical = WanderersOfTheRift.id("mechanical");
 
         // Voided
         ResourceLocation death = WanderersOfTheRift.id("death");
