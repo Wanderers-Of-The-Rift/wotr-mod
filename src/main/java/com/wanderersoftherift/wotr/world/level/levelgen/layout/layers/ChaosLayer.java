@@ -1,12 +1,13 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.layers;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 
 import java.util.ArrayList;
@@ -15,10 +16,11 @@ import java.util.Collections;
 public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
 
     private static final IntList MASKS;
-    private final RoomRandomizer roomRandomizer;
+    private final RoomRandomizer.Factory roomRandomizerFactory;
+    private volatile RoomRandomizer roomRandomizer;
 
-    public ChaosLayer(RoomRandomizer roomRandomizer) {
-        this.roomRandomizer = roomRandomizer;
+    public ChaosLayer(RoomRandomizer.Factory roomRandomizer) {
+        this.roomRandomizerFactory = roomRandomizer;
     }
 
     private RiftSpace nextChaoticSpace(
@@ -26,6 +28,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
             RandomSource randomSource,
             Vec3i roomPosition,
             LayeredRiftLayout.LayoutSection section) {
+
         var slices = new int[] { sliceBitmap(corridor, 0, roomPosition, section),
                 sliceBitmap(corridor, 1, roomPosition, section), sliceBitmap(corridor, 2, roomPosition, section) };
         if ((slices[0] & 0b00000_00000_00100_00000_00000) == 0) {
@@ -145,7 +148,15 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
     public void generateSection(
             LayeredRiftLayout.LayoutSection section,
             RandomSource source,
-            ArrayList<RiftSpace> allSpaces) {
+            ArrayList<RiftSpace> allSpaces,
+            MinecraftServer server) {
+        if (roomRandomizer == null) {
+            synchronized (this) {
+                if (roomRandomizer == null) {
+                    roomRandomizer = roomRandomizerFactory.createRandomizer(server);
+                }
+            }
+        }
         // if (allSpaces.isEmpty()) {
         var room = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
         room = room.offset(section.sectionShape().getBoxStart().getX() + 1, -2,

@@ -41,7 +41,8 @@ public record LegacyPerimeterGeneratable(BlockState perimeterBlock, CorridorVali
                     .filter(riftSpaceCorridor -> validator.validateCorridor(
                             riftSpaceCorridor.position().getX() + spaceOrigin.getX(),
                             riftSpaceCorridor.position().getY() + spaceOrigin.getY(),
-                            riftSpaceCorridor.position().getZ() + spaceOrigin.getZ(), riftSpaceCorridor.direction())
+                            riftSpaceCorridor.position().getZ() + spaceOrigin.getZ(), riftSpaceCorridor.direction(),
+                            world.getServer())
                     )
                     .toList();
             var hasCorridorNorth = corridors.stream().anyMatch((it) -> it.direction() == Direction.NORTH);

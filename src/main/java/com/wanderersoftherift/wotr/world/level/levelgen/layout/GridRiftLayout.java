@@ -4,12 +4,13 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.MinecraftServer;
 
 @Deprecated
 public class GridRiftLayout implements RiftLayout {
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos) {
+    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
         var gridX = chunkPos.getX() / 3;
         var gridZ = chunkPos.getZ() / 3;
         // space would have to be provided by RoomRandomizer for this to work properly
@@ -22,7 +23,7 @@ public class GridRiftLayout implements RiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d) {
+    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
         return true;
     }
 }

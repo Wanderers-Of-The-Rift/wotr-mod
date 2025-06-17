@@ -111,6 +111,15 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         }
     }
 
+    public static record Factory(ResourceLocation pool, RiftSpaceHolderFactory spaceHolderFactory)
+            implements RoomRandomizer.Factory {
+
+        @Override
+        public RoomRandomizer createRandomizer(MinecraftServer server) {
+            return new RoomRandomizerImpl(server, pool, spaceHolderFactory);
+        }
+    }
+
     public static interface RiftSpaceHolderFactory {
         RiftSpaceHolder create(List<RiftGeneratable> templates, RoomConverter converter);
     }

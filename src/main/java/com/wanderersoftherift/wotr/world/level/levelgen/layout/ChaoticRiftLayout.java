@@ -1,17 +1,18 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.LegacyRoomRandomizer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.LegacyRoomRandomizer;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 import org.joml.Vector2i;
@@ -53,7 +54,7 @@ public class ChaoticRiftLayout implements RiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos) {
+    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
         return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
     }
 
@@ -84,7 +85,7 @@ public class ChaoticRiftLayout implements RiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d) {
+    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
         return hasCorridorSingle(x, y, z, d)
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }

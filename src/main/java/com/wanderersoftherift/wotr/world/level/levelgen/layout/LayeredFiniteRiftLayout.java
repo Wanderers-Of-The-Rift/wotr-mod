@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 
@@ -30,6 +31,8 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     private final CompletableFuture<Unit> generationCompletion = new CompletableFuture<>();
 
     private final List<LayoutLayer> layers;
+
+    private MinecraftServer serverCache;
 
     public LayeredFiniteRiftLayout(FiniteRiftShape riftShape, int seed, List<LayoutLayer> layers) {
         layerCount = riftShape.getBoxSize().getY();
@@ -55,22 +58,30 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos) {
-        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
+    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
+        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ(), server);
     }
 
-    public RiftSpace getChunkSpace(int x, int y, int z) {
+    public RiftSpace getChunkSpace(int x, int y, int z, MinecraftServer server) {
         var origin = riftShape.getBoxStart();
         var rand = ProcessorUtil.createRandom(
                 ProcessorUtil.getRandomSeed(new BlockPos(origin.getX(), 0, origin.getZ()), seed));
-        tryGenerate(rand);
+        tryGenerate(rand, server);
         return getSpaceAt(x, y, z);
     }
 
-    public void tryGenerate(RandomSource random) {
-        if (generatorThread.get() == null && random != null
-                && generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
-            generate(random);
+    public void tryGenerate(RandomSource random, MinecraftServer server) {
+        if (generatorThread.get() == null && random != null) {
+            if (server == null) {
+                if (serverCache == null) {
+                    return;
+                }
+                server = serverCache;
+            }
+            serverCache = server;
+            if (generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
+                generate(random, server);
+            }
         }
         try {
             generationCompletion.get();
@@ -79,10 +90,10 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         }
     }
 
-    public void generate(RandomSource randomSource) {
+    public void generate(RandomSource randomSource, MinecraftServer server) {
         var allSpaces = new ArrayList<RiftSpace>();
         for (var layer : layers) {
-            layer.generateSection(this, randomSource, allSpaces);
+            layer.generateSection(this, randomSource, allSpaces, server);
         }
         generationCompletion.complete(Unit.INSTANCE);
     }
@@ -151,8 +162,8 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         return emptySpaces;
     }
 
-    private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
-        var space = getChunkSpace(x, y, z);
+    private boolean hasCorridorSingle(int x, int y, int z, Direction d, MinecraftServer server) {
+        var space = getChunkSpace(x, y, z, server);
         if (space == null || space instanceof VoidRiftSpace) {
             return false;
         }
@@ -170,9 +181,9 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d) {
-        return hasCorridorSingle(x, y, z, d)
-                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
+    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
+        return hasCorridorSingle(x, y, z, d, server)
+                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite(), server);
     }
 
     @Override
