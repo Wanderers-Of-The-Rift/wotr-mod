@@ -1,21 +1,21 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_gravel": {
+    "has_chorus_fruit": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:red_sand"
+            "items": "minecraft:chorus_fruit"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_honeycomb": {
+    "has_gravel": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:honeycomb"
+            "items": "minecraft:red_sand"
           }
         ]
       },
@@ -32,7 +32,7 @@
     [
       "has_the_recipe",
       "has_gravel",
-      "has_honeycomb"
+      "has_chorus_fruit"
     ]
   ],
   "rewards": {

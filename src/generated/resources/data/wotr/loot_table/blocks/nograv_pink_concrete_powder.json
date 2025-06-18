@@ -3,15 +3,25 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "minecraft:pink_concrete_powder"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "wotr:rift_level_check",
+                  "min_tier": 1
+                }
+              ],
+              "name": "minecraft:pink_concrete_powder"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "wotr:nograv_pink_concrete_powder"
+            }
+          ]
         }
       ],
       "rolls": 1.0
