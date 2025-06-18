@@ -327,7 +327,7 @@ public final class RiftLevelManager {
 
     private static RiftLayout.Factory defaultLayout(int tier, int seed) {
 
-        var factory = new LayeredInfiniteRiftLayout.Factory(new DiamondRiftShape(30, 1.0), seed, List.of(
+        var factory = new LayeredInfiniteRiftLayout.Factory(new DiamondRiftShape(4+tier*3, 1.0), seed, List.of(
                 new BoxedLayer.Factory(new Vec3i(-10, -2, -10), new Vec3i(20, 4, 20), List.of(
                         new PredefinedRoomLayer.Factory(
                                 new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
