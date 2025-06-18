@@ -1,21 +1,21 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_chorus_fruit": {
+    "has_brown_concrete_powder": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:chorus_fruit"
+            "items": "minecraft:brown_concrete_powder"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_gravel": {
+    "has_chorus_fruit": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:brown_concrete_powder"
+            "items": "minecraft:chorus_fruit"
           }
         ]
       },
@@ -31,7 +31,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_gravel",
+      "has_brown_concrete_powder",
       "has_chorus_fruit"
     ]
   ],

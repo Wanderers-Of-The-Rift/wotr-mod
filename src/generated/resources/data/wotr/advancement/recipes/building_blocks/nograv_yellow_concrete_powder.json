@@ -11,7 +11,13 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_gravel": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wotr:nograv_yellow_concrete_powder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_yellow_concrete_powder": {
       "conditions": {
         "items": [
           {
@@ -20,18 +26,12 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "wotr:nograv_yellow_concrete_powder"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_gravel",
+      "has_yellow_concrete_powder",
       "has_chorus_fruit"
     ]
   ],

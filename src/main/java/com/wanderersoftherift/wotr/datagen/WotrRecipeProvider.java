@@ -145,7 +145,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.RED_SAND)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.RED_SAND))
+                .unlockedBy("has_red_sand", this.has(Items.RED_SAND))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -156,7 +156,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.WHITE_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.WHITE_CONCRETE_POWDER))
+                .unlockedBy("has_white_concrete_powder", this.has(Items.WHITE_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -167,7 +167,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.ORANGE_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.ORANGE_CONCRETE_POWDER))
+                .unlockedBy("has_orange_concrete_powder", this.has(Items.ORANGE_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -178,7 +178,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.MAGENTA_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.MAGENTA_CONCRETE_POWDER))
+                .unlockedBy("has_magenta_concrete_powder", this.has(Items.MAGENTA_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -189,7 +189,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.LIGHT_BLUE_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.LIGHT_BLUE_CONCRETE_POWDER))
+                .unlockedBy("has_light_blue_concrete_powder", this.has(Items.LIGHT_BLUE_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -200,7 +200,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.YELLOW_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.YELLOW_CONCRETE_POWDER))
+                .unlockedBy("has_yellow_concrete_powder", this.has(Items.YELLOW_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -210,7 +210,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.LIME_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.LIME_CONCRETE_POWDER))
+                .unlockedBy("has_lime_concrete_powder", this.has(Items.LIME_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -220,7 +220,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.PINK_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.PINK_CONCRETE_POWDER))
+                .unlockedBy("has_pink_concrete_powder", this.has(Items.PINK_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -230,7 +230,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.GRAY_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.GRAY_CONCRETE_POWDER))
+                .unlockedBy("has_gray_concrete_powder", this.has(Items.GRAY_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -241,7 +241,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.LIGHT_GRAY_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.LIGHT_GRAY_CONCRETE_POWDER))
+                .unlockedBy("has_light_gray_concrete_powder", this.has(Items.LIGHT_GRAY_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -251,7 +251,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.CYAN_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.CYAN_CONCRETE_POWDER))
+                .unlockedBy("has_cyan_concrete_powder", this.has(Items.CYAN_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -262,7 +262,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.PURPLE_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.PURPLE_CONCRETE_POWDER))
+                .unlockedBy("has_purple_concrete_powder", this.has(Items.PURPLE_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -272,7 +272,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.BLUE_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.BLUE_CONCRETE_POWDER))
+                .unlockedBy("has_blue_concrete_powder", this.has(Items.BLUE_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -283,7 +283,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.BROWN_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.BROWN_CONCRETE_POWDER))
+                .unlockedBy("has_brown_concrete_powder", this.has(Items.BROWN_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -294,7 +294,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.GREEN_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.GREEN_CONCRETE_POWDER))
+                .unlockedBy("has_green_concrete_powder", this.has(Items.GREEN_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -304,7 +304,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.RED_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.RED_CONCRETE_POWDER))
+                .unlockedBy("has_red_concrete_powder", this.has(Items.RED_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
@@ -315,7 +315,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.BLACK_CONCRETE_POWDER)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.BLACK_CONCRETE_POWDER))
+                .unlockedBy("has_black_concrete_powder", this.has(Items.BLACK_CONCRETE_POWDER))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
