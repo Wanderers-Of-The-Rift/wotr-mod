@@ -359,13 +359,14 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
                 .id("textures/gui/container/ability_bench/selected_choice_button.png");
         private static final ResourceLocation HOVERED_CHOICE_BUTTON = WanderersOfTheRift
                 .id("textures/gui/container/ability_bench/hovered_choice_button.png");
+        private static final int INDICATOR_SIZE = 7;
 
         private final int choice;
         private final int selection;
         private final Supplier<AbilityUpgradePool> upgradePool;
 
         ChoiceButton(int x, int y, int choice, int selection, Supplier<AbilityUpgradePool> upgradePool) {
-            super(x, y, 20, 20, Component.empty());
+            super(x, y, 22, 22, Component.empty());
             this.choice = choice;
             this.selection = selection;
             this.upgradePool = upgradePool;
@@ -414,6 +415,12 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
             AbilityUpgrade upgrade = pool.getChoiceOptions(choice).get(selection).value();
             guiGraphics.blit(RenderType::guiTextured, upgrade.icon(), this.getX() + (width - ICON_SIZE) / 2,
                     this.getY() + (height - ICON_SIZE) / 2, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            ResourceLocation indicator = upgrade.indicator().getIcon();
+            if (indicator != null) {
+                guiGraphics.blit(RenderType::guiTextured, indicator, this.getX() + (width - ICON_SIZE) / 2,
+                        this.getY() + (height - ICON_SIZE) / 2, 0, 0, INDICATOR_SIZE, INDICATOR_SIZE, INDICATOR_SIZE,
+                        INDICATOR_SIZE);
+            }
         }
 
         public boolean isSelected() {

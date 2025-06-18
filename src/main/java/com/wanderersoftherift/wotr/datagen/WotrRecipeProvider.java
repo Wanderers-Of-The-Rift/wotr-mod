@@ -135,7 +135,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("processor")))
                 .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("processor")).setMinPercent(1f).build())
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("processor")).setMin(1).build())
                 .save(output, WanderersOfTheRift.id("rift_theme_processor"));
 
         KeyForgeRecipe
@@ -157,21 +157,22 @@ public class WotrRecipeProvider extends RecipeProvider {
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("noir")))
-                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("light")).setMinPercent(50f).build())
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("light")).setMinPercent(25f).build())
                 .setPriority(10)
                 .save(output, WanderersOfTheRift.id("rift_theme_noir"));
 
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("mesa")))
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("earth")).setMinPercent(50f).build())
+                .setPriority(10)
+                .save(output, WanderersOfTheRift.id("rift_theme_mesa"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("buzzy_bees")))
                 .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("life")).setMinPercent(25F).build())
-                .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("water")).setMinPercent(5F).build())
-                .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("order")).setMinPercent(5F).build())
-                .withEssenceReq(
-                        new EssencePredicate.Builder(WanderersOfTheRift.id("plant")).setMinPercent(15F).build())
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("honey")).setMinPercent(25F).build())
                 .setPriority(10)
                 .save(output, WanderersOfTheRift.id("rift_theme_buzzy_bees"));
 

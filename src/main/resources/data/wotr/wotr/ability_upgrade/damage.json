@@ -1,6 +1,7 @@
 {
   "id" : "wotr:damage",
-  "icon" : "wotr:textures/item/runegem/shape/diamond.png",
+  "icon" : "wotr:textures/ability/upgrade/damage.png",
+  "indicator" : "positive_increase",
   "maxCount" : 5,
   "effects": [
     {

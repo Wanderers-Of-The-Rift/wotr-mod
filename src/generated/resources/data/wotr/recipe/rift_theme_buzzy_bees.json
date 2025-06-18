@@ -2,20 +2,8 @@
   "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:life",
+      "essenceType": "wotr:honey",
       "minPercent": 25.0
-    },
-    {
-      "essenceType": "wotr:water",
-      "minPercent": 5.0
-    },
-    {
-      "essenceType": "wotr:order",
-      "minPercent": 5.0
-    },
-    {
-      "essenceType": "wotr:plant",
-      "minPercent": 15.0
     }
   ],
   "output": {

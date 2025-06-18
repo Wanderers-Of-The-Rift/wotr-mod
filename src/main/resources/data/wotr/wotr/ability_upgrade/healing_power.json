@@ -1,6 +1,7 @@
 {
   "id" : "wotr:healing_power",
-  "icon" : "wotr:textures/item/runegem/shape/heart.png",
+  "icon" : "wotr:textures/ability/upgrade/heal.png",
+  "indicator" : "positive_increase",
   "maxCount" : 5,
   "effects": [
     {

@@ -1,6 +1,7 @@
 {
   "id" : "wotr:projectile_speed",
-  "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "icon" : "wotr:textures/ability/upgrade/projectile-speed.png",
+  "indicator" : "positive_increase",
   "maxCount" : 10,
   "effects": [
     {

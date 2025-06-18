@@ -1,6 +1,7 @@
 {
   "id": "wotr:mana_cost",
-  "icon" : "wotr:textures/item/runegem/shape/pentagon.png",
+  "icon" : "wotr:textures/ability/upgrade/mana.png",
+  "indicator" : "positive_decrease",
   "maxCount" : 5,
   "effects": [
     {

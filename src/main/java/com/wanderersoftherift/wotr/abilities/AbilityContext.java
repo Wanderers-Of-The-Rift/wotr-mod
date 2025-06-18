@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The context for processing an ability.
@@ -19,7 +20,7 @@ import net.minecraft.world.level.Level;
  * @param caster      The caster of the ability
  * @param abilityItem The item holding the ability (and any upgrades)
  */
-public record AbilityContext(LivingEntity caster, ItemStack abilityItem) {
+public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem) {
 
     /**
      * @return The level the ability was used within

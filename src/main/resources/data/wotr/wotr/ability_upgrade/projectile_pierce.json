@@ -1,6 +1,7 @@
 {
-  "id" : "wotr:projectile_count",
+  "id" : "wotr:projectile_pierce",
   "icon" : "wotr:textures/item/runegem/shape/square.png",
+  "indicator" : "positive_increase",
   "maxCount" : 4,
   "effects": [
     {

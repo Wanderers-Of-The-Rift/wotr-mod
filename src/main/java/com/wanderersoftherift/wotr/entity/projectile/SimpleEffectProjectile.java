@@ -416,13 +416,12 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         }
 
         if (this.level() instanceof ServerLevel serverLevel && effect != null) {
-            LivingEntity caster = null;
-            if (owner instanceof LivingEntity livingOwner) {
-                caster = livingOwner;
+            if (!(owner instanceof LivingEntity livingOwner)) {
+                return;
             }
             // TODO: capture and carry across ability item
             effect.applyDelayed(serverLevel, entity, List.of(entity.blockPosition()),
-                    new AbilityContext(caster, ItemStack.EMPTY));
+                    new AbilityContext(livingOwner, ItemStack.EMPTY));
         }
 
         if (this.getPierceLevel() <= 0) {
@@ -459,12 +458,11 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         this.lastState = this.level().getBlockState(result.getBlockPos());
         super.onHitBlock(result);
         ItemStack itemstack = this.getWeaponItem();
-        if (this.level() instanceof ServerLevel serverLevel) {
-            if (effect != null) {
-                // TODO: capture and carry across ability item
-                effect.applyDelayed(serverLevel, null, List.of(result.getBlockPos()),
-                        new AbilityContext((LivingEntity) this.getOwner(), ItemStack.EMPTY));
-            }
+        if (effect != null && this.level() instanceof ServerLevel serverLevel
+                && this.getOwner() instanceof LivingEntity caster) {
+            // TODO: capture and carry across ability item
+            effect.applyDelayed(serverLevel, null, List.of(result.getBlockPos()),
+                    new AbilityContext(caster, ItemStack.EMPTY));
         }
 
         Vec3 vec31 = this.getDeltaMovement();

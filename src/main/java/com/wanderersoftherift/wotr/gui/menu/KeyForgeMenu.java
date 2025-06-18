@@ -21,7 +21,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +50,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     private final Container inputContainer;
     private final ResultContainer resultContainer;
     private final DataSlot tierPercent;
+    private final QuickMover mover;
 
     public KeyForgeMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
@@ -79,6 +79,15 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         addStandardInventorySlots(playerInventory, 8, 114);
 
         addDataSlot(tierPercent);
+
+        mover = QuickMover.create(this)
+                .forPlayerSlots(INPUT_SLOTS + OUTPUT_SLOTS)
+                .tryMoveTo(0, INPUT_SLOTS)
+                .forSlots(0, INPUT_SLOTS)
+                .tryMoveToPlayer()
+                .forSlot(INPUT_SLOTS)
+                .tryMoveToPlayer()
+                .build();
     }
 
     public int getTierPercent() {
@@ -96,47 +105,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack slotStack = slot.getItem();
-        ItemStack resultStack = slotStack.copy();
-        if (slot instanceof KeyOutputSlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS,
-                    true)) {
-                return ItemStack.EMPTY;
-            }
-            slot.onQuickCraft(slotStack, resultStack);
-        } else if (slot instanceof EssenceInputSlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS,
-                    true)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false)) {
-                // Move from player inventory to hotbar
-                if (index < INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS) {
-                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS,
-                            INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_SLOTS, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                // Move from hotbar to player inventory
-                else if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + OUTPUT_SLOTS,
-                        INPUT_SLOTS + OUTPUT_SLOTS + PLAYER_INVENTORY_SLOTS, false)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        }
-
-        if (slotStack.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-
-        return resultStack;
+        return mover.quickMove(player, index);
     }
 
     @Override

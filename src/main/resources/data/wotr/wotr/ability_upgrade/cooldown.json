@@ -1,6 +1,7 @@
 {
   "id" : "wotr:cooldown",
-  "icon" : "wotr:textures/item/runegem/shape/triangle.png",
+  "icon" : "wotr:textures/ability/upgrade/cooldown.png",
+  "indicator" : "positive_decrease",
   "maxCount" : 5,
   "effects": [
     {

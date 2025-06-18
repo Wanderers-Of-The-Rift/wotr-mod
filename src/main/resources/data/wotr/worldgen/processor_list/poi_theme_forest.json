@@ -7,11 +7,11 @@
                     "input_state": "wotr:processor_block_1",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:oak_wood",
+                            "output_state": "minecraft:stripped_oak_wood",
                             "step_size": 0.5
                         },
                         {
-                            "output_state": "minecraft:dark_oak_wood",
+                            "output_state": "minecraft:stripped_dark_oak_wood",
                             "step_size": 0.4
                         },
                         {
@@ -712,12 +712,8 @@
                     "input_state": "wotr:processor_block_6_directional_pillar",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:bamboo_block",
-                            "step_size": 0.6
-                        },
-                        {
-                            "output_state": "minecraft:stripped_bamboo_block",
-                            "step_size": 0.4
+                            "output_state": "minecraft:mangrove_log",
+                            "step_size": 1
                         }
                     ]
                 },
@@ -798,7 +794,7 @@
                         {
                             "output_state": {
                                 "type": "wotr:blockstate",
-                                "Name": "minecraft:jungle_leaves",
+                                "Name": "minecraft:mangrove_leaves",
                                 "Properties": {
                                     "persistent": "true"
                                 }

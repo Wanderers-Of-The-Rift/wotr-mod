@@ -4,11 +4,14 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
 import com.wanderersoftherift.wotr.gui.menu.slot.AbilitySlot;
-import com.wanderersoftherift.wotr.gui.menu.slot.SkillThreadSlot;
+import com.wanderersoftherift.wotr.gui.menu.slot.LargeSlotItemHandler;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentPatch;
@@ -19,7 +22,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -39,23 +42,43 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
+    private final DataSlot canLevel;
+    private final QuickMover mover;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL,
-                new ItemStackHandler(AbilitySlots.ABILITY_BAR_SIZE));
+        this(containerId, playerInventory,
+                new LargeCountItemHandler(WotrItems.SKILL_THREAD.toStack(1), AbilityBenchBlockEntity.THREAD_STORAGE),
+                ContainerLevelAccess.NULL, new ItemStackHandler(AbilitySlots.ABILITY_BAR_SIZE));
     }
 
-    public AbilityBenchMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
-            IItemHandler abilities) {
+    public AbilityBenchMenu(int containerId, Inventory playerInventory, IItemHandler persistentStore,
+            ContainerLevelAccess access, IItemHandler abilities) {
         super(WotrMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
         this.access = access;
         this.inputContainer = new SimpleContainer(INPUT_SLOTS);
         inputContainer.addListener(this::onAbilitySlotChanged);
         addSlot(new AbilitySlot(inputContainer, 0, 32, 17));
-        addSlot(new SkillThreadSlot(inputContainer, 1, 297, 7));
+        addSlot(new LargeSlotItemHandler(persistentStore, 0, 297, 7));
 
         addStandardInventorySlots(playerInventory, 32, 154);
         addPlayerAbilitySlots(abilities, 4, 46);
+
+        canLevel = DataSlot.standalone();
+        addDataSlot(canLevel);
+
+        mover = QuickMover.create(this)
+                .forPlayerSlots(INPUT_SLOTS)
+                .tryMoveTo(0, INPUT_SLOTS)
+                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+                .forSlot(0)
+                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+                .tryMoveToPlayer()
+                .forSlot(1)
+                .tryMoveToPlayer()
+                .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+                .tryMoveTo(0)
+                .tryMoveToPlayer()
+                .build();
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -82,6 +105,18 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                                 AbilityUpgradePool.SELECTION_PER_LEVEL)
                         .toImmutable();
                 item.set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
+            }
+
+            if (item.isEmpty()) {
+                canLevel.set(0);
+            } else {
+                AbilityUpgradePool upgradePool = getUpgradePool();
+                Holder<AbstractAbility> ability = getAbility();
+                if (upgradePool.canLevelUp(level.registryAccess(), ability.value())) {
+                    canLevel.set(1);
+                } else {
+                    canLevel.set(0);
+                }
             }
         });
     }
@@ -131,19 +166,18 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      * @return Whether the ability could be leveled up (ignoring currency availability)
      */
     public boolean canLevelUp() {
-        AbilityUpgradePool pool = getUpgradePool();
-        if (pool != null) {
-            return pool.getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size();
-        }
-        return false;
+        return canLevel.get() == 1;
     }
 
     /**
      * @return How much currency is required for the next level
      */
     public int costForNextLevel() {
+        if (!canLevelUp()) {
+            return 0;
+        }
         AbilityUpgradePool pool = getUpgradePool();
-        if (pool != null) {
+        if (pool != null && pool.getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()) {
             return AbilityUpgradePool.COST_PER_LEVEL.getInt(pool.getChoiceCount());
         }
         return 65;
@@ -166,11 +200,17 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 return;
             }
             inputContainer.getItem(1).shrink(cost);
-            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL,
-                    pool.getMutable()
-                            .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
-                                    AbilityUpgradePool.SELECTION_PER_LEVEL)
-                            .toImmutable());
+            AbilityUpgradePool updatedPool = pool.getMutable()
+                    .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
+                            AbilityUpgradePool.SELECTION_PER_LEVEL)
+                    .toImmutable();
+            getAbilityItem().set(WotrDataComponentType.ABILITY_UPGRADE_POOL, updatedPool);
+
+            if (updatedPool.canLevelUp(serverLevel.registryAccess(), getAbility().value())) {
+                canLevel.set(1);
+            } else {
+                canLevel.set(0);
+            }
         });
     }
 
@@ -229,59 +269,11 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack slotStack = slot.getItem();
-        ItemStack resultStack = slotStack.copy();
-        if (slot instanceof AbilitySlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_SLOTS,
-                    INPUT_SLOTS + PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, false)) {
-                if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, true)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-            slot.onQuickCraft(slotStack, resultStack);
-        } else if (slot instanceof SkillThreadSlot) {
-            if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_SLOTS, true)) {
-                return ItemStack.EMPTY;
-            }
-            slot.onQuickCraft(slotStack, resultStack);
-        } else if (index < INPUT_SLOTS + PLAYER_SLOTS) {
-            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false) && !this.moveItemStackTo(slotStack,
-                    INPUT_SLOTS + PLAYER_SLOTS, PLAYER_SLOTS + AbilitySlots.ABILITY_BAR_SIZE, true)) {
-                // Move from player inventory to hotbar
-                if (index < INPUT_SLOTS + PLAYER_INVENTORY_SLOTS) {
-                    if (!this.moveItemStackTo(slotStack, INPUT_SLOTS + PLAYER_INVENTORY_SLOTS,
-                            INPUT_SLOTS + PLAYER_SLOTS, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                // Move from hotbar to player inventory
-                else if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, INPUT_SLOTS + PLAYER_INVENTORY_SLOTS, false)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        } else {
-            if (!this.moveItemStackTo(slotStack, 0, INPUT_SLOTS, false)) {
-                if (!this.moveItemStackTo(slotStack, INPUT_SLOTS, PLAYER_SLOTS, true)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        }
-        if (slotStack.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-
-        return resultStack;
+        return mover.quickMove(player, index);
     }
 
     @Override
     public boolean stillValid(@NotNull Player player) {
         return stillValid(this.access, player, WotrBlocks.ABILITY_BENCH.get());
     }
-
 }

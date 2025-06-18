@@ -144,6 +144,19 @@ public class AbilityUpgradePool {
     }
 
     /**
+     * Checks if it is still possible to level up this ability - even if the ability is not max level there might not be
+     * enough upgrades to continue to level it.
+     * 
+     * @param registryAccess
+     * @param ability
+     * @return Whether it still possible to level up this ability
+     */
+    public boolean canLevelUp(RegistryAccess registryAccess, AbstractAbility ability) {
+        return getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()
+                && !determineChoices(registryAccess, ability, choices).isEmpty();
+    }
+
+    /**
      * @return A mutable AbilityUpgradePool for modification
      */
     public AbilityUpgradePool.Mutable getMutable() {
@@ -237,7 +250,8 @@ public class AbilityUpgradePool {
                 int count,
                 RandomSource random,
                 int optionCount) {
-            Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability);
+            Object2IntMap<Holder<AbilityUpgrade>> availableUpgrades = determineChoices(registryAccess, ability,
+                    choices);
 
             for (int i = 0; i < count; i++) {
                 ObjectList<Holder<AbilityUpgrade>> upgradeSet = new ObjectArrayList<>(availableUpgrades.keySet());
@@ -255,27 +269,29 @@ public class AbilityUpgradePool {
             return this;
         }
 
-        private Object2IntMap<Holder<AbilityUpgrade>> determineChoices(
-                RegistryAccess registryAccess,
-                AbstractAbility ability) {
-            Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(WotrRegistries.Keys.ABILITY_UPGRADES);
-            Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
-                    .filter(x -> isRelevant(x, ability))
-                    .map(upgrades::wrapAsHolder)
-                    .collect(
-                            Collectors.toMap(x -> x, x -> x.value().maxCount(), Integer::sum, Object2IntArrayMap::new));
-            choices.forEach(
-                    options -> options.forEach((item) -> availableUpgrades.mergeInt(item, 0, (a, b) -> a + b - 1)));
-            return availableUpgrades;
-        }
+    }
 
-        private boolean isRelevant(AbilityUpgrade upgrade, AbstractAbility ability) {
-            for (AbstractModifierEffect modifierEffect : upgrade.modifierEffects()) {
-                if (!ability.isRelevantModifier(modifierEffect)) {
-                    return false;
-                }
+    private static Object2IntMap<Holder<AbilityUpgrade>> determineChoices(
+            RegistryAccess registryAccess,
+            AbstractAbility ability,
+            List<List<Holder<AbilityUpgrade>>> existingChoices) {
+        Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(WotrRegistries.Keys.ABILITY_UPGRADES);
+        Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
+                .filter(x -> isRelevant(x, ability))
+                .map(upgrades::wrapAsHolder)
+                .collect(
+                        Collectors.toMap(x -> x, x -> x.value().maxCount(), Integer::sum, Object2IntArrayMap::new));
+        existingChoices.forEach(
+                options -> options.forEach((item) -> availableUpgrades.mergeInt(item, 0, (a, b) -> a + b - 1)));
+        return availableUpgrades;
+    }
+
+    private static boolean isRelevant(AbilityUpgrade upgrade, AbstractAbility ability) {
+        for (AbstractModifierEffect modifierEffect : upgrade.modifierEffects()) {
+            if (!ability.isRelevantModifier(modifierEffect)) {
+                return false;
             }
-            return true;
         }
+        return true;
     }
 }

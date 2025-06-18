@@ -632,7 +632,7 @@
                     "input_state": "wotr:processor_block_6_directional_pillar",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:pale_oak_planks",
+                            "output_state": "minecraft:stripped_pale_oak_log",
                             "step_size": 1.0
                         }
                     ]
@@ -704,8 +704,14 @@
                     "input_state": "wotr:processor_block_6_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:white_stained_glass",
-                            "step_size": 1.0
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:pale_oak_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
+                            "step_size": 1
                         }
                     ]
                 },

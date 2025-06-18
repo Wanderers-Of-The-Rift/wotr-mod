@@ -781,8 +781,14 @@
                     "input_state": "wotr:processor_block_6_glass",
                     "output_steps": [
                         {
-                            "output_state": "minecraft:scaffolding",
-                            "step_size": 1.0
+                            "output_state": {
+                                "type": "wotr:blockstate",
+                                "Name": "minecraft:birch_leaves",
+                                "Properties": {
+                                    "persistent": "true"
+                                }
+                            },
+                            "step_size": 1
                         }
                     ]
                 },

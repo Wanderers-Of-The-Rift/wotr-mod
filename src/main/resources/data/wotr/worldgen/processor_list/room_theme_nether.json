@@ -665,7 +665,7 @@
           "input_state": "wotr:processor_block_6_directional_pillar",
           "output_steps": [
             {
-              "output_state": "minecraft:warped_stem",
+              "output_state": "minecraft:warped_hyphae",
               "step_size": 1
             }
           ]
@@ -737,12 +737,8 @@
           "input_state": "wotr:processor_block_6_glass",
           "output_steps": [
             {
-              "output_state": "minecraft:gray_stained_glass",
-              "step_size": 0.7
-            },
-            {
-              "output_state": "minecraft:black_stained_glass",
-              "step_size": 0.3
+              "output_state": "minecraft:warped_wart_block",
+              "step_size": 1
             }
           ]
         },
