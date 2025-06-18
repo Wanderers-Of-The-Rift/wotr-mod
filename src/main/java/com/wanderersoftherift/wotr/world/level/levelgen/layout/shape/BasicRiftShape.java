@@ -1,6 +1,17 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.shape;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 public class BasicRiftShape implements RiftShape {
+
+    public static final MapCodec<BasicRiftShape> CODEC = RecordCodecBuilder
+            .mapCodec(it -> it.point(new BasicRiftShape()));
+
+    @Override
+    public MapCodec<? extends RiftShape> codec() {
+        return CODEC;
+    }
 
     @Override
     public double chaosiveness(double x, double z) {

@@ -1,5 +1,8 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
@@ -113,6 +116,14 @@ public class RoomRandomizerImpl implements RoomRandomizer {
 
     public static record Factory(ResourceLocation pool, RiftSpaceHolderFactory spaceHolderFactory)
             implements RoomRandomizer.Factory {
+
+        public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
+                ResourceLocation.CODEC.fieldOf("template_pool").forGetter(Factory::pool),
+                Codec.BOOL.fieldOf("is_single_size")
+                        .forGetter(
+                                it2 -> it2.spaceHolderFactory == RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY))
+                .apply(it, (a, b) -> new Factory(a,
+                        b ? SINGLE_SIZE_SPACE_HOLDER_FACTORY : MULTI_SIZE_SPACE_HOLDER_FACTORY)));
 
         @Override
         public RoomRandomizer createRandomizer(MinecraftServer server) {

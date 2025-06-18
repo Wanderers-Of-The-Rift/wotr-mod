@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.MinecraftServer;
 import org.joml.Vector2i;
 
 @Deprecated
@@ -18,7 +17,7 @@ public class GridTunnelRiftLayout implements RiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
+    public RiftSpace getChunkSpace(Vec3i chunkPos) {
         var gridX = Math.floorDiv(chunkPos.getX(), 3);
         var gridZ = Math.floorDiv(chunkPos.getZ(), 3);
 
@@ -47,7 +46,7 @@ public class GridTunnelRiftLayout implements RiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
         return true;
     }
 }

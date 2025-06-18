@@ -12,12 +12,21 @@ import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.BoxedLayer;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -310,7 +319,29 @@ public final class RiftLevelManager {
         var random = RandomSource.create();
         int seed = baseConfig.seed().orElseGet(random::nextInt);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, random));
-        return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(), Optional.of(seed));
+        return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
+                baseConfig.layout().isPresent()?baseConfig.layout():Optional.of(defaultLayout(baseConfig.tier(), seed)), Optional.of(seed));
+    }
+
+    private static RiftLayout.Factory defaultLayout(int tier, int seed) {
+
+        var factory = new LayeredInfiniteRiftLayout.Factory(new BasicRiftShape(), seed, List.of(
+                new BoxedLayer.Factory(new Vec3i(-10, -2, -10), new Vec3i(20, 4, 20), List.of(
+                        new PredefinedRoomLayer.Factory(
+                                new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
+                                        RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
+                                new Vec3i(-1, -1, -1)),
+                        new RingLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_stable"),
+                                RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5),
+                        new RingLayer.Factory(
+                                new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_unstable"),
+                                        RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
+                                10),
+                        new ChaosLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
+                                RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
+                ))
+        ));
+        return factory;
     }
 
     private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld, int layerCount, RiftConfig config) {

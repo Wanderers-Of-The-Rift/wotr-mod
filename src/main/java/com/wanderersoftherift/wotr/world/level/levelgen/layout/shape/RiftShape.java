@@ -1,10 +1,17 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.shape;
 
-import net.minecraft.core.Vec3i;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 
 import static java.lang.Math.abs;
 
 public interface RiftShape {
+
+    Codec<RiftShape> CODEC = WotrRegistries.RIFT_SHAPE_TYPES.byNameCodec()
+            .dispatch(shape -> shape.codec(), codec -> codec);
+
+    MapCodec<? extends RiftShape> codec();
 
     @Deprecated
     double chaosiveness(double x, double z);
@@ -14,30 +21,5 @@ public interface RiftShape {
 
     default boolean isPositionValid(int x, int y, int z) {
         return chaosiveness(x, z) > abs(y);
-    }
-
-    static FiniteRiftShape boxed(RiftShape baseShape, Vec3i boxStart, Vec3i boxSize) {
-
-        return new FiniteRiftShape() {
-            @Override
-            public Vec3i getBoxStart() {
-                return boxStart;
-            }
-
-            @Override
-            public Vec3i getBoxSize() {
-                return boxSize;
-            }
-
-            @Override
-            public double chaosiveness(double x, double z) {
-                return baseShape.chaosiveness(x, z);
-            }
-
-            @Override
-            public int categorize(double x, double y) {
-                return baseShape.categorize(x, y);
-            }
-        };
     }
 }

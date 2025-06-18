@@ -12,7 +12,6 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 import org.joml.Vector2i;
@@ -54,7 +53,7 @@ public class ChaoticRiftLayout implements RiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
+    public RiftSpace getChunkSpace(Vec3i chunkPos) {
         return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
     }
 
@@ -85,7 +84,7 @@ public class ChaoticRiftLayout implements RiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
         return hasCorridorSingle(x, y, z, d)
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }

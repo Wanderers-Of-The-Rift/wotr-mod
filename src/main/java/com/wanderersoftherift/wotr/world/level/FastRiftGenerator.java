@@ -3,25 +3,17 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.BoxedLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.StartRoomLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -29,6 +21,7 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
@@ -60,10 +53,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.AIR;
-
-/*
- * todo use rift tier
- */
 
 // https://wiki.fabricmc.net/tutorial:chunkgenerator
 @ParametersAreNonnullByDefault
@@ -115,29 +104,31 @@ public class FastRiftGenerator extends ChunkGenerator {
         return config;
     }
 
-    public RiftLayout getOrCreateLayout() {
+    public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
             layout.compareAndSet(null,
-                    new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(), config.seed().orElseThrow(),
-                            List.of(
-                                    new BoxedLayer(new Vec3i(-10, -2, -10), new Vec3i(20, 4, 20), new StartRoomLayer(
-                                            new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
-                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY)),
-                                            new RingLayer(new RoomRandomizerImpl.Factory(
-                                                    WanderersOfTheRift.id("rift/room_stable"),
-                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5),
-                                            new RingLayer(new RoomRandomizerImpl.Factory(
-                                                    WanderersOfTheRift.id("rift/room_unstable"),
-                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10)),
-                                    new ChaosLayer(
-                                            new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
-                                                    RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
-                            ))
+                    config.layout()
+                            .get()
+                            .createLayout(server, layerCount
+                                    - 2));/*
+                                           * new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(),
+                                           * config.seed().orElseThrow(), List.of( new BoxedLayer(new Vec3i(-10, -2,
+                                           * -10), new Vec3i(20, 4, 20), new PredefinedRoomLayer( new
+                                           * RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
+                                           * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), new Vec3i(-1,-1,-1)),
+                                           * new RingLayer(new RoomRandomizerImpl.Factory(
+                                           * WanderersOfTheRift.id("rift/room_stable"),
+                                           * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5), new RingLayer(new
+                                           * RoomRandomizerImpl.Factory( WanderersOfTheRift.id("rift/room_unstable"),
+                                           * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10)), new ChaosLayer(
+                                           * new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
+                                           * RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY)) )
+                                           */
             /*
              * new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,
              * roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase())), new
              * BasicRiftShape())
-             */);
+             */
             perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();
@@ -221,11 +212,11 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount];
-        var layout = getOrCreateLayout();
+        var layout = getOrCreateLayout(level.getServer());
         var roomGenerator = getOrCreateRoomGenerator();
         for (int i = 0; i < layerCount; i++) {
             var position = new Vec3i(chunk.getPos().x, i - layerCount / 2, chunk.getPos().z);
-            var space = layout.getChunkSpace(position, level.getServer());
+            var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level,
                         RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
@@ -254,12 +245,12 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     private void runCorridorBlender(ChunkAccess chunk, PositionalRandomFactory randomFactory, WorldGenLevel level) {
         var rng = randomFactory.at(chunk.getPos().x, 0, chunk.getPos().z);
-        var layout = getOrCreateLayout();
+        var layout = getOrCreateLayout(level.getServer());
         for (int i = 0; i < layerCount; i++) {
             var chunkX = chunk.getPos().x;
             var chunkY = i - layerCount / 2;
             var chunkZ = chunk.getPos().z;
-            var corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, NORTH, level.getServer());
+            var corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, NORTH);
             if (corridor) {
                 for (int x = 0; x < 5; x++) {
                     for (int y = 0; y < 7; y++) {
@@ -272,7 +263,7 @@ public class FastRiftGenerator extends ChunkGenerator {
                     }
                 }
             }
-            corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, WEST, level.getServer());
+            corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, WEST);
             if (corridor) {
                 for (int z = 0; z < 5; z++) {
                     for (int y = 0; y < 7; y++) {
@@ -311,9 +302,9 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
-        var layout = getOrCreateLayout();
+        var layout = this.layout.get();
         if (layout != null) {
-            var currentSpace = layout.getChunkSpace(SectionPos.of(pos), null);
+            var currentSpace = layout.getChunkSpace(SectionPos.of(pos));
             info.add("current space");
             if (currentSpace == null || currentSpace instanceof VoidRiftSpace) {
                 info.add("void");

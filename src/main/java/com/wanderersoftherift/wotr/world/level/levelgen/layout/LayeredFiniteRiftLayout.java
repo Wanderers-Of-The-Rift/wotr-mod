@@ -1,5 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
@@ -21,18 +25,16 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, LayeredRiftLayout.LayoutSection {
 
     private static final RiftSpace VOID_SPACE = VoidRiftSpace.INSTANCE;
+
     private final FiniteRiftShape riftShape;
     private final int layerCount;
     private final int seed;
-
     private final RiftSpace[] spaces;
+
     private final long[] emptySpaces;
     private final AtomicReference<WeakReference<Thread>> generatorThread = new AtomicReference<>(null);
     private final CompletableFuture<Unit> generationCompletion = new CompletableFuture<>();
-
     private final List<LayoutLayer> layers;
-
-    private MinecraftServer serverCache;
 
     public LayeredFiniteRiftLayout(FiniteRiftShape riftShape, int seed, List<LayoutLayer> layers) {
         layerCount = riftShape.getBoxSize().getY();
@@ -58,30 +60,22 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
-        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ(), server);
+    public RiftSpace getChunkSpace(Vec3i chunkPos) {
+        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
     }
 
-    public RiftSpace getChunkSpace(int x, int y, int z, MinecraftServer server) {
+    public RiftSpace getChunkSpace(int x, int y, int z) {
         var origin = riftShape.getBoxStart();
         var rand = ProcessorUtil.createRandom(
                 ProcessorUtil.getRandomSeed(new BlockPos(origin.getX(), 0, origin.getZ()), seed));
-        tryGenerate(rand, server);
+        tryGenerate(rand);
         return getSpaceAt(x, y, z);
     }
 
-    public void tryGenerate(RandomSource random, MinecraftServer server) {
-        if (generatorThread.get() == null && random != null) {
-            if (server == null) {
-                if (serverCache == null) {
-                    return;
-                }
-                server = serverCache;
-            }
-            serverCache = server;
-            if (generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
-                generate(random, server);
-            }
+    public void tryGenerate(RandomSource random) {
+        if (generatorThread.get() == null && random != null
+                && generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
+            generate(random);
         }
         try {
             generationCompletion.get();
@@ -90,10 +84,10 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         }
     }
 
-    public void generate(RandomSource randomSource, MinecraftServer server) {
+    public void generate(RandomSource randomSource) {
         var allSpaces = new ArrayList<RiftSpace>();
         for (var layer : layers) {
-            layer.generateSection(this, randomSource, allSpaces, server);
+            layer.generateSection(this, randomSource, allSpaces);
         }
         generationCompletion.complete(Unit.INSTANCE);
     }
@@ -162,8 +156,8 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         return emptySpaces;
     }
 
-    private boolean hasCorridorSingle(int x, int y, int z, Direction d, MinecraftServer server) {
-        var space = getChunkSpace(x, y, z, server);
+    private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
+        var space = getChunkSpace(x, y, z);
         if (space == null || space instanceof VoidRiftSpace) {
             return false;
         }
@@ -181,13 +175,36 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
-        return hasCorridorSingle(x, y, z, d, server)
-                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite(), server);
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
+        return hasCorridorSingle(x, y, z, d)
+                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
     @Override
     public FiniteRiftShape sectionShape() {
         return riftShape;
+    }
+
+    public static record Factory(BoxedRiftShape shape, int seed, List<LayeredRiftLayout.LayoutLayer.Factory> layers)
+            implements RiftLayout.Factory {
+
+        public static final MapCodec<LayeredFiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
+                .mapCodec(it -> it.group(
+                        BoxedRiftShape.CODEC.fieldOf("shape").forGetter(LayeredFiniteRiftLayout.Factory::shape),
+                        Codec.INT.fieldOf("seed").forGetter(LayeredFiniteRiftLayout.Factory::seed),
+                        LayoutLayer.Factory.CODEC.listOf()
+                                .fieldOf("layers")
+                                .forGetter(LayeredFiniteRiftLayout.Factory::layers)
+                ).apply(it, Factory::new));
+
+        @Override
+        public MapCodec<? extends RiftLayout.Factory> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public RiftLayout createLayout(MinecraftServer server, int layerCount) {
+            return new LayeredFiniteRiftLayout(shape, seed, layers.stream().map(it -> it.create(server)).toList());
+        }
     }
 }

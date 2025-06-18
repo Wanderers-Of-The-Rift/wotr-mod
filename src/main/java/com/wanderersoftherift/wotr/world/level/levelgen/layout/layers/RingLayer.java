@@ -1,9 +1,13 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.layers;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
@@ -11,12 +15,11 @@ import net.minecraft.util.RandomSource;
 import java.util.ArrayList;
 
 public class RingLayer implements LayeredRiftLayout.LayoutLayer {
-    private final RoomRandomizer.Factory roomRandomizerFactory;
     private final int radius;
-    private volatile RoomRandomizer roomRandomizer;
+    private final RoomRandomizer roomRandomizer;
 
-    public RingLayer(RoomRandomizer.Factory roomRandomizer, int radius) {
-        this.roomRandomizerFactory = roomRandomizer;
+    public RingLayer(RoomRandomizer roomRandomizer, int radius) {
+        this.roomRandomizer = roomRandomizer;
         this.radius = radius;
     }
 
@@ -24,15 +27,7 @@ public class RingLayer implements LayeredRiftLayout.LayoutLayer {
     public void generateSection(
             LayeredRiftLayout.LayoutSection section,
             RandomSource source,
-            ArrayList<RiftSpace> allSpaces,
-            MinecraftServer server) {
-        if (roomRandomizer == null) {
-            synchronized (this) {
-                if (roomRandomizer == null) {
-                    roomRandomizer = roomRandomizerFactory.createRandomizer(server);
-                }
-            }
-        }
+            ArrayList<RiftSpace> allSpaces) {
         var origin = section.sectionShape().getBoxStart();
         var size = section.sectionShape().getBoxSize();
 
@@ -53,6 +48,25 @@ public class RingLayer implements LayeredRiftLayout.LayoutLayer {
                     allSpaces.add(room);
                 }
             }
+        }
+    }
+
+    public static record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory, int radius)
+            implements LayeredRiftLayout.LayoutLayer.Factory {
+
+        public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
+                RoomRandomizerImpl.Factory.CODEC.fieldOf("room_randomizer").forGetter(Factory::roomRandomizerFactory),
+                Codec.INT.fieldOf("radius").forGetter(Factory::radius)
+        ).apply(it, Factory::new));
+
+        @Override
+        public LayeredRiftLayout.LayoutLayer create(MinecraftServer server) {
+            return new RingLayer(roomRandomizerFactory.createRandomizer(server), radius);
+        }
+
+        @Override
+        public MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory> codec() {
+            return CODEC;
         }
     }
 }

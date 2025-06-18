@@ -1,9 +1,12 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout.layers;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Vec3i;
@@ -16,11 +19,10 @@ import java.util.Collections;
 public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
 
     private static final IntList MASKS;
-    private final RoomRandomizer.Factory roomRandomizerFactory;
-    private volatile RoomRandomizer roomRandomizer;
+    private final RoomRandomizer roomRandomizer;
 
-    public ChaosLayer(RoomRandomizer.Factory roomRandomizer) {
-        this.roomRandomizerFactory = roomRandomizer;
+    public ChaosLayer(RoomRandomizer roomRandomizer) {
+        this.roomRandomizer = roomRandomizer;
     }
 
     private RiftSpace nextChaoticSpace(
@@ -148,15 +150,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
     public void generateSection(
             LayeredRiftLayout.LayoutSection section,
             RandomSource source,
-            ArrayList<RiftSpace> allSpaces,
-            MinecraftServer server) {
-        if (roomRandomizer == null) {
-            synchronized (this) {
-                if (roomRandomizer == null) {
-                    roomRandomizer = roomRandomizerFactory.createRandomizer(server);
-                }
-            }
-        }
+            ArrayList<RiftSpace> allSpaces) {
         // if (allSpaces.isEmpty()) {
         var room = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
         room = room.offset(section.sectionShape().getBoxStart().getX() + 1, -2,
@@ -181,6 +175,23 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
                     }
                 }
             }
+        }
+    }
+
+    public static record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory)
+            implements LayeredRiftLayout.LayoutLayer.Factory {
+        public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
+                RoomRandomizerImpl.Factory.CODEC.fieldOf("room_randomizer").forGetter(Factory::roomRandomizerFactory)
+        ).apply(it, Factory::new));
+
+        @Override
+        public LayeredRiftLayout.LayoutLayer create(MinecraftServer server) {
+            return new ChaosLayer(roomRandomizerFactory.createRandomizer(server));
+        }
+
+        @Override
+        public MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory> codec() {
+            return CODEC;
         }
     }
 

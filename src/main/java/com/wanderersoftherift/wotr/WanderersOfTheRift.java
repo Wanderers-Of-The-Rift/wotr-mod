@@ -45,6 +45,9 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrChunkGenerators;
 import com.wanderersoftherift.wotr.init.worldgen.WotrInputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -95,6 +98,10 @@ public class WanderersOfTheRift {
         WotrInputBlockStateTypes.INPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrProcessors.PROCESSORS.register(modEventBus);
+
+        WotrRiftLayoutLayers.LAYOUT_LAYERS.register(modEventBus);
+        WotrRiftLayouts.LAYOUTS.register(modEventBus);
+        WotrRiftShapes.RIFT_SHAPES.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);

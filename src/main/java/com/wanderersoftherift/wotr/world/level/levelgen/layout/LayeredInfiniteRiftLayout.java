@@ -1,5 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
@@ -24,12 +28,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
     private final ConcurrentHashMap<Vector2i, Region> regions = new ConcurrentHashMap<>();
+
     private final int levelCount;
     private final int seed;
     private final RiftShape riftShape;
     private final List<LayoutLayer> layers;
-
-    private MinecraftServer serverCache;
 
     public LayeredInfiniteRiftLayout(int levelCount, RiftShape riftShape, int seed, List<LayoutLayer> layers) {
         this.layers = layers;
@@ -47,20 +50,20 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos, MinecraftServer server) {
-        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ(), server);
+    public RiftSpace getChunkSpace(Vec3i chunkPos) {
+        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
     }
 
-    public RiftSpace getChunkSpace(int x, int y, int z, MinecraftServer server) {
+    public RiftSpace getChunkSpace(int x, int y, int z) {
         var region = getOrCreateRegion(x, z);
         var rand = ProcessorUtil.createRandom(
                 ProcessorUtil.getRandomSeed(new BlockPos(region.origin.getX(), 0, region.origin.getZ()), seed));
-        region.tryGenerate(rand, server);
+        region.tryGenerate(rand);
         return region.getSpaceAt(x, y, z);
     }
 
-    private boolean hasCorridorSingle(int x, int y, int z, Direction d, MinecraftServer server) {
-        var space = getChunkSpace(x, y, z, server);
+    private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
+        var space = getChunkSpace(x, y, z);
         if (space == null || space instanceof VoidRiftSpace) {
             return false;
         }
@@ -78,9 +81,33 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d, MinecraftServer server) {
-        return hasCorridorSingle(x, y, z, d, server)
-                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite(), server);
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
+        return hasCorridorSingle(x, y, z, d)
+                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
+    }
+
+    public record Factory(RiftShape riftShape, int seed, List<LayoutLayer.Factory> layers)
+            implements RiftLayout.Factory {
+
+        public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
+                .mapCodec(it -> it.group(
+                        RiftShape.CODEC.fieldOf("shape").forGetter(LayeredInfiniteRiftLayout.Factory::riftShape),
+                        Codec.INT.fieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
+                        LayoutLayer.Factory.CODEC.listOf()
+                                .fieldOf("layers")
+                                .forGetter(LayeredInfiniteRiftLayout.Factory::layers)
+                ).apply(it, Factory::new));
+
+        @Override
+        public MapCodec<? extends RiftLayout.Factory> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public RiftLayout createLayout(MinecraftServer server, int levelCount) {
+            return new LayeredInfiniteRiftLayout(levelCount, riftShape, seed,
+                    layers.stream().map(it -> it.create(server)).toList());
+        }
     }
 
     private class Region implements LayeredRiftLayout.LayoutSection {
@@ -108,13 +135,13 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                     }
                 }
             }
-            this.sectionShape = RiftShape.boxed(riftShape, origin, new Vec3i(15, levelCount, 15));
+            this.sectionShape = new BoxedRiftShape(riftShape, origin, new Vec3i(15, levelCount, 15));
         }
 
-        public void generate(RandomSource randomSource, MinecraftServer server) {
+        public void generate(RandomSource randomSource) {
             var allSpaces = new ArrayList<RiftSpace>();
             for (var layer : layers) {
-                layer.generateSection(this, randomSource, allSpaces, server);
+                layer.generateSection(this, randomSource, allSpaces);
             }
             generationCompletion.complete(Unit.INSTANCE);
         }
@@ -194,18 +221,10 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
             return emptySpaces;
         }
 
-        public void tryGenerate(RandomSource random, MinecraftServer server) {
-            if (generatorThread.get() == null && random != null) {
-                if (server == null) {
-                    if (serverCache == null) {
-                        return;
-                    }
-                    server = serverCache;
-                }
-                serverCache = server;
-                if (generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
-                    generate(random, server);
-                }
+        public void tryGenerate(RandomSource random) {
+            if (generatorThread.get() == null && random != null
+                    && generatorThread.compareAndSet(null, new WeakReference(Thread.currentThread()))) {
+                generate(random);
             }
             try {
                 generationCompletion.get();
@@ -215,5 +234,4 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
     }
-
 }
