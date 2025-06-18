@@ -135,7 +135,7 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Items.SAND)
                 .define('H', Items.CHORUS_FRUIT)
-                .unlockedBy("has_gravel", this.has(Items.SAND))
+                .unlockedBy("has_sand", this.has(Items.SAND))
                 .unlockedBy("has_chorus_fruit", this.has(Items.CHORUS_FRUIT))
                 .save(this.output);
 
