@@ -3,7 +3,7 @@
   "essence_reqs": [
     {
       "essenceType": "wotr:processor",
-      "minPercent": 1.0
+      "min": 1
     }
   ],
   "output": {

@@ -62,28 +62,33 @@ public class WotrLanguageProvider extends LanguageProvider {
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
 
-        addEssenceType("animal", "Animal");
-        addEssenceType("plant", "Plant");
-        addEssenceType("mushroom", "Mushroom");
-        addEssenceType("life", "Life");
-        addEssenceType("death", "Death");
-        addEssenceType("light", "Light");
-        addEssenceType("dark", "Dark");
+        addEssenceType("void", "Void");
+        addEssenceType("flow", "Flow");
+        addEssenceType("form", "Form");
         addEssenceType("order", "Order");
         addEssenceType("chaos", "Chaos");
+
         addEssenceType("earth", "Earth");
         addEssenceType("fire", "Fire");
         addEssenceType("water", "Water");
         addEssenceType("air", "Air");
-        addEssenceType("time", "Time");
-        addEssenceType("space", "Space");
+        addEssenceType("life", "Life");
+        addEssenceType("death", "Death");
+        addEssenceType("light", "Light");
+        addEssenceType("dark", "Dark");
 
+        addEssenceType("animal", "Animal");
+        addEssenceType("plant", "Plant");
+        addEssenceType("mushroom", "Mushroom");
+        addEssenceType("honey", "Honey");
+        addEssenceType("food", "Food");
+        addEssenceType("slime", "Slime");
+        addEssenceType("mechanical", "Mechanical");
         addEssenceType("metal", "Metal");
         addEssenceType("fabric", "Fabric");
         addEssenceType("crystal", "Crystal");
-        addEssenceType("power", "Power");
-        addEssenceType("knowledge", "Knowledge");
-
+        addEssenceType("energy", "Energy");
+        addEssenceType("mind", "Mind");
         addEssenceType("nether", "Nether");
         addEssenceType("end", "End");
         addEssenceType("processor", "Processor");
