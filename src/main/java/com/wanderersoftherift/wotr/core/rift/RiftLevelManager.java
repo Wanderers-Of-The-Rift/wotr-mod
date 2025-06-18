@@ -18,7 +18,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.BoxedLayer
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BasicRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.DiamondRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.BlockPos;
@@ -327,7 +327,7 @@ public final class RiftLevelManager {
 
     private static RiftLayout.Factory defaultLayout(int tier, int seed) {
 
-        var factory = new LayeredInfiniteRiftLayout.Factory(new BasicRiftShape(), seed, List.of(
+        var factory = new LayeredInfiniteRiftLayout.Factory(new DiamondRiftShape(30, 1.0), seed, List.of(
                 new BoxedLayer.Factory(new Vec3i(-10, -2, -10), new Vec3i(20, 4, 20), List.of(
                         new PredefinedRoomLayer.Factory(
                                 new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
