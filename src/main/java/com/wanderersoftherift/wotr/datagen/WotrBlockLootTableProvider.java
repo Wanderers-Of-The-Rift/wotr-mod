@@ -76,7 +76,6 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         );
     }
 
-
     @Override
     protected @NotNull Iterable<Block> getKnownBlocks() {
         return WotrBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
