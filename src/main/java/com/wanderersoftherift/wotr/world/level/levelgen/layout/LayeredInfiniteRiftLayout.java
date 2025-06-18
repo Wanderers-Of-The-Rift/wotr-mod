@@ -135,7 +135,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                     }
                 }
             }
-            this.sectionShape = new BoxedRiftShape(riftShape, origin, new Vec3i(15, levelCount, 15));
+            this.sectionShape = BoxedRiftShape.of(riftShape, origin, new Vec3i(15, levelCount, 15));
         }
 
         public void generate(RandomSource randomSource) {
