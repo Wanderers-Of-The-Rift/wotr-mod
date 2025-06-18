@@ -153,11 +153,13 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
             ArrayList<RiftSpace> allSpaces) {
         // if (allSpaces.isEmpty()) {
         var room = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
-        room = room.offset(section.sectionShape().getBoxStart().getX() + 1, -2,
-                section.sectionShape().getBoxStart().getZ() + 1);
+        room = room.offset(
+                section.sectionShape().getBoxStart().getX() + 1 + (section.sectionShape().getBoxSize().getX() >> 1), -2,
+                section.sectionShape().getBoxStart().getZ() + 1 + (section.sectionShape().getBoxSize().getZ() >> 1));
         var room2 = roomRandomizer.randomSpace(source, new Vec3i(1, 1, 1));
-        room2 = room2.offset(section.sectionShape().getBoxStart().getX() + 1, 2,
-                section.sectionShape().getBoxStart().getZ() + 1);
+        room2 = room2.offset(
+                section.sectionShape().getBoxStart().getX() + 1 + (section.sectionShape().getBoxSize().getX() >> 1), 2,
+                section.sectionShape().getBoxStart().getZ() + 1 + (section.sectionShape().getBoxSize().getZ() >> 1));
         allSpaces.add(room);
         allSpaces.add(room2);
         // }
@@ -172,6 +174,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
                     var nextSpace = nextChaoticSpace(corridor, source, space.origin(), section);
                     if (nextSpace != null && section.tryPlaceSpace(nextSpace)) {
                         nextSpaces.add(nextSpace);
+                        allSpaces.add(nextSpace);
                     }
                 }
             }

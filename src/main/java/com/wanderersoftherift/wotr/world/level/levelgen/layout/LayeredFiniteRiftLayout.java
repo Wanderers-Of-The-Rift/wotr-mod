@@ -51,7 +51,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
                 var idx = (z * width) + x;
 
                 for (int y = 0; y < layerCount; y++) {
-                    if (riftShape.isPositionValid(x + origin.getX(), y - (layerCount / 2), z + origin.getZ())) {
+                    if (riftShape.isPositionValid(x + origin.getX(), y + origin.getY(), z + origin.getZ())) {
                         emptySpaces[idx] |= 1L << y;
                     }
                 }

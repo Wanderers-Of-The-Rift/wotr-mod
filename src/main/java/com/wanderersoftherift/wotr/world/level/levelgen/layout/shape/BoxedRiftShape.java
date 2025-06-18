@@ -40,6 +40,14 @@ public record BoxedRiftShape(RiftShape baseShape, Vec3i boxStart, Vec3i boxSize)
     }
 
     @Override
+    public boolean isPositionValid(int x, int y, int z) {
+        var start = getBoxStart();
+        var end = start.offset(getBoxSize());
+        return baseShape.isPositionValid(x, y, z) && end.getX() > x && start.getX() <= x && end.getY() > y
+                && start.getY() <= y && end.getZ() > z && start.getZ() <= z;
+    }
+
+    @Override
     public MapCodec<? extends RiftShape> codec() {
         return CODEC;
     }

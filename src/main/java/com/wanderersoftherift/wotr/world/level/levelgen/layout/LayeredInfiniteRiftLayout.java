@@ -147,7 +147,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
         public RiftSpace getSpaceAt(Vec3i position) {
-            if (riftShape.chaosiveness(position.getX(), position.getZ()) < Math.abs(position.getY())
+            if (!riftShape.isPositionValid(position.getX(), position.getY(), position.getZ())
                     || isOutsideThisRegion(position.getX(), position.getY(), position.getZ())) {
                 return VOID_SPACE;
             }
@@ -156,14 +156,15 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
         public RiftSpace getSpaceAt(int x, int y, int z) {
-            if (riftShape.chaosiveness(x, z) < Math.abs(y) || isOutsideThisRegion(x, y, z)) {
+            if (!riftShape.isPositionValid(x, y, z) || isOutsideThisRegion(x, y, z)) {
                 return VOID_SPACE;
             }
             return spaces[(x - origin.getX()) + (z - origin.getZ()) * 15 + (y - origin.getY()) * 225];
         }
 
         public void setSpaceAt(Vec3i position, RiftSpace space) {
-            if (isOutsideThisRegion(position.getX(), position.getY(), position.getZ())) {
+            if (!riftShape.isPositionValid(position.getX(), position.getY(), position.getZ())
+                    || isOutsideThisRegion(position.getX(), position.getY(), position.getZ())) {
                 return;
             }
             emptySpaces[(position.getX() - origin.getX())
