@@ -133,7 +133,7 @@ public class WotrBlocks {
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<Block> NOGRAVGRAVEL = registerNoGrav("nograv_grav", Blocks.GRAVEL);
+    public static final DeferredBlock<Block> NOGRAVGRAVEL = registerNoGrav("nograv_gravel", Blocks.GRAVEL);
     public static final DeferredBlock<Block> NOGRAVSAND = registerNoGrav("nograv_sand", Blocks.SAND);
     public static final DeferredBlock<Block> NOGRAVREDSAND = registerNoGrav("nograv_red_sand", Blocks.RED_SAND);
     public static final DeferredBlock<Block> NOGRAVWHITECONCRETEPOWDER = registerNoGrav("nograv_white_concrete_powder",

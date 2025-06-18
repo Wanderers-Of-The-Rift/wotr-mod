@@ -11,8 +11,7 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "wotr:rift_level_check",
-                  "min_tier": 1
+                  "condition": "wotr:rift_level_check"
                 }
               ],
               "name": "minecraft:blue_concrete_powder"
