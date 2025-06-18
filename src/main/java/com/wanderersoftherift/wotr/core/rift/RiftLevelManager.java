@@ -320,7 +320,9 @@ public final class RiftLevelManager {
         int seed = baseConfig.seed().orElseGet(random::nextInt);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, random));
         return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
-                baseConfig.layout().isPresent()?baseConfig.layout():Optional.of(defaultLayout(baseConfig.tier(), seed)), Optional.of(seed));
+                baseConfig.layout().isPresent() ? baseConfig.layout()
+                        : Optional.of(defaultLayout(baseConfig.tier(), seed)),
+                Optional.of(seed));
     }
 
     private static RiftLayout.Factory defaultLayout(int tier, int seed) {
