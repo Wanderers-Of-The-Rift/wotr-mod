@@ -29,7 +29,7 @@ public final class QuickMover {
             return ItemStack.EMPTY;
         }
 
-        ItemStack slotStack = slot.getItem();
+        ItemStack slotStack = slot.getItem().copy();
         ItemStack resultStack = slotStack.copy();
         return slotMovers.stream().filter(x -> x.isFor(slotIndex)).findFirst().map(mover -> {
             MoveResult result = MoveResult.NO_MOVE;
@@ -52,7 +52,7 @@ public final class QuickMover {
                 if (slotStack.isEmpty()) {
                     slot.set(ItemStack.EMPTY);
                 } else {
-                    slot.setChanged();
+                    slot.set(slotStack);
                 }
                 return resultStack;
             }
