@@ -11,7 +11,8 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "wotr:rift_level_check"
+                  "condition": "wotr:rift_level_check",
+                  "min_tier": 1
                 }
               ],
               "name": "minecraft:purple_concrete_powder"

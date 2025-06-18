@@ -69,12 +69,14 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         this.add(block, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(AlternativesEntry.alternatives(
-                                LootItem.lootTableItem(riftDrop).when(RiftLevelCheck.riftTier()),
+                                LootItem.lootTableItem(riftDrop)
+                                        .when(RiftLevelCheck.riftTier().min(1).max(Integer.MAX_VALUE)),
                                 LootItem.lootTableItem(block)
                         ))
                 )
         );
     }
+
 
     @Override
     protected @NotNull Iterable<Block> getKnownBlocks() {
