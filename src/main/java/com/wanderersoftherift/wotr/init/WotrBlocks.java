@@ -18,7 +18,20 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StainedGlassBlock;
+import net.minecraft.world.level.block.StainedGlassPaneBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -120,44 +133,25 @@ public class WotrBlocks {
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<Block> NOGRAVGRAVEL
-            = registerNoGrav("nograv_gravel", Blocks.GRAVEL);
-    public static final DeferredBlock<Block> NOGRAVSAND
-            = registerNoGrav("nograv_sand", Blocks.SAND);
-    public static final DeferredBlock<Block> NOGRAVREDSAND
-            = registerNoGrav("nograv_red_sand", Blocks.RED_SAND);
-    public static final DeferredBlock<Block> NOGRAVWHITECONCRETEPOWDER
-            = registerNoGrav("nograv_white_concrete_powder", Blocks.WHITE_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVORANGECONCRETEPOWDER
-            = registerNoGrav("nograv_orange_concrete_powder", Blocks.ORANGE_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVMAGENTACONCRETEPOWDER
-            = registerNoGrav("nograv_magenta_concrete_powder", Blocks.MAGENTA_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVLIGHTBLUECONCRETEPOWDER
-            = registerNoGrav("nograv_light_blue_concrete_powder", Blocks.LIGHT_BLUE_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVYELLOWCONCRETEPOWDER
-            = registerNoGrav("nograv_yellow_concrete_powder", Blocks.YELLOW_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVLIMECONCRETEPOWDER
-            = registerNoGrav("nograv_lime_concrete_powder", Blocks.LIME_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVPINKCONCRETEPOWDER
-            = registerNoGrav("nograv_pink_concrete_powder", Blocks.PINK_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVGRAYCONCRETEPOWDER
-            = registerNoGrav("nograv_gray_concrete_powder", Blocks.GRAY_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVLIGHTGRAYCONCRETEPOWDER
-            = registerNoGrav("nograv_light_gray_concrete_powder", Blocks.LIGHT_GRAY_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVCYANCONCRETEPOWDER
-            = registerNoGrav("nograv_cyan_concrete_powder", Blocks.CYAN_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVPURPLECONCRETEPOWDER
-            = registerNoGrav("nograv_purple_concrete_powder", Blocks.PURPLE_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVBLUECONCRETEPOWDER
-            = registerNoGrav("nograv_blue_concrete_powder", Blocks.BLUE_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVBROWNCONCRETEPOWDER
-            = registerNoGrav("nograv_brown_concrete_powder", Blocks.BROWN_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVGREENCONCRETEPOWDER
-            = registerNoGrav("nograv_green_concrete_powder", Blocks.GREEN_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVREDCONCRETEPOWDER
-            = registerNoGrav("nograv_red_concrete_powder", Blocks.RED_CONCRETE_POWDER);
-    public static final DeferredBlock<Block> NOGRAVBLACKCONCRETEPOWDER
-            = registerNoGrav("nograv_black_concrete_powder", Blocks.BLACK_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVGRAVEL = registerNoGrav("nograv_grav", Blocks.GRAVEL);
+    public static final DeferredBlock<Block> NOGRAVSAND = registerNoGrav("nograv_sand", Blocks.SAND);
+    public static final DeferredBlock<Block> NOGRAVREDSAND = registerNoGrav("nograv_red_sand", Blocks.RED_SAND);
+    public static final DeferredBlock<Block> NOGRAVWHITECONCRETEPOWDER = registerNoGrav("nograv_white_concrete_powder", Blocks.WHITE_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVORANGECONCRETEPOWDER = registerNoGrav("nograv_orange_concrete_powder", Blocks.ORANGE_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVMAGENTACONCRETEPOWDER = registerNoGrav("nograv_magenta_concrete_powder", Blocks.MAGENTA_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVLIGHTBLUECONCRETEPOWDER = registerNoGrav("nograv_light_blue_concrete_powder", Blocks.LIGHT_BLUE_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVYELLOWCONCRETEPOWDER = registerNoGrav("nograv_yellow_concrete_powder", Blocks.YELLOW_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVLIMECONCRETEPOWDER = registerNoGrav("nograv_lime_concrete_powder", Blocks.LIME_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVPINKCONCRETEPOWDER = registerNoGrav("nograv_pink_concrete_powder", Blocks.PINK_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVGRAYCONCRETEPOWDER = registerNoGrav("nograv_gray_concrete_powder", Blocks.GRAY_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVLIGHTGRAYCONCRETEPOWDER = registerNoGrav("nograv_light_gray_concrete_powder", Blocks.LIGHT_GRAY_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVCYANCONCRETEPOWDER = registerNoGrav("nograv_cyan_concrete_powder", Blocks.CYAN_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVPURPLECONCRETEPOWDER = registerNoGrav("nograv_purple_concrete_powder", Blocks.PURPLE_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVBLUECONCRETEPOWDER = registerNoGrav("nograv_blue_concrete_powder", Blocks.BLUE_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVBROWNCONCRETEPOWDER = registerNoGrav("nograv_brown_concrete_powder", Blocks.BROWN_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVGREENCONCRETEPOWDER = registerNoGrav("nograv_green_concrete_powder", Blocks.GREEN_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVREDCONCRETEPOWDER = registerNoGrav("nograv_red_concrete_powder", Blocks.RED_CONCRETE_POWDER);
+    public static final DeferredBlock<Block> NOGRAVBLACKCONCRETEPOWDER = registerNoGrav("nograv_black_concrete_powder", Blocks.BLACK_CONCRETE_POWDER);
 
     public static final BlockFamilyHelper PROCESSOR_BLOCK_1 = registerBuildingBlock("processor_block_1",
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_1"))));
@@ -270,7 +264,8 @@ public class WotrBlocks {
 
     private static DeferredBlock<Block> registerNoGrav(String idString, Block original) {
         return registerBlock(idString, () -> new Block(
-                BlockBehaviour.Properties.ofFullCopy(original).setId(blockId(idString))
+                BlockBehaviour.Properties.ofFullCopy(original)
+                        .setId(blockId(idString))
         ));
     }
 
