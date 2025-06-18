@@ -20,4 +20,7 @@ public class WotrRiftShapes {
     public static final Supplier<MapCodec<BasicRiftShape>> BASIC_RIFT_SHAPE = RIFT_SHAPES.register("basic_shape",
             () -> BasicRiftShape.CODEC);
 
+    public static final Supplier<MapCodec<BasicRiftShape>> UNLIMITED_RIFT_SHAPE = RIFT_SHAPES
+            .register("unlimited_shape", () -> BasicRiftShape.CODEC);
+
 }
