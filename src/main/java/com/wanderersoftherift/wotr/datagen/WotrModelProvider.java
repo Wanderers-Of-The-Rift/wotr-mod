@@ -382,17 +382,17 @@ public class WotrModelProvider extends ModelProvider {
                 "_top_active_ominous");
         TextureMapping texturemapping5 = TextureMapping.trialSpawner(block, "_side_active_ominous",
                 "_top_ejecting_reward_ominous");
-        ResourceLocation resourcelocation = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.create(block, texturemapping,
+        ResourceLocation resourcelocation = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend().renderType("cutout").build().create(block, texturemapping,
                 blockModels.modelOutput);
-        ResourceLocation resourcelocation1 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+        ResourceLocation resourcelocation1 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend().renderType("cutout").build().createWithSuffix(block,
                 "_active", texturemapping1, blockModels.modelOutput);
-        ResourceLocation resourcelocation2 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+        ResourceLocation resourcelocation2 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend().renderType("cutout").build().createWithSuffix(block,
                 "_ejecting_reward", texturemapping2, blockModels.modelOutput);
-        ResourceLocation resourcelocation3 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+        ResourceLocation resourcelocation3 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend().renderType("cutout").build().createWithSuffix(block,
                 "_inactive_ominous", texturemapping3, blockModels.modelOutput);
-        ResourceLocation resourcelocation4 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+        ResourceLocation resourcelocation4 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend().renderType("cutout").build().createWithSuffix(block,
                 "_active_ominous", texturemapping4, blockModels.modelOutput);
-        ResourceLocation resourcelocation5 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
+        ResourceLocation resourcelocation5 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend().renderType("cutout").build().createWithSuffix(block,
                 "_ejecting_reward_ominous", texturemapping5, blockModels.modelOutput);
         blockModels.registerSimpleItemModel(block, resourcelocation);
         blockModels.blockStateOutput.accept(
