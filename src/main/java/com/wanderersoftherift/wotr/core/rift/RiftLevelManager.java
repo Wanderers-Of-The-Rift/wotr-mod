@@ -12,13 +12,13 @@ import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.BoxedLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.DiamondRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.BlockPos;
@@ -327,8 +327,10 @@ public final class RiftLevelManager {
 
     private static RiftLayout.Factory defaultLayout(int tier, int seed) {
 
-        var factory = new LayeredInfiniteRiftLayout.Factory(new DiamondRiftShape(4 + tier * 3, 1.0), seed, List.of(
-                new BoxedLayer.Factory(new Vec3i(-10, -2, -10), new Vec3i(20, 4, 20), List.of(
+        var factory = new LayeredFiniteRiftLayout.Factory(
+                new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0),
+                        new Vec3i(-1 - 3 * tier, -10, -1 - 3 * tier), new Vec3i(3 + 6 * tier, 20, 3 + 6 * tier)),
+                seed, List.of(
                         new PredefinedRoomLayer.Factory(
                                 new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
                                         RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
@@ -341,8 +343,8 @@ public final class RiftLevelManager {
                                 10),
                         new ChaosLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
                                 RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
-                ))
-        ));
+
+                ));
         return factory;
     }
 
