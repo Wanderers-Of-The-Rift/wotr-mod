@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarsePyramidRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.DiamondRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.ExponentialRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.InverseExponentialRiftShape;
@@ -33,6 +35,10 @@ public class WotrRiftShapes {
             () -> DiamondRiftShape.CODEC);
     public static final Supplier<MapCodec<PyramidRiftShape>> PYRAMID_RIFT_SHAPE = RIFT_SHAPES.register("pyramid_shape",
             () -> PyramidRiftShape.CODEC);
+    public static final Supplier<MapCodec<CoarseDiamondRiftShape>> COARSE_DIAMOND_RIFT_SHAPE = RIFT_SHAPES
+            .register("coarse_diamond_shape", () -> CoarseDiamondRiftShape.CODEC);
+    public static final Supplier<MapCodec<CoarsePyramidRiftShape>> COARSE_PYRAMID_RIFT_SHAPE = RIFT_SHAPES
+            .register("coarse_pyramid_shape", () -> CoarsePyramidRiftShape.CODEC);
     public static final Supplier<MapCodec<SphereRiftShape>> SPHERE_RIFT_SHAPE = RIFT_SHAPES.register("sphere_shape",
             () -> SphereRiftShape.CODEC);
 
