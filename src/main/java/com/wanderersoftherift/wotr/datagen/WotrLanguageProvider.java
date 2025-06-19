@@ -40,6 +40,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.PLAYER_TRAP_BLOCK, "Player Trap Block");
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
+        addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
         addBlock(WotrBlocks.NOGRAVGRAVEL, "No Gravity Gravel");
         addBlock(WotrBlocks.NOGRAVSAND, "No Gravity Sand");
         addBlock(WotrBlocks.NOGRAVREDSAND, "No Gravity Red Sand");
