@@ -1,6 +1,6 @@
-# Dimension Delvers Mod
+# Wanderers of the Rift Mod
 
-This the open-source main mod for the Dimension Delvers modpack.
+This the open-source main mod for the Wanderers of the Rift modpack.
 
 ## Getting started
 
@@ -11,7 +11,7 @@ To set up the development workspace, first clone the project and open the build.
 If you're interested in contributing to the project, you can fork the repository and comment on any open issues.
 
 If you want a more involved role in the project, involving branches on the main repository and involvement
-in design discussions, join our discord: https://discord.com/invite/woldsvaults
+in design discussions, join our discord: To Be Fixed
 
 You can add pre-commit hooks for formatting and linting by running:
 
