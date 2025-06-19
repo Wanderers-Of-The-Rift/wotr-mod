@@ -96,6 +96,79 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
                 .with(createFacingDispatchFromUpModel()));
 
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAVEL.get(), TexturedModel.CUBE.updateTexture(
+                mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/gravel"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVSAND.get(), TexturedModel.CUBE.updateTexture(
+                mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/sand"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVREDSAND.get(), TexturedModel.CUBE.updateTexture(
+                mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/red_sand"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/white_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/orange_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/magenta_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/light_blue_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/yellow_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/lime_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/pink_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/gray_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/light_gray_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/cyan_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/purple_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/blue_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/brown_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/green_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/red_concrete_powder"))));
+
+        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(),
+                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
+                        ResourceLocation.withDefaultNamespace("block/black_concrete_powder"))));
+
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
 
@@ -309,18 +382,30 @@ public class WotrModelProvider extends ModelProvider {
                 "_top_active_ominous");
         TextureMapping texturemapping5 = TextureMapping.trialSpawner(block, "_side_active_ominous",
                 "_top_ejecting_reward_ominous");
-        ResourceLocation resourcelocation = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.create(block, texturemapping,
-                blockModels.modelOutput);
-        ResourceLocation resourcelocation1 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
-                "_active", texturemapping1, blockModels.modelOutput);
-        ResourceLocation resourcelocation2 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
-                "_ejecting_reward", texturemapping2, blockModels.modelOutput);
-        ResourceLocation resourcelocation3 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
-                "_inactive_ominous", texturemapping3, blockModels.modelOutput);
-        ResourceLocation resourcelocation4 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
-                "_active_ominous", texturemapping4, blockModels.modelOutput);
-        ResourceLocation resourcelocation5 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.createWithSuffix(block,
-                "_ejecting_reward_ominous", texturemapping5, blockModels.modelOutput);
+        ResourceLocation resourcelocation = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend()
+                .renderType("cutout")
+                .build()
+                .create(block, texturemapping, blockModels.modelOutput);
+        ResourceLocation resourcelocation1 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend()
+                .renderType("cutout")
+                .build()
+                .createWithSuffix(block, "_active", texturemapping1, blockModels.modelOutput);
+        ResourceLocation resourcelocation2 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend()
+                .renderType("cutout")
+                .build()
+                .createWithSuffix(block, "_ejecting_reward", texturemapping2, blockModels.modelOutput);
+        ResourceLocation resourcelocation3 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend()
+                .renderType("cutout")
+                .build()
+                .createWithSuffix(block, "_inactive_ominous", texturemapping3, blockModels.modelOutput);
+        ResourceLocation resourcelocation4 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend()
+                .renderType("cutout")
+                .build()
+                .createWithSuffix(block, "_active_ominous", texturemapping4, blockModels.modelOutput);
+        ResourceLocation resourcelocation5 = ModelTemplates.CUBE_BOTTOM_TOP_INNER_FACES.extend()
+                .renderType("cutout")
+                .build()
+                .createWithSuffix(block, "_ejecting_reward_ominous", texturemapping5, blockModels.modelOutput);
         blockModels.registerSimpleItemModel(block, resourcelocation);
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.multiVariant(block)

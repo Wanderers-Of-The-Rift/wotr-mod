@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "wotr:rift_level_check",
+                  "min_tier": 1
+                }
+              ],
+              "name": "minecraft:light_gray_concrete_powder"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "wotr:nograv_light_gray_concrete_powder"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "wotr:blocks/nograv_light_gray_concrete_powder"
+}

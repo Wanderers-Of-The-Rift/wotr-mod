@@ -1,0 +1,14 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essenceType": "wotr:earth",
+      "minPercent": 50.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:mesa"
+  },
+  "priority": 10
+}

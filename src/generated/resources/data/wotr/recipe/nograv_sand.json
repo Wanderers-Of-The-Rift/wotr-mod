@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "minecraft:sand",
+    "H": "minecraft:chorus_fruit"
+  },
+  "pattern": [
+    "GGG",
+    "GHG",
+    "GGG"
+  ],
+  "result": {
+    "count": 8,
+    "id": "wotr:nograv_sand"
+  }
+}
