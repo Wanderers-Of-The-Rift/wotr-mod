@@ -153,7 +153,7 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
                 used = true;
             }
             if (!used) {
-                WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+                WanderersOfTheRift.LOGGER.warn("incompatible processor type: {}", processor.getClass());
             }
         }
         return lastThemeTemplateProcessorCache = newCache;

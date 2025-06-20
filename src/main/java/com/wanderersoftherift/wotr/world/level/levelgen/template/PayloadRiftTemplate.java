@@ -57,7 +57,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                 used = true;
             }
             if (!used && !(processor instanceof NopProcessor)) {
-                WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+                WanderersOfTheRift.LOGGER.warn("incompatible processor type: {}", processor.getClass());
             }
         }
         this.templateProcessors = ImmutableList.copyOf(templateProcessors);

@@ -73,7 +73,7 @@ public class BasicRiftTemplate implements RiftGeneratable {
                 used = true;
             }
             if (!used && !(processor instanceof NopProcessor)) {
-                WanderersOfTheRift.LOGGER.warn("incompatible processor type:" + processor.getClass());
+                WanderersOfTheRift.LOGGER.warn("incompatible processor type: {}", processor.getClass());
             }
         }
 
