@@ -1,3 +1,35 @@
+## Our values
+
+We are building Wanderers of the Rift and Builders of the Rift as a community driven, open source project rooted in trust, creativity, and shared purpose. 
+These values guide how we collaborate and what we’re creating together:
+
+### Open source
+Both mods are licensed under AGPL-3.0, ensuring that the source code remains freely available, forkable, and open to the public.
+
+### Accessibility
+We are committed to including accessibility features wherever possible so that a wide range of players can enjoy the mod.
+
+### Play your own way
+We believe players should be free to express themselves through gameplay. 
+Our design avoids forcing specific styles or solutions and instead encourages creativity and exploration.
+
+## How we build
+
+### Open idea contribution
+Anyone in the project can share ideas through our forums and channels. 
+We’re working to make the contribution process more streamlined and inclusive over time.
+
+### Distributed leadership
+We operate through shared leadership among core contributors who share direction and decision making responsibilities. 
+Gameplay and content decisions are guided by the coordination team and community while organizational processes are led by the elected/appointed leadership team. 
+While leadership defines key processes, contributor feedback is always welcome and encouraged.
+
+### Transparency
+We value transparency as a foundation for trust. 
+This includes openness around decisions, development progress, and financial matters, while still respecting privacy, boundaries, and project roles
+
+
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
@@ -14,32 +46,46 @@ diverse, inclusive, and healthy community.
 
 ## Our Standards
 
-Examples of behavior that contributes to a positive environment for our
-community include:
+To foster a positive, inclusive, and respectful community, all members are expected to adhere to the following standards:
 
-- Demonstrating empathy and kindness toward other people
-- Being respectful of differing opinions, viewpoints, and experiences
-- Giving and gracefully accepting constructive feedback
-- Accepting responsibility and apologizing to those affected by our mistakes,
-  and learning from the experience
-- Focusing on what is best not just for us as individuals, but for the
-  overall community
+1. Treat everyone with respect
+- Speak and act with empathy, courtesy, and kindness.
+- Engage in discussions constructively, especially during disagreements.
+- Critique ideas, not people.
+  
+2. Embrace diversity and inclusion
+- Respect differing perspectives, experiences, and identities.
+- Acknowledge and appreciate cultural differences and lived experiences.
+- Use inclusive language and behavior.
 
-Examples of unacceptable behavior include:
+3. Communicate thoughtfully and clearly
+- Our team is global, and not everyone speaks English as a first language, so be patient and avoid assumptions.
+- Strive for clarity, use plain language, explain ideas when needed, and aim for mutual understanding.
+- Assume positive intent, especially in written communication where tone can be unclear.
+- Provide constructive, actionable feedback, and accept feedback with openness and humility.
 
-- The use of sexualized language or imagery, and sexual attention or advances
-  of any kind
-- Trolling, insulting or derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information, such as a physical or email
-  address, without their explicit permission
-- Other conduct which could reasonably be considered inappropriate in a
-  professional setting
+4. Be accountable and act with integrity
+- Acknowledge mistakes and make amends where appropriate.
+- Honor others’ privacy and consent at all times.
+- Represent yourself honestly and do not mislead others.
+
+5. Prioritize the well-being of the community
+- Make decisions with the shared health of the project and its members in mind.
+- Support a safe, welcoming, and collaborative space for all contributors.
+- Report harmful behavior through the appropriate moderation channels.
+
+6. Uphold professionalism in all interactions
+- Refrain from using sexualized language, imagery, or behavior.
+- Do not engage in harassment, threats, or discriminatory conduct.
+- Avoid publishing others' private information without consent.
+
 
 ## AI
 The standard for our project will be to utilize the work of the artists and creators on our team rather than relying on AI for these creative works. 
 
-We trust our team members who utilize AI will do so in a way that complements their original work and not  use it as a final product so we can avoid copyright issues. Assets discovered to be purely Generative AI will result in the replacement of the asset. We reserve the right as a team to determine whether an asset is the work of AI and call for a replacement. 
+We trust our team members who utilize AI will do so in a way that complements their original work and not use it as a final product so we can avoid copyright issues. 
+Assets discovered to be purely Generative AI will result in the replacement of the asset. 
+We reserve the right as a team to determine whether an asset is the work of AI and call for a replacement. 
 
 ## Enforcement Responsibilities
 
@@ -55,8 +101,7 @@ decisions when appropriate.
 
 ## Scope
 
-This Code of Conduct applies within all community spaces, including but not limited 
-to Discord, Github, and Reddit.
+This Code of Conduct applies within all community spaces, including but not limited to Discord, Github, Build/Test servers, and Reddit.
 
 It also applies when an individual is officially representing the community in public spaces.
 Examples of representing our community include using an official e-mail address,
@@ -65,39 +110,31 @@ representative at an online or offline event.
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community coordinators responsible for enforcement using the google form
-found [here](link). All complaints will be reviewed and investigated
-promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the PM team using the reporting form provided in the discord. 
+The Project Leadership (PL) and Moderation team will review and investigate all complaints promptly, fairly, and with discretion.
 
-All community coordinators are obligated to respect the privacy and security of the
-reporter of any incident.
+All members of the PL and Moderation team are committed to respecting the privacy and safety of anyone who reports an incident. 
+Retaliation against reporters will not be tolerated.
 
 ## Enforcement Guidelines
 
-Community coordinators will follow these Community Impact Guidelines in determining
-the consequences for any action they deem in violation of this Code of Conduct:
+The PL and Moderation team will follow these Community Impact Guidelines in determining the consequences for any action they deem in violation of this Code of Conduct:
 
 ### 1. Correction
 
 **Community Impact:** Use of inappropriate language or other behavior deemed
 unprofessional or unwelcome in the community.
 
-**Consequence:** A private, written warning from community coordinators, providing
-clarity around the nature of the violation and an explanation of why the
-behavior was inappropriate. A public apology may be requested.
+**Consequence:** A private, written warning from a member of the Moderation team, providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate. 
+A public apology may be requested.
 
 ### 2. Warning
 
 **Community Impact:** A violation through a single incident or series
 of actions.
 
-**Consequence:** A warning with consequences for continued behavior. No
-interaction with the people involved, including unsolicited interaction with
-those enforcing the Code of Conduct, for a specified period of time. This
-includes avoiding interactions in community spaces as well as external channels
-like social media. Violating these terms may lead to a temporary or
-permanent ban.
+**Consequence:** A formal warning issued by the PL and Moderation team. The individual may be temporarily restricted from certain channels or forums. 
+Continued violations may result in escalation to a temporary ban. Guidance will be provided on how to re-engage with the community appropriately.
 
 ### 3. Temporary Ban
 
