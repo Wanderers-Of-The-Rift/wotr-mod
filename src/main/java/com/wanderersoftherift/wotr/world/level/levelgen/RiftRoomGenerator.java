@@ -61,8 +61,7 @@ public class RiftRoomGenerator {
                 var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
                 var mirror = space.templateTransform();
                 if (mirror == null) {
-                    var mirrorInt = randomSource.nextInt(8);
-                    mirror = new TripleMirror(mirrorInt);
+                    mirror = TripleMirror.random(randomSource);
                 }
                 var template = space.template();
                 if (template == null) {

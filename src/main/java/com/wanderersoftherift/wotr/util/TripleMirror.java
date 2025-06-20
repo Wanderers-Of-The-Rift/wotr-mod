@@ -1,22 +1,42 @@
 package com.wanderersoftherift.wotr.util;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.stream.IntStream;
+
 public record TripleMirror(boolean x, boolean z, boolean diagonal) {
 
+    public static final ImmutableList<TripleMirror> PERMUTATIONS = IntStream.range(0, 8)
+            .mapToObj(TripleMirror::new)
+            .collect(ImmutableList.toImmutableList());
     public static final TripleMirror DIAGONAL = new TripleMirror(false, false, true);
     public static final TripleMirror NONE = new TripleMirror(false, false, false);
 
     public TripleMirror(int permutation) {
         this((permutation & 0b1) != 0, (permutation & 0b10) != 0, (permutation & 0b100) != 0);
+    }
+
+    public static TripleMirror random(RandomSource source) {
+        var permutation = source.nextInt(8);
+        return PERMUTATIONS.get(permutation);
+    }
+
+    public TripleMirror onlyDiagonal() {
+        if (this.diagonal) {
+            return DIAGONAL;
+        } else {
+            return NONE;
+        }
     }
 
     public Vec3i applyToPosition(Vec3i position, int sizeX, int sizeZ) {

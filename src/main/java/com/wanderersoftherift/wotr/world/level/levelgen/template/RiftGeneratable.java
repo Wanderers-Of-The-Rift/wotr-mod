@@ -94,7 +94,7 @@ public interface RiftGeneratable {
             } else {
                 nextMirrorInt = mirrorCorrection(parentPrimaryDirection, childPrimaryDirection, nextMirrorInt, true);
             }
-            var nextMirror = new TripleMirror(nextMirrorInt);
+            var nextMirror = TripleMirror.PERMUTATIONS.get(nextMirrorInt);
             var newPlacementShift = placementShift
                     .offset(mirror.applyToPosition(jigsaw.info().pos(), generatable.size().getX() - 1,
                             generatable.size().getZ() - 1))
@@ -117,7 +117,7 @@ public interface RiftGeneratable {
         if (mask == null) {
             return false;
         }
-        var size = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(riftGeneratable.size(), 0, 0);
+        var size = mirror.onlyDiagonal().applyToPosition(riftGeneratable.size(), 0, 0);
         for (int y = 0; y < size.getY(); y += 4) {
             for (int z = 0; z < size.getZ(); z += 4) {
                 for (int x = 0; x < size.getX(); x += 4) {
@@ -162,7 +162,7 @@ public interface RiftGeneratable {
         if (mask == null) {
             return;
         }
-        var size = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(riftGeneratable.size(), 0, 0);
+        var size = mirror.onlyDiagonal().applyToPosition(riftGeneratable.size(), 0, 0);
         for (int y = 0; y < size.getY(); y += 4) {
             for (int z = 0; z < size.getZ(); z += 4) {
                 for (int x = 0; x < size.getX(); x += 4) {

@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class RoomRandomizerImpl implements RoomRandomizer {
@@ -69,9 +68,8 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         var sizeBlocks = generatable.size();
         var sizeChunks = new Vec3i(Math.ceilDiv(sizeBlocks.getX(), 16), Math.ceilDiv(sizeBlocks.getY(), 16),
                 Math.ceilDiv(sizeBlocks.getZ(), 16));
-        var baseStream = IntStream.range(0, 8).mapToObj((mirrorPermutation) -> {
-            var mirror = new TripleMirror(mirrorPermutation);
-            var modifiedSize = new TripleMirror(false, false, mirror.diagonal()).applyToPosition(sizeChunks, 0, 0);
+        var baseStream = TripleMirror.PERMUTATIONS.stream().map((mirror) -> {
+            var modifiedSize = mirror.onlyDiagonal().applyToPosition(sizeChunks, 0, 0);
             return new RoomRiftSpace(modifiedSize,
                     new Vec3i(modifiedSize.getX() / 2, modifiedSize.getY() / 2, modifiedSize.getZ() / 2),
                     computeCorridors(generatable.jigsaws(), mirror, sizeChunks), generatable, mirror
