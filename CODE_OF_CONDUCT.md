@@ -89,12 +89,12 @@ We reserve the right as a team to determine whether an asset is the work of AI a
 
 ## Enforcement Responsibilities
 
-Community coordinators are responsible for clarifying and enforcing our standards
+The Project Leadership (PL) and Moderation team is responsible for clarifying and enforcing our standards
 of acceptable behavior and will take appropriate and fair corrective action in
 response to any behavior that they deem inappropriate, threatening, offensive,
 or harmful.
 
-Community coordinators have the right and responsibility to remove, edit, or reject
+The PL and Moderation team has the right and responsibility to remove, edit, or reject
 comments, commits, code, wiki edits, issues, and other contributions that are
 not aligned to this Code of Conduct, and will communicate reasons for moderation
 decisions when appropriate.
@@ -111,7 +111,7 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the PM team using the reporting form provided in the discord. 
-The Project Leadership (PL) and Moderation team will review and investigate all complaints promptly, fairly, and with discretion.
+The PL and Moderation team will review and investigate all complaints promptly, fairly, and with discretion.
 
 All members of the PL and Moderation team are committed to respecting the privacy and safety of anyone who reports an incident. 
 Retaliation against reporters will not be tolerated.
