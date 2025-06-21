@@ -7,9 +7,11 @@ import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
+import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
@@ -57,6 +59,9 @@ public class WotrRegistries {
             Keys.RIFT_SHAPE_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
+    public static final Registry<CharacterMenuItem> CHARACTER_MENU_ITEMS = new RegistryBuilder<>(
+            Keys.CHARACTER_MENU_ITEMS
+    ).create();
 
     public static final class Keys {
 
@@ -106,6 +111,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
+        public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
 
         private Keys() {
         }
@@ -125,6 +134,7 @@ public class WotrRegistries {
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
+        event.register(CHARACTER_MENU_ITEMS);
     }
 
     @SubscribeEvent
@@ -141,5 +151,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
         event.dataPackRegistry(Keys.TRADE_LISTING, TradeListing.CODEC, TradeListing.CODEC);
+        event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
     }
 }
