@@ -12,7 +12,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Processor
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -110,11 +109,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             StructureTemplate.StructureBlockInfo blockInfo,
             StructurePlaceSettings settings,
             @Nullable StructureTemplate template) {
-
-        var newBlockState = processBlockState(blockInfo.state(), blockInfo.pos().getX(), blockInfo.pos().getX(),
-                blockInfo.pos().getX(), (ServerLevel) world, piecePos, null, true);
-
-        return new StructureTemplate.StructureBlockInfo(blockInfo.pos(), newBlockState, blockInfo.nbt());
+        return backportProcess(world, piecePos, structurePos, rawBlockInfo, blockInfo, settings, template);
     }
 
     @Override

@@ -41,7 +41,6 @@ import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
@@ -389,43 +388,8 @@ public final class RiftLevelManager {
         riftData.setConfig(config);
 
         riftData.setTheme(config.theme().orElse(getRandomTheme(riftLevel.getServer(), riftLevel.random)));
-        int maxDepth = getRiftSize(config.tier());
 
-        /*
-         * placeInitialJigsaw(riftLevel, WanderersOfTheRift.id("rift/room_portal"), WanderersOfTheRift.id("portal"),
-         * maxDepth, new BlockPos(0, 2, 0));
-         */
         return riftLevel;
-    }
-
-    private static void placeInitialJigsaw(
-            ServerLevel level,
-            ResourceLocation templatePoolKey,
-            ResourceLocation target,
-            int maxDepth,
-            BlockPos pos) {
-        var templatePool = level.registryAccess()
-                .lookupOrThrow(Registries.TEMPLATE_POOL)
-                .get(templatePoolKey)
-                .orElse(null);
-        if (templatePool == null) {
-            WanderersOfTheRift.LOGGER.error("Template pool {} not found", templatePoolKey);
-            return;
-        }
-        JigsawPlacement.generateJigsaw(level, templatePool, target, maxDepth, pos, false);
-    }
-
-    private static int getRiftSize(int tier) {
-        return switch (tier) {
-            case 0, 1 -> 5; // no chaos
-            case 2 -> 7;
-            case 3 -> 9;
-            case 4 -> 11;
-            case 5 -> 13;
-            case 6 -> 15;
-            case 7 -> 17;
-            default -> 19; // structures are capped at 20 and it has to be odd for POIs to spawn
-        };
     }
 
     public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, RandomSource random) {

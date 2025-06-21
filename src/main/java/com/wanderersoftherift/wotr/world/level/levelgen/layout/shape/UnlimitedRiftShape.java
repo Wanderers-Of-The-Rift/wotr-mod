@@ -14,13 +14,8 @@ public class UnlimitedRiftShape implements RiftShape {
     }
 
     @Override
-    public double chaosiveness(double x, double z) {
+    public double riftHeightAt(double x, double z) {
         return Double.POSITIVE_INFINITY;
-    }
-
-    @Override
-    public int categorize(double x, double y) {
-        return 2;
     }
 
     @Override

@@ -106,29 +106,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null,
-                    config.layout()
-                            .get()
-                            .createLayout(server, layerCount
-                                    - 2));/*
-                                           * new LayeredInfiniteRiftLayout(layerCount - 2, new BasicRiftShape(),
-                                           * config.seed().orElseThrow(), List.of( new BoxedLayer(new Vec3i(-10, -2,
-                                           * -10), new Vec3i(20, 4, 20), new PredefinedRoomLayer( new
-                                           * RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
-                                           * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), new Vec3i(-1,-1,-1)),
-                                           * new RingLayer(new RoomRandomizerImpl.Factory(
-                                           * WanderersOfTheRift.id("rift/room_stable"),
-                                           * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5), new RingLayer(new
-                                           * RoomRandomizerImpl.Factory( WanderersOfTheRift.id("rift/room_unstable"),
-                                           * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10)), new ChaosLayer(
-                                           * new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
-                                           * RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY)) )
-                                           */
-            /*
-             * new ChaoticRiftLayout(layerCount - 2, config.seed().orElseThrow(), new RoomRandomizerImpl(server,
-             * roomType -> WanderersOfTheRift.id("rift/room_" + roomType.toString().toLowerCase())), new
-             * BasicRiftShape())
-             */
+            layout.compareAndSet(null, config.layout().get().createLayout(server, layerCount - 2));
             perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();

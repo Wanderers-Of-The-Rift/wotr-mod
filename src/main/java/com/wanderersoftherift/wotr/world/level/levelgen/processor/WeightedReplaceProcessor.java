@@ -66,20 +66,7 @@ public class WeightedReplaceProcessor extends StructureProcessor implements Rift
             StructureTemplate.StructureBlockInfo blockInfo,
             StructurePlaceSettings settings,
             @Nullable StructureTemplate template) {
-        BlockState blockstate = blockInfo.state();
-        BlockPos blockPos = blockInfo.pos();
-        if (!inputBlockState.matchesBlockstate(blockstate)) {
-            return blockInfo;
-        }
-
-        BlockState newBlockState = getReplacementBlock(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
-                structurePos);
-        if (newBlockState == null) {
-            return blockInfo;
-        }
-
-        newBlockState = ProcessorUtil.copyState(blockstate, newBlockState);
-        return new StructureTemplate.StructureBlockInfo(blockPos, newBlockState, blockInfo.nbt());
+        return backportProcess(world, piecePos, structurePos, rawBlockInfo, blockInfo, settings, template);
     }
 
     private BlockState getReplacementBlock(LevelReader world, int x, int y, int z, BlockPos structurePos) {

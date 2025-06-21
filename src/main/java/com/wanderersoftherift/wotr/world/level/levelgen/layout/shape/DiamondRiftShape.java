@@ -17,22 +17,7 @@ public record DiamondRiftShape(double offset, double scaleY) implements RiftShap
     }
 
     @Override
-    public double chaosiveness(double x, double z) {
+    public double riftHeightAt(double x, double z) {
         return offset - scaleY * (Math.abs(x) + Math.abs(z));
-    }
-
-    // 2 = chaotic, 1 = unstable, 0 = stable
-    @Override
-    public int categorize(double x, double y) {
-        var chaosiveness = chaosiveness(x, y);
-        if (chaosiveness > 2.5) {
-            return 2;
-        } else {
-            if (chaosiveness > 1.75) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
     }
 }

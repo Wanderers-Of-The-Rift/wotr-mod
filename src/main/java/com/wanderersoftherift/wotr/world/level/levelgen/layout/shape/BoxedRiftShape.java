@@ -53,13 +53,8 @@ public record BoxedRiftShape(RiftShape baseShape, Vec3i boxStart, Vec3i boxSize)
     }
 
     @Override
-    public double chaosiveness(double x, double z) {
-        return baseShape.chaosiveness(x, z);
-    }
-
-    @Override
-    public int categorize(double x, double y) {
-        return baseShape.categorize(x, y);
+    public double riftHeightAt(double x, double z) {
+        return baseShape.riftHeightAt(x, z);
     }
 
     @Override

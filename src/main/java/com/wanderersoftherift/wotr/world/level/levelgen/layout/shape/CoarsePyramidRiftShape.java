@@ -17,22 +17,7 @@ public record CoarsePyramidRiftShape(double offset, double scaleY) implements Ri
     }
 
     @Override
-    public double chaosiveness(double x, double z) {
+    public double riftHeightAt(double x, double z) {
         return offset - scaleY * Double.max(Math.abs(Math.floor((x + 1) / 3)), Math.abs(Math.floor((z + 1) / 3)));
-    }
-
-    // 2 = chaotic, 1 = unstable, 0 = stable
-    @Override
-    public int categorize(double x, double y) {
-        var chaosiveness = chaosiveness(x, y);
-        if (chaosiveness > 2.5) {
-            return 2;
-        } else {
-            if (chaosiveness > 1.75) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
     }
 }

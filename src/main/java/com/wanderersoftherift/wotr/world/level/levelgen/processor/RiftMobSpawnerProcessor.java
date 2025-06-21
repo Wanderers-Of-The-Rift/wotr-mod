@@ -13,7 +13,6 @@ import com.wanderersoftherift.wotr.util.Ref;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.TrialSpawnerBlock;
@@ -64,37 +63,7 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
             StructureTemplate.StructureBlockInfo blockInfo,
             StructurePlaceSettings settings,
             @javax.annotation.Nullable StructureTemplate template) {
-        if (blockInfo.state().getBlock() instanceof TrialSpawnerBlock) {
-            BlockState blockState = WotrBlocks.RIFT_MOB_SPAWNER.get().defaultBlockState();
-            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockState.getBlock()).newBlockEntity(blockInfo.pos(),
-                    blockState);
-            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
-                return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
-                        blockState.setValue(RiftMobSpawnerBlock.STATE, RiftMobSpawnerState.INACTIVE),
-                        getBlockEntity(world, spawnerBlockEntity));
-            }
-        }
-        if (blockInfo.state().getBlock() instanceof RiftMobSpawnerBlock) {
-            BlockEntity blockEntity = ((RiftMobSpawnerBlock) blockInfo.state().getBlock())
-                    .newBlockEntity(blockInfo.pos(), blockInfo.state());
-            if (blockEntity instanceof RiftMobSpawnerBlockEntity spawnerBlockEntity) {
-                return new StructureTemplate.StructureBlockInfo(blockInfo.pos(),
-                        blockInfo.state().setValue(RiftMobSpawnerBlock.STATE, RiftMobSpawnerState.INACTIVE),
-                        getBlockEntity(world, spawnerBlockEntity));
-            }
-        }
-        return blockInfo;
-    }
-
-    private CompoundTag getBlockEntity(LevelReader world, RiftMobSpawnerBlockEntity blockEntity) {
-        Holder<TrialSpawnerConfig> normalConfig = getFinalNormalConfig(world);
-        Holder<TrialSpawnerConfig> ominousConfig = getFinalOminousConfig(normalConfig);
-        RiftMobSpawner riftMobSpawner = new RiftMobSpawner(
-                normalConfig, ominousConfig, new RiftMobSpawnerData(), 72_000, 9, blockEntity, RIFT_PLAYERS,
-                PlayerDetector.EntitySelector.SELECT_FROM_LEVEL);
-        riftMobSpawner.getData().reset();
-        blockEntity.setRiftMobSpawner(riftMobSpawner);
-        return blockEntity.saveWithId(world.registryAccess());
+        return backportProcess(world, piecePos, structurePos, rawBlockInfo, blockInfo, settings, template);
     }
 
     private Holder<TrialSpawnerConfig> getFinalNormalConfig(LevelReader world) {

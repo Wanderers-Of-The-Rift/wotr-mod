@@ -48,12 +48,4 @@ public record RoomRiftSpace(Vec3i size, Vec3i center, List<RiftSpaceCorridor> co
     public RoomRiftSpace offset(int x, int y, int z) {
         return new RoomRiftSpace(size, center.offset(x, y, z), corridors, template, templateTransform);
     }
-
-    @Deprecated
-    public static enum RoomType {
-        CHAOS,
-        UNSTABLE,
-        STABLE,
-        PORTAL
-    }
 }
