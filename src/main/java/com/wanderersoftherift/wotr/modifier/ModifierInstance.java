@@ -30,7 +30,7 @@ public record ModifierInstance(Holder<Modifier> modifier, int tier, float roll) 
         return new ModifierInstance(modifier, tier, random.nextFloat());
     }
 
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, ChatFormatting chatFormatting) {
-        return modifier.value().getTooltipComponent(stack, roll, this, chatFormatting);
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack, int color) {
+        return modifier.value().getTooltipComponent(stack, roll, this, color);
     }
 }

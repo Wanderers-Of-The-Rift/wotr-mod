@@ -8,10 +8,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -109,14 +109,14 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
+    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, int color) {
         return switch (this.getOperation()) {
-            case ADD_VALUE -> getAddTooltipComponent(stack, roll, chatFormatting);
-            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, chatFormatting);
+            case ADD_VALUE -> getAddTooltipComponent(stack, roll, color);
+            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, color);
         };
     }
 
-    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
+    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, int color) {
         double calculatedRoll = calculateModifier(roll);
         float roundedValue = (float) (Math.ceil(calculatedRoll * 100) / 100);
         String sign;
@@ -129,11 +129,11 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         MutableComponent cmp = Component
                 .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign, roundedValue,
                         Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(chatFormatting);
+                .withStyle(Style.EMPTY.withColor(color));
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
-    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
+    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, int color) {
         double calculatedRoll = calculateModifier(roll);
         int roundedValue = (int) Math.ceil(calculatedRoll * 100);
         String sign;
@@ -146,7 +146,7 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         MutableComponent cmp = Component
                 .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
                         Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(chatFormatting);
+                .withStyle(Style.EMPTY.withColor(color));
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 }

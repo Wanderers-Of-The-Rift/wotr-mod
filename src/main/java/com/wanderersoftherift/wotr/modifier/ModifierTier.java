@@ -52,10 +52,10 @@ public class ModifierTier {
             ItemStack stack,
             float roll,
             ModifierInstance instance,
-            ChatFormatting chatFormatting) {
+            int color) {
         List<TooltipComponent> tooltipComponents = new ArrayList<>();
         for (AbstractModifierEffect effect : modifierEffects) {
-            tooltipComponents.add(effect.getTooltipComponent(stack, roll, chatFormatting));
+            tooltipComponents.add(effect.getTooltipComponent(stack, roll, color));
         }
         return tooltipComponents;
     }
