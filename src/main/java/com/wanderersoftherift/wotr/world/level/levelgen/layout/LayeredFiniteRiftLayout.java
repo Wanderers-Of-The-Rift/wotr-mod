@@ -203,7 +203,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         }
 
         @Override
-        public RiftLayout createLayout(MinecraftServer server, int layerCount) {
+        public RiftLayout createLayout(MinecraftServer server) {
             return new LayeredFiniteRiftLayout(shape, seed, layers.stream().map(it -> it.create(server)).toList());
         }
     }

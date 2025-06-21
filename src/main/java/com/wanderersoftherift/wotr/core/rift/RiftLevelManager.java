@@ -83,7 +83,8 @@ public final class RiftLevelManager {
      */
     public static boolean isRift(Level level) {
         Registry<DimensionType> dimTypes = level.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
-        Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPES.stream()
+        Stream<Holder.Reference<DimensionType>> riftTypes = RiftDimensionType.RIFT_DIMENSION_TYPE_MAP.values()
+                .stream()
                 .map(dimTypes::get)
                 .filter(Optional::isPresent)
                 .map(Optional::get);
@@ -173,16 +174,18 @@ public final class RiftLevelManager {
             return null;
         }
 
-        int typeHeight = 5;
+        int requestedRiftHeightChunks = 24; // arbitrary number, maybe load from key or something
+        var riftDimensionType = RiftDimensionType.RIFT_DIMENSION_TYPE_MAP.ceilingEntry(requestedRiftHeightChunks * 16);
+        int actualRiftHeight = riftDimensionType.getKey();
 
-        config = initializeConfig(config, server);
+        config = initializeConfig(config, requestedRiftHeightChunks - FastRiftGenerator.MARGIN_LAYERS, server);
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(ow, (typeHeight + 1) * 4, config);
+        ChunkGenerator chunkGen = getRiftChunkGenerator(ow, requestedRiftHeightChunks, actualRiftHeight, config);
         if (chunkGen == null) {
             return null;
         }
 
-        var stem = getLevelStem(server, id, chunkGen, typeHeight);
+        var stem = getLevelStem(server, id, chunkGen, riftDimensionType.getValue());
         if (stem == null) {
             return null;
         }
@@ -227,7 +230,7 @@ public final class RiftLevelManager {
             MinecraftServer server,
             ResourceLocation id,
             ChunkGenerator chunkGen,
-            int type) {
+            ResourceKey<DimensionType> type) {
         Optional<Registry<LevelStem>> levelStemRegistry = server.overworld()
                 .registryAccess()
                 .lookup(Registries.LEVEL_STEM);
@@ -235,10 +238,7 @@ public final class RiftLevelManager {
             return null;
         }
 
-        var riftType = server.registryAccess()
-                .lookupOrThrow(Registries.DIMENSION_TYPE)
-                .get(RiftDimensionType.RIFT_DIMENSION_TYPES.get(type/* todo read from key or something */))
-                .orElse(null);
+        var riftType = server.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE).get(type).orElse(null);
         if (riftType == null) {
             WanderersOfTheRift.LOGGER.error("Failed to get rift dimension type");
             return null;
@@ -315,21 +315,22 @@ public final class RiftLevelManager {
         level.getServer().overworld().save(null, true, false);
     }
 
-    private static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
+    private static RiftConfig initializeConfig(RiftConfig baseConfig, int layerCount, MinecraftServer server) {
         var random = RandomSource.create();
         int seed = baseConfig.seed().orElseGet(random::nextInt);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, random));
         return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
                 baseConfig.layout().isPresent() ? baseConfig.layout()
-                        : Optional.of(defaultLayout(baseConfig.tier(), seed)),
+                        : Optional.of(defaultLayout(baseConfig.tier(), layerCount, seed)),
                 Optional.of(seed));
     }
 
-    private static RiftLayout.Factory defaultLayout(int tier, int seed) {
+    private static RiftLayout.Factory defaultLayout(int tier, int layerCount, int seed) {
 
         var factory = new LayeredFiniteRiftLayout.Factory(
                 new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0),
-                        new Vec3i(-1 - 3 * tier, -10, -1 - 3 * tier), new Vec3i(3 + 6 * tier, 20, 3 + 6 * tier)),
+                        new Vec3i(-1 - 3 * tier, -layerCount / 2, -1 - 3 * tier),
+                        new Vec3i(3 + 6 * tier, layerCount, 3 + 6 * tier)),
                 seed, List.of(
                         new PredefinedRoomLayer.Factory(
                                 new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
@@ -348,12 +349,16 @@ public final class RiftLevelManager {
         return factory;
     }
 
-    private static ChunkGenerator getRiftChunkGenerator(ServerLevel overworld, int layerCount, RiftConfig config) {
+    private static ChunkGenerator getRiftChunkGenerator(
+            ServerLevel overworld,
+            int layerCount,
+            int dimensionHeightBlocks,
+            RiftConfig config) {
         var voidBiome = overworld.registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).orElse(null);
         if (voidBiome == null) {
             return null;
         }
-        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount,
+        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount, dimensionHeightBlocks,
                 ResourceLocation.withDefaultNamespace("bedrock"), config);
     }
 

@@ -62,13 +62,16 @@ public class FastRiftGenerator extends ChunkGenerator {
     public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
+            Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
             ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
+    public static final int MARGIN_LAYERS = 2;
 
     private final int layerCount;
 
     private final ResourceLocation customBlockID;
+    private final int dimensionHeightBlocks;
     private final BlockState customBlock;
     private final AtomicInteger inFlightChunks = new AtomicInteger(0);
 
@@ -82,10 +85,11 @@ public class FastRiftGenerator extends ChunkGenerator {
     private RiftGeneratable filler;
     private RiftGeneratable perimeter;
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, ResourceLocation defaultBlock,
-            RiftConfig config) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
+            ResourceLocation defaultBlock, RiftConfig config) {
         super(biomeSource);
         this.layerCount = layerCount;
+        this.dimensionHeightBlocks = dimensionHeightBlocks;
         this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock)
                 .map(Holder.Reference::value)
                 .map(Block::defaultBlockState)
@@ -106,7 +110,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, config.layout().get().createLayout(server, layerCount - 2));
+            layout.compareAndSet(null, config.layout().get().createLayout(server));
             perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();
@@ -157,7 +161,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public int getGenDepth() {
-        return layerCount * 16;
+        return dimensionHeightBlocks;
     }
 
     @Override
@@ -260,12 +264,12 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public int getSeaLevel() {
-        return -layerCount * 8;
+        return -dimensionHeightBlocks / 2;
     }
 
     @Override
     public int getMinY() {
-        return -layerCount * 8;
+        return -dimensionHeightBlocks / 2;
     }
 
     @Override
@@ -309,5 +313,9 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public ResourceLocation getCustomBlockID() {
         return customBlockID;
+    }
+
+    public int getDimensionHeightBlocks() {
+        return dimensionHeightBlocks;
     }
 }

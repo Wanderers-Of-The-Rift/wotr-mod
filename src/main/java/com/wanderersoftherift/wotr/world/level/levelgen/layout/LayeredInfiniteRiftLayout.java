@@ -86,13 +86,14 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
-    public record Factory(RiftShape riftShape, int seed, List<LayoutLayer.Factory> layers)
+    public record Factory(RiftShape riftShape, int seed, int levelCount, List<LayoutLayer.Factory> layers)
             implements RiftLayout.Factory {
 
         public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
                         RiftShape.CODEC.fieldOf("shape").forGetter(LayeredInfiniteRiftLayout.Factory::riftShape),
                         Codec.INT.fieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
+                        Codec.INT.fieldOf("level_count").forGetter(LayeredInfiniteRiftLayout.Factory::levelCount),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
                                 .forGetter(LayeredInfiniteRiftLayout.Factory::layers)
@@ -104,9 +105,9 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
         @Override
-        public RiftLayout createLayout(MinecraftServer server, int levelCount) {
-            return new LayeredInfiniteRiftLayout(levelCount, riftShape, seed,
-                    layers.stream().map(it -> it.create(server)).toList());
+        public RiftLayout createLayout(MinecraftServer server) {
+            return new LayeredInfiniteRiftLayout(levelCount /* maybe Y limits could be part of all rift shapes */,
+                    riftShape, seed, layers.stream().map(it -> it.create(server)).toList());
         }
     }
 
