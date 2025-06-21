@@ -114,7 +114,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
             z = -z;
         }
 
-        return new Vec3(x + 8, y + 6, z + 8);
+        return new Vec3(PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION).add(x, y, z);
     }
 
     @Override

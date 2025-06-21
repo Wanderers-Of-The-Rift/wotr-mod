@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
@@ -204,7 +205,7 @@ public final class RiftLevelManager {
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
 
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
-        spawnRiftExit(level, new BlockPos(8, 6, 8).above().getBottomCenter());
+        spawnRiftExit(level, PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION.above().getBottomCenter());
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
     }
