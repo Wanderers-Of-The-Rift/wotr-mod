@@ -20,20 +20,27 @@ import java.util.stream.Collectors;
 
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList)
+            ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList),
+            Codec.INT.optionalFieldOf("color", 0xFFFFFF).forGetter(Modifier::getColor)
     ).apply(inst, Modifier::new));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.MODIFIERS);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MODIFIERS);
 
     private final Map<Integer, ModifierTier> modifierTiers;
+    private final int color;
 
-    public Modifier(List<ModifierTier> modifierTiers) {
+    public Modifier(List<ModifierTier> modifierTiers, int color) {
         this.modifierTiers = modifierTiers.stream().collect(Collectors.toMap(ModifierTier::getTier, tier -> tier));
+        this.color = color;
     }
 
     public List<ModifierTier> getModifierTierList() {
         return modifierTiers.values().stream().toList();
+    }
+
+    public int getColor() {
+        return color;
     }
 
     public void enableModifier(float roll, Entity entity, ModifierSource source, int tier) {
