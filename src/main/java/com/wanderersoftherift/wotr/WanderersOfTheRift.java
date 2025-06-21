@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
 import com.wanderersoftherift.wotr.init.WotrContainerTypes;
 import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -117,6 +118,8 @@ public class WanderersOfTheRift {
             WotrConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
             WotrEmblemProviders.PROVIDERS.register(modEventBus);
         }
+
+        WotrCharacterMenuItems.MENU_ITEMS.register(modEventBus);
 
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);

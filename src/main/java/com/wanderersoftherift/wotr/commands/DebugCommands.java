@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.ServerWallet;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -32,7 +33,21 @@ public class DebugCommands extends BaseCommand {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
         builder.then(Commands.literal("openTradingMenu").executes(this::openTradingMenu));
+        builder.then(Commands.literal("openStatusMenu").executes(this::openStatusMenu));
 
+    }
+
+    private int openStatusMenu(CommandContext<CommandSourceStack> context) {
+        if (context.getSource().getPlayer() != null) {
+            context.getSource()
+                    .getPlayer()
+                    .openMenu(new SimpleMenuProvider(
+                            ((containerId, playerInventory, player) -> new GuildMenu(containerId, playerInventory,
+                                    ContainerLevelAccess.create(player.level(), player.getOnPos()))),
+                            Component.translatable(WanderersOfTheRift.translationId("container", "guilds"), "Guild")));
+            return 1;
+        }
+        return 0;
     }
 
     private int openTradingMenu(CommandContext<CommandSourceStack> context) {
