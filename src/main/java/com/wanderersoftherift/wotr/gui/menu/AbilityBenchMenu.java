@@ -42,6 +42,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
+    private final IItemHandler upgradeMatStorage;
     private final DataSlot canLevel;
     private final QuickMover mover;
 
@@ -55,7 +56,8 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             ContainerLevelAccess access, IItemHandler abilities) {
         super(WotrMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
         this.access = access;
-        this.inputContainer = new SimpleContainer(INPUT_SLOTS);
+        this.inputContainer = new SimpleContainer(1);
+        this.upgradeMatStorage = persistentStore;
         inputContainer.addListener(this::onAbilitySlotChanged);
         addSlot(new AbilitySlot(inputContainer, 0, 32, 17));
         addSlot(new LargeSlotItemHandler(persistentStore, 0, 297, 7));
@@ -159,7 +161,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      * @return How much upgrade currency is available
      */
     public int availableUpgradeCurrency() {
-        return inputContainer.getItem(1).getCount();
+        return upgradeMatStorage.getStackInSlot(0).getCount();
     }
 
     /**
@@ -199,7 +201,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             if (available < cost) {
                 return;
             }
-            inputContainer.getItem(1).shrink(cost);
+            upgradeMatStorage.extractItem(0, cost, false);
             AbilityUpgradePool updatedPool = pool.getMutable()
                     .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
                             AbilityUpgradePool.SELECTION_PER_LEVEL)
