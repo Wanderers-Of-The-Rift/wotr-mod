@@ -339,7 +339,7 @@ public final class RiftLevelManager {
                 new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0),
                         new Vec3i(-1 - 3 * tier, -layerCount / 2, -1 - 3 * tier),
                         new Vec3i(3 + 6 * tier, layerCount, 3 + 6 * tier)),
-                seed, List.of(
+                Optional.of(seed), List.of(
                         new PredefinedRoomLayer.Factory(
                                 new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
                                         RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),

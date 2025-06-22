@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 public class RoomRandomizerImpl implements RoomRandomizer {
 
-    public static final PreparableReloadListener RELOAD_LISTENER = (barrier,manager,executor1,executor2)->{
+    public static final PreparableReloadListener RELOAD_LISTENER = (barrier, manager, executor1, executor2) -> {
         POOL_CACHE = null;
         return barrier.wait(null);
     };

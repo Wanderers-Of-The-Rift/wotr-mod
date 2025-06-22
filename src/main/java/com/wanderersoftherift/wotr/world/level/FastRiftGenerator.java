@@ -110,7 +110,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, config.layout().get().createLayout(server));
+            layout.compareAndSet(null, config.layout().get().createLayout(server, config.seed().get()));
             perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();

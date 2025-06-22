@@ -198,11 +198,10 @@ public class WanderersOfTheRift {
     }
 
     @SubscribeEvent
-    private void registerServerReloadListeners(AddServerReloadListenersEvent event){
+    private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
         event.addListener(id("invalidate_caches/rift_templates"), RiftTemplates.RELOAD_LISTENER);
         event.addListener(id("invalidate_caches/room_randomizer"), RoomRandomizerImpl.RELOAD_LISTENER);
     }
-
 
     @SubscribeEvent
     private void registerCommands(RegisterCommandsEvent event) {

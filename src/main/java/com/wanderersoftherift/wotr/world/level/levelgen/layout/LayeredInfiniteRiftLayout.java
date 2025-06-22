@@ -20,6 +20,7 @@ import org.joml.Vector2i;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -86,13 +87,13 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
-    public record Factory(RiftShape riftShape, int seed, int levelCount, List<LayoutLayer.Factory> layers)
+    public record Factory(RiftShape riftShape, Optional<Integer> seed, int levelCount, List<LayoutLayer.Factory> layers)
             implements RiftLayout.Factory {
 
         public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
                         RiftShape.CODEC.fieldOf("shape").forGetter(LayeredInfiniteRiftLayout.Factory::riftShape),
-                        Codec.INT.fieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
+                        Codec.INT.optionalFieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
                         Codec.INT.fieldOf("level_count").forGetter(LayeredInfiniteRiftLayout.Factory::levelCount),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
@@ -105,9 +106,9 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
         @Override
-        public RiftLayout createLayout(MinecraftServer server) {
+        public RiftLayout createLayout(MinecraftServer server, int seed) {
             return new LayeredInfiniteRiftLayout(levelCount /* maybe Y limits could be part of all rift shapes */,
-                    riftShape, seed, layers.stream().map(it -> it.create(server)).toList());
+                    riftShape, this.seed.orElse(seed), layers.stream().map(it -> it.create(server)).toList());
         }
     }
 

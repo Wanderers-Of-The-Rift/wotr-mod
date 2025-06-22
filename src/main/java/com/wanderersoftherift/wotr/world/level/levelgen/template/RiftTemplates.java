@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RiftTemplates {
 
     private static final Map<String, FastWeightedList<RiftGeneratable>> RIFT_TEMPLATE_POOL_CACHE = new ConcurrentHashMap<>();
-    public static final PreparableReloadListener RELOAD_LISTENER = (barrier, manager, executor1, executor2)->{
+    public static final PreparableReloadListener RELOAD_LISTENER = (barrier, manager, executor1, executor2) -> {
         RIFT_TEMPLATE_POOL_CACHE.clear();
         return barrier.wait(null);
     };
