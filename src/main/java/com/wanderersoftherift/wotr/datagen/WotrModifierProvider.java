@@ -105,8 +105,9 @@ public class WotrModifierProvider {
                                         Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("attack_heavy"), new Modifier(generateEqualRollSpread(5, List.of(
-                new ToBeTieredModifierEffect(0.01F, 2F, attributeModifierEffectGetter(WanderersOfTheRift.id("attack_heavy"),
-                        Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE))),
+                new ToBeTieredModifierEffect(0.01F, 2F,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("attack_heavy"), Attributes.ATTACK_DAMAGE,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_BASE))),
                 List.of(new AttributeModifierEffect(
                         WanderersOfTheRift.id("attack_heavy"), Attributes.ATTACK_SPEED, -1, -0.5F,
                         AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
