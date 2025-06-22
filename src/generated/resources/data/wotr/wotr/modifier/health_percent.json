@@ -6,8 +6,8 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
           "id": "wotr:health_percent",
-          "max_roll": 0.029999999329447746,
-          "min_roll": 0.0,
+          "max_roll": 0.03999999910593033,
+          "min_roll": 0.009999999776482582,
           "operation": "add_multiplied_base"
         }
       ],
@@ -20,7 +20,7 @@
           "attribute": "minecraft:max_health",
           "id": "wotr:health_percent",
           "max_roll": 0.07000000029802322,
-          "min_roll": 0.029999999329447746,
+          "min_roll": 0.03999999910593033,
           "operation": "add_multiplied_base"
         }
       ],
@@ -32,7 +32,7 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
           "id": "wotr:health_percent",
-          "max_roll": 0.10000000149011612,
+          "max_roll": 0.10999999940395355,
           "min_roll": 0.07000000029802322,
           "operation": "add_multiplied_base"
         }
@@ -45,8 +45,8 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:max_health",
           "id": "wotr:health_percent",
-          "max_roll": 0.12999999523162842,
-          "min_roll": 0.10000000149011612,
+          "max_roll": 0.14000000059604645,
+          "min_roll": 0.10999999940395355,
           "operation": "add_multiplied_base"
         }
       ],
@@ -59,7 +59,7 @@
           "attribute": "minecraft:max_health",
           "id": "wotr:health_percent",
           "max_roll": 0.17000000178813934,
-          "min_roll": 0.12999999523162842,
+          "min_roll": 0.14000000059604645,
           "operation": "add_multiplied_base"
         }
       ],

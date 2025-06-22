@@ -6,8 +6,8 @@
           "type": "wotr:attribute",
           "attribute": "wotr:projectile_speed",
           "id": "wotr:projectile_count",
-          "max_roll": 0.05000000074505806,
-          "min_roll": 0.0,
+          "max_roll": 0.05999999865889549,
+          "min_roll": 0.009999999776482582,
           "operation": "add_multiplied_base"
         }
       ],
@@ -20,7 +20,7 @@
           "attribute": "wotr:projectile_speed",
           "id": "wotr:projectile_count",
           "max_roll": 0.10000000149011612,
-          "min_roll": 0.05000000074505806,
+          "min_roll": 0.05999999865889549,
           "operation": "add_multiplied_base"
         }
       ],

@@ -45,7 +45,7 @@
           "type": "wotr:attribute",
           "attribute": "minecraft:attack_damage",
           "id": "wotr:attack_percent",
-          "max_roll": 0.550000011920929,
+          "max_roll": 0.6000000238418579,
           "min_roll": 0.44999998807907104,
           "operation": "add_multiplied_base"
         }
@@ -59,7 +59,7 @@
           "attribute": "minecraft:attack_damage",
           "id": "wotr:attack_percent",
           "max_roll": 0.699999988079071,
-          "min_roll": 0.550000011920929,
+          "min_roll": 0.6000000238418579,
           "operation": "add_multiplied_base"
         }
       ],

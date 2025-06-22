@@ -6,8 +6,8 @@
           "type": "wotr:attribute",
           "attribute": "wotr:mana_regen_rate",
           "id": "wotr:mana_regen_rate",
-          "max_roll": 0.05000000074505806,
-          "min_roll": 0.0,
+          "max_roll": 0.05999999865889549,
+          "min_roll": 0.009999999776482582,
           "operation": "add_multiplied_base"
         }
       ],
@@ -19,8 +19,8 @@
           "type": "wotr:attribute",
           "attribute": "wotr:mana_regen_rate",
           "id": "wotr:mana_regen_rate",
-          "max_roll": 0.10000000149011612,
-          "min_roll": 0.05000000074505806,
+          "max_roll": 0.10999999940395355,
+          "min_roll": 0.05999999865889549,
           "operation": "add_multiplied_base"
         }
       ],
@@ -33,7 +33,7 @@
           "attribute": "wotr:mana_regen_rate",
           "id": "wotr:mana_regen_rate",
           "max_roll": 0.15000000596046448,
-          "min_roll": 0.10000000149011612,
+          "min_roll": 0.10999999940395355,
           "operation": "add_multiplied_base"
         }
       ],
