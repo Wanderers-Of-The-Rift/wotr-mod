@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -28,7 +29,10 @@ import java.util.stream.Stream;
 
 public class RoomRandomizerImpl implements RoomRandomizer {
 
-    // todo invalidate if data pack changes
+    public static final PreparableReloadListener RELOAD_LISTENER = (barrier,manager,executor1,executor2)->{
+        POOL_CACHE = null;
+        return barrier.wait(null);
+    };
     public static final RiftSpaceHolderFactory MULTI_SIZE_SPACE_HOLDER_FACTORY = MultiSizeRiftSpaceRandomList::new;
     public static final RiftSpaceHolderFactory SINGLE_SIZE_SPACE_HOLDER_FACTORY = MonoSizeRiftSpaceRandomList::new;
     @SuppressWarnings("StaticVariableName")

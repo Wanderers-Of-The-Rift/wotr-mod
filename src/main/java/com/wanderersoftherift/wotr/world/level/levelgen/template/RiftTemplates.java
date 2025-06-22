@@ -10,6 +10,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
@@ -26,8 +27,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RiftTemplates {
 
-    // todo invalidate if data pack changes
     private static final Map<String, FastWeightedList<RiftGeneratable>> RIFT_TEMPLATE_POOL_CACHE = new ConcurrentHashMap<>();
+    public static final PreparableReloadListener RELOAD_LISTENER = (barrier, manager, executor1, executor2)->{
+        RIFT_TEMPLATE_POOL_CACHE.clear();
+        return barrier.wait(null);
+    };
 
     private static PhantomReference<MinecraftServer> cachedServer;
 
