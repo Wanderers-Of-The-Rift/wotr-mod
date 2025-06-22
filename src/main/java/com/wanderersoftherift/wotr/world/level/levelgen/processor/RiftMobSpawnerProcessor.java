@@ -39,6 +39,7 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
 
     private final Optional<Holder<TrialSpawnerConfig>> spawnerConfig;
     private final Optional<Holder<TrialSpawnerConfig>> ominousConfig;
+    private Holder.Reference<TrialSpawnerConfig> fallbackCache;
 
     public RiftMobSpawnerProcessor(Optional<Holder<TrialSpawnerConfig>> spawnerConfig,
             Optional<Holder<TrialSpawnerConfig>> ominousConfig) {
@@ -67,10 +68,11 @@ public class RiftMobSpawnerProcessor extends StructureProcessor implements RiftT
     }
 
     private Holder<TrialSpawnerConfig> getFinalNormalConfig(LevelReader world) {
-        return spawnerConfig.orElseGet(() -> world.registryAccess()
-                .lookupOrThrow(Registries.TRIAL_SPAWNER_CONFIG)
-                .get(WanderersOfTheRift.id("rift"))
-                .orElseThrow());
+        return spawnerConfig.orElse((fallbackCache != null) ? fallbackCache
+                : ((fallbackCache = world.registryAccess()
+                        .lookupOrThrow(Registries.TRIAL_SPAWNER_CONFIG)
+                        .get(WanderersOfTheRift.id("rift"))
+                        .orElseThrow())));
     }
 
     private Holder<TrialSpawnerConfig> getFinalOminousConfig(Holder<TrialSpawnerConfig> normalConfig) {
