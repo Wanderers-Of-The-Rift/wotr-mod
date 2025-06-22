@@ -6,8 +6,8 @@
           "type": "wotr:attribute",
           "attribute": "wotr:ability_cooldown",
           "id": "wotr:ability_cooldown",
-          "max_roll": -0.019999999552965164,
-          "min_roll": 0.0,
+          "max_roll": -0.009999999776482582,
+          "min_roll": 0.009999999776482582,
           "operation": "add_multiplied_base"
         }
       ],
@@ -19,8 +19,8 @@
           "type": "wotr:attribute",
           "attribute": "wotr:ability_cooldown",
           "id": "wotr:ability_cooldown",
-          "max_roll": -0.03999999910593033,
-          "min_roll": -0.019999999552965164,
+          "max_roll": -0.029999999329447746,
+          "min_roll": -0.009999999776482582,
           "operation": "add_multiplied_base"
         }
       ],
@@ -33,7 +33,7 @@
           "attribute": "wotr:ability_cooldown",
           "id": "wotr:ability_cooldown",
           "max_roll": -0.05999999865889549,
-          "min_roll": -0.03999999910593033,
+          "min_roll": -0.029999999329447746,
           "operation": "add_multiplied_base"
         }
       ],
