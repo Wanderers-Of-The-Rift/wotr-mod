@@ -14,7 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-/*copied from VaultFaster*/
+/* copied from VaultFaster
+ *
+ * fixes a bug in mojank code that causes multithreading crash
+ * original code loaded empty map to rotatedDirections and then populate it
+ * this would cause a crash where if two threads tried to access it simoultaneously, one could read the map before it was fully populated.
+ * this modified code fixes this issue by loading empty map to a local variable, then populating it and then moving it to rotatedDirections so that rotatedDirections never has a nonnull map that's not fully populated
+ */
 @Mixin(OctahedralGroup.class)
 public abstract class MixinOctahedralGroup {
 
