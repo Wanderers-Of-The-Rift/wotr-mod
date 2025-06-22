@@ -1,10 +1,10 @@
-package com.wanderersoftherift.wotr.gui.screen.status;
+package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.gui.menu.status.BaseStatusMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.BaseCharacterMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
-import com.wanderersoftherift.wotr.network.SelectStatusMenuPayload;
+import com.wanderersoftherift.wotr.network.SelectCharacterMenuPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,15 +15,15 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class BaseStatusScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
+public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends AbstractContainerScreen<T> {
+    protected static final int MENU_BAR_WIDTH = 100;
 
     private ScrollContainerWidget<MenuItem> menuSelection;
 
-    public BaseStatusScreen(T menu, Inventory playerInventory, Component title) {
+    public BaseCharacterScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.leftPos = 0;
         this.topPos = 0;
@@ -34,9 +34,9 @@ public abstract class BaseStatusScreen<T extends AbstractContainerMenu> extends 
     @Override
     protected void init() {
         super.init();
-        menuSelection = new ScrollContainerWidget<>(0, 0, 200, 320);
-        for (int i = 0; i < BaseStatusMenu.ITEMS.size(); i++) {
-            var item = BaseStatusMenu.ITEMS.get(i);
+        menuSelection = new ScrollContainerWidget<>(0, 0, MENU_BAR_WIDTH, 320);
+        for (int i = 0; i < BaseCharacterMenu.ITEMS.size(); i++) {
+            var item = BaseCharacterMenu.ITEMS.get(i);
             menuSelection.children()
                     .add(new MenuItem(item.name(), i, 0, 0, 94, font, menu.getType() == item.menuType()));
         }
@@ -73,13 +73,16 @@ public abstract class BaseStatusScreen<T extends AbstractContainerMenu> extends 
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        menuSelection.setHeight(guiGraphics.guiHeight());
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderLabels(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
-
+        int width = font.width(getTitle());
+        guiGraphics.drawString(font, getTitle(), (guiGraphics.guiWidth() - width) / 2, 10,
+                ChatFormatting.WHITE.getColor(), true);
     }
 
     @Override
@@ -90,11 +93,11 @@ public abstract class BaseStatusScreen<T extends AbstractContainerMenu> extends 
     private static class MenuItem extends AbstractWidget implements ScrollContainerEntry {
 
         private static final ResourceLocation BACKGROUND = WanderersOfTheRift
-                .id("textures/gui/container/status/menu_item.png");
+                .id("textures/gui/container/character/menu_item.png");
         private static final ResourceLocation SELECTED = WanderersOfTheRift
-                .id("textures/gui/container/status/menu_item_selected.png");
+                .id("textures/gui/container/character/menu_item_selected.png");
         private static final ResourceLocation HOVERED = WanderersOfTheRift
-                .id("textures/gui/container/status/menu_item_hovered.png");
+                .id("textures/gui/container/character/menu_item_hovered.png");
         private final Font font;
         private final boolean selected;
         private final int index;
@@ -132,7 +135,7 @@ public abstract class BaseStatusScreen<T extends AbstractContainerMenu> extends 
         @Override
         public void onClick(double mouseX, double mouseY, int button) {
             if (!selected) {
-                PacketDistributor.sendToServer(new SelectStatusMenuPayload(index));
+                PacketDistributor.sendToServer(new SelectCharacterMenuPayload(index));
             }
         }
     }

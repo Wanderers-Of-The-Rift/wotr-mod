@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
-import com.wanderersoftherift.wotr.network.SelectStatusMenuPayload;
+import com.wanderersoftherift.wotr.network.SelectCharacterMenuPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsCooldownsPayload;
@@ -90,9 +90,9 @@ public class WotrPayloadHandlers {
         registrar.playToServer(SelectTradePayload.TYPE, SelectTradePayload.STREAM_CODEC,
                 SelectTradePayload::handleOnServer);
 
-        // Status Menu
-        registrar.playToServer(SelectStatusMenuPayload.TYPE, SelectStatusMenuPayload.STREAM_CODEC,
-                SelectStatusMenuPayload::handleOnServer);
+        // Character Menu
+        registrar.playToServer(SelectCharacterMenuPayload.TYPE, SelectCharacterMenuPayload.STREAM_CODEC,
+                SelectCharacterMenuPayload::handleOnServer);
     }
 
     @SubscribeEvent

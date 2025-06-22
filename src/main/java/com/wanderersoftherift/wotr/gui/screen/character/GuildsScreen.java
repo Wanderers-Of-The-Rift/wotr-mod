@@ -1,14 +1,14 @@
-package com.wanderersoftherift.wotr.gui.screen.status;
+package com.wanderersoftherift.wotr.gui.screen.character;
 
-import com.wanderersoftherift.wotr.gui.menu.status.WalletMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public class WalletScreen extends BaseStatusScreen<WalletMenu> {
+public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
 
-    public WalletScreen(WalletMenu menu, Inventory playerInventory, Component title) {
+    public GuildsScreen(GuildMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, Component.empty());
     }
 

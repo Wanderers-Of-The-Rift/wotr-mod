@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.interop.rei.client;
 
-import com.wanderersoftherift.wotr.gui.screen.status.BaseStatusScreen;
+import com.wanderersoftherift.wotr.gui.screen.character.BaseCharacterScreen;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
@@ -55,7 +55,7 @@ public class WotrREIPluginClient implements REIClientPlugin {
         registry.registerDecider(new OverlayDecider() {
             @Override
             public <R extends Screen> boolean isHandingScreen(Class<R> screen) {
-                return BaseStatusScreen.class.isAssignableFrom(screen);
+                return BaseCharacterScreen.class.isAssignableFrom(screen);
             }
 
             @Override

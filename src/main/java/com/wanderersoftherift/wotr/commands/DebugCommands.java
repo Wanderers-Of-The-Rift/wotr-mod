@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.ServerWallet;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
-import com.wanderersoftherift.wotr.gui.menu.status.GuildMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;

@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.gui.menu.status;
+package com.wanderersoftherift.wotr.gui.menu.character;
 
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import net.minecraft.world.entity.player.Inventory;
@@ -6,14 +6,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 
-public class GuildMenu extends BaseStatusMenu {
+public class WalletMenu extends BaseCharacterMenu {
 
-    public GuildMenu(int containerId, Inventory playerInventory) {
+    public WalletMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
     }
 
-    public GuildMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
-        super(WotrMenuTypes.GUILDS_MENU.get(), containerId);
+    public WalletMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+        super(WotrMenuTypes.WALLET_MENU.get(), containerId);
     }
 
     @Override
