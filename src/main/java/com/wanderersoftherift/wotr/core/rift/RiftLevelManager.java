@@ -15,6 +15,7 @@ import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
@@ -175,11 +176,16 @@ public final class RiftLevelManager {
             return null;
         }
 
-        int requestedRiftHeightChunks = 24; // arbitrary number, maybe load from key or something
+        var defaultRiftHeightChunks = 24; // arbitrary number, maybe load from key or something,
+        config = initializeConfig(config, defaultRiftHeightChunks, server);
+        var loadedRiftHeight = config.layout()
+                .map(it -> it instanceof LayeredInfiniteRiftLayout.Factory fac
+                        ? fac.levelCount() + FastRiftGenerator.MARGIN_LAYERS
+                        : defaultRiftHeightChunks
+                );
+        int requestedRiftHeightChunks = loadedRiftHeight.orElse(defaultRiftHeightChunks);
         var riftDimensionType = RiftDimensionType.RIFT_DIMENSION_TYPE_MAP.ceilingEntry(requestedRiftHeightChunks * 16);
         int actualRiftHeight = riftDimensionType.getKey();
-
-        config = initializeConfig(config, requestedRiftHeightChunks - FastRiftGenerator.MARGIN_LAYERS, server);
 
         ChunkGenerator chunkGen = getRiftChunkGenerator(ow, requestedRiftHeightChunks, actualRiftHeight, config);
         if (chunkGen == null) {
@@ -322,7 +328,8 @@ public final class RiftLevelManager {
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
         return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
                 baseConfig.layout().isPresent() ? baseConfig.layout()
-                        : Optional.of(defaultLayout(baseConfig.tier(), layerCount, seed)),
+                        : Optional.of(
+                                defaultLayout(baseConfig.tier(), layerCount - FastRiftGenerator.MARGIN_LAYERS, seed)),
                 Optional.of(seed));
     }
 
