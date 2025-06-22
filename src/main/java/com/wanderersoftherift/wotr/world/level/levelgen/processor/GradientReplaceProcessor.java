@@ -156,7 +156,8 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             int z,
             BlockState blockstate,
             boolean isVisible) {
-        BlockState newBlockState = getReplacementBlock(outputSteps, x, y, z, world, structurePos, isVisible);
+        BlockState newBlockState = getReplacementBlock(outputSteps, x, y, z, world, structurePos, isVisible,
+                blockstate);
         if (newBlockState == null) {
             return blockstate;
         }
@@ -184,13 +185,14 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
             int z,
             LevelReader world,
             BlockPos structurePos,
-            boolean isVisible) {
+            boolean isVisible,
+            BlockState inputBlock) {
         var outputStepCount = outputSteps.size();
         if (outputStepCount == 0) {
             return null;
         }
         if (outputStepCount == 1 || !isVisible) {
-            return outputSteps.convertedBlockStates[0];
+            return outputSteps.outputBlockStates[0].convertBlockState();
         }
 
         double noiseValue = Math.abs(getNoiseGen(world, structurePos).noise3_Classic(x * getNoiseScaleX(),
@@ -200,7 +202,7 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
         for (int i = 0; i < outputStepCount; i++) {
             stepSize += stepSizes[i];
             if (noiseValue < stepSize) {
-                return outputSteps.convertedBlockStates[i];
+                return outputSteps.outputBlockStates[i].convertBlockState();
             }
         }
         return null;
@@ -258,17 +260,17 @@ public class GradientReplaceProcessor extends StructureProcessor implements Rift
 
     private static class OutputSteps {
         private final float[] stepSizes;
-        private final BlockState[] convertedBlockStates;
+        private final OutputBlockState[] outputBlockStates;
         private final int size;
 
         private OutputSteps(List<OutputStep> steps) {
             this.size = steps.size();
             stepSizes = new float[steps.size()];
-            convertedBlockStates = new BlockState[steps.size()];
+            outputBlockStates = new OutputBlockState[steps.size()];
             for (int i = 0; i < steps.size(); i++) {
                 var step = steps.get(i);
                 stepSizes[i] = step.stepSize;
-                convertedBlockStates[i] = step.outputBlockState().convertBlockState();
+                outputBlockStates[i] = step.outputBlockState();
             }
         }
 
