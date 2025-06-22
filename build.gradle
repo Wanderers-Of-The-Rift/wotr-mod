@@ -142,8 +142,8 @@ dependencies {
     implementation "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
-    compileOnly "maven.modrinth:sophisticated-core:${sophisticated_core_version}"
-    compileOnly "maven.modrinth:sophisticated-backpacks:${sophisticated_backpacks_version}"
+    implementation "maven.modrinth:sophisticated-core:${sophisticated_core_version}"
+    implementation "maven.modrinth:sophisticated-backpacks:${sophisticated_backpacks_version}"
 
     runtimeOnly "curse.maven:sodium-394468:${sodium_version}"
     runtimeOnly "curse.maven:spark-361579:${spark_version}"
