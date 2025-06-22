@@ -1,8 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Rotation;
@@ -17,132 +18,11 @@ import java.util.Objects;
 
 public interface RiftAdjacencyProcessor<T> {
 
+    ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
+
     int processAdjacency(T data, BlockState[] asArray, boolean isHidden);
 
     T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
-
-    static void preloadLayer(
-            RiftProcessedRoom room,
-            int xOffset,
-            int yOffset,
-            int zOffset,
-            Vec3i pieceSize,
-            BlockState[][] preloading,
-            long[] saveFlags,
-            long[] mergedFlags) {
-        var yOffsetMasked = yOffset & 0xf;
-        var yOffsetMaskedShift = yOffsetMasked << 4;
-        for (int chunkZ = 0; chunkZ <= ((pieceSize.getZ() - 1) >> 4); chunkZ++) {
-            var z2Delta = chunkZ << 4;
-            var z3Delta = 0;
-            if (chunkZ == 0) {
-                z3Delta += zOffset & 0xf;
-            } else {
-                z2Delta -= zOffset & 0xf;
-            }
-            for (int chunkX = 0; chunkX <= ((pieceSize.getX() - 1) >> 4); chunkX++) {
-                var chunk = room.getChunk(chunkX + (xOffset >> 4), yOffset >> 4, chunkZ + (zOffset >> 4));
-                var x2Delta = chunkX << 4;
-                var x3Delta = 0;
-                if (chunkX == 0) {
-                    x3Delta += xOffset & 0xf;
-                } else {
-                    x2Delta -= xOffset & 0xf;
-                }
-                if (chunk == null) {
-                    continue;
-                }
-                for (int z = 0; true; z++) {
-                    var z2 = z + z2Delta;
-                    var z3 = z + z3Delta;
-                    if ((z3 >= 16) || (z2 >= pieceSize.getZ())) {
-                        break;
-                    }
-                    saveFlags[z2 + 1] = 0;
-                    var pre = preloading[z2 + 1];
-                    var mer = mergedFlags[z2 + 1];
-                    for (int x = 0; true; x++) {
-                        var x2 = x + x2Delta;
-                        var x3 = x + x3Delta;
-                        if ((x3 >= 16) || (x2 >= pieceSize.getX())) {
-                            break;
-                        }
-                        var state = chunk.getBlockStatePure(x3, yOffsetMasked, z3);
-                        pre[x2 + 1] = state;
-                        var merg = (((chunk.hidden[yOffsetMaskedShift | z3] >> x3) & 1) != 0)
-                                || (((chunk.newlyAdded[yOffsetMaskedShift | z3] >> x3) & 1) == 0);
-                        var bits = 1 << (x2 + 1);
-                        mer &= ~bits;
-                        if (merg) {
-                            mer |= bits;
-                        }
-                    }
-                    mergedFlags[z2 + 1] = mer;
-                }
-            }
-        }
-    }
-
-    static void saveLayer(
-            RiftProcessedRoom room,
-            int xOffset,
-            int yOffset,
-            int zOffset,
-            Vec3i pieceSize,
-            BlockState[][] preloading,
-            long[] saveFlags) {
-        var yOffsetMasked = yOffset & 0xf;
-        for (int chunkZ = 0; chunkZ <= ((pieceSize.getZ() - 1) >> 4); chunkZ++) {
-            var z2Delta = chunkZ << 4;
-            var z3Delta = 0;
-            if (chunkZ == 0) {
-                z3Delta += zOffset & 0xf;
-            } else {
-                z2Delta -= zOffset & 0xf;
-            }
-            for (int chunkX = 0; chunkX <= ((pieceSize.getX() - 1) >> 4); chunkX++) {
-                var chunk = room.getChunk(chunkX + (xOffset >> 4), yOffset >> 4, chunkZ + (zOffset >> 4));
-                var x2Delta = chunkX << 4;
-                var x3Delta = 0;
-                if (chunkX == 0) {
-                    x3Delta += xOffset & 0xf;
-                } else {
-                    x2Delta -= xOffset & 0xf;
-                }
-                if (chunk == null) {
-                    continue;
-                }
-                for (int z = 0; true; z++) {
-                    var z2 = z + z2Delta;
-                    var z3 = z + z3Delta;
-                    if ((z3 >= 16) || (z2 >= pieceSize.getZ())) {
-                        break;
-                    }
-                    var sav = saveFlags[z2 + 1];
-                    if (sav == 0) {
-                        continue;
-                    }
-                    var pre = preloading[z2 + 1];
-
-                    for (int x = 0; true; x++) {
-                        var x2 = x + x2Delta;
-                        var x3 = x + x3Delta;
-                        if ((x3 >= 16) || (x2 >= pieceSize.getX())) {
-                            break;
-                        }
-
-                        var remainingFlags = (sav >> (x2 + 1));
-                        if (remainingFlags == 0) {
-                            break;
-                        }
-                        if ((remainingFlags & 1) != 0) {
-                            chunk.setBlockStatePure(x3, yOffsetMasked, z3, pre[x2 + 1]);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     // stupid mojank why are they applying mirror and rotation to position before processing but to state after
     // processing????
@@ -163,49 +43,62 @@ public interface RiftAdjacencyProcessor<T> {
         var size = new Vec3i(lastPos.getX() - firstPos.getX(), lastPos.getY() - firstPos.getY(),
                 lastPos.getZ() - firstPos.getZ());
         var data = thiz.createData(offset, size, serverLevel);
+
+        var stateArray = new BlockState[7];
+        var directionalIndices = new int[7];
+
         for (int i = 0; i < processedBlockInfos.size(); i++) {
             StructureTemplate.StructureBlockInfo blockInfo = getInfo(i, processedBlockInfos, modified);
             if (modified[i] == null) {
                 modified[i] = blockInfo;
             }
-            var down = ProcessorUtil.getBlockIndex(processedBlockInfos, blockInfo.pos().below());
-            var up = ProcessorUtil.getBlockIndex(processedBlockInfos, blockInfo.pos().above());
-            var north = ProcessorUtil.getBlockIndex(processedBlockInfos, blockInfo.pos().north());
-            var south = ProcessorUtil.getBlockIndex(processedBlockInfos, blockInfo.pos().south());
-            var west = ProcessorUtil.getBlockIndex(processedBlockInfos, blockInfo.pos().west());
-            var east = ProcessorUtil.getBlockIndex(processedBlockInfos, blockInfo.pos().east());
 
-            var array = new BlockState[] { getState(down, processedBlockInfos, modified, settings),
-                    getState(up, processedBlockInfos, modified, settings),
-                    getState(north, processedBlockInfos, modified, settings),
-                    getState(south, processedBlockInfos, modified, settings),
-                    getState(west, processedBlockInfos, modified, settings),
-                    getState(east, processedBlockInfos, modified, settings),
-                    getState(i, processedBlockInfos, modified, settings) };
-            var altered = thiz.processAdjacency(data, array, false);
-            if ((altered & 0b1) != 0 && down > 0) {
-                modified[down] = updateInfo(array[0], getInfo(down, processedBlockInfos, modified), settings);
-            }
-            if ((altered & 0b10) != 0 && up > 0) {
-                modified[up] = updateInfo(array[1], getInfo(up, processedBlockInfos, modified), settings);
-            }
-            if ((altered & 0b100) != 0 && north > 0) {
-                modified[north] = updateInfo(array[2], getInfo(north, processedBlockInfos, modified), settings);
-            }
-            if ((altered & 0b1000) != 0 && south > 0) {
-                modified[south] = updateInfo(array[3], getInfo(south, processedBlockInfos, modified), settings);
-            }
-            if ((altered & 0b10000) != 0 && west > 0) {
-                modified[west] = updateInfo(array[4], getInfo(west, processedBlockInfos, modified), settings);
-            }
-            if ((altered & 0b100000) != 0 && east > 0) {
-                modified[east] = updateInfo(array[5], getInfo(east, processedBlockInfos, modified), settings);
-            }
-            if ((altered & 0b1000000) != 0) {
-                modified[i] = updateInfo(array[6], blockInfo, settings);
-            }
+            loadIndices(directionalIndices, processedBlockInfos, blockInfo.pos());
+            directionalIndices[6] = i;
+
+            stateArray[6] = getState(i, processedBlockInfos, modified, settings);
+            loadStates(stateArray, directionalIndices, processedBlockInfos, modified, settings);
+
+            var altered = thiz.processAdjacency(data, stateArray, false);
+
+            commitStates(stateArray, directionalIndices, processedBlockInfos, modified, settings, altered);
         }
         return Arrays.stream(modified).filter(Objects::nonNull).toList();
+    }
+
+    private static void commitStates(
+            BlockState[] stateArray,
+            int[] directionalIndices,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructureTemplate.StructureBlockInfo[] modified,
+            StructurePlaceSettings settings,
+            int altered) {
+        for (int i = 0; i < directionalIndices.length; i++) {
+            var index = directionalIndices[i];
+            if ((altered & (1 << i)) != 0 && index > 0) {
+                modified[i] = updateInfo(stateArray[0], getInfo(index, processedBlockInfos, modified), settings);
+            }
+        }
+    }
+
+    private static void loadStates(
+            BlockState[] stateArray,
+            int[] directionalIndices,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            StructureTemplate.StructureBlockInfo[] modified,
+            StructurePlaceSettings settings) {
+        for (int i = 0; i < directionalIndices.length; i++) {
+            stateArray[i] = getState(directionalIndices[i], processedBlockInfos, modified, settings);
+        }
+    }
+
+    private static void loadIndices(
+            int[] directionalIndices,
+            List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
+            BlockPos pos) {
+        for (int i = 0; i < DIRECTIONS.size(); i++) {
+            directionalIndices[i] = ProcessorUtil.getBlockIndex(processedBlockInfos, pos.relative(DIRECTIONS.get(i)));
+        }
     }
 
     private static StructureTemplate.StructureBlockInfo updateInfo(
