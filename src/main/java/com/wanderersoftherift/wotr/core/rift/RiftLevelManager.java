@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.S2CLevelListUpdatePacket;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
@@ -318,7 +319,7 @@ public final class RiftLevelManager {
     private static RiftConfig initializeConfig(RiftConfig baseConfig, int layerCount, MinecraftServer server) {
         var random = RandomSource.create();
         int seed = baseConfig.seed().orElseGet(random::nextInt);
-        var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, random));
+        var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
         return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
                 baseConfig.layout().isPresent() ? baseConfig.layout()
                         : Optional.of(defaultLayout(baseConfig.tier(), layerCount, seed)),
@@ -393,15 +394,20 @@ public final class RiftLevelManager {
         riftData.setPortalPos(portalPos);
         riftData.setConfig(config);
 
-        riftData.setTheme(config.theme().orElse(getRandomTheme(riftLevel.getServer(), riftLevel.random)));
+        riftData.setTheme(config.theme()
+                /* note: cannot be empty at this point */.orElse(getRandomTheme(riftLevel.getServer(), seed)));
 
         return riftLevel;
     }
 
-    public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, RandomSource random) {
+    public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {
+
+        var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+                seed * 5624397638181617163L);
+
         Registry<RiftTheme> registry = server.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
 
-        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, random)
+        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, themeRandom)
                 .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
 }
