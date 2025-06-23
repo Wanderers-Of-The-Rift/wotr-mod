@@ -22,8 +22,6 @@ import java.util.Map;
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity {
 
-    @Shadow protected abstract boolean shouldDropLoot();
-
     @Inject(method = "onChangedBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;runLocationChangedEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;)V"))
     private void onChangedBlockRunLocationChangedEffects(ServerLevel level, BlockPos pos, CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
