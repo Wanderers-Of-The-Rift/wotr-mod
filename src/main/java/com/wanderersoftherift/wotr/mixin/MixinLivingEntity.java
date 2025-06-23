@@ -48,7 +48,9 @@ public abstract class MixinLivingEntity {
 
     @Inject(method = "dropAllDeathLoot", at = @At(value = "HEAD"), cancellable = true)
     private void stopDeathLootInRift(ServerLevel sLevel, DamageSource damageSource, CallbackInfo ci) {
-        if (RiftLevelManager.isRift(sLevel)) ci.cancel();
+        if (RiftLevelManager.isRift(sLevel)) {
+            ci.cancel();
+        }
     }
 
 }
