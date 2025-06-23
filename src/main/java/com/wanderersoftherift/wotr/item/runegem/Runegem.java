@@ -8,6 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -82,7 +83,8 @@ public class Runegem extends Item {
                             .ifPresent(tagKey -> tooltipComponents
                                     .add(Component.literal(tagKey.toString()).withStyle(ChatFormatting.AQUA)));
                     for (TieredModifier tieredModifier : group.modifiers()) {
-                        tooltipComponents.add(tieredModifier.getName());
+                        MutableComponent cmp  = (MutableComponent) tieredModifier.getName();
+                        tooltipComponents.add(cmp.withColor(tieredModifier.modifier().value().getColor()));
                     }
                 }
             }
