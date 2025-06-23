@@ -44,7 +44,7 @@ public class DebugCommands extends BaseCommand {
                     .openMenu(new SimpleMenuProvider(
                             ((containerId, playerInventory, player) -> new GuildMenu(containerId, playerInventory,
                                     ContainerLevelAccess.create(player.level(), player.getOnPos()))),
-                            Component.translatable(WanderersOfTheRift.translationId("container", "trading"), "Guild")));
+                            Component.translatable(WanderersOfTheRift.translationId("container", "guilds"), "Guild")));
             return 1;
         }
         return 0;

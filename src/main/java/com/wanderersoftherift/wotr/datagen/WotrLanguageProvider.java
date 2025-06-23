@@ -164,6 +164,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
         add(WanderersOfTheRift.translationId("container", "rift_complete"), "Rift Overview");
+        add(WanderersOfTheRift.translationId("container", "rift_complete.reward"), "Rewards");
+
+        add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
+        add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
+        add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
+
+        add(WanderersOfTheRift.translationId("container", "wallet"), "Wallet");
 
         add(WanderersOfTheRift.translationId("stat", "result"), "Result: ");
         add(WanderersOfTheRift.translationId("stat", "result.success"), "Success");
@@ -366,6 +373,13 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
         add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
+
+        add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
+        add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");
+        add(WanderersOfTheRift.translationId("guild", "stick"), "Figures of the Stick");
+        add(WanderersOfTheRift.translationId("guild", "stick.rank.0"), "Twigling");
+        add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
+        add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
     }
 
     private void addRunegems() {

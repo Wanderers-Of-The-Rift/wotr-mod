@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.character.BaseCharacterMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.network.SelectCharacterMenuPayload;
@@ -9,6 +10,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
@@ -18,25 +22,29 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends AbstractContainerScreen<T> {
     protected static final int MENU_BAR_WIDTH = 100;
 
     private ScrollContainerWidget<MenuItem> menuSelection;
+    private List<ScrollContainerWidget<?>> scrollContainers = new ArrayList<>();
 
     public BaseCharacterScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.leftPos = 0;
-        this.topPos = 0;
-        this.imageWidth = 320;
-        this.imageHeight = 236;
     }
 
     @Override
     protected void init() {
         super.init();
+        leftPos = 0;
+        topPos = 0;
         menuSelection = new ScrollContainerWidget<>(0, 0, MENU_BAR_WIDTH, 320);
-        for (int i = 0; i < BaseCharacterMenu.ITEMS.size(); i++) {
-            var item = BaseCharacterMenu.ITEMS.get(i);
+
+        List<CharacterMenuItem> items = BaseCharacterMenu.getSortedMenuItems(minecraft.level.registryAccess());
+        for (int i = 0; i < items.size(); i++) {
+            var item = items.get(i);
             menuSelection.children()
                     .add(new MenuItem(item.name(), i, 0, 0, 94, font, menu.getType() == item.menuType()));
         }
@@ -44,10 +52,20 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends A
     }
 
     @Override
+    protected <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget) {
+        if (widget instanceof ScrollContainerWidget<?> scrollContainer) {
+            scrollContainers.add(scrollContainer);
+        }
+        return super.addRenderableWidget(widget);
+    }
+
+    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double xOffset, double yOffset) {
         if (!super.mouseScrolled(mouseX, mouseY, xOffset, yOffset)) {
-            if (menuSelection.isHovered()) {
-                return menuSelection.mouseScrolled(mouseX, mouseY, xOffset, yOffset);
+            for (var scrollContainer : scrollContainers) {
+                if (scrollContainer.isHovered()) {
+                    return scrollContainer.mouseScrolled(mouseX, mouseY, xOffset, yOffset);
+                }
             }
         }
         return false;
@@ -56,15 +74,20 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends A
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-        menuSelection.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        for (var scrollContainer : scrollContainers) {
+            scrollContainer.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        }
+
         return true;
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!super.keyPressed(keyCode, scanCode, modifiers)) {
-            if (menuSelection.isHoveredOrFocused()) {
-                return menuSelection.keyPressed(keyCode, scanCode, modifiers);
+            for (var scrollContainer : scrollContainers) {
+                if (scrollContainer.isHoveredOrFocused()) {
+                    return scrollContainer.keyPressed(keyCode, scanCode, modifiers);
+                }
             }
             return false;
         }
@@ -81,7 +104,8 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends A
     @Override
     protected void renderLabels(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
         int width = font.width(getTitle());
-        guiGraphics.drawString(font, getTitle(), (guiGraphics.guiWidth() - width) / 2, 10,
+        guiGraphics.drawString(font, getTitle(),
+                leftPos + (guiGraphics.guiWidth() - MENU_BAR_WIDTH - width) / 2 + MENU_BAR_WIDTH, 10,
                 ChatFormatting.WHITE.getColor(), true);
     }
 

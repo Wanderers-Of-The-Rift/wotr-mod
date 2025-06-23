@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.character.BaseCharacterMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -15,6 +16,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public record SelectCharacterMenuPayload(int submenu) implements CustomPacketPayload {
 
@@ -31,9 +34,10 @@ public record SelectCharacterMenuPayload(int submenu) implements CustomPacketPay
     }
 
     public void handleOnServer(final IPayloadContext context) {
+        List<CharacterMenuItem> items = BaseCharacterMenu.getSortedMenuItems(context.player().level().registryAccess());
         if (context.player().containerMenu instanceof BaseCharacterMenu menu && menu.stillValid(context.player())
-                && submenu >= 0 && submenu < BaseCharacterMenu.ITEMS.size()) {
-            var menuItem = BaseCharacterMenu.ITEMS.get(submenu);
+                && submenu >= 0 && submenu < items.size()) {
+            var menuItem = items.get(submenu);
             context.player().openMenu(new MenuProvider() {
                 @Override
                 public @Nullable AbstractContainerMenu createMenu(
