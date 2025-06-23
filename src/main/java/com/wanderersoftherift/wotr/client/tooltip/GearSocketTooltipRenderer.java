@@ -149,8 +149,9 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                         pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15_728_880);
 
                 MutableComponent component = Component.literal("");
-                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(), socket.modifier().get().modifier().value().getColor()
-                        );
+                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(),
+                        socket.modifier().get().modifier().value().getColor()
+                );
                 if (tooltip instanceof ImageComponent img) {
                     if (tier == getModifierTiers(socket).size()) {
                         component.append(ComponentUtil.wavingComponent(img.base(),
@@ -284,7 +285,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         return String.format(Locale.ROOT, "%.2f", value);
     }
 
-    private static String getEffectText(AbstractModifierEffect effect, int tier, boolean isShiftDown, Modifier modifier) {
+    private static String getEffectText(
+            AbstractModifierEffect effect,
+            int tier,
+            boolean isShiftDown,
+            Modifier modifier) {
         String base;
         if (effect.getTooltipComponent(ItemStack.EMPTY, 0.0F, modifier.getColor()) instanceof ImageComponent img) {
             base = img.base().getString();
