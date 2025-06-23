@@ -41,7 +41,7 @@ public class GearImplicitsTooltipEvent {
 
         List<TooltipComponent> toAdd = new ArrayList<>();
         for (ModifierInstance modifierInstance : modifierInstances) {
-            List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack, ChatFormatting.AQUA);
+            List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack, modifierInstance.modifier().value().getColor());
             toAdd.addAll(tooltipComponents);
         }
 
