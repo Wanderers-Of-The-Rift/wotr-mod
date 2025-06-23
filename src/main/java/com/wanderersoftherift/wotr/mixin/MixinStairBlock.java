@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.mixin;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -50,6 +51,18 @@ public class MixinStairBlock {
                         }
                         case OUTER_RIGHT -> {
                             cir.setReturnValue(state.setValue(SHAPE, StairsShape.OUTER_LEFT));
+                        }
+                    }
+                }
+                if (direction.getAxis() == Direction.Axis.X) {
+                    switch (stairsshape) {
+                        case INNER_LEFT -> {
+                            cir.setReturnValue(
+                                    state.rotate(Rotation.CLOCKWISE_180).setValue(SHAPE, StairsShape.INNER_RIGHT));
+                        }
+                        case INNER_RIGHT -> {
+                            cir.setReturnValue(
+                                    state.rotate(Rotation.CLOCKWISE_180).setValue(SHAPE, StairsShape.INNER_LEFT));
                         }
                     }
                 }
