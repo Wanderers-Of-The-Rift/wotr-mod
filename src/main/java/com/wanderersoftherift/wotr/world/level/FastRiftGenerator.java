@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
@@ -16,6 +17,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
@@ -238,8 +240,20 @@ public class FastRiftGenerator extends ChunkGenerator {
                     for (int y = 0; y < 7; y++) {
                         var pos = new BlockPos((chunkX << 4) + x + 6, (chunkY << 4) + 5 + y, chunkZ << 4);
                         var state = level.getBlockState(pos.south());
-                        if (rng.nextBoolean()) {
-                            state = level.getBlockState(pos.north());
+                        if (x > 0 && x < 4 && y > 1 && y < 5) {
+                            if (rng.nextBoolean()) {
+                                state = level.getBlockState(pos.north());
+                            }
+                        } else {
+                            if (rng.nextBoolean() || !isStateAllowedByCorridorBlender(state, NORTH)) {
+                                var newState = level.getBlockState(pos.north());
+                                if (isStateAllowedByCorridorBlender(newState, NORTH)) {
+                                    state = level.getBlockState(pos.north());
+                                }
+                            }
+                        }
+                        if (!isStateAllowedByCorridorBlender(state, NORTH)) {
+                            state = AIR.defaultBlockState();
                         }
                         level.setBlock(pos, state, 0);
                     }
@@ -251,8 +265,20 @@ public class FastRiftGenerator extends ChunkGenerator {
                     for (int y = 0; y < 7; y++) {
                         var pos = new BlockPos((chunkX << 4), (chunkY << 4) + 5 + y, (chunkZ << 4) + z + 6);
                         var state = level.getBlockState(pos.east());
-                        if (rng.nextBoolean()) {
-                            state = level.getBlockState(pos.west());
+                        if (z > 0 && z < 4 && y > 1 && y < 5) {
+                            if (rng.nextBoolean()) {
+                                state = level.getBlockState(pos.west());
+                            }
+                        } else {
+                            if (rng.nextBoolean() || !isStateAllowedByCorridorBlender(state, WEST)) {
+                                var newState = level.getBlockState(pos.west());
+                                if (isStateAllowedByCorridorBlender(newState, WEST)) {
+                                    state = level.getBlockState(pos.west());
+                                }
+                            }
+                        }
+                        if (!isStateAllowedByCorridorBlender(state, WEST)) {
+                            state = AIR.defaultBlockState();
                         }
                         level.setBlock(pos, state, 0);
                     }
@@ -260,6 +286,15 @@ public class FastRiftGenerator extends ChunkGenerator {
             }
 
         }
+    }
+
+    private boolean isStateAllowedByCorridorBlender(BlockState state, Direction direction) {
+        if (!state.canOcclude()) {
+            return false;
+        }
+        var shape = state.getOcclusionShape();
+        return ProcessorUtil.isFaceFullFast(shape, direction) == ProcessorUtil.isFaceFullFast(shape,
+                direction.getOpposite());
     }
 
     @Override
