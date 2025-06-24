@@ -13,6 +13,7 @@
     "MixinFireBlock",
     "MixinItem",
     "MixinItemStack",
+    "MixinJigsawTemplatePoolPlacer",
     "MixinLavaFluid",
     "MixinLivingEntity",
     "MixinServerPlayer",
