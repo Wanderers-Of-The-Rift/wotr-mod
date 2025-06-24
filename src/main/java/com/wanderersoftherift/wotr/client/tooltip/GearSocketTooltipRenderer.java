@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -158,7 +159,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                                 TextColor.parseColor("#e0ba12").getOrThrow(), 0.125f, 0.5f));
                     } else {
                         component.append(
-                                img.base().copy().withColor(TextColor.parseColor("#e0ba12").getOrThrow().getValue()));
+                                img.base().copy().withStyle(Style.EMPTY.withColor(TextColor.parseColor("#e0ba12").getOrThrow().getValue())));
                     }
 
                 }
