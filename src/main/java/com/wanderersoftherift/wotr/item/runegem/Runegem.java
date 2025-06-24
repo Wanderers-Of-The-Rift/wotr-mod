@@ -85,7 +85,8 @@ public class Runegem extends Item {
                                     .add(Component.literal(tagKey.toString()).withStyle(ChatFormatting.AQUA)));
                     for (TieredModifier tieredModifier : group.modifiers()) {
                         MutableComponent cmp = (MutableComponent) tieredModifier.getName();
-                        tooltipComponents.add(cmp.withStyle(Style.EMPTY.withColor(tieredModifier.modifier().value().getColor())));
+                        tooltipComponents.add(
+                                cmp.withStyle(Style.EMPTY.withColor(tieredModifier.modifier().value().getColor())));
                     }
                 }
             }
