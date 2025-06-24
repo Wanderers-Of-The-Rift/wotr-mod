@@ -40,6 +40,10 @@ public class ClientConfig {
     public static final HudElementConfig EXPERIENCE_LEVEL;
     public static final HudElementConfig VANILLA_EFFECTS;
 
+    // JigsawPoolRedirect
+    public static final ModConfigSpec.DoubleValue POOL_OBJECTIVE_WEIGHT;
+    public static final ModConfigSpec.DoubleValue POOL_SHRINE_WEIGHT;
+
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
@@ -114,6 +118,13 @@ public class ClientConfig {
                 .build(builder);
         VANILLA_EFFECTS = new HudElementConfig.Builder("Vanilla Effects", "effects").anchor(ScreenAnchor.TOP_RIGHT)
                 .build(builder);
+
+        builder.push(" == Jigsaw Pool Redirect Weights == ");
+        POOL_OBJECTIVE_WEIGHT = builder.comment(" Chance to redirect to Pool Objective (0.0 - 1.0)")
+                .defineInRange("poolObjectiveWeight", 0.1, 0.0, 1.0);
+        POOL_SHRINE_WEIGHT = builder.comment(" Chance to redirect to Pool Shrine (0.0 - 1.0)")
+                .defineInRange("poolShrineWeight", 0.3, 0.0, 1.0);
+        builder.pop();
 
         SPEC = builder.build();
     }
