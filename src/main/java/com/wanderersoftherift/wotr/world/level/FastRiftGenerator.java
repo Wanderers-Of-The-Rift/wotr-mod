@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -234,57 +235,44 @@ public class FastRiftGenerator extends ChunkGenerator {
             var chunkX = chunk.getPos().x;
             var chunkY = i - layerCount / 2;
             var chunkZ = chunk.getPos().z;
-            var corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, NORTH);
-            if (corridor) {
-                for (int x = 0; x < 5; x++) {
-                    for (int y = 0; y < 7; y++) {
-                        var pos = new BlockPos((chunkX << 4) + x + 6, (chunkY << 4) + 5 + y, chunkZ << 4);
-                        var state = level.getBlockState(pos.south());
-                        if (x > 0 && x < 4 && y > 1 && y < 5) {
-                            if (rng.nextBoolean()) {
-                                state = level.getBlockState(pos.north());
-                            }
-                        } else {
-                            if (rng.nextBoolean() || !isStateAllowedByCorridorBlender(state, NORTH)) {
-                                var newState = level.getBlockState(pos.north());
-                                if (isStateAllowedByCorridorBlender(newState, NORTH)) {
-                                    state = level.getBlockState(pos.north());
-                                }
-                            }
-                        }
-                        if (!isStateAllowedByCorridorBlender(state, NORTH)) {
-                            state = AIR.defaultBlockState();
-                        }
-                        level.setBlock(pos, state, 0);
-                    }
-                }
-            }
-            corridor = layout.validateCorridor(chunkX, chunkY, chunkZ, WEST);
-            if (corridor) {
-                for (int z = 0; z < 5; z++) {
-                    for (int y = 0; y < 7; y++) {
-                        var pos = new BlockPos((chunkX << 4), (chunkY << 4) + 5 + y, (chunkZ << 4) + z + 6);
-                        var state = level.getBlockState(pos.east());
-                        if (z > 0 && z < 4 && y > 1 && y < 5) {
-                            if (rng.nextBoolean()) {
-                                state = level.getBlockState(pos.west());
-                            }
-                        } else {
-                            if (rng.nextBoolean() || !isStateAllowedByCorridorBlender(state, WEST)) {
-                                var newState = level.getBlockState(pos.west());
-                                if (isStateAllowedByCorridorBlender(newState, WEST)) {
-                                    state = level.getBlockState(pos.west());
-                                }
-                            }
-                        }
-                        if (!isStateAllowedByCorridorBlender(state, WEST)) {
-                            state = AIR.defaultBlockState();
-                        }
-                        level.setBlock(pos, state, 0);
-                    }
-                }
-            }
+            runCorridorBlenderDirectional(layout, chunkX, chunkY, chunkZ, NORTH, level, rng);
+            runCorridorBlenderDirectional(layout, chunkX, chunkY, chunkZ, WEST, level, rng);
+        }
+    }
 
+    private void runCorridorBlenderDirectional(
+            RiftLayout layout,
+            int chunkX,
+            int chunkY,
+            int chunkZ,
+            Direction direction,
+            WorldGenLevel level,
+            RandomSource rng) {
+        if (layout.validateCorridor(chunkX, chunkY, chunkZ, direction)) {
+            for (int x = 0; x < 5; x++) {
+                for (int y = 0; y < 7; y++) {
+                    var pos = new BlockPos((chunkX << 4) - (x + 6) * direction.getStepZ(), (chunkY << 4) + 5 + y,
+                            (chunkZ << 4) - (x + 6) * direction.getStepX());
+                    var posOffset = pos.relative(direction);
+                    var state = level.getBlockState(pos.relative(direction.getOpposite()));
+                    if (x > 0 && x < 4 && y > 1 && y < 5) {
+                        if (rng.nextBoolean()) {
+                            state = level.getBlockState(posOffset);
+                        }
+                    } else {
+                        if (rng.nextBoolean() || !isStateAllowedByCorridorBlender(state, direction)) {
+                            var newState = level.getBlockState(posOffset);
+                            if (isStateAllowedByCorridorBlender(newState, direction)) {
+                                state = level.getBlockState(posOffset);
+                            }
+                        }
+                    }
+                    if (!isStateAllowedByCorridorBlender(state, direction)) {
+                        state = AIR.defaultBlockState();
+                    }
+                    level.setBlock(pos, state, 0);
+                }
+            }
         }
     }
 
