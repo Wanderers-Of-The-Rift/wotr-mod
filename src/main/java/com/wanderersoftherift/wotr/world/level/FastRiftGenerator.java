@@ -3,11 +3,14 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
@@ -84,9 +87,8 @@ public class FastRiftGenerator extends ChunkGenerator {
     private long generationStart = 0;
     private final RiftConfig config;
     private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
-    private final AtomicReference<RiftRoomGenerator> roomGenerator = new AtomicReference<>();
+    private final RiftRoomGenerator roomGenerator;
     private RiftGeneratable filler;
-    private RiftGeneratable perimeter;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
             ResourceLocation defaultBlock, RiftConfig config) {
@@ -99,7 +101,15 @@ public class FastRiftGenerator extends ChunkGenerator {
                 .orElse(AIR.defaultBlockState());
         this.customBlockID = defaultBlock;
         this.config = config;
-        filler = new SingleBlockChunkGeneratable(customBlock);
+        this.filler = new SingleBlockChunkGeneratable(customBlock);
+
+        this.roomGenerator = new RiftRoomGenerator( // todo make configurable
+                RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                        this.getRiftConfig().seed().orElse(0) + 949_616_156),
+                List.of(new PerimeterGeneratable(customBlock, layout.get())), List.of(
+                        new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws()
+                )
+        );
     }
 
     @Override
@@ -114,16 +124,12 @@ public class FastRiftGenerator extends ChunkGenerator {
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
             layout.compareAndSet(null, config.layout().get().createLayout(server, config.seed().get()));
-            perimeter = new PerimeterGeneratable(customBlock, layout.get());
         }
         return layout.get();
     }
 
-    private RiftRoomGenerator getOrCreateRoomGenerator() {
-        if (roomGenerator.get() == null) {
-            roomGenerator.compareAndSet(null, new RiftRoomGenerator());
-        }
-        return roomGenerator.get();
+    private RiftRoomGenerator getRoomGenerator() {
+        return roomGenerator;
     }
 
     @Override
@@ -198,15 +204,12 @@ public class FastRiftGenerator extends ChunkGenerator {
         }
         Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount];
         var layout = getOrCreateLayout(level.getServer());
-        var roomGenerator = getOrCreateRoomGenerator();
+        var roomGenerator = getRoomGenerator();
         for (int i = 0; i < layerCount; i++) {
             var position = new Vec3i(chunk.getPos().x, i - layerCount / 2, chunk.getPos().z);
             var space = layout.getChunkSpace(position);
             if (space instanceof RoomRiftSpace roomSpace) {
-                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level,
-                        RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                                this.getRiftConfig().seed().orElse(0) + 949_616_156),
-                        perimeter);
+                chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level);
             } else {
                 chunkFutures[i] = roomGenerator.chunkOf(filler, level, position);
             }
@@ -214,7 +217,6 @@ public class FastRiftGenerator extends ChunkGenerator {
         for (Future<RiftProcessedChunk> generatedRoomChunkFuture : chunkFutures) {
             try {
                 RiftProcessedChunk generatedRoomChunk = generatedRoomChunkFuture.get();
-
                 if (generatedRoomChunk != null) {
                     generatedRoomChunk.placeInWorld(chunk, level);
                 }

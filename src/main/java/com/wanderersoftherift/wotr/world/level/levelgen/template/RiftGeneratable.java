@@ -1,11 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
-import com.wanderersoftherift.wotr.util.JavaRandomFromRandomSource;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -15,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 public interface RiftGeneratable {
 
@@ -39,7 +37,8 @@ public interface RiftGeneratable {
             TripleMirror mirror,
             MinecraftServer server,
             RandomSource random,
-            long[] mask) {
+            long[] mask,
+            List<JigsawProcessor> jigsawProcessors) {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
@@ -48,13 +47,12 @@ public interface RiftGeneratable {
             mask = new long[16 * 16 * 16];
         }
         var jigsawList = new ArrayList<>(generatable.jigsaws());
-        Collections.shuffle(jigsawList, JavaRandomFromRandomSource.of(random));
+        for (var jigsawHandler : jigsawProcessors) {
+            jigsawHandler.processJigsaws(jigsawList, random);
+        }
 
         for (var jigsaw : jigsawList) {
             var pool = jigsaw.pool();
-            if (isPoolBlacklisted(pool)) {
-                continue;
-            }
             var next = RiftTemplates.random(server, pool, random);
             if (next == null) {
                 continue;
@@ -103,7 +101,7 @@ public interface RiftGeneratable {
                             .multiply(-1));
 
             generate(next, destination, world, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server,
-                    random, mask);
+                    random, mask, jigsawProcessors);
         }
         writeCollisionMask(generatable, mask, placementShift, mirror);
         generatable.processAndPlace(destination, world, placementShift, mirror);
@@ -228,8 +226,8 @@ public interface RiftGeneratable {
         return mirror.applyToBlockState(jigsaw.info().state()).getValue(JigsawBlock.ORIENTATION).top();
     }
 
-    private static boolean isPoolBlacklisted(ResourceLocation pool) {
-        return pool.getPath().contains("rift/ring_") && "wotr".equals(pool.getNamespace());
+    interface JigsawProcessor {
+        void processJigsaws(List<StructureTemplate.JigsawBlockInfo> jigsaws, RandomSource random);
     }
 
 }

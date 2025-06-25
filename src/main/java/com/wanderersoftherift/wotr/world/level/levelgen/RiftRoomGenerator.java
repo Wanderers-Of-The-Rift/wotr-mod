@@ -9,6 +9,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -19,22 +20,27 @@ import java.util.concurrent.TimeoutException;
 public class RiftRoomGenerator {
 
     private final ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> structureCache = new ConcurrentHashMap<>();
+    private final PositionalRandomFactory randomFactory;
+    private final List<RiftGeneratable> perimeterGeneratables;
+    private final List<RiftGeneratable.JigsawProcessor> jigsawProcessors;
+
+    public RiftRoomGenerator(PositionalRandomFactory randomFactory, List<RiftGeneratable> perimeterGeneratables,
+            List<RiftGeneratable.JigsawProcessor> jigsawProcessors) {
+        this.randomFactory = randomFactory;
+        this.perimeterGeneratables = perimeterGeneratables;
+        this.jigsawProcessors = jigsawProcessors;
+    }
 
     public Future<RiftProcessedChunk> getAndRemoveRoomChunk(
             Vec3i sectionPos,
             RoomRiftSpace space,
-            ServerLevelAccessor world,
-            PositionalRandomFactory randomFactory,
-            RiftGeneratable perimeter) {
-        return getOrCreateFutureProcessedRoom(space, world, randomFactory, perimeter)
-                .thenApply(it -> it.getAndRemoveChunk(sectionPos));
+            ServerLevelAccessor world) {
+        return getOrCreateFutureProcessedRoom(space, world).thenApply(it -> it.getAndRemoveChunk(sectionPos));
     }
 
     private CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,
-            ServerLevelAccessor world,
-            PositionalRandomFactory randomFactory,
-            RiftGeneratable perimeter) {
+            ServerLevelAccessor world) {
         var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
         var processedRoomFuture = structureCache.compute(space.origin(), (key, oldFuture) -> {
             if (oldFuture == null) {
@@ -72,9 +78,9 @@ public class RiftRoomGenerator {
                         15 - ((template.size().getZ() - 1) & 0xf)
                 );
                 RiftGeneratable.generate(template, processedRoom2, world, border, mirror, world.getServer(),
-                        randomSource, null);
+                        randomSource, null, jigsawProcessors);
                 processedRoom2.markAsComplete();
-                if (perimeter != null) {
+                for (var perimeter : perimeterGeneratables) {
                     perimeter.processAndPlace(processedRoom2, world, Vec3i.ZERO, mirror);
                 }
                 newFuture.complete(new WeakReference<>(processedRoom2));
@@ -85,7 +91,7 @@ public class RiftRoomGenerator {
         processedRoomFuture.thenAccept((weak) -> {
             var value = weak.get();
             if (value == null) {
-                getOrCreateFutureProcessedRoom(space, world, randomFactory, perimeter).thenAccept(newResult::complete);
+                getOrCreateFutureProcessedRoom(space, world).thenAccept(newResult::complete);
             } else {
                 newResult.complete(value);
             }
