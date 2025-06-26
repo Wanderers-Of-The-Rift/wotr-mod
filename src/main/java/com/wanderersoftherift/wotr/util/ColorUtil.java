@@ -10,6 +10,29 @@ import java.util.List;
  */
 public final class ColorUtil {
     public static final int OFF_BLACK = 0x404040;
+    public static final int RED = 0xFF6347;
+    public static final int DARK_RED = 0x8B0000;
+    public static final int CRIMSON_RED = 0xDC143C;
+    public static final int ORANGE_RED = 0xFF4500;
+    public static final int DARK_ORANGE = 0xFF8C00;
+    public static final int GREEN = 0x00FF7F;
+    public static final int LIME_GREEN = 0x32CD32;
+    public static final int SEA_GREEN = 0x3CB371;
+    public static final int FOREST_GREEN = 0x228B22;
+    public static final int NEON_GREEN = 0x00FA9A;
+    public static final int BLUE = 0x4169E1;
+    public static final int DARK_BLUE = 0x000080;
+    public static final int TURQUOISE = 0x00CED1;
+    public static final int LIGHT_BLUE = 0xADD8E6;
+    public static final int SKY_BLUE = 0x00BFFF;
+    public static final int GOLD = 0xFFD700;
+    public static final int SOFT_GOLD = 0xF0E68C;
+    public static final int DARK_GOLD = 0xDAA520;
+    public static final int BROWN = 0x8B4513;
+    public static final int DARK_BROWN = 0x4B3621;
+    public static final int GRAY = 0xA9A9A9;
+    public static final int SILVER_GRAY = 0x778899;
+    public static final int PURPLE = 0xB68CFF;
 
     public static final List<String> RAINBOW = Arrays.asList(
             "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8B00FF"
