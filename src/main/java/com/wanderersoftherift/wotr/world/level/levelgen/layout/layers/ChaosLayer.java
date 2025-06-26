@@ -188,7 +188,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
         ).apply(it, Factory::new));
 
         @Override
-        public LayeredRiftLayout.LayoutLayer create(MinecraftServer server) {
+        public LayeredRiftLayout.LayoutLayer createLayer(MinecraftServer server) {
             return new ChaosLayer(roomRandomizerFactory.createRandomizer(server));
         }
 

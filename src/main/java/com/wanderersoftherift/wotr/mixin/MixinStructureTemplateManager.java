@@ -19,11 +19,9 @@ public class MixinStructureTemplateManager implements TemplateIdLookup {
 
     @Override
     public ResourceLocation wotr$idForTemplate(StructureTemplate template) {
-        return structureRepository.entrySet()
-                .stream()
-                .filter((it) -> it.getValue().isPresent() && it.getValue().get() == template)
-                .findFirst()
-                .map(Map.Entry::getKey)
-                .orElse(null);
+        return structureRepository.entrySet().stream().filter((entry) -> {
+            var optionalValue = entry.getValue();
+            return optionalValue.isPresent() && optionalValue.get() == template;
+        }).findFirst().map(Map.Entry::getKey).orElse(null);
     }
 }

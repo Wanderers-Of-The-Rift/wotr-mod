@@ -60,7 +60,7 @@ public class RingLayer implements LayeredRiftLayout.LayoutLayer {
         ).apply(it, Factory::new));
 
         @Override
-        public LayeredRiftLayout.LayoutLayer create(MinecraftServer server) {
+        public LayeredRiftLayout.LayoutLayer createLayer(MinecraftServer server) {
             return new RingLayer(roomRandomizerFactory.createRandomizer(server), radius);
         }
 

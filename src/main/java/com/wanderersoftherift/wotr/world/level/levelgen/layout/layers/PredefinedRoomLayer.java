@@ -45,7 +45,7 @@ public class PredefinedRoomLayer implements LayeredRiftLayout.LayoutLayer {
         ).apply(it, (room, x, y, z) -> new Factory(room, new Vec3i(x, y, z))));
 
         @Override
-        public LayeredRiftLayout.LayoutLayer create(MinecraftServer server) {
+        public LayeredRiftLayout.LayoutLayer createLayer(MinecraftServer server) {
             return new PredefinedRoomLayer(roomRandomizerFactory.createRandomizer(server), position);
         }
 

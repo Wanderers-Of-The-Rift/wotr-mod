@@ -41,7 +41,9 @@ public class FastWeightedList<T> {
     }
 
     public static <T> FastWeightedList<T> of(Pair<Float, T>... entries) {
-        var sortedEntries = Arrays.stream(entries).sorted(Comparator.comparingDouble(it -> -it.getA())).toList();
+        var sortedEntries = Arrays.stream(entries)
+                .sorted(Comparator.comparingDouble(Pair<Float, T>::getA).reversed())
+                .toList();
 
         var values = new ArrayList<T>(sortedEntries.size());
         var weights = new FloatArrayList(sortedEntries.size());
@@ -54,7 +56,7 @@ public class FastWeightedList<T> {
     }
 
     public static <T> FastWeightedList<T> merge(FastWeightedList<T>... lists) {
-        return of(Arrays.stream(lists).flatMap(it -> it.entries()).toArray(Pair[]::new));
+        return of(Arrays.stream(lists).flatMap(FastWeightedList::entries).toArray(Pair[]::new));
     }
 
     public static <T, K extends Comparable<K>> FastWeightedList<T> byCountingDuplicates(

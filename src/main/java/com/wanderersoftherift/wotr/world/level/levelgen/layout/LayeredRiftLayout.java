@@ -19,7 +19,7 @@ public interface LayeredRiftLayout extends RiftLayout {
             Codec<Factory> CODEC = WotrRegistries.LAYOUT_LAYER_TYPES.byNameCodec()
                     .dispatch(fac -> fac.codec(), codec -> codec);
 
-            LayoutLayer create(MinecraftServer server);
+            LayoutLayer createLayer(MinecraftServer server);
 
             MapCodec<? extends Factory> codec();
         }

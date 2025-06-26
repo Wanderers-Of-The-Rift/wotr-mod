@@ -53,9 +53,9 @@ public record BoxedLayer(Vec3i start, Vec3i size, LayeredRiftLayout.LayoutLayer.
                         new Vec3i(x2, y2, z2), sublayers)));
 
         @Override
-        public LayeredRiftLayout.LayoutLayer create(MinecraftServer server) {
+        public LayeredRiftLayout.LayoutLayer createLayer(MinecraftServer server) {
             return new BoxedLayer(start, size,
-                    sublayers.stream().map(it -> it.create(server)).toArray(LayeredRiftLayout.LayoutLayer[]::new));
+                    sublayers.stream().map(it -> it.createLayer(server)).toArray(LayeredRiftLayout.LayoutLayer[]::new));
         }
 
         @Override

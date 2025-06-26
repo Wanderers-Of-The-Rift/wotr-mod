@@ -8,13 +8,13 @@ import net.minecraft.core.Vec3i;
 public record BoxedRiftShape(RiftShape baseShape, Vec3i boxStart, Vec3i boxSize) implements FiniteRiftShape {
 
     public static final MapCodec<BoxedRiftShape> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
-            Codec.INT.fieldOf("start_x").forGetter(it2 -> it2.boxStart.getX()),
-            Codec.INT.fieldOf("start_y").forGetter(it2 -> it2.boxStart.getY()),
-            Codec.INT.fieldOf("start_z").forGetter(it2 -> it2.boxStart.getZ()),
-            Codec.INT.fieldOf("size_x").forGetter(it2 -> it2.boxSize.getX()),
-            Codec.INT.fieldOf("size_y").forGetter(it2 -> it2.boxSize.getY()),
-            Codec.INT.fieldOf("size_z").forGetter(it2 -> it2.boxSize.getZ()),
-            RiftShape.CODEC.fieldOf("base_shape").forGetter(it2 -> it2.baseShape)
+            Codec.INT.fieldOf("start_x").forGetter(shape -> shape.boxStart.getX()),
+            Codec.INT.fieldOf("start_y").forGetter(shape -> shape.boxStart.getY()),
+            Codec.INT.fieldOf("start_z").forGetter(shape -> shape.boxStart.getZ()),
+            Codec.INT.fieldOf("size_x").forGetter(shape -> shape.boxSize.getX()),
+            Codec.INT.fieldOf("size_y").forGetter(shape -> shape.boxSize.getY()),
+            Codec.INT.fieldOf("size_z").forGetter(shape -> shape.boxSize.getZ()),
+            RiftShape.CODEC.fieldOf("base_shape").forGetter(BoxedRiftShape::baseShape)
     )
             .apply(it, (x1, y1, z1, x2, y2, z2, baseShape) -> BoxedRiftShape.of(baseShape, new Vec3i(x1, y1, z1),
                     new Vec3i(x2, y2, z2))));

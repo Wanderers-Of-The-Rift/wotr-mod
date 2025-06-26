@@ -35,7 +35,7 @@ public class RiftRoomGenerator {
             Vec3i sectionPos,
             RoomRiftSpace space,
             ServerLevelAccessor world) {
-        return getOrCreateFutureProcessedRoom(space, world).thenApply(it -> it.getAndRemoveChunk(sectionPos));
+        return getOrCreateFutureProcessedRoom(space, world).thenApply(room -> room.getAndRemoveChunk(sectionPos));
     }
 
     private CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
