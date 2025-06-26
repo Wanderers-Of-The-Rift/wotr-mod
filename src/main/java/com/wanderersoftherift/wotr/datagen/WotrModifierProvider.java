@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import static com.wanderersoftherift.wotr.util.ColorUtil.*;
+
 public class WotrModifierProvider {
 
     public static final Map<ResourceKey<Modifier>, Modifier> DATA = new LinkedHashMap<>();
@@ -32,21 +34,21 @@ public class WotrModifierProvider {
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_aoe"),
                                         WotrAttributes.ABILITY_AOE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xB68CFF) // Purple
+                PURPLE)
         );
         registerModifier(context, getResourceKey("ability_cooldown"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, -0.1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_cooldown"),
                                         WotrAttributes.COOLDOWN, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xADD8E6) // Light Blue
+                LIGHT_BLUE)
         );
         registerModifier(context, getResourceKey("ability_damage_flat"), new Modifier(
                 generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0.01F, 7F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_flat"),
                                         WotrAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))),
-                0xFF6347) // Red
+                RED)
         );
         registerModifier(context, getResourceKey("ability_damage_heavy"),
                 new Modifier(generateEqualRollSpread(5,
@@ -56,41 +58,41 @@ public class WotrModifierProvider {
                         List.of(new AttributeModifierEffect(
                                 WanderersOfTheRift.id("ability_damage_heavy"), WotrAttributes.COOLDOWN, 0.5, 1F,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE))),
-                        0x8B0000) // Dark Red
+                        DARK_RED)
         );
         registerModifier(context, getResourceKey("ability_damage_percent"), new Modifier(
                 generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0, 1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_percent"),
                                 WotrAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xFF4500) // Orange-redish
+                ORANGE_RED)
         );
         registerModifier(context, getResourceKey("ability_heal_power_flat"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 10F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_heal_power_flat"),
                                         WotrAttributes.HEAL_POWER, AttributeModifier.Operation.ADD_VALUE)))),
-                0x00FF7F) // Green
+                GREEN)
         );
         registerModifier(context, getResourceKey("ability_heal_power_percent"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_heal_power_percent"),
                                         WotrAttributes.HEAL_POWER, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x32CD32) // Lime Green
+                LIME_GREEN)
         );
         registerModifier(context, getResourceKey("absorption"), new Modifier(
                 generateEqualRollSpread(4,
                         List.of(new ToBeTieredModifierEffect(0.01F, 6,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("absorption"),
                                         Attributes.MAX_ABSORPTION, AttributeModifier.Operation.ADD_VALUE)))),
-                0xFFD700) // Gold
+                GOLD)
         );
         registerModifier(context, getResourceKey("armor"),
                 new Modifier(generateEqualRollSpread(4,
                         List.of(new ToBeTieredModifierEffect(2, 20,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("armor"), Attributes.ARMOR,
                                         AttributeModifier.Operation.ADD_VALUE)))),
-                        0x8B4513) // Brown
+                        BROWN)
         );
         registerModifier(context, getResourceKey("armor_heavy"), new Modifier(generateEqualRollSpread(
                 4,
@@ -100,21 +102,21 @@ public class WotrModifierProvider {
                 List.of(new AttributeModifierEffect(
                         WanderersOfTheRift.id("armor_heavy"), Attributes.MOVEMENT_SPEED, -0.03F, -0.001F,
                         AttributeModifier.Operation.ADD_VALUE))),
-                0x4B3621) // Dark Brown
+                DARK_BROWN)
         );
         registerModifier(context, getResourceKey("armor_toughness"), new Modifier(
                 generateEqualRollSpread(2,
                         List.of(new ToBeTieredModifierEffect(0.01F, 4,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("armor_toughness"),
                                         Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_VALUE)))),
-                0xA9A9A9) // Dark Gray
+                GRAY)
         );
         registerModifier(context, getResourceKey("attack_flat"), new Modifier(
                 generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0.01F, 11,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("attack_flat"),
                                         Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))),
-                0xFF0000) // Red
+                RED)
         );
         registerModifier(context, getResourceKey("attack_heavy"), new Modifier(generateEqualRollSpread(5, List.of(
                 new ToBeTieredModifierEffect(0.01F, 2F,
@@ -123,28 +125,28 @@ public class WotrModifierProvider {
                 List.of(new AttributeModifierEffect(
                         WanderersOfTheRift.id("attack_heavy"), Attributes.ATTACK_SPEED, -0.25, -0.5F,
                         AttributeModifier.Operation.ADD_MULTIPLIED_BASE))),
-                0x8B0000) // Dark Red
+                DARK_RED)
         );
         registerModifier(context, getResourceKey("attack_percent"), new Modifier(
                 generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("attack_percent"),
                                         Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xDC143C) // Crimson
+                CRIMSON_RED)
         );
         registerModifier(context, getResourceKey("attack_speed"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("attack_speed"),
                                         Attributes.ATTACK_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xFF8C00) // Dark Orange
+                DARK_ORANGE)
         );
         registerModifier(context, getResourceKey("health_flat"), new Modifier(
                 generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0.01F, 12,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("health_flat"),
                                         Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_VALUE)))),
-                0x32CD32) // Lime Green
+                LIME_GREEN)
         );
         registerModifier(context, getResourceKey("health_hybrid"), new Modifier(generateEqualRollSpread(5, List.of(
                 new ToBeTieredModifierEffect(0.01F, 5,
@@ -153,14 +155,14 @@ public class WotrModifierProvider {
                 new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("health_hybrid"), Attributes.MAX_HEALTH,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x3CB371) // Greenish
+                SEA_GREEN)
         );
         registerModifier(context, getResourceKey("health_percent"), new Modifier(
                 generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0.01F, 0.2F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("health_percent"),
                                         Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x228B22) // Also a Greenish
+                FOREST_GREEN)
         );
         registerModifier(context, getResourceKey("jump_height"), new Modifier(generateEqualRollSpread(3, List.of(
                 new ToBeTieredModifierEffect(0.01F, 0.5F,
@@ -169,14 +171,14 @@ public class WotrModifierProvider {
                 new ToBeTieredModifierEffect(0.01F, 4,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("fall_reduction"),
                                 Attributes.SAFE_FALL_DISTANCE, AttributeModifier.Operation.ADD_VALUE)))),
-                0x00BFFF) // Sky blue
+                SKY_BLUE)
         );
         registerModifier(context, getResourceKey("knockback"), new Modifier(
                 generateEqualRollSpread(3,
                         List.of(new ToBeTieredModifierEffect(0.01F, 7.5F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE)))),
-                0xD2691E) // Brownish
+                DARK_ORANGE)
         );
         registerModifier(context, getResourceKey("knockback_heavy"),
                 new Modifier(generateEqualRollSpread(3,
@@ -186,92 +188,92 @@ public class WotrModifierProvider {
                         List.of(new AttributeModifierEffect(
                                 WanderersOfTheRift.id("knockback_heavy"), Attributes.ATTACK_SPEED, -1, -0.5F,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE))),
-                        0x8B4513) // Brown
+                        BROWN)
         );
         registerModifier(context, getResourceKey("knockback_resistance"), new Modifier(
                 generateEqualRollSpread(3,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1.5F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback_resistance"),
                                         Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE)))),
-                0x778899) // Grayish
+                SILVER_GRAY)
         );
         registerModifier(context, getResourceKey("mana_cost"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(-0.01F, -0.1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("mana_cost"),
                                         WotrAttributes.MANA_COST, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x4169E1) // Blueish
+                BLUE)
         );
         registerModifier(context, getResourceKey("mana_degen_rate"), new Modifier(
                 generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("mana_degen_rate"),
                                 WotrAttributes.MANA_DEGEN_RATE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x000080) // Other Blueish
+                DARK_BLUE)
         );
         registerModifier(context, getResourceKey("mana_regen_rate"), new Modifier(
                 generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("mana_regen_rate"),
                                 WotrAttributes.MANA_REGEN_RATE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x00CED1) // Cyan
+                TURQUOISE)
         );
         registerModifier(context, getResourceKey("max_mana_flat"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 50F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_flat"),
                                         WotrAttributes.MAX_MANA, AttributeModifier.Operation.ADD_VALUE)))),
-                0x1E90FF) // Other Blueish
+                BLUE)
         );
         registerModifier(context, getResourceKey("max_mana_percent"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_percent"),
                                         WotrAttributes.MAX_MANA, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x6495ED) // Other Blueish
+                BLUE)
         );
         registerModifier(context, getResourceKey("movement_speed"), new Modifier(
                 generateEqualRollSpread(3,
                         List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("movement_speed"),
                                         Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_VALUE)))),
-                0x00FA9A) // Greenish
+                NEON_GREEN)
         );
         registerModifier(context, getResourceKey("projectile_count"), new Modifier(
                 generateEqualRollSpread(2, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_count"),
                                 WotrAttributes.PROJECTILE_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xF0E68C) // Yellow-Brownish
+                SOFT_GOLD)
         );
         registerModifier(context, getResourceKey("projectile_pierce"), new Modifier(
                 generateEqualRollSpread(2, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_pierce"),
                                 WotrAttributes.PROJECTILE_PIERCE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0xDAA520) // Goldish
+                DARK_GOLD)
         );
         registerModifier(context, getResourceKey("projectile_speed"), new Modifier(
                 generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_speed"),
                                 WotrAttributes.PROJECTILE_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x7FFFD4) // Another Blue
+                TURQUOISE)
         );
         registerModifier(context, getResourceKey("projectile_spread"), new Modifier(
                 generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(-0.01F, -0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_spread"),
                                 WotrAttributes.PROJECTILE_SPREAD, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                0x708090) // Grayish
+                SILVER_GRAY)
         );
         registerModifier(context, getResourceKey("step_height"), new Modifier(
                 generateEqualRollSpread(1,
                         List.of(new ToBeTieredModifierEffect(0.5F, 0.5F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("step_height"),
                                         Attributes.STEP_HEIGHT, AttributeModifier.Operation.ADD_VALUE)))),
-                0xB0C4DE) // Another Blueish
+                SILVER_GRAY)
         );
         registerModifier(context, getResourceKey("sweeping_attack_damage"), new Modifier(
                 generateEqualRollSpread(4,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("sweeping_attack_damage"),
                                         Attributes.SWEEPING_DAMAGE_RATIO, AttributeModifier.Operation.ADD_VALUE)))),
-                0xFF4500) // Orange Red
+                ORANGE_RED)
         );
     }
 
