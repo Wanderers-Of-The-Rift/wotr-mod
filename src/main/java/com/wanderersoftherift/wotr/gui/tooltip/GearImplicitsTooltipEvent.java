@@ -41,8 +41,7 @@ public class GearImplicitsTooltipEvent {
 
         List<TooltipComponent> toAdd = new ArrayList<>();
         for (ModifierInstance modifierInstance : modifierInstances) {
-            List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack,
-                    modifierInstance.modifier().value().getColor());
+            List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack);
             toAdd.addAll(tooltipComponents);
         }
 

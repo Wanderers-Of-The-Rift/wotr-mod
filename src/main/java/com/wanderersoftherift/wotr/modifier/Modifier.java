@@ -56,17 +56,13 @@ public class Modifier {
         modifierTiers.get(tier).disableModifier(roll, entity, source);
     }
 
-    public List<TooltipComponent> getTooltipComponent(
-            ItemStack stack,
-            float roll,
-            ModifierInstance instance,
-            int color) {
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
         if (!modifierTiers.containsKey(instance.tier())) {
             return List.of();
         }
         return modifierTiers.get(instance.tier())
                 .getTooltipComponent(
-                        stack, roll, instance, color
+                        stack, roll, instance
                 );
     }
 }
