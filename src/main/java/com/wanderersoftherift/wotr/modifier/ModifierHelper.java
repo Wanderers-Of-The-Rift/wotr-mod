@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.modifier;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
@@ -8,6 +9,9 @@ import com.wanderersoftherift.wotr.modifier.source.GearImplicitModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.GearSocketModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +24,30 @@ public class ModifierHelper {
             ItemStack stack,
             EquipmentSlot slot,
             LivingEntity entity,
-            ModifierHelper.ModifierInSlotVisitor visitor) {
-        if (!stack.isEmpty()) {
+            ModifierInSlotVisitor visitor) {
+        if (!stack.isEmpty() && itemWorksInSlot(stack, slot)) {
             runOnImplicits(stack, slot, entity, visitor);
             runOnGearSockets(stack, slot, entity, visitor);
         }
+    }
+
+    private static boolean itemWorksInSlot(ItemStack item, EquipmentSlot slot) {
+        var equippable = item.getComponents().get(DataComponents.EQUIPPABLE);
+        if (equippable != null) {
+            return equippable.slot() == slot;
+        }
+        var tag = switch (slot) {
+            case MAINHAND -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_main_hand_slot"));
+            case OFFHAND -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_off_hand_slot"));
+            case FEET -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_boots_slot"));
+            case LEGS -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_leggings_slot"));
+            case CHEST, BODY -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_chestplate_slot"));
+            case HEAD -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_helmet_slot"));
+        };
+        if (item.is(tag)) {
+            return true;
+        }
+        return false;
     }
 
     private static void runOnGearSockets(
@@ -63,7 +86,7 @@ public class ModifierHelper {
         }
     }
 
-    public static void runIterationOnEquipment(LivingEntity entity, ModifierHelper.ModifierInSlotVisitor visitor) {
+    public static void runIterationOnEquipment(LivingEntity entity, ModifierInSlotVisitor visitor) {
         for (EquipmentSlot equipmentslot : EquipmentSlot.VALUES) {
             runIterationOnItem(entity.getItemBySlot(equipmentslot), equipmentslot, entity, visitor);
         }
