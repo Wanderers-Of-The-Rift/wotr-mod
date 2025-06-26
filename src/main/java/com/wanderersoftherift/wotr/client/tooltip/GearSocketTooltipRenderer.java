@@ -156,13 +156,13 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 if (tooltip instanceof ImageComponent img) {
                     if (tier == getModifierTiers(socket).size()) {
                         component.append(ComponentUtil.wavingComponent(img.base(),
-                                TextColor.parseColor("#e0ba12").getOrThrow(), 0.125f, 0.5f));
+                                socket.modifier().get().modifier().value().getColor(), 0.125f, 0.5f));
                     } else {
                         component.append(
                                 img.base()
                                         .copy()
                                         .withStyle(Style.EMPTY
-                                                .withColor(TextColor.parseColor("#e0ba12").getOrThrow().getValue())));
+                                                .withColor(socket.modifier().get().modifier().value().getColor())));
                     }
 
                 }
