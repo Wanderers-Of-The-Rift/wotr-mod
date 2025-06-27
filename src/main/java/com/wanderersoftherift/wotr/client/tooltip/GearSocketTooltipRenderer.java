@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -150,19 +149,17 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                         pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15_728_880);
 
                 MutableComponent component = Component.literal("");
-                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(),
-                        socket.modifier().get().modifier().value().getColor()
+                Modifier mod = socket.modifier().get().modifier().value();
+
+                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(), mod.getStyle()
                 );
                 if (tooltip instanceof ImageComponent img) {
                     if (tier == getModifierTiers(socket).size()) {
-                        component.append(ComponentUtil.wavingComponent(img.base(),
-                                socket.modifier().get().modifier().value().getColor(), 0.125f, 0.5f));
+                        component.append(ComponentUtil.wavingComponent(img.base(), mod.getStyle().getColor().getValue(),
+                                0.125f, 0.5f));
                     } else {
                         component.append(
-                                img.base()
-                                        .copy()
-                                        .withStyle(Style.EMPTY
-                                                .withColor(socket.modifier().get().modifier().value().getColor())));
+                                img.base().copy().withStyle(mod.getStyle()));
                     }
 
                 }
@@ -295,7 +292,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             boolean isShiftDown,
             Modifier modifier) {
         String base;
-        if (effect.getTooltipComponent(ItemStack.EMPTY, 0.0F, modifier.getColor()) instanceof ImageComponent img) {
+        if (effect.getTooltipComponent(ItemStack.EMPTY, 0.0F, modifier.getStyle()) instanceof ImageComponent img) {
             base = img.base().getString();
         } else {
             base = "";

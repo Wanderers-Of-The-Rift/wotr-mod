@@ -9,7 +9,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -86,7 +85,7 @@ public class Runegem extends Item {
                     for (TieredModifier tieredModifier : group.modifiers()) {
                         MutableComponent cmp = (MutableComponent) tieredModifier.getName();
                         tooltipComponents.add(
-                                cmp.withStyle(Style.EMPTY.withColor(tieredModifier.modifier().value().getColor())));
+                                cmp.withStyle(tieredModifier.modifier().value().getStyle()));
                     }
                 }
             }

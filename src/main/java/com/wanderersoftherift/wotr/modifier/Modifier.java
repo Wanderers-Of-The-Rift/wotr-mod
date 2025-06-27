@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -15,31 +16,32 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList),
-            Codec.INT.optionalFieldOf("color", 0xFFFFFF).forGetter(Modifier::getColor)
-    ).apply(inst, Modifier::new));
+            Style.Serializer.CODEC.optionalFieldOf("style").forGetter(mod -> Optional.ofNullable(mod.getStyle()))
+    ).apply(inst, (tiers, styleOpt) -> new Modifier(tiers, styleOpt.orElse(null))));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.MODIFIERS);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MODIFIERS);
 
     private final Map<Integer, ModifierTier> modifierTiers;
-    private final int color;
+    private final Style style;
 
-    public Modifier(List<ModifierTier> modifierTiers, int color) {
+    public Modifier(List<ModifierTier> modifierTiers, Style style) {
         this.modifierTiers = modifierTiers.stream().collect(Collectors.toMap(ModifierTier::getTier, tier -> tier));
-        this.color = color;
+        this.style = style;
     }
 
     public List<ModifierTier> getModifierTierList() {
         return modifierTiers.values().stream().toList();
     }
 
-    public int getColor() {
-        return color;
+    public Style getStyle() {
+        return style;
     }
 
     public void enableModifier(float roll, Entity entity, ModifierSource source, int tier) {
