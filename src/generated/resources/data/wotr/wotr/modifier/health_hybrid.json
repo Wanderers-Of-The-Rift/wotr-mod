@@ -1,5 +1,7 @@
 {
-  "color": 3978097,
+  "style": {
+    "color": "#3CB371"
+  },
   "tiers": [
     {
       "modifiers": [

@@ -109,14 +109,14 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, int color) {
+    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
         return switch (this.getOperation()) {
-            case ADD_VALUE -> getAddTooltipComponent(stack, roll, color);
-            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, color);
+            case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
+            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
         };
     }
 
-    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, int color) {
+    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, Style style) {
         double calculatedRoll = calculateModifier(roll);
         float roundedValue = (float) (Math.ceil(calculatedRoll * 100) / 100);
         String sign;
@@ -129,11 +129,11 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         MutableComponent cmp = Component
                 .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign, roundedValue,
                         Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(Style.EMPTY.withColor(color));
+                .withStyle(style);
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
-    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, int color) {
+    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, Style style) {
         double calculatedRoll = calculateModifier(roll);
         int roundedValue = (int) Math.ceil(calculatedRoll * 100);
         String sign;
@@ -146,7 +146,7 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         MutableComponent cmp = Component
                 .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
                         Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(Style.EMPTY.withColor(color));
+                .withStyle(style);
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 }
