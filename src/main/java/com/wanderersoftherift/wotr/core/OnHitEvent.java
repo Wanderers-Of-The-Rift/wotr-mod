@@ -1,0 +1,20 @@
+package com.wanderersoftherift.wotr.core;
+
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
+import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+
+@EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
+public class OnHitEvent {
+
+    @SubscribeEvent
+    public static void onHit(LivingIncomingDamageEvent event) {
+        if(event.getEntity().getAttribute(WotrAttributes.CRITICAL_AVOIDANCE) != null) {
+            float dmg = OnHitEffect.critical((LivingEntity) event.getSource().getDirectEntity(), event.getEntity(), event.getEntity().getRandom());
+            event.setAmount(dmg);
+        }
+    }
+}

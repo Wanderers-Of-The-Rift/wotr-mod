@@ -73,6 +73,18 @@ public class WotrAttributes {
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0,
                     Integer.MAX_VALUE));
 
+    // Critical
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_CHANCE = registerPlayerAttribute("critical_chance",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_chance"), 0, 0,
+                    Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_MULTIPLIER = registerPlayerAttribute("critical_multiplier",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_multiplier"), 1.5, 0,
+                    Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_AVOIDANCE = registerPlayerAttribute("critical_avoidance",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), 0, 0,
+                    Integer.MAX_VALUE));
+
+
     public static List<DeferredHolder<Attribute, RangedAttribute>> getPlayerAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
     }

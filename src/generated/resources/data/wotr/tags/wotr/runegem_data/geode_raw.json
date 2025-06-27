@@ -1,6 +1,7 @@
 {
   "values": [
     "wotr:attack_raw",
+    "wotr:critical_raw",
     "wotr:defense_raw",
     "wotr:health_raw",
     "wotr:magic_raw",

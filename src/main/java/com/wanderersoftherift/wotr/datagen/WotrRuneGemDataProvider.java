@@ -207,6 +207,13 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "sweeping_attack_damage"))
                                 ))
                 ), RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("critical_raw"), new RunegemData(
+                getTranslatableName("defense_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                        mainHandTag, List.of(
+                                new TieredModifier(1, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(1, getModifier(lookup, "critical_avoidance"))
+                ))),
+        RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("defense_raw"), new RunegemData(
                 getTranslatableName("defense_raw"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
