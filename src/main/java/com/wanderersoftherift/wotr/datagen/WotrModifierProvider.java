@@ -15,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

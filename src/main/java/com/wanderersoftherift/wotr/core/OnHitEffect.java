@@ -16,9 +16,8 @@ public class OnHitEffect {
 
         if(critChance - critAvoid > 100) {
             int i;
-            for (i = critChance; i >= 100; i = i - 100) ;
-            {
-                if (i > 100 || i > random.nextInt(0, 100)) {
+            for (i = critChance; i >= 100; i = i - 100){
+                if (i > critChance || i > random.nextInt(0, 100)) {
                     damage = damage * critMult;
                 }
             }
