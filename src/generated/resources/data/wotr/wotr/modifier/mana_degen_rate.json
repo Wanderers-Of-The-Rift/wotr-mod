@@ -1,4 +1,7 @@
 {
+  "style": {
+    "color": "#000080"
+  },
   "tiers": [
     {
       "modifiers": [

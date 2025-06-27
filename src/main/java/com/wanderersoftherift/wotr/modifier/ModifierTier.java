@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -48,14 +47,10 @@ public class ModifierTier {
         }
     }
 
-    public List<TooltipComponent> getTooltipComponent(
-            ItemStack stack,
-            float roll,
-            ModifierInstance instance,
-            ChatFormatting chatFormatting) {
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
         List<TooltipComponent> tooltipComponents = new ArrayList<>();
         for (AbstractModifierEffect effect : modifierEffects) {
-            tooltipComponents.add(effect.getTooltipComponent(stack, roll, chatFormatting));
+            tooltipComponents.add(effect.getTooltipComponent(stack, roll, instance.modifier().value().getStyle()));
         }
         return tooltipComponents;
     }
