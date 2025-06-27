@@ -2,6 +2,7 @@
   "values": [
     "minecraft:golden_sword",
     "minecraft:golden_axe",
-    "minecraft:crossbow"
+    "minecraft:crossbow",
+    "wotr:wand"
   ]
 }

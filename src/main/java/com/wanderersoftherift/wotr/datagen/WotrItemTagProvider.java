@@ -89,7 +89,8 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.NETHERITE_SHOVEL)
                 .add(Items.NETHERITE_SWORD)
                 .add(Items.BOW)
-                .add(Items.CROSSBOW);
+                .add(Items.CROSSBOW)
+                .add(WotrItems.WAND.get());
 
         tag(WotrTags.Items.SOCKETABLE_OFF_HAND_SLOT)
                 .add(Items.SHIELD);
@@ -144,7 +145,8 @@ public class WotrItemTagProvider extends ItemTagsProvider {
         tag(WotrTags.Items.WIZARD_TYPE_WEAPON)
                 .add(Items.GOLDEN_SWORD)
                 .add(Items.GOLDEN_AXE)
-                .add(Items.CROSSBOW);
+                .add(Items.CROSSBOW)
+                .add(WotrItems.WAND.get());
 
         // spotless:on
     }

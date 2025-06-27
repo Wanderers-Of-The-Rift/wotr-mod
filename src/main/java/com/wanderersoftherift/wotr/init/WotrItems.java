@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
+import com.wanderersoftherift.wotr.item.gear.Gear_Material;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -19,6 +20,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -36,6 +38,9 @@ public class WotrItems {
 
     public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register("builder_glasses",
             BuilderGlasses::new);
+
+    // Gear
+    public static final DeferredItem<SwordItem> WAND = ITEMS.registerItem("wand", props -> new SwordItem(Gear_Material.RIFT_GEAR_MATERIAL, 3,-2.4f, props));
 
     // Runegems
     public static final DeferredItem<Item> RUNEGEM = ITEMS.register("runegem",

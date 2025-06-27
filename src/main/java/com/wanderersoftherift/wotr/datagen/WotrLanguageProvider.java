@@ -77,6 +77,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.FRAMED_RUNEGEM_MONSTER, "Monster Runegem (Framed)");
         addItem(WotrItems.ABILITY_HOLDER, "Empty Ability");
         addItem(WotrItems.SKILL_THREAD, "Skill Thread");
+        addItem(WotrItems.WAND, "Wand");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");

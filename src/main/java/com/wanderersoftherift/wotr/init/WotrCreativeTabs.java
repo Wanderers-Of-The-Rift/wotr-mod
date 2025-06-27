@@ -25,6 +25,7 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
+                        output.accept(WotrItems.WAND);
                         WotrItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());

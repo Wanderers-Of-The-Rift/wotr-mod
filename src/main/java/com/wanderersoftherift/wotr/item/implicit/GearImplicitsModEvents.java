@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.item.implicit;
 
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,6 +26,8 @@ public class GearImplicitsModEvents {
         event.modify(Items.DIAMOND_SWORD,
                 builder -> builder.set(WotrDataComponentType.GEAR_IMPLICITS.get(), new UnrolledGearImplicits()));
         event.modify(Items.NETHERITE_SWORD,
+                builder -> builder.set(WotrDataComponentType.GEAR_IMPLICITS.get(), new UnrolledGearImplicits()));
+        event.modify(WotrItems.WAND,
                 builder -> builder.set(WotrDataComponentType.GEAR_IMPLICITS.get(), new UnrolledGearImplicits()));
 
         event.modify(Items.WOODEN_AXE,

@@ -11,7 +11,7 @@ public class Gear_Material {
             1,
             1f,
             1f,
-            0,
+            1,
             Tags.Items.INGOTS
     );
 }
