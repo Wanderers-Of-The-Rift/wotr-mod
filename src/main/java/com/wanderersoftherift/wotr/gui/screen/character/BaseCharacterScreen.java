@@ -3,18 +3,15 @@ package com.wanderersoftherift.wotr.gui.screen.character;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.character.BaseCharacterMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
+import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
-import com.wanderersoftherift.wotr.network.SelectCharacterMenuPayload;
+import com.wanderersoftherift.wotr.network.charactermenu.SelectCharacterMenuPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,14 +19,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends AbstractContainerScreen<T> {
+public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends EnhancedContainerScreen<T> {
     protected static final int MENU_BAR_WIDTH = 100;
 
     private ScrollContainerWidget<MenuItem> menuSelection;
-    private List<ScrollContainerWidget<?>> scrollContainers = new ArrayList<>();
 
     public BaseCharacterScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -49,49 +44,6 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends A
                     .add(new MenuItem(item.name(), i, 0, 0, 94, font, menu.getType() == item.menuType()));
         }
         addRenderableWidget(menuSelection);
-    }
-
-    @Override
-    protected <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget) {
-        if (widget instanceof ScrollContainerWidget<?> scrollContainer) {
-            scrollContainers.add(scrollContainer);
-        }
-        return super.addRenderableWidget(widget);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double xOffset, double yOffset) {
-        if (!super.mouseScrolled(mouseX, mouseY, xOffset, yOffset)) {
-            for (var scrollContainer : scrollContainers) {
-                if (scrollContainer.isHovered()) {
-                    return scrollContainer.mouseScrolled(mouseX, mouseY, xOffset, yOffset);
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-        for (var scrollContainer : scrollContainers) {
-            scrollContainer.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (!super.keyPressed(keyCode, scanCode, modifiers)) {
-            for (var scrollContainer : scrollContainers) {
-                if (scrollContainer.isHoveredOrFocused()) {
-                    return scrollContainer.keyPressed(keyCode, scanCode, modifiers);
-                }
-            }
-            return false;
-        }
-        return true;
     }
 
     @Override

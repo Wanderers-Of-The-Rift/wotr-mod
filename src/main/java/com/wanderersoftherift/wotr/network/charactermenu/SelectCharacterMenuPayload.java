@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network;
+package com.wanderersoftherift.wotr.network.charactermenu;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.character.BaseCharacterMenu;

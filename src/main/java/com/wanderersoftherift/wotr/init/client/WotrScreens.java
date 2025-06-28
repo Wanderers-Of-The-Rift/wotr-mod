@@ -7,7 +7,10 @@ import com.wanderersoftherift.wotr.gui.screen.RiftCompleteScreen;
 import com.wanderersoftherift.wotr.gui.screen.RuneAnvilScreen;
 import com.wanderersoftherift.wotr.gui.screen.TradingScreen;
 import com.wanderersoftherift.wotr.gui.screen.character.GuildsScreen;
+import com.wanderersoftherift.wotr.gui.screen.character.QuestsScreen;
 import com.wanderersoftherift.wotr.gui.screen.character.WalletScreen;
+import com.wanderersoftherift.wotr.gui.screen.quest.QuestCompletionScreen;
+import com.wanderersoftherift.wotr.gui.screen.quest.QuestGiverScreen;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -26,5 +29,8 @@ public class WotrScreens {
         event.register(WotrMenuTypes.TRADING_MENU.get(), TradingScreen::new);
         event.register(WotrMenuTypes.GUILDS_MENU.get(), GuildsScreen::new);
         event.register(WotrMenuTypes.WALLET_MENU.get(), WalletScreen::new);
+        event.register(WotrMenuTypes.QUEST_MENU.get(), QuestsScreen::new);
+        event.register(WotrMenuTypes.QUEST_GIVER_MENU.get(), QuestGiverScreen::new);
+        event.register(WotrMenuTypes.QUEST_COMPLETION_MENU.get(), QuestCompletionScreen::new);
     }
 }

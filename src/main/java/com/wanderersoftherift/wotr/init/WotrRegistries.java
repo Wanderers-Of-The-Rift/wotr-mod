@@ -9,6 +9,9 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.guild.quest.Goal;
+import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.Reward;
 import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
@@ -62,6 +65,9 @@ public class WotrRegistries {
     public static final Registry<CharacterMenuItem> CHARACTER_MENU_ITEMS = new RegistryBuilder<>(
             Keys.CHARACTER_MENU_ITEMS
     ).create();
+    public static final Registry<MapCodec<? extends Goal>> GOAL_TYPES = new RegistryBuilder<>(Keys.GOAL_TYPES).create();
+    public static final Registry<MapCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
+            .create();
 
     public static final class Keys {
 
@@ -116,6 +122,17 @@ public class WotrRegistries {
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
 
+        public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("quest"));
+        public static final ResourceKey<Registry<MapCodec<? extends Goal>>> GOAL_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal_type"));
+        public static final ResourceKey<Registry<Goal>> GOALS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal"));
+        public static final ResourceKey<Registry<MapCodec<? extends Reward>>> REWARD_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("reward_type"));
+        public static final ResourceKey<Registry<Reward>> REWARDS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("reward"));
+
         private Keys() {
         }
     }
@@ -135,6 +152,8 @@ public class WotrRegistries {
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
         event.register(CHARACTER_MENU_ITEMS);
+        event.register(GOAL_TYPES);
+        event.register(REWARD_TYPES);
     }
 
     @SubscribeEvent
@@ -152,5 +171,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
         event.dataPackRegistry(Keys.TRADE_LISTING, TradeListing.CODEC, TradeListing.CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
     }
 }

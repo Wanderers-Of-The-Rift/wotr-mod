@@ -20,6 +20,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Map;
 
+/**
+ * Commands related to manipulating a player's currency
+ */
 public class CurrencyCommands extends BaseCommand {
 
     private static final DynamicCommandExceptionType ERROR_INVALID_CURRENCY = new DynamicCommandExceptionType(

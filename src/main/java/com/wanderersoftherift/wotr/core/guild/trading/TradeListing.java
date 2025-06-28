@@ -10,6 +10,10 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
+/**
+ * A trade listing describes trade that can be offered. All trade listings have a price (in terms of one or more
+ * currencies) and an output item that is supplied by the trade
+ */
 public class TradeListing {
 
     public static final Codec<TradeListing> CODEC = RecordCodecBuilder.create(instance -> instance.group(
