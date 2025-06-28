@@ -142,14 +142,13 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
                                         WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context, getResourceKey("critical_dual"),
-                new Modifier(generateEqualRollSpread(5, List.of(
-                        new ToBeTieredModifierEffect(1, 25,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
-                                        WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)),
-                        new ToBeTieredModifierEffect(1, 25,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
-                                        WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        registerModifier(context, getResourceKey("critical_dual"), new Modifier(generateEqualRollSpread(5, List.of(
+                new ToBeTieredModifierEffect(1, 25,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
+                                WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)),
+                new ToBeTieredModifierEffect(1, 25,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
+                                WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("health_flat"),
                 new Modifier(generateEqualRollSpread(6,

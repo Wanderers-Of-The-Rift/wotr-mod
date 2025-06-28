@@ -10,7 +10,8 @@ public class OnHitEvent {
 
     @SubscribeEvent
     public static void onHit(LivingIncomingDamageEvent event) {
-        float dmg = OnHitEffect.critical(event.getAmount(), event.getEntity(), event.getEntity(), event.getEntity().getRandom());
+        float dmg = OnHitEffect.critical(event.getAmount(), event.getEntity(), event.getEntity(),
+                event.getEntity().getRandom());
         event.setAmount(dmg);
     }
 }

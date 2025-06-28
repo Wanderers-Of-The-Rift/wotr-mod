@@ -14,8 +14,8 @@ public class OnHitEffect {
         int critChance = baseCritChance - critAvoid;
         int critApplications = critChance / 100;
 
-        if(random.nextInt(0, 100) < (critChance % 100)) {
-            critApplications = critApplications + 1;
+        if (random.nextInt(0, 100) < (critChance % 100)) {
+            critApplications += 1;
         }
         float finalDamage = initialDamage * critMult * critApplications;
         return finalDamage;
