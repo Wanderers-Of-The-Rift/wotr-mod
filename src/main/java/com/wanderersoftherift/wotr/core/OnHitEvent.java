@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.core;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -10,8 +11,8 @@ public class OnHitEvent {
 
     @SubscribeEvent
     public static void onHit(LivingIncomingDamageEvent event) {
-        float dmg = OnHitEffect.critical(event.getAmount(), event.getEntity(), event.getEntity(),
-                event.getEntity().getRandom());
+        float dmg = OnHitEffect.critical(event.getAmount(), (LivingEntity) event.getSource().getDirectEntity(),
+                event.getEntity(), event.getEntity().getRandom());
         event.setAmount(dmg);
     }
 }
