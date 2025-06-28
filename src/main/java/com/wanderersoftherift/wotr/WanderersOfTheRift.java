@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.config.ClientConfig;
+import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
+import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
@@ -25,6 +27,8 @@ import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
 import com.wanderersoftherift.wotr.init.client.WotrEmblemProviders;
+import com.wanderersoftherift.wotr.init.guild.WotrGoalTypes;
+import com.wanderersoftherift.wotr.init.guild.WotrRewardTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootModifiers;
@@ -53,6 +57,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
@@ -101,6 +106,9 @@ public class WanderersOfTheRift {
         WotrEffects.EFFECTS.register(modEventBus);
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
 
+        WotrGoalTypes.GOAL_TYPES.register(modEventBus);
+        WotrRewardTypes.REWARD_TYPES.register(modEventBus);
+
         WotrModifierEffectTypes.MODIFIER_EFFECT_TYPES.register(modEventBus);
         WotrObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
         WotrOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
@@ -117,6 +125,7 @@ public class WanderersOfTheRift {
             WotrConfigurableLayers.LAYERS.register(modEventBus);
             WotrConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
             WotrEmblemProviders.PROVIDERS.register(modEventBus);
+            modEventBus.addListener(this::registerWidgetLookups);
         }
 
         WotrCharacterMenuItems.MENU_ITEMS.register(modEventBus);
@@ -188,6 +197,11 @@ public class WanderersOfTheRift {
     private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
         event.addListener(id("invalidate_caches/rift_templates"), RiftTemplates.RELOAD_LISTENER);
         event.addListener(id("invalidate_caches/room_randomizer"), RoomRandomizerImpl.RELOAD_LISTENER);
+    }
+
+    private void registerWidgetLookups(final FMLClientSetupEvent event) {
+        RewardDisplays.init();
+        GoalDisplays.init();
     }
 
 }

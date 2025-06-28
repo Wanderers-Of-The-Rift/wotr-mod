@@ -13,6 +13,12 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
+/**
+ * Defines and describes a currency
+ * 
+ * @param icon
+ * @param smallIcon
+ */
 public record Currency(ResourceLocation icon, Optional<ResourceLocation> smallIcon) {
     public static final Codec<Currency> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("icon").forGetter(Currency::icon),

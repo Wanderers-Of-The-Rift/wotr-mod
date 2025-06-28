@@ -61,6 +61,7 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialBlock(WotrBlocks.DITTO_BLOCK.get(),
                 TexturedModel.CUBE.updateTemplate(template -> template.extend().renderType("cutout").build()));
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
+        blockModels.createTrivialCube(WotrBlocks.QUEST_HUB.get());
 
         createBlockStatesForTrapBlock(WotrBlocks.MOB_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);

@@ -21,11 +21,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class TradingMenu extends AbstractContainerMenu {
 
+    private static final QuickMover MOVER = QuickMover.create().forPlayerSlots(1).forSlot(0).tryMoveToPlayer().build();
+
     private final ContainerLevelAccess access;
     private final ChangeAwareItemHandler purchaseItem;
     private final SlotItemHandler purchaseSlot;
     private final WalletAccessor wallet;
-    private final QuickMover quickMover;
+
     private Holder<TradeListing> currentTrade;
     private boolean updatingTrade = false;
 
@@ -57,13 +59,11 @@ public class TradingMenu extends AbstractContainerMenu {
         this.addSlot(purchaseSlot);
 
         addStandardInventorySlots(playerInventory, 108, 84);
-
-        quickMover = QuickMover.create().forPlayerSlots(1).forSlot(0).tryMoveToPlayer().build();
     }
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        ItemStack stack = quickMover.quickMove(this, player, index);
+        ItemStack stack = MOVER.quickMove(this, player, index);
         // If quick move has left residual, move it to the player's hand or drop it (alternatively we could take a bit
         // back)
         int remaining = purchaseItem.getStackInSlot(0).getCount();
