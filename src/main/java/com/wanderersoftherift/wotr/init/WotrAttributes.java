@@ -3,8 +3,11 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.monster.Monster;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
@@ -23,6 +26,8 @@ public class WotrAttributes {
             WanderersOfTheRift.MODID);
 
     private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
+
+    private static final List<DeferredHolder<Attribute, RangedAttribute>> MOB_ATTRIBUTES = new ArrayList<>();
 
     /* Ability Attributes */
     public static final DeferredHolder<Attribute, RangedAttribute> ABILITY_AOE = registerPlayerAttribute("ability_aoe",
@@ -93,9 +98,11 @@ public class WotrAttributes {
      * This adds the different attributes to the player for the different abilities
      */
     @SubscribeEvent
-    private static void addAttributesToPlayer(EntityAttributeModificationEvent event) {
+    private static void addAttributesToLivingEntities(EntityAttributeModificationEvent event) {
         for (DeferredHolder<Attribute, RangedAttribute> attribute : PLAYER_ATTRIBUTES) {
-            event.add(EntityType.PLAYER, attribute);
+            for(EntityType i : event.getTypes()) {
+                event.add(i, attribute);
+            }
         }
     }
 
