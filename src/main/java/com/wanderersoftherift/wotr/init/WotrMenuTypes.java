@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
+import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -33,6 +34,11 @@ public class WotrMenuTypes {
 
     public static final Supplier<MenuType<TradingMenu>> TRADING_MENU = MENUS.register("trading_menu",
             () -> new MenuType<>(TradingMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    public static final Supplier<MenuType<QuestGiverMenu>> QUEST_GIVER_MENU = MENUS.register("quest_giver_menu",
+            () -> new MenuType<>(QuestGiverMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    /// Character Menus
 
     public static final Supplier<MenuType<GuildMenu>> GUILDS_MENU = MENUS.register("guilds_menu",
             () -> new MenuType<>(GuildMenu::new, FeatureFlags.DEFAULT_FLAGS));
