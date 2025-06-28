@@ -17,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
 public class RiftCompleteScreen extends AbstractContainerScreen<RiftCompleteMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/rift_complete/background.png");
-    private static final Component REWARDS_LABEL = Component.literal("Rewards");
+    private static final Component REWARDS_LABEL = Component
+            .translatable(WanderersOfTheRift.translationId("container", "rift_complete.reward"));
     private static final int BACKGROUND_WIDTH = 296;
     private static final int BACKGROUND_HEIGHT = 236;
 

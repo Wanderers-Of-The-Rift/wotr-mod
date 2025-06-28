@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.block.DittoBlock;
 import com.wanderersoftherift.wotr.block.KeyForgeBlock;
 import com.wanderersoftherift.wotr.block.MobTrapBlock;
 import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
+import com.wanderersoftherift.wotr.block.QuestGiverBlock;
 import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
@@ -97,6 +98,9 @@ public class WotrBlocks {
                     .setId(blockId("ability_bench"))
                     .strength(2.0f)
                     .sound(SoundType.WOOD)));
+
+    public static final DeferredBlock<QuestGiverBlock> QUEST_GIVER = registerBlock("quest_giver",
+            () -> new QuestGiverBlock(BlockBehaviour.Properties.of().setId(blockId("quest_giver")).strength(2.0f)));
 
     public static final DeferredBlock<DittoBlock> DITTO_BLOCK = registerBlock("ditto_block",
             () -> new DittoBlock(BlockBehaviour.Properties.of()

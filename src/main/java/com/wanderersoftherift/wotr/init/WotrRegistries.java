@@ -7,7 +7,14 @@ import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
+import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.guild.quest.Goal;
+import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.Reward;
+import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
@@ -46,6 +53,12 @@ public class WotrRegistries {
             Keys.EFFECT_TARGETING_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
+    public static final Registry<CharacterMenuItem> CHARACTER_MENU_ITEMS = new RegistryBuilder<>(
+            Keys.CHARACTER_MENU_ITEMS
+    ).create();
+    public static final Registry<MapCodec<? extends Goal>> GOAL_TYPES = new RegistryBuilder<>(Keys.GOAL_TYPES).create();
+    public static final Registry<MapCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
+            .create();
 
     public static final class Keys {
 
@@ -57,6 +70,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
         public static final ResourceKey<Registry<ContainerType>> CONTAINER_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("container_type"));
+        public static final ResourceKey<Registry<Currency>> CURRENCIES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("currency"));
+        public static final ResourceKey<Registry<TradeListing>> TRADE_LISTING = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("trade_listing"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
         public static final ResourceKey<Registry<ImplicitConfig>> GEAR_IMPLICITS_CONFIG = ResourceKey
@@ -85,6 +102,21 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
         public static final ResourceKey<Registry<MapCodec<? extends AbstractTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_targeting"));
+        public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
+
+        public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("quest"));
+        public static final ResourceKey<Registry<MapCodec<? extends Goal>>> GOAL_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal_type"));
+        public static final ResourceKey<Registry<Goal>> GOALS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal"));
+        public static final ResourceKey<Registry<MapCodec<? extends Reward>>> REWARD_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("reward_type"));
+        public static final ResourceKey<Registry<Reward>> REWARDS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("reward"));
 
         private Keys() {
         }
@@ -101,6 +133,9 @@ public class WotrRegistries {
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);
         event.register(CONTAINER_TYPE);
+        event.register(CHARACTER_MENU_ITEMS);
+        event.register(GOAL_TYPES);
+        event.register(REWARD_TYPES);
     }
 
     @SubscribeEvent
@@ -115,5 +150,9 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.TRADE_LISTING, TradeListing.CODEC, TradeListing.CODEC);
+        event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
     }
 }

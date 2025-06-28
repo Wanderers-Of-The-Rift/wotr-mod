@@ -1,21 +1,13 @@
 package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
-import com.wanderersoftherift.wotr.commands.AbilityCommands;
-import com.wanderersoftherift.wotr.commands.BugReportCommand;
-import com.wanderersoftherift.wotr.commands.DebugCommands;
-import com.wanderersoftherift.wotr.commands.EssenceCommands;
-import com.wanderersoftherift.wotr.commands.HudCommands;
-import com.wanderersoftherift.wotr.commands.InventorySnapshotCommands;
-import com.wanderersoftherift.wotr.commands.RiftCommands;
-import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
-import com.wanderersoftherift.wotr.commands.RiftMapCommands;
-import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
+import com.wanderersoftherift.wotr.gui.widget.lookup.ClassWidgets;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
 import com.wanderersoftherift.wotr.init.WotrContainerTypes;
 import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -33,6 +25,9 @@ import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
+import com.wanderersoftherift.wotr.init.client.WotrEmblemProviders;
+import com.wanderersoftherift.wotr.init.guild.WotrGoalTypes;
+import com.wanderersoftherift.wotr.init.guild.WotrRewardTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootModifiers;
@@ -51,15 +46,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -101,6 +94,9 @@ public class WanderersOfTheRift {
         WotrEffects.EFFECTS.register(modEventBus);
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
 
+        WotrGoalTypes.GOAL_TYPES.register(modEventBus);
+        WotrRewardTypes.REWARD_TYPES.register(modEventBus);
+
         WotrModifierEffectTypes.MODIFIER_EFFECT_TYPES.register(modEventBus);
         WotrObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
         WotrOngoingObjectiveTypes.ONGOING_OBJECTIVE_TYPES.register(modEventBus);
@@ -116,13 +112,11 @@ public class WanderersOfTheRift {
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);
             WotrConfigurableLayers.VANILLA_LAYERS.register(modEventBus);
+            WotrEmblemProviders.PROVIDERS.register(modEventBus);
+            modEventBus.addListener(this::registerClassWidgets);
         }
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (Wotr) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like
-        // onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
+        WotrCharacterMenuItems.MENU_ITEMS.register(modEventBus);
 
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);
@@ -181,25 +175,13 @@ public class WanderersOfTheRift {
         ModList.get().getModContainerById("sophisticatedbackpacks").ifPresent(x -> SophisticatedBackpackInterop.load());
     }
 
-    public void registerInterop(RegisterEvent event) {
+    private void registerInterop(RegisterEvent event) {
         ModList.get()
                 .getModContainerById("sophisticatedbackpacks")
                 .ifPresent(x -> SophisticatedBackpackInterop.register(event));
     }
 
-    @SubscribeEvent
-    private void registerCommands(RegisterCommandsEvent event) {
-        InventorySnapshotCommands.register(event.getDispatcher(), event.getBuildContext());
-        SpawnPieceCommand.register(event.getDispatcher(), event.getBuildContext());
-        if (FMLEnvironment.dist.isClient()) {
-            RiftMapCommands.register(event.getDispatcher(), event.getBuildContext());
-        }
-        new DebugCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        AbilityCommands.register(event.getDispatcher(), event.getBuildContext());
-        new RiftKeyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new EssenceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new BugReportCommand().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
-        new HudCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+    private void registerClassWidgets(final FMLClientSetupEvent event) {
+        ClassWidgets.init();
     }
 }
