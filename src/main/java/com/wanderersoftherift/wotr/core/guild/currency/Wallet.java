@@ -13,6 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Player attachment that stores currencies
+ */
 public class Wallet implements WalletAccessor {
     public static final Codec<Wallet> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.unboundedMap(Currency.CODEC, Codec.INT).fieldOf("currencies").forGetter(x -> x.currencies)

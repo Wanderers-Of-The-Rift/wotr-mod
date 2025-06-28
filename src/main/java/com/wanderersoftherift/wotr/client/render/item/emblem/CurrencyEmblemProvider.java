@@ -8,6 +8,9 @@ import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Provides an emblem based on the currency the item contains
+ */
 public class CurrencyEmblemProvider implements EmblemProvider {
     public static final MapCodec<CurrencyEmblemProvider> CODEC = Codec.unit(new CurrencyEmblemProvider())
             .fieldOf("currency");

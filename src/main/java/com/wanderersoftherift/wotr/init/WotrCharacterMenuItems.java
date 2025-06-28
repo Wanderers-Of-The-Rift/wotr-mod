@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.OrderHint;
+import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -30,6 +31,14 @@ public class WotrCharacterMenuItems {
             (id, inventory, player) -> new WalletMenu(id, inventory,
                     ContainerLevelAccess.create(player.level(), player.getOnPos())),
             OrderHint.AFTER, WotrMenuTypes.GUILDS_MENU.get()
+    ));
+
+    public static final Supplier<CharacterMenuItem> QUESTS = MENU_ITEMS.register("quests", () -> new CharacterMenuItem(
+            Component.translatable(WanderersOfTheRift.translationId("container", "quests")),
+            WotrMenuTypes.QUEST_MENU.get(),
+            (id, inventory, player) -> new QuestMenu(id, inventory,
+                    ContainerLevelAccess.create(player.level(), player.getOnPos())),
+            OrderHint.AFTER, WotrMenuTypes.WALLET_MENU.get()
     ));
 
 }

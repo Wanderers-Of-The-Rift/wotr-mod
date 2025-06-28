@@ -15,6 +15,7 @@ import org.lwjgl.glfw.GLFW;
 public class WotrKeyMappings {
 
     public static final String ABILITY_CATEGORY = WanderersOfTheRift.translationId("key", "categories.ability");
+    public static final String MENU_CATEGORY = WanderersOfTheRift.translationId("key", "categories.menu");
     public static final String MISC_CATEGORY = WanderersOfTheRift.translationId("key", "categories.misc");
 
     public static final KeyMapping ABILITY_1_KEY = new KeyMapping(WanderersOfTheRift.translationId("key", "ability.1"),
@@ -73,6 +74,11 @@ public class WotrKeyMappings {
             WanderersOfTheRift.translationId("key", "jigsaw_name_toggle"), KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MISC_CATEGORY);
 
+    public static final KeyMapping CHARACTER_MENU_KEY = new KeyMapping(
+            WanderersOfTheRift.translationId("key", "character_menu"), KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, MENU_CATEGORY
+    );
+
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         for (KeyMapping key : ABILITY_SLOT_KEYS) {
@@ -84,6 +90,7 @@ public class WotrKeyMappings {
         event.register(ACTIVATE_ABILITY_SCROLL);
         event.register(SHOW_TOOLTIP_INFO);
         event.register(JIGSAW_NAME_TOGGLE_KEY);
+        event.register(CHARACTER_MENU_KEY);
     }
 
 }
