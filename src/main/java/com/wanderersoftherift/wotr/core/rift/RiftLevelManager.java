@@ -15,7 +15,6 @@ import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
@@ -65,6 +64,8 @@ import java.util.stream.Stream;
  * Static manager for handing access to, creation, and destruction of a rift
  */
 public final class RiftLevelManager {
+
+    public static final int DEFAULT_RIFT_HEIGHT_IN_CHUNKS = 24;
 
     private RiftLevelManager() {
     }
@@ -176,14 +177,11 @@ public final class RiftLevelManager {
             return null;
         }
 
-        var defaultRiftHeightChunks = 24; // arbitrary number, maybe load from key or something,
-        config = initializeConfig(config, defaultRiftHeightChunks, server);
+        config = initializeConfig(config, server);
         var loadedRiftHeight = config.layout()
-                .map(it -> it instanceof LayeredInfiniteRiftLayout.Factory fac
-                        ? fac.levelCount() + FastRiftGenerator.MARGIN_LAYERS
-                        : defaultRiftHeightChunks
+                .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS
                 );
-        int requestedRiftHeightChunks = loadedRiftHeight.orElse(defaultRiftHeightChunks);
+        int requestedRiftHeightChunks = (Integer) loadedRiftHeight.get();
         var riftDimensionType = RiftDimensionType.RIFT_DIMENSION_TYPE_MAP.ceilingEntry(requestedRiftHeightChunks * 16);
         int actualRiftHeight = riftDimensionType.getKey();
 
@@ -322,21 +320,21 @@ public final class RiftLevelManager {
         level.getServer().overworld().save(null, true, false);
     }
 
-    private static RiftConfig initializeConfig(RiftConfig baseConfig, int layerCount, MinecraftServer server) {
+    private static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
         var random = RandomSource.create();
         int seed = baseConfig.seed().orElseGet(random::nextInt);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
         return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
                 baseConfig.layout().isPresent() ? baseConfig.layout()
                         : Optional.of(
-                                defaultLayout(baseConfig.tier(), layerCount - FastRiftGenerator.MARGIN_LAYERS, seed)),
+                                defaultLayout(baseConfig.tier(), seed)),
                 Optional.of(seed));
     }
 
-    private static RiftLayout.Factory defaultLayout(int tier, int layerCount, int seed) {
-
+    private static RiftLayout.Factory defaultLayout(int tier, int seed) {
+        var layerCount = DEFAULT_RIFT_HEIGHT_IN_CHUNKS - FastRiftGenerator.MARGIN_LAYERS;
         var factory = new LayeredFiniteRiftLayout.Factory(
-                new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0),
+                new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0, layerCount),
                         new Vec3i(-1 - 3 * tier, -layerCount / 2, -1 - 3 * tier),
                         new Vec3i(3 + 6 * tier, layerCount, 3 + 6 * tier)),
                 Optional.of(seed), List.of(

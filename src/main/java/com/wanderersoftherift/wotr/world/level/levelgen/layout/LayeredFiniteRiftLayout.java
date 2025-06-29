@@ -38,7 +38,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     private final List<LayoutLayer> layers;
 
     public LayeredFiniteRiftLayout(FiniteRiftShape riftShape, int seed, List<LayoutLayer> layers) {
-        layerCount = riftShape.getBoxSize().getY();
+        layerCount = riftShape.levelCount();
         this.riftShape = riftShape;
         this.layers = layers;
         this.seed = seed;
@@ -186,12 +186,12 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         return riftShape;
     }
 
-    public static record Factory(BoxedRiftShape shape, Optional<Integer> seed,
+    public static record Factory(BoxedRiftShape riftShape, Optional<Integer> seed,
             List<LayeredRiftLayout.LayoutLayer.Factory> layers) implements RiftLayout.Factory {
 
         public static final MapCodec<LayeredFiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
-                        BoxedRiftShape.CODEC.fieldOf("shape").forGetter(LayeredFiniteRiftLayout.Factory::shape),
+                        BoxedRiftShape.CODEC.fieldOf("shape").forGetter(LayeredFiniteRiftLayout.Factory::riftShape),
                         Codec.INT.optionalFieldOf("seed").forGetter(LayeredFiniteRiftLayout.Factory::seed),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
@@ -205,7 +205,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
 
         @Override
         public RiftLayout createLayout(MinecraftServer server, int seed) {
-            return new LayeredFiniteRiftLayout(shape, this.seed.orElse(seed),
+            return new LayeredFiniteRiftLayout(riftShape, this.seed.orElse(seed),
                     layers.stream().map(it -> it.createLayer(server)).toList());
         }
     }

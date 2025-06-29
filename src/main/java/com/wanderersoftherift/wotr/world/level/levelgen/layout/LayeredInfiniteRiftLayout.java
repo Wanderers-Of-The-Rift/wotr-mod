@@ -30,14 +30,12 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
     private final ConcurrentHashMap<Vector2i, Region> regions = new ConcurrentHashMap<>();
 
-    private final int levelCount;
     private final int seed;
     private final RiftShape riftShape;
     private final List<LayoutLayer> layers;
 
-    public LayeredInfiniteRiftLayout(int levelCount, RiftShape riftShape, int seed, List<LayoutLayer> layers) {
+    public LayeredInfiniteRiftLayout(RiftShape riftShape, int seed, List<LayoutLayer> layers) {
         this.layers = layers;
-        this.levelCount = levelCount;
         this.seed = seed;
         this.riftShape = riftShape;
     }
@@ -47,7 +45,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         var regionZ = Math.floorDiv(z + 7, 15);
 
         return regions.computeIfAbsent(new Vector2i(regionX, regionZ),
-                (unused) -> new Region(new Vec3i(regionX * 15 - 7, -levelCount / 2, regionZ * 15 - 7)));
+                (unused) -> new Region(new Vec3i(regionX * 15 - 7, -riftShape.levelCount() / 2, regionZ * 15 - 7)));
     }
 
     @Override
@@ -87,14 +85,13 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
-    public record Factory(RiftShape riftShape, Optional<Integer> seed, int levelCount, List<LayoutLayer.Factory> layers)
+    public record Factory(RiftShape riftShape, Optional<Integer> seed, List<LayoutLayer.Factory> layers)
             implements RiftLayout.Factory {
 
         public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
                         RiftShape.CODEC.fieldOf("shape").forGetter(LayeredInfiniteRiftLayout.Factory::riftShape),
                         Codec.INT.optionalFieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
-                        Codec.INT.fieldOf("level_count").forGetter(LayeredInfiniteRiftLayout.Factory::levelCount),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
                                 .forGetter(LayeredInfiniteRiftLayout.Factory::layers)
@@ -107,8 +104,8 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
         @Override
         public RiftLayout createLayout(MinecraftServer server, int seed) {
-            return new LayeredInfiniteRiftLayout(levelCount /* maybe Y limits could be part of all rift shapes */,
-                    riftShape, this.seed.orElse(seed), layers.stream().map(it -> it.createLayer(server)).toList());
+            return new LayeredInfiniteRiftLayout(riftShape, this.seed.orElse(seed),
+                    layers.stream().map(it -> it.createLayer(server)).toList());
         }
     }
 
@@ -118,6 +115,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
         public final Vec3i origin;
 
+        private final int levelCount = riftShape.levelCount();
         private final RiftSpace[] spaces = new RiftSpace[15 * 15 * levelCount];
         private final long[] emptySpaces = new long[15 * 15];
         private final AtomicReference<WeakReference<Thread>> generatorThread = new AtomicReference<>(null);

@@ -4,11 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public record CoarsePyramidRiftShape(double offset, double scaleY) implements RiftShape {
+public record CoarsePyramidRiftShape(double offset, double scaleY, int levelCount) implements RiftShape {
 
     public static final MapCodec<CoarsePyramidRiftShape> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
             Codec.DOUBLE.fieldOf("offset").forGetter(CoarsePyramidRiftShape::offset),
-            Codec.DOUBLE.fieldOf("scale_y").forGetter(CoarsePyramidRiftShape::scaleY)
+            Codec.DOUBLE.fieldOf("scale_y").forGetter(CoarsePyramidRiftShape::scaleY),
+            Codec.INT.fieldOf("level_count").forGetter(RiftShape::levelCount)
     ).apply(it, CoarsePyramidRiftShape::new));
 
     @Override
