@@ -14,6 +14,9 @@ import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -44,6 +47,12 @@ public class WotrRegistries {
             Keys.OUTPUT_BLOCKSTATE_TYPES).create();
     public static final Registry<MapCodec<? extends AbstractTargeting>> EFFECT_TARGETING_TYPES = new RegistryBuilder<>(
             Keys.EFFECT_TARGETING_TYPES).create();
+    public static final Registry<MapCodec<? extends RiftLayout.Factory>> LAYOUT_TYPES = new RegistryBuilder<>(
+            Keys.LAYOUT_TYPES).create();
+    public static final Registry<MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory>> LAYOUT_LAYER_TYPES = new RegistryBuilder<>(
+            Keys.LAYOUT_LAYER_TYPES).create();
+    public static final Registry<MapCodec<? extends RiftShape>> RIFT_SHAPE_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_SHAPE_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
 
@@ -85,6 +94,12 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
         public static final ResourceKey<Registry<MapCodec<? extends AbstractTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_targeting"));
+        public static final ResourceKey<Registry<MapCodec<? extends RiftLayout.Factory>>> LAYOUT_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/layout"));
+        public static final ResourceKey<Registry<MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory>>> LAYOUT_LAYER_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
+        public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
 
         private Keys() {
         }
@@ -100,6 +115,9 @@ public class WotrRegistries {
         event.register(ABILITY_TYPES);
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);
+        event.register(LAYOUT_TYPES);
+        event.register(LAYOUT_LAYER_TYPES);
+        event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
     }
 

@@ -45,7 +45,12 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrChunkGenerators;
 import com.wanderersoftherift.wotr.init.worldgen.WotrInputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -59,6 +64,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
@@ -95,6 +101,10 @@ public class WanderersOfTheRift {
         WotrInputBlockStateTypes.INPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrProcessors.PROCESSORS.register(modEventBus);
+
+        WotrRiftLayoutLayers.LAYOUT_LAYERS.register(modEventBus);
+        WotrRiftLayouts.LAYOUTS.register(modEventBus);
+        WotrRiftShapes.RIFT_SHAPES.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
@@ -185,6 +195,12 @@ public class WanderersOfTheRift {
         ModList.get()
                 .getModContainerById("sophisticatedbackpacks")
                 .ifPresent(x -> SophisticatedBackpackInterop.register(event));
+    }
+
+    @SubscribeEvent
+    private void registerServerReloadListeners(AddServerReloadListenersEvent event) {
+        event.addListener(id("invalidate_caches/rift_templates"), RiftTemplates.RELOAD_LISTENER);
+        event.addListener(id("invalidate_caches/room_randomizer"), RoomRandomizerImpl.RELOAD_LISTENER);
     }
 
     @SubscribeEvent

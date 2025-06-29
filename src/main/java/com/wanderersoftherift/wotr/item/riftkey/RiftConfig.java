@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -28,13 +29,14 @@ import java.util.Optional;
  */
 // TODO: Move into core.rift
 public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<Holder<ObjectiveType>> objective,
-        Optional<Integer> seed) {
+        Optional<RiftLayout.Factory> layout, Optional<Integer> seed) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder
             .create(instance -> instance
                     .group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
                             RiftTheme.CODEC.optionalFieldOf("theme").forGetter(RiftConfig::theme),
                             ObjectiveType.CODEC.optionalFieldOf("objective").forGetter(RiftConfig::objective),
+                            RiftLayout.Factory.CODEC.optionalFieldOf("layout").forGetter(RiftConfig::layout),
                             Codec.INT.optionalFieldOf("seed").forGetter(RiftConfig::seed))
                     .apply(instance, RiftConfig::new));
 
@@ -43,20 +45,21 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
             ByteBufCodecs.INT, RiftConfig::tier,
             ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES).apply(ByteBufCodecs::optional), RiftConfig::theme,
             ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES).apply(ByteBufCodecs::optional), RiftConfig::objective,
+            ByteBufCodecs.fromCodec(RiftLayout.Factory.CODEC).apply(ByteBufCodecs::optional), RiftConfig::layout,
             ByteBufCodecs.INT.apply(ByteBufCodecs::optional), RiftConfig::seed,
             RiftConfig::new);
     // spotless:on
 
     public RiftConfig(int tier) {
-        this(tier, Optional.empty(), Optional.empty(), Optional.empty());
+        this(tier, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme) {
-        this(tier, Optional.of(theme), Optional.empty(), Optional.empty());
+        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme, int seed) {
-        this(tier, Optional.of(theme), Optional.empty(), Optional.of(seed));
+        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.of(seed));
     }
 
     /**
@@ -98,12 +101,14 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
         private int tier;
         private Optional<Holder<RiftTheme>> theme;
         private Optional<Holder<ObjectiveType>> objective;
+        private Optional<RiftLayout.Factory> layout;
         private Optional<Integer> seed;
 
         public Builder() {
             this.tier = 0;
             this.theme = Optional.empty();
             this.objective = Optional.empty();
+            this.layout = Optional.empty();
             this.seed = Optional.empty();
         }
 
@@ -111,6 +116,7 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
             this.tier = source.tier;
             this.theme = source.theme;
             this.objective = source.objective;
+            this.layout = source.layout;
             this.seed = source.seed;
         }
 
@@ -129,13 +135,18 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
             return this;
         }
 
+        public Builder layout(RiftLayout.Factory layout) {
+            this.layout = Optional.of(layout);
+            return this;
+        }
+
         public Builder seed(int seed) {
             this.seed = Optional.of(seed);
             return this;
         }
 
         public RiftConfig build() {
-            return new RiftConfig(tier, theme, objective, seed);
+            return new RiftConfig(tier, theme, objective, layout, seed);
         }
     }
 }

@@ -23,4 +23,8 @@ public abstract class InputBlockState {
     public abstract MapCodec<? extends InputBlockState> getCodec();
 
     public abstract boolean matchesBlockstate(BlockState blockState);
+
+    public abstract boolean matchesBlockstateAssumingBlockEqual(BlockState blockState);
+
+    public abstract Block block();
 }

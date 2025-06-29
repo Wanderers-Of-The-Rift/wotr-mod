@@ -139,6 +139,6 @@ public class RiftKey extends Item {
         Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RIFT_OBJECTIVE);
         Integer seed = stack.get(WotrDataComponentType.RIFT_SEED);
         return new RiftConfig(tier, Optional.ofNullable(riftTheme), Optional.ofNullable(objective),
-                Optional.ofNullable(seed));
+                Optional.empty()/* todo */, Optional.ofNullable(seed));
     }
 }
