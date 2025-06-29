@@ -25,11 +25,7 @@ public class OnHitEffect {
         int thornsChance = (int) entity.getAttributeValue(WotrAttributes.THORNS_CHANCE);
         boolean thornsProc;
 
-        if (thornsChance > random.nextInt(0, 100)) {
-            thornsProc = true;
-        } else {
-            thornsProc = false;
-        }
+        thornsProc = thornsChance > random.nextInt(0, 100);
         return thornsProc;
     }
 }
