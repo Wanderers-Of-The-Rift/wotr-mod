@@ -74,6 +74,20 @@ public class FastRiftGenerator extends ChunkGenerator {
     ).apply(instance, FastRiftGenerator::new));
     public static final int MARGIN_LAYERS = 2;
 
+    public static final int CORRIDOR_WIDTH = 5;
+    public static final int CORRIDOR_HEIGHT = 7;
+    public static final int CORRIDOR_START_X = 6;
+    public static final int CORRIDOR_START_Y = 5;
+    public static final int CORRIDOR_OPTIONAL_START_X = 1; // optionals are in corridor space
+    public static final int CORRIDOR_OPTIONAL_START_Y = 2;
+    public static final int CORRIDOR_OPTIONAL_END_X = 3;
+    public static final int CORRIDOR_OPTIONAL_END_Y = 4;
+
+    public static final int SEED_ADJUSTMENT_ROOM_GENERATOR = 949_616_156;
+    public static final int SEED_ADJUSTMENT_CORRIDOR_BLENDER = 496_415;
+
+    public static final int MAX_MEASUREMENT_PAUSE_MILLISECONDS = 3000;
+
     private final int layerCount;
 
     private final ResourceLocation customBlockID;
@@ -105,7 +119,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         this.roomGenerator = new RiftRoomGenerator( // todo make configurable
                 RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                        this.getRiftConfig().seed().orElse(0) + 949_616_156),
+                        this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR),
                 List.of(new PerimeterGeneratable(customBlock, layout.get())), List.of(
                         new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws()
                 )
@@ -135,7 +149,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         runCorridorBlender(chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftConfig().seed().orElse(0) + 496_415), level);
+                this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
@@ -180,7 +194,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             StructureManager structureManager,
             ChunkAccess chunk) {
         var time = System.currentTimeMillis();
-        if (inFlightChunks.getAndIncrement() == 0 && time - lastChunkStart.get() > 3000) {
+        if (inFlightChunks.getAndIncrement() == 0 && time - lastChunkStart.get() > MAX_MEASUREMENT_PAUSE_MILLISECONDS) {
             generationStart = time;
             completedChunksInWindow.set(0);
         }
@@ -251,13 +265,18 @@ public class FastRiftGenerator extends ChunkGenerator {
             WorldGenLevel level,
             RandomSource rng) {
         if (layout.validateCorridor(chunkX, chunkY, chunkZ, direction)) {
-            for (int x = 0; x < 5; x++) {
-                for (int y = 0; y < 7; y++) {
-                    var pos = new BlockPos((chunkX << 4) - (x + 6) * direction.getStepZ(), (chunkY << 4) + 5 + y,
-                            (chunkZ << 4) - (x + 6) * direction.getStepX());
+            for (int x = 0; x < CORRIDOR_WIDTH; x++) {
+                for (int y = 0; y < CORRIDOR_HEIGHT; y++) {
+                    var pos = new BlockPos(
+                            (chunkX << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)
+                                    - (x + CORRIDOR_START_X) * direction.getStepZ(),
+                            (chunkY << RiftProcessedChunk.CHUNK_HEIGHT_SHIFT) + CORRIDOR_START_Y + y,
+                            (chunkZ << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)
+                                    - (x + CORRIDOR_START_X) * direction.getStepX());
                     var posOffset = pos.relative(direction);
                     var state = level.getBlockState(pos.relative(direction.getOpposite()));
-                    if (x > 0 && x < 4 && y > 1 && y < 5) {
+                    if (x >= CORRIDOR_OPTIONAL_START_X && x <= CORRIDOR_OPTIONAL_END_X && y >= CORRIDOR_OPTIONAL_START_Y
+                            && y <= CORRIDOR_OPTIONAL_END_Y) {
                         if (rng.nextBoolean()) {
                             state = level.getBlockState(posOffset);
                         }
@@ -299,7 +318,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
-        return layerCount * 16;
+        return layerCount << RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
     }
 
     @Override

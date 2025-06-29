@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.lang.ref.WeakReference;
@@ -74,8 +75,8 @@ public class RiftRoomGenerator {
                     throw new IllegalStateException("template should not be null");
                 }
                 var border = new Vec3i(
-                        15 - ((template.size().getX() - 1) & 0xf), 15 - ((template.size().getY() - 1) & 0xf),
-                        15 - ((template.size().getZ() - 1) & 0xf)
+                        LevelChunkSection.SECTION_WIDTH - 1 - ((template.size().getX() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK), LevelChunkSection.SECTION_HEIGHT - 1 - ((template.size().getY() - 1) & RiftProcessedChunk.CHUNK_HEIGHT_MASK),
+                        LevelChunkSection.SECTION_WIDTH - 1 - ((template.size().getZ() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK)
                 );
                 RiftGeneratable.generate(template, processedRoom2, world, border, mirror, world.getServer(),
                         randomSource, null, jigsawProcessors);

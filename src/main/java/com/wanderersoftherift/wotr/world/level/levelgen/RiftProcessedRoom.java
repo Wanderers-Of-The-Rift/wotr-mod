@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
+import com.wanderersoftherift.wotr.util.ShiftMath;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -22,16 +23,27 @@ import java.util.concurrent.atomic.AtomicReference;
 public class RiftProcessedRoom {
 
     public final RiftSpace space;
-    private final AtomicReference<RiftProcessedChunk>[] chunkArray = new AtomicReference[64];
+    private final AtomicReference<RiftProcessedChunk>[] chunkArray;
     private final CompletableFuture<Unit> isComplete = new CompletableFuture<>();
     private final Vec3i origin;
+    private final int shiftZ;
+    private final int shiftY;
+    private final int shiftYZ;
+    private final int xMask;
+    private final int zMask;
 
     public RiftProcessedRoom(RiftSpace space) {
         this.space = space;
         origin = space.origin();
+        shiftZ = ShiftMath.shiftForCeilPow2(space.size().getX());
+        shiftY = ShiftMath.shiftForCeilPow2(space.size().getZ());
+        shiftYZ = shiftZ+shiftY;
+        chunkArray = new AtomicReference[space.size().getY() << shiftYZ];
+        xMask = (1 << shiftZ) - 1;
+        zMask = (1 << shiftY) - 1;
         for (int i = 0; i < chunkArray.length; i++) {
-            if ((i & 0b11) < space.size().getX() && ((i >> 4) & 0b11) < space.size().getY()
-                    && ((i >> 2) & 0b11) < space.size().getZ()) {
+            if (((i & xMask) < space.size().getX()) && ((i >> shiftYZ) < space.size().getY())
+                    && (((i >> shiftZ) & zMask) < space.size().getZ())) {
                 chunkArray[i] = new AtomicReference<>();
             }
         }
@@ -50,7 +62,7 @@ public class RiftProcessedRoom {
                 || z2 >= space.size().getZ()) {
             return null;
         }
-        var idx = x2 + (z2 << 2) + (y2 << 4);
+        var idx = x2 + (z2 << shiftZ) + (y2 << shiftYZ);
         var ref = chunkArray[idx];
         if (ref == null) {
             return null;
@@ -71,7 +83,7 @@ public class RiftProcessedRoom {
                 || z2 >= space.size().getZ()) {
             return null;
         }
-        return getOrCreateChunk(x2 + (z2 << 2) + (y2 << 4));
+        return getOrCreateChunk(x2 + (z2 << shiftZ) + (y2 << shiftYZ));
     }
 
     private RiftProcessedChunk getOrCreateChunk(int index) {
@@ -83,7 +95,8 @@ public class RiftProcessedRoom {
         if (value != null) {
             return value;
         }
-        value = new RiftProcessedChunk(origin.offset(index & 0b11, (index >> 4) & 0b11, (index >> 2) & 0b11), this);
+        value = new RiftProcessedChunk(origin.offset(index & xMask, (index >> shiftYZ), (index >> shiftZ) & zMask),
+                this);
         if (ref.compareAndSet(null, value)) {
             return value;
         }
@@ -98,7 +111,7 @@ public class RiftProcessedRoom {
                 || z2 >= space.size().getZ()) {
             return null;
         }
-        var ref = chunkArray[x2 + (z2 << 2) + (y2 << 4)];
+        var ref = chunkArray[x2 + (z2 << shiftZ) + (y2 << shiftYZ)];
         if (ref == null) {
             return null;
         }
@@ -130,33 +143,38 @@ public class RiftProcessedRoom {
         listtag.add(DoubleTag.valueOf(info.pos.z));
         nbt.put("Pos", listtag);
         nbt.remove("UUID");
-        var chunk = this.getOrCreateChunk(new Vec3i(position.getX() >> 4, position.getY() >> 4, position.getZ() >> 4));
+        var chunk = this.getOrCreateChunk(new Vec3i(position.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT,
+                position.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT,
+                position.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT));
         if (chunk != null) {
             chunk.entities.add(nbt);
         }
     }
 
     public BlockState getBlock(int x, int y, int z) {
-        var chunkX = x >> 4;
-        var chunkY = y >> 4;
-        var chunkZ = z >> 4;
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunk = getChunk(chunkX, chunkY, chunkZ);
         if (chunk == null) {
             return null;
         }
-        return chunk.getBlockStatePure(x & 0xf, y & 0xf, z & 0xf);
+        return chunk.getBlockStatePure(x & RiftProcessedChunk.CHUNK_WIDTH_MASK,
+                y & RiftProcessedChunk.CHUNK_HEIGHT_MASK, z & RiftProcessedChunk.CHUNK_WIDTH_MASK);
     }
 
     public boolean getMerged(int x, int y, int z) {
-        var chunkX = x >> 4;
-        var chunkY = y >> 4;
-        var chunkZ = z >> 4;
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunk = getChunk(chunkX, chunkY, chunkZ);
         if (chunk == null) {
             return false;
         }
-        return ((chunk.hidden[((y & 0xf) << 4) | (z & 0xf)] >> (x & 0xf)) & 1) != 0
-                || ((chunk.newlyAdded[((y & 0xf) << 4) | (z & 0xf)] >> (x & 0xf)) & 1) == 0;
+        var index = ((y & RiftProcessedChunk.CHUNK_HEIGHT_MASK) << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)
+                | (z & RiftProcessedChunk.CHUNK_WIDTH_MASK);
+        var shift = x & RiftProcessedChunk.CHUNK_WIDTH_MASK;
+        return ((chunk.hidden[index] >> shift) & 1) != 0 || ((chunk.newlyAdded[index] >> shift) & 1) == 0;
     }
 
     public void clearNewFlags() {
@@ -177,11 +195,12 @@ public class RiftProcessedRoom {
     }
 
     public void setBlock(int x, int y, int z, BlockState state) {
-        var chunkX = x >> 4;
-        var chunkY = y >> 4;
-        var chunkZ = z >> 4;
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
-        chunk.setBlockStatePure(x & 0xf, y & 0xf, z & 0xf, state);
+        chunk.setBlockStatePure(x & RiftProcessedChunk.CHUNK_WIDTH_MASK, y & RiftProcessedChunk.CHUNK_HEIGHT_MASK,
+                z & RiftProcessedChunk.CHUNK_WIDTH_MASK, state);
     }
 
     public void setBlock(Vec3i basePos, BlockState blockState) {
@@ -190,7 +209,7 @@ public class RiftProcessedRoom {
 
     public List<RiftProcessedChunk> getOrCreateAllChunks() {
         var result = new ArrayList<RiftProcessedChunk>();
-        for (int i = 0; i < 64; i++) {
+        for (int i = 0; i < chunkArray.length; i++) {
             var chunk = getOrCreateChunk(i);
             if (chunk != null) {
                 result.add(chunk);

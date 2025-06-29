@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template.payload;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
+import com.wanderersoftherift.wotr.util.ShiftMath;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -24,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
-    public static final int CHUNK_WIDTH = 16;
+    public static final int PAYLOAD_CHUNK_WIDTH = 16;
+    public static final int PAYLOAD_CHUNK_WIDTH_SHIFT = ShiftMath.shiftForCeilPow2(PAYLOAD_CHUNK_WIDTH);
+    public static final int PAYLOAD_CHUNK_WIDTH_MASK = (1 << PAYLOAD_CHUNK_WIDTH_SHIFT) - 1;
     private static final ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
     private static final CompoundTag EMPTY_TAG = new CompoundTag();
 
@@ -53,11 +56,11 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
             Vec3i size,
             List<StructureTemplate.StructureEntityInfo> entities) {
 
-        int chunkCount = size.getX() >> 4;
-        if ((size.getX() & 0xf) > 0) {
+        int chunkCount = size.getX() >> PAYLOAD_CHUNK_WIDTH_SHIFT;
+        if ((size.getX() & PAYLOAD_CHUNK_WIDTH_MASK) > 0) {
             chunkCount++;
         }
-        var blockStates = new BlockState[chunkCount][size.getY() * size.getZ() << 4];
+        var blockStates = new BlockState[chunkCount][size.getY() * size.getZ() << PAYLOAD_CHUNK_WIDTH_SHIFT];
         var blockEntities = new HashMap<Vec3i, CompoundTag>();
 
         List<StructureTemplate.StructureBlockInfo> blockInfos = palette.blocks();
@@ -71,7 +74,8 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                     blockStateChunk = blockStates[chunk];
                     lastChunkX = chunk;
                 }
-                blockStateChunk[(pos.getX() & 0xf) + (pos.getZ() << 4) + (pos.getY() * size.getZ() << 4)] = state;
+                blockStateChunk[(pos.getX() & PAYLOAD_CHUNK_WIDTH_MASK) + (pos.getZ() << PAYLOAD_CHUNK_WIDTH_SHIFT)
+                        + (pos.getY() * size.getZ() << PAYLOAD_CHUNK_WIDTH_SHIFT)] = state;
                 if (nbt != null && !nbt.isEmpty()) {
                     blockEntities.put(pos, nbt);
                 }
@@ -102,7 +106,7 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
     }
 
     private static short[][] computeHidden(BlockState[][] data, Vec3i size) {
-        var result = new short[data.length][data[0].length / 16];
+        var result = new short[data.length][data[0].length >> PAYLOAD_CHUNK_WIDTH_SHIFT];
         var offsetPos = new BlockPos.MutableBlockPos();
         for (int index1A = 0; index1A < data.length; index1A++) {
             var hiddenChunk = result[index1A];
@@ -113,9 +117,9 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                 if (blockState == null) {
                     continue;
                 }
-                var blockPosX = (index1A << 4) + (index1B & 0xf);
-                var blockPosY = (index1B >> 4) / size.getZ();
-                var blockPosZ = (index1B >> 4) % size.getZ();
+                var blockPosX = (index1A << PAYLOAD_CHUNK_WIDTH_SHIFT) + (index1B & PAYLOAD_CHUNK_WIDTH_MASK);
+                var blockPosY = (index1B >> PAYLOAD_CHUNK_WIDTH_SHIFT) / size.getZ();
+                var blockPosZ = (index1B >> PAYLOAD_CHUNK_WIDTH_SHIFT) % size.getZ();
                 var isInvisible = blockState.canOcclude();
                 for (int i = 0; i < DIRECTIONS.size(); i++) {
                     var direction = DIRECTIONS.get(i);
@@ -129,14 +133,16 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                             || offsetPos.getZ() >= size.getZ()) {
                         continue;
                     }
-                    var index2A = offsetPos.getX() >> 4;
-                    var index2B = (offsetPos.getX() & 0xf) + (offsetPos.getZ() << 4)
-                            + (offsetPos.getY() * size.getZ() << 4);
+                    var index2A = offsetPos.getX() >> PAYLOAD_CHUNK_WIDTH_SHIFT;
+                    var index2B = (offsetPos.getX() & PAYLOAD_CHUNK_WIDTH_MASK)
+                            + (offsetPos.getZ() << PAYLOAD_CHUNK_WIDTH_SHIFT)
+                            + (offsetPos.getY() * size.getZ() << PAYLOAD_CHUNK_WIDTH_SHIFT);
                     var blockState2 = data[index2A][index2B];
                     isInvisible = blockState2 != null && blockState2.canOcclude();
                 }
                 if (isInvisible) {
-                    hiddenChunk[(index1B >> 4)] |= (short) (1 << (index1B & 0xf));
+                    hiddenChunk[(index1B >> PAYLOAD_CHUNK_WIDTH_SHIFT)] |= (short) (1 << (index1B
+                            & PAYLOAD_CHUNK_WIDTH_MASK));
                 }
             }
         }
@@ -167,19 +173,20 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
 
             for (int j = 0; j < templateChunk.length; j++) {
                 var blockState = mirror.applyToBlockState(templateChunk[j]);
-                var isVisible = ((hiddenChunk[j >> 4] >> (j & 0xf)) & 1) == 0;
+                var isVisible = ((hiddenChunk[j >> PAYLOAD_CHUNK_WIDTH_SHIFT] >> (j & PAYLOAD_CHUNK_WIDTH_MASK))
+                        & 1) == 0;
                 if (blockState != null) {
-                    var blockPosX = (i << 4) + (j & 0xf);
-                    var blockPosY = (j >> 4) / size.getZ();
-                    var blockPosZ = (j >> 4) % size.getZ();
+                    var blockPosX = (i << PAYLOAD_CHUNK_WIDTH_SHIFT) + (j & PAYLOAD_CHUNK_WIDTH_MASK);
+                    var blockPosY = (j >> PAYLOAD_CHUNK_WIDTH_SHIFT) / size.getZ();
+                    var blockPosZ = (j >> PAYLOAD_CHUNK_WIDTH_SHIFT) % size.getZ();
 
                     mutablePosition.set(blockPosX, blockPosY, blockPosZ);
                     mirror.applyToMutablePosition(mutablePosition, size.getX() - 1, size.getZ() - 1);
                     mutablePosition.move(offset);
 
-                    var xChunkPosition = mutablePosition.getX() >> 4;
-                    var yChunkPosition = mutablePosition.getY() >> 4;
-                    var zChunkPosition = mutablePosition.getZ() >> 4;
+                    var xChunkPosition = mutablePosition.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+                    var yChunkPosition = mutablePosition.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+                    var zChunkPosition = mutablePosition.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
 
                     if (xLastChunkPosition != xChunkPosition || yLastChunkPosition != yChunkPosition
                             || zLastChunkPosition != zChunkPosition || roomChunk == null) {
@@ -191,8 +198,11 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                             continue;
                         }
                     }
-                    if (roomChunk.blocks[(mutablePosition.getX() & 0xf) | ((mutablePosition.getZ() & 0xf) << 4)
-                            | ((mutablePosition.getY() & 0xf) << 8)] != null) {
+                    if (roomChunk.blocks[(mutablePosition.getX() & RiftProcessedChunk.CHUNK_WIDTH_MASK)
+                            | ((mutablePosition.getZ()
+                                    & RiftProcessedChunk.CHUNK_WIDTH_MASK) << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)
+                            | ((mutablePosition.getY()
+                                    & RiftProcessedChunk.CHUNK_HEIGHT_MASK) << RiftProcessedChunk.CHUNK_WIDTH_SHIFT_2)] != null) {
                         continue;
                     }
 

@@ -41,11 +41,11 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     private Region getOrCreateRegion(int x, int z) {
-        var regionX = Math.floorDiv(x + 7, 15);
-        var regionZ = Math.floorDiv(z + 7, 15);
+        var regionX = Math.floorDiv(x + Region.OFFSET, Region.WIDTH);
+        var regionZ = Math.floorDiv(z + Region.OFFSET, Region.WIDTH);
 
         return regions.computeIfAbsent(new Vector2i(regionX, regionZ),
-                (unused) -> new Region(new Vec3i(regionX * 15 - 7, -riftShape.levelCount() / 2, regionZ * 15 - 7)));
+                (unused) -> new Region(new Vec3i(regionX * Region.WIDTH - Region.OFFSET, -riftShape.levelCount() / 2, regionZ * Region.WIDTH - Region.OFFSET)));
     }
 
     @Override
@@ -110,23 +110,26 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     private class Region implements LayeredRiftLayout.LayoutSection {
+        public static int WIDTH = 15;
+        public static int WIDTH_SQUARED = WIDTH*WIDTH;
+        public static int OFFSET = 7;
 
         private static final RiftSpace VOID_SPACE = VoidRiftSpace.INSTANCE;
 
         public final Vec3i origin;
 
         private final int levelCount = riftShape.levelCount();
-        private final RiftSpace[] spaces = new RiftSpace[15 * 15 * levelCount];
-        private final long[] emptySpaces = new long[15 * 15];
+        private final RiftSpace[] spaces = new RiftSpace[WIDTH_SQUARED * levelCount];
+        private final long[] emptySpaces = new long[WIDTH_SQUARED];
         private final AtomicReference<WeakReference<Thread>> generatorThread = new AtomicReference<>(null);
         private final CompletableFuture<Unit> generationCompletion = new CompletableFuture<>();
         private final FiniteRiftShape sectionShape;
 
         public Region(Vec3i origin) {
             this.origin = origin;
-            for (int x = 0; x < 15; x++) {
-                for (int z = 0; z < 15; z++) {
-                    var idx = (z * 15) + x;
+            for (int x = 0; x < WIDTH; x++) {
+                for (int z = 0; z < WIDTH; z++) {
+                    var idx = (z * WIDTH) + x;
 
                     for (int y = 0; y < levelCount; y++) {
                         if (riftShape.isPositionValid(x + origin.getX(), y + origin.getY(), z + origin.getZ())) {
@@ -135,7 +138,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                     }
                 }
             }
-            this.sectionShape = BoxedRiftShape.of(riftShape, origin, new Vec3i(15, levelCount, 15));
+            this.sectionShape = BoxedRiftShape.of(riftShape, origin, new Vec3i(WIDTH, levelCount, WIDTH));
         }
 
         public void generate(RandomSource randomSource) {
@@ -151,15 +154,15 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                     || isOutsideThisRegion(position.getX(), position.getY(), position.getZ())) {
                 return VOID_SPACE;
             }
-            return spaces[(position.getX() - origin.getX()) + (position.getZ() - origin.getZ()) * 15
-                    + (position.getY() - origin.getY()) * 225];
+            return spaces[(position.getX() - origin.getX()) + (position.getZ() - origin.getZ()) * WIDTH
+                    + (position.getY() - origin.getY()) * WIDTH_SQUARED];
         }
 
         public RiftSpace getSpaceAt(int x, int y, int z) {
             if (!riftShape.isPositionValid(x, y, z) || isOutsideThisRegion(x, y, z)) {
                 return VOID_SPACE;
             }
-            return spaces[(x - origin.getX()) + (z - origin.getZ()) * 15 + (y - origin.getY()) * 225];
+            return spaces[(x - origin.getX()) + (z - origin.getZ()) * WIDTH + (y - origin.getY()) * WIDTH_SQUARED];
         }
 
         public void setSpaceAt(Vec3i position, RiftSpace space) {
@@ -168,14 +171,14 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                 return;
             }
             emptySpaces[(position.getX() - origin.getX())
-                    + (position.getZ() - origin.getZ()) * 15] &= ~(1L << (position.getY() - origin.getY()));
-            spaces[(position.getX() - origin.getX()) + (position.getZ() - origin.getZ()) * 15
-                    + (position.getY() - origin.getY()) * 225] = space;
+                    + (position.getZ() - origin.getZ()) * WIDTH] &= ~(1L << (position.getY() - origin.getY()));
+            spaces[(position.getX() - origin.getX()) + (position.getZ() - origin.getZ()) * WIDTH
+                    + (position.getY() - origin.getY()) * WIDTH_SQUARED] = space;
         }
 
         private boolean isOutsideThisRegion(int x, int y, int z) {
-            return x < origin.getX() || x >= origin.getX() + 15 || y < origin.getY() || y >= origin.getY() + levelCount
-                    || z < origin.getZ() || z >= origin.getZ() + 15;
+            return x < origin.getX() || x >= origin.getX() + WIDTH || y < origin.getY() || y >= origin.getY() + levelCount
+                    || z < origin.getZ() || z >= origin.getZ() + WIDTH;
         }
 
         private boolean canPlaceSpace(RiftSpace space) {

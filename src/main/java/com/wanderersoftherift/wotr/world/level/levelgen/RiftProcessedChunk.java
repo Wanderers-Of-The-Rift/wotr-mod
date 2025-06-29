@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen;
 
 import com.wanderersoftherift.wotr.mixin.AccessorPalettedContainer;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
+import com.wanderersoftherift.wotr.util.ShiftMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -28,13 +29,18 @@ import java.util.List;
  */
 public class RiftProcessedChunk {
 
+    public static final int CHUNK_WIDTH_SHIFT = ShiftMath.shiftForCeilPow2(LevelChunkSection.SECTION_WIDTH);
+    public static final int CHUNK_WIDTH_SHIFT_2 = ShiftMath.shiftForCeilPow2(LevelChunkSection.SECTION_WIDTH) << 1;
+    public static final int CHUNK_HEIGHT_SHIFT = ShiftMath.shiftForCeilPow2(LevelChunkSection.SECTION_HEIGHT);
+    public static final int CHUNK_WIDTH_MASK = (1 << CHUNK_WIDTH_SHIFT) - 1;
+    public static final int CHUNK_HEIGHT_MASK = (1 << CHUNK_HEIGHT_SHIFT) - 1;
     public final Vec3i origin;
-    public final BlockState[] blocks = new BlockState[4096];
-    public final short[] hidden = new short[256];
-    public final short[] newlyAdded = new short[256];
+    public final BlockState[] blocks = new BlockState[LevelChunkSection.SECTION_SIZE];
+    public final short[] hidden = new short[1 << CHUNK_WIDTH_SHIFT_2];
+    public final short[] newlyAdded = new short[1 << CHUNK_WIDTH_SHIFT_2];
     public final RiftProcessedRoom parentRoom;
     public final ArrayList<CompoundTag> entities = new ArrayList<>();
-    public final ArrayList<BlockEntity> blockEntities = new ArrayList<BlockEntity>(4096);
+    public final ArrayList<BlockEntity> blockEntities = new ArrayList<>(LevelChunkSection.SECTION_SIZE);
 
     public RiftProcessedChunk(Vec3i origin, RiftProcessedRoom parentRoom) {
         this.origin = origin;
@@ -42,7 +48,7 @@ public class RiftProcessedChunk {
     }
 
     public void placeInWorld(ChunkAccess chunk, ServerLevelAccessor level) {
-        swapMinecraftSection(chunk.getSections(), origin.getY() - chunk.getMinY() / 16);
+        swapMinecraftSection(chunk.getSections(), origin.getY() - (chunk.getMinY() >> CHUNK_HEIGHT_SHIFT));
         for (int idx = 0; idx < blockEntities.size(); idx++) {
 
             var entity = blockEntities.get(idx);
@@ -68,12 +74,12 @@ public class RiftProcessedChunk {
     }
 
     public void setBlockState(int x, int y, int z, BlockState blockState) {
-        var index = x + (z << 4) + ((y - (origin.getY() << 4)) << 8);
+        var index = x + (z << CHUNK_WIDTH_SHIFT) + ((y - (origin.getY() << CHUNK_HEIGHT_SHIFT)) << CHUNK_WIDTH_SHIFT_2);
         blocks[index] = blockState;
     }
 
     public void setBlockStatePure(int x, int y, int z, BlockState blockState) {
-        var index = x + (z << 4) + (y << 8);
+        var index = x + (z << CHUNK_WIDTH_SHIFT) + (y << CHUNK_WIDTH_SHIFT_2);
         blocks[index] = blockState;
     }
 
@@ -82,12 +88,12 @@ public class RiftProcessedChunk {
     }
 
     public BlockState getBlockState(int x, int y, int z) {
-        var index = x + (z << 4) + ((y - (origin.getY() << 4)) << 8);
+        var index = x + (z << CHUNK_WIDTH_SHIFT) + ((y - (origin.getY() << CHUNK_HEIGHT_SHIFT)) << CHUNK_WIDTH_SHIFT_2);
         return blocks[index];
     }
 
     public BlockState getBlockStatePure(int x, int y, int z) {
-        var index = x + (z << 4) + (y << 8);
+        var index = x + (z << CHUNK_WIDTH_SHIFT) + (y << CHUNK_WIDTH_SHIFT_2);
         return blocks[index];
     }
 
@@ -98,7 +104,7 @@ public class RiftProcessedChunk {
         var air = Blocks.AIR.defaultBlockState();
         var oldSection = sectionArray[sectionIndex];
         var size = 0;
-        var uniqueStatesList = new BlockState[4096];
+        var uniqueStatesList = new BlockState[LevelChunkSection.SECTION_SIZE];
         var uniqueStatesHashTable = new BlockState[64];
         var uniqueStatesIndexHashTable = new int[64];
         var uniqueStatesFallback = new IdentityHashMap<BlockState, Integer>();
@@ -119,13 +125,13 @@ public class RiftProcessedChunk {
         if (size == 0) {
             return;
         }
-        var bits = 32 - Integer.numberOfLeadingZeros(size - 1);
+        var bits = ShiftMath.shiftForCeilPow2(size);
 
         var registry = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
         if (bits == 0) {
             var strat = PalettedContainer.Strategy.SECTION_STATES;
             var config = strat.<BlockState>getConfiguration(registry, 0);
-            var storage = new ZeroBitStorage(4096);
+            var storage = new ZeroBitStorage(LevelChunkSection.SECTION_SIZE);
             var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage,
                     List.of(uniqueStatesList[0]));
             sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
@@ -134,18 +140,18 @@ public class RiftProcessedChunk {
 
         var useRegistry = bits > 8;
         if (useRegistry) {
-            bits = 32 - Integer.numberOfLeadingZeros(registry.size() - 1);
+            bits = ShiftMath.shiftForCeilPow2(registry.size());
         }
 
-        var shift = Integer.max(32 - Integer.numberOfLeadingZeros(bits - 1), 2);
-        var bitsPowerOfTwo = 1 << shift;
+        var shiftBitsPow2 = Integer.max(ShiftMath.shiftForCeilPow2(bits), 2);
+        var bitsPowerOfTwo = 1 << shiftBitsPow2;
 
         var strat = PalettedContainer.Strategy.SECTION_STATES;
         var config = strat.<BlockState>getConfiguration(registry, bitsPowerOfTwo);
 
-        var longs = new long[4096 / (64 >> shift)];
+        var valuesPerLong = 64 >> shiftBitsPow2;
+        var longs = new long[LevelChunkSection.SECTION_SIZE / valuesPerLong];
 
-        var valuesPerLong = 64 >> shift;
         for (int i = 0; i < longs.length; i++) {
             var value = 0L;
             for (int j = valuesPerLong - 1; j >= 0; j--) {
@@ -173,7 +179,7 @@ public class RiftProcessedChunk {
             longs[i] = value;
         }
 
-        var storage = new SimpleBitStorage(bitsPowerOfTwo, 4096, longs);
+        var storage = new SimpleBitStorage(bitsPowerOfTwo, LevelChunkSection.SECTION_SIZE, longs);
 
         var stateList = new ArrayList<BlockState>(size);
         for (int i = 0; i < size; i++) {

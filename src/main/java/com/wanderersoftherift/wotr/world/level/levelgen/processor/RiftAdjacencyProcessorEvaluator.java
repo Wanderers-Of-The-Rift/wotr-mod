@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 
 import java.util.List;
 
@@ -21,29 +22,35 @@ public class RiftAdjacencyProcessorEvaluator {
             long[] saveFlags,
             long[] mergedFlags,
             boolean save) {
-        var yOffsetMasked = yOffset & 0xf;
-        for (int chunkZ = 0; chunkZ <= ((pieceSize.getZ() - 1) >> 4); chunkZ++) {
-            var zWithinOutputOffset = chunkZ << 4;
+        var yOffsetMasked = yOffset & RiftProcessedChunk.CHUNK_HEIGHT_MASK;
+        for (int chunkZ = 0; chunkZ <= ((pieceSize.getZ() - 1) >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT); chunkZ++) {
+            var zWithinOutputOffset = chunkZ << RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
             var zWithinChunkOffset = 0;
             if (chunkZ == 0) {
-                zWithinChunkOffset += zOffset & 0xf;
+                zWithinChunkOffset += zOffset & RiftProcessedChunk.CHUNK_WIDTH_MASK;
             } else {
-                zWithinOutputOffset -= zOffset & 0xf;
+                zWithinOutputOffset -= zOffset & RiftProcessedChunk.CHUNK_WIDTH_MASK;
             }
-            for (int chunkX = 0; chunkX <= ((pieceSize.getX() - 1) >> 4); chunkX++) {
-                var xWithinOutputOffset = chunkX << 4;
+            for (int chunkX = 0; chunkX <= ((pieceSize.getX() - 1) >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT); chunkX++) {
+                var xWithinOutputOffset = chunkX << RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
                 var xWithinChunkOffset = 0;
                 if (chunkX == 0) {
-                    xWithinChunkOffset += xOffset & 0xf;
+                    xWithinChunkOffset += xOffset & RiftProcessedChunk.CHUNK_WIDTH_MASK;
                 } else {
-                    xWithinOutputOffset -= xOffset & 0xf;
+                    xWithinOutputOffset -= xOffset & RiftProcessedChunk.CHUNK_WIDTH_MASK;
                 }
                 if (save) {
-                    saveLayerToChunk(room.getChunk(chunkX + (xOffset >> 4), yOffset >> 4, chunkZ + (zOffset >> 4)),
+                    saveLayerToChunk(
+                            room.getChunk(chunkX + (xOffset >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT),
+                                    yOffset >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT,
+                                    chunkZ + (zOffset >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT)),
                             yOffsetMasked, xWithinOutputOffset, zWithinOutputOffset, xWithinChunkOffset,
                             zWithinChunkOffset, pieceSize, preloading, saveFlags);
                 } else {
-                    preloadLayerFromChunk(room.getChunk(chunkX + (xOffset >> 4), yOffset >> 4, chunkZ + (zOffset >> 4)),
+                    preloadLayerFromChunk(
+                            room.getChunk(chunkX + (xOffset >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT),
+                                    yOffset >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT,
+                                    chunkZ + (zOffset >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT)),
                             yOffsetMasked, xWithinOutputOffset, zWithinOutputOffset, xWithinChunkOffset,
                             zWithinChunkOffset, pieceSize, preloading, saveFlags, mergedFlags);
                 }
@@ -69,7 +76,7 @@ public class RiftAdjacencyProcessorEvaluator {
         for (int z = 0; true; z++) {
             var zWithinOutput = z + zWithinOutputOffset;
             var zWithinChunk = z + zWithinChunkOffset;
-            if ((zWithinChunk >= 16) || (zWithinOutput >= pieceSize.getZ())) {
+            if ((zWithinChunk >= LevelChunkSection.SECTION_WIDTH) || (zWithinOutput >= pieceSize.getZ())) {
                 break;
             }
             saveFlags[zWithinOutput + 1] = 0;
@@ -78,7 +85,7 @@ public class RiftAdjacencyProcessorEvaluator {
             for (int x = 0; true; x++) {
                 var xWithinOutput = x + xWithinOutputOffset;
                 var xWithinChunk = x + xWithinChunkOffset;
-                if ((xWithinChunk >= 16) || (xWithinOutput >= pieceSize.getX())) {
+                if ((xWithinChunk >= LevelChunkSection.SECTION_WIDTH) || (xWithinOutput >= pieceSize.getX())) {
                     break;
                 }
                 preloadingStripe[xWithinOutput + 1] = chunk.getBlockStatePure(xWithinChunk, yOffsetMasked,
@@ -111,7 +118,7 @@ public class RiftAdjacencyProcessorEvaluator {
         for (int z = 0; true; z++) {
             var zWithinOutput = z + zWithinOutputOffset;
             var zWithinChunk = z + zWithinChunkOffset;
-            if ((zWithinChunk >= 16) || (zWithinOutput >= pieceSize.getZ())) {
+            if ((zWithinChunk >= LevelChunkSection.SECTION_WIDTH) || (zWithinOutput >= pieceSize.getZ())) {
                 break;
             }
             var sav = saveFlags[zWithinOutput + 1];
@@ -123,7 +130,7 @@ public class RiftAdjacencyProcessorEvaluator {
             for (int x = 0; true; x++) {
                 var xWithinOutput = x + xWithinOutputOffset;
                 var xWithinChunk = x + xWithinChunkOffset;
-                if ((xWithinChunk >= 16) || (xWithinOutput >= pieceSize.getX())) {
+                if ((xWithinChunk >= LevelChunkSection.SECTION_WIDTH) || (xWithinOutput >= pieceSize.getX())) {
                     break;
                 }
 

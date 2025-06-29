@@ -41,6 +41,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.DerivedLevelData;
@@ -55,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -165,27 +167,30 @@ public final class RiftLevelManager {
             BlockPos portalPos,
             RiftConfig config) {
         var server = ServerLifecycleHooks.getCurrentServer();
-        var ow = server.overworld();
+        var overworld = server.overworld();
 
         var existingRift = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
         if (existingRift != null) {
             return existingRift;
         }
 
-        Optional<Registry<Level>> dimensionRegistry = ow.registryAccess().lookup(Registries.DIMENSION);
+        Optional<Registry<Level>> dimensionRegistry = server.registryAccess().lookup(Registries.DIMENSION);
         if (dimensionRegistry.isEmpty()) {
             return null;
         }
 
         config = initializeConfig(config, server);
         var loadedRiftHeight = config.layout()
-                .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS
-                );
-        int requestedRiftHeightChunks = (Integer) loadedRiftHeight.get();
-        var riftDimensionType = RiftDimensionType.RIFT_DIMENSION_TYPE_MAP.ceilingEntry(requestedRiftHeightChunks * 16);
+                .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS);
+        if (loadedRiftHeight.isEmpty()) {
+            WanderersOfTheRift.LOGGER.error("missing values in RiftConfig");
+            return null;
+        }
+        int requestedRiftHeightChunks = loadedRiftHeight.get();
+        var riftDimensionType = getRiftDimensionTypeForHeight(requestedRiftHeightChunks);
         int actualRiftHeight = riftDimensionType.getKey();
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(ow, requestedRiftHeightChunks, actualRiftHeight, config);
+        ChunkGenerator chunkGen = getRiftChunkGenerator(overworld, requestedRiftHeightChunks, actualRiftHeight, config);
         if (chunkGen == null) {
             return null;
         }
@@ -216,6 +221,12 @@ public final class RiftLevelManager {
         spawnRiftExit(level, PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION.above().getBottomCenter());
         WanderersOfTheRift.LOGGER.debug("Created rift level {}", id);
         return level;
+    }
+
+    private static Map.Entry<Integer, ResourceKey<DimensionType>> getRiftDimensionTypeForHeight(
+            int requestedRiftHeightChunks) {
+        return RiftDimensionType.RIFT_DIMENSION_TYPE_MAP
+                .ceilingEntry(requestedRiftHeightChunks * LevelChunkSection.SECTION_HEIGHT);
     }
 
     /**

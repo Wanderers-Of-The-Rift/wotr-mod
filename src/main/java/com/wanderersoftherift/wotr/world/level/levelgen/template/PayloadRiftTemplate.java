@@ -77,7 +77,9 @@ public class PayloadRiftTemplate implements RiftGeneratable {
             ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror) {
-        var structurePos = new BlockPos(room.space.origin().multiply(16)).offset(placementShift);
+        var structurePos = new BlockPos(room.space.origin().getX() << RiftProcessedChunk.CHUNK_WIDTH_SHIFT,
+                room.space.origin().getY() << RiftProcessedChunk.CHUNK_HEIGHT_SHIFT,
+                room.space.origin().getZ() << RiftProcessedChunk.CHUNK_WIDTH_SHIFT).offset(placementShift);
         payload.processPayloadBlocks(this, room, world, structurePos, mirror);
         payload.processPayloadEntities(this, room, world, structurePos, mirror);
 
@@ -145,11 +147,12 @@ public class PayloadRiftTemplate implements RiftGeneratable {
                 return;
             }
         }
-        var xWithinChunk = x & 0xf;
-        var yWithinChunk = y & 0xf;
-        var zWithinChunk = z & 0xf;
-        roomChunk.blocks[(xWithinChunk) | ((zWithinChunk) << 4) | ((yWithinChunk) << 8)] = blockState;
-        var idx = zWithinChunk | (yWithinChunk << 4); // todo maybe re-add mid-air flag
+        var xWithinChunk = x & RiftProcessedChunk.CHUNK_WIDTH_MASK;
+        var yWithinChunk = y & RiftProcessedChunk.CHUNK_HEIGHT_MASK;
+        var zWithinChunk = z & RiftProcessedChunk.CHUNK_WIDTH_MASK;
+        var idx = zWithinChunk | (yWithinChunk << RiftProcessedChunk.CHUNK_WIDTH_SHIFT); // todo maybe re-add mid-air
+                                                                                         // flag
+        roomChunk.blocks[(xWithinChunk) | (idx << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)] = blockState;
         var mask = (short) (1 << xWithinChunk);
         roomChunk.newlyAdded[idx] |= mask;
         if (!isVisible) {
