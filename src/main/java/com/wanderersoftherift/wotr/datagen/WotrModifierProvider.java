@@ -124,6 +124,32 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("attack_speed"),
                                         Attributes.ATTACK_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
+        registerModifier(context, getResourceKey("critical_chance"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(1, 50,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
+                                        WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+        registerModifier(context, getResourceKey("critical_multiplier"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(0.5F, 3F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_multiplier"),
+                                        WotrAttributes.CRITICAL_MULTIPLIER, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+        registerModifier(context, getResourceKey("critical_avoidance"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(1, 50,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
+                                        WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+        registerModifier(context, getResourceKey("critical_dual"), new Modifier(generateEqualRollSpread(5, List.of(
+                new ToBeTieredModifierEffect(1, 25,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
+                                WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)),
+                new ToBeTieredModifierEffect(1, 25,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
+                                WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
         registerModifier(context, getResourceKey("health_flat"),
                 new Modifier(generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0.01F, 12,
@@ -164,7 +190,7 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback_heavy"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE))),
                         List.of(new AttributeModifierEffect(
-                                WanderersOfTheRift.id("knockback_heavy"), Attributes.ATTACK_SPEED, -1, -0.5F,
+                                WanderersOfTheRift.id("knockback_heavy"), Attributes.ATTACK_SPEED, -0.25, -0.05F,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
         registerModifier(context, getResourceKey("knockback_resistance"),
@@ -238,6 +264,18 @@ public class WotrModifierProvider {
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("sweeping_attack_damage"),
                                         Attributes.SWEEPING_DAMAGE_RATIO, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+        registerModifier(context, getResourceKey("thorns_chance"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(0.01F, 50,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_chance"),
+                                        WotrAttributes.THORNS_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+        registerModifier(context, getResourceKey("thorns_damage"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(1, 30,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_damage"),
+                                        WotrAttributes.THORNS_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
     }
 
