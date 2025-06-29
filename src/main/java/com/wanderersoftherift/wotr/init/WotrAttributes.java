@@ -106,7 +106,7 @@ public class WotrAttributes {
      */
     @SubscribeEvent
     private static void registerMobAttribute(EntityAttributeModificationEvent event) {
-        for (DeferredHolder<Attribute, RangedAttribute> attribute :MOB_ATTRIBUTES) {
+        for (DeferredHolder<Attribute, RangedAttribute> attribute : MOB_ATTRIBUTES) {
             for (EntityType i : event.getTypes()) {
                 event.add(i, attribute);
             }

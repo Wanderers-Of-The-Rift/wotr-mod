@@ -14,7 +14,7 @@ public class OnHitEffect {
         int critChance = baseCritChance - critAvoid;
         int critApplications = 0;
 
-        if(critChance > 100) {
+        if (critChance > 100) {
             critApplications = critChance / 100;
         } else {
             critApplications = 1;
