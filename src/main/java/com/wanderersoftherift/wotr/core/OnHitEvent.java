@@ -12,7 +12,6 @@ public class OnHitEvent {
 
     @SubscribeEvent
     public static void onCriticalHit(LivingIncomingDamageEvent event) {
-        LivingEntity attacker = (LivingEntity) event.getSource().getDirectEntity();
         if (event.getSource().getDirectEntity() instanceof LivingEntity livingAttacker) {
             float dmg = OnHitEffect.critical(event.getAmount(), livingAttacker, event.getEntity(),
                     event.getEntity().getRandom());
