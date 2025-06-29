@@ -27,7 +27,7 @@ public interface RiftAdjacencyProcessor<T> {
     // stupid mojank why are they applying mirror and rotation to position before processing but to state after
     // processing????
     static <T> List<StructureTemplate.StructureBlockInfo> backportFinalizeProcessing(
-            RiftAdjacencyProcessor<T> thiz,
+            RiftAdjacencyProcessor<T> processor,
             ServerLevelAccessor serverLevel,
             BlockPos offset,
             BlockPos pos,
@@ -42,7 +42,7 @@ public interface RiftAdjacencyProcessor<T> {
         BlockPos lastPos = processedBlockInfos.getLast().pos();
         var size = new Vec3i(lastPos.getX() - firstPos.getX(), lastPos.getY() - firstPos.getY(),
                 lastPos.getZ() - firstPos.getZ());
-        var data = thiz.createData(offset, size, serverLevel);
+        var data = processor.createData(offset, size, serverLevel);
 
         var stateArray = new BlockState[7];
         var directionalIndices = new int[7];
@@ -59,7 +59,7 @@ public interface RiftAdjacencyProcessor<T> {
             stateArray[6] = getState(i, processedBlockInfos, modified, settings);
             loadStates(stateArray, directionalIndices, processedBlockInfos, modified, settings);
 
-            var altered = thiz.processAdjacency(data, stateArray, false);
+            var altered = processor.processAdjacency(data, stateArray, false);
 
             commitStates(stateArray, directionalIndices, processedBlockInfos, modified, settings, altered);
         }
