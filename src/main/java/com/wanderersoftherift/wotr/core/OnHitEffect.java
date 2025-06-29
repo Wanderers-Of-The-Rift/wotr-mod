@@ -20,4 +20,16 @@ public class OnHitEffect {
         float finalDamage = initialDamage * ((critMult - 1) * critApplications + 1);
         return finalDamage;
     }
+
+    public static boolean thorns(LivingEntity entity, RandomSource random) {
+        int thornsChance = (int) entity.getAttributeValue(WotrAttributes.THORNS_CHANCE);
+        boolean thornsProc;
+
+        if (thornsChance > random.nextInt(0, 100)) {
+            thornsProc = true;
+        } else {
+            thornsProc = false;
+        }
+        return thornsProc;
+    }
 }

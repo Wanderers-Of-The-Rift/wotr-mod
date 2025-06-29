@@ -265,6 +265,18 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("sweeping_attack_damage"),
                                         Attributes.SWEEPING_DAMAGE_RATIO, AttributeModifier.Operation.ADD_VALUE)))))
         );
+        registerModifier(context, getResourceKey("thorns_chance"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(0.01F, 50,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_chance"),
+                                        WotrAttributes.THORNS_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
+        registerModifier(context, getResourceKey("thorns_damage"),
+                new Modifier(generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(1, 30,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_damage"),
+                                        WotrAttributes.THORNS_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
+        );
     }
 
     private static List<ModifierTier> generateEqualRollSpread(

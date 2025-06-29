@@ -8,6 +8,7 @@
     "wotr:projectile_raw",
     "wotr:skeleton_raw",
     "wotr:speed_raw",
+    "wotr:thorns_raw",
     "wotr:zombie_raw"
   ]
 }

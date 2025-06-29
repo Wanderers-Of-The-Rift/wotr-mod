@@ -89,6 +89,14 @@ public class WotrAttributes {
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), 0, 0,
                     Integer.MAX_VALUE));
 
+    // Thorns
+    public static final DeferredHolder<Attribute, RangedAttribute> THORNS_CHANCE = registerPlayerAttribute(
+            "thorns_chance", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_chance"),
+                    0, 0, Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> THORNS_DAMAGE = registerPlayerAttribute(
+            "thorns_damage", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_damage"),
+                    0, 0, Integer.MAX_VALUE));
+
     public static List<DeferredHolder<Attribute, RangedAttribute>> getPlayerAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
     }

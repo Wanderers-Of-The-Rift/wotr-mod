@@ -780,6 +780,13 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "movement_speed"))
                                 ))),
                 RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("thorns_raw"), new RunegemData(
+                getTranslatableName("thorns_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                        socketablesTag, List.of(
+                                new TieredModifier(1, getModifier(lookup, "thorns_chance")),
+                                new TieredModifier(1, getModifier(lookup, "thorns_damage"))
+                        ))),
+                RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("zombie_raw"),
                 new RunegemData(getTranslatableName("zombie_raw"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
