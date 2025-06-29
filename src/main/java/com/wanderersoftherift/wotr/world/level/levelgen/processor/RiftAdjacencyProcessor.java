@@ -1,9 +1,8 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
-import com.google.common.collect.ImmutableList;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Rotation;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 public interface RiftAdjacencyProcessor<T> {
 
-    ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
 
     int processAdjacency(T data, BlockState[] adjacentBlocks, boolean isHidden);
 
@@ -96,8 +94,9 @@ public interface RiftAdjacencyProcessor<T> {
             int[] directionalIndices,
             List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
             BlockPos pos) {
-        for (int i = 0; i < DIRECTIONS.size(); i++) {
-            directionalIndices[i] = ProcessorUtil.getBlockIndex(processedBlockInfos, pos.relative(DIRECTIONS.get(i)));
+        for (int i = 0; i < EnumEntries.DIRECTIONS.size(); i++) {
+            directionalIndices[i] = ProcessorUtil.getBlockIndex(processedBlockInfos,
+                    pos.relative(EnumEntries.DIRECTIONS.get(i)));
         }
     }
 

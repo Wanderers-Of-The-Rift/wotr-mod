@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -19,7 +19,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
@@ -27,7 +26,6 @@ import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Pr
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.core.Direction.DOWN;
-import static net.minecraft.core.Direction.values;
 import static net.minecraft.world.level.block.Blocks.VINE;
 import static net.minecraft.world.level.block.VineBlock.PROPERTY_BY_DIRECTION;
 
@@ -41,8 +39,6 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
                             RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
                                     .forGetter(VineProcessor::getStructureRandomType))
                     .apply(builder, VineProcessor::new));
-    private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
-    private static final List<Direction> DIRECTIONS = Arrays.stream(values()).toList();
 
     private final boolean attachToWall;
     private final boolean attachToCeiling;
@@ -120,7 +116,7 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
             if (attachToWall) {
                 for (int i = 2; i < 6; i++) {
                     var otherBlock = adjacentBlocks[i];
-                    var direction = DIRECTIONS.get(i);
+                    var direction = EnumEntries.DIRECTIONS.get(i);
                     if (otherBlock == null || otherBlock.isAir()) {
                         if (data.recalculateChance() < rarity) {
                             if (shape == null) {

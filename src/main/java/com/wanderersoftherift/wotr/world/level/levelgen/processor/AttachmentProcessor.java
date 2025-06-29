@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
@@ -39,7 +40,6 @@ public class AttachmentProcessor extends StructureProcessor
                     .forGetter(AttachmentProcessor::getStructureRandomType),
             Codec.LONG.optionalFieldOf("seed").forGetter(AttachmentProcessor::getSeed)
     ).apply(builder, AttachmentProcessor::new));
-    private static final List<Direction> HORIZONTAL = Direction.Plane.HORIZONTAL.stream().toList();
 
     private final BlockState blockState;
     private final int requiresSides;
@@ -135,8 +135,8 @@ public class AttachmentProcessor extends StructureProcessor
                     }
                 }
 
-                for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
-                    var side = HORIZONTAL.get(i);
+                for (int i = 0; i < EnumEntries.DIRECTIONS_HORIZONTAL.size() && sideCount > 0; i++) {
+                    var side = EnumEntries.DIRECTIONS_HORIZONTAL.get(i);
                     var directionBlock = adjacentBlocks[side.ordinal()];
                     if (directionBlock != null && isFaceFullFast(directionBlock, BlockPos.ZERO, side.getOpposite())) {
                         sideCount--;
@@ -181,8 +181,8 @@ public class AttachmentProcessor extends StructureProcessor
             if (requiresSides <= 0) {
                 return result;
             }
-            for (int i = 0; i < HORIZONTAL.size(); i++) {
-                var side = HORIZONTAL.get(i);
+            for (int i = 0; i < EnumEntries.DIRECTIONS_HORIZONTAL.size(); i++) {
+                var side = EnumEntries.DIRECTIONS_HORIZONTAL.get(i);
                 var ordinal = side.ordinal();
                 var directionBlock = adjacentBlocks[ordinal];
                 if ((directionBlock == null || !directionBlock.isAir()) || !(data.recalculateChance() <= rarity)) {

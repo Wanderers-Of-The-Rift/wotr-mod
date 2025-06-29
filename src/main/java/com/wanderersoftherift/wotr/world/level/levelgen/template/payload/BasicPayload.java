@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template.payload;
 
-import com.google.common.collect.ImmutableList;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
 import com.wanderersoftherift.wotr.util.ShiftMath;
 import com.wanderersoftherift.wotr.util.TripleMirror;
@@ -8,7 +8,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PayloadRiftTemplate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
@@ -28,7 +27,6 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
     public static final int PAYLOAD_CHUNK_WIDTH = 16;
     public static final int PAYLOAD_CHUNK_WIDTH_SHIFT = ShiftMath.shiftForCeilPow2(PAYLOAD_CHUNK_WIDTH);
     public static final int PAYLOAD_CHUNK_WIDTH_MASK = (1 << PAYLOAD_CHUNK_WIDTH_SHIFT) - 1;
-    private static final ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
     private static final CompoundTag EMPTY_TAG = new CompoundTag();
 
     private final BlockState[][] data;
@@ -121,8 +119,8 @@ public class BasicPayload implements PayloadRiftTemplate.TemplatePayload {
                 var blockPosY = (index1B >> PAYLOAD_CHUNK_WIDTH_SHIFT) / size.getZ();
                 var blockPosZ = (index1B >> PAYLOAD_CHUNK_WIDTH_SHIFT) % size.getZ();
                 var isInvisible = blockState.canOcclude();
-                for (int i = 0; i < DIRECTIONS.size(); i++) {
-                    var direction = DIRECTIONS.get(i);
+                for (int i = 0; i < EnumEntries.DIRECTIONS.size(); i++) {
+                    var direction = EnumEntries.DIRECTIONS.get(i);
                     if (!isInvisible) {
                         break;
                     }
