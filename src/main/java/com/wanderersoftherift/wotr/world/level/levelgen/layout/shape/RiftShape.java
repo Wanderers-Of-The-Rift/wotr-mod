@@ -17,7 +17,7 @@ public interface RiftShape {
     double riftHeightAt(double x, double z);
 
     default boolean isPositionValid(int x, int y, int z) {
-        return Integer.min((int) riftHeightAt(x, z), levelCount()/2) > abs(y);
+        return Integer.min((int) riftHeightAt(x, z), levelCount() / 2) > abs(y);
     }
 
     int levelCount();

@@ -45,7 +45,8 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         var regionZ = Math.floorDiv(z + Region.OFFSET, Region.WIDTH);
 
         return regions.computeIfAbsent(new Vector2i(regionX, regionZ),
-                (unused) -> new Region(new Vec3i(regionX * Region.WIDTH - Region.OFFSET, -riftShape.levelCount() / 2, regionZ * Region.WIDTH - Region.OFFSET)));
+                (unused) -> new Region(new Vec3i(regionX * Region.WIDTH - Region.OFFSET, -riftShape.levelCount() / 2,
+                        regionZ * Region.WIDTH - Region.OFFSET)));
     }
 
     @Override
@@ -110,9 +111,9 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     private class Region implements LayeredRiftLayout.LayoutSection {
-        public static int WIDTH = 15;
-        public static int WIDTH_SQUARED = WIDTH*WIDTH;
-        public static int OFFSET = 7;
+        public static final int WIDTH = 15;
+        public static final int WIDTH_SQUARED = WIDTH * WIDTH;
+        public static final int OFFSET = 7;
 
         private static final RiftSpace VOID_SPACE = VoidRiftSpace.INSTANCE;
 
@@ -177,8 +178,8 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
         private boolean isOutsideThisRegion(int x, int y, int z) {
-            return x < origin.getX() || x >= origin.getX() + WIDTH || y < origin.getY() || y >= origin.getY() + levelCount
-                    || z < origin.getZ() || z >= origin.getZ() + WIDTH;
+            return x < origin.getX() || x >= origin.getX() + WIDTH || y < origin.getY()
+                    || y >= origin.getY() + levelCount || z < origin.getZ() || z >= origin.getZ() + WIDTH;
         }
 
         private boolean canPlaceSpace(RiftSpace space) {

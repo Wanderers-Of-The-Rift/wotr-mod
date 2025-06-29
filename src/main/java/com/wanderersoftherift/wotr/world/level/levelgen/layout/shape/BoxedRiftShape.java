@@ -43,14 +43,15 @@ public record BoxedRiftShape(RiftShape baseShape, Vec3i boxStart, Vec3i boxSize)
     public boolean isPositionValid(int x, int y, int z) {
         var start = getBoxStart();
         var end = start.offset(getBoxSize());
-        return baseShape.isPositionValid(x, y, z) && end.getX() > x && start.getX() <= x && Integer.min(end.getY(), baseShape.levelCount()/2) > y
-                && Integer.max(start.getY(),-baseShape.levelCount()/2) <= y && end.getZ() > z && start.getZ() <= z;
+        return baseShape.isPositionValid(x, y, z) && end.getX() > x && start.getX() <= x
+                && Integer.min(end.getY(), baseShape.levelCount() / 2) > y
+                && Integer.max(start.getY(), -baseShape.levelCount() / 2) <= y && end.getZ() > z && start.getZ() <= z;
     }
 
     @Override
     public int levelCount() {
         return Integer.min(baseShape.levelCount(),
-                2*Integer.max(Math.abs(boxStart.getY()), Math.abs(boxStart.getY() + boxSize.getY())));
+                2 * Integer.max(Math.abs(boxStart.getY()), Math.abs(boxStart.getY() + boxSize.getY())));
     }
 
     @Override

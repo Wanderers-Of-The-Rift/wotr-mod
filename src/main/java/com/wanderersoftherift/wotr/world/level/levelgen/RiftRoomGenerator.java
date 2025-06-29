@@ -75,8 +75,12 @@ public class RiftRoomGenerator {
                     throw new IllegalStateException("template should not be null");
                 }
                 var border = new Vec3i(
-                        LevelChunkSection.SECTION_WIDTH - 1 - ((template.size().getX() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK), LevelChunkSection.SECTION_HEIGHT - 1 - ((template.size().getY() - 1) & RiftProcessedChunk.CHUNK_HEIGHT_MASK),
-                        LevelChunkSection.SECTION_WIDTH - 1 - ((template.size().getZ() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK)
+                        LevelChunkSection.SECTION_WIDTH - 1
+                                - ((template.size().getX() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK),
+                        LevelChunkSection.SECTION_HEIGHT - 1
+                                - ((template.size().getY() - 1) & RiftProcessedChunk.CHUNK_HEIGHT_MASK),
+                        LevelChunkSection.SECTION_WIDTH - 1
+                                - ((template.size().getZ() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK)
                 );
                 RiftGeneratable.generate(template, processedRoom2, world, border, mirror, world.getServer(),
                         randomSource, null, jigsawProcessors);

@@ -37,7 +37,7 @@ public class RiftProcessedRoom {
         origin = space.origin();
         shiftZ = ShiftMath.shiftForCeilPow2(space.size().getX());
         shiftY = ShiftMath.shiftForCeilPow2(space.size().getZ());
-        shiftYZ = shiftZ+shiftY;
+        shiftYZ = shiftZ + shiftY;
         chunkArray = new AtomicReference[space.size().getY() << shiftYZ];
         xMask = (1 << shiftZ) - 1;
         zMask = (1 << shiftY) - 1;
