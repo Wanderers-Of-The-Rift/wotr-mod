@@ -17,9 +17,20 @@ import java.util.Objects;
 
 public interface RiftAdjacencyProcessor<T> {
 
-
+    /**
+     * Runs the processor on patch of blocks
+     *
+     * @param data           value computed by {@link this.createData}
+     * @param adjacentBlocks Array of size 7. First 6 values are blocks adjecent to the central block, last is the
+     *                       central block itself
+     * @param isHidden       whether central block is fully surrounded by solid blocks
+     * @return bitmask denoting which blocks in adjacentBlocks were modified
+     */
     int processAdjacency(T data, BlockState[] adjacentBlocks, boolean isHidden);
 
+    /**
+     * Creates data used as 1st parameter of {@link this.processAdjacency}, called once per template
+     */
     T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
 
     // stupid mojank why are they applying mirror and rotation to position before processing but to state after
