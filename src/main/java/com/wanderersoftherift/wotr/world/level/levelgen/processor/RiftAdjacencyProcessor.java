@@ -20,7 +20,7 @@ public interface RiftAdjacencyProcessor<T> {
 
     ImmutableList<Direction> DIRECTIONS = ImmutableList.copyOf(Direction.values());
 
-    int processAdjacency(T data, BlockState[] asArray, boolean isHidden);
+    int processAdjacency(T data, BlockState[] adjacentBlocks, boolean isHidden);
 
     T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
 

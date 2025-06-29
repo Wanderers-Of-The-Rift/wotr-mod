@@ -209,11 +209,11 @@ public class ThemeProcessor extends StructureProcessor implements RiftTemplatePr
     }
 
     @Override
-    public int processAdjacency(ThemeAdjacencyData data, BlockState[] asArray, boolean isHidden) {
+    public int processAdjacency(ThemeAdjacencyData data, BlockState[] adjacentBlocks, boolean isHidden) {
         var i = 0;
         List<? extends ProcessorDataPair<?>> list = data.list;
         for (int j = 0; j < list.size(); j++) {
-            i |= list.get(j).run(asArray, isHidden);
+            i |= list.get(j).run(adjacentBlocks, isHidden);
         }
         return i;
     }

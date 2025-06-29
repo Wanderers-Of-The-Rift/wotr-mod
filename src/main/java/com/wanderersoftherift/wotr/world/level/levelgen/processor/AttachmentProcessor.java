@@ -115,21 +115,21 @@ public class AttachmentProcessor extends StructureProcessor
     }
 
     @Override
-    public int processAdjacency(ReplacementData data, BlockState[] directions, boolean isHidden) {
-        var old = directions[6];
+    public int processAdjacency(ReplacementData data, BlockState[] adjacentBlocks, boolean isHidden) {
+        var old = adjacentBlocks[6];
         var result = 0;
         if (useOldProcessor) {
             if (old.isAir() && data.recalculateChance() <= rarity) {
                 int sideCount = requiresSides;
 
                 if (requiresDown) {
-                    var block = directions[0];
+                    var block = adjacentBlocks[0];
                     if (block != null && !isFaceFullFast(block, BlockPos.ZERO, Direction.UP)) {
                         return 0;
                     }
                 }
                 if (requiresUp) {
-                    var block = directions[1];
+                    var block = adjacentBlocks[1];
                     if (block != null && !isFaceFullFast(block, BlockPos.ZERO, Direction.DOWN)) {
                         return 0;
                     }
@@ -137,7 +137,7 @@ public class AttachmentProcessor extends StructureProcessor
 
                 for (int i = 0; i < HORIZONTAL.size() && sideCount > 0; i++) {
                     var side = HORIZONTAL.get(i);
-                    var directionBlock = directions[side.ordinal()];
+                    var directionBlock = adjacentBlocks[side.ordinal()];
                     if (directionBlock != null && isFaceFullFast(directionBlock, BlockPos.ZERO, side.getOpposite())) {
                         sideCount--;
                     }
@@ -147,7 +147,7 @@ public class AttachmentProcessor extends StructureProcessor
                     return 0;
                 }
 
-                directions[6] = blockState;
+                adjacentBlocks[6] = blockState;
                 return 0b1000000;
             }
             return 0;
@@ -155,25 +155,25 @@ public class AttachmentProcessor extends StructureProcessor
         if (!isHidden && !old.isAir()) {
             VoxelShape shape = null;
             if (requiresUp) {
-                var block = directions[0];
+                var block = adjacentBlocks[0];
                 if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
                     if (shape == null) {
                         shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                     }
                     if (isFaceFullFast(shape, Direction.DOWN)) {
-                        directions[0] = blockState;
+                        adjacentBlocks[0] = blockState;
                         result |= 1;
                     }
                 }
             }
             if (requiresDown) {
-                var block = directions[1];
+                var block = adjacentBlocks[1];
                 if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
                     if (shape == null) {
                         shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                     }
                     if (isFaceFullFast(shape, Direction.UP)) {
-                        directions[1] = blockState;
+                        adjacentBlocks[1] = blockState;
                         result |= 2;
                     }
                 }
@@ -184,7 +184,7 @@ public class AttachmentProcessor extends StructureProcessor
             for (int i = 0; i < HORIZONTAL.size(); i++) {
                 var side = HORIZONTAL.get(i);
                 var ordinal = side.ordinal();
-                var directionBlock = directions[ordinal];
+                var directionBlock = adjacentBlocks[ordinal];
                 if ((directionBlock == null || !directionBlock.isAir()) || !(data.recalculateChance() <= rarity)) {
                     continue;
                 }
@@ -192,7 +192,7 @@ public class AttachmentProcessor extends StructureProcessor
                     shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                 }
                 if (isFaceFullFast(shape, side)) {
-                    directions[ordinal] = blockState;
+                    adjacentBlocks[ordinal] = blockState;
                     result |= 1 << ordinal;
                 }
             }

@@ -90,19 +90,19 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
     }
 
     @Override
-    public int processAdjacency(ReplacementData data, BlockState[] directionBlocks, boolean isHidden) {
-        var old = directionBlocks[6];
+    public int processAdjacency(ReplacementData data, BlockState[] adjacentBlocks, boolean isHidden) {
+        var old = adjacentBlocks[6];
         var result = 0;
         if (!isHidden && !old.isAir()) {
             VoxelShape shape = null;
             if (attachToCeiling) {
-                var otherBlock = directionBlocks[0];
+                var otherBlock = adjacentBlocks[0];
                 if (otherBlock == null || otherBlock.isAir()) {
                     if (data.recalculateChance() < rarity) {
                         shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                         if (isFaceFullFast(shape, DOWN)) {
                             BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
-                            directionBlocks[0] = VINE.defaultBlockState().setValue(property, true);
+                            adjacentBlocks[0] = VINE.defaultBlockState().setValue(property, true);
                             result |= 1;
                         }
                     }
@@ -111,7 +111,7 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
                         shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
                         if (isFaceFullFast(shape, DOWN)) {
                             BooleanProperty property = PROPERTY_BY_DIRECTION.get(DOWN.getOpposite());
-                            directionBlocks[0] = otherBlock.setValue(property, true);
+                            adjacentBlocks[0] = otherBlock.setValue(property, true);
                             result |= 1;
                         }
                     }
@@ -119,7 +119,7 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
             }
             if (attachToWall) {
                 for (int i = 2; i < 6; i++) {
-                    var otherBlock = directionBlocks[i];
+                    var otherBlock = adjacentBlocks[i];
                     var direction = DIRECTIONS.get(i);
                     if (otherBlock == null || otherBlock.isAir()) {
                         if (data.recalculateChance() < rarity) {
@@ -128,7 +128,7 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
                             }
                             if (isFaceFullFast(shape, direction)) {
                                 BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
-                                directionBlocks[i] = VINE.defaultBlockState().setValue(property, true);
+                                adjacentBlocks[i] = VINE.defaultBlockState().setValue(property, true);
                                 result |= 1 << i;
                             }
                         }
@@ -139,7 +139,7 @@ public class VineProcessor extends StructureProcessor implements RiftAdjacencyPr
                             }
                             if (isFaceFullFast(shape, direction)) {
                                 BooleanProperty property = PROPERTY_BY_DIRECTION.get(direction.getOpposite());
-                                directionBlocks[i] = otherBlock.setValue(property, true);
+                                adjacentBlocks[i] = otherBlock.setValue(property, true);
                                 result |= 1 << i;
                             }
                         }
