@@ -105,8 +105,8 @@ public class WotrAttributes {
      * This adds the different attributes to the player for the different abilities
      */
     @SubscribeEvent
-    private static void addAttributesToLivingEntities(EntityAttributeModificationEvent event) {
-        for (DeferredHolder<Attribute, RangedAttribute> attribute : PLAYER_ATTRIBUTES) {
+    private static void registerMobAttribute(EntityAttributeModificationEvent event) {
+        for (DeferredHolder<Attribute, RangedAttribute> attribute :MOB_ATTRIBUTES) {
             for (EntityType i : event.getTypes()) {
                 event.add(i, attribute);
             }

@@ -12,7 +12,13 @@ public class OnHitEffect {
         int critAvoid = (int) foe.getAttributeValue(WotrAttributes.CRITICAL_AVOIDANCE);
 
         int critChance = baseCritChance - critAvoid;
-        int critApplications = critChance / 100;
+        int critApplications = 0;
+
+        if(critChance > 100) {
+            critApplications = critChance / 100;
+        } else {
+            critApplications = 1;
+        }
 
         if (random.nextInt(100) < (critChance % 100)) {
             critApplications += 1;

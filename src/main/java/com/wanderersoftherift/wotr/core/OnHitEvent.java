@@ -13,8 +13,8 @@ public class OnHitEvent {
     @SubscribeEvent
     public static void onCriticalHit(LivingIncomingDamageEvent event) {
         LivingEntity attacker = (LivingEntity) event.getSource().getDirectEntity();
-        if (attacker != null && attacker.attackable()) {
-            float dmg = OnHitEffect.critical(event.getAmount(), attacker, event.getEntity(),
+        if (event.getSource().getDirectEntity() instanceof LivingEntity livingAttacker) {
+            float dmg = OnHitEffect.critical(event.getAmount(), livingAttacker, event.getEntity(),
                     event.getEntity().getRandom());
             event.setAmount(dmg);
         }
@@ -22,14 +22,16 @@ public class OnHitEvent {
 
     @SubscribeEvent
     public static void onThornsProc(LivingIncomingDamageEvent event) {
-        if (event.getEntity().attackable()) {
-            boolean t = OnHitEffect.thorns(event.getEntity(), event.getEntity().getRandom());
-            double thornsDamage = event.getEntity().getAttributeValue(WotrAttributes.THORNS_DAMAGE);
-            if (t) {
-                if(event.getEntity().getAttributeValue(WotrAttributes.THORNS_DAMAGE) > 1) {
-                    event.getEntity().getLastAttacker().hurt(event.getSource(), (float) thornsDamage);
-                } else {
-                    event.getEntity().getLastAttacker().hurt(event.getSource(), 1);
+        if (event.getEntity() instanceof LivingEntity living) {
+            if (living.getLastAttacker() instanceof LivingEntity attacker) {
+                boolean t = OnHitEffect.thorns(living, living.getRandom());
+                double thornsDamage = living.getAttributeValue(WotrAttributes.THORNS_DAMAGE);
+                if (t) {
+                    if (living.getAttributeValue(WotrAttributes.THORNS_DAMAGE) > 1) {
+                        attacker.hurt(event.getSource(), (float) thornsDamage);
+                    } else {
+                        attacker.hurt(event.getSource(), 1);
+                    }
                 }
             }
         }
