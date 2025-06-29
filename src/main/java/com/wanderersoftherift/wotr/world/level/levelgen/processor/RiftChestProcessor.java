@@ -42,7 +42,6 @@ import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.RIFT_CHES
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
 import static net.minecraft.world.level.block.Blocks.AIR;
 import static net.minecraft.world.level.block.Blocks.CHEST;
-import static net.minecraft.world.level.block.ChestBlock.FACING;
 
 public class RiftChestProcessor extends StructureProcessor implements RiftTemplateProcessor {
 
@@ -97,7 +96,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
             if (random.nextFloat() < rarity) {
                 RiftChestType chestType = getRandomChestType(random);
                 BlockState blockState = CHEST_TYPES.get(chestType).get().defaultBlockState();
-                blockState = copyProperties(blockState, blockInfo.state());
+                blockState = ProcessorUtil.copyState(blockInfo.state(), blockState);
                 BlockEntity tileEntity = ((RiftChestEntityBlock) blockState.getBlock()).newBlockEntity(pos, blockState);
                 tileEntity.loadWithComponents(blockInfo.nbt(), world.registryAccess());
                 ((RandomizableContainerBlockEntity) tileEntity).setLootTable(getLootTable(chestType),
@@ -122,11 +121,6 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
     private @NotNull ResourceKey<LootTable> getLootTable(RiftChestType chestType) {
         return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(
                 this.baseLootTable.getNamespace(), this.baseLootTable.getPath() + chestType.name().toLowerCase()));
-    }
-
-    private BlockState copyProperties(BlockState blockState, BlockState state) {
-        return blockState.setValue(FACING, state.getValue(FACING)); // shouldn't we use ProcessorUtil.copyState()
-                                                                    // instead?
     }
 
     public ResourceLocation getBaseLootTable() {
@@ -171,7 +165,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
             if (random.nextFloat() < rarity) {
                 RiftChestType chestType = getRandomChestType(random);
                 BlockState blockState = CHEST_TYPES.get(chestType).get().defaultBlockState();
-                blockState = copyProperties(blockState, currentState);
+                blockState = ProcessorUtil.copyState(currentState, blockState);
                 BlockEntity tileEntity = entityRef.getValue();
                 if (tileEntity instanceof RandomizableContainerBlockEntity container) {
                     container.setLootTable(lootTableCache.get(chestType.ordinal()), random.nextLong());
@@ -191,7 +185,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftTempla
                 RiftChestType chestType = getRandomChestType(random);
                 var block = (RiftChestEntityBlock) CHEST_TYPES.get(chestType).get();
                 BlockState blockState = block.defaultBlockState();
-                blockState = copyProperties(blockState, currentState);
+                blockState = ProcessorUtil.copyState(currentState, blockState);
                 BlockEntity oldTileEntity = entityRef.getValue();
                 BlockEntity tileEntity = block.newBlockEntity(pos, blockState);
                 tileEntity.loadWithComponents(oldTileEntity.saveWithoutMetadata(world.registryAccess()),
