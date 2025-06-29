@@ -26,7 +26,11 @@ public class OnHitEvent {
             boolean t = OnHitEffect.thorns(event.getEntity(), event.getEntity().getRandom());
             double thornsDamage = event.getEntity().getAttributeValue(WotrAttributes.THORNS_DAMAGE);
             if (t) {
-                event.getEntity().getLastAttacker().hurt(event.getSource(), (float) thornsDamage);
+                if(event.getEntity().getAttributeValue(WotrAttributes.THORNS_DAMAGE) > 1) {
+                    event.getEntity().getLastAttacker().hurt(event.getSource(), (float) thornsDamage);
+                } else {
+                    event.getEntity().getLastAttacker().hurt(event.getSource(), 1);
+                }
             }
         }
     }
