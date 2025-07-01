@@ -4,30 +4,32 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.codec.OutputStateCodecs;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.wanderersoftherift.wotr.init.worldgen.WotrProcessors.ATTACHMENT;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.getBlockInfo;
-import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFull;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.isFaceFullFast;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil.shapeForFaceFullCheck;
+import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.BLOCK;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
-import static net.minecraft.core.Direction.Plane;
 
-public class AttachmentProcessor extends StructureProcessor {
+public class AttachmentProcessor extends StructureProcessor
+        implements RiftAdjacencyProcessor<AttachmentProcessor.ReplacementData> {
     public static final MapCodec<AttachmentProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             OutputStateCodecs.OUTPUT_STATE_CODEC.fieldOf("blockstate").forGetter(AttachmentProcessor::getBlockState),
             Codec.INT.optionalFieldOf("requires_sides", 0).forGetter(AttachmentProcessor::getRequiresSides),
@@ -46,6 +48,7 @@ public class AttachmentProcessor extends StructureProcessor {
     private final float rarity;
     private final StructureRandomType structureRandomType;
     private final Optional<Long> seed;
+    private final boolean useOldProcessor;
 
     public AttachmentProcessor(BlockState blockState, int requiresSides, boolean requiresUp, boolean requiresDown,
             float rarity, StructureRandomType structureRandomType, Optional<Long> seed) {
@@ -56,6 +59,15 @@ public class AttachmentProcessor extends StructureProcessor {
         this.rarity = rarity;
         this.structureRandomType = structureRandomType;
         this.seed = seed;
+
+        var totalSides = requiresSides;
+        if (requiresDown) {
+            totalSides++;
+        }
+        if (requiresUp) {
+            totalSides++;
+        }
+        useOldProcessor = totalSides > 1;
     }
 
     @Override
@@ -66,59 +78,8 @@ public class AttachmentProcessor extends StructureProcessor {
             List<StructureTemplate.StructureBlockInfo> originalBlockInfos,
             List<StructureTemplate.StructureBlockInfo> processedBlockInfos,
             StructurePlaceSettings settings) {
-        List<StructureTemplate.StructureBlockInfo> newBlockInfos = new ArrayList<>(processedBlockInfos.size());
-        for (StructureTemplate.StructureBlockInfo blockInfo : processedBlockInfos) {
-            StructureTemplate.StructureBlockInfo newBlockInfo = processFinal(serverLevel, offset, pos, blockInfo,
-                    blockInfo, settings, processedBlockInfos);
-            newBlockInfos.add(newBlockInfo);
-        }
-        return newBlockInfos;
-    }
-
-    public StructureTemplate.StructureBlockInfo processFinal(
-            LevelReader world,
-            BlockPos piecePos,
-            BlockPos structurePos,
-            StructureTemplate.StructureBlockInfo rawBlockInfo,
-            StructureTemplate.StructureBlockInfo blockInfo,
-            StructurePlaceSettings settings,
-            List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
-        RandomSource random = ProcessorUtil.getRandom(structureRandomType, blockInfo.pos(), piecePos, structurePos,
-                world, seed);
-        BlockPos blockpos = blockInfo.pos();
-        if (blockInfo.state().isAir() && random.nextFloat() <= rarity) {
-            boolean validSides = validSides(blockpos, processedBlockInfos);
-            boolean validUp = !requiresUp || hasDirection(processedBlockInfos, blockpos, Direction.UP);
-            boolean validDown = !requiresDown || hasDirection(processedBlockInfos, blockpos, Direction.DOWN);
-            if (validSides && validUp && validDown) {
-                return new StructureTemplate.StructureBlockInfo(blockpos, blockState, blockInfo.nbt());
-            }
-        }
-        return blockInfo;
-    }
-
-    private boolean validSides(BlockPos blockpos, List<StructureTemplate.StructureBlockInfo> processedBlockInfos) {
-        if (requiresSides == 0) {
-            return true;
-        }
-        int sides = 0;
-        for (Direction direction : Plane.HORIZONTAL) {
-            if (hasDirection(processedBlockInfos, blockpos, direction)) {
-                sides++;
-                if (sides >= requiresSides) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean hasDirection(
-            List<StructureTemplate.StructureBlockInfo> pieceBlocks,
-            BlockPos pos,
-            Direction direction) {
-        StructureTemplate.StructureBlockInfo block = getBlockInfo(pieceBlocks, pos.mutable().move(direction));
-        return isFaceFull(block, direction.getOpposite());
+        return RiftAdjacencyProcessor.backportFinalizeProcessing(this, serverLevel, offset, pos, originalBlockInfos,
+                processedBlockInfos, settings);
     }
 
     protected StructureProcessorType<?> getType() {
@@ -152,4 +113,122 @@ public class AttachmentProcessor extends StructureProcessor {
     public Optional<Long> getSeed() {
         return seed;
     }
+
+    @Override
+    public int processAdjacency(ReplacementData data, BlockState[] adjacentBlocks, boolean isHidden) {
+        var old = adjacentBlocks[6];
+        var result = 0;
+        if (useOldProcessor) {
+            if (old.isAir() && data.recalculateChance() <= rarity) {
+                int sideCount = requiresSides;
+
+                if (requiresDown) {
+                    var block = adjacentBlocks[0];
+                    if (block != null && !isFaceFullFast(block, BlockPos.ZERO, Direction.UP)) {
+                        return 0;
+                    }
+                }
+                if (requiresUp) {
+                    var block = adjacentBlocks[1];
+                    if (block != null && !isFaceFullFast(block, BlockPos.ZERO, Direction.DOWN)) {
+                        return 0;
+                    }
+                }
+
+                for (int i = 0; i < EnumEntries.DIRECTIONS_HORIZONTAL.size() && sideCount > 0; i++) {
+                    var side = EnumEntries.DIRECTIONS_HORIZONTAL.get(i);
+                    var directionBlock = adjacentBlocks[side.ordinal()];
+                    if (directionBlock != null && isFaceFullFast(directionBlock, BlockPos.ZERO, side.getOpposite())) {
+                        sideCount--;
+                    }
+                }
+
+                if (sideCount > 0) {
+                    return 0;
+                }
+
+                adjacentBlocks[6] = blockState;
+                return 0b1000000;
+            }
+            return 0;
+        }
+        if (!isHidden && !old.isAir()) {
+            VoxelShape shape = null;
+            if (requiresUp) {
+                var block = adjacentBlocks[0];
+                if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
+                    if (shape == null) {
+                        shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                    }
+                    if (isFaceFullFast(shape, Direction.DOWN)) {
+                        adjacentBlocks[0] = blockState;
+                        result |= 1;
+                    }
+                }
+            }
+            if (requiresDown) {
+                var block = adjacentBlocks[1];
+                if ((block != null && block.isAir()) && data.recalculateChance() <= rarity) {
+                    if (shape == null) {
+                        shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                    }
+                    if (isFaceFullFast(shape, Direction.UP)) {
+                        adjacentBlocks[1] = blockState;
+                        result |= 2;
+                    }
+                }
+            }
+            if (requiresSides <= 0) {
+                return result;
+            }
+            for (int i = 0; i < EnumEntries.DIRECTIONS_HORIZONTAL.size(); i++) {
+                var side = EnumEntries.DIRECTIONS_HORIZONTAL.get(i);
+                var ordinal = side.ordinal();
+                var directionBlock = adjacentBlocks[ordinal];
+                if ((directionBlock == null || !directionBlock.isAir()) || !(data.recalculateChance() <= rarity)) {
+                    continue;
+                }
+                if (shape == null) {
+                    shape = shapeForFaceFullCheck(old, BlockPos.ZERO);
+                }
+                if (isFaceFullFast(shape, side)) {
+                    adjacentBlocks[ordinal] = blockState;
+                    result |= 1 << ordinal;
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public AttachmentProcessor.ReplacementData createData(
+            BlockPos structurePos,
+            Vec3i pieceSize,
+            ServerLevelAccessor world) {
+        return new AttachmentProcessor.ReplacementData(
+                ProcessorUtil.getRiftRandomFactory(world, seed.orElse(94513147161L))
+                        .at(structurePos.getX(), structurePos.getY(), structurePos.getZ()),
+                structureRandomType == BLOCK
+        );
+    }
+
+    public static class ReplacementData {
+        private final RandomSource rng1;
+        private final boolean isRng1PerBlock;
+        private float roll1;
+
+        public ReplacementData(RandomSource rng1, boolean isRng1PerBlock) {
+            this.rng1 = rng1;
+            this.isRng1PerBlock = isRng1PerBlock;
+            roll1 = rng1.nextFloat();
+        }
+
+        public float recalculateChance() {
+            if (isRng1PerBlock) {
+                roll1 = rng1.nextFloat();
+            }
+            return roll1;
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor.input;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class StateInputBlockState extends InputBlockState {
@@ -26,5 +27,15 @@ public class StateInputBlockState extends InputBlockState {
     @Override
     public boolean matchesBlockstate(BlockState blockState) {
         return blockState.equals(state);
+    }
+
+    @Override
+    public boolean matchesBlockstateAssumingBlockEqual(BlockState blockState) {
+        return matchesBlockstate(blockState);
+    }
+
+    @Override
+    public Block block() {
+        return getState().getBlock();
     }
 }

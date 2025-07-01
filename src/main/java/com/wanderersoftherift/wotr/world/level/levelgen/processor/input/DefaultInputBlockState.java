@@ -32,4 +32,14 @@ public class DefaultInputBlockState extends InputBlockState {
         return blockState.is(block);
     }
 
+    @Override
+    public boolean matchesBlockstateAssumingBlockEqual(BlockState blockState) {
+        return true;
+    }
+
+    @Override
+    public Block block() {
+        return getBlock();
+    }
+
 }
