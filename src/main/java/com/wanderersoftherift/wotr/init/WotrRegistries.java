@@ -51,6 +51,8 @@ public class WotrRegistries {
 
         public static final ResourceKey<Registry<AbstractAbility>> ABILITIES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("abilities"));
+        public static final ResourceKey<Registry<AbstractAbility>> ABILITIES_GEAR = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("abilities_gear"));
         public static final ResourceKey<Registry<MapCodec<? extends AbstractAbility>>> ABILITY_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_types"));
         public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADES = ResourceKey
@@ -114,6 +116,8 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.ABILITIES_GEAR, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
+        //event.dataPackRegistry(Keys.GEAR, GearItemSingle.DIRECT_CODEC, GearItemSingle.DIRECT_CODEC);
     }
 }

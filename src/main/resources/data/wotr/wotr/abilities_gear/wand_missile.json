@@ -1,0 +1,44 @@
+{
+  "type": "wotr:gear_ability",
+  "gear_type": "wotr:wand",
+  "ability_name": "wotr:wand_missile_ability",
+  "cooldown": 1,
+  "effects": [
+    {
+      "type": "wotr:simple_projectile_effect",
+      "config": {
+        "gravity_affected": false,
+        "render": {
+          "animations": "wotr:animations/ability/fireball.animations.json",
+          "model": "wotr:geo/ability/fireball.geo.json",
+          "texture": "wotr:textures/ability/fireball.png"
+        },
+        "velocity": 3.0
+      },
+      "effects": [
+        {
+          "type": "wotr:damage_effect",
+          "amount": 10.0,
+          "damage_type": "wotr:fire",
+          "targeting": {
+            "type": "wotr:area_targeting",
+            "range": 12.0,
+            "target": {
+              "sentiment": "not_friend"
+            }
+          }
+        }
+      ],
+      "particles": {
+        "target_block": {
+          "type": "minecraft:explosion"
+        }
+      },
+      "targeting": {
+        "type": "wotr:self_targeting"
+      }
+    }
+  ],
+  "icon": "minecraft:textures/item/fire_charge.png",
+  "mana_cost": 5
+}

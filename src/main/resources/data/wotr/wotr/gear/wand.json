@@ -1,0 +1,12 @@
+{
+  "type": "wotr:single_handed",
+  "primary_ability": "wotr:wand_missile",
+  "secondary_ability": "wotr:wand_barrage",
+  "properties": [
+    {
+      "attack_damage": 1.0,
+      "attack_speed": 1.0,
+      "reach": 1.0
+    }
+    ]
+}

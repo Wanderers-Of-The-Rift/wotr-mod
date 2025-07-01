@@ -26,9 +26,11 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES_GEAR;
 
 public abstract class AbstractAbility {
 
@@ -50,7 +52,7 @@ public abstract class AbstractAbility {
     private boolean isToggle = false;
 
     public AbstractAbility(ResourceLocation abilityName, ResourceLocation icon, List<AbstractEffect> effects,
-            int baseCooldown) {
+                           int baseCooldown) {
         this.name = abilityName;
         this.effects = effects;
         this.icon = icon;

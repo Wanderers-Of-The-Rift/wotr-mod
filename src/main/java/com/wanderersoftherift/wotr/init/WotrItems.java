@@ -1,16 +1,19 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
-import com.wanderersoftherift.wotr.item.gear.Gear_Material;
+import com.wanderersoftherift.wotr.item.gear.GearAbility;
+import com.wanderersoftherift.wotr.item.gear.GearMaterial;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -40,7 +43,8 @@ public class WotrItems {
             BuilderGlasses::new);
 
     // Gear
-    public static final DeferredItem<SwordItem> WAND = ITEMS.registerItem("wand", props -> new SwordItem(Gear_Material.RIFT_GEAR_MATERIAL, 3,-2.4f, props));
+    public static final DeferredItem<SwordItem> WAND = ITEMS.registerItem(
+            "wand", props -> new SwordItem(GearMaterial.WAND_MATERIAL, GearMaterial.WAND_MATERIAL.attackDamageBonus(),GearMaterial.WAND_MATERIAL.speed(),props));
 
     // Runegems
     public static final DeferredItem<Item> RUNEGEM = ITEMS.register("runegem",

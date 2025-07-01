@@ -22,4 +22,6 @@ public class WotrLootItemFunctionTypes {
             .register("runegems", () -> new LootItemFunctionType<>(RunegemsFunction.CODEC));
     public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<AbilityHolderFunction>> ABILITY_HOLDER_FUNCTION = LOOT_ITEM_FUNCTION_TYPES
             .register("ability_holder", () -> new LootItemFunctionType<>(AbilityHolderFunction.CODEC));
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<AbilityHolderFunction>> GEAR_ABILITY_FUNCTION = LOOT_ITEM_FUNCTION_TYPES
+            .register("gear_ability", () -> new LootItemFunctionType<>(AbilityHolderFunction.CODEC));
 }

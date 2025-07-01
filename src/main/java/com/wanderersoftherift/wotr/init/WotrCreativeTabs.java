@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.item.gear.GearAbility;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -48,7 +49,7 @@ public class WotrCreativeTabs {
             WanderersOfTheRift.MODID + "_runegem",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".runegem"))
-                    .withTabsBefore(WOTR_ABILITY_TAB.getId())
+                    .withTabsBefore(WOTR_TAB.getId())
                     .icon(WotrItems.CUT_RUNEGEM_GEODE::toStack)
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RAW_RUNEGEM_GEODE);
@@ -84,6 +85,16 @@ public class WotrCreativeTabs {
             HolderLookup.RegistryLookup<AbstractAbility> registry) {
         registry.listElements().forEach(abilityHolder -> {
             ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
+            item.set(WotrDataComponentType.ABILITY, abilityHolder);
+            output.accept(item);
+        });
+    }
+
+    private static void generateGear(
+            CreativeModeTab.Output output,
+            HolderLookup.RegistryLookup<AbstractAbility> registry) {
+        registry.listElements().forEach(abilityHolder -> {
+            ItemStack item = WotrItems.WAND.toStack();
             item.set(WotrDataComponentType.ABILITY, abilityHolder);
             output.accept(item);
         });
