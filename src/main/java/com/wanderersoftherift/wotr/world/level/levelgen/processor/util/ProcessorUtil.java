@@ -13,6 +13,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -279,7 +280,11 @@ public class ProcessorUtil {
     }
 
     public static BlockState copyState(BlockState fromState, BlockState toState) {
-        for (var property : fromState.getBlock().defaultBlockState().getValues().keySet()) {
+        var values = fromState.getBlock().defaultBlockState().getValues();
+        if (values.isEmpty()) {
+            return toState;
+        }
+        for (var property : values.keySet()) {
             toState = updateProperty(fromState, toState, property);
         }
         return toState;
