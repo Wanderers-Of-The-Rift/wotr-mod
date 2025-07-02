@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.item.gear.GearAbility;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.HolderLookup;
@@ -12,6 +13,8 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Predicate;
 
 public class WotrCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister
@@ -26,8 +29,11 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
-                        output.accept(WotrItems.WAND);
                         WotrItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
+                        //output.accept(WotrItems.WAND);
+                        parameters.holders().lookup(WotrRegistries.Keys.ABILITIES).ifPresent((abilities) -> {
+                                    generateGear(output, abilities);});
+
                     })
                     .build());
 
@@ -94,9 +100,11 @@ public class WotrCreativeTabs {
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<AbstractAbility> registry) {
         registry.listElements().forEach(abilityHolder -> {
-            ItemStack item = WotrItems.WAND.toStack();
-            item.set(WotrDataComponentType.ABILITY, abilityHolder);
-            output.accept(item);
+            if(abilityHolder.is(WotrTags.Abilities.GEAR_ABILITIES)) {
+                ItemStack item = WotrItems.WAND.toStack();
+                item.set(WotrDataComponentType.ABILITY, abilityHolder);
+                output.accept(item);
+            }
         });
     }
 

@@ -1,20 +1,22 @@
-package com.wanderersoftherift.wotr.item.gear;
+package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.nimbusds.jose.util.Resource;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.network.UseAbilityPayload;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -22,7 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class GearAbility extends AbstractAbility {
-    public static ItemStack gear;
+
+    //public ItemStack item;
 
     public static final MapCodec<GearAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
@@ -33,12 +36,13 @@ public class GearAbility extends AbstractAbility {
                             Codec.list(AbstractEffect.DIRECT_CODEC)
                                     .optionalFieldOf("effects", Collections.emptyList())
                                     .forGetter(GearAbility::getEffects)
+                            //ItemStack.CODEC.fieldOf("gear_type").forGetter(GearAbility::getItem)
                     ).apply(instance, GearAbility::new));
 
     public GearAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
-                           List<AbstractEffect> effects) {
-
+                       List<AbstractEffect> effects) {
         super(resourceLocation, icon, effects, baseCooldown);
+        //this.item = item;
         setBaseManaCost(manaCost);
     }
 
@@ -47,8 +51,10 @@ public class GearAbility extends AbstractAbility {
         return CODEC;
     }
 
+    //public ItemStack getItem(){return item;}
+
     @Override
-    public void onActivate(Player player, int slot, ItemStack abilityItem){
+    public void onActivate(Player player, int slot, ItemStack abilityItem) {
         if (!this.canPlayerUse(player)) {
             player.displayClientMessage(Component.literal("You cannot use this"), true);
             return;
@@ -80,12 +86,12 @@ public class GearAbility extends AbstractAbility {
     }
 
     @Override
-    public void onDeactivate(Player player, int slot){
+    public void onDeactivate(Player player, int slot) {
 
     }
 
     @Override
-    public void tick(Player player){
+    public void tick(Player player) {
 
     }
 }

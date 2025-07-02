@@ -26,6 +26,8 @@ public class WotrAbilityTagsProvider extends TagsProvider<AbstractAbility> {
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("fireball")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("heal")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("icicles")));
+        tag(WotrTags.Abilities.GEAR_ABILITIES)
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("wand_missile")));
         // spotless:on
     }
 }

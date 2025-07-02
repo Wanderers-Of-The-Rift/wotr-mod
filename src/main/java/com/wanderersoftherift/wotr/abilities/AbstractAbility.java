@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
-import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES_GEAR;
 
 public abstract class AbstractAbility {
 

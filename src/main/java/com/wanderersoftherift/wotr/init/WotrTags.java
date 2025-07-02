@@ -84,6 +84,12 @@ public class WotrTags {
         private static TagKey<AbstractAbility> createTag(String name) {
             return TagKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", name));
         }
+
+        public static final TagKey<AbstractAbility> GEAR_ABILITIES = createTagGear("gear_abilities");
+
+        private static TagKey<AbstractAbility> createTagGear(String name) {
+            return TagKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", name));
+        }
     }
 
     public static class RiftThemes {
