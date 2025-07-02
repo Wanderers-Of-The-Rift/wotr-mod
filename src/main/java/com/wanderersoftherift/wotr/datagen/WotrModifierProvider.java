@@ -164,7 +164,7 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback_heavy"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE))),
                         List.of(new AttributeModifierEffect(
-                                WanderersOfTheRift.id("knockback_heavy"), Attributes.ATTACK_SPEED, -1, -0.5F,
+                                WanderersOfTheRift.id("knockback_heavy"), Attributes.ATTACK_SPEED, -0.25, -0.05F,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
         registerModifier(context, getResourceKey("knockback_resistance"),
