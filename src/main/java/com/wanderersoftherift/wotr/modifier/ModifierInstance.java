@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -30,7 +29,7 @@ public record ModifierInstance(Holder<Modifier> modifier, int tier, float roll) 
         return new ModifierInstance(modifier, tier, random.nextFloat());
     }
 
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, ChatFormatting chatFormatting) {
-        return modifier.value().getTooltipComponent(stack, roll, this, chatFormatting);
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack) {
+        return modifier.value().getTooltipComponent(stack, roll, this);
     }
 }

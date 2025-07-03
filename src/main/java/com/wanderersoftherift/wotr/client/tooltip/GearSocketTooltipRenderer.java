@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
+import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.ModifierTier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
@@ -90,7 +91,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 int tier = socket.modifier().get().tier();
                 ModifierTier modifier = tiers.get(tier - 1);
                 for (AbstractModifierEffect effect : getModifierEffects(modifier)) {
-                    String text = getEffectText(effect, tier, isShiftDown);
+                    String text = getEffectText(effect, tier, isShiftDown, socket.modifier().get().modifier().value());
                     maxWidth = Math.max(maxWidth, font.width("> " + text) + 30);
                 }
             } else {
@@ -148,15 +149,17 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                         pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 15_728_880);
 
                 MutableComponent component = Component.literal("");
-                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(),
-                        ChatFormatting.AQUA);
+                Modifier mod = socket.modifier().get().modifier().value();
+
+                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(), mod.getStyle()
+                );
                 if (tooltip instanceof ImageComponent img) {
                     if (tier == getModifierTiers(socket).size()) {
-                        component.append(ComponentUtil.wavingComponent(img.base(),
-                                TextColor.parseColor("#e0ba12").getOrThrow(), 0.125f, 0.5f));
+                        component.append(ComponentUtil.wavingComponent(img.base(), mod.getStyle().getColor().getValue(),
+                                0.125f, 0.5f));
                     } else {
                         component.append(
-                                img.base().copy().withColor(TextColor.parseColor("#e0ba12").getOrThrow().getValue()));
+                                img.base().copy().withStyle(mod.getStyle()));
                     }
 
                 }
@@ -283,9 +286,13 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         return String.format(Locale.ROOT, "%.2f", value);
     }
 
-    private static String getEffectText(AbstractModifierEffect effect, int tier, boolean isShiftDown) {
+    private static String getEffectText(
+            AbstractModifierEffect effect,
+            int tier,
+            boolean isShiftDown,
+            Modifier modifier) {
         String base;
-        if (effect.getTooltipComponent(ItemStack.EMPTY, 0.0F, ChatFormatting.AQUA) instanceof ImageComponent img) {
+        if (effect.getTooltipComponent(ItemStack.EMPTY, 0.0F, modifier.getStyle()) instanceof ImageComponent img) {
             base = img.base().getString();
         } else {
             base = "";

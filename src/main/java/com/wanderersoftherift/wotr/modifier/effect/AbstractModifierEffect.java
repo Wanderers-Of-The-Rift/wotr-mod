@@ -3,9 +3,9 @@ package com.wanderersoftherift.wotr.modifier.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -35,5 +35,5 @@ public abstract class AbstractModifierEffect {
 
     public abstract void applyModifier();
 
-    public abstract TooltipComponent getTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting);
+    public abstract TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style);
 }
