@@ -117,5 +117,4 @@ public class WotrCreativeTabs {
             output.accept(item);
         });
     }
-
 }
