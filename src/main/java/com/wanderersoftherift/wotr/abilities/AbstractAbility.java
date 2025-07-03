@@ -83,6 +83,8 @@ public abstract class AbstractAbility {
 
     public abstract void onActivate(Player player, int slot, ItemStack abilityItem);
 
+    public abstract void onActivateGear(Player player, ItemStack abilityItem);
+
     public abstract void onDeactivate(Player player, int slot);
 
     public boolean canPlayerUse(Player player) {
