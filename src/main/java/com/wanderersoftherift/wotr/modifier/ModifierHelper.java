@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.modifier;
 
+import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
@@ -18,10 +19,10 @@ public class ModifierHelper {
 
     public static void runIterationOnItem(
             ItemStack stack,
-            EquipmentSlot slot,
+            WotrEquipmentSlot slot,
             LivingEntity entity,
-            ModifierHelper.ModifierInSlotVisitor visitor) {
-        if (!stack.isEmpty()) {
+            ModifierInSlotVisitor visitor) {
+        if (!stack.isEmpty() && slot.canAccept(stack)) {
             runOnImplicits(stack, slot, entity, visitor);
             runOnGearSockets(stack, slot, entity, visitor);
         }
@@ -29,7 +30,7 @@ public class ModifierHelper {
 
     private static void runOnGearSockets(
             ItemStack stack,
-            EquipmentSlot slot,
+            WotrEquipmentSlot slot,
             LivingEntity entity,
             ModifierInSlotVisitor visitor) {
         GearSockets gearSockets = stack.get(WotrDataComponentType.GEAR_SOCKETS);
@@ -50,7 +51,7 @@ public class ModifierHelper {
 
     private static void runOnImplicits(
             ItemStack stack,
-            EquipmentSlot slot,
+            WotrEquipmentSlot slot,
             LivingEntity entity,
             ModifierInSlotVisitor visitor) {
         GearImplicits implicits = stack.get(WotrDataComponentType.GEAR_IMPLICITS);
@@ -63,9 +64,14 @@ public class ModifierHelper {
         }
     }
 
-    public static void runIterationOnEquipment(LivingEntity entity, ModifierHelper.ModifierInSlotVisitor visitor) {
+    public static void runIterationOnEquipment(LivingEntity entity, ModifierInSlotVisitor visitor) {
         for (EquipmentSlot equipmentslot : EquipmentSlot.VALUES) {
-            runIterationOnItem(entity.getItemBySlot(equipmentslot), equipmentslot, entity, visitor);
+            var wotrSlot = new WotrEquipmentSlotFromMC(equipmentslot);
+            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
+        }
+        for (var abilitySlot = 0; abilitySlot < AbilitySlots.ABILITY_BAR_SIZE; abilitySlot++) {
+            var wotrSlot = new AbilityEquipmentSlot(abilitySlot);
+            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
         }
     }
 
@@ -75,6 +81,10 @@ public class ModifierHelper {
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
+        enableModifier(stack, entity, new WotrEquipmentSlotFromMC(slot));
+    }
+
+    public static void enableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
         runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
                 .enableModifier(roll, entity, source, tier));
     }
@@ -85,6 +95,10 @@ public class ModifierHelper {
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
+        disableModifier(stack, entity, new WotrEquipmentSlotFromMC(slot));
+    }
+
+    public static void disableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
         runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
                 .disableModifier(roll, entity, source, tier));
     }
