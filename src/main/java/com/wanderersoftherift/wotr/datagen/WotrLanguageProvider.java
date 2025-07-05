@@ -409,9 +409,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "skillthread.title"), "Deliver Skill Thread");
         add(WanderersOfTheRift.translationId("quest", "skillthread.description"),
                 "I've heard there is a strange thread that can be found in the rifts that holds the key to unlocking the full potential of abilities. Could you bring me a sample?");
-        add(WanderersOfTheRift.translationId("quest", "runegem.title"), "Deliver Runegem");
-        add(WanderersOfTheRift.translationId("quest", "runegem.description"),
-                "My gear has been feeling a little lackluster of late - if you would kindly bring me a runegem to improve it with I will gladly reward you.");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron.title"), "Sample the Wares");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron.description"),
+                "Psst. You look like a discerning customer? I've got some powerful shiny baubles if you can bring me some precious metals!");
     }
 
     private void addRunegems() {

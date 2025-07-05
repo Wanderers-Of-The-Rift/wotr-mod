@@ -65,7 +65,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
                 quests.stream().map(quests::wrapAsHolder).map(QuestItem::new).toList());
         addRenderableWidget(questsWidget);
 
-        questInfo = new ScrollContainerWidget<>(leftPos + 108, topPos + 20, 214, 120);
+        questInfo = new ScrollContainerWidget<>(leftPos + 108, topPos + 20, 210, 120);
         addRenderableWidget(questInfo);
 
         accept = Button.builder(Component.translatable(WanderersOfTheRift.translationId("container", "quest.accept")),
@@ -76,6 +76,10 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
                 }).bounds(leftPos + 108, topPos + 142, 40, 16).build();
         addRenderableWidget(accept);
         accept.visible = false;
+
+        if (selectedQuest != null) {
+            selectQuest(selectedQuest);
+        }
     }
 
     private void selectQuest(Holder<Quest> quest) {
@@ -99,6 +103,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
                 .map(Optional::get)
                 .toList();
         questInfo.children().add(new FlowContainer(rewards));
+        questInfo.children().add(new SpacerEntry(2));
         // Accept button
         accept.visible = true;
     }
