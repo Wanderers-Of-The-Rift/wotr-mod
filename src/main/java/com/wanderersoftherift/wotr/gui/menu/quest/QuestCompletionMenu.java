@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
@@ -9,8 +10,11 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.network.guild.ActiveQuestReplicationPayload;
+import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -116,12 +120,17 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         if (questIndex != selectedQuest.get() || !getQuest().isComplete()) {
             return;
         }
-        // Reward
-
-        // Remove quest
-        quests.remove(questIndex);
-        PacketDistributor.sendToPlayer(player, new ActiveQuestReplicationPayload(quests.quests()));
-        player.closeContainer();
+        access.execute((level, blockPos) -> {
+            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(player, handInItems);
+            player.closeContainer();
+            player.openMenu(new SimpleMenuProvider(
+                    (containerId, playerInventory, p) -> {
+                        var menu = new QuestRewardMenu(containerId, playerInventory,
+                                ContainerLevelAccess.create(level, p.getOnPos()), quests, selectedQuest.get());
+                        menu.addRewards(player);
+                        return menu;
+                    }, Component.translatable(WanderersOfTheRift.translationId("container", "quest_complete"))));
+        });
     }
 
     public int getQuestIndex() {

@@ -1,9 +1,7 @@
-package com.wanderersoftherift.wotr.gui.screen.quest;
+package com.wanderersoftherift.wotr.gui.widget;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
-import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
-import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;

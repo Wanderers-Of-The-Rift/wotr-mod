@@ -13,7 +13,7 @@ public class ItemRewardWidget extends AbstractWidget {
 
     public ItemRewardWidget(ItemReward reward) {
         super(0, 0, 16, 16, Component.empty());
-        this.rewardItem = reward.getItemStack();
+        this.rewardItem = reward.generateItem();
     }
 
     @Override
