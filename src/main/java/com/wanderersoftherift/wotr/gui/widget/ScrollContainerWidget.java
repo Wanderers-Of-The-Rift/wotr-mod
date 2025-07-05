@@ -48,7 +48,7 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
 
     @Override
     protected int contentHeight() {
-        return children.stream().map(x -> x.getHeight(width)).reduce(0, Integer::sum);
+        return children.stream().map(x -> x.getHeight(width - SCROLLBAR_SPACE)).reduce(0, Integer::sum);
     }
 
     @Override
@@ -72,10 +72,13 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
         graphics.enableScissor(getX(), getY(), getX() + width, getY() + height);
         int absoluteY = 0;
         for (ScrollContainerEntry child : children) {
+            int childHeight = child.getHeight(width - SCROLLBAR_SPACE);
             int rowBottom = absoluteY + child.getHeight(width - SCROLLBAR_SPACE);
             if (rowBottom >= scrollAmount() && absoluteY <= scrollAmount() + height) {
                 child.setX(getX());
                 child.setY(getY() + absoluteY - (int) scrollAmount());
+                child.setWidth(width - SCROLLBAR_SPACE);
+                child.setHeight(childHeight);
                 child.render(graphics, mouseX, mouseY, delta);
             }
             absoluteY = rowBottom;

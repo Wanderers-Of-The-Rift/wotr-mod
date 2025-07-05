@@ -30,6 +30,13 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
             new Vector2i(80, 26), new Vector2i(127, 51), new Vector2i(127, 101), new Vector2i(80, 126),
             new Vector2i(33, 101), new Vector2i(33, 51));
     private static final Vector2i GEAR_SLOT_POSITION = new Vector2i(80, 76);
+    private static final QuickMover MOVER = QuickMover.create()
+            .forPlayerSlots(0)
+            .tryMoveTo(QuickMover.PLAYER_SLOTS, 7)
+            .forSlots(QuickMover.PLAYER_SLOTS, 7)
+            .tryMoveToPlayer()
+            .build();
+
     private final List<Slot> playerInventorySlots = new ArrayList<>();
     private final List<RunegemSlot> socketSlots = new ArrayList<>();
     private final Inventory playerInventory;
@@ -38,7 +45,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
     private final Container container;
     private Slot gearSlot;
     private int activeSocketSlots = 0;
-    private final QuickMover mover;
 
     // Client
     public RuneAnvilMenu(int containerId, Inventory playerInventory) {
@@ -55,13 +61,6 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
         this.container = container;
 
         this.createSlots();
-
-        mover = QuickMover.create(this)
-                .forPlayerSlots(0)
-                .tryMoveTo(QuickMover.PLAYER_SLOTS, 7)
-                .forSlots(QuickMover.PLAYER_SLOTS, 7)
-                .tryMoveToPlayer()
-                .build();
     }
 
     private void createSlots() {
@@ -230,7 +229,7 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return mover.quickMove(player, index);
+        return MOVER.quickMove(this, player, index);
     }
 
     public @NotNull ItemStack getGearSlotItem() {
