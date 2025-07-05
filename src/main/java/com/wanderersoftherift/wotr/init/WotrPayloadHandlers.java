@@ -19,6 +19,7 @@ import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.SelectCharacterMenuPayload;
+import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.AcceptQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.ActiveQuestReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.CompleteQuestPayload;
@@ -102,6 +103,8 @@ public class WotrPayloadHandlers {
                 HandInQuestItemPayload::handleOnServer);
         registrar.playToServer(CompleteQuestPayload.TYPE, CompleteQuestPayload.STREAM_CODEC,
                 CompleteQuestPayload::handleOnServer);
+        registrar.playToServer(AbandonQuestPayload.TYPE, AbandonQuestPayload.STREAM_CODEC,
+                AbandonQuestPayload::handleOnServer);
 
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,
@@ -172,7 +175,7 @@ public class WotrPayloadHandlers {
 
     private static void replicateActiveQuests(ServerPlayer player) {
         PacketDistributor.sendToPlayer(player,
-                new ActiveQuestReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS).quests()));
+                new ActiveQuestReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
     }
 
 }

@@ -67,4 +67,9 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
 
     }
+
+    @Override
+    protected boolean isValidClickButton(int button) {
+        return false;
+    }
 }

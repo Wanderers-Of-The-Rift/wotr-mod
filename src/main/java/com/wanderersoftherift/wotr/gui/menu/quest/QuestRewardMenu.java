@@ -71,9 +71,8 @@ public class QuestRewardMenu extends AbstractContainerMenu {
     }
 
     public List<Reward> getNonItemRewards() {
-        return activeQuests.quests()
-                .get(selectedQuest.get())
-                .getQuest()
+        return activeQuests.getQuest(selectedQuest.get())
+                .getBaseQuest()
                 .value()
                 .rewards()
                 .stream()
@@ -86,18 +85,18 @@ public class QuestRewardMenu extends AbstractContainerMenu {
         super.removed(player);
         if (player instanceof ServerPlayer serverPlayer) {
             ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, rewardItems);
-            List<Reward> rewards = activeQuests.quests().get(selectedQuest.get()).getQuest().value().rewards();
+            List<Reward> rewards = activeQuests.getQuest(selectedQuest.get()).getBaseQuest().value().rewards();
             for (Reward reward : rewards) {
                 reward.apply(serverPlayer);
             }
             activeQuests.remove(selectedQuest.get());
-            PacketDistributor.sendToPlayer(serverPlayer, new ActiveQuestReplicationPayload(activeQuests.quests()));
+            PacketDistributor.sendToPlayer(serverPlayer, new ActiveQuestReplicationPayload(activeQuests));
         }
     }
 
     public void addRewards(ServerPlayer player) {
         access.execute((level, pos) -> {
-            Quest quest = activeQuests.quests().get(selectedQuest.get()).getQuest().value();
+            Quest quest = activeQuests.getQuest(selectedQuest.get()).getBaseQuest().value();
             for (Reward reward : quest.rewards()) {
                 ItemStack rewardItem = reward.generateItem();
 

@@ -54,13 +54,13 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
     protected void init() {
         super.init();
         ActiveQuest activeQuest = menu.getQuest();
-        questInfo = new ScrollContainerWidget<>(leftPos + 4, topPos + 20, 100, 172);
+        questInfo = new ScrollContainerWidget<>(leftPos + 5, topPos + 20, 99, 172);
         for (int i = 0; i < activeQuest.goalCount(); i++) {
             questInfo.children().add(new GoalStateWidget(activeQuest, i));
         }
         questInfo.children().add(new SpacerEntry(6));
         questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
-        List<AbstractWidget> rewards = activeQuest.getQuest()
+        List<AbstractWidget> rewards = activeQuest.getBaseQuest()
                 .value()
                 .rewards()
                 .stream()
