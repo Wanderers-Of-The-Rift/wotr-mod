@@ -8,6 +8,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
 
@@ -25,4 +27,23 @@ public interface Reward {
      * @return The codec for serializing this reward
      */
     MapCodec<? extends Reward> getCodec();
+
+    /**
+     * @return Whether this is an item-based reward
+     */
+    boolean isItem();
+
+    /**
+     * Applies non-item reward elements to the player
+     *
+     * @param player The player to give the reward to
+     */
+    void apply(ServerPlayer player);
+
+    /**
+     * Generates item for this is an item reward
+     */
+    default ItemStack generateItem() {
+        return ItemStack.EMPTY;
+    }
 }

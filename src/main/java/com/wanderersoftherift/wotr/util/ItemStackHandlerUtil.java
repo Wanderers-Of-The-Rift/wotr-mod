@@ -25,4 +25,23 @@ public final class ItemStackHandlerUtil {
             }
         }
     }
+
+    public static void addOrGiveToPlayerOrDrop(ItemStack item, ItemStackHandler handler, ServerPlayer player) {
+        ItemStack residual = item;
+        for (int i = 0; i < handler.getSlots(); i++) {
+            if (handler.getStackInSlot(i).isEmpty()) {
+                residual = handler.insertItem(i, residual, false);
+                if (residual.isEmpty()) {
+                    return;
+                }
+            }
+        }
+        if (!residual.isEmpty()) {
+            if (player.isRemoved() || player.hasDisconnected()) {
+                player.drop(item, false);
+            } else {
+                player.getInventory().placeItemBackInInventory(item);
+            }
+        }
+    }
 }

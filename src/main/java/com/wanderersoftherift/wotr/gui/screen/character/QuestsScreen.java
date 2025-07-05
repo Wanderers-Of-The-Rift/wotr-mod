@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
-import com.wanderersoftherift.wotr.gui.screen.quest.GoalStateWidget;
+import com.wanderersoftherift.wotr.gui.widget.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
