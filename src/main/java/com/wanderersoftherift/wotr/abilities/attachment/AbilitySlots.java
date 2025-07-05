@@ -4,10 +4,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.modifier.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
@@ -129,9 +132,12 @@ public class AbilitySlots implements IItemHandlerModifiable {
         if (!isItemValid(slot, stack)) {
             return stack;
         }
-        if (abilities.get(slot).isEmpty()) {
+        var oldStack = abilities.get(slot);
+        if (oldStack.isEmpty()) {
             if (!simulate) {
-                abilities.set(slot, stack.copy().split(1));
+                var newStack = stack.copy().split(1);
+                abilities.set(slot, newStack);
+                onSlotChanged(slot, oldStack, newStack);
                 return stack;
             } else {
                 ItemStack residual = stack.copy();
@@ -144,14 +150,23 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (!abilities.get(slot).isEmpty()) {
-            ItemStack result = abilities.get(slot);
-            if (!simulate) {
-                abilities.set(slot, ItemStack.EMPTY);
-            }
-            return result.copy();
+        if (amount == 0 || abilities.get(slot).isEmpty()) {
+            return ItemStack.EMPTY;
         }
-        return ItemStack.EMPTY;
+        var original = abilities.get(slot).copy();
+        if (!simulate) {
+            var newCount = original.getCount() - 1;
+            if (newCount > 0) {
+                var newStack = abilities.get(slot);
+                newStack.setCount(newCount);
+                onSlotChanged(slot, original, newStack);
+            } else {
+                abilities.set(slot, ItemStack.EMPTY);
+                onSlotChanged(slot, original, ItemStack.EMPTY);
+            }
+        }
+        original.setCount(1);
+        return original;
     }
 
     @Override
@@ -166,7 +181,16 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+        var original = abilities.get(slot);
+        onSlotChanged(slot, original, stack);
         abilities.set(slot, stack);
+    }
+
+    private void onSlotChanged(int slot, ItemStack original, ItemStack newStack) {
+        if (holder instanceof LivingEntity livingEntity) {
+            ModifierHelper.disableModifier(original, livingEntity, new AbilityEquipmentSlot(slot));
+            ModifierHelper.enableModifier(newStack, livingEntity, new AbilityEquipmentSlot(slot));
+        }
     }
 
     @Override
