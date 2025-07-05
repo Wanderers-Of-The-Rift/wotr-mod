@@ -56,7 +56,10 @@ public class WotrAttachments {
                             .build());
     public static final Supplier<AttachmentType<AbilitySlots>> ABILITY_SLOTS = ATTACHMENT_TYPES.register(
             "ability_slots",
-            () -> AttachmentType.builder(AbilitySlots::new).serialize(AbilitySlots.CODEC).copyOnDeath().build());
+            () -> AttachmentType.builder((holder) -> new AbilitySlots(holder, null))
+                    .serialize(AbilitySlots.SERIALIZER)
+                    .copyOnDeath()
+                    .build());
     public static final Supplier<AttachmentType<AttachedEffectData>> ATTACHED_EFFECTS = ATTACHMENT_TYPES.register(
             "attached_effects",
             () -> AttachmentType.builder(AttachedEffectData::new).serialize(AttachedEffectData.CODEC).build());
