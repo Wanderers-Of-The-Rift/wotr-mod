@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.modifier;
 
+import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
@@ -65,8 +66,12 @@ public class ModifierHelper {
 
     public static void runIterationOnEquipment(LivingEntity entity, ModifierInSlotVisitor visitor) {
         for (EquipmentSlot equipmentslot : EquipmentSlot.VALUES) {
-            runIterationOnItem(entity.getItemBySlot(equipmentslot), new WotrEquipmentSlotFromMC(equipmentslot), entity,
-                    visitor);
+            var wotrSlot = new WotrEquipmentSlotFromMC(equipmentslot);
+            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
+        }
+        for (var abilitySlot = 0; abilitySlot < AbilitySlots.ABILITY_BAR_SIZE; abilitySlot++) {
+            var wotrSlot = new AbilityEquipmentSlot(abilitySlot);
+            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
         }
     }
 
