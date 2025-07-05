@@ -48,7 +48,7 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
 
     @Override
     protected int contentHeight() {
-        return children.stream().map(x -> x.getHeight(width)).reduce(0, Integer::sum);
+        return children.stream().map(x -> x.getHeight(width - SCROLLBAR_SPACE)).reduce(0, Integer::sum);
     }
 
     @Override

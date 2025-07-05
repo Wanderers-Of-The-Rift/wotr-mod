@@ -9,8 +9,10 @@
   "rewards": [
     {
       "type": "wotr:item",
-      "item": "minecraft:gold_ingot",
-      "quantity": 8
+      "item": {
+        "count": 8,
+        "id": "minecraft:gold_ingot"
+      }
     }
   ]
 }
