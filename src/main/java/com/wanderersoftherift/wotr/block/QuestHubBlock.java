@@ -42,7 +42,7 @@ public class QuestHubBlock extends Block {
         }
 
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
-        if (activeQuests.quests().isEmpty()) {
+        if (activeQuests.isEmpty()) {
             player.openMenu(new SimpleMenuProvider((containerId, playerInventory, p) -> new QuestGiverMenu(containerId,
                     playerInventory, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE));
         } else {
@@ -51,7 +51,7 @@ public class QuestHubBlock extends Block {
                             (containerId, playerInventory, p) -> new QuestCompletionMenu(containerId, playerInventory,
                                     ContainerLevelAccess.create(level, pos), p.getData(WotrAttachments.ACTIVE_QUESTS),
                                     0),
-                            Quest.title(activeQuests.quests().get(0).getQuest())));
+                            Quest.title(activeQuests.getQuest(0).getBaseQuest())));
         }
         return InteractionResult.CONSUME;
     }

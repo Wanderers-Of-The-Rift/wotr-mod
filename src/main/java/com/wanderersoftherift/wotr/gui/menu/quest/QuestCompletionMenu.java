@@ -54,7 +54,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         this.selectedQuest = DataSlot.standalone();
         selectedQuest.set(questIndex);
         addDataSlot(selectedQuest);
-        handInItems = new QuestItemStackHandler(() -> quests.quests().get(selectedQuest.get()), HAND_IN_SLOTS);
+        handInItems = new QuestItemStackHandler(() -> quests.getQuest(selectedQuest.get()), HAND_IN_SLOTS);
         for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
             addSlot(new SlotItemHandler(handInItems, slot, 112 + slot * 18, 32));
         }
@@ -72,7 +72,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
     }
 
     public ActiveQuest getQuest() {
-        return quests.quests().get(selectedQuest.get());
+        return quests.getQuest(selectedQuest.get());
     }
 
     public boolean hasItemToHandIn() {
@@ -107,7 +107,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
             }
             // TODO: replicate specific changed quest.
             if (changed) {
-                PacketDistributor.sendToPlayer(player, new ActiveQuestReplicationPayload(quests.quests()));
+                PacketDistributor.sendToPlayer(player, new ActiveQuestReplicationPayload(quests));
             }
             // Empty the slots of residual items
             for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
@@ -135,5 +135,13 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
     public int getQuestIndex() {
         return selectedQuest.get();
+    }
+
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        if (player instanceof ServerPlayer serverPlayer) {
+            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, handInItems);
+        }
     }
 }

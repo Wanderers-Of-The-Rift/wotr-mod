@@ -170,9 +170,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.handin"), "Hand In");
         add(WanderersOfTheRift.translationId("container", "quest.goals"), "Goal");
         add(WanderersOfTheRift.translationId("container", "quest.rewards"), "Reward");
+        add(WanderersOfTheRift.translationId("container", "quest.abandon"), "Abandon");
+        add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver: ");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
+        add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");

@@ -7,6 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,11 +15,11 @@ import java.util.List;
  */
 public final class ActiveQuests {
     public static final Codec<ActiveQuests> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ActiveQuest.CODEC.listOf().fieldOf("quests").forGetter(ActiveQuests::quests)
+            ActiveQuest.CODEC.listOf().fieldOf("quests").forGetter(ActiveQuests::getQuestList)
     ).apply(instance, ActiveQuests::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ActiveQuests> STREAM_CODEC = ActiveQuest.STREAM_CODEC
             .apply(ByteBufCodecs.list())
-            .map(ActiveQuests::new, ActiveQuests::quests);
+            .map(ActiveQuests::new, ActiveQuests::getQuestList);
 
     private final List<ActiveQuest> quests;
 
@@ -33,8 +34,27 @@ public final class ActiveQuests {
     /**
      * @return The list of active quests
      */
-    public List<ActiveQuest> quests() {
-        return quests;
+    public List<ActiveQuest> getQuestList() {
+        return Collections.unmodifiableList(quests);
+    }
+
+    /**
+     * @param index
+     * @return the nth active quest
+     */
+    public ActiveQuest getQuest(int index) {
+        return quests.get(index);
+    }
+
+    /**
+     * @return The number of active quests
+     */
+    public int count() {
+        return quests.size();
+    }
+
+    public boolean isEmpty() {
+        return quests.isEmpty();
     }
 
     /**
@@ -64,4 +84,7 @@ public final class ActiveQuests {
         }
     }
 
+    public void add(ActiveQuest newQuest) {
+        quests.add(newQuest);
+    }
 }

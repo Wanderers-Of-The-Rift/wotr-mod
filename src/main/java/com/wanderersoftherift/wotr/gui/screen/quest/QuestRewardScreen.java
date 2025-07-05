@@ -23,8 +23,8 @@ public class QuestRewardScreen extends EnhancedContainerScreen<QuestRewardMenu> 
 
     public QuestRewardScreen(QuestRewardMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        width = BACKGROUND_WIDTH;
-        height = BACKGROUND_HEIGHT;
+        imageWidth = BACKGROUND_WIDTH;
+        imageHeight = BACKGROUND_HEIGHT;
         inventoryLabelX = 7;
         inventoryLabelY = 69;
     }
@@ -32,7 +32,7 @@ public class QuestRewardScreen extends EnhancedContainerScreen<QuestRewardMenu> 
     @Override
     protected void init() {
         super.init();
-        titleLabelX = (width - font.width(title)) / 2;
+        titleLabelX = (BACKGROUND_WIDTH - font.width(title)) / 2;
         List<AbstractWidget> rewards = menu.getNonItemRewards()
                 .stream()
                 .map(RewardDisplays::createFor)

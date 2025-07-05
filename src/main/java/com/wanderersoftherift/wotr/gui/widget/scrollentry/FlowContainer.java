@@ -56,6 +56,10 @@ public class FlowContainer extends AbstractWidget implements ScrollContainerEntr
         }
     }
 
+    protected boolean isValidClickButton(int button) {
+        return false;
+    }
+
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
 
