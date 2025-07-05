@@ -5,9 +5,24 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 
+import java.util.Collection;
 import java.util.List;
 
 public class ComponentUtil {
+
+    public static MutableComponent joinWithNewLines(Collection<Component> components) {
+        MutableComponent result = Component.empty();
+        boolean first = true;
+        for (Component component : components) {
+            if (!first) {
+                result = result.append("\n");
+            }
+            result = result.append(component);
+            first = false;
+        }
+        return result;
+    }
+
     public static MutableComponent blendComponent(Component baseComponent, float interval, List<String> hexStrings) {
         GradientMixer colorBlender = new GradientMixer(1.0F);
 

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.network.guild;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
+import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -21,6 +22,10 @@ public record ActiveQuestReplicationPayload(List<ActiveQuest> quests) implements
             .composite(
                     ActiveQuest.STREAM_CODEC.apply(ByteBufCodecs.list()), ActiveQuestReplicationPayload::quests,
                     ActiveQuestReplicationPayload::new);
+
+    public ActiveQuestReplicationPayload(ActiveQuests quests) {
+        this(quests.getQuestList());
+    }
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

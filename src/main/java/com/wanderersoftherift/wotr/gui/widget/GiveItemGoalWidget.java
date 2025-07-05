@@ -3,11 +3,14 @@ package com.wanderersoftherift.wotr.gui.widget;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.util.ColorUtil;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
@@ -42,9 +45,13 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
         displayItem.setCount(Math.max(1, goal.progressTarget() - progress));
         guiGraphics.renderFakeItem(displayItem, getX() + messageWidth, getY());
         guiGraphics.renderItemDecorations(font, displayItem, getX() + messageWidth, getY());
+
         if (mouseX >= getX() + messageWidth && mouseX <= getX() + messageWidth + 16 && mouseY >= getY() + 1
                 && mouseY <= getY() + 17) {
-            guiGraphics.renderTooltip(font, displayItem, mouseX, mouseY);
+            setTooltip(Tooltip.create(
+                    ComponentUtil.joinWithNewLines(Screen.getTooltipFromItem(Minecraft.getInstance(), displayItem))));
+        } else {
+            setTooltip(null);
         }
     }
 

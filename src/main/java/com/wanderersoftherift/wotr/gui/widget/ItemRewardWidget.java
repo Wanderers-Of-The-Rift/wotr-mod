@@ -1,10 +1,13 @@
 package com.wanderersoftherift.wotr.gui.widget;
 
 import com.wanderersoftherift.wotr.core.guild.quest.reward.ItemReward;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,15 +17,14 @@ public class ItemRewardWidget extends AbstractWidget {
     public ItemRewardWidget(ItemReward reward) {
         super(0, 0, 16, 16, Component.empty());
         this.rewardItem = reward.generateItem();
+        setTooltip(Tooltip.create(
+                ComponentUtil.joinWithNewLines(Screen.getTooltipFromItem(Minecraft.getInstance(), rewardItem))));
     }
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.renderFakeItem(rewardItem, getX(), getY());
         guiGraphics.renderItemDecorations(Minecraft.getInstance().font, rewardItem, getX(), getY());
-        if (mouseX >= getX() && mouseX <= getX() + getWidth() && mouseY >= getY() && mouseY <= getY() + getWidth()) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, rewardItem, mouseX, mouseY);
-        }
     }
 
     @Override

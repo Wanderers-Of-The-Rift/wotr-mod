@@ -21,12 +21,12 @@ import java.util.List;
 public class ActiveQuest {
 
     public static final Codec<ActiveQuest> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Quest.CODEC.fieldOf("quest").forGetter(ActiveQuest::getQuest),
+            Quest.CODEC.fieldOf("quest").forGetter(ActiveQuest::getBaseQuest),
             Codec.INT.listOf().fieldOf("goal_states").forGetter(x -> IntArrayList.wrap(x.goalProgress))
     ).apply(instance, ActiveQuest::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ActiveQuest> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), ActiveQuest::getQuest,
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), ActiveQuest::getBaseQuest,
             ByteBufCodecs.INT.apply(ByteBufCodecs.list()), x -> IntArrayList.wrap(x.goalProgress), ActiveQuest::new
     );
 
@@ -49,7 +49,7 @@ public class ActiveQuest {
     /**
      * @return The definition of the quest that has been accepted
      */
-    public Holder<Quest> getQuest() {
+    public Holder<Quest> getBaseQuest() {
         return quest;
     }
 
@@ -116,7 +116,7 @@ public class ActiveQuest {
      * @param activeQuest
      */
     public void updateFromServer(ActiveQuest activeQuest) {
-        this.quest = activeQuest.getQuest();
+        this.quest = activeQuest.getBaseQuest();
         this.goalProgress = activeQuest.goalProgress;
     }
 }

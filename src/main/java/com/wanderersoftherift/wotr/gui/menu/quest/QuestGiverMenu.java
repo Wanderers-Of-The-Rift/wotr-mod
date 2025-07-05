@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
+import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
@@ -15,8 +16,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class QuestGiverMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
@@ -43,7 +42,7 @@ public class QuestGiverMenu extends AbstractContainerMenu {
 
     public void acceptQuest(ServerPlayer player, Holder<Quest> quest) {
         // TODO: check quest is valid in this context
-        List<ActiveQuest> activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS).quests();
+        ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
             ActiveQuest activeQuest = new ActiveQuest(quest);
             activeQuests.add(activeQuest);
