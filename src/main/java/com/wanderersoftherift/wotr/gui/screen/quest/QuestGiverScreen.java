@@ -104,6 +104,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
                 .toList();
         questInfo.children().add(new FlowContainer(rewards));
         questInfo.children().add(new SpacerEntry(2));
+        questInfo.setScrollAmount(0);
         // Accept button
         accept.visible = true;
     }
