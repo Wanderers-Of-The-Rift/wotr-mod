@@ -16,22 +16,36 @@ public class OnHitEffect {
 
         if (critChance > 100) {
             critApplications = critChance / 100;
-        } else {
-            critApplications = 1;
+            int leftover = critChance % 100;
+            if (random.nextInt(0, 100) < leftover) {
+                critApplications += 1;
+            }
+        } else if (critChance < 100) {
+            if (random.nextInt(0, 100) < (critChance % 100)) {
+                critApplications += 1;
+            }
         }
 
-        if (random.nextInt(100) < (critChance % 100)) {
-            critApplications += 1;
-        }
         float finalDamage = initialDamage * ((critMult - 1) * critApplications + 1);
         return finalDamage;
     }
 
-    public static boolean thorns(LivingEntity entity, RandomSource random) {
+    public static int thorns(LivingEntity entity, RandomSource random) {
         int thornsChance = (int) entity.getAttributeValue(WotrAttributes.THORNS_CHANCE);
-        boolean thornsProc;
+        int thornsApplications = 0;
 
-        thornsProc = thornsChance > random.nextInt(0, 100);
-        return thornsProc;
+        if (thornsChance > 100) {
+            thornsApplications = thornsChance / 100;
+            int leftover = thornsChance % 100;
+            if (random.nextInt(0, 100) < leftover) {
+                thornsApplications += 1;
+            }
+        } else if (thornsChance < 100) {
+            if (random.nextInt(0, 100) < (thornsChance % 100)) {
+                thornsApplications += 1;
+            }
+        }
+
+        return thornsApplications;
     }
 }

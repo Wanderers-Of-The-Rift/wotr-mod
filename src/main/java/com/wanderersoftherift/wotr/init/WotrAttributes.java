@@ -99,19 +99,12 @@ public class WotrAttributes {
 
     public static List<DeferredHolder<Attribute, RangedAttribute>> getPlayerAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
+
     }
 
     /*
      * This adds the different attributes to the player for the different abilities
      */
-    @SubscribeEvent
-    private static void registerMobAttribute(EntityAttributeModificationEvent event) {
-        for (DeferredHolder<Attribute, RangedAttribute> attribute : MOB_ATTRIBUTES) {
-            for (EntityType i : event.getTypes()) {
-                event.add(i, attribute);
-            }
-        }
-    }
 
     private static DeferredHolder<Attribute, RangedAttribute> registerPlayerAttribute(
             final String name,
@@ -119,5 +112,14 @@ public class WotrAttributes {
         DeferredHolder<Attribute, RangedAttribute> result = ATTRIBUTES.register(name, sup);
         PLAYER_ATTRIBUTES.add(result);
         return result;
+    }
+
+    @SubscribeEvent
+    private static void addLivingAttribute(EntityAttributeModificationEvent event) {
+        for (DeferredHolder<Attribute, RangedAttribute> attribute : WotrAttributes.PLAYER_ATTRIBUTES) {
+            for (EntityType e : event.getTypes()) {
+                event.add(e, attribute);
+            }
+        }
     }
 }
