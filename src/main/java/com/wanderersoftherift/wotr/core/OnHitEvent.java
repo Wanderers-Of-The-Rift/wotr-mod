@@ -29,18 +29,18 @@ public class OnHitEvent {
     public static void onThornsProc(LivingIncomingDamageEvent event) {
         Level level = event.getEntity().level();
         DamageSource thorns = new DamageSource(
-                level.registryAccess()
-                        .lookupOrThrow(Registries.DAMAGE_TYPE)
-                        .getOrThrow(WotrDamageTypes.THORNS_DAMAGE));
+                level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(WotrDamageTypes.THORNS_DAMAGE));
         Entity causer = event.getSource().getEntity();
         LivingEntity reciever = event.getEntity();
-        if (!event.getSource().typeHolder().equals(WotrDamageTypes.THORNS_DAMAGE) && causer != null) {
-           int thornsProc = OnHitEffect.thorns(event.getEntity(), event.getEntity().getRandom());
-           if (thornsProc != 0) {
-               causer.hurtServer((ServerLevel) level, thorns, (float) reciever.getAttributeValue(WotrAttributes.THORNS_DAMAGE) * thornsProc);
-           } else {
-               causer.hurtServer((ServerLevel) level, thorns, (float) reciever.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
-           }
+        if (!WotrDamageTypes.THORNS_DAMAGE.equals(event.getSource().typeHolder()) && causer != null) {
+            int thornsProc = OnHitEffect.thorns(event.getEntity(), event.getEntity().getRandom());
+            if (thornsProc != 0) {
+                causer.hurtServer((ServerLevel) level, thorns,
+                        (float) reciever.getAttributeValue(WotrAttributes.THORNS_DAMAGE) * thornsProc);
+            } else {
+                causer.hurtServer((ServerLevel) level, thorns,
+                        (float) reciever.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
+            }
         }
     }
 }
