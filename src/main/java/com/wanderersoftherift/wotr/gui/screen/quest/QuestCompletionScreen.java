@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
+import com.wanderersoftherift.wotr.gui.widget.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;

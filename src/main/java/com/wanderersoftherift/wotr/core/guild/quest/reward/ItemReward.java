@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Reward;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -27,7 +28,18 @@ public record ItemReward(Holder<Item> item, int quantity) implements Reward {
         return CODEC;
     }
 
-    public ItemStack getItemStack() {
+    @Override
+    public boolean isItem() {
+        return true;
+    }
+
+    @Override
+    public void apply(ServerPlayer player) {
+    }
+
+    @Override
+    public ItemStack generateItem() {
         return new ItemStack(item, quantity);
     }
+
 }
