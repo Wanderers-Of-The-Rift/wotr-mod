@@ -24,6 +24,8 @@ public class WotrAttributes {
 
     private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
+    private static final List<DeferredHolder<Attribute, RangedAttribute>> MOB_ATTRIBUTES = new ArrayList<>();
+
     /* Ability Attributes */
     public static final DeferredHolder<Attribute, RangedAttribute> ABILITY_AOE = registerPlayerAttribute("ability_aoe",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "ability.aoe"), 0, 0,
@@ -73,19 +75,41 @@ public class WotrAttributes {
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0,
                     Integer.MAX_VALUE));
 
+    // Critical
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_CHANCE = registerPlayerAttribute(
+            "critical_chance",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_chance"), 0, 0,
+                    Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_MULTIPLIER = registerPlayerAttribute(
+            "critical_multiplier",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_multiplier"), 1.5, 0,
+                    Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_AVOIDANCE = registerPlayerAttribute(
+            "critical_avoidance",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), 0, 0,
+                    Integer.MAX_VALUE));
+
+    // Thorns
+    public static final DeferredHolder<Attribute, RangedAttribute> THORNS_CHANCE = registerPlayerAttribute(
+            "thorns_chance", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_chance"),
+                    0, 0, Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> THORNS_DAMAGE = registerPlayerAttribute(
+            "thorns_damage", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_damage"),
+                    0, 0, Integer.MAX_VALUE));
+
+    // Life Leech
+    public static final DeferredHolder<Attribute, RangedAttribute> LIFE_LEECH = registerPlayerAttribute(
+            "life_leech",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "life_leech"), 0, 0, 1F));
+
     public static List<DeferredHolder<Attribute, RangedAttribute>> getPlayerAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
+
     }
 
     /*
      * This adds the different attributes to the player for the different abilities
      */
-    @SubscribeEvent
-    private static void addAttributesToPlayer(EntityAttributeModificationEvent event) {
-        for (DeferredHolder<Attribute, RangedAttribute> attribute : PLAYER_ATTRIBUTES) {
-            event.add(EntityType.PLAYER, attribute);
-        }
-    }
 
     private static DeferredHolder<Attribute, RangedAttribute> registerPlayerAttribute(
             final String name,
@@ -93,5 +117,14 @@ public class WotrAttributes {
         DeferredHolder<Attribute, RangedAttribute> result = ATTRIBUTES.register(name, sup);
         PLAYER_ATTRIBUTES.add(result);
         return result;
+    }
+
+    @SubscribeEvent
+    private static void addLivingAttribute(EntityAttributeModificationEvent event) {
+        for (DeferredHolder<Attribute, RangedAttribute> attribute : WotrAttributes.PLAYER_ATTRIBUTES) {
+            for (EntityType e : event.getTypes()) {
+                event.add(e, attribute);
+            }
+        }
     }
 }

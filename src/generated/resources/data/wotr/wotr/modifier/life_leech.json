@@ -1,0 +1,82 @@
+{
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:life_leech",
+          "id": "wotr:life_leech",
+          "max_roll": 0.20000000298023224,
+          "min_roll": 0.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:life_leech",
+          "id": "wotr:life_leech",
+          "max_roll": 0.3499999940395355,
+          "min_roll": 0.20000000298023224,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:life_leech",
+          "id": "wotr:life_leech",
+          "max_roll": 0.5,
+          "min_roll": 0.3499999940395355,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:life_leech",
+          "id": "wotr:life_leech",
+          "max_roll": 0.6499999761581421,
+          "min_roll": 0.5,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:life_leech",
+          "id": "wotr:life_leech",
+          "max_roll": 0.8500000238418579,
+          "min_roll": 0.6499999761581421,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 5
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:life_leech",
+          "id": "wotr:life_leech",
+          "max_roll": 1.0,
+          "min_roll": 0.8500000238418579,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 6
+    }
+  ]
+}

@@ -207,6 +207,13 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "sweeping_attack_damage"))
                                 ))
                 ), RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("critical_raw"), new RunegemData(
+                getTranslatableName("defense_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                        mainHandTag, List.of(
+                                new TieredModifier(1, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(1, getModifier(lookup, "critical_avoidance"))
+                        ))),
+                RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("defense_raw"), new RunegemData(
                 getTranslatableName("defense_raw"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
@@ -513,6 +520,13 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(5, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("life_leech_raw"),
+                new RunegemData(getTranslatableName("life_leech_raw"), RunegemShape.PENTAGON,
+                        List.of(new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "life_leech"))
+                                ))),
+                        RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("magic_raw"),
                 new RunegemData(getTranslatableName("magic_raw"), RunegemShape.SQUARE,
                         List.of(new RunegemData.ModifierGroup(
@@ -773,6 +787,13 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "movement_speed"))
                                 ))),
                 RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("thorns_raw"), new RunegemData(
+                getTranslatableName("thorns_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                        socketablesTag, List.of(
+                                new TieredModifier(1, getModifier(lookup, "thorns_chance")),
+                                new TieredModifier(1, getModifier(lookup, "thorns_damage"))
+                        ))),
+                RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("zombie_raw"),
                 new RunegemData(getTranslatableName("zombie_raw"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(

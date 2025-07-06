@@ -26,6 +26,15 @@
               "sentiment": "not_friend"
             }
           }
+        },
+        {
+          "type": "wotr:sound_effect",
+          "sound": {
+            "sound_id": "minecraft:entity.generic.explode"
+          },
+          "targeting": {
+            "type": "wotr:self_targeting"
+          }
         }
       ],
       "particles": {
