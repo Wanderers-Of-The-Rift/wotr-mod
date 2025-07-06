@@ -2,8 +2,8 @@
   "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:honey",
-      "minPercent": 25.0
+      "essence_type": "wotr:honey",
+      "min_percent": 25.0
     }
   ],
   "output": {

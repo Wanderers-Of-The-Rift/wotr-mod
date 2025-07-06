@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +15,6 @@ import java.util.List;
  * Widget that "flows" its child widgets, wrapping when they exceed its width
  */
 public class FlowContainer extends AbstractWidget implements ScrollContainerEntry {
-
     private final List<AbstractWidget> children;
 
     public FlowContainer(Collection<AbstractWidget> children) {
@@ -24,47 +24,54 @@ public class FlowContainer extends AbstractWidget implements ScrollContainerEntr
 
     @Override
     public int getHeight(int width) {
-        int result = 0;
-        int rowHeight = 0;
-        int rowWidth = 0;
-        for (AbstractWidget child : children) {
-            int childWidth = child.getWidth();
-            if (rowWidth + childWidth > width) {
-                result += rowHeight;
-                rowWidth = childWidth;
-                rowHeight = child.getHeight();
-            } else {
-                rowWidth += childWidth;
-                rowHeight = Math.max(rowHeight, child.getHeight());
-            }
-        }
-        result += rowHeight;
-        return result;
+        TotalHeightAction calcHeight = new TotalHeightAction();
+        layoutChildren(width, calcHeight);
+        return calcHeight.totalHeight;
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int x = getX();
         int y = getY();
-        int maxHeight = 0;
+        layoutChildren(width, (child, xOffset, yOffset) -> {
+            child.setPosition(x + xOffset, y + yOffset);
+            child.render(guiGraphics, mouseX, mouseY, partialTick);
+        });
+    }
+
+    private void layoutChildren(int width, ChildAction action) {
         int xOffset = 0;
+        int yOffset = 0;
+        int rowHeight = 0;
         for (AbstractWidget child : children) {
             int childWidth = child.getWidth();
-            if (xOffset + childWidth > getWidth()) {
+            if (xOffset + childWidth > width) {
                 xOffset = 0;
-                y += maxHeight;
-                maxHeight = 0;
+                yOffset += rowHeight;
+                rowHeight = 0;
             }
-            child.setX(x + xOffset);
-            child.setY(y);
-            child.render(guiGraphics, mouseX, mouseY, partialTick);
-            maxHeight = Math.max(maxHeight, child.getHeight());
+            action.apply(child, xOffset, yOffset);
             xOffset += childWidth;
+            rowHeight = Math.max(rowHeight, child.getHeight());
         }
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
 
     }
+
+    private interface ChildAction {
+        void apply(AbstractWidget child, int xOffset, int yOffset);
+    }
+
+    private static class TotalHeightAction implements ChildAction {
+        private int totalHeight;
+
+        @Override
+        public void apply(AbstractWidget child, int xOffset, int yOffset) {
+            totalHeight = Math.max(totalHeight, yOffset + child.getHeight());
+        }
+    }
+
 }
