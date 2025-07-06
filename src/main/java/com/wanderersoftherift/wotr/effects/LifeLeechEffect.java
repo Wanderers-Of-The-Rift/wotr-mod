@@ -5,8 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class LifeLeechEffect {
     
-    public static double calcHeal (LivingEntity causer, LivingEntity receiver, float incomingDamage) {
-        double healthToHeal = 0;
+    public static float calcHeal (LivingEntity causer, LivingEntity receiver, float incomingDamage) {
+        float healthToHeal = 0;
         if (causer != null) {
             healthToHeal = Math.min(incomingDamage, receiver.getHealth()) * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
         }
