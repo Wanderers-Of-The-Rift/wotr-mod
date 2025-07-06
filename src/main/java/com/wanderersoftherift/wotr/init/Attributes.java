@@ -24,8 +24,6 @@ public class Attributes {
 
     private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
-    private static final List<DeferredHolder<Attribute, RangedAttribute>> MOB_ATTRIBUTES = new ArrayList<>();
-
     /* Ability Attributes */
     public static final DeferredHolder<Attribute, RangedAttribute> ABILITY_AOE = registerAttribute("ability_aoe",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "ability.aoe"), 0, 0,

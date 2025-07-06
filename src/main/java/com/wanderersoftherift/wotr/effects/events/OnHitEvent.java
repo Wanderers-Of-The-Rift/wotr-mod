@@ -22,7 +22,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 public class OnHitEvent {
 
     @SubscribeEvent
-    public static void onCriticalHit(LivingIncomingDamageEvent event) {
+    public static void criticalEvent(LivingIncomingDamageEvent event) {
         if (event.getSource().getEntity() instanceof LivingEntity livingAttacker) {
             float dmg = CriticalEffect.calcFinalDamage(event.getAmount(), livingAttacker, event.getEntity(),
                     event.getEntity().getRandom());
@@ -31,7 +31,7 @@ public class OnHitEvent {
     }
 
     @SubscribeEvent
-    public static void checkThornsProc(LivingDamageEvent.Post event) {
+    public static void thornsEvent(LivingDamageEvent.Post event) {
         Level level = event.getEntity().level();
         DamageSource thorns = new DamageSource(
                 level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(WotrDamageTypes.THORNS_DAMAGE));
@@ -49,7 +49,7 @@ public class OnHitEvent {
     }
 
     @SubscribeEvent
-    public static void lifeLeech(LivingDamageEvent.Pre event) {
+    public static void lifeLeechEvent(LivingDamageEvent.Pre event) {
         LivingEntity causer = (LivingEntity) event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
         if (causer != null) {
