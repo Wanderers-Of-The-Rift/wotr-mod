@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Axis;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -23,8 +24,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Math;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -64,7 +63,7 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
 
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
-        poseStack.rotateAround(new Quaternionf().rotationZYX(0, Math.PI_f, 0), 0, 0, 0);
+        poseStack.rotateAround(Axis.YP.rotationDegrees(180), 0, 0, 0);
 
         // We render the base item with the FIXED content, because this item is already being rendered with the display
         // context
@@ -79,10 +78,11 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
             poseStack.translate(offset.x(), offset.y(), offset.z());
             VertexConsumer consumer = bufferSource.getBuffer(getRenderType(icon));
             PoseStack.Pose pose = poseStack.last();
-            vertex(consumer, pose, packedLight, -0.5f * scale, -0.5f * scale, 0.0f, 0, 1);
-            vertex(consumer, pose, packedLight, 0.5f * scale, -0.5f * scale, 0.0f, 1, 1);
-            vertex(consumer, pose, packedLight, 0.5f * scale, 0.5f * scale, 0.0f, 1, 0);
-            vertex(consumer, pose, packedLight, -0.5f * scale, 0.5f * scale, 0.0f, 0, 0);
+            float vertOffset = 0.5f * scale;
+            vertex(consumer, pose, packedLight, -vertOffset, -vertOffset, 0.0f, 0, 1);
+            vertex(consumer, pose, packedLight, vertOffset, -vertOffset, 0.0f, 1, 1);
+            vertex(consumer, pose, packedLight, vertOffset, vertOffset, 0.0f, 1, 0);
+            vertex(consumer, pose, packedLight, -vertOffset, vertOffset, 0.0f, 0, 0);
         }
         poseStack.popPose();
     }
@@ -110,11 +110,11 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
             int u,
             int v) {
         consumer.addVertex(pose, x, y, z)
-                .setColor(-1)
+                .setColor(0xFFFFFFFF)
                 .setUv((float) u, (float) v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
-                .setNormal(pose, 0.0F, 1.0F, 0.0F);
+                .setNormal(pose, 0.0F, 0.0f, 1.0F);
     }
 
     @Override
@@ -164,7 +164,7 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
 
         public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Item.CODEC.fieldOf("base_item").forGetter(Unbaked::base),
-                EmblemProvider.CODEC.fieldOf("emblemProvider").forGetter(Unbaked::emblemProvider),
+                EmblemProvider.CODEC.fieldOf("emblem_provider").forGetter(Unbaked::emblemProvider),
                 Codec.FLOAT.optionalFieldOf("scale", 0.5f).forGetter(Unbaked::scale),
                 Codec.FLOAT.optionalFieldOf("x_offset", 0f).forGetter(Unbaked::xOffset),
                 Codec.FLOAT.optionalFieldOf("y_offset", 0f).forGetter(Unbaked::yOffset),
