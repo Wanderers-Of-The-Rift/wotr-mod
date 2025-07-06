@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.OminousItemSpawner;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -445,7 +444,8 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
                 ? EnchantmentHelper.modifyKnockback(serverlevel, this.firedFromWeapon, entity, damageSource, 0.0F)
                 : 0.0F);
         if (d0 > 0.0) {
-            double d1 = Math.max(0.0, 1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            double d1 = Math.max(0.0, 1.0 - entity
+                    .getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE));
             Vec3 vec3 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale(d0 * 0.6 * d1);
             if (vec3.lengthSqr() > 0.0) {
                 entity.push(vec3.x, 0.1, vec3.z);
@@ -718,7 +718,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
 
     public void configure(SimpleProjectileConfig config, AbilityContext context) {
         this.config = config;
-        this.setPierceLevel((int) context.getAbilityAttribute(WotrAttributes.PROJECTILE_PIERCE, config.pierce()));
+        this.setPierceLevel((int) context.getAbilityAttribute(Attributes.PROJECTILE_PIERCE, config.pierce()));
         this.setRenderConfig(config.renderConfig());
         setNoGravity(!config.gravityAffected());
     }

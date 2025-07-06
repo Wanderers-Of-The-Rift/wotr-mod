@@ -6,8 +6,8 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -83,7 +83,7 @@ public class ManaBar implements ConfigurableLayer {
             return;
         }
         LocalPlayer player = minecraft.player;
-        int maxMana = (int) player.getAttributeValue(WotrAttributes.MAX_MANA);
+        int maxMana = (int) player.getAttributeValue(Attributes.MAX_MANA);
         if (maxMana == 0) {
             return;
         }

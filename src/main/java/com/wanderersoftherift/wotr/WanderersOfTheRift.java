@@ -12,23 +12,8 @@ import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.init.WotrBlockEntities;
-import com.wanderersoftherift.wotr.init.WotrBlocks;
-import com.wanderersoftherift.wotr.init.WotrContainerTypes;
-import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.init.WotrEntities;
-import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
-import com.wanderersoftherift.wotr.init.WotrItems;
-import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.init.WotrMobEffects;
-import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
-import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
-import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
-import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
-import com.wanderersoftherift.wotr.init.WotrSoundEvents;
+import com.wanderersoftherift.wotr.init.*;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
@@ -70,7 +55,7 @@ public class WanderersOfTheRift {
 
     public WanderersOfTheRift(IEventBus modEventBus, ModContainer modContainer) {
         // Vanilla elements
-        WotrAttributes.ATTRIBUTES.register(modEventBus);
+        Attributes.ATTRIBUTES.register(modEventBus);
         WotrBlocks.BLOCKS.register(modEventBus);
         WotrBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         WotrContainerTypes.CONTAINER_TYPES.register(modEventBus);

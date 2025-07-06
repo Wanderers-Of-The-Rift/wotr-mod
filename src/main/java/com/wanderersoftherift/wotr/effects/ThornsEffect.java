@@ -1,12 +1,12 @@
 package com.wanderersoftherift.wotr.effects;
 
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ThornsEffect {
     public static int calcThornsMult(LivingEntity entity, RandomSource random) {
-        int thornsChance = (int) entity.getAttributeValue(WotrAttributes.THORNS_CHANCE);
+        int thornsChance = (int) entity.getAttributeValue(Attributes.THORNS_CHANCE);
         int thornsApplications = 0;
 
         if (thornsChance > 100 || thornsChance == 100) {

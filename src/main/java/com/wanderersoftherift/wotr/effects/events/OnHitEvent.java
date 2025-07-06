@@ -4,7 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.effects.CriticalEffect;
 import com.wanderersoftherift.wotr.effects.LifeLeechEffect;
 import com.wanderersoftherift.wotr.effects.ThornsEffect;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.WotrDamageTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -43,7 +43,7 @@ public class OnHitEvent {
             int thornsProc = ThornsEffect.calcThornsMult(event.getEntity(), event.getEntity().getRandom());
             if (thornsProc != 0) {
                 causer.hurtServer((ServerLevel) level, thorns,
-                        (float) receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE) * thornsProc);
+                        (float) receiver.getAttributeValue(Attributes.THORNS_DAMAGE) * thornsProc);
             }
         }
     }

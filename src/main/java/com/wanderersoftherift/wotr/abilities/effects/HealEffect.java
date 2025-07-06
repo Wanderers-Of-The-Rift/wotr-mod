@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.BlockPos;
@@ -47,7 +47,7 @@ public class HealEffect extends AbstractEffect {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
         applyParticlesToUser(user);
 
-        float finalHealAmount = context.getAbilityAttribute(WotrAttributes.HEAL_POWER, healAmount);
+        float finalHealAmount = context.getAbilityAttribute(Attributes.HEAL_POWER, healAmount);
         for (Entity target : targets) {
             applyParticlesToTarget(target);
             if (target instanceof LivingEntity living) {
@@ -70,6 +70,6 @@ public class HealEffect extends AbstractEffect {
     @Override
     protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.HEAL_POWER.equals(attributeModifierEffect.getAttribute());
+                && Attributes.HEAL_POWER.equals(attributeModifierEffect.getAttribute());
     }
 }

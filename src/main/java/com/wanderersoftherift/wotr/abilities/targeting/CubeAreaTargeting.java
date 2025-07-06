@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetPredicate;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,7 @@ public class CubeAreaTargeting extends AbstractTargeting {
     }
 
     private float getRange(AbilityContext context) {
-        return context.getAbilityAttribute(WotrAttributes.ABILITY_AOE, range);
+        return context.getAbilityAttribute(Attributes.ABILITY_AOE, range);
     }
 
     public boolean getIncludeSelf() {
@@ -132,6 +132,6 @@ public class CubeAreaTargeting extends AbstractTargeting {
     @Override
     public boolean isRelevant(AbstractModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.ABILITY_AOE.equals(attributeModifierEffect.getAttribute());
+                && Attributes.ABILITY_AOE.equals(attributeModifierEffect.getAttribute());
     }
 }

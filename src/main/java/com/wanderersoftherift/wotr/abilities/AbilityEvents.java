@@ -6,8 +6,8 @@ import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -75,7 +75,7 @@ public class AbilityEvents {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent respawnEvent) {
-        AttributeInstance maxManaAttribute = respawnEvent.getEntity().getAttribute(WotrAttributes.MAX_MANA);
+        AttributeInstance maxManaAttribute = respawnEvent.getEntity().getAttribute(Attributes.MAX_MANA);
         if (maxManaAttribute != null) {
             respawnEvent.getEntity()
                     .getData(WotrAttachments.MANA)

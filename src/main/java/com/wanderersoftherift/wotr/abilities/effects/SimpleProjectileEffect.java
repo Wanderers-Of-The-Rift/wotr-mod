@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
@@ -82,11 +82,11 @@ public class SimpleProjectileEffect extends AbstractEffect {
     }
 
     private float getSpread(AbilityContext context) {
-        return context.getAbilityAttribute(WotrAttributes.PROJECTILE_SPREAD, 15);
+        return context.getAbilityAttribute(Attributes.PROJECTILE_SPREAD, 15);
     }
 
     private int getNumberOfProjectiles(AbilityContext context) {
-        return (int) context.getAbilityAttribute(WotrAttributes.PROJECTILE_COUNT, config.projectiles());
+        return (int) context.getAbilityAttribute(Attributes.PROJECTILE_COUNT, config.projectiles());
     }
 
     private void spawnProjectile(Entity user, EntityType<?> type, float angle, AbilityContext context) {
@@ -99,7 +99,7 @@ public class SimpleProjectileEffect extends AbstractEffect {
             projectileEntity.configure(config, context);
 
             projectileEntity.shootFromRotation(user, user.getXRot(), user.getYRot() + angle, 0,
-                    context.getAbilityAttribute(WotrAttributes.PROJECTILE_SPEED, config.velocity()), 0);
+                    context.getAbilityAttribute(Attributes.PROJECTILE_SPEED, config.velocity()), 0);
 
             context.level().addFreshEntity(simpleProjectile);
         }
@@ -120,9 +120,8 @@ public class SimpleProjectileEffect extends AbstractEffect {
     protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
             Holder<Attribute> attribute = attributeModifier.getAttribute();
-            return WotrAttributes.PROJECTILE_SPREAD.equals(attribute)
-                    || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
-                    || WotrAttributes.PROJECTILE_SPEED.equals(attribute);
+            return Attributes.PROJECTILE_SPREAD.equals(attribute) || Attributes.PROJECTILE_COUNT.equals(attribute)
+                    || Attributes.PROJECTILE_SPEED.equals(attribute);
         }
         return false;
     }

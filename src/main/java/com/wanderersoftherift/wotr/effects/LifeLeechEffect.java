@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.effects;
 
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.Attributes;
 import net.minecraft.world.entity.LivingEntity;
 
 public class LifeLeechEffect {
@@ -9,7 +9,7 @@ public class LifeLeechEffect {
         float healthToHeal = 0;
         if (causer != null) {
             healthToHeal = Math.min(incomingDamage, receiver.getHealth())
-                    * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
+                    * (float) causer.getAttributeValue(Attributes.LIFE_LEECH);
         }
         return healthToHeal;
     }
