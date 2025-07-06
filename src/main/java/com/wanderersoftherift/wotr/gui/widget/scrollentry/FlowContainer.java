@@ -54,10 +54,12 @@ public class FlowContainer extends AbstractWidget implements ScrollContainerEntr
         if (lastWidth == width) {
             return;
         }
-        int rowHeight = 0;
-        int rowWidth = 0;
+        lastWidth = width;
         cachedRowHeights.clear();
         cachedRows = new ArrayList<>();
+
+        int rowHeight = 0;
+        int rowWidth = 0;
         List<AbstractWidget> row = new ArrayList<>();
         for (AbstractWidget child : children) {
             int childWidth = child.getWidth();
