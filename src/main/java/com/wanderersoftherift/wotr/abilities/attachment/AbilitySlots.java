@@ -6,15 +6,10 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.modifier.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
-import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,25 +25,6 @@ import java.util.Objects;
 public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
-    public static final Codec<AbilitySlots.Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
-            Codec.INT.fieldOf("selected").forGetter(x -> x.selected)
-    ).apply(instance, AbilitySlots.Data::new));
-
-    // maybe this should be a separate class
-    public static final IAttachmentSerializer<?, AbilitySlots> SERIALIZER = new IAttachmentSerializer<>() {
-        @Override
-        public AbilitySlots read(IAttachmentHolder iAttachmentHolder, Tag tag, HolderLookup.Provider provider) {
-            return new AbilitySlots(iAttachmentHolder,
-                    CODEC.decode(provider.createSerializationContext(NbtOps.INSTANCE), tag).getOrThrow().getFirst());
-        }
-
-        @Override
-        public @Nullable Tag write(AbilitySlots abilitySlots, HolderLookup.Provider provider) {
-            return CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), abilitySlots.data())
-                    .getOrThrow();
-        }
-    };
 
     private final IAttachmentHolder holder;
     private final NonNullList<ItemStack> abilities = NonNullList.withSize(ABILITY_BAR_SIZE, ItemStack.EMPTY);
@@ -65,7 +41,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
         }
     }
 
-    private Data data() {
+    public Data data() {
         return new Data(abilities, selected);
     }
 
@@ -173,7 +149,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public int getSlotLimit(int slot) {
-        return 1; //Item.ABSOLUTE_MAX_STACK_SIZE if we wanted consumable abilities
+        return 1; // Item.ABSOLUTE_MAX_STACK_SIZE if we wanted consumable abilities
     }
 
     @Override
@@ -212,6 +188,10 @@ public class AbilitySlots implements IItemHandlerModifiable {
     }
 
     public record Data(NonNullList<ItemStack> abilities, int selected) {
+        public static final Codec<AbilitySlots.Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
+                Codec.INT.fieldOf("selected").forGetter(x -> x.selected)
+        ).apply(instance, AbilitySlots.Data::new));
     }
 
 }
