@@ -5,7 +5,7 @@
     "model": {
       "type": "wotr:emblem",
       "base_item": "wotr:base_ability_holder",
-      "emblemProvider": {
+      "emblem_provider": {
         "type": "wotr:ability",
         "ability": {}
       },

@@ -2,8 +2,8 @@
   "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:light",
-      "minPercent": 25.0
+      "essence_type": "wotr:light",
+      "min_percent": 25.0
     }
   ],
   "output": {

@@ -2,12 +2,12 @@
   "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:death",
-      "minPercent": 15.0
+      "essence_type": "wotr:death",
+      "min_percent": 15.0
     },
     {
-      "essenceType": "wotr:earth",
-      "minPercent": 35.0
+      "essence_type": "wotr:earth",
+      "min_percent": 35.0
     }
   ],
   "output": {

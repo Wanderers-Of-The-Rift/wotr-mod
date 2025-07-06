@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Axis;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -23,34 +24,24 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Math;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
-/**
+/***
  * Special renderer for rendering an emblem (icon) on an item
+ *
+ * @param baseItem       The base model to render the emblem on
+ * @param emblemProvider The provider for determining the icon for the emblem
+ * @param scale          The scale of the emblem
+ * @param offset         The offset of the emblem
  */
-public final class EmblemSpecialRenderer implements SpecialModelRenderer<ResourceLocation> {
-    private final Holder<Item> baseItem;
-    private final float scale;
-    private final Vector3fc offset;
-    private final EmblemProvider emblemProvider;
-    private final Map<ResourceLocation, RenderType> renderTypes = new LinkedHashMap<>();
+public record EmblemSpecialRenderer(Holder<Item> baseItem, EmblemProvider emblemProvider, float scale, Vector3fc offset)
+        implements SpecialModelRenderer<ResourceLocation> {
 
-    /**
-     * @param baseItem An item that is rendered for the non-ability portion
-     */
-    public EmblemSpecialRenderer(Holder<Item> baseItem, EmblemProvider emblemProvider, float scale, Vector3fc offset) {
-        this.baseItem = baseItem;
-        this.scale = scale;
-        this.offset = offset;
-        this.emblemProvider = emblemProvider;
-    }
+    private static final Map<ResourceLocation, RenderType> RENDER_TYPES = new LinkedHashMap<>();
 
     @Override
     public void render(
@@ -64,7 +55,7 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
 
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
-        poseStack.rotateAround(new Quaternionf().rotationZYX(0, Math.PI_f, 0), 0, 0, 0);
+        poseStack.rotateAround(Axis.YP.rotationDegrees(180), 0, 0, 0);
 
         // We render the base item with the FIXED content, because this item is already being rendered with the display
         // context
@@ -79,18 +70,19 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
             poseStack.translate(offset.x(), offset.y(), offset.z());
             VertexConsumer consumer = bufferSource.getBuffer(getRenderType(icon));
             PoseStack.Pose pose = poseStack.last();
-            vertex(consumer, pose, packedLight, -0.5f * scale, -0.5f * scale, 0.0f, 0, 1);
-            vertex(consumer, pose, packedLight, 0.5f * scale, -0.5f * scale, 0.0f, 1, 1);
-            vertex(consumer, pose, packedLight, 0.5f * scale, 0.5f * scale, 0.0f, 1, 0);
-            vertex(consumer, pose, packedLight, -0.5f * scale, 0.5f * scale, 0.0f, 0, 0);
+            float vertOffset = 0.5f * scale;
+            vertex(consumer, pose, packedLight, vertOffset, -vertOffset, 0.0f, 0, 1);
+            vertex(consumer, pose, packedLight, -vertOffset, -vertOffset, 0.0f, 1, 1);
+            vertex(consumer, pose, packedLight, -vertOffset, vertOffset, 0.0f, 1, 0);
+            vertex(consumer, pose, packedLight, vertOffset, vertOffset, 0.0f, 0, 0);
         }
         poseStack.popPose();
     }
 
-    private RenderType getRenderType(ResourceLocation icon) {
-        return renderTypes.computeIfAbsent(icon,
-                resourceLocation -> RenderType.create("emblem_" + icon.getNamespace() + "__" + icon.getPath(),
-                        DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 786_432, true, false,
+    private static RenderType getRenderType(ResourceLocation icon) {
+        return RENDER_TYPES.computeIfAbsent(icon,
+                resourceLocation -> RenderType.create("emblem_" + icon.toString(), DefaultVertexFormat.BLOCK,
+                        VertexFormat.Mode.QUADS, 786_432, true, false,
                         RenderType.CompositeState.builder()
                                 .setLightmapState(RenderStateShard.LIGHTMAP)
                                 .setShaderState(RenderStateShard.RENDERTYPE_CUTOUT_SHADER)
@@ -110,11 +102,11 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
             int u,
             int v) {
         consumer.addVertex(pose, x, y, z)
-                .setColor(-1)
+                .setColor(0xFFFFFFFF)
                 .setUv((float) u, (float) v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
-                .setNormal(pose, 0.0F, 1.0F, 0.0F);
+                .setNormal(pose, 0.0F, 0.0f, -1.0F);
     }
 
     @Override
@@ -122,49 +114,12 @@ public final class EmblemSpecialRenderer implements SpecialModelRenderer<Resourc
         return emblemProvider.getIcon(stack);
     }
 
-    public Holder<Item> baseItem() {
-        return baseItem;
-    }
-
-    public float scale() {
-        return scale;
-    }
-
-    public Vector3fc offset() {
-        return offset;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof EmblemSpecialRenderer other) {
-            return Objects.equals(this.baseItem, other.baseItem)
-                    && Float.floatToIntBits(this.scale) == Float.floatToIntBits(other.scale)
-                    && Objects.equals(this.offset, other.offset)
-                    && Objects.equals(this.emblemProvider, other.emblemProvider);
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(baseItem, scale, offset);
-    }
-
-    @Override
-    public String toString() {
-        return "EmblemSpecialRenderer[" + "baseItem=" + baseItem + ", " + "scale=" + scale + ", " + "offset=" + offset
-                + ']';
-    }
-
     public record Unbaked(Holder<Item> base, EmblemProvider emblemProvider, float scale, float xOffset, float yOffset,
             float zOffset) implements SpecialModelRenderer.Unbaked {
 
         public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Item.CODEC.fieldOf("base_item").forGetter(Unbaked::base),
-                EmblemProvider.CODEC.fieldOf("emblemProvider").forGetter(Unbaked::emblemProvider),
+                EmblemProvider.CODEC.fieldOf("emblem_provider").forGetter(Unbaked::emblemProvider),
                 Codec.FLOAT.optionalFieldOf("scale", 0.5f).forGetter(Unbaked::scale),
                 Codec.FLOAT.optionalFieldOf("x_offset", 0f).forGetter(Unbaked::xOffset),
                 Codec.FLOAT.optionalFieldOf("y_offset", 0f).forGetter(Unbaked::yOffset),
