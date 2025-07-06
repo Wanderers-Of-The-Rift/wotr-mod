@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.modifier;
 
-import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
@@ -12,7 +11,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.common.NeoForge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModifierHelper {
@@ -65,12 +67,8 @@ public class ModifierHelper {
     }
 
     public static void runIterationOnEquipment(LivingEntity entity, ModifierInSlotVisitor visitor) {
-        for (EquipmentSlot equipmentslot : EquipmentSlot.VALUES) {
-            var wotrSlot = new WotrEquipmentSlotFromMC(equipmentslot);
-            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
-        }
-        for (var abilitySlot = 0; abilitySlot < AbilitySlots.ABILITY_BAR_SIZE; abilitySlot++) {
-            var wotrSlot = new AbilityEquipmentSlot(abilitySlot);
+        var slots = NeoForge.EVENT_BUS.post(new IterateEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
+        for (var wotrSlot : slots) {
             runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
         }
     }
@@ -81,7 +79,7 @@ public class ModifierHelper {
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        enableModifier(stack, entity, new WotrEquipmentSlotFromMC(slot));
+        enableModifier(stack, entity, WotrEquipmentSlotFromMC.SLOT_MAP.get(slot));
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
@@ -95,7 +93,7 @@ public class ModifierHelper {
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        disableModifier(stack, entity, new WotrEquipmentSlotFromMC(slot));
+        disableModifier(stack, entity, WotrEquipmentSlotFromMC.SLOT_MAP.get(slot));
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
@@ -106,5 +104,23 @@ public class ModifierHelper {
     @FunctionalInterface
     public interface ModifierInSlotVisitor {
         void accept(Holder<Modifier> modifierHolder, int tier, float roll, ModifierSource item);
+    }
+
+    public static class IterateEquipmentSlotsEvent extends Event {
+        private final List<WotrEquipmentSlot> slots;
+        private final LivingEntity entity;
+
+        public IterateEquipmentSlotsEvent(List<WotrEquipmentSlot> slots, LivingEntity entity) {
+            this.slots = slots;
+            this.entity = entity;
+        }
+
+        public List<WotrEquipmentSlot> getSlots() {
+            return slots;
+        }
+
+        public LivingEntity getEntity() {
+            return entity;
+        }
     }
 }

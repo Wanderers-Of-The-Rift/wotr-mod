@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.LivingEntity;
