@@ -27,30 +27,58 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
     }
 
     public void handleOnServer(final IPayloadContext context) {
-        if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
-            return;
-        }
-        AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
-        ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
-        if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
-            return;
-        }
-        AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
-        abilitySlots.setSelectedSlot(slot());
+        if (slot == 99) { //Handles the item in hand
+            if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
+                return;
+            }
+            ItemStack weapon = player.getItemHeldByArm(player.getMainArm());
+            if (weapon.isEmpty() || !weapon.has(WotrDataComponentType.ABILITY)) {
+                return;
+            }
+            AbstractAbility ability = weapon.get(WotrDataComponentType.ABILITY).value();
 
-        if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
-        {
-            if (!ability.isToggled(player)) {
-                ability.onActivate(player, slot(), abilityItem);
+            if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
+            {
+                if (!ability.isToggled(player)) {
+                    ability.onActivateGear(player, weapon);
+                } else {
+                    ability.onDeactivate(player, slot()); //Need to make an onDeactivateGear
+                }
+
+                if (ability.canPlayerUse(player)) {
+                    ability.toggle(player);
+                }
             } else {
-                ability.onDeactivate(player, slot());
+                ability.onActivateGear(player, weapon);
+            }
+        }else {
+            if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
+                return;
             }
 
-            if (ability.canPlayerUse(player)) {
-                ability.toggle(player);
+            AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
+            ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
+            if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
+                return;
             }
-        } else {
-            ability.onActivate(player, slot(), abilityItem);
+            AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
+            abilitySlots.setSelectedSlot(slot());
+
+            if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
+            {
+                if (!ability.isToggled(player)) {
+                    ability.onActivate(player, slot(), abilityItem);
+                } else {
+                    ability.onDeactivate(player, slot());
+                }
+
+                if (ability.canPlayerUse(player)) {
+                    ability.toggle(player);
+                }
+            } else {
+                ability.onActivate(player, slot(), abilityItem);
+            }
         }
     }
 }
+

@@ -49,34 +49,7 @@ public class GearAbility extends AbstractAbility {
 
     @Override
     public void onActivate(Player player, int slot, ItemStack abilityItem){
-        if (!this.canPlayerUse(player)) {
-            player.displayClientMessage(Component.literal("You cannot use this"), true);
-            return;
-        }
-        if (this.isOnCooldown(player, slot)) {
-            return;
-        }
-        AbilityContext abilityContext = new AbilityContext(player, abilityItem);
-        abilityContext.enableModifiers();
-        try {
-            int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-            ManaData manaData = player.getData(WotrAttachments.MANA);
-            if (manaCost > 0) {
-                if (manaData.getAmount() < manaCost) {
-                    return;
-                }
-            }
-            if (player instanceof ServerPlayer) {
-                manaData.useAmount(player, manaCost);
-                this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-                this.setCooldown(player, slot,
-                        abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
-            } else {
-                PacketDistributor.sendToServer(new UseAbilityPayload(slot));
-            }
-        } finally {
-            abilityContext.disableModifiers();
-        }
+
     }
 
     @Override
@@ -98,11 +71,15 @@ public class GearAbility extends AbstractAbility {
             if (player instanceof ServerPlayer) {
                 manaData.useAmount(player, manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
+            } else {
+                PacketDistributor.sendToServer(new UseAbilityPayload(99));
             }
-        } finally {
+        }
+        finally{
             abilityContext.disableModifiers();
         }
     }
+
 
     @Override
     public void onDeactivate(Player player, int slot){
