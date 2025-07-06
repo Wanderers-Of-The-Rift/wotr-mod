@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.effects.events;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.effects.CriticalEffect;
+import com.wanderersoftherift.wotr.effects.LifeLeechEffect;
 import com.wanderersoftherift.wotr.effects.ThornsEffect;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDamageTypes;
@@ -51,8 +52,7 @@ public class OnHitEvent {
         LivingEntity causer = (LivingEntity) event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
         if (causer != null) {
-            float healthToHeal = Math.min(event.getOriginalDamage(), receiver.getHealth()) * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
-            causer.setHealth(causer.getHealth() + healthToHeal);
+            causer.setHealth(LifeLeechEffect.calcHeal(causer, receiver, event.getOriginalDamage()));
         }
     }
 }
