@@ -38,7 +38,8 @@ public class OnHitEvent {
 
         Entity causer = event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
-        if (!event.getSource().is(DamageTypes.THORNS) && !event.getSource().is(WotrDamageTypes.THORNS_DAMAGE) && causer != null && event.getOriginalDamage() != 0) {
+        if (!event.getSource().is(DamageTypes.THORNS) && !event.getSource().is(WotrDamageTypes.THORNS_DAMAGE)
+                && causer != null && event.getOriginalDamage() != 0) {
             int thornsProc = ThornsEffect.calcThornsMult(event.getEntity(), event.getEntity().getRandom());
             if (thornsProc != 0) {
                 causer.hurtServer((ServerLevel) level, thorns,
