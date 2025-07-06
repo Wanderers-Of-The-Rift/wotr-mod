@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.network.ManaChangePayload;
+import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

@@ -45,12 +45,19 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     private static final int INPUT_SLOT_X_OFFSET = 25;
     private static final int INPUT_SLOT_Y_OFFSET = 25;
     private static final List<Integer> TIER_COSTS = IntStream.iterate(10, n -> n + 8).limit(20).boxed().toList();
+    private static final QuickMover MOVER = QuickMover.create()
+            .forPlayerSlots(INPUT_SLOTS + OUTPUT_SLOTS)
+            .tryMoveTo(0, INPUT_SLOTS)
+            .forSlots(0, INPUT_SLOTS)
+            .tryMoveToPlayer()
+            .forSlot(INPUT_SLOTS)
+            .tryMoveToPlayer()
+            .build();
 
     private final ContainerLevelAccess access;
     private final Container inputContainer;
     private final ResultContainer resultContainer;
     private final DataSlot tierPercent;
-    private final QuickMover mover;
 
     public KeyForgeMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
@@ -79,15 +86,6 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         addStandardInventorySlots(playerInventory, 8, 114);
 
         addDataSlot(tierPercent);
-
-        mover = QuickMover.create(this)
-                .forPlayerSlots(INPUT_SLOTS + OUTPUT_SLOTS)
-                .tryMoveTo(0, INPUT_SLOTS)
-                .forSlots(0, INPUT_SLOTS)
-                .tryMoveToPlayer()
-                .forSlot(INPUT_SLOTS)
-                .tryMoveToPlayer()
-                .build();
     }
 
     public int getTierPercent() {
@@ -105,7 +103,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return mover.quickMove(player, index);
+        return MOVER.quickMove(this, player, index);
     }
 
     @Override

@@ -38,11 +38,16 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
     private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
     private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
 
+    private static final QuickMover MOVER = QuickMover.create()
+            .forPlayerSlots(NUM_REWARD_SLOTS)
+            .forSlots(0, NUM_REWARD_SLOTS)
+            .tryMoveToPlayer()
+            .build();
+
     private final ContainerLevelAccess access;
     private final ItemStackHandler rewards;
     private final DataSlot resultStatus;
     private final List<DataSlot> stats = new ArrayList<>();
-    private final QuickMover mover;
 
     public RiftCompleteMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL, 0, new Object2IntArrayMap<>());
@@ -70,12 +75,6 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
             addDataSlot(statSlot);
             stats.add(statSlot);
         }
-
-        mover = QuickMover.create(this)
-                .forPlayerSlots(NUM_REWARD_SLOTS)
-                .forSlots(0, NUM_REWARD_SLOTS)
-                .tryMoveToPlayer()
-                .build();
     }
 
     public int getStat(int index) {
@@ -88,7 +87,7 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return mover.quickMove(player, index);
+        return MOVER.quickMove(this, player, index);
     }
 
     @Override

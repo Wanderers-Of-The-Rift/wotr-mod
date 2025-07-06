@@ -40,11 +40,24 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
     private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
     private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
 
+    private static final QuickMover MOVER = QuickMover.create()
+            .forPlayerSlots(INPUT_SLOTS)
+            .tryMoveTo(0, INPUT_SLOTS)
+            .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .forSlot(0)
+            .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .tryMoveToPlayer()
+            .forSlot(1)
+            .tryMoveToPlayer()
+            .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .tryMoveTo(0)
+            .tryMoveToPlayer()
+            .build();;
+
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
     private final IItemHandler upgradeMatStorage;
     private final DataSlot canLevel;
-    private final QuickMover mover;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory,
@@ -67,20 +80,6 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
         canLevel = DataSlot.standalone();
         addDataSlot(canLevel);
-
-        mover = QuickMover.create(this)
-                .forPlayerSlots(INPUT_SLOTS)
-                .tryMoveTo(0, INPUT_SLOTS)
-                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .forSlot(0)
-                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .tryMoveToPlayer()
-                .forSlot(1)
-                .tryMoveToPlayer()
-                .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .tryMoveTo(0)
-                .tryMoveToPlayer()
-                .build();
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -271,7 +270,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return mover.quickMove(player, index);
+        return MOVER.quickMove(this, player, index);
     }
 
     @Override
