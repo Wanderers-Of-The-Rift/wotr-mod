@@ -88,9 +88,9 @@ public class WotrAttachments {
         }
 
         @Override
-        public @Nullable Tag write(A abilitySlots, HolderLookup.Provider provider) {
+        public @Nullable Tag write(A attachment, HolderLookup.Provider provider) {
             return codec
-                    .encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), dataGetter().apply(abilitySlots))
+                    .encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), dataGetter().apply(attachment))
                     .getOrThrow();
         }
     }
