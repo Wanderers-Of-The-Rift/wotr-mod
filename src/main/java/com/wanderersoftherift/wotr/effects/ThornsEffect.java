@@ -11,7 +11,7 @@ public class ThornsEffect {
 
         if (thornsChance > 100 || thornsChance == 100) {
             thornsApplications = thornsChance / 100;
-        } else if (thornsChance < 100) {
+        } else {
             if (random.nextInt(0, 100) < (thornsChance % 100)) {
                 thornsApplications += 1;
             }

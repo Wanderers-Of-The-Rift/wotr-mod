@@ -6,22 +6,19 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class CriticalEffect {
     public static float calcFinalDamage(float initialDamage, LivingEntity attacker, LivingEntity foe, RandomSource random) {
-        int baseCritChance = (int) attacker.getAttributeValue(WotrAttributes.CRITICAL_CHANCE);
-        float critMult = (float) attacker.getAttributeValue(WotrAttributes.CRITICAL_MULTIPLIER);
-        int critAvoid = (int) foe.getAttributeValue(WotrAttributes.CRITICAL_AVOIDANCE);
 
-        int critChance = baseCritChance - critAvoid;
+        int critChance = (int) attacker.getAttributeValue(WotrAttributes.CRITICAL_CHANCE) - (int)foe.getAttributeValue(WotrAttributes.CRITICAL_AVOIDANCE);
+        float critMult = (float) attacker.getAttributeValue(WotrAttributes.CRITICAL_MULTIPLIER);
+
         int critApplications = 0;
 
-        if (critChance > 100 || critChance == 100) {
+        if (critChance > 100) {
             critApplications = critChance / 100;
-        } else if (critChance < 100) {
+        } else {
             if (random.nextInt(0, 100) < (critChance % 100)) {
                 critApplications += 1;
             }
         }
-
-        float finalDamage = initialDamage * ((critMult - 1) * critApplications + 1);
-        return finalDamage;
+        return initialDamage * ((critMult - 1) * critApplications + 1);
     }
 }
