@@ -97,6 +97,11 @@ public class WotrAttributes {
             "thorns_damage", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_damage"),
                     0, 0, Integer.MAX_VALUE));
 
+    // Life Leech
+    public static final DeferredHolder<Attribute, RangedAttribute> LIFE_LEECH = registerPlayerAttribute(
+            "life_leech",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "life_leech"), 0, 0, 1F));
+
     public static List<DeferredHolder<Attribute, RangedAttribute>> getPlayerAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
 

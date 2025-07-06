@@ -520,6 +520,13 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(5, getModifier(lookup, "health_percent"))
                                 ))),
                 RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("life_leech_raw"),
+                new RunegemData(getTranslatableName("life_leech_raw"), RunegemShape.PENTAGON,
+                        List.of(new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "life_leech"))
+                                ))),
+                        RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("magic_raw"),
                 new RunegemData(getTranslatableName("magic_raw"), RunegemShape.SQUARE,
                         List.of(new RunegemData.ModifierGroup(

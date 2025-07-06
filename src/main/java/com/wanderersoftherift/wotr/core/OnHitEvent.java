@@ -30,6 +30,7 @@ public class OnHitEvent {
         Level level = event.getEntity().level();
         DamageSource thorns = new DamageSource(
                 level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(WotrDamageTypes.THORNS_DAMAGE));
+
         Entity causer = event.getSource().getEntity();
         LivingEntity reciever = event.getEntity();
         if (!WotrDamageTypes.THORNS_DAMAGE.equals(event.getSource().typeHolder()) && causer != null) {
@@ -40,6 +41,22 @@ public class OnHitEvent {
             } else {
                 causer.hurtServer((ServerLevel) level, thorns,
                         (float) reciever.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void lifeLeech(LivingIncomingDamageEvent event) {
+        LivingEntity causer = (LivingEntity) event.getSource().getEntity();
+        LivingEntity receiver = event.getEntity();
+        if(causer != null) {
+            float healthToHeal = event.getAmount() * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
+            float health = causer.getHealth();
+
+            if (receiver.getHealth() < event.getAmount()){
+                causer.setHealth(health + receiver.getHealth());
+            } else {
+                causer.setHealth(health + healthToHeal);
             }
         }
     }

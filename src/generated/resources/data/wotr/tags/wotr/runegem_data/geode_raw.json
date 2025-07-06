@@ -4,6 +4,7 @@
     "wotr:critical_raw",
     "wotr:defense_raw",
     "wotr:health_raw",
+    "wotr:life_leech_raw",
     "wotr:magic_raw",
     "wotr:projectile_raw",
     "wotr:speed_raw",

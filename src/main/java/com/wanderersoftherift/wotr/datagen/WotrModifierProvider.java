@@ -170,6 +170,12 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("health_percent"),
                                         Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
+        registerModifier(context, getResourceKey("life_leech"),
+                new Modifier(generateEqualRollSpread(6,
+                        List.of(new ToBeTieredModifierEffect(0.01F, 1F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("life_leech"),
+                                        WotrAttributes.LIFE_LEECH, AttributeModifier.Operation.ADD_VALUE)))))
+        );
         registerModifier(context, getResourceKey("jump_height"), new Modifier(generateEqualRollSpread(3, List.of(
                 new ToBeTieredModifierEffect(0.01F, 0.5F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("jump_height"), Attributes.JUMP_STRENGTH,
