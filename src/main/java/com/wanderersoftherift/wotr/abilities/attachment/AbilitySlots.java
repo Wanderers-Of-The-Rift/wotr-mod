@@ -11,6 +11,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
@@ -154,8 +155,9 @@ public class AbilitySlots implements IItemHandlerModifiable {
             return ItemStack.EMPTY;
         }
         var original = abilities.get(slot).copy();
+        var extracted = Integer.min(amount, original.getMaxStackSize());
         if (!simulate) {
-            var newCount = original.getCount() - 1;
+            var newCount = original.getCount() - extracted;
             if (newCount > 0) {
                 var newStack = abilities.get(slot);
                 newStack.setCount(newCount);
@@ -165,13 +167,13 @@ public class AbilitySlots implements IItemHandlerModifiable {
                 onSlotChanged(slot, original, ItemStack.EMPTY);
             }
         }
-        original.setCount(1);
+        original.setCount(extracted);
         return original;
     }
 
     @Override
     public int getSlotLimit(int slot) {
-        return 1;
+        return 1; //Item.ABSOLUTE_MAX_STACK_SIZE if we wanted consumable abilities
     }
 
     @Override
