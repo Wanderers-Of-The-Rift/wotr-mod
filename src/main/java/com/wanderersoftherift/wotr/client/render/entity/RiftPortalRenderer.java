@@ -106,7 +106,7 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
             int u,
             int v) {
         consumer.addVertex(pose, x, y, z)
-                .setColor(-1)
+                .setColor(0xFFFFFFFF)
                 .setUv((float) u, (float) v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
