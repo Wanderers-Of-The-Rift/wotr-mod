@@ -49,11 +49,11 @@ public class OnHitEvent {
     public static void lifeLeech(LivingIncomingDamageEvent event) {
         LivingEntity causer = (LivingEntity) event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
-        if(causer != null) {
+        if (causer != null) {
             float healthToHeal = event.getAmount() * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
             float health = causer.getHealth();
 
-            if (receiver.getHealth() < event.getAmount()){
+            if (receiver.getHealth() < event.getAmount()) {
                 causer.setHealth(health + receiver.getHealth());
             } else {
                 causer.setHealth(health + healthToHeal);
