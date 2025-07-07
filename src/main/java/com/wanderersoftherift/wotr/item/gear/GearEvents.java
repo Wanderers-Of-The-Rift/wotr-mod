@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -27,9 +28,11 @@ public class GearEvents {
         Player player = Minecraft.getInstance().player;
         ItemStack weapon = player.getItemHeldByArm(player.getMainArm());
         AbstractAbility ability = new AbilityContext(player, weapon).getAbility();
-        if (ability != null){
-            ability.onActivateGear(player, weapon);
-            player.displayClientMessage(Component.literal("test"), true);
-        }
+
+            if (ability != null){
+                ability.onActivateGear(player, weapon);
+                player.displayClientMessage(Component.literal(String.valueOf(player.getAttackStrengthScale(200.0f))), true);
+            }
+
     }
 }

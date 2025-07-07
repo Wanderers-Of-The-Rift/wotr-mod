@@ -9,7 +9,7 @@ public class GearMaterial {
     public static final ToolMaterial WAND_MATERIAL = new ToolMaterial(
             BlockTags.NEEDS_STONE_TOOL,
             1,
-            1f,
+            -3.0f,
             1f,
             1,
             Tags.Items.INGOTS

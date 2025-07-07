@@ -40,5 +40,5 @@
     }
   ],
   "icon": "minecraft:textures/item/fire_charge.png",
-  "mana_cost": 5
+  "mana_cost": 0
 }
