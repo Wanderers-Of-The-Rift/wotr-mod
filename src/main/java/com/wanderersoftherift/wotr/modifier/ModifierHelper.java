@@ -67,7 +67,7 @@ public class ModifierHelper {
     }
 
     public static void runIterationOnEquipment(LivingEntity entity, ModifierInSlotVisitor visitor) {
-        var slots = NeoForge.EVENT_BUS.post(new IterateEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
+        var slots = NeoForge.EVENT_BUS.post(new CollectEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
         for (var wotrSlot : slots) {
             runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
         }
@@ -79,7 +79,7 @@ public class ModifierHelper {
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        enableModifier(stack, entity, WotrEquipmentSlotFromMC.SLOT_MAP.get(slot));
+        enableModifier(stack, entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
@@ -93,7 +93,7 @@ public class ModifierHelper {
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        disableModifier(stack, entity, WotrEquipmentSlotFromMC.SLOT_MAP.get(slot));
+        disableModifier(stack, entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
@@ -106,11 +106,11 @@ public class ModifierHelper {
         void accept(Holder<Modifier> modifierHolder, int tier, float roll, ModifierSource item);
     }
 
-    public static class IterateEquipmentSlotsEvent extends Event {
+    public static class CollectEquipmentSlotsEvent extends Event {
         private final List<WotrEquipmentSlot> slots;
         private final LivingEntity entity;
 
-        public IterateEquipmentSlotsEvent(List<WotrEquipmentSlot> slots, LivingEntity entity) {
+        public CollectEquipmentSlotsEvent(List<WotrEquipmentSlot> slots, LivingEntity entity) {
             this.slots = slots;
             this.entity = entity;
         }

@@ -32,7 +32,7 @@ import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
 public class AbilityEvents {
 
     @SubscribeEvent
-    public static void registerAbilitySlots(ModifierHelper.IterateEquipmentSlotsEvent event) {
+    public static void collectAbilitySlots(ModifierHelper.CollectEquipmentSlotsEvent event) {
         if (event.getEntity() instanceof IAttachmentHolder holder) {
             var slotCount = holder.getData(WotrAttachments.ABILITY_SLOTS).getSlots();
             for (int i = 0; i < slotCount && i < AbilityEquipmentSlot.SLOTS.size(); i++) {
