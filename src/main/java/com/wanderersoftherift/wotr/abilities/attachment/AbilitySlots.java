@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.LivingEntity;
@@ -153,7 +154,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return stack.has(WotrDataComponentType.ABILITY);
+        return stack.is(WotrItems.ABILITY_HOLDER);
+        // return stack.has(WotrDataComponentType.ABILITY);
     }
 
     @Override
