@@ -348,7 +348,8 @@ public class WotrRecipeProvider extends RecipeProvider {
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("deepfrost")))
-                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("nether")).setMinPercent(10f).build())
+                .withEssenceReq(
+                        new EssencePredicate.Builder(WanderersOfTheRift.id("nether")).setMinPercent(10f).build())
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("dark")).setMinPercent(30f).build())
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("water")).setMinPercent(10f).build())
                 .setPriority(10)
