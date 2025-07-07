@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.modifier;
 
-import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -50,22 +49,18 @@ public record WotrEquipmentSlotFromMC(EquipmentSlot minecraftSlot, TagKey<Item> 
     }
 
     static {
-        SLOTS = ImmutableList.of(
-                new WotrEquipmentSlotFromMC(EquipmentSlot.MAINHAND,
-                        TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_main_hand_slot"))),
-                new WotrEquipmentSlotFromMC(EquipmentSlot.OFFHAND,
-                        TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_off_hand_slot"))),
-                new WotrEquipmentSlotFromMC(EquipmentSlot.FEET,
-                        TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_boots_slot"))),
-                new WotrEquipmentSlotFromMC(EquipmentSlot.LEGS,
-                        TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_leggings_slot"))),
-                new WotrEquipmentSlotFromMC(EquipmentSlot.CHEST,
-                        TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_chestplate_slot"))),
-                new WotrEquipmentSlotFromMC(EquipmentSlot.HEAD,
-                        TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_helmet_slot"))),
-                // this is apparently slot for horse armor
-                new WotrEquipmentSlotFromMC(EquipmentSlot.BODY,
-                        TagKey.create(Registries.ITEM, ResourceLocation.parse("minecraft:empty"))));
+        SLOTS = EquipmentSlot.VALUES.stream().map(slot -> {
+            var tag = switch (slot) {
+                case MAINHAND -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_main_hand_slot"));
+                case OFFHAND -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_off_hand_slot"));
+                case FEET -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_boots_slot"));
+                case LEGS -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_leggings_slot"));
+                case CHEST -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_chestplate_slot"));
+                case HEAD -> TagKey.create(Registries.ITEM, WanderersOfTheRift.id("socketable_helmet_slot"));
+                default -> TagKey.create(Registries.ITEM, ResourceLocation.parse("minecraft:empty"));
+            };
+            return new WotrEquipmentSlotFromMC(slot, tag);
+        }).toList();
     }
 
     @EventBusSubscriber(modid = WanderersOfTheRift.MODID)
