@@ -13,7 +13,7 @@
           "model": "wotr:geo/ability/fireball.geo.json",
           "texture": "wotr:textures/ability/fireball.png"
         },
-        "velocity": 3.0
+        "velocity": 1.0
       },
       "effects": [
         {
