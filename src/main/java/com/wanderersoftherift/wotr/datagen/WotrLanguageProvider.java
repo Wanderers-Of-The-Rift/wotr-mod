@@ -122,6 +122,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         addTheme("noir", "Noir");
         addTheme("mesa", "Mesa");
         addTheme("desert", "Desert");
+        addTheme("jungle", "Jungle");
+        addTheme("deepfrost", "Deepfrost");
         addTheme("swamp", "Swamp");
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
