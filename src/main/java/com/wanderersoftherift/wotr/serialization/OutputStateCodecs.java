@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.codec;
+package com.wanderersoftherift.wotr.serialization;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;

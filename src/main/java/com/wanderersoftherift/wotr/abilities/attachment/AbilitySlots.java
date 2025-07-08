@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
+import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,8 @@ import java.util.Objects;
 public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
+    public static final AttachmentSerializerFromDataCodec<Data, AbilitySlots> SERIALIZER = new AttachmentSerializerFromDataCodec<Data, AbilitySlots>(
+            Data.CODEC, AbilitySlots::new, AbilitySlots::data);
 
     private final IAttachmentHolder holder;
     private final NonNullList<ItemStack> abilities = NonNullList.withSize(ABILITY_BAR_SIZE, ItemStack.EMPTY);
@@ -41,7 +44,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
         }
     }
 
-    public Data data() {
+    private Data data() {
         return new Data(abilities, selected);
     }
 
@@ -188,7 +191,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
         return Objects.hash(abilities, selected);
     }
 
-    public record Data(NonNullList<ItemStack> abilities, int selected) {
+    private record Data(NonNullList<ItemStack> abilities, int selected) {
         public static final Codec<AbilitySlots.Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
                 Codec.INT.fieldOf("selected").forGetter(x -> x.selected)

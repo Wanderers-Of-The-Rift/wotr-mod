@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.rift.objective;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
