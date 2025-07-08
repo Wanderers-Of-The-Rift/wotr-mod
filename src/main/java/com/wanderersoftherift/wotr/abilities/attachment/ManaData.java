@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.init.Attributes;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.network.ManaChangePayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -70,7 +70,7 @@ public class ManaData {
 
     // Regenerates and/or degenerates the pool.
     public void tick(LivingEntity entity) {
-        int maxMana = (int) entity.getAttributeValue(Attributes.MAX_MANA);
+        int maxMana = (int) entity.getAttributeValue(WotrAttributes.MAX_MANA);
         if (amount > maxMana) {
             amount = maxMana;
         }
@@ -83,7 +83,7 @@ public class ManaData {
     }
 
     private void tickRegen(LivingEntity entity, int maxMana) {
-        AttributeInstance manaRegenAttribute = entity.getAttribute(Attributes.MANA_REGEN_RATE);
+        AttributeInstance manaRegenAttribute = entity.getAttribute(WotrAttributes.MANA_REGEN_RATE);
         if (manaRegenAttribute == null) {
             return;
         }
@@ -93,7 +93,7 @@ public class ManaData {
     }
 
     private void tickDegen(LivingEntity entity) {
-        AttributeInstance manaDegenAttribute = entity.getAttribute(Attributes.MANA_DEGEN_RATE);
+        AttributeInstance manaDegenAttribute = entity.getAttribute(WotrAttributes.MANA_DEGEN_RATE);
         if (manaDegenAttribute == null) {
             return;
         }

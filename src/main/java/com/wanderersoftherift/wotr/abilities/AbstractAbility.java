@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
-import com.wanderersoftherift.wotr.init.Attributes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
@@ -185,10 +185,10 @@ public abstract class AbstractAbility {
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifierEffect) {
             Holder<Attribute> attribute = attributeModifierEffect.getAttribute();
-            if (Attributes.COOLDOWN.equals(attribute) && baseCooldown > 0) {
+            if (WotrAttributes.COOLDOWN.equals(attribute) && baseCooldown > 0) {
                 return true;
             }
-            if (Attributes.MANA_COST.equals(attribute) && baseManaCost > 0) {
+            if (WotrAttributes.MANA_COST.equals(attribute) && baseManaCost > 0) {
                 return true;
             }
         }

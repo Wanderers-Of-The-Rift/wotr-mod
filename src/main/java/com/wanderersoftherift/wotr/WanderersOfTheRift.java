@@ -13,7 +13,7 @@ import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.init.*;
-import com.wanderersoftherift.wotr.init.Attributes;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
@@ -55,7 +55,7 @@ public class WanderersOfTheRift {
 
     public WanderersOfTheRift(IEventBus modEventBus, ModContainer modContainer) {
         // Vanilla elements
-        Attributes.ATTRIBUTES.register(modEventBus);
+        WotrAttributes.WOTR_ATTRIBUTES.register(modEventBus);
         WotrBlocks.BLOCKS.register(modEventBus);
         WotrBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         WotrContainerTypes.CONTAINER_TYPES.register(modEventBus);

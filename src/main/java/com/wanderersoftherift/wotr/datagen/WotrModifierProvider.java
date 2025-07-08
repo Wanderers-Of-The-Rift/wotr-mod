@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.Attributes;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierTier;
@@ -30,46 +30,45 @@ public class WotrModifierProvider {
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_aoe"),
-                                        Attributes.ABILITY_AOE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                        WotrAttributes.ABILITY_AOE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("ability_cooldown"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, -0.1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_cooldown"),
-                                        Attributes.COOLDOWN, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                        WotrAttributes.COOLDOWN, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("ability_damage_flat"),
                 new Modifier(generateEqualRollSpread(7,
                         List.of(new ToBeTieredModifierEffect(0.01F, 7F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_flat"),
-                                        Attributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("ability_damage_heavy"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 10F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_heavy"),
-                                        Attributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE))),
+                                        WotrAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_VALUE))),
                         List.of(new AttributeModifierEffect(
-                                WanderersOfTheRift.id("ability_damage_heavy"), Attributes.COOLDOWN, 0.5, 1F,
+                                WanderersOfTheRift.id("ability_damage_heavy"), WotrAttributes.COOLDOWN, 0.5, 1F,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE))))
         );
         registerModifier(context, getResourceKey("ability_damage_percent"),
-                new Modifier(generateEqualRollSpread(5,
-                        List.of(new ToBeTieredModifierEffect(0, 1F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_percent"),
-                                        Attributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                new Modifier(generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0, 1F,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("ability_damage_percent"),
+                                WotrAttributes.ABILITY_DAMAGE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("ability_heal_power_flat"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 10F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_heal_power_flat"),
-                                        Attributes.HEAL_POWER, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.HEAL_POWER, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("ability_heal_power_percent"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("ability_heal_power_percent"),
-                                        Attributes.HEAL_POWER, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                        WotrAttributes.HEAL_POWER, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("absorption"),
                 new Modifier(generateEqualRollSpread(4,
@@ -138,27 +137,27 @@ public class WotrModifierProvider {
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(1, 50,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
-                                        Attributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("critical_multiplier"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.5F, 3F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_multiplier"),
-                                        Attributes.CRITICAL_MULTIPLIER, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.CRITICAL_MULTIPLIER, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("critical_avoidance"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(1, 50,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
-                                        Attributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("critical_dual"), new Modifier(generateEqualRollSpread(5, List.of(
                 new ToBeTieredModifierEffect(1, 25,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
-                                Attributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)),
+                                WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)),
                 new ToBeTieredModifierEffect(1, 25,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
-                                Attributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("health_flat"),
                 new Modifier(generateEqualRollSpread(6,
@@ -188,7 +187,7 @@ public class WotrModifierProvider {
                 new Modifier(generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("life_leech"),
-                                        Attributes.LIFE_LEECH, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.LIFE_LEECH, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("jump_height"), new Modifier(generateEqualRollSpread(3, List.of(
                 new ToBeTieredModifierEffect(0.01F, 0.5F,
@@ -228,32 +227,30 @@ public class WotrModifierProvider {
         registerModifier(context, getResourceKey("mana_cost"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(-0.01F, -0.1F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("mana_cost"), Attributes.MANA_COST,
-                                        AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("mana_cost"),
+                                        WotrAttributes.MANA_COST, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("mana_degen_rate"),
-                new Modifier(generateEqualRollSpread(5,
-                        List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("mana_degen_rate"),
-                                        Attributes.MANA_DEGEN_RATE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                new Modifier(generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("mana_degen_rate"),
+                                WotrAttributes.MANA_DEGEN_RATE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("mana_regen_rate"),
-                new Modifier(generateEqualRollSpread(5,
-                        List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("mana_regen_rate"),
-                                        Attributes.MANA_REGEN_RATE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                new Modifier(generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("mana_regen_rate"),
+                                WotrAttributes.MANA_REGEN_RATE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("max_mana_flat"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 50F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_flat"),
-                                        Attributes.MAX_MANA, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.MAX_MANA, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("max_mana_percent"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 0.25F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_percent"),
-                                        Attributes.MAX_MANA, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                        WotrAttributes.MAX_MANA, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("movement_speed"),
                 new Modifier(generateEqualRollSpread(3,
@@ -265,22 +262,22 @@ public class WotrModifierProvider {
         registerModifier(context, getResourceKey("projectile_count"),
                 new Modifier(generateEqualRollSpread(2, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_count"),
-                                Attributes.PROJECTILE_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                WotrAttributes.PROJECTILE_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("projectile_pierce"),
                 new Modifier(generateEqualRollSpread(2, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_pierce"),
-                                Attributes.PROJECTILE_PIERCE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                WotrAttributes.PROJECTILE_PIERCE, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("projectile_speed"),
                 new Modifier(generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_speed"),
-                                Attributes.PROJECTILE_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                WotrAttributes.PROJECTILE_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("projectile_spread"),
                 new Modifier(generateEqualRollSpread(5, List.of(new ToBeTieredModifierEffect(-0.01F, -0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_spread"),
-                                Attributes.PROJECTILE_SPREAD, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
+                                WotrAttributes.PROJECTILE_SPREAD, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))))
         );
         registerModifier(context, getResourceKey("step_height"),
                 new Modifier(generateEqualRollSpread(1,
@@ -300,13 +297,13 @@ public class WotrModifierProvider {
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 50,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_chance"),
-                                        Attributes.THORNS_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.THORNS_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("thorns_damage"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(1, 30,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_damage"),
-                                        Attributes.THORNS_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.THORNS_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
         );
     }
 

@@ -18,8 +18,8 @@ import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("checkstyle:DeclarationOrder")
-public class Attributes {
-    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE,
+public class WotrAttributes {
+    public static final DeferredRegister<Attribute> WOTR_ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE,
             WanderersOfTheRift.MODID);
 
     private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
@@ -100,7 +100,7 @@ public class Attributes {
             "life_leech",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "life_leech"), 0, 0, 1F));
 
-    public static List<DeferredHolder<Attribute, RangedAttribute>> getAttributes() {
+    public static List<DeferredHolder<Attribute, RangedAttribute>> getWotrAttributes() {
         return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
 
     }
@@ -112,14 +112,14 @@ public class Attributes {
     private static DeferredHolder<Attribute, RangedAttribute> registerAttribute(
             final String name,
             final Supplier<? extends RangedAttribute> sup) {
-        DeferredHolder<Attribute, RangedAttribute> result = ATTRIBUTES.register(name, sup);
+        DeferredHolder<Attribute, RangedAttribute> result = WOTR_ATTRIBUTES.register(name, sup);
         PLAYER_ATTRIBUTES.add(result);
         return result;
     }
 
     @SubscribeEvent
     private static void addLivingAttribute(EntityAttributeModificationEvent event) {
-        for (DeferredHolder<Attribute, RangedAttribute> attribute : Attributes.PLAYER_ATTRIBUTES) {
+        for (DeferredHolder<Attribute, RangedAttribute> attribute : WotrAttributes.PLAYER_ATTRIBUTES) {
             for (EntityType e : event.getTypes()) {
                 event.add(e, attribute);
             }

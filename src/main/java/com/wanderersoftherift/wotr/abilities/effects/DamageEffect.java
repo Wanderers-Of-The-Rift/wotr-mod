@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
-import com.wanderersoftherift.wotr.init.Attributes;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.BlockPos;
@@ -63,7 +63,7 @@ public class DamageEffect extends AbstractEffect {
 
         // for now its ABILITY_DAMAGE but needs to be considered how multiple types are going to be implemented ie AP or
         // AD
-        float finalDamage = context.getAbilityAttribute(Attributes.ABILITY_DAMAGE, damageAmount);
+        float finalDamage = context.getAbilityAttribute(WotrAttributes.ABILITY_DAMAGE, damageAmount);
 
         for (Entity target : targets) {
             applyParticlesToTarget(target);
@@ -82,6 +82,6 @@ public class DamageEffect extends AbstractEffect {
     @Override
     public boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && Attributes.ABILITY_DAMAGE.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.ABILITY_DAMAGE.equals(attributeModifierEffect.getAttribute());
     }
 }
