@@ -2,11 +2,11 @@ package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.guild.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.network.guild.ActiveQuestReplicationPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +18,6 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -71,8 +70,8 @@ public class QuestRewardMenu extends AbstractContainerMenu {
     }
 
     public List<Reward> getNonItemRewards() {
-        return activeQuests.getQuest(selectedQuest.get())
-                .getBaseQuest()
+        return activeQuests.getQuestState(selectedQuest.get())
+                .getQuest()
                 .value()
                 .rewards()
                 .stream()
@@ -83,20 +82,20 @@ public class QuestRewardMenu extends AbstractContainerMenu {
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
+        QuestState questState = activeQuests.getQuestState(selectedQuest.get());
         if (player instanceof ServerPlayer serverPlayer) {
             ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, rewardItems);
-            List<Reward> rewards = activeQuests.getQuest(selectedQuest.get()).getBaseQuest().value().rewards();
+            List<Reward> rewards = questState.getQuest().value().rewards();
             for (Reward reward : rewards) {
                 reward.apply(serverPlayer);
             }
-            activeQuests.remove(selectedQuest.get());
-            PacketDistributor.sendToPlayer(serverPlayer, new ActiveQuestReplicationPayload(activeQuests));
+            activeQuests.remove(questState.getQuest());
         }
     }
 
     public void addRewards(ServerPlayer player) {
         access.execute((level, pos) -> {
-            Quest quest = activeQuests.getQuest(selectedQuest.get()).getBaseQuest().value();
+            Quest quest = activeQuests.getQuestState(selectedQuest.get()).getQuest().value();
             for (Reward reward : quest.rewards()) {
                 ItemStack rewardItem = reward.generateItem();
 

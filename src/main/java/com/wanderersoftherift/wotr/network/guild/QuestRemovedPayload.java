@@ -10,26 +10,23 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public record AbandonQuestPayload(Holder<Quest> quest) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<AbandonQuestPayload> TYPE = new CustomPacketPayload.Type<>(
-            ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "abandon_quest"));
+public record QuestRemovedPayload(Holder<Quest> quest) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<QuestRemovedPayload> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "quest_removed"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, AbandonQuestPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), AbandonQuestPayload::quest,
-            AbandonQuestPayload::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, QuestRemovedPayload> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), QuestRemovedPayload::quest,
+            QuestRemovedPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
-    public void handleOnServer(final IPayloadContext context) {
-        if (context.player() instanceof ServerPlayer player) {
-            player.getData(WotrAttachments.ACTIVE_QUESTS).remove(quest);
-        }
+    public void handleOnClient(final IPayloadContext context) {
+        context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).remove(quest);
     }
 }

@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.network.guild;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -12,19 +12,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public record ActiveQuestReplicationPayload(List<ActiveQuest> quests) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ActiveQuestReplicationPayload> TYPE = new CustomPacketPayload.Type<>(
+public record ActiveQuestsReplicationPayload(List<QuestState> quests) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<ActiveQuestsReplicationPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "active_quest_replication"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ActiveQuestReplicationPayload> STREAM_CODEC = StreamCodec
+    public static final StreamCodec<RegistryFriendlyByteBuf, ActiveQuestsReplicationPayload> STREAM_CODEC = StreamCodec
             .composite(
-                    ActiveQuest.STREAM_CODEC.apply(ByteBufCodecs.list()), ActiveQuestReplicationPayload::quests,
-                    ActiveQuestReplicationPayload::new);
+                    QuestState.STREAM_CODEC.apply(ByteBufCodecs.list()), ActiveQuestsReplicationPayload::quests,
+                    ActiveQuestsReplicationPayload::new);
 
-    public ActiveQuestReplicationPayload(ActiveQuests quests) {
-        this(quests.getQuestList());
+    public ActiveQuestsReplicationPayload(ActiveQuests quests) {
+        this(new ArrayList<>(quests.getQuestList()));
     }
 
     @Override
@@ -33,6 +34,6 @@ public record ActiveQuestReplicationPayload(List<ActiveQuest> quests) implements
     }
 
     public void handleOnClient(final IPayloadContext context) {
-        context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).updateFromServer(quests);
+        context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).resyncFromServer(quests);
     }
 }

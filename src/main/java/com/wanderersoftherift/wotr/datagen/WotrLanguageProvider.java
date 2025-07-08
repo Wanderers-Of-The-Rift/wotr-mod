@@ -173,6 +173,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.abandon"), "Abandon");
         add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver: ");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s %s");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
@@ -412,6 +413,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "gold_and_iron.title"), "Sample the Wares");
         add(WanderersOfTheRift.translationId("quest", "gold_and_iron.description"),
                 "Psst. You look like a discerning customer? I've got some powerful shiny baubles if you can bring me some precious metals!");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons.title"), "Defeat Skeletons");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons.description"), "Bones scare me! Save me!");
+
+        add("mobgroup.minecraft.skeletons", "Skeletons");
     }
 
     private void addRunegems() {

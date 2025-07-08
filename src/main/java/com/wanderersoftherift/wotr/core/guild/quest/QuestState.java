@@ -4,11 +4,15 @@ import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.network.guild.QuestGoalUpdatePayload;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -18,27 +22,28 @@ import java.util.List;
  * Progress is tracked as an integer for each goal, with each goal providing a target value
  * </p>
  */
-public class ActiveQuest {
+public class QuestState {
 
-    public static final Codec<ActiveQuest> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Quest.CODEC.fieldOf("quest").forGetter(ActiveQuest::getBaseQuest),
+    public static final Codec<QuestState> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Quest.CODEC.fieldOf("quest").forGetter(QuestState::getQuest),
             Codec.INT.listOf().fieldOf("goal_states").forGetter(x -> IntArrayList.wrap(x.goalProgress))
-    ).apply(instance, ActiveQuest::new));
+    ).apply(instance, QuestState::new));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ActiveQuest> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), ActiveQuest::getBaseQuest,
-            ByteBufCodecs.INT.apply(ByteBufCodecs.list()), x -> IntArrayList.wrap(x.goalProgress), ActiveQuest::new
+    public static final StreamCodec<RegistryFriendlyByteBuf, QuestState> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), QuestState::getQuest,
+            ByteBufCodecs.INT.apply(ByteBufCodecs.list()), x -> IntArrayList.wrap(x.goalProgress), QuestState::new
     );
 
+    private IAttachmentHolder holder;
     private Holder<Quest> quest;
     private int[] goalProgress;
 
-    public ActiveQuest(Holder<Quest> quest) {
+    public QuestState(Holder<Quest> quest) {
         this.quest = quest;
         this.goalProgress = new int[quest.value().goals().size()];
     }
 
-    public ActiveQuest(Holder<Quest> quest, List<Integer> states) {
+    public QuestState(Holder<Quest> quest, List<Integer> states) {
         this.quest = quest;
         this.goalProgress = new int[quest.value().goals().size()];
         for (int i = 0; i < goalProgress.length && i < states.size(); i++) {
@@ -46,10 +51,19 @@ public class ActiveQuest {
         }
     }
 
+    public void setHolder(IAttachmentHolder holder) {
+        this.holder = holder;
+        if (holder instanceof ServerPlayer player) {
+            for (int i = 0; i < goalCount(); i++) {
+                quest.value().goals().get(i).registerActiveQuest(player, this, i);
+            }
+        }
+    }
+
     /**
      * @return The definition of the quest that has been accepted
      */
-    public Holder<Quest> getBaseQuest() {
+    public Holder<Quest> getQuest() {
         return quest;
     }
 
@@ -108,15 +122,8 @@ public class ActiveQuest {
     public void setGoalProgress(int index, int amount) {
         Preconditions.checkArgument(index >= 0 && index < goalProgress.length, "Index out of bounds");
         goalProgress[index] = amount;
-    }
-
-    /**
-     * Updates this active quest from information replicated from the server
-     * 
-     * @param activeQuest
-     */
-    public void updateFromServer(ActiveQuest activeQuest) {
-        this.quest = activeQuest.getBaseQuest();
-        this.goalProgress = activeQuest.goalProgress;
+        if (holder instanceof ServerPlayer player) {
+            PacketDistributor.sendToPlayer(player, new QuestGoalUpdatePayload(quest, index, amount));
+        }
     }
 }

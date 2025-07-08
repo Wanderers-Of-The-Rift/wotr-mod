@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.gui.widget;
+package com.wanderersoftherift.wotr.gui.widget.scrollentry;
 
 import com.wanderersoftherift.wotr.core.guild.quest.reward.ItemReward;
 import com.wanderersoftherift.wotr.util.ComponentUtil;

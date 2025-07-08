@@ -1,7 +1,8 @@
-package com.wanderersoftherift.wotr.gui.widget;
+package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
+import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.client.Minecraft;
@@ -42,7 +43,10 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
         int messageWidth = font.width(getMessage());
         ContextMap contextmap = SlotDisplayContext.fromLevel(Minecraft.getInstance().level);
         ItemStack displayItem = goal.item().display().resolveForFirstStack(contextmap);
-        displayItem.setCount(Math.max(1, goal.progressTarget() - progress));
+        int remaining = goal.progressTarget() - progress;
+        if (remaining != 0) {
+            displayItem.setCount(remaining);
+        }
         guiGraphics.renderFakeItem(displayItem, getX() + messageWidth, getY());
         guiGraphics.renderItemDecorations(font, displayItem, getX() + messageWidth, getY());
 
