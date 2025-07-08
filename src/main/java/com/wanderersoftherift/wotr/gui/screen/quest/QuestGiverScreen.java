@@ -1,14 +1,14 @@
 package com.wanderersoftherift.wotr.gui.screen.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
-import com.wanderersoftherift.wotr.gui.widget.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
+import com.wanderersoftherift.wotr.gui.widget.quest.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.SpacerEntry;
@@ -84,7 +84,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
 
     private void selectQuest(Holder<Quest> quest) {
         selectedQuest = quest;
-        ActiveQuest fakeQuest = new ActiveQuest(quest);
+        QuestState fakeQuest = new QuestState(quest);
         questInfo.children().clear();
         questInfo.children().add(new LabelEntry(font, Quest.title(quest), 4));
         questInfo.children().add(new WrappedTextEntry(font, Quest.description(quest)));

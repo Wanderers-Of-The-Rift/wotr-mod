@@ -1,17 +1,18 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.gui.menu.slot.QuestItemStackHandler;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.network.guild.ActiveQuestReplicationPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -23,7 +24,6 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class QuestCompletionMenu extends AbstractContainerMenu {
@@ -54,11 +54,11 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         this.selectedQuest = DataSlot.standalone();
         selectedQuest.set(questIndex);
         addDataSlot(selectedQuest);
-        handInItems = new QuestItemStackHandler(() -> quests.getQuest(selectedQuest.get()), HAND_IN_SLOTS);
+        handInItems = new QuestItemStackHandler(() -> quests.getQuestState(selectedQuest.get()), HAND_IN_SLOTS);
         for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
-            addSlot(new SlotItemHandler(handInItems, slot, 112 + slot * 18, 32));
+            addSlot(new SlotItemHandler(handInItems, slot, 162 + slot * 18, 32));
         }
-        addStandardInventorySlots(playerInventory, 108, 118);
+        addStandardInventorySlots(playerInventory, 158, 118);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         return stillValid(this.access, player, WotrBlocks.QUEST_HUB.get());
     }
 
-    public ActiveQuest getQuest() {
-        return quests.getQuest(selectedQuest.get());
+    public QuestState getQuestState() {
+        return quests.getQuestState(selectedQuest.get());
     }
 
     public boolean hasItemToHandIn() {
@@ -81,8 +81,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
     public void handIn(ServerPlayer player) {
         access.execute((level, blockPos) -> {
-            ActiveQuest quest = getQuest();
-            boolean changed = false;
+            QuestState quest = getQuestState();
             for (int index = 0; index < quest.goalCount(); index++) {
                 if (!quest.isGoalComplete(index) && quest.getGoal(index) instanceof GiveItemGoal goal) {
                     for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
@@ -92,7 +91,6 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
                         }
 
                         if (goal.item().test(itemsToHandIn)) {
-                            changed = true;
                             int remainingItems = goal.progressTarget() - quest.getGoalProgress(index);
                             if (itemsToHandIn.getCount() >= remainingItems) {
                                 quest.setGoalProgress(index, quest.getGoalProgress(index) + remainingItems);
@@ -105,10 +103,6 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
                     }
                 }
             }
-            // TODO: replicate specific changed quest.
-            if (changed) {
-                PacketDistributor.sendToPlayer(player, new ActiveQuestReplicationPayload(quests));
-            }
             // Empty the slots of residual items
             for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
                 quickMoveStack(player, slot);
@@ -116,8 +110,9 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         });
     }
 
-    public void completeQuest(ServerPlayer player, int questIndex) {
-        if (questIndex != selectedQuest.get() || !getQuest().isComplete()) {
+    public void completeQuest(ServerPlayer player, Holder<Quest> quest) {
+        QuestState questState = getQuestState();
+        if (!questState.getQuest().equals(quest) || !questState.isComplete()) {
             return;
         }
         access.execute((level, blockPos) -> {
@@ -131,10 +126,6 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
                         return menu;
                     }, Component.translatable(WanderersOfTheRift.translationId("container", "quest_complete"))));
         });
-    }
-
-    public int getQuestIndex() {
-        return selectedQuest.get();
     }
 
     @Override

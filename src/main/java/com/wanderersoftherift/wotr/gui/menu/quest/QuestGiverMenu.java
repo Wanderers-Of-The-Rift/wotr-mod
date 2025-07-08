@@ -1,12 +1,11 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.network.guild.ActiveQuestReplicationPayload;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class QuestGiverMenu extends AbstractContainerMenu {
@@ -44,10 +42,8 @@ public class QuestGiverMenu extends AbstractContainerMenu {
         // TODO: check quest is valid in this context
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
-            ActiveQuest activeQuest = new ActiveQuest(quest);
-            activeQuests.add(activeQuest);
-            PacketDistributor.sendToPlayer(player, new ActiveQuestReplicationPayload(activeQuests));
-            // TODO: open completion screen
+            QuestState questState = new QuestState(quest);
+            activeQuests.add(questState);
             player.closeContainer();
         }
     }

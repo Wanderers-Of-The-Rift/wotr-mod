@@ -51,7 +51,7 @@ public class QuestHubBlock extends Block {
                             (containerId, playerInventory, p) -> new QuestCompletionMenu(containerId, playerInventory,
                                     ContainerLevelAccess.create(level, pos), p.getData(WotrAttachments.ACTIVE_QUESTS),
                                     0),
-                            Quest.title(activeQuests.getQuest(0).getBaseQuest())));
+                            Quest.title(activeQuests.getQuestState(0).getQuest())));
         }
         return InteractionResult.CONSUME;
     }

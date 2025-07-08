@@ -75,6 +75,8 @@ public class WotrAttachments {
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.CODEC).copyOnDeath().build());
     public static final Supplier<AttachmentType<ActiveQuests>> ACTIVE_QUESTS = ATTACHMENT_TYPES.register(
             "active_quests",
-            () -> AttachmentType.builder(() -> new ActiveQuests()).serialize(ActiveQuests.CODEC).copyOnDeath().build());
-
+            () -> AttachmentType.builder(ActiveQuests::new)
+                    .serialize(ActiveQuests.getSerializer())
+                    .copyOnDeath()
+                    .build());
 }

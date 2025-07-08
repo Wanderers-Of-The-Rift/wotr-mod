@@ -4,23 +4,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Goal;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestEventHandler;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.crafting.Ingredient;
 
-/**
- * This goal requires items to be handed in to complete.
- * 
- * @param item     The item (or set of items) that the quest requires
- * @param quantity How many total items need to be provided
- */
-public record GiveItemGoal(Ingredient item, int quantity) implements Goal {
+public record KillMobGoal(EntityTypePredicate mob, int quantity) implements Goal {
 
-    public static final MapCodec<GiveItemGoal> CODEC = RecordCodecBuilder.mapCodec(
+    public static final MapCodec<KillMobGoal> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Ingredient.CODEC.fieldOf("item").forGetter(GiveItemGoal::item),
-                    Codec.INT.optionalFieldOf("quantity", 1).forGetter(GiveItemGoal::progressTarget)
-            ).apply(instance, GiveItemGoal::new));
+                    EntityTypePredicate.CODEC.fieldOf("mob").forGetter(KillMobGoal::mob),
+                    Codec.INT.optionalFieldOf("quantity", 1).forGetter(KillMobGoal::quantity)
+            ).apply(instance, KillMobGoal::new));
 
     @Override
     public MapCodec<? extends Goal> getCodec() {
@@ -34,7 +29,6 @@ public record GiveItemGoal(Ingredient item, int quantity) implements Goal {
 
     @Override
     public void registerActiveQuest(ServerPlayer player, QuestState quest, int goalIndex) {
-
+        QuestEventHandler.registerKillMobGoal(player, this, quest, goalIndex);
     }
-
 }

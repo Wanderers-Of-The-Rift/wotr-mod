@@ -1,20 +1,19 @@
 package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
-import com.wanderersoftherift.wotr.gui.widget.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
+import com.wanderersoftherift.wotr.gui.widget.quest.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.SpacerEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.WrappedTextEntry;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -23,7 +22,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -64,8 +62,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
             if (confirmAbandon) {
                 button.setMessage(ABANDON_LABEL);
                 confirmAbandon = false;
-                PacketDistributor.sendToServer(new AbandonQuestPayload(0));
-                activeQuests.remove(0);
+                activeQuests.remove(activeQuests.getQuestState(0).getQuest());
                 questInfo.children().clear();
                 button.visible = false;
             } else {
@@ -76,17 +73,17 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
         addRenderableWidget(abandonQuest);
 
         if (!activeQuests.isEmpty()) {
-            ActiveQuest activeQuest = activeQuests.getQuest(0);
-            questInfo.children().add(new LabelEntry(font, Quest.title(activeQuest.getBaseQuest()), 4));
-            questInfo.children().add(new WrappedTextEntry(font, Quest.description(activeQuest.getBaseQuest())));
+            QuestState questState = activeQuests.getQuestState(0);
+            questInfo.children().add(new LabelEntry(font, Quest.title(questState.getQuest()), 4));
+            questInfo.children().add(new WrappedTextEntry(font, Quest.description(questState.getQuest())));
             questInfo.children().add(new SpacerEntry(4));
             questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 4));
-            for (int i = 0; i < activeQuest.goalCount(); i++) {
-                questInfo.children().add(new GoalStateWidget(activeQuest, i));
+            for (int i = 0; i < questState.goalCount(); i++) {
+                questInfo.children().add(new GoalStateWidget(questState, i));
             }
             questInfo.children().add(new SpacerEntry(2));
             questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
-            List<AbstractWidget> rewards = activeQuest.getBaseQuest()
+            List<AbstractWidget> rewards = questState.getQuest()
                     .value()
                     .rewards()
                     .stream()

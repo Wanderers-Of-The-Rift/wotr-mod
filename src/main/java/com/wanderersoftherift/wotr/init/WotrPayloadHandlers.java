@@ -21,9 +21,12 @@ import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayloa
 import com.wanderersoftherift.wotr.network.charactermenu.SelectCharacterMenuPayload;
 import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.AcceptQuestPayload;
-import com.wanderersoftherift.wotr.network.guild.ActiveQuestReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.ActiveQuestsReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.CompleteQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.HandInQuestItemPayload;
+import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
+import com.wanderersoftherift.wotr.network.guild.QuestGoalUpdatePayload;
+import com.wanderersoftherift.wotr.network.guild.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.network.guild.SelectTradePayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
@@ -97,8 +100,14 @@ public class WotrPayloadHandlers {
                 SelectTradePayload::handleOnServer);
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
                 AcceptQuestPayload::handleOnServer);
-        registrar.playToClient(ActiveQuestReplicationPayload.TYPE, ActiveQuestReplicationPayload.STREAM_CODEC,
-                ActiveQuestReplicationPayload::handleOnClient);
+        registrar.playToClient(ActiveQuestsReplicationPayload.TYPE, ActiveQuestsReplicationPayload.STREAM_CODEC,
+                ActiveQuestsReplicationPayload::handleOnClient);
+        registrar.playToClient(QuestAcceptedPayload.TYPE, QuestAcceptedPayload.STREAM_CODEC,
+                QuestAcceptedPayload::handleOnClient);
+        registrar.playToClient(QuestRemovedPayload.TYPE, QuestRemovedPayload.STREAM_CODEC,
+                QuestRemovedPayload::handleOnClient);
+        registrar.playToClient(QuestGoalUpdatePayload.TYPE, QuestGoalUpdatePayload.STREAM_CODEC,
+                QuestGoalUpdatePayload::handleOnClient);
         registrar.playToServer(HandInQuestItemPayload.TYPE, HandInQuestItemPayload.STREAM_CODEC,
                 HandInQuestItemPayload::handleOnServer);
         registrar.playToServer(CompleteQuestPayload.TYPE, CompleteQuestPayload.STREAM_CODEC,
@@ -120,8 +129,9 @@ public class WotrPayloadHandlers {
             replicateEffectMarkers(player);
             replicateMana(player);
             replicateWallet(player);
-            replicateActiveQuests(player);
             BannedFromRiftPayload.sendTo(player);
+            PacketDistributor.sendToPlayer(player,
+                    new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
         }
     }
 
@@ -131,8 +141,9 @@ public class WotrPayloadHandlers {
             replicateAbilities(player);
             replicateEffectMarkers(player);
             replicateWallet(player);
-            replicateActiveQuests(player);
             BannedFromRiftPayload.sendTo(player);
+            PacketDistributor.sendToPlayer(player,
+                    new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
         }
     }
 
@@ -143,8 +154,9 @@ public class WotrPayloadHandlers {
             replicateEffectMarkers(player);
             replicateMana(player);
             replicateWallet(player);
-            replicateActiveQuests(player);
             BannedFromRiftPayload.sendTo(player);
+            PacketDistributor.sendToPlayer(player,
+                    new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
         }
     }
 
@@ -171,11 +183,6 @@ public class WotrPayloadHandlers {
 
     private static void replicateWallet(ServerPlayer player) {
         PacketDistributor.sendToPlayer(player, new WalletReplicationPayload(player.getData(WotrAttachments.WALLET)));
-    }
-
-    private static void replicateActiveQuests(ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player,
-                new ActiveQuestReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
     }
 
 }

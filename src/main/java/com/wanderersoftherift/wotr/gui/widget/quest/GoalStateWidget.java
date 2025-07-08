@@ -1,7 +1,9 @@
-package com.wanderersoftherift.wotr.gui.widget;
+package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuest;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
+import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -18,11 +20,11 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     private static final int STATE_BOX_SIZE = 8;
     private static final int STATE_BOX_VERT_OFFSET = 4;
     private static final int STATE_BOX_HORIZ_OFFSET = 2;
-    private final ActiveQuest quest;
+    private final QuestState quest;
     private final int goalIndex;
     private final GoalDisplay goalWidget;
 
-    public GoalStateWidget(ActiveQuest quest, int goalIndex) {
+    public GoalStateWidget(QuestState quest, int goalIndex) {
         super(0, 0, 0, 0, Component.empty());
         this.quest = quest;
         this.goalIndex = goalIndex;
