@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.effects.events;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.effects.CriticalEffect;
 import com.wanderersoftherift.wotr.effects.LifeLeechEffect;
-import com.wanderersoftherift.wotr.effects.ThornsEffect;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDamageTypes;
 import net.minecraft.core.registries.Registries;
@@ -29,12 +28,12 @@ public class OnHitEvent {
         Entity causer = event.getSource().getEntity();
         if (causer != null) {
             LivingEntity living = (LivingEntity) causer;
-            if(living.getAttributeValue(WotrAttributes.CRITICAL_CHANCE) > living.getRandom().nextInt(0, 100)){
-                event.setAmount(CriticalEffect.calcFinalDamage(event.getAmount(), living, event.getEntity(), living.getRandom()));
+            if (living.getAttributeValue(WotrAttributes.CRITICAL_CHANCE) > living.getRandom().nextInt(0, 100)) {
+                event.setAmount(CriticalEffect.calcFinalDamage(event.getAmount(), living, event.getEntity(),
+                        living.getRandom()));
             }
         }
     }
-
 
     @SubscribeEvent
     public static void thornsEvent(LivingDamageEvent.Post event) {
@@ -45,14 +44,16 @@ public class OnHitEvent {
         Entity causer = event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
 
-        if(causer != null && event.getNewDamage() != 0){
-            if(causer instanceof LivingEntity) {
-                if(!event.getSource().is(WotrDamageTypes.THORNS_DAMAGE) && !event.getSource().is(DamageTypes.THORNS)){
-                    causer.hurtServer((ServerLevel) level, thorns, (float) receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
+        if (causer != null && event.getNewDamage() != 0) {
+            if (causer instanceof LivingEntity) {
+                if (!event.getSource().is(WotrDamageTypes.THORNS_DAMAGE) && !event.getSource().is(DamageTypes.THORNS)) {
+                    causer.hurtServer((ServerLevel) level, thorns,
+                            (float) receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
                 }
             } else if (causer instanceof Projectile proj) {
-                LivingEntity shooter = (LivingEntity)proj.getOwner();
-                shooter.hurtServer((ServerLevel) level, thorns, (float) receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
+                LivingEntity shooter = (LivingEntity) proj.getOwner();
+                shooter.hurtServer((ServerLevel) level, thorns,
+                        (float) receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE));
             }
         }
     }
@@ -60,11 +61,12 @@ public class OnHitEvent {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void lifeLeechEvent(LivingDamageEvent.Pre event) {
         Entity causer = event.getSource().getDirectEntity();
-        if( causer != null && causer.isAlive() && !(causer instanceof Projectile)) {
+        if (causer != null && causer.isAlive() && !(causer instanceof Projectile)) {
             LivingEntity livCauser = (LivingEntity) causer;
             LivingEntity receiver = event.getEntity();
             if (event.getNewDamage() != 0) {
-                livCauser.setHealth(livCauser.getHealth() + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
+                livCauser.setHealth(
+                        livCauser.getHealth() + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
             }
         }
     }
