@@ -11,22 +11,14 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.attachment.IAttachmentHolder;
-import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class WotrAttachments {
@@ -65,8 +57,7 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<AbilitySlots>> ABILITY_SLOTS = ATTACHMENT_TYPES.register(
             "ability_slots",
             () -> AttachmentType.builder((holder) -> new AbilitySlots(holder, null))
-                    .serialize(new AttachmentSerializerFromDataCodec<AbilitySlots.Data, AbilitySlots>(
-                            AbilitySlots.Data.CODEC, AbilitySlots::new, AbilitySlots::data))
+                    .serialize(AbilitySlots.SERIALIZER)
                     .copyOnDeath()
                     .build());
     public static final Supplier<AttachmentType<AttachedEffectData>> ATTACHED_EFFECTS = ATTACHMENT_TYPES.register(
@@ -77,21 +68,4 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
             () -> AttachmentType.builder(ManaData::new).serialize(ManaData.CODEC).build());
 
-    public static record AttachmentSerializerFromDataCodec<D, A>(Codec<D> codec,
-            BiFunction<IAttachmentHolder, D, A> attachmentConstructor, Function<A, D> dataGetter)
-            implements IAttachmentSerializer<Tag, A> {
-
-        @Override
-        public A read(IAttachmentHolder iAttachmentHolder, Tag tag, HolderLookup.Provider provider) {
-            return attachmentConstructor.apply(iAttachmentHolder,
-                    codec.decode(provider.createSerializationContext(NbtOps.INSTANCE), tag).getOrThrow().getFirst());
-        }
-
-        @Override
-        public @Nullable Tag write(A attachment, HolderLookup.Provider provider) {
-            return codec
-                    .encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), dataGetter().apply(attachment))
-                    .getOrThrow();
-        }
-    }
 }
