@@ -2,15 +2,13 @@ package com.wanderersoftherift.wotr.core.guild.quest;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -18,19 +16,11 @@ import java.util.WeakHashMap;
 @EventBusSubscriber
 public class QuestEventHandler {
 
-    private static final Multimap<ServerPlayer, KillMobEntry> killMobGoals = Multimaps
+    private static final Multimap<ServerPlayer, Listener<LivingDeathEvent>> killListeners = Multimaps
             .newListMultimap(new WeakHashMap<>(), ArrayList::new);
 
-    private static void registerGoals(ServerPlayer player) {
-        for (QuestState questState : player.getData(WotrAttachments.ACTIVE_QUESTS).getQuestList()) {
-            for (int goalIndex = 0; goalIndex < questState.goalCount(); goalIndex++) {
-                questState.getGoal(goalIndex).registerActiveQuest(player, questState, goalIndex);
-            }
-        }
-    }
-
-    public static void registerKillMobGoal(ServerPlayer player, KillMobGoal goal, QuestState quest, int goalIndex) {
-        killMobGoals.put(player, new KillMobEntry(goal, new WeakReference<>(quest), goalIndex));
+    public static void registerPlayerKillListener(ServerPlayer player, Listener<LivingDeathEvent> listener) {
+        killListeners.put(player, listener);
     }
 
     @SubscribeEvent
@@ -39,15 +29,11 @@ public class QuestEventHandler {
             return;
         }
 
-        Iterator<KillMobEntry> iterator = killMobGoals.get(player).iterator();
+        Iterator<Listener<LivingDeathEvent>> iterator = killListeners.get(player).iterator();
         while (iterator.hasNext()) {
-            KillMobEntry entry = iterator.next();
-            QuestState questState = entry.quest().get();
-            if (questState != null) {
-                int progress = questState.getGoalProgress(entry.goalIndex);
-                if (progress < entry.goal.progressTarget() && entry.goal.mob().matches(event.getEntity().getType())) {
-                    questState.setGoalProgress(entry.goalIndex, progress + 1);
-                }
+            Listener<LivingDeathEvent> listener = iterator.next();
+            if (listener.isRelevant()) {
+                listener.onEvent(event);
             } else {
                 iterator.remove();
             }
@@ -59,10 +45,23 @@ public class QuestEventHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        killMobGoals.removeAll(player);
+        killListeners.removeAll(player);
     }
 
-    private record KillMobEntry(KillMobGoal goal, WeakReference<QuestState> quest, int goalIndex) {
+    public interface Listener<T extends Event> {
+
+        /**
+         * Called when the listener to event occurs
+         * 
+         * @param event
+         */
+        void onEvent(T event);
+
+        /**
+         * @return Whether this listener is still relevant
+         */
+        boolean isRelevant();
+
     }
 
 }

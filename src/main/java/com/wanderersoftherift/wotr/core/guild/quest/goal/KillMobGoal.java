@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Goal;
+import com.wanderersoftherift.wotr.core.guild.quest.GoalEventListener;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestEventHandler;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
@@ -28,7 +29,16 @@ public record KillMobGoal(EntityTypePredicate mob, int quantity) implements Goal
     }
 
     @Override
-    public void registerActiveQuest(ServerPlayer player, QuestState quest, int goalIndex) {
-        QuestEventHandler.registerKillMobGoal(player, this, quest, goalIndex);
+    public void registerActiveQuest(ServerPlayer player, QuestState questState, int goalIndex) {
+        QuestEventHandler.registerPlayerKillListener(player,
+                new GoalEventListener<>(questState, goalIndex, (event, state, index) -> {
+                    if (mob.matches(event.getEntity().getType())) {
+                        int goalProgress = state.getGoalProgress(index);
+                        if (goalProgress < progressTarget()) {
+                            state.setGoalProgress(index, goalProgress + 1);
+                        }
+                    }
+                }));
     }
+
 }
