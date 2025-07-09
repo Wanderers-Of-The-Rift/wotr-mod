@@ -2,16 +2,13 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -29,8 +26,6 @@ import java.util.Objects;
 public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
-    public static final TagKey<Item> ABILITY_SLOT_ACCEPTED = new TagKey<>(Registries.ITEM,
-            WanderersOfTheRift.id("ability_slot_accepted"));
 
     public static final AttachmentSerializerFromDataCodec<Data, AbilitySlots> SERIALIZER = new AttachmentSerializerFromDataCodec<Data, AbilitySlots>(
             Data.CODEC, AbilitySlots::new, AbilitySlots::data);
@@ -163,7 +158,7 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return stack.is(ABILITY_SLOT_ACCEPTED);
+        return stack.is(WotrTags.Items.ABILITY_SLOT_ACCEPTED);
     }
 
     @Override
