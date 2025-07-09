@@ -43,6 +43,7 @@ public class WotrTags {
         public static final TagKey<Item> TANK_TYPE_WEAPON = createTag("weapon_type.tank_type_weapon");
         public static final TagKey<Item> BARBARIAN_TYPE_WEAPON = createTag("weapon_type.barbarian_type_weapon");
         public static final TagKey<Item> WIZARD_TYPE_WEAPON = createTag("weapon_type.wizard_type_weapon");
+        public static final TagKey<Item> ABILITY_SLOT_ACCEPTED = createTag("ability_slot_accepted");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(WanderersOfTheRift.id(name));
