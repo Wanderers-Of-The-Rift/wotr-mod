@@ -139,11 +139,11 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
                                         WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
         );
-        registerModifier(context, getResourceKey("critical_multiplier"),
+        registerModifier(context, getResourceKey("critical_bonus"),
                 new Modifier(generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.5F, 3F,
-                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_multiplier"),
-                                        WotrAttributes.CRITICAL_MULTIPLIER, AttributeModifier.Operation.ADD_VALUE)))))
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("critical_bonus"),
+                                        WotrAttributes.CRITICAL_BONUS, AttributeModifier.Operation.ADD_VALUE)))))
         );
         registerModifier(context, getResourceKey("critical_avoidance"),
                 new Modifier(generateEqualRollSpread(5,

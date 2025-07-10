@@ -78,10 +78,9 @@ public class WotrAttributes {
             "critical_chance",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_chance"), 0, 0,
                     Integer.MAX_VALUE));
-    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_MULTIPLIER = registerAttribute(
-            "critical_multiplier",
-            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_multiplier"), 1.5, 0,
-                    Integer.MAX_VALUE));
+    public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_BONUS = registerAttribute(
+            "critical_bonus", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_bonus"),
+                    1.5, 0, Integer.MAX_VALUE));
     public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_AVOIDANCE = registerAttribute(
             "critical_avoidance",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), 0, 0,

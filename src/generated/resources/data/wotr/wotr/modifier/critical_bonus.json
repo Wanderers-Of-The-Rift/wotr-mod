@@ -4,8 +4,8 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "wotr:critical_multiplier",
-          "id": "wotr:critical_multiplier",
+          "attribute": "wotr:critical_bonus",
+          "id": "wotr:critical_bonus",
           "max_roll": 1.0,
           "min_roll": 0.5,
           "operation": "add_value"
@@ -17,8 +17,8 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "wotr:critical_multiplier",
-          "id": "wotr:critical_multiplier",
+          "attribute": "wotr:critical_bonus",
+          "id": "wotr:critical_bonus",
           "max_roll": 1.5,
           "min_roll": 1.0,
           "operation": "add_value"
@@ -30,8 +30,8 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "wotr:critical_multiplier",
-          "id": "wotr:critical_multiplier",
+          "attribute": "wotr:critical_bonus",
+          "id": "wotr:critical_bonus",
           "max_roll": 2.0,
           "min_roll": 1.5,
           "operation": "add_value"
@@ -43,8 +43,8 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "wotr:critical_multiplier",
-          "id": "wotr:critical_multiplier",
+          "attribute": "wotr:critical_bonus",
+          "id": "wotr:critical_bonus",
           "max_roll": 2.5,
           "min_roll": 2.0,
           "operation": "add_value"
@@ -56,8 +56,8 @@
       "modifiers": [
         {
           "type": "wotr:attribute",
-          "attribute": "wotr:critical_multiplier",
-          "id": "wotr:critical_multiplier",
+          "attribute": "wotr:critical_bonus",
+          "id": "wotr:critical_bonus",
           "max_roll": 3.0,
           "min_roll": 2.5,
           "operation": "add_value"
