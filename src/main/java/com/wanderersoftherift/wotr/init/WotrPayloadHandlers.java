@@ -22,6 +22,7 @@ import com.wanderersoftherift.wotr.network.charactermenu.SelectCharacterMenuPayl
 import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.AcceptQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.ActiveQuestsReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.AvailableQuestsPayload;
 import com.wanderersoftherift.wotr.network.guild.CompleteQuestPayload;
 import com.wanderersoftherift.wotr.network.guild.HandInQuestItemPayload;
 import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
@@ -114,6 +115,8 @@ public class WotrPayloadHandlers {
                 CompleteQuestPayload::handleOnServer);
         registrar.playToServer(AbandonQuestPayload.TYPE, AbandonQuestPayload.STREAM_CODEC,
                 AbandonQuestPayload::handleOnServer);
+        registrar.playToClient(AvailableQuestsPayload.TYPE, AvailableQuestsPayload.STREAM_CODEC,
+                AvailableQuestsPayload::handleOnClient);
 
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,

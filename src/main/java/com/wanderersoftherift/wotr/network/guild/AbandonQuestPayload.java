@@ -1,12 +1,9 @@
 package com.wanderersoftherift.wotr.network.guild;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
-import net.minecraft.core.Holder;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -14,13 +11,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public record AbandonQuestPayload(Holder<Quest> quest) implements CustomPacketPayload {
+import java.util.UUID;
+
+public record AbandonQuestPayload(UUID questId) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<AbandonQuestPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "abandon_quest"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AbandonQuestPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS), AbandonQuestPayload::quest,
-            AbandonQuestPayload::new);
+            UUIDUtil.STREAM_CODEC, AbandonQuestPayload::questId, AbandonQuestPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -29,7 +27,7 @@ public record AbandonQuestPayload(Holder<Quest> quest) implements CustomPacketPa
 
     public void handleOnServer(final IPayloadContext context) {
         if (context.player() instanceof ServerPlayer player) {
-            player.getData(WotrAttachments.ACTIVE_QUESTS).remove(quest);
+            player.getData(WotrAttachments.ACTIVE_QUESTS).remove(questId);
         }
     }
 }

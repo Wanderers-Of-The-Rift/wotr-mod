@@ -60,9 +60,7 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
         }
         questInfo.children().add(new SpacerEntry(6));
         questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
-        List<AbstractWidget> rewards = questState.getQuest()
-                .value()
-                .rewards()
+        List<AbstractWidget> rewards = questState.getRewards()
                 .stream()
                 .map(RewardDisplays::createFor)
                 .filter(Optional::isPresent)
@@ -83,7 +81,7 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
         complete = Button
                 .builder(Component.translatable(WanderersOfTheRift.translationId("container", "quest.complete")),
                         button -> {
-                            PacketDistributor.sendToServer(new CompleteQuestPayload(menu.getQuestState().getQuest()));
+                            PacketDistributor.sendToServer(new CompleteQuestPayload(menu.getQuestState().getId()));
                         })
                 .bounds(leftPos + 157, topPos + 78, 60, 16)
                 .build();

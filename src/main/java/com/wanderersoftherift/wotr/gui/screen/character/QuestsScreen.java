@@ -62,7 +62,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
             if (confirmAbandon) {
                 button.setMessage(ABANDON_LABEL);
                 confirmAbandon = false;
-                activeQuests.remove(activeQuests.getQuestState(0).getQuest());
+                activeQuests.remove(activeQuests.getQuestState(0).getId());
                 questInfo.children().clear();
                 button.visible = false;
             } else {
@@ -74,8 +74,8 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
 
         if (!activeQuests.isEmpty()) {
             QuestState questState = activeQuests.getQuestState(0);
-            questInfo.children().add(new LabelEntry(font, Quest.title(questState.getQuest()), 4));
-            questInfo.children().add(new WrappedTextEntry(font, Quest.description(questState.getQuest())));
+            questInfo.children().add(new LabelEntry(font, Quest.title(questState.getOrigin()), 4));
+            questInfo.children().add(new WrappedTextEntry(font, Quest.description(questState.getOrigin())));
             questInfo.children().add(new SpacerEntry(4));
             questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 4));
             for (int i = 0; i < questState.goalCount(); i++) {
@@ -83,9 +83,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
             }
             questInfo.children().add(new SpacerEntry(2));
             questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
-            List<AbstractWidget> rewards = questState.getQuest()
-                    .value()
-                    .rewards()
+            List<AbstractWidget> rewards = questState.getRewards()
                     .stream()
                     .map(RewardDisplays::createFor)
                     .filter(Optional::isPresent)
