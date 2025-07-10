@@ -46,8 +46,7 @@ public class OnHitEvent {
         if (causer instanceof LivingEntity livCauser && causer.isAlive()) {
             if (event.getNewDamage() != 0) {
                 livCauser.setHealth(
-                        livCauser.getHealth()
-                                + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
+                        livCauser.getHealth() + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
             }
         }
     }
