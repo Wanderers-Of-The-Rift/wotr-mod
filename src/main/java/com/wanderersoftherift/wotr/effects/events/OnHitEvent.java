@@ -38,7 +38,7 @@ public class OnHitEvent {
     public static void thornsEvent(LivingDamageEvent.Post event) {
         Level level = event.getEntity().level();
 
-        Entity causer = event.getSource().getDirectEntity();
+        Entity causer = event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
 
         if (causer instanceof LivingEntity) {
@@ -47,27 +47,15 @@ public class OnHitEvent {
                         level.registryAccess()
                                 .lookupOrThrow(Registries.DAMAGE_TYPE)
                                 .getOrThrow(WotrDamageTypes.THORNS_DAMAGE));
-                receiver.setHealth(receiver.getHealth() - event.getOriginalDamage());
                 causer.hurtServer((ServerLevel) level, thornsDamageSource,
                         (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom()));
             }
-        } else if (causer instanceof Projectile && event.getSource().getEntity() != null
-                && !event.getSource().is(WotrDamageTypes.THORNS_DAMAGE)) {
-            DamageSource thornsDamageSource = new DamageSource(
-                    level.registryAccess()
-                            .lookupOrThrow(Registries.DAMAGE_TYPE)
-                            .getOrThrow(WotrDamageTypes.THORNS_DAMAGE));
-            LivingEntity shooter = (LivingEntity) event.getSource().getEntity();
-            receiver.setHealth(receiver.getHealth() - event.getOriginalDamage());
-            shooter.hurtServer((ServerLevel) level, thornsDamageSource,
-                    (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom()));
-
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void lifeLeechEvent(LivingDamageEvent.Pre event) {
-        Entity causer = event.getSource().getDirectEntity();
+        Entity causer = event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
         DamageContainer container = event.getContainer();
         if (causer != null && causer.isAlive() && !(causer instanceof Projectile)) {
@@ -77,23 +65,7 @@ public class OnHitEvent {
                     && container.getReduction(DamageContainer.Reduction.ENCHANTMENTS) == 0) {
                 livCauser.setHealth(
                         livCauser.getHealth()
-                                + LifeLeechEffect.calcHeal(livCauser, receiver, event.getOriginalDamage()));
-            } else {
-                livCauser.setHealth(
-                        livCauser.getHealth() + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
-            }
-        } else if (causer instanceof Projectile && event.getSource().getEntity() != null) {
-            LivingEntity shooter = (LivingEntity) event.getSource().getEntity();
-
-            // If the
-            if (event.getOriginalDamage() != 0 && container.getBlockedDamage() == 0
-                    && container.getReduction(DamageContainer.Reduction.ARMOR) == 0
-                    && container.getReduction(DamageContainer.Reduction.ENCHANTMENTS) == 0) {
-                shooter.setHealth(
-                        shooter.getHealth() + LifeLeechEffect.calcHeal(shooter, receiver, event.getOriginalDamage()));
-            } else {
-                shooter.setHealth(
-                        shooter.getHealth() + LifeLeechEffect.calcHeal(shooter, receiver, event.getNewDamage()));
+                                + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
             }
         }
     }
