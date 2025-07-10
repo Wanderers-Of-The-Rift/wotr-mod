@@ -5,9 +5,12 @@ import com.wanderersoftherift.wotr.effects.CriticalEffect;
 import com.wanderersoftherift.wotr.effects.LifeLeechEffect;
 import com.wanderersoftherift.wotr.effects.ThornsEffect;
 import com.wanderersoftherift.wotr.init.WotrDamageTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -29,12 +32,15 @@ public class OnHitEvent {
 
     @SubscribeEvent
     public static void thornsEvent(LivingDamageEvent.Post event) {
+        Level level = event.getEntity().level();
         Entity causer = event.getSource().getEntity();
         LivingEntity receiver = event.getEntity();
-
+        DamageSource thornsDamageSource = new DamageSource(
+                level.registryAccess().get(WotrDamageTypes.THORNS_DAMAGE).get(), receiver, receiver, causer.position());
         if (causer instanceof LivingEntity livCauser && causer.isAlive()) {
             if (!event.getSource().is(WotrDamageTypes.THORNS_DAMAGE) && !event.getSource().is(DamageTypes.THORNS)) {
-                livCauser.setHealth((float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom()));
+                livCauser.hurtServer((ServerLevel) level, thornsDamageSource,
+                        (float) ThornsEffect.calcThornsDamage(livCauser, livCauser.getRandom()));
             }
         }
     }
@@ -45,8 +51,7 @@ public class OnHitEvent {
         LivingEntity receiver = event.getEntity();
         if (causer instanceof LivingEntity livCauser && causer.isAlive()) {
             if (event.getNewDamage() != 0) {
-                livCauser.setHealth(
-                        livCauser.getHealth() + LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
+                livCauser.heal(LifeLeechEffect.calcHeal(livCauser, receiver, event.getNewDamage()));
             }
         }
     }
