@@ -12,11 +12,6 @@ public class LifeLeechEffect {
      * @return The life to be leeched. Can either be the initial damage, or the receiver's health, whichever is less.
      */
     public static float calcHeal(LivingEntity causer, LivingEntity receiver, float incomingDamage) {
-        float healthToHeal = 0;
-        if (causer != null) {
-            healthToHeal = Math.min(incomingDamage, receiver.getHealth())
-                    * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
-        }
-        return healthToHeal;
+        return Math.min(incomingDamage, receiver.getHealth()) * (float) causer.getAttributeValue(WotrAttributes.LIFE_LEECH);
     }
 }
