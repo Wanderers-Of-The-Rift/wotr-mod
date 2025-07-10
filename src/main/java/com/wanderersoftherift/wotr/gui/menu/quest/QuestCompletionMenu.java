@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
@@ -12,7 +11,6 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -25,6 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class QuestCompletionMenu extends AbstractContainerMenu {
     private static final int HAND_IN_SLOTS = 1;
@@ -110,9 +110,9 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         });
     }
 
-    public void completeQuest(ServerPlayer player, Holder<Quest> quest) {
+    public void completeQuest(ServerPlayer player, UUID questId) {
         QuestState questState = getQuestState();
-        if (!questState.getQuest().equals(quest) || !questState.isComplete()) {
+        if (!questState.getId().equals(questId) || !questState.isComplete()) {
             return;
         }
         access.execute((level, blockPos) -> {

@@ -3,6 +3,7 @@
     {
       "type": "wotr:kill_mob",
       "mob": "#minecraft:skeletons",
+      "mob_label": "mobgroup.minecraft.skeletons",
       "quantity": 4
     }
   ],

@@ -22,7 +22,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,7 +45,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
 
     private ScrollContainerWidget<ScrollContainerEntry> questInfo;
 
-    private Holder<Quest> selectedQuest = null;
+    private Integer selectedQuest;
 
     private Button accept;
 
@@ -61,8 +60,8 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
         super.init();
         Registry<Quest> quests = minecraft.level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
 
-        questsWidget = new ScrollContainerWidget<>(leftPos + 5, topPos + 18, 95, 140,
-                quests.stream().map(quests::wrapAsHolder).map(QuestItem::new).toList());
+        questsWidget = new ScrollContainerWidget<>(leftPos + 5, topPos + 18, 95, 140);
+        updateQuestList();
         addRenderableWidget(questsWidget);
 
         questInfo = new ScrollContainerWidget<>(leftPos + 108, topPos + 20, 210, 120);
@@ -82,21 +81,31 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
         }
     }
 
-    private void selectQuest(Holder<Quest> quest) {
-        selectedQuest = quest;
-        QuestState fakeQuest = new QuestState(quest);
+    private void updateQuestList() {
+        if (menu.isDirty()) {
+            questsWidget.children().clear();
+            for (int i = 0; i < menu.getAvailableQuests().size(); i++) {
+                questsWidget.children().add(new QuestItem(i));
+            }
+            menu.clearDirty();
+        }
+    }
+
+    private void selectQuest(int index) {
+        selectedQuest = index;
+        QuestState quest = menu.getAvailableQuests().get(index);
+
         questInfo.children().clear();
-        questInfo.children().add(new LabelEntry(font, Quest.title(quest), 4));
-        questInfo.children().add(new WrappedTextEntry(font, Quest.description(quest)));
+        questInfo.children().add(new LabelEntry(font, Quest.title(quest.getOrigin()), 4));
+        questInfo.children().add(new WrappedTextEntry(font, Quest.description(quest.getOrigin())));
         questInfo.children().add(new SpacerEntry(4));
         questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 4));
-        for (int i = 0; i < selectedQuest.value().goals().size(); i++) {
-            questInfo.children().add(new GoalStateWidget(fakeQuest, i));
+        for (int i = 0; i < quest.goalCount(); i++) {
+            questInfo.children().add(new GoalStateWidget(quest, i));
         }
         questInfo.children().add(new SpacerEntry(2));
         questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
-        List<AbstractWidget> rewards = selectedQuest.value()
-                .rewards()
+        List<AbstractWidget> rewards = quest.getRewards()
                 .stream()
                 .map(RewardDisplays::createFor)
                 .filter(Optional::isPresent)
@@ -112,6 +121,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+        updateQuestList();
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
@@ -128,11 +138,11 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
 
     private class QuestItem extends AbstractButton implements ScrollContainerEntry {
 
-        private final Holder<Quest> quest;
+        private final int index;
 
-        public QuestItem(Holder<Quest> quest) {
-            super(0, 0, 100, 15, Quest.title(quest));
-            this.quest = quest;
+        public QuestItem(int index) {
+            super(0, 0, 100, 15, Quest.title(menu.getAvailableQuests().get(index).getOrigin()));
+            this.index = index;
         }
 
         @Override
@@ -142,7 +152,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
 
         @Override
         public void onPress() {
-            selectQuest(quest);
+            selectQuest(index);
         }
 
         @Override

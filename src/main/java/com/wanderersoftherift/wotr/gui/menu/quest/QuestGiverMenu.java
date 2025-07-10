@@ -1,12 +1,10 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,17 +13,24 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuestGiverMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
+    private final List<QuestState> availableQuests;
+    private boolean availableQuestsDirty = false;
 
     public QuestGiverMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL);
+        this(containerId, playerInventory, ContainerLevelAccess.NULL, new ArrayList<>());
     }
 
-    public QuestGiverMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+    public QuestGiverMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
+            List<QuestState> availableQuests) {
         super(WotrMenuTypes.QUEST_GIVER_MENU.get(), containerId);
 
         this.access = access;
+        this.availableQuests = availableQuests;
     }
 
     @Override
@@ -33,18 +38,35 @@ public class QuestGiverMenu extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
+    public List<QuestState> getAvailableQuests() {
+        return availableQuests;
+    }
+
     @Override
     public boolean stillValid(@NotNull Player player) {
         return stillValid(this.access, player, WotrBlocks.QUEST_HUB.get());
     }
 
-    public void acceptQuest(ServerPlayer player, Holder<Quest> quest) {
+    public void acceptQuest(ServerPlayer player, int index) {
         // TODO: check quest is valid in this context
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
-        if (activeQuests.isEmpty()) {
-            QuestState questState = new QuestState(quest);
-            activeQuests.add(questState);
+        if (activeQuests.isEmpty() && index >= 0 && index < availableQuests.size()) {
+            activeQuests.add(availableQuests.get(index));
             player.closeContainer();
         }
+    }
+
+    public void setAvailableQuests(List<QuestState> quests) {
+        this.availableQuests.clear();
+        this.availableQuests.addAll(quests);
+        availableQuestsDirty = true;
+    }
+
+    public boolean isDirty() {
+        return availableQuestsDirty;
+    }
+
+    public void clearDirty() {
+        availableQuestsDirty = false;
     }
 }

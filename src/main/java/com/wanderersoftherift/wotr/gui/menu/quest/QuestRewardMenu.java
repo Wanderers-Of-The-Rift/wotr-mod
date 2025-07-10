@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.guild.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
@@ -70,13 +69,7 @@ public class QuestRewardMenu extends AbstractContainerMenu {
     }
 
     public List<Reward> getNonItemRewards() {
-        return activeQuests.getQuestState(selectedQuest.get())
-                .getQuest()
-                .value()
-                .rewards()
-                .stream()
-                .filter(x -> !x.isItem())
-                .toList();
+        return activeQuests.getQuestState(selectedQuest.get()).getRewards().stream().filter(x -> !x.isItem()).toList();
     }
 
     @Override
@@ -85,18 +78,18 @@ public class QuestRewardMenu extends AbstractContainerMenu {
         QuestState questState = activeQuests.getQuestState(selectedQuest.get());
         if (player instanceof ServerPlayer serverPlayer) {
             ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, rewardItems);
-            List<Reward> rewards = questState.getQuest().value().rewards();
+            List<Reward> rewards = questState.getRewards();
             for (Reward reward : rewards) {
                 reward.apply(serverPlayer);
             }
-            activeQuests.remove(questState.getQuest());
+            activeQuests.remove(questState.getId());
         }
     }
 
     public void addRewards(ServerPlayer player) {
         access.execute((level, pos) -> {
-            Quest quest = activeQuests.getQuestState(selectedQuest.get()).getQuest().value();
-            for (Reward reward : quest.rewards()) {
+            QuestState quest = activeQuests.getQuestState(selectedQuest.get());
+            for (Reward reward : quest.getRewards()) {
                 ItemStack rewardItem = reward.generateItem();
 
                 if (!rewardItem.isEmpty()) {

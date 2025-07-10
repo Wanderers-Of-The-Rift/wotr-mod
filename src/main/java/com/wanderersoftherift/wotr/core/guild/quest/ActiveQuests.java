@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.guild.QuestRemovedPayload;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.SequencedMap;
+import java.util.UUID;
 
 /**
  * Player attachment for holding the active quests of the player
@@ -88,23 +90,24 @@ public final class ActiveQuests {
     /**
      * Removes a quest from the active quests
      *
-     * @param quest
+     * @param questId
      */
-    public void remove(Holder<Quest> quest) {
-        if (data.quests().remove(quest) != null) {
+    public void remove(UUID questId) {
+        if (data.quests().remove(questId) != null) {
             if (holder instanceof ServerPlayer player) {
-                PacketDistributor.sendToPlayer(player, new QuestRemovedPayload(quest));
+                PacketDistributor.sendToPlayer(player, new QuestRemovedPayload(questId));
             }
         }
     }
 
     /**
-     * Adds a quest
      *
-     * @param newQuest
+     * @param origin  The quest that generated this active quest
+     * @param goals   The goals of the quest
+     * @param rewards The rewards of the quest
      */
-    public void add(Holder<Quest> newQuest) {
-        add(new QuestState(newQuest));
+    public void add(Holder<Quest> origin, List<Goal> goals, List<Reward> rewards) {
+        add(origin, goals, rewards);
     }
 
     /**
@@ -113,7 +116,7 @@ public final class ActiveQuests {
      * @param newQuest
      */
     public void add(QuestState newQuest) {
-        data.quests().put(newQuest.getQuest(), newQuest);
+        data.quests().put(newQuest.getId(), newQuest);
         newQuest.setHolder(holder);
         if (holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new QuestAcceptedPayload(newQuest));
@@ -132,7 +135,7 @@ public final class ActiveQuests {
         }
     }
 
-    public Optional<QuestState> getQuestState(Holder<Quest> quest) {
+    public Optional<QuestState> getQuestState(UUID quest) {
         return Optional.ofNullable(data.quests().get(quest));
     }
 
@@ -140,10 +143,10 @@ public final class ActiveQuests {
         return data.quests().values().stream().skip(slot).findFirst().orElse(null);
     }
 
-    private record Data(SequencedMap<Holder<Quest>, QuestState> quests) {
+    private record Data(SequencedMap<UUID, QuestState> quests) {
         private static final Codec<ActiveQuests.Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.unboundedMap(Quest.CODEC, QuestState.CODEC)
-                        .<SequencedMap<Holder<Quest>, QuestState>>xmap(LinkedHashMap::new, x -> x)
+                Codec.unboundedMap(UUIDUtil.CODEC, QuestState.CODEC)
+                        .<SequencedMap<UUID, QuestState>>xmap(LinkedHashMap::new, x -> x)
                         .fieldOf("quests")
                         .forGetter(ActiveQuests.Data::quests)
         ).apply(instance, ActiveQuests.Data::new));

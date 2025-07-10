@@ -107,6 +107,7 @@ public class WanderersOfTheRift {
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
 
         WotrGoalTypes.GOAL_TYPES.register(modEventBus);
+        WotrGoalTypes.GOAL_DEFINITION_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_TYPES.register(modEventBus);
 
         WotrModifierEffectTypes.MODIFIER_EFFECT_TYPES.register(modEventBus);

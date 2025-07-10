@@ -4,8 +4,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Goal;
+import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.crafting.Ingredient;
 
 /**
@@ -22,9 +27,21 @@ public record GiveItemGoal(Ingredient item, int quantity) implements Goal {
                     Codec.INT.optionalFieldOf("quantity", 1).forGetter(GiveItemGoal::progressTarget)
             ).apply(instance, GiveItemGoal::new));
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, GiveItemGoal> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, GiveItemGoal::item, ByteBufCodecs.INT, GiveItemGoal::progressTarget,
+            GiveItemGoal::new
+    );
+
+    public static final GoalType<GiveItemGoal> TYPE = new GoalType<>(CODEC, STREAM_CODEC);
+
     @Override
-    public MapCodec<? extends Goal> getCodec() {
-        return CODEC;
+    public GoalType<GiveItemGoal> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public Goal generateGoal(RandomSource random) {
+        return this;
     }
 
     @Override

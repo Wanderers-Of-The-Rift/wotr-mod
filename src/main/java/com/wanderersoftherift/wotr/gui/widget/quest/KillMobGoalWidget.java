@@ -32,18 +32,7 @@ public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        Component name;
-        if (goal.mob().types().size() == 1) {
-            name = goal.mob().types().get(0).value().getDescription();
-        } else {
-            name = goal.mob()
-                    .types()
-                    .unwrapKey()
-                    .<Component>map(
-                            key -> Component.translatable(WanderersOfTheRift.translationId("mobgroup", key.location())))
-                    .orElse(goal.mob().types().get(0).value().getDescription());
-        }
-
+        Component name = goal.mobLabel();
         int remainder = goal.progressTarget() - progress;
         guiGraphics.drawString(font, Component.translatable(GOAL_MESSAGE, remainder, name), getX(),
                 getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);

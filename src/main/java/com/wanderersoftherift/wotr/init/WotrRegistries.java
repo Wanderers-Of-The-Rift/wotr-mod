@@ -9,9 +9,10 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.quest.Goal;
+import com.wanderersoftherift.wotr.core.guild.quest.GoalDefinition;
+import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
-import com.wanderersoftherift.wotr.core.guild.quest.Reward;
+import com.wanderersoftherift.wotr.core.guild.quest.RewardType;
 import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
@@ -65,8 +66,10 @@ public class WotrRegistries {
     public static final Registry<CharacterMenuItem> CHARACTER_MENU_ITEMS = new RegistryBuilder<>(
             Keys.CHARACTER_MENU_ITEMS
     ).create();
-    public static final Registry<MapCodec<? extends Goal>> GOAL_TYPES = new RegistryBuilder<>(Keys.GOAL_TYPES).create();
-    public static final Registry<MapCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
+    public static final Registry<MapCodec<? extends GoalDefinition>> GOAL_DEFINITION_TYPES = new RegistryBuilder<>(
+            Keys.GOAL_DEFINITION_TYPES).create();
+    public static final Registry<GoalType<?>> GOAL_TYPES = new RegistryBuilder<>(Keys.GOAL_TYPES).sync(true).create();
+    public static final Registry<RewardType<?>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES).sync(true)
             .create();
 
     public static final class Keys {
@@ -124,14 +127,12 @@ public class WotrRegistries {
 
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("quest"));
-        public static final ResourceKey<Registry<MapCodec<? extends Goal>>> GOAL_TYPES = ResourceKey
+        public static final ResourceKey<Registry<GoalType<?>>> GOAL_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("goal_type"));
-        public static final ResourceKey<Registry<Goal>> GOALS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("goal"));
-        public static final ResourceKey<Registry<MapCodec<? extends Reward>>> REWARD_TYPES = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends GoalDefinition>>> GOAL_DEFINITION_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal_definition_type"));
+        public static final ResourceKey<Registry<RewardType<?>>> REWARD_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("reward_type"));
-        public static final ResourceKey<Registry<Reward>> REWARDS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("reward"));
 
         private Keys() {
         }
@@ -154,6 +155,7 @@ public class WotrRegistries {
         event.register(CHARACTER_MENU_ITEMS);
         event.register(GOAL_TYPES);
         event.register(REWARD_TYPES);
+        event.register(GOAL_DEFINITION_TYPES);
     }
 
     @SubscribeEvent
