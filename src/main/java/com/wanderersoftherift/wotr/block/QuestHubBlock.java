@@ -21,11 +21,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A block that provides access to selecting and completing quests
@@ -52,8 +56,10 @@ public class QuestHubBlock extends Block {
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         Registry<Quest> questRegistry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
         if (activeQuests.isEmpty() && player instanceof ServerPlayer) {
+            LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
+            LootContext context = new LootContext.Builder(params).create(Optional.empty());
             List<QuestState> quests = questRegistry.stream()
-                    .map(x -> new QuestState(questRegistry.wrapAsHolder(x), x.generateGoals(level.random),
+                    .map(x -> new QuestState(questRegistry.wrapAsHolder(x), x.generateGoals(context),
                             x.generateRewards(level.random)))
                     .toList();
             player.openMenu(new SimpleMenuProvider((containerId, playerInventory, p) -> new QuestGiverMenu(containerId,

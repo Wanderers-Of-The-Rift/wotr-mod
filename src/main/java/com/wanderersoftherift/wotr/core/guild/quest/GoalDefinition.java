@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.core.guild.quest;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 import java.util.function.Function;
 
@@ -16,6 +16,6 @@ public interface GoalDefinition {
      */
     MapCodec<? extends GoalDefinition> getCodec();
 
-    Goal generateGoal(RandomSource random);
+    Goal generateGoal(LootContext context);
 
 }

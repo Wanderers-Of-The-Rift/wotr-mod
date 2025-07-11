@@ -407,6 +407,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
         add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
 
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest.title"), "Fetch Quest");
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest.description"),
+                "Bring me what I need and I'll make it worth your while.");
         add(WanderersOfTheRift.translationId("quest", "skillthread.title"), "Deliver Skill Thread");
         add(WanderersOfTheRift.translationId("quest", "skillthread.description"),
                 "I've heard there is a strange thread that can be found in the rifts that holds the key to unlocking the full potential of abilities. Could you bring me a sample?");

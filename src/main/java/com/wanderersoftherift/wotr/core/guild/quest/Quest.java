@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,8 +45,8 @@ public final class Quest {
         this.rewards = rewards;
     }
 
-    public List<Goal> generateGoals(RandomSource random) {
-        return goals.stream().map(x -> x.generateGoal(random)).toList();
+    public List<Goal> generateGoals(LootContext context) {
+        return goals.stream().map(x -> x.generateGoal(context)).toList();
     }
 
     public List<Reward> generateRewards(RandomSource random) {

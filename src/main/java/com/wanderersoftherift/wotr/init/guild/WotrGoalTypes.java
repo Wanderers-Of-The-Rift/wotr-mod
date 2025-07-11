@@ -6,6 +6,8 @@ import com.wanderersoftherift.wotr.core.guild.quest.GoalDefinition;
 import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.PoolGoalDefinition;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.RandomizedItemGoalDefinition;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -21,6 +23,12 @@ public class WotrGoalTypes {
     public static final Supplier<GoalType<?>> GIVE_ITEM = register("give_item", () -> GiveItemGoal.TYPE);
 
     public static final Supplier<GoalType<?>> KILL_MOB = register("kill_mob", () -> KillMobGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalDefinition>> RANDOMIZED_GIVE_ITEM = GOAL_DEFINITION_TYPES
+            .register("randomized_give_item", () -> RandomizedItemGoalDefinition.CODEC);
+
+    public static final Supplier<MapCodec<? extends GoalDefinition>> POOL = GOAL_DEFINITION_TYPES.register("pool",
+            () -> PoolGoalDefinition.CODEC);
 
     private static Supplier<GoalType<?>> register(String id, Supplier<GoalType<?>> typeSupplier) {
         GOAL_DEFINITION_TYPES.register(id, () -> typeSupplier.get().codec());
