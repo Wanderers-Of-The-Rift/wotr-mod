@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.SpacerEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.WrappedTextEntry;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -62,7 +64,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
             if (confirmAbandon) {
                 button.setMessage(ABANDON_LABEL);
                 confirmAbandon = false;
-                activeQuests.remove(activeQuests.getQuestState(0).getId());
+                PacketDistributor.sendToServer(new AbandonQuestPayload(activeQuests.getQuestState(0).getId()));
                 questInfo.children().clear();
                 button.visible = false;
             } else {

@@ -4,10 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.guild.QuestRemovedPayload;
+import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -23,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.SequencedMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Player attachment for holding the active quests of the player
@@ -49,24 +48,7 @@ public final class ActiveQuests {
     }
 
     public static IAttachmentSerializer<Tag, ActiveQuests> getSerializer() {
-        return new IAttachmentSerializer<>() {
-            @Override
-            public @NotNull ActiveQuests read(
-                    @NotNull IAttachmentHolder holder,
-                    @NotNull Tag tag,
-                    HolderLookup.@NotNull Provider provider) {
-                return new ActiveQuests(holder,
-                        Data.CODEC.decode(provider.createSerializationContext(NbtOps.INSTANCE), tag)
-                                .getOrThrow()
-                                .getFirst());
-            }
-
-            @Override
-            public @Nullable Tag write(@NotNull ActiveQuests attachment, HolderLookup.@NotNull Provider provider) {
-                return Data.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), attachment.data)
-                        .getOrThrow();
-            }
-        };
+        return new AttachmentSerializerFromDataCodec<>(Data.CODEC, ActiveQuests::new, x -> x.data);
     }
 
     /**
@@ -101,7 +83,6 @@ public final class ActiveQuests {
     }
 
     /**
-     *
      * @param origin  The quest that generated this active quest
      * @param goals   The goals of the quest
      * @param rewards The rewards of the quest
@@ -145,8 +126,13 @@ public final class ActiveQuests {
 
     private record Data(SequencedMap<UUID, QuestState> quests) {
         private static final Codec<ActiveQuests.Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.unboundedMap(UUIDUtil.CODEC, QuestState.CODEC)
-                        .<SequencedMap<UUID, QuestState>>xmap(LinkedHashMap::new, x -> x)
+                QuestState.CODEC.listOf()
+                        .<SequencedMap<UUID, QuestState>>xmap(
+                                list -> list.stream()
+                                        .collect(Collectors.toMap(QuestState::getId, x -> x, (a, b) -> a,
+                                                LinkedHashMap::new)),
+                                map -> List.copyOf(map.values())
+                        )
                         .fieldOf("quests")
                         .forGetter(ActiveQuests.Data::quests)
         ).apply(instance, ActiveQuests.Data::new));
