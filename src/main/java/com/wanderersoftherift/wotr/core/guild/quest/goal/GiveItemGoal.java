@@ -10,7 +10,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.crafting.Ingredient;
 
 /**
@@ -37,11 +36,6 @@ public record GiveItemGoal(Ingredient item, int quantity) implements Goal {
     @Override
     public GoalType<GiveItemGoal> getType() {
         return TYPE;
-    }
-
-    @Override
-    public Goal generateGoal(RandomSource random) {
-        return this;
     }
 
     @Override

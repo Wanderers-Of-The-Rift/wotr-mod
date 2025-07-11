@@ -1,0 +1,67 @@
+{
+  "goals": [
+    {
+      "type": "wotr:pool",
+      "entries": [
+        {
+          "type" : "wotr:randomized_give_item",
+          "item" : "wotr:skill_thread",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 5,
+            "max": 8
+          }
+        },
+        {
+          "type" : "wotr:randomized_give_item",
+          "item" : "minecraft:gold_ingot",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 24,
+            "max": 32
+          }
+        },
+        {
+          "type" : "wotr:randomized_give_item",
+          "item" : "minecraft:iron_ingot",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 32,
+            "max": 48
+          }
+        },
+        {
+          "type" : "wotr:randomized_give_item",
+          "item" : "minecraft:copper_ingot",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 48,
+            "max": 64
+          }
+        }
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "components": {
+          "wotr:ability": "wotr:dash"
+        },
+        "count": 1,
+        "id": "wotr:ability_holder"
+      }
+    },
+    {
+      "type": "wotr:item",
+      "item": {
+        "components": {
+          "wotr:ability": "wotr:fireball"
+        },
+        "count": 1,
+        "id": "wotr:ability_holder"
+      }
+    }
+  ]
+}

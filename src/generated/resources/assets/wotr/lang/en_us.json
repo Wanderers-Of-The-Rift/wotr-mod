@@ -476,6 +476,8 @@
   "objective.wotr.kill.name": "Kill mobs",
   "objective.wotr.stealth.description": "Defeat monsters stealthily",
   "objective.wotr.stealth.name": "Stealth",
+  "quest.wotr.fetch_quest.description": "Bring me what I need and I'll make it worth your while.",
+  "quest.wotr.fetch_quest.title": "Fetch Quest",
   "quest.wotr.gold_and_iron.description": "Psst. You look like a discerning customer? I've got some powerful shiny baubles if you can bring me some precious metals!",
   "quest.wotr.gold_and_iron.title": "Sample the Wares",
   "quest.wotr.kill_skeletons.description": "Bones scare me! Save me!",

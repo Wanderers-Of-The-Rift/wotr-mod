@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 
 public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int quantity) implements Goal {
 
@@ -35,11 +34,6 @@ public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int quantity
     @Override
     public GoalType<KillMobGoal> getType() {
         return TYPE;
-    }
-
-    @Override
-    public Goal generateGoal(RandomSource random) {
-        return this;
     }
 
     @Override
