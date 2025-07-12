@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.util.ShiftMath;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.util.ZeroBitStorage;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -140,7 +141,31 @@ public class RiftProcessedChunk {
 
         var useRegistry = bits > 8;
         if (useRegistry) {
-            bits = ShiftMath.shiftForCeilPow2(registry.size());
+            bits = Mth.ceillog2(registry.size());
+            if (Integer.bitCount(bits) != 1) {
+
+                var strat = PalettedContainer.Strategy.SECTION_STATES;
+                var config = strat.<BlockState>getConfiguration(registry, bits);
+                var storage = new SimpleBitStorage(bits, LevelChunkSection.SECTION_SIZE);
+
+                for (int i = 0; i < 4096; i++) {
+                    var state = blocks[i];
+                    if (state == null) {
+                        state = air;
+                    }
+                    var value = registry.getId(state);
+                    storage.set(i, value);
+                }
+
+                var stateList = new ArrayList<BlockState>(size);
+                for (int i = 0; i < size; i++) {
+                    stateList.add(uniqueStatesList[i]);
+                }
+                var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage,
+                        stateList);
+                sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
+                return;
+            }
         }
 
         var shiftBitsPow2 = Integer.max(ShiftMath.shiftForCeilPow2(bits), 2);
