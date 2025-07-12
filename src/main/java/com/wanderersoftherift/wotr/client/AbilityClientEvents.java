@@ -8,7 +8,6 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -17,7 +16,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.*;
@@ -30,11 +28,16 @@ public final class AbilityClientEvents {
 
     @SubscribeEvent
     public static void processScrollWheelForAbilityBar(InputEvent.MouseScrollingEvent event) {
-        if(ACTIVATE_ABILITY_SCROLL.isDown()) {
+        if (ACTIVATE_ABILITY_SCROLL.isDown()) {
             double scrollDelta = event.getScrollDeltaY();
 
-            if(scrollDelta != 0) {
-                int direction = scrollDelta > 0 ? -1 : 1;
+            if (scrollDelta != 0) {
+                int direction;
+                if (scrollDelta > 0) {
+                    direction = -1;
+                } else {
+                    direction = 1;
+                }
 
                 Player player = Minecraft.getInstance().player;
                 AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
@@ -42,7 +45,7 @@ public final class AbilityClientEvents {
 
                 int newSlot = Mth.clamp(selectedSlot + direction, 0, abilitySlots.getSlots() - 1);
 
-                if(selectedSlot != newSlot) {
+                if (selectedSlot != newSlot) {
                     abilitySlots.setSelectedSlot(newSlot);
                     PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
                     event.setCanceled(true);
