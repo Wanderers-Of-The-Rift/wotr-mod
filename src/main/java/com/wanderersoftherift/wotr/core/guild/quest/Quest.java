@@ -7,10 +7,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,29 +26,29 @@ import java.util.Optional;
 public final class Quest {
     public static final Codec<Quest> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(Quest::icon),
-            GoalDefinition.DIRECT_CODEC.listOf().optionalFieldOf("goals", List.of()).forGetter(Quest::goals),
-            Reward.DIRECT_CODEC.listOf().optionalFieldOf("rewards", List.of()).forGetter(Quest::rewards)
+            GoalProvider.DIRECT_CODEC.listOf().optionalFieldOf("goals", List.of()).forGetter(Quest::goals),
+            RewardProvider.DIRECT_CODEC.listOf().optionalFieldOf("rewards", List.of()).forGetter(Quest::rewards)
     ).apply(instance, Quest::new));
 
     public static final Codec<Holder<Quest>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.QUESTS);
 
     private final Optional<ResourceLocation> icon;
 
-    private final List<GoalDefinition> goals;
-    private final List<Reward> rewards;
+    private final List<GoalProvider> goals;
+    private final List<RewardProvider> rewards;
 
-    public Quest(Optional<ResourceLocation> icon, List<GoalDefinition> goals, List<Reward> rewards) {
+    public Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, List<RewardProvider> rewards) {
         this.icon = icon;
         this.goals = goals;
         this.rewards = rewards;
     }
 
-    public List<Goal> generateGoals(LootContext context) {
-        return goals.stream().map(x -> x.generateGoal(context)).toList();
+    public List<Goal> generateGoals(LootParams params) {
+        return goals.stream().flatMap(x -> x.generateGoal(params).stream()).toList();
     }
 
-    public List<Reward> generateRewards(RandomSource random) {
-        return Collections.unmodifiableList(rewards);
+    public List<Reward> generateRewards(LootParams params) {
+        return rewards.stream().flatMap(x -> x.generateReward(params).stream()).toList();
     }
 
     /**
@@ -63,14 +61,14 @@ public final class Quest {
     /**
      * @return The goals for the quest
      */
-    public List<GoalDefinition> goals() {
+    public List<GoalProvider> goals() {
         return goals;
     }
 
     /**
      * @return The rewards for completing the quest
      */
-    public List<Reward> rewards() {
+    public List<RewardProvider> rewards() {
         return rewards;
     }
 
