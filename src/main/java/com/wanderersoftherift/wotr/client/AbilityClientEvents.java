@@ -18,11 +18,11 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.ACTIVATE_ABILITY_SCROLL;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.USE_ABILITY_KEY;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.PREV_ABILITY_KEY;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.NEXT_ABILITY_KEY;
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.ABILITY_SLOT_KEYS;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.ACTIVATE_ABILITY_SCROLL;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.NEXT_ABILITY_KEY;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.PREV_ABILITY_KEY;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.USE_ABILITY_KEY;
 
 /**
  * Events related to abilities - key activation detection and mana ticking.
