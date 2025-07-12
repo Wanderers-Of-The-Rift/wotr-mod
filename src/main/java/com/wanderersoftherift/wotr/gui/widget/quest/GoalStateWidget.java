@@ -5,11 +5,13 @@ import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 public class GoalStateWidget extends AbstractWidget implements ScrollContainerEntry {
@@ -25,11 +27,18 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     private final GoalDisplay goalWidget;
 
     public GoalStateWidget(QuestState quest, int goalIndex) {
+        this(quest, goalIndex, Style.EMPTY.withColor(ChatFormatting.DARK_GRAY));
+    }
+
+    public GoalStateWidget(QuestState quest, int goalIndex, Style textStyle) {
         super(0, 0, 0, 0, Component.empty());
         this.quest = quest;
         this.goalIndex = goalIndex;
 
         this.goalWidget = GoalDisplays.createFor(quest.getGoal(goalIndex)).orElse(null);
+        if (goalWidget != null) {
+            goalWidget.setTextStyle(textStyle);
+        }
     }
 
     @Override
