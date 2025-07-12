@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "block_variants"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "biomeswevegone"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "stoneworks"
+    }
+  ],
+  "processors": [
+    {
+      "piece_type": "poi",
+      "processors": "wotr:poi_theme_color"
+    },
+    {
+      "piece_type": "room",
+      "processors": "wotr:room_theme_color"
+    }
+  ]
+}

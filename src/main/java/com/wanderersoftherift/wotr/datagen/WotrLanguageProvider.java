@@ -115,11 +115,13 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         addTheme("buzzy_bees", "Buzzy Bees");
         addTheme("cave", "Cave");
+        addTheme("color", "Color");
         addTheme("forest", "Forest");
         addTheme("processor", "Processor");
         addTheme("mushroom", "Mushroom");
         addTheme("nether", "Nether");
         addTheme("noir", "Noir");
+        addTheme("meadow", "Meadow");
         addTheme("mesa", "Mesa");
         addTheme("desert", "Desert");
         addTheme("jungle", "Jungle");
