@@ -13,6 +13,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
@@ -26,9 +27,14 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     private int progress;
 
     public GiveItemGoalWidget(GiveItemGoal goal) {
-        super(0, 0, 100, 18, TEXT);
+        super(0, 0, 100, 18, Component.empty().append(TEXT).withStyle(Style.EMPTY.withColor(ColorUtil.OFF_BLACK)));
         this.font = Minecraft.getInstance().font;
         this.goal = goal;
+    }
+
+    @Override
+    public void setTextStyle(Style textStyle) {
+        setMessage(Component.empty().append(TEXT).withStyle(textStyle));
     }
 
     @Override

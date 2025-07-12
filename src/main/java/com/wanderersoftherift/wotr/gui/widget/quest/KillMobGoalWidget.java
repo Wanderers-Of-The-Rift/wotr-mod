@@ -10,12 +10,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
 
 public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
     private static final String GOAL_MESSAGE = WanderersOfTheRift.translationId("container", "quest.goal.kill");
     private final Font font;
     private final KillMobGoal goal;
+    private Style textStyle = Style.EMPTY.withColor(ColorUtil.OFF_BLACK);
 
     private int progress;
 
@@ -23,6 +25,11 @@ public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
         super(0, 0, 100, 18, Component.empty());
         this.font = Minecraft.getInstance().font;
         this.goal = goal;
+    }
+
+    @Override
+    public void setTextStyle(Style textStyle) {
+        this.textStyle = textStyle;
     }
 
     @Override
@@ -34,7 +41,7 @@ public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Component name = goal.mobLabel();
         int remainder = goal.progressTarget() - progress;
-        guiGraphics.drawString(font, Component.translatable(GOAL_MESSAGE, remainder, name), getX(),
+        guiGraphics.drawString(font, Component.translatable(GOAL_MESSAGE, remainder, name).withStyle(textStyle), getX(),
                 getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
     }
 
