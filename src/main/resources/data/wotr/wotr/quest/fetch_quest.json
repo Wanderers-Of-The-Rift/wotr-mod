@@ -44,24 +44,8 @@
   ],
   "rewards": [
     {
-      "type": "wotr:item",
-      "item": {
-        "components": {
-          "wotr:ability": "wotr:dash"
-        },
-        "count": 1,
-        "id": "wotr:ability_holder"
-      }
-    },
-    {
-      "type": "wotr:item",
-      "item": {
-        "components": {
-          "wotr:ability": "wotr:fireball"
-        },
-        "count": 1,
-        "id": "wotr:ability_holder"
-      }
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:chests/wooden"
     }
   ]
 }

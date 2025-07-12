@@ -7,24 +7,28 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+
+import java.util.List;
 
 /**
  * Interface for a goal that is part of a quest
  */
-public interface Goal extends GoalDefinition {
+public interface Goal extends GoalProvider {
     Codec<Goal> DIRECT_CODEC = WotrRegistries.GOAL_TYPES.byNameCodec().dispatch(Goal::getType, GoalType::codec);
     StreamCodec<RegistryFriendlyByteBuf, Goal> STREAM_CODEC = ByteBufCodecs.registry(WotrRegistries.Keys.GOAL_TYPES)
             .dispatch(Goal::getType, GoalType::streamCodec);
 
     GoalType<?> getType();
 
-    default MapCodec<? extends GoalDefinition> getCodec() {
+    @Override
+    default MapCodec<? extends GoalProvider> getCodec() {
         return getType().codec();
     }
 
-    default Goal generateGoal(LootContext context) {
-        return this;
+    @Override
+    default List<Goal> generateGoal(LootParams params) {
+        return List.of(this);
     }
 
     /**
