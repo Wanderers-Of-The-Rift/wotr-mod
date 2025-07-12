@@ -8,24 +8,48 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.ABILITY_SLOT_KEYS;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.NEXT_ABILITY_KEY;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.PREV_ABILITY_KEY;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.USE_ABILITY_KEY;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.*;
 
 /**
  * Events related to abilities - key activation detection and mana ticking.
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class AbilityClientEvents {
+
+    @SubscribeEvent
+    public static void processScrollWheelForAbilityBar(InputEvent.MouseScrollingEvent event) {
+        if(ACTIVATE_ABILITY_SCROLL.isDown()) {
+            double scrollDelta = event.getScrollDeltaY();
+
+            if(scrollDelta != 0) {
+                int direction = scrollDelta > 0 ? -1 : 1;
+
+                Player player = Minecraft.getInstance().player;
+                AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
+                int selectedSlot = abilitySlots.getSelectedSlot();
+
+                int newSlot = Mth.clamp(selectedSlot + direction, 0, abilitySlots.getSlots() - 1);
+
+                if(selectedSlot != newSlot) {
+                    abilitySlots.setSelectedSlot(newSlot);
+                    PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void processAbilityKeys(ClientTickEvent.Post event) {

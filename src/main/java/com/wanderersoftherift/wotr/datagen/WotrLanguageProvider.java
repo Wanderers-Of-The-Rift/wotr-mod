@@ -298,6 +298,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WotrKeyMappings.PREV_ABILITY_KEY.getName(), "Select Previous Ability");
         add(WotrKeyMappings.NEXT_ABILITY_KEY.getName(), "Select Next Ability");
         add(WotrKeyMappings.USE_ABILITY_KEY.getName(), "Use Selected Ability");
+        add(WotrKeyMappings.ACTIVATE_ABILITY_SCROLL.getName(), "Activate Ability Bar Scroll");
         add(WotrKeyMappings.SHOW_TOOLTIP_INFO.getName(), "Show Additional Tooltip Info");
         add(WotrKeyMappings.JIGSAW_NAME_TOGGLE_KEY.getName(), "Show Jigsaw Block Info");
 

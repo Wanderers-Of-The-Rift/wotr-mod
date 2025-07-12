@@ -61,6 +61,10 @@ public class WotrKeyMappings {
             WanderersOfTheRift.translationId("key", "ability.use_selected"), KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, ABILITY_CATEGORY);
 
+    public static final KeyMapping ACTIVATE_ABILITY_SCROLL = new KeyMapping(
+            WanderersOfTheRift.translationId("key", "ability.scroll_modifier"), KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, ABILITY_CATEGORY);
+
     public static final KeyMapping SHOW_TOOLTIP_INFO = new KeyMapping(
             WanderersOfTheRift.translationId("key", "tooltip.show_tooltip_info"), KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_SHIFT, MISC_CATEGORY);
@@ -77,6 +81,7 @@ public class WotrKeyMappings {
         event.register(PREV_ABILITY_KEY);
         event.register(NEXT_ABILITY_KEY);
         event.register(USE_ABILITY_KEY);
+        event.register(ACTIVATE_ABILITY_SCROLL);
         event.register(SHOW_TOOLTIP_INFO);
         event.register(JIGSAW_NAME_TOGGLE_KEY);
     }
