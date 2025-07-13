@@ -42,9 +42,9 @@ public class OnHitEvent {
                 DamageSource thornsDamageSource = new DamageSource(
                         level.registryAccess().get(WotrDamageTypes.THORNS_DAMAGE).get(), receiver, receiver,
                         receiver.position());
-                if (receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE) != 0) {
-                    livCauser.hurtServer((ServerLevel) level, thornsDamageSource,
-                            (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom()));
+                float thornsDamage = (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom());
+                if (thornsDamage != 0) {
+                    livCauser.hurtServer((ServerLevel) level, thornsDamageSource, thornsDamage);
                 }
             }
         }
