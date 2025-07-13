@@ -38,11 +38,11 @@ public class OnHitEvent {
         if (causer instanceof LivingEntity livCauser && causer.isAlive()) {
             if (!event.getSource().is(WotrDamageTypes.THORNS_DAMAGE) && !event.getSource().is(DamageTypes.THORNS)
                     && event.getNewDamage() != 0) {
-                DamageSource thornsDamageSource = new DamageSource(
-                        level.registryAccess().get(WotrDamageTypes.THORNS_DAMAGE).get(), receiver, receiver,
-                        receiver.position());
                 float thornsDamage = (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom());
                 if (thornsDamage != 0) {
+                    DamageSource thornsDamageSource = new DamageSource(
+                            level.registryAccess().get(WotrDamageTypes.THORNS_DAMAGE).get(), receiver, receiver,
+                            receiver.position());
                     livCauser.hurtServer((ServerLevel) level, thornsDamageSource, thornsDamage);
                 }
             }
