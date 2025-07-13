@@ -8,7 +8,6 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
@@ -33,27 +32,27 @@ public final class AbilityClientEvents {
     @SubscribeEvent
     public static void processScrollWheelForAbilityBar(InputEvent.MouseScrollingEvent event) {
         if (ACTIVATE_ABILITY_SCROLL.isDown()) {
-            double scrollDelta = event.getScrollDeltaY();
+            int scrollDelta = (int) event.getScrollDeltaY();
 
-            if (scrollDelta != 0) {
-                int direction;
-                if (scrollDelta > 0) {
-                    direction = -1;
-                } else {
-                    direction = 1;
-                }
+            int direction = Integer.signum(scrollDelta) * -1;
 
+            if (direction != 0) {
                 Player player = Minecraft.getInstance().player;
                 AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
                 int selectedSlot = abilitySlots.getSelectedSlot();
 
-                int newSlot = Mth.clamp(selectedSlot + direction, 0, abilitySlots.getSlots() - 1);
+                int newSlot = selectedSlot + direction;
 
-                if (selectedSlot != newSlot) {
+                if (newSlot > AbilitySlots.ABILITY_BAR_SIZE - 1) {
+                    abilitySlots.setSelectedSlot(0);
+                } else if (newSlot < 0) {
+                    abilitySlots.setSelectedSlot(AbilitySlots.ABILITY_BAR_SIZE - 1);
+                } else {
                     abilitySlots.setSelectedSlot(newSlot);
-                    PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
-                    event.setCanceled(true);
                 }
+
+                PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
+                event.setCanceled(true);
             }
         }
     }
