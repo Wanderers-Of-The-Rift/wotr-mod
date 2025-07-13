@@ -15,6 +15,9 @@
           "model": "wotr:geo/ability/icicle.geo.json",
           "texture": "wotr:textures/ability/icicle.png"
         },
+        "sound": {
+          "collision": "minecraft:block.glass.break"
+        },
         "velocity": 1.7
       },
       "effects": [
