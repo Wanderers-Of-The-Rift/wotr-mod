@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.datagen;
 
-import com.mojang.datafixers.optics.Wander;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrEntities;
