@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -141,23 +142,26 @@ public class WotrModifierProvider {
                                         Attributes.ATTACK_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
                 Style.EMPTY.withColor(ColorUtil.DARK_ORANGE))
         );
-        registerModifier(context, getResourceKey("critical_chance"),
-                new Modifier(generateEqualRollSpread(5,
+        registerModifier(context, getResourceKey("critical_chance"), new Modifier(
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(1, 50,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_chance"),
-                                        WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.ORANGE_RED))
         );
-        registerModifier(context, getResourceKey("critical_bonus"),
-                new Modifier(generateEqualRollSpread(5,
+        registerModifier(context, getResourceKey("critical_bonus"), new Modifier(
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.5F, 3F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_bonus"),
-                                        WotrAttributes.CRITICAL_BONUS, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.CRITICAL_BONUS, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.ORANGE_RED))
         );
-        registerModifier(context, getResourceKey("critical_avoidance"),
-                new Modifier(generateEqualRollSpread(5,
+        registerModifier(context, getResourceKey("critical_avoidance"), new Modifier(
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(1, 50,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
-                                        WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.ORANGE_RED))
         );
         registerModifier(context, getResourceKey("critical_dual"), new Modifier(generateEqualRollSpread(5, List.of(
                 new ToBeTieredModifierEffect(1, 25,
@@ -165,7 +169,8 @@ public class WotrModifierProvider {
                                 WotrAttributes.CRITICAL_CHANCE, AttributeModifier.Operation.ADD_VALUE)),
                 new ToBeTieredModifierEffect(1, 25,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("critical_avoidance"),
-                                WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                WotrAttributes.CRITICAL_AVOIDANCE, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.ORANGE_RED))
         );
         registerModifier(context, getResourceKey("health_flat"), new Modifier(
                 generateEqualRollSpread(6,
@@ -190,11 +195,12 @@ public class WotrModifierProvider {
                                         Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
                 Style.EMPTY.withColor(ColorUtil.FOREST_GREEN))
         );
-        registerModifier(context, getResourceKey("life_leech"),
-                new Modifier(generateEqualRollSpread(6,
+        registerModifier(context, getResourceKey("life_leech"), new Modifier(
+                generateEqualRollSpread(6,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("life_leech"),
-                                        WotrAttributes.LIFE_LEECH, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.LIFE_LEECH, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.CRIMSON_RED))
         );
         registerModifier(context, getResourceKey("jump_height"), new Modifier(generateEqualRollSpread(3, List.of(
                 new ToBeTieredModifierEffect(0.01F, 0.5F,
@@ -307,17 +313,19 @@ public class WotrModifierProvider {
                                         Attributes.SWEEPING_DAMAGE_RATIO, AttributeModifier.Operation.ADD_VALUE)))),
                 Style.EMPTY.withColor(ColorUtil.ORANGE_RED))
         );
-        registerModifier(context, getResourceKey("thorns_chance"),
-                new Modifier(generateEqualRollSpread(5,
+        registerModifier(context, getResourceKey("thorns_chance"), new Modifier(
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 50,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_chance"),
-                                        WotrAttributes.THORNS_CHANCE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.THORNS_CHANCE, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.CRIMSON_RED))
         );
-        registerModifier(context, getResourceKey("thorns_damage"),
-                new Modifier(generateEqualRollSpread(5,
+        registerModifier(context, getResourceKey("thorns_damage"), new Modifier(
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(1, 30,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("thorns_damage"),
-                                        WotrAttributes.THORNS_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))))
+                                        WotrAttributes.THORNS_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.CRIMSON_RED))
         );
     }
 
