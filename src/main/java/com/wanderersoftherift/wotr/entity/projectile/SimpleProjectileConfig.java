@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 public record SimpleProjectileConfig(int projectiles, int pierce, float velocity, boolean gravityAffected,
-                                     float gravity, int groundPersistTicks, SimpleProjectileConfigRenderConfig renderConfig,
-                                     SimpleProjectileConfigSoundConfig soundConfig) {
+        float gravity, int groundPersistTicks, SimpleProjectileConfigRenderConfig renderConfig,
+        SimpleProjectileConfigSoundConfig soundConfig) {
 
     public static final SimpleProjectileConfig DEFAULT = new SimpleProjectileConfig(
             1, 0, 1.0F, true, 0.05F, 0, SimpleProjectileConfigRenderConfig.DEFAULT,
@@ -30,12 +30,12 @@ public record SimpleProjectileConfig(int projectiles, int pierce, float velocity
     ).apply(instance, SimpleProjectileConfig::new));
 
     public record SimpleProjectileConfigRenderConfig(ResourceLocation modelResource, ResourceLocation textureResource,
-                                                     ResourceLocation animationResource) {
+            ResourceLocation animationResource) {
 
         public static final Codec<SimpleProjectileConfigRenderConfig> CODEC = RecordCodecBuilder
                 .create(instance -> instance
                         .group(ResourceLocation.CODEC.fieldOf("model")
-                                        .forGetter(SimpleProjectileConfigRenderConfig::modelResource),
+                                .forGetter(SimpleProjectileConfigRenderConfig::modelResource),
                                 ResourceLocation.CODEC.fieldOf("texture")
                                         .forGetter(SimpleProjectileConfigRenderConfig::textureResource),
                                 ResourceLocation.CODEC.fieldOf("animations")
@@ -53,7 +53,7 @@ public record SimpleProjectileConfig(int projectiles, int pierce, float velocity
     }
 
     public record SimpleProjectileConfigSoundConfig(ResourceLocation collisionSound, ResourceLocation fireSound,
-                                                    ResourceLocation travelSound) {
+            ResourceLocation travelSound) {
 
         private static final ResourceLocation EMPTY_SOUND = ResourceLocation
                 .withDefaultNamespace("intentionally_empty");
@@ -62,7 +62,7 @@ public record SimpleProjectileConfig(int projectiles, int pierce, float velocity
         public static final Codec<SimpleProjectileConfigSoundConfig> CODEC = RecordCodecBuilder
                 .create(instance -> instance
                         .group(ResourceLocation.CODEC.optionalFieldOf("collision", EMPTY_SOUND)
-                                        .forGetter(SimpleProjectileConfigSoundConfig::collisionSound),
+                                .forGetter(SimpleProjectileConfigSoundConfig::collisionSound),
                                 ResourceLocation.CODEC.optionalFieldOf("fire", EMPTY_SOUND)
                                         .forGetter(SimpleProjectileConfigSoundConfig::fireSound),
                                 ResourceLocation.CODEC.optionalFieldOf("travel", EMPTY_SOUND)
