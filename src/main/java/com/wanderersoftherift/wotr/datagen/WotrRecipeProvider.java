@@ -323,7 +323,7 @@ public class WotrRecipeProvider extends RecipeProvider {
         // </editor-fold>
 
         // <editor-fold desc="WotR Key Forge Recipes">
-        // Add recipes for the mod's themes. Cave, processor, alphabetic afterwards.
+        // Add recipes for the mod's themes. Order: Cave, processor, alphabetic afterwards.
         KeyForgeRecipe
                 .create(WotrDataComponentType.RIFT_THEME.get(),
                         DeferredHolder.create(WotrRegistries.Keys.RIFT_THEMES, WanderersOfTheRift.id("cave")))

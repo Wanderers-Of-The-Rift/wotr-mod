@@ -157,16 +157,16 @@ dependencies {
 
     /* Builders Dependencies
     For Themes: */
-    //runtimeOnly "curse.maven:block-variants-481119:${block_variants_version}" // Breaks chunks, and more
+    runtimeOnly "curse.maven:block-variants-481119:${block_variants_version}" // Breaks chunks, and more
     runtimeOnly "curse.maven:chisel-reborn-551763:${chisel_reborn_version}"
-    //runtimeOnly "curse.maven:oh-the-biomes-weve-gone-1070751:${otbwg_version}"
-    //runtimeOnly "curse.maven:oh-the-trees-youll-grow-962544:${ottyg_version}"
+    runtimeOnly "curse.maven:oh-the-biomes-weve-gone-1070751:${otbwg_version}"
+    runtimeOnly "curse.maven:oh-the-trees-youll-grow-962544:${ottyg_version}"
     runtimeOnly "curse.maven:stoneworks-852663:${stoneworks_version}"
-    //runtimeOnly "curse.maven:ametrin-api-670599:${ametrin_api_version}"
-    //runtimeOnly "curse.maven:corgilib-693313:${corgilib_version}"
-    //runtimeOnly "curse.maven:terrablender-940057:${terrablender_version}"
+    runtimeOnly "curse.maven:ametrin-api-670599:${ametrin_api_version}"
+    runtimeOnly "curse.maven:corgilib-693313:${corgilib_version}"
+    runtimeOnly "curse.maven:terrablender-940057:${terrablender_version}"
     runtimeOnly "curse.maven:cryonic-config-1208896:${cryonic_config_version}"
-    //runtimeOnly "curse.maven:puzzles-lib-495476:${puzzles_lib_version}"
+    runtimeOnly "curse.maven:puzzles-lib-495476:${puzzles_lib_version}"
 
     /*Rest:
     runtimeOnly "curse.maven:balm-531761:${balm_version}"
