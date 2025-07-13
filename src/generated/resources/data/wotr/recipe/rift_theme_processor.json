@@ -2,7 +2,7 @@
   "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:processor",
+      "essence_type": "wotr:processor",
       "min": 1
     }
   ],

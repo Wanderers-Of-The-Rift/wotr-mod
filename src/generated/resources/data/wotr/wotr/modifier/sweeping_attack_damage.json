@@ -1,4 +1,7 @@
 {
+  "style": {
+    "color": "#FF4500"
+  },
   "tiers": [
     {
       "modifiers": [

@@ -40,10 +40,24 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
     private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
     private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
 
+    private static final QuickMover MOVER = QuickMover.create()
+            .forPlayerSlots(INPUT_SLOTS)
+            .tryMoveTo(0, INPUT_SLOTS)
+            .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .forSlot(0)
+            .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .tryMoveToPlayer()
+            .forSlot(1)
+            .tryMoveToPlayer()
+            .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .tryMoveTo(0)
+            .tryMoveToPlayer()
+            .build();;
+
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
+    private final IItemHandler upgradeMatStorage;
     private final DataSlot canLevel;
-    private final QuickMover mover;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory,
@@ -55,7 +69,8 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             ContainerLevelAccess access, IItemHandler abilities) {
         super(WotrMenuTypes.ABILITY_BENCH_MENU.get(), containerId);
         this.access = access;
-        this.inputContainer = new SimpleContainer(INPUT_SLOTS);
+        this.inputContainer = new SimpleContainer(1);
+        this.upgradeMatStorage = persistentStore;
         inputContainer.addListener(this::onAbilitySlotChanged);
         addSlot(new AbilitySlot(inputContainer, 0, 32, 17));
         addSlot(new LargeSlotItemHandler(persistentStore, 0, 297, 7));
@@ -65,20 +80,6 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
         canLevel = DataSlot.standalone();
         addDataSlot(canLevel);
-
-        mover = QuickMover.create(this)
-                .forPlayerSlots(INPUT_SLOTS)
-                .tryMoveTo(0, INPUT_SLOTS)
-                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .forSlot(0)
-                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .tryMoveToPlayer()
-                .forSlot(1)
-                .tryMoveToPlayer()
-                .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .tryMoveTo(0)
-                .tryMoveToPlayer()
-                .build();
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -159,7 +160,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
      * @return How much upgrade currency is available
      */
     public int availableUpgradeCurrency() {
-        return inputContainer.getItem(1).getCount();
+        return upgradeMatStorage.getStackInSlot(0).getCount();
     }
 
     /**
@@ -199,7 +200,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             if (available < cost) {
                 return;
             }
-            inputContainer.getItem(1).shrink(cost);
+            upgradeMatStorage.extractItem(0, cost, false);
             AbilityUpgradePool updatedPool = pool.getMutable()
                     .generateChoice(serverLevel.registryAccess(), getAbility().value(), serverLevel.getRandom(),
                             AbilityUpgradePool.SELECTION_PER_LEVEL)
@@ -269,7 +270,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return mover.quickMove(player, index);
+        return MOVER.quickMove(this, player, index);
     }
 
     @Override

@@ -1,31 +1,44 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "com.wanderersoftherift.wotr.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "wotr.refmap.json",
-  "mixins": [
-    "AccessorMappedRegistry",
-    "AccessorMinecraftServer",
-    "InvokerAbstractContainerMenu",
-    "InvokerBlockBehaviour",
-    "MixinEnchantingTableBlock",
-    "MixinFireBlock",
-    "MixinItem",
-    "MixinItemStack",
-    "MixinLavaFluid",
-    "MixinLivingEntity",
-    "MixinServerPlayer",
-    "MixinSetItemDamageFunction",
-    "MixinStructureTemplate",
-    "MixinWorldDimensions"
-  ],
-  "client": [
-    "MixinAccessibilityOptionsScreen",
-    "MixinGuiGraphics",
-    "MixinMinecraft"
-  ],
-  "injectors": {
-    "defaultRequire": 1
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.wanderersoftherift.wotr.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "wotr.refmap.json",
+    "mixins": [
+        "AccessorMappedRegistry",
+        "AccessorMinecraftServer",
+        "AccessorPalettedContainer",
+        "AccessorSinglePoolElement",
+        "AccessorStructureManager",
+        "AccessorStructureTemplate",
+        "InvokerAbstractContainerMenu",
+        "InvokerBlockBehaviour",
+        "MixinBlockAgeProcessor",
+        "MixinChunkAccess",
+        "MixinChunkMap",
+        "MixinEnchantingTableBlock",
+        "MixinFireBlock",
+        "MixinItem",
+        "MixinItemStack",
+        "MixinJigsawReplacementProcessor",
+        "MixinLavaFluid",
+        "MixinLivingEntity",
+        "MixinOctahedralGroup",
+        "MixinProtoChunk",
+        "MixinRegionFileVersion",
+        "MixinServerPlayer",
+        "MixinSetItemDamageFunction",
+        "MixinStairBlock",
+        "MixinStructureTemplate",
+        "MixinStructureTemplateManager",
+        "MixinWorldDimensions"
+    ],
+    "client": [
+        "MixinAccessibilityOptionsScreen",
+        "MixinGuiGraphics",
+        "MixinMinecraft"
+    ],
+    "injectors": {
+        "defaultRequire": 1
   }
 }

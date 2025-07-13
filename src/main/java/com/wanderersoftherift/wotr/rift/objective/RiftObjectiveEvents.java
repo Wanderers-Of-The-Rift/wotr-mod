@@ -10,7 +10,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
-import com.wanderersoftherift.wotr.network.S2CRiftObjectiveStatusPacket;
+import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;

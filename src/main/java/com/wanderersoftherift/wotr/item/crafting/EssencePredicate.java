@@ -19,11 +19,11 @@ import net.minecraft.resources.ResourceLocation;
 public record EssencePredicate(ResourceLocation essenceType, int min, int max, float minPercent, float maxPercent) {
 
     public static final Codec<EssencePredicate> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(ResourceLocation.CODEC.fieldOf("essenceType").forGetter(x -> x.essenceType),
+            .group(ResourceLocation.CODEC.fieldOf("essence_type").forGetter(x -> x.essenceType),
                     Codec.INT.optionalFieldOf("min", 0).forGetter(x -> x.min),
                     Codec.INT.optionalFieldOf("max", Integer.MAX_VALUE).forGetter(x -> x.max),
-                    Codec.FLOAT.optionalFieldOf("minPercent", 0f).forGetter(x -> x.minPercent),
-                    Codec.FLOAT.optionalFieldOf("maxPercent", 100f).forGetter(x -> x.maxPercent))
+                    Codec.FLOAT.optionalFieldOf("min_percent", 0f).forGetter(x -> x.minPercent),
+                    Codec.FLOAT.optionalFieldOf("max_percent", 100f).forGetter(x -> x.maxPercent))
             .apply(instance, EssencePredicate::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EssencePredicate> STREAM_CODEC = StreamCodec.composite(

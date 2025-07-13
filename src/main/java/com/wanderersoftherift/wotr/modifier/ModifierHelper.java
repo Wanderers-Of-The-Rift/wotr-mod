@@ -11,17 +11,20 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.common.NeoForge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModifierHelper {
 
     public static void runIterationOnItem(
             ItemStack stack,
-            EquipmentSlot slot,
+            WotrEquipmentSlot slot,
             LivingEntity entity,
-            ModifierHelper.ModifierInSlotVisitor visitor) {
-        if (!stack.isEmpty()) {
+            ModifierInSlotVisitor visitor) {
+        if (!stack.isEmpty() && slot.canAccept(stack)) {
             runOnImplicits(stack, slot, entity, visitor);
             runOnGearSockets(stack, slot, entity, visitor);
         }
@@ -29,7 +32,7 @@ public class ModifierHelper {
 
     private static void runOnGearSockets(
             ItemStack stack,
-            EquipmentSlot slot,
+            WotrEquipmentSlot slot,
             LivingEntity entity,
             ModifierInSlotVisitor visitor) {
         GearSockets gearSockets = stack.get(WotrDataComponentType.GEAR_SOCKETS);
@@ -50,7 +53,7 @@ public class ModifierHelper {
 
     private static void runOnImplicits(
             ItemStack stack,
-            EquipmentSlot slot,
+            WotrEquipmentSlot slot,
             LivingEntity entity,
             ModifierInSlotVisitor visitor) {
         GearImplicits implicits = stack.get(WotrDataComponentType.GEAR_IMPLICITS);
@@ -63,9 +66,10 @@ public class ModifierHelper {
         }
     }
 
-    public static void runIterationOnEquipment(LivingEntity entity, ModifierHelper.ModifierInSlotVisitor visitor) {
-        for (EquipmentSlot equipmentslot : EquipmentSlot.VALUES) {
-            runIterationOnItem(entity.getItemBySlot(equipmentslot), equipmentslot, entity, visitor);
+    public static void runIterationOnEquipment(LivingEntity entity, ModifierInSlotVisitor visitor) {
+        var slots = NeoForge.EVENT_BUS.post(new CollectEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
+        for (var wotrSlot : slots) {
+            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
         }
     }
 
@@ -75,6 +79,10 @@ public class ModifierHelper {
     }
 
     public static void enableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
+        enableModifier(stack, entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
+    }
+
+    public static void enableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
         runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
                 .enableModifier(roll, entity, source, tier));
     }
@@ -85,6 +93,10 @@ public class ModifierHelper {
     }
 
     public static void disableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
+        disableModifier(stack, entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
+    }
+
+    public static void disableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
         runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
                 .disableModifier(roll, entity, source, tier));
     }
@@ -92,5 +104,23 @@ public class ModifierHelper {
     @FunctionalInterface
     public interface ModifierInSlotVisitor {
         void accept(Holder<Modifier> modifierHolder, int tier, float roll, ModifierSource item);
+    }
+
+    public static class CollectEquipmentSlotsEvent extends Event {
+        private final List<WotrEquipmentSlot> slots;
+        private final LivingEntity entity;
+
+        public CollectEquipmentSlotsEvent(List<WotrEquipmentSlot> slots, LivingEntity entity) {
+            this.slots = slots;
+            this.entity = entity;
+        }
+
+        public List<WotrEquipmentSlot> getSlots() {
+            return slots;
+        }
+
+        public LivingEntity getEntity() {
+            return entity;
+        }
     }
 }

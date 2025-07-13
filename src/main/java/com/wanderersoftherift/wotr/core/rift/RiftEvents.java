@@ -15,6 +15,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.Set;
 
+import static com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION;
+
 @EventBusSubscriber
 public class RiftEvents {
 
@@ -42,9 +44,10 @@ public class RiftEvents {
         }
         RiftData riftData = RiftData.get(originLevel);
         if (riftData.containsPlayer(event.getEntity())) {
+            var position = DEFAULT_RIFT_EXIT_POSITION.offset(3, 0, 3);
             event.getEntity()
-                    .teleportTo(originLevel, 5, 0, 5, Set.of(), event.getEntity().getYRot(),
-                            event.getEntity().getXRot(), false);
+                    .teleportTo(originLevel, position.getX(), position.getY(), position.getZ(), Set.of(),
+                            event.getEntity().getYRot(), event.getEntity().getXRot(), false);
         }
     }
 

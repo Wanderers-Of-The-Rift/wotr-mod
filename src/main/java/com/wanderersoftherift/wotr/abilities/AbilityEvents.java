@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
@@ -8,6 +9,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -27,6 +30,16 @@ import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class AbilityEvents {
+
+    @SubscribeEvent
+    public static void collectAbilitySlots(ModifierHelper.CollectEquipmentSlotsEvent event) {
+        if (event.getEntity() instanceof IAttachmentHolder holder) {
+            var slotCount = holder.getData(WotrAttachments.ABILITY_SLOTS).getSlots();
+            for (int i = 0; i < slotCount && i < AbilityEquipmentSlot.SLOTS.size(); i++) {
+                event.getSlots().add(AbilityEquipmentSlot.SLOTS.get(i));
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void logAvailableAbilities(ServerStartingEvent event) {

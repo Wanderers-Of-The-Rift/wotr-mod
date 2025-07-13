@@ -4,19 +4,22 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
-import com.wanderersoftherift.wotr.network.AbilityCooldownUpdatePayload;
-import com.wanderersoftherift.wotr.network.AbilitySlotsContentPayload;
-import com.wanderersoftherift.wotr.network.AbilitySlotsCooldownsPayload;
-import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
-import com.wanderersoftherift.wotr.network.AbilityToggleStatePayload;
-import com.wanderersoftherift.wotr.network.BannedFromRiftPayload;
-import com.wanderersoftherift.wotr.network.LevelUpAbilityPayload;
-import com.wanderersoftherift.wotr.network.ManaChangePayload;
-import com.wanderersoftherift.wotr.network.SelectAbilitySlotPayload;
-import com.wanderersoftherift.wotr.network.SelectAbilityUpgradePayload;
-import com.wanderersoftherift.wotr.network.SetEffectMarkerPayload;
-import com.wanderersoftherift.wotr.network.UpdateEffectMarkersPayload;
-import com.wanderersoftherift.wotr.network.UseAbilityPayload;
+import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
+import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
+import com.wanderersoftherift.wotr.network.ability.AbilitySlotsCooldownsPayload;
+import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
+import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
+import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
+import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
+import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
+import com.wanderersoftherift.wotr.network.ability.SetEffectMarkerPayload;
+import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
+import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
+import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
+import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
+import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,6 +39,7 @@ public class WotrPayloadHandlers {
     public static void registerPayloadHandlers(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(WanderersOfTheRift.MODID).versioned(PROTOCOL_VERSION);
 
+        // Ability
         registrar.playToServer(SelectAbilityUpgradePayload.TYPE, SelectAbilityUpgradePayload.STREAM_CODEC,
                 SelectAbilityUpgradePayload::handleOnServer);
         registrar.playToServer(LevelUpAbilityPayload.TYPE, LevelUpAbilityPayload.STREAM_CODEC,
@@ -49,6 +53,7 @@ public class WotrPayloadHandlers {
         registrar.playToClient(AbilitySlotsCooldownsPayload.TYPE, AbilitySlotsCooldownsPayload.STREAM_CODEC,
                 AbilitySlotsCooldownsPayload::handleOnClient);
 
+        // Ability effect markers
         registrar.playToClient(SetEffectMarkerPayload.TYPE, SetEffectMarkerPayload.STREAM_CODEC,
                 SetEffectMarkerPayload::handleOnClient);
         registrar.playToClient(UpdateEffectMarkersPayload.TYPE, UpdateEffectMarkersPayload.STREAM_CODEC,
@@ -63,8 +68,15 @@ public class WotrPayloadHandlers {
         registrar.playToClient(ManaChangePayload.TYPE, ManaChangePayload.STREAM_CODEC,
                 ManaChangePayload::handleOnClient);
 
+        // Rift
         registrar.playToClient(BannedFromRiftPayload.TYPE, BannedFromRiftPayload.STREAM_CODEC,
                 BannedFromRiftPayload::handleOnClient);
+        registrar.playToClient(S2CRiftObjectiveStatusPacket.TYPE, S2CRiftObjectiveStatusPacket.STREAM_CODEC,
+                new S2CRiftObjectiveStatusPacket.S2CRiftObjectiveStatusPacketHandler());
+        registrar.playToServer(C2SRuneAnvilApplyPacket.TYPE, C2SRuneAnvilApplyPacket.STREAM_CODEC,
+                new C2SRuneAnvilApplyPacket.C2SRuneAnvilApplyPacketHandler());
+        registrar.playToClient(S2CLevelListUpdatePacket.TYPE, S2CLevelListUpdatePacket.STREAM_CODEC,
+                new S2CLevelListUpdatePacket.S2CLevelListUpdatePacketHandler());
     }
 
     @SubscribeEvent

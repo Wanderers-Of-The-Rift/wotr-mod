@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
 import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
-import com.wanderersoftherift.wotr.network.AbilitySlotsUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -52,7 +53,7 @@ public class AbilityBenchBlockEntity extends BlockEntity {
         AbilitySlots slots = playerInventory.player.getData(WotrAttachments.ABILITY_SLOTS);
         IItemHandler replicatedSlots = new ChangeAwareItemHandler(slots) {
             @Override
-            public void onSlotChanged(int slot) {
+            public void onSlotChanged(int slot, ItemStack oldStack, ItemStack newStack) {
                 PacketDistributor.sendToPlayer((ServerPlayer) player,
                         new AbilitySlotsUpdatePayload(slot, slots.getStackInSlot(slot)));
             }
