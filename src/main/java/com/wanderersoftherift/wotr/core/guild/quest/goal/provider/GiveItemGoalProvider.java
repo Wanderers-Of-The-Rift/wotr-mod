@@ -14,13 +14,12 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import java.util.List;
 import java.util.Optional;
 
-public record RandomizedItemGoalProvider(Ingredient item, NumberProvider count) implements GoalProvider {
+public record GiveItemGoalProvider(Ingredient item, NumberProvider count) implements GoalProvider {
 
-    public static final MapCodec<RandomizedItemGoalProvider> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> instance.group(
-                    Ingredient.CODEC.fieldOf("item").forGetter(RandomizedItemGoalProvider::item),
-                    NumberProviders.CODEC.fieldOf("count").forGetter(RandomizedItemGoalProvider::count)
-            ).apply(instance, RandomizedItemGoalProvider::new));
+    public static final MapCodec<GiveItemGoalProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("item").forGetter(GiveItemGoalProvider::item),
+            NumberProviders.CODEC.fieldOf("count").forGetter(GiveItemGoalProvider::count)
+    ).apply(instance, GiveItemGoalProvider::new));
 
     @Override
     public MapCodec<? extends GoalProvider> getCodec() {

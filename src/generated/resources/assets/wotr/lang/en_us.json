@@ -305,7 +305,7 @@
   "container.wotr.quest.complete": "Complete",
   "container.wotr.quest.goal.complete_rift": "%s a %srift (%s/%s)",
   "container.wotr.quest.goal.complete_rifts": "%s %srifts (%s/%s)",
-  "container.wotr.quest.goal.give": "Deliver: ",
+  "container.wotr.quest.goal.give": "Deliver %s/%s ",
   "container.wotr.quest.goal.kill": "Defeat %s (%s/%s)",
   "container.wotr.quest.goals": "Goal",
   "container.wotr.quest.handin": "Hand In",
