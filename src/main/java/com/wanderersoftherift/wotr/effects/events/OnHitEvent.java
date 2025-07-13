@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.effects.CriticalEffect;
 import com.wanderersoftherift.wotr.effects.LifeLeechEffect;
 import com.wanderersoftherift.wotr.effects.ThornsEffect;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDamageTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -41,8 +42,10 @@ public class OnHitEvent {
                 DamageSource thornsDamageSource = new DamageSource(
                         level.registryAccess().get(WotrDamageTypes.THORNS_DAMAGE).get(), receiver, receiver,
                         receiver.position());
-                livCauser.hurtServer((ServerLevel) level, thornsDamageSource,
-                        (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom()));
+                if (receiver.getAttributeValue(WotrAttributes.THORNS_DAMAGE) != 0) {
+                    livCauser.hurtServer((ServerLevel) level, thornsDamageSource,
+                            (float) ThornsEffect.calcThornsDamage(receiver, receiver.getRandom()));
+                }
             }
         }
     }
