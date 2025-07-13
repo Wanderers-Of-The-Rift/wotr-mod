@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.effects.CriticalEffect;
 import com.wanderersoftherift.wotr.effects.LifeLeechEffect;
 import com.wanderersoftherift.wotr.effects.ThornsEffect;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDamageTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
