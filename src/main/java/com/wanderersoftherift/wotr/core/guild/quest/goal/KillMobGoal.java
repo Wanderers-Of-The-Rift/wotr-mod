@@ -45,11 +45,9 @@ public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int quantity
     public void registerActiveQuest(ServerPlayer player, QuestState questState, int goalIndex) {
         QuestEventHandler.registerPlayerKillListener(player,
                 new GoalEventListener<>(questState, goalIndex, (event, state, index) -> {
-                    if (mob.matches(event.getEntity().getType())) {
-                        int goalProgress = state.getGoalProgress(index);
-                        if (goalProgress < progressTarget()) {
-                            state.setGoalProgress(index, goalProgress + 1);
-                        }
+                    int goalProgress = state.getGoalProgress(index);
+                    if (goalProgress < progressTarget() && mob.matches(event.getEntity().getType())) {
+                        state.setGoalProgress(index, goalProgress + 1);
                     }
                 }));
     }

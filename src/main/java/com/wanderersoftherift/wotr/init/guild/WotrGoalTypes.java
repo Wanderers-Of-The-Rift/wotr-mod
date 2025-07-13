@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.provider.PoolGoalProvider;
@@ -23,6 +24,8 @@ public class WotrGoalTypes {
     public static final Supplier<GoalType<?>> GIVE_ITEM = register("give_item", () -> GiveItemGoal.TYPE);
 
     public static final Supplier<GoalType<?>> KILL_MOB = register("kill_mob", () -> KillMobGoal.TYPE);
+
+    public static final Supplier<GoalType<?>> COMPLETE_RIFT = register("complete_rift", () -> CompleteRiftGoal.TYPE);
 
     public static final Supplier<MapCodec<? extends GoalProvider>> RANDOMIZED_GIVE_ITEM = GOAL_PROVIDER_TYPES
             .register("randomized_give_item", () -> RandomizedItemGoalProvider.CODEC);

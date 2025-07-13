@@ -34,20 +34,19 @@ public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
 
     @Override
     public int getHeight(int width) {
-        return 18;
+        return font.lineHeight;
     }
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Component name = goal.mobLabel();
-        int remainder = goal.progressTarget() - progress;
-        guiGraphics.drawString(font, Component.translatable(GOAL_MESSAGE, remainder, name).withStyle(textStyle), getX(),
-                getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
+        guiGraphics.drawString(font,
+                Component.translatable(GOAL_MESSAGE, name, progress, goal.progressTarget()).withStyle(textStyle),
+                getX(), getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
     }
 
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
-
     }
 
     @Override

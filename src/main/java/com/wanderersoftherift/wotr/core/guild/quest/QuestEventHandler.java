@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.guild.quest;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,9 +19,50 @@ public class QuestEventHandler {
 
     private static final Multimap<ServerPlayer, Listener<LivingDeathEvent>> killListeners = Multimaps
             .newListMultimap(new WeakHashMap<>(), ArrayList::new);
+    private static final Multimap<ServerPlayer, Listener<RiftEvent.PlayerCompletedRift>> riftCompletionListeners = Multimaps
+            .newListMultimap(new WeakHashMap<>(), ArrayList::new);
+    private static final Multimap<ServerPlayer, Listener<RiftEvent.PlayerDied>> diedInRiftListeners = Multimaps
+            .newListMultimap(new WeakHashMap<>(), ArrayList::new);
 
     public static void registerPlayerKillListener(ServerPlayer player, Listener<LivingDeathEvent> listener) {
         killListeners.put(player, listener);
+    }
+
+    public static void registerRiftCompletionListener(
+            ServerPlayer player,
+            Listener<RiftEvent.PlayerCompletedRift> listener) {
+        riftCompletionListeners.put(player, listener);
+    }
+
+    public static void registerDiedInRiftListener(ServerPlayer player, Listener<RiftEvent.PlayerDied> listener) {
+        diedInRiftListeners.put(player, listener);
+    }
+
+    @SubscribeEvent
+    public static void onDiedInRift(RiftEvent.PlayerDied event) {
+        Iterator<Listener<RiftEvent.PlayerDied>> iterator = diedInRiftListeners.get(event.getPlayer()).iterator();
+        while (iterator.hasNext()) {
+            Listener<RiftEvent.PlayerDied> listener = iterator.next();
+            if (listener.isRelevant()) {
+                listener.onEvent(event);
+            } else {
+                iterator.remove();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCompletedRift(RiftEvent.PlayerCompletedRift event) {
+        Iterator<Listener<RiftEvent.PlayerCompletedRift>> iterator = riftCompletionListeners.get(event.getPlayer())
+                .iterator();
+        while (iterator.hasNext()) {
+            Listener<RiftEvent.PlayerCompletedRift> listener = iterator.next();
+            if (listener.isRelevant()) {
+                listener.onEvent(event);
+            } else {
+                iterator.remove();
+            }
+        }
     }
 
     @SubscribeEvent
@@ -46,6 +88,8 @@ public class QuestEventHandler {
             return;
         }
         killListeners.removeAll(player);
+        diedInRiftListeners.removeAll(player);
+        riftCompletionListeners.removeAll(player);
     }
 
     public interface Listener<T extends Event> {

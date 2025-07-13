@@ -1,0 +1,20 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "rift_type": {
+        "tier" : 1,
+        "theme" : "wotr:buzzy_bees"
+      }
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 8,
+        "id": "minecraft:gold_ingot"
+      }
+    }
+  ]
+}

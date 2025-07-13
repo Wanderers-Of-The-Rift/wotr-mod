@@ -99,7 +99,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
         questInfo.children().add(new LabelEntry(font, Quest.title(quest.getOrigin()), 4));
         questInfo.children().add(new WrappedTextEntry(font, Quest.description(quest.getOrigin())));
         questInfo.children().add(new SpacerEntry(4));
-        questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 4));
+        questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 0));
         for (int i = 0; i < quest.goalCount(); i++) {
             questInfo.children().add(new GoalStateWidget(quest, i));
         }
