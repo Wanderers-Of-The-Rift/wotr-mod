@@ -39,7 +39,7 @@ public class QuestRewardScreen extends EnhancedContainerScreen<QuestRewardMenu> 
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
-        FlowContainer rewardContainer = new FlowContainer(rewards);
+        FlowContainer rewardContainer = new FlowContainer(rewards, 2);
         rewardContainer.setRectangle(162, 16, 7, 28);
 
         addRenderableWidget(rewardContainer);
