@@ -21,7 +21,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -85,7 +84,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     @Nullable private BlockState lastState;
     private int life;
     private double baseDamage = 2.0;
-    private SoundEvent soundEvent = this.getDefaultHitGroundSoundEvent();
+    private SoundEvent collisionSoundEvent = this.getCollisionSound();
+    private SoundEvent fireSoundEvent = this.getFireSoundEvent();
+    private SoundEvent travelSoundEvent = this.getTravelSoundEvent();
     @Nullable private IntOpenHashSet piercingIgnoreEntityIds;
     @Nullable private List<Entity> piercedAndKilledEntities;
     private ItemStack pickupItemStack = this.getDefaultPickupItem();
@@ -106,8 +107,37 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         this.effect = effect;
     }
 
-    public void setSoundEvent(SoundEvent soundEvent) {
-        this.soundEvent = soundEvent;
+    public void setSounds(SoundEvent collisionSound, SoundEvent fireSound, SoundEvent travelSound) {
+        this.collisionSoundEvent = collisionSound;
+        this.fireSoundEvent = fireSound;
+        this.travelSoundEvent = travelSound;
+    }
+
+    public SoundEvent getCollisionSound() {
+        if (this.config == null) {
+            return BuiltInRegistries.SOUND_EVENT
+                    .getValue(SimpleProjectileConfig.SimpleProjectileConfigSoundConfig.DEFAULT.collisionSound());
+        }
+
+        return this.config.getCollisionSound();
+    }
+
+    public SoundEvent getFireSoundEvent() {
+        if (this.config == null) {
+            return BuiltInRegistries.SOUND_EVENT
+                    .getValue(SimpleProjectileConfig.SimpleProjectileConfigSoundConfig.DEFAULT.fireSound());
+        }
+
+        return this.config.getFireSound();
+    }
+
+    public SoundEvent getTravelSoundEvent() {
+        if (this.config == null) {
+            return BuiltInRegistries.SOUND_EVENT
+                    .getValue(SimpleProjectileConfig.SimpleProjectileConfigSoundConfig.DEFAULT.travelSound());
+        }
+
+        return this.config.getTravelSound();
     }
 
     public SimpleProjectileConfig getConfig() {
@@ -143,6 +173,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         super.shoot(x, y, z, velocity, inaccuracy);
         this.life = 0;
+        this.playSound(this.getFireSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
     }
 
     @Override
@@ -177,6 +208,11 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
             this.discard();
             return;
         }
+
+        if (tickCount % 5 == 0) {
+            this.playSound(this.getTravelSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        }
+
         boolean flag = !this.isNoPhysics();
         Vec3 vec3 = this.getDeltaMovement();
         BlockPos blockpos = this.blockPosition();
@@ -470,25 +506,16 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         Vec3 vec3 = vec32.scale(0.05F);
         this.setPos(this.position().subtract(vec3));
         this.setDeltaMovement(Vec3.ZERO);
-        this.playSound(this.getHitGroundSoundEvent(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.playSound(this.getCollisionSound(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
         this.setInGround(true);
         this.shakeTime = SHAKE_TIME;
         this.setPierceLevel((byte) 0);
-        this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.resetPiercedEntities();
     }
 
     @Override
     public ItemStack getWeaponItem() {
         return this.firedFromWeapon;
-    }
-
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return SoundEvents.ARROW_HIT;
-    }
-
-    protected final SoundEvent getHitGroundSoundEvent() {
-        return this.soundEvent;
     }
 
     protected void doPostHurtEffects(LivingEntity target) {
@@ -526,7 +553,10 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         compound.putByte("pickup", (byte) this.pickup.ordinal());
         compound.putDouble("damage", this.baseDamage);
         compound.putInt("PierceLevel", this.getPierceLevel());
-        compound.putString("SoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.soundEvent).toString());
+        compound.putString("CollisionSoundEvent",
+                BuiltInRegistries.SOUND_EVENT.getKey(this.collisionSoundEvent).toString());
+        compound.putString("FireSoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.fireSoundEvent).toString());
+        compound.putString("TravelSoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.travelSoundEvent).toString());
         if (!this.pickupItemStack.isEmpty()) {
             compound.put("item", this.pickupItemStack.save(this.registryAccess()));
         }
@@ -558,10 +588,20 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
 
         this.pickup = AbstractArrow.Pickup.byOrdinal(compound.getByte("pickup"));
         this.setPierceLevel(compound.getByte("PierceLevel"));
-        if (compound.contains("SoundEvent", 8)) {
-            this.soundEvent = BuiltInRegistries.SOUND_EVENT
-                    .getOptional(ResourceLocation.parse(compound.getString("SoundEvent")))
-                    .orElse(this.getDefaultHitGroundSoundEvent());
+        if (compound.contains("CollisionSoundEvent", 8)) {
+            this.collisionSoundEvent = BuiltInRegistries.SOUND_EVENT
+                    .getOptional(ResourceLocation.parse(compound.getString("CollisionSoundEvent")))
+                    .orElse(this.getCollisionSound());
+        }
+        if (compound.contains("FireSoundEvent", 8)) {
+            this.fireSoundEvent = BuiltInRegistries.SOUND_EVENT
+                    .getOptional(ResourceLocation.parse(compound.getString("FireSoundEvent")))
+                    .orElse(this.getFireSoundEvent());
+        }
+        if (compound.contains("TravelSoundEvent", 8)) {
+            this.travelSoundEvent = BuiltInRegistries.SOUND_EVENT
+                    .getOptional(ResourceLocation.parse(compound.getString("TravelSoundEvent")))
+                    .orElse(this.getTravelSoundEvent());
         }
 
         if (compound.contains("item", 10)) {
@@ -718,6 +758,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
 
     public void configure(SimpleProjectileConfig config, AbilityContext context) {
         this.config = config;
+        this.setSounds(config.getCollisionSound(), config.getFireSound(), config.getTravelSound());
         this.setPierceLevel((int) context.getAbilityAttribute(WotrAttributes.PROJECTILE_PIERCE, config.pierce()));
         this.setRenderConfig(config.renderConfig());
         setNoGravity(!config.gravityAffected());
