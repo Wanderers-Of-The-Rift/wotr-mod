@@ -34,8 +34,7 @@ public record QuestGoalUpdatePayload(UUID quest, int goalIndex, int progress) im
 
     public void handleOnClient(final IPayloadContext context) {
         context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).getQuestState(quest).ifPresent(state -> {
-            if (goalIndex >= 0 && goalIndex < state.goalCount()
-                    && state.getGoalProgress(goalIndex) < state.getGoal(goalIndex).progressTarget()) {
+            if (goalIndex >= 0 && goalIndex < state.goalCount()) {
                 state.setGoalProgress(goalIndex, progress);
                 if (state.isComplete()) {
                     Minecraft.getInstance().getToastManager().addToast(new QuestToast(state.getOrigin()));

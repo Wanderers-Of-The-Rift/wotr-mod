@@ -21,7 +21,7 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
             .id("textures/gui/container/quest/complete.png");
     private static final int STATE_BOX_SIZE = 8;
     private static final int STATE_BOX_VERT_OFFSET = 4;
-    private static final int STATE_BOX_HORIZ_OFFSET = 2;
+    private static final int STATE_BOX_HORIZ_OFFSET = 4;
     private final QuestState quest;
     private final int goalIndex;
     private final GoalDisplay goalWidget;
@@ -44,8 +44,8 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     @Override
     public int getHeight(int width) {
         if (goalWidget != null) {
-            return Math.max(STATE_BOX_SIZE + STATE_BOX_VERT_OFFSET,
-                    goalWidget.getHeight(width - STATE_BOX_SIZE - STATE_BOX_HORIZ_OFFSET));
+            return Math.max(STATE_BOX_SIZE + 2 * STATE_BOX_VERT_OFFSET,
+                    goalWidget.getHeight(width - STATE_BOX_SIZE - STATE_BOX_HORIZ_OFFSET) + STATE_BOX_VERT_OFFSET);
         }
         return STATE_BOX_SIZE + STATE_BOX_VERT_OFFSET;
     }

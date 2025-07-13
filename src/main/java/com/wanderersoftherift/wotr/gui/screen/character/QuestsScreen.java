@@ -79,7 +79,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
             questInfo.children().add(new LabelEntry(font, Quest.title(questState.getOrigin()), 4));
             questInfo.children().add(new WrappedTextEntry(font, Quest.description(questState.getOrigin())));
             questInfo.children().add(new SpacerEntry(4));
-            questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 4));
+            questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 0));
             for (int i = 0; i < questState.goalCount(); i++) {
                 questInfo.children().add(new GoalStateWidget(questState, i));
             }

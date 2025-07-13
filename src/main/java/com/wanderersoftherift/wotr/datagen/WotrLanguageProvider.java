@@ -173,7 +173,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.abandon"), "Abandon");
         add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver: ");
-        add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s %s");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rift"), "%s a %srift (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
@@ -407,6 +409,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
         add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
 
+        add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
+        add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
+        add(WanderersOfTheRift.translationId("goal", "rift.complete"), "Complete");
+        add(WanderersOfTheRift.translationId("goal", "rift.tier"), "tier %s");
+        add(WanderersOfTheRift.translationId("goal", "any"), "any");
+
         add(WanderersOfTheRift.translationId("quest", "fetch_quest.title"), "Fetch Quest");
         add(WanderersOfTheRift.translationId("quest", "fetch_quest.description"),
                 "Bring me what I need and I'll make it worth your while.");
@@ -418,6 +426,8 @@ public class WotrLanguageProvider extends LanguageProvider {
                 "Psst. You look like a discerning customer? I've got some powerful shiny baubles if you can bring me some precious metals!");
         add(WanderersOfTheRift.translationId("quest", "kill_skeletons.title"), "Defeat Skeletons");
         add(WanderersOfTheRift.translationId("quest", "kill_skeletons.description"), "Bones scare me! Save me!");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift.title"), "Complete Rifts");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
     }

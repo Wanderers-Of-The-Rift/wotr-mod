@@ -39,7 +39,7 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
 
     @Override
     public int getHeight(int width) {
-        return 18;
+        return 16;
     }
 
     @Override
@@ -49,12 +49,10 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
         int messageWidth = font.width(getMessage());
         ContextMap contextmap = SlotDisplayContext.fromLevel(Minecraft.getInstance().level);
         ItemStack displayItem = goal.item().display().resolveForFirstStack(contextmap);
-        int remaining = goal.progressTarget() - progress;
-        if (remaining != 0) {
-            displayItem.setCount(remaining);
-        }
         guiGraphics.renderFakeItem(displayItem, getX() + messageWidth, getY());
-        guiGraphics.renderItemDecorations(font, displayItem, getX() + messageWidth, getY());
+        String text = progress + "/" + goal.progressTarget();
+        int textWidth = font.width(text);
+        guiGraphics.renderItemDecorations(font, displayItem, getX() + messageWidth + textWidth - 8, getY(), text);
 
         if (mouseX >= getX() + messageWidth && mouseX <= getX() + messageWidth + 16 && mouseY >= getY() + 1
                 && mouseY <= getY() + 17) {
