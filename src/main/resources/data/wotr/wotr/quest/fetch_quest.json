@@ -4,7 +4,7 @@
       "type": "wotr:pool",
       "entries": [
         {
-          "type" : "wotr:randomized_give_item",
+          "type" : "wotr:give_item",
           "item" : "wotr:skill_thread",
           "count" : {
             "type": "minecraft:uniform",
@@ -13,7 +13,7 @@
           }
         },
         {
-          "type" : "wotr:randomized_give_item",
+          "type" : "wotr:give_item",
           "item" : "minecraft:gold_ingot",
           "count" : {
             "type": "minecraft:uniform",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "type" : "wotr:randomized_give_item",
+          "type" : "wotr:give_item",
           "item" : "minecraft:iron_ingot",
           "count" : {
             "type": "minecraft:uniform",
@@ -31,7 +31,7 @@
           }
         },
         {
-          "type" : "wotr:randomized_give_item",
+          "type" : "wotr:give_item",
           "item" : "minecraft:copper_ingot",
           "count" : {
             "type": "minecraft:uniform",

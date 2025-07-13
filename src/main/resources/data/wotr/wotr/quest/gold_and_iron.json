@@ -1,12 +1,12 @@
 {
   "goals": [
     {
-      "type": "wotr:give_item",
+      "type": "wotr:fixed_give_item",
       "item": "minecraft:gold_ingot",
       "quantity": 4
     },
     {
-      "type": "wotr:give_item",
+      "type": "wotr:fixed_give_item",
       "item": "minecraft:iron_ingot",
       "quantity": 4
     }

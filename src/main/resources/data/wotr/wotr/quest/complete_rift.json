@@ -2,19 +2,28 @@
   "goals": [
     {
       "type": "wotr:complete_rift",
-      "rift_type": {
-        "tier" : 1,
-        "theme" : "wotr:buzzy_bees"
-      }
+      "count" : {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+      },
+      "tier" : {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+      },
+      "themes" : [
+        "wotr:cave",
+        "wotr:forest",
+        "wotr:desert",
+        "wotr:swamp"
+      ]
     }
   ],
   "rewards": [
     {
-      "type": "wotr:item",
-      "item": {
-        "count": 8,
-        "id": "minecraft:gold_ingot"
-      }
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:chests/wooden"
     }
   ]
 }

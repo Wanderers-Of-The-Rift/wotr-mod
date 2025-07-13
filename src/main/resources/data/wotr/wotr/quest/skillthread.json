@@ -1,7 +1,7 @@
 {
   "goals": [
     {
-      "type": "wotr:give_item",
+      "type": "wotr:fixed_give_item",
       "item": "wotr:skill_thread",
       "quantity": 4
     }
