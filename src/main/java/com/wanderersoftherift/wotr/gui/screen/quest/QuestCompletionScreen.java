@@ -66,7 +66,7 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
-        questInfo.children().add(new FlowContainer(rewards));
+        questInfo.children().add(new FlowContainer(rewards, 2));
         addRenderableWidget(questInfo);
 
         handInItems = Button

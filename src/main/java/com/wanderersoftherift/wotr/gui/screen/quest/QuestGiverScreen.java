@@ -111,7 +111,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
-        questInfo.children().add(new FlowContainer(rewards));
+        questInfo.children().add(new FlowContainer(rewards, 2));
         questInfo.children().add(new SpacerEntry(2));
         questInfo.setScrollAmount(0);
         // Accept button
