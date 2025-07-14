@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.commands;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -53,6 +54,6 @@ public class CurrencyCommands extends BaseCommand {
         Wallet wallet = ctx.getSource().getPlayer().getData(WotrAttachments.WALLET.get());
         wallet.set(currency, amount);
         PacketDistributor.sendToPlayer(ctx.getSource().getPlayer(), new WalletUpdatePayload(Map.of(currency, amount)));
-        return 1;
+        return Command.SINGLE_SUCCESS;
     }
 }

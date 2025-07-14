@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.currency.WalletAccessor;
+import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.gui.menu.slot.TakeAllOnlyItemHandlerSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -26,7 +26,7 @@ public class TradingMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private final ChangeAwareItemHandler purchaseItem;
     private final SlotItemHandler purchaseSlot;
-    private final WalletAccessor wallet;
+    private final Wallet wallet;
 
     private Holder<TradeListing> currentTrade;
     private boolean updatingTrade = false;
@@ -36,7 +36,7 @@ public class TradingMenu extends AbstractContainerMenu {
                 Minecraft.getInstance().player.getData(WotrAttachments.WALLET));
     }
 
-    public TradingMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, WalletAccessor wallet) {
+    public TradingMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, Wallet wallet) {
         super(WotrMenuTypes.TRADING_MENU.get(), containerId);
         this.access = access;
         this.wallet = wallet;

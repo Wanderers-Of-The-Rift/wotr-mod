@@ -44,7 +44,7 @@ public record GiveItemGoal(Ingredient item, int quantity) implements Goal {
     }
 
     @Override
-    public void registerActiveQuest(ServerPlayer player, QuestState quest, int goalIndex) {
+    public void register(ServerPlayer player, QuestState quest, int goalIndex) {
 
     }
 

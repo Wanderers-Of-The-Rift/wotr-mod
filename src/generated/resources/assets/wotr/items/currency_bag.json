@@ -5,7 +5,7 @@
     "model": {
       "type": "wotr:emblem",
       "base_item": "wotr:base_currency_bag",
-      "emblemProvider": {
+      "emblem_provider": {
         "type": "wotr:currency",
         "currency": {}
       },

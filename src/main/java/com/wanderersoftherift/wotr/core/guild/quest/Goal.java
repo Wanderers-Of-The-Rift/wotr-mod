@@ -43,5 +43,5 @@ public interface Goal extends GoalProvider {
      * @param quest     The quest this goal belongs to
      * @param goalIndex The index of this goal in its quest
      */
-    void registerActiveQuest(ServerPlayer player, QuestState quest, int goalIndex);
+    void register(ServerPlayer player, QuestState quest, int goalIndex);
 }

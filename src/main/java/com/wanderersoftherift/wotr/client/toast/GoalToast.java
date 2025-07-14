@@ -16,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * A toast for when a subgoal of a quest is completed (but not the entire quest)
+ */
 public class GoalToast implements Toast {
     private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation
             .withDefaultNamespace("toast/advancement");

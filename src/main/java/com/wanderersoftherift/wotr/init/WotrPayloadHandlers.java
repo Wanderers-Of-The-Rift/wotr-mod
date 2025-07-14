@@ -185,7 +185,8 @@ public class WotrPayloadHandlers {
     }
 
     private static void replicateWallet(ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player, new WalletReplicationPayload(player.getData(WotrAttachments.WALLET)));
+        PacketDistributor.sendToPlayer(player,
+                new WalletReplicationPayload(player.getData(WotrAttachments.WALLET).getAll()));
     }
 
 }

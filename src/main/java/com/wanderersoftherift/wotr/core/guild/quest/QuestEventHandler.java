@@ -1,68 +1,78 @@
 package com.wanderersoftherift.wotr.core.guild.quest;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.CompleteRiftGoal;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.RiftCompletionLevel;
+import com.wanderersoftherift.wotr.core.guild.quest.goal.RiftPredicate;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.WeakHashMap;
-
 @EventBusSubscriber
 public class QuestEventHandler {
 
-    private static final Multimap<ServerPlayer, Listener<LivingDeathEvent>> killListeners = Multimaps
-            .newListMultimap(new WeakHashMap<>(), ArrayList::new);
-    private static final Multimap<ServerPlayer, Listener<RiftEvent.PlayerCompletedRift>> riftCompletionListeners = Multimaps
-            .newListMultimap(new WeakHashMap<>(), ArrayList::new);
-    private static final Multimap<ServerPlayer, Listener<RiftEvent.PlayerDied>> diedInRiftListeners = Multimaps
-            .newListMultimap(new WeakHashMap<>(), ArrayList::new);
+    private static final GoalEventListenerRegistrar<LivingDeathEvent> KILL_MOB_GOALS = new GoalEventListenerRegistrar<>(
+            (event, player, state, index) -> {
+                if (!(state.getGoal(index) instanceof KillMobGoal goal)) {
+                    return;
+                }
+                int goalProgress = state.getGoalProgress(index);
+                if (goalProgress < goal.progressTarget() && goal.mob().matches(event.getEntity().getType())) {
+                    state.setGoalProgress(index, goalProgress + 1);
+                }
+            });
 
-    public static void registerPlayerKillListener(ServerPlayer player, Listener<LivingDeathEvent> listener) {
-        killListeners.put(player, listener);
+    private static final GoalEventListenerRegistrar<RiftEvent.PlayerCompletedRift> RIFT_COMPLETION_SUCCESS_GOALS = new GoalEventListenerRegistrar<>(
+            (event, player, state, index) -> {
+                if (!(state.getGoal(
+                        index) instanceof CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, RiftPredicate predicate))) {
+                    return;
+                }
+                int progress = state.getGoalProgress(index);
+                if (progress >= count) {
+                    return;
+                }
+                if (!event.isObjectiveComplete() && completionLevel == RiftCompletionLevel.COMPLETE) {
+                    return;
+                }
+                if (predicate.matches(event.getConfig())) {
+                    state.setGoalProgress(index, progress + 1);
+                }
+            });
+
+    private static final GoalEventListenerRegistrar<RiftEvent.PlayerDied> RIFT_COMPLETION_DIED_GOALS = new GoalEventListenerRegistrar<>(
+            (event, player, state, index) -> {
+                if (!(state.getGoal(
+                        index) instanceof CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, RiftPredicate predicate))) {
+                    return;
+                }
+                int progress = state.getGoalProgress(index);
+                if (progress < count && completionLevel == RiftCompletionLevel.ENTER
+                        && predicate.matches(event.getConfig())) {
+                    state.setGoalProgress(index, progress + 1);
+                }
+            });
+
+    public static void registerKillMobGoal(ServerPlayer player, QuestState questState, int goalIndex) {
+        KILL_MOB_GOALS.register(player, questState, goalIndex);
     }
 
-    public static void registerRiftCompletionListener(
-            ServerPlayer player,
-            Listener<RiftEvent.PlayerCompletedRift> listener) {
-        riftCompletionListeners.put(player, listener);
-    }
-
-    public static void registerDiedInRiftListener(ServerPlayer player, Listener<RiftEvent.PlayerDied> listener) {
-        diedInRiftListeners.put(player, listener);
+    public static void registerRiftCompletionListener(ServerPlayer player, QuestState questState, int goalIndex) {
+        RIFT_COMPLETION_SUCCESS_GOALS.register(player, questState, goalIndex);
+        RIFT_COMPLETION_DIED_GOALS.register(player, questState, goalIndex);
     }
 
     @SubscribeEvent
     public static void onDiedInRift(RiftEvent.PlayerDied event) {
-        Iterator<Listener<RiftEvent.PlayerDied>> iterator = diedInRiftListeners.get(event.getPlayer()).iterator();
-        while (iterator.hasNext()) {
-            Listener<RiftEvent.PlayerDied> listener = iterator.next();
-            if (listener.isRelevant()) {
-                listener.onEvent(event);
-            } else {
-                iterator.remove();
-            }
-        }
+        RIFT_COMPLETION_DIED_GOALS.trigger(event.getPlayer(), event);
     }
 
     @SubscribeEvent
     public static void onCompletedRift(RiftEvent.PlayerCompletedRift event) {
-        Iterator<Listener<RiftEvent.PlayerCompletedRift>> iterator = riftCompletionListeners.get(event.getPlayer())
-                .iterator();
-        while (iterator.hasNext()) {
-            Listener<RiftEvent.PlayerCompletedRift> listener = iterator.next();
-            if (listener.isRelevant()) {
-                listener.onEvent(event);
-            } else {
-                iterator.remove();
-            }
-        }
+        RIFT_COMPLETION_SUCCESS_GOALS.trigger(event.getPlayer(), event);
     }
 
     @SubscribeEvent
@@ -70,16 +80,7 @@ public class QuestEventHandler {
         if (!(event.getSource().getEntity() instanceof ServerPlayer player)) {
             return;
         }
-
-        Iterator<Listener<LivingDeathEvent>> iterator = killListeners.get(player).iterator();
-        while (iterator.hasNext()) {
-            Listener<LivingDeathEvent> listener = iterator.next();
-            if (listener.isRelevant()) {
-                listener.onEvent(event);
-            } else {
-                iterator.remove();
-            }
-        }
+        KILL_MOB_GOALS.trigger(player, event);
     }
 
     @SubscribeEvent
@@ -87,25 +88,8 @@ public class QuestEventHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        killListeners.removeAll(player);
-        diedInRiftListeners.removeAll(player);
-        riftCompletionListeners.removeAll(player);
+        KILL_MOB_GOALS.unregister(player);
+        RIFT_COMPLETION_SUCCESS_GOALS.unregister(player);
+        RIFT_COMPLETION_DIED_GOALS.unregister(player);
     }
-
-    public interface Listener<T extends Event> {
-
-        /**
-         * Called when the listener to event occurs
-         * 
-         * @param event
-         */
-        void onEvent(T event);
-
-        /**
-         * @return Whether this listener is still relevant
-         */
-        boolean isRelevant();
-
-    }
-
 }

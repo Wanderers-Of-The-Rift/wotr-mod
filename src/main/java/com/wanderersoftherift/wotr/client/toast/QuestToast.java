@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.client.toast;
 
 import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,6 +18,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * A toast for when a quest is completed
+ */
 public class QuestToast implements Toast {
     private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation
             .withDefaultNamespace("toast/advancement");
@@ -59,8 +63,7 @@ public class QuestToast implements Toast {
     public void render(GuiGraphics guiGraphics, Font font, long visibilityTime) {
         guiGraphics.blitSprite(RenderType::guiTextured, BACKGROUND_SPRITE, 0, 0, this.width(), this.height());
         List<FormattedCharSequence> list = font.split(Quest.title(quest), TOAST_WIDTH - ICON_SIZE - 2 * PADDING);
-        int color = 0xff_88_ff_88;
-        guiGraphics.drawString(font, TITLE, PADDING + ICON_SIZE, 7, color, false);
+        guiGraphics.drawString(font, TITLE, PADDING + ICON_SIZE, 7, ColorUtil.LIGHT_GREEN, false);
         guiGraphics.drawString(font, list.getFirst(), PADDING + ICON_SIZE, 18, ChatFormatting.WHITE.getColor(), false);
     }
 }

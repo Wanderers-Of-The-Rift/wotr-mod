@@ -52,25 +52,31 @@ public class QuestHubBlock extends Block {
         }
 
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
-        Registry<Quest> questRegistry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
-        if (activeQuests.isEmpty() && player instanceof ServerPlayer) {
-            LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
-            List<QuestState> quests = questRegistry.stream()
-                    .map(x -> new QuestState(questRegistry.wrapAsHolder(x), x.generateGoals(params),
-                            x.generateRewards(params)))
-                    .toList();
-            player.openMenu(new SimpleMenuProvider((containerId, playerInventory, p) -> new QuestGiverMenu(containerId,
-                    playerInventory, ContainerLevelAccess.create(level, pos), quests), CONTAINER_TITLE));
+        if (activeQuests.isEmpty()) {
+            List<QuestState> quests = generateQuestList(level, serverPlayer);
+            player.openMenu(
+                    new SimpleMenuProvider((containerId, playerInventory, p) -> new QuestGiverMenu(containerId,
+                            playerInventory, ContainerLevelAccess.create(level, pos), quests), CONTAINER_TITLE)
+            );
             PacketDistributor.sendToPlayer(serverPlayer, new AvailableQuestsPayload(quests));
-
         } else {
             player.openMenu(
                     new SimpleMenuProvider(
                             (containerId, playerInventory, p) -> new QuestCompletionMenu(containerId, playerInventory,
                                     ContainerLevelAccess.create(level, pos), p.getData(WotrAttachments.ACTIVE_QUESTS),
                                     0),
-                            Quest.title(activeQuests.getQuestState(0).getOrigin())));
+                            Quest.title(activeQuests.getQuestState(0).getOrigin()))
+            );
         }
         return InteractionResult.CONSUME;
+    }
+
+    private static @NotNull List<QuestState> generateQuestList(Level level, ServerPlayer serverPlayer) {
+        LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
+        Registry<Quest> questRegistry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
+        return questRegistry.stream()
+                .map(x -> new QuestState(questRegistry.wrapAsHolder(x), x.generateGoals(params),
+                        x.generateRewards(params)))
+                .toList();
     }
 }
