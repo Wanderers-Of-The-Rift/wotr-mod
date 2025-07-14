@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.item.gear.AbstractGear;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
@@ -33,6 +34,8 @@ public class WotrRegistries {
 
     public static final Registry<MapCodec<? extends AbstractAbility>> ABILITY_TYPES = new RegistryBuilder<>(
             Keys.ABILITY_TYPES).create();
+    public static final Registry<MapCodec<? extends AbstractGear>> GEAR_TYPES = new RegistryBuilder<>(
+            Keys.GEAR_TYPES).create();
     public static final Registry<MapCodec<? extends AbstractEffect>> EFFECTS = new RegistryBuilder<>(
             Keys.EFFECTS).create();
     public static final Registry<MapCodec<? extends InputBlockState>> INPUT_BLOCKSTATE_TYPES = new RegistryBuilder<>(
@@ -62,6 +65,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("abilities"));
         public static final ResourceKey<Registry<MapCodec<? extends AbstractAbility>>> ABILITY_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_types"));
+        public static final ResourceKey<Registry<AbstractGear>> GEAR = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("gear"));
+        public static final ResourceKey<Registry<MapCodec<? extends AbstractGear>>> GEAR_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("gear_types"));
         public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
         public static final ResourceKey<Registry<ContainerType>> CONTAINER_TYPES = ResourceKey
@@ -113,6 +120,7 @@ public class WotrRegistries {
         event.register(OBJECTIVE_TYPES);
         event.register(ONGOING_OBJECTIVE_TYPES);
         event.register(ABILITY_TYPES);
+        event.register(GEAR_TYPES);
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);
         event.register(LAYOUT_TYPES);
@@ -132,6 +140,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GEAR, AbstractGear.DIRECT_CODEC, AbstractGear.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
     }
 }
