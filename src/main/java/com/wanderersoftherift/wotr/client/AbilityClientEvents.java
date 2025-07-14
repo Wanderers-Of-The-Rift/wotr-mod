@@ -14,9 +14,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.ABILITY_SLOT_KEYS;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.ACTIVATE_ABILITY_SCROLL;
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.NEXT_ABILITY_KEY;
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.PREV_ABILITY_KEY;
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.USE_ABILITY_KEY;
@@ -26,6 +28,26 @@ import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.USE_ABILIT
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class AbilityClientEvents {
+
+    @SubscribeEvent
+    public static void processScrollWheelForAbilityBar(InputEvent.MouseScrollingEvent event) {
+        if (ACTIVATE_ABILITY_SCROLL.isDown()) {
+            int scrollDelta = (int) event.getScrollDeltaY();
+
+            int direction = Integer.signum(scrollDelta) * -1;
+
+            if (direction != 0) {
+                Player player = Minecraft.getInstance().player;
+                AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
+                int selectedSlot = abilitySlots.getSelectedSlot();
+
+                abilitySlots.setSelectedSlot(Math.floorMod(selectedSlot + direction, AbilitySlots.ABILITY_BAR_SIZE));
+
+                PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
+                event.setCanceled(true);
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void processAbilityKeys(ClientTickEvent.Post event) {
