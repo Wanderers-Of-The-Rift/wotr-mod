@@ -42,7 +42,7 @@ public class Modifier {
     }
 
     public Style getStyle() {
-        if(style == null) {
+        if (style == null) {
             return Style.EMPTY.withColor(ChatFormatting.GRAY);
         }
 
