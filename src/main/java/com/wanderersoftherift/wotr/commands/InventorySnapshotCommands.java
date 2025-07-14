@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshotSystem;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -23,9 +22,9 @@ public class InventorySnapshotCommands {
     private static int createInventorySnapshot(CommandSourceStack source) {
         try {
             ServerPlayer player = source.getPlayerOrException();
-            InventorySnapshotSystem.captureSnapshot(player);
-            source.sendSuccess(() -> Component.literal("Created inventory snapshot"), true);
-            return 1;
+            // InventorySnapshotSystem.captureSnapshot(player, );
+            source.sendFailure(Component.literal("Unsupported command, No snapshot created"));
+            return 0;
         } catch (CommandSyntaxException e) {
             return 0;
         }
