@@ -90,6 +90,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     private ItemStack pickupItemStack = this.getDefaultPickupItem();
     @Nullable private ItemStack firedFromWeapon = null;
     private AbstractAbility ability;
+    private ItemStack abilityItem;
     private SimpleProjectileEffect effect;
     private SimpleProjectileConfig config;
 
@@ -434,9 +435,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
             if (!(owner instanceof LivingEntity livingOwner)) {
                 return;
             }
-            // TODO: capture and carry across ability item
+
             effect.applyDelayed(serverLevel, entity, List.of(entity.blockPosition()),
-                    new AbilityContext(livingOwner, ItemStack.EMPTY));
+                    new AbilityContext(livingOwner, abilityItem));
         }
 
         if (this.getPierceLevel() <= 0) {
@@ -475,9 +476,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         ItemStack itemstack = this.getWeaponItem();
         if (effect != null && this.level() instanceof ServerLevel serverLevel
                 && this.getOwner() instanceof LivingEntity caster) {
-            // TODO: capture and carry across ability item
+
             effect.applyDelayed(serverLevel, null, List.of(result.getBlockPos()),
-                    new AbilityContext(caster, ItemStack.EMPTY));
+                    new AbilityContext(caster, abilityItem));
         }
 
         Vec3 vec31 = this.getDeltaMovement();
@@ -535,6 +536,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         if (!this.pickupItemStack.isEmpty()) {
             compound.put("item", this.pickupItemStack.save(this.registryAccess()));
         }
+        if (!this.abilityItem.isEmpty()) {
+            compound.put("abilityItem", this.abilityItem.save(this.registryAccess()));
+        }
         if (this.firedFromWeapon != null) {
             compound.put("weapon", this.firedFromWeapon.save(this.registryAccess(), new CompoundTag()));
         }
@@ -569,6 +573,12 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         } else {
             this.setPickupItemStack(this.getDefaultPickupItem());
         }
+        if (compound.contains("abilityItem", 10)) {
+            this.setAbilityItem(ItemStack.parse(this.registryAccess(), compound.getCompound("abilityItem"))
+                    .orElse(this.getDefaultPickupItem()));
+        } else {
+            this.setAbilityItem(this.getDefaultPickupItem());
+        }
 
         if (compound.contains("weapon", 10)) {
             this.firedFromWeapon = ItemStack.parse(this.registryAccess(), compound.getCompound("weapon")).orElse(null);
@@ -581,6 +591,9 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
                     .resultOrPartial(value -> WanderersOfTheRift.LOGGER.warn("Invalid projectile config: {}", value))
                     .orElse(SimpleProjectileConfig.DEFAULT);
             setRenderConfig(this.config.renderConfig());
+            if (this.getOwner() instanceof LivingEntity owner) {
+                this.configure(this.config, new AbilityContext(owner, abilityItem));
+            }
         }
     }
 
@@ -654,6 +667,15 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         this.entityData.set(RENDER_CONFIG, renderConfig);
     }
 
+    public void setAbilityItem(ItemStack abilityItemStack) {
+        this.abilityItem = abilityItemStack;
+    }
+
+    public void setAbilityContext(AbilityContext context) {
+        this.setAbility(context.getAbility());
+        this.setAbilityItem(context.abilityItem());
+    }
+
     private void setFlag(int id, boolean value) {
         byte b0 = this.entityData.get(ID_FLAGS);
         if (value) {
@@ -722,6 +744,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         this.setCollisionSound(config.soundConfig().getCollisionSound());
         this.setFireSound(config.soundConfig().getFireSound());
         this.setTravelSound(config.soundConfig().getTravelSound());
+        this.setAbilityContext(context);
         setNoGravity(!config.gravityAffected());
     }
 
