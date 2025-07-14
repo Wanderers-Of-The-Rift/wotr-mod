@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.item.gear.GearAbility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -31,8 +32,15 @@ public class GearEvents {
 
             if (ability != null){
                 ability.onActivateGear(player, weapon);
-                player.displayClientMessage(Component.literal(String.valueOf(player.getAttackStrengthScale(200.0f))), true);
+                player.displayClientMessage(Component.literal(String.valueOf(player.getAttackStrengthScale(0.0F))), true);
             }
 
+    }
+
+    public static void startBasicCooldown(){
+       return;
+    }
+    public static void startSecondaryCooldown(){
+        return;
     }
 }
