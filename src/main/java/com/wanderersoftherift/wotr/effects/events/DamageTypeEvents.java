@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.effects;
+package com.wanderersoftherift.wotr.effects.events;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.neoforged.bus.api.SubscribeEvent;

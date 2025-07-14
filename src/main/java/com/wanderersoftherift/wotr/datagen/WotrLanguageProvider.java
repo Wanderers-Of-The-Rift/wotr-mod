@@ -349,7 +349,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "ability.raw_damage"), "Ability Damage");
         add(WanderersOfTheRift.translationId("attribute", "ability.cooldown"), "Ability Cooldown");
         add(WanderersOfTheRift.translationId("attribute", "ability.heal_amount"), "Ability Heal Amount");
+        add(WanderersOfTheRift.translationId("attribute", "critical_chance"), "Critical Chance");
+        add(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), "Critical Avoidance");
+        add(WanderersOfTheRift.translationId("attribute", "critical_bonus"), "Critical Bonus");
         add(WanderersOfTheRift.translationId("attribute", "ability.mana_cost"), "Mana Cost");
+        add(WanderersOfTheRift.translationId("attribute", "thorns_chance"), "Thorns Chance");
+        add(WanderersOfTheRift.translationId("attribute", "thorns_damage"), "Thorns Damage");
+        add(WanderersOfTheRift.translationId("attribute", "life_leech"), "Life Leech");
         add(WanderersOfTheRift.translationId("attribute", "projectile_spread"), "Ability Projectile Spread");
         add(WanderersOfTheRift.translationId("attribute", "projectile_count"), "Ability Projectile Count");
         add(WanderersOfTheRift.translationId("attribute", "projectile_speed"), "Ability Projectile Speed");

@@ -65,7 +65,7 @@ public class WanderersOfTheRift {
 
     public WanderersOfTheRift(IEventBus modEventBus, ModContainer modContainer) {
         // Vanilla elements
-        WotrAttributes.ATTRIBUTES.register(modEventBus);
+        WotrAttributes.WOTR_ATTRIBUTES.register(modEventBus);
         WotrBlocks.BLOCKS.register(modEventBus);
         WotrBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         WotrContainerTypes.CONTAINER_TYPES.register(modEventBus);
