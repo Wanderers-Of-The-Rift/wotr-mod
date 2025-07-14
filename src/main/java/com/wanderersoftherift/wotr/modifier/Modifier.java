@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Style;
@@ -41,6 +42,10 @@ public class Modifier {
     }
 
     public Style getStyle() {
+        if(style == null) {
+            return Style.EMPTY.withColor(ChatFormatting.GRAY);
+        }
+
         return style;
     }
 
