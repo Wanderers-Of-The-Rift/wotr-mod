@@ -76,7 +76,6 @@ public record SimpleProjectileConfig(int projectiles, int pierce, float velocity
         public static final SimpleProjectileConfigSoundConfig DEFAULT = new SimpleProjectileConfigSoundConfig(
                 ARROW_SOUND, EMPTY_SOUND, EMPTY_SOUND);
 
-
         public SoundEvent getCollisionSound() {
             return BuiltInRegistries.SOUND_EVENT.getValue(this.collisionSound);
         }
@@ -90,6 +89,5 @@ public record SimpleProjectileConfig(int projectiles, int pierce, float velocity
         }
 
     }
-
 
 }
