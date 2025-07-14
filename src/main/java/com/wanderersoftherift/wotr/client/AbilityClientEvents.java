@@ -41,15 +41,7 @@ public final class AbilityClientEvents {
                 AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
                 int selectedSlot = abilitySlots.getSelectedSlot();
 
-                int newSlot = selectedSlot + direction;
-
-                if (newSlot > AbilitySlots.ABILITY_BAR_SIZE - 1) {
-                    abilitySlots.setSelectedSlot(0);
-                } else if (newSlot < 0) {
-                    abilitySlots.setSelectedSlot(AbilitySlots.ABILITY_BAR_SIZE - 1);
-                } else {
-                    abilitySlots.setSelectedSlot(newSlot);
-                }
+                abilitySlots.setSelectedSlot(Math.floorMod(selectedSlot + direction, AbilitySlots.ABILITY_BAR_SIZE));
 
                 PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
                 event.setCanceled(true);
