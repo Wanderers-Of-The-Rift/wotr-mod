@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.init;
 
-import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
@@ -9,7 +8,6 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
-import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
 import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
@@ -27,10 +25,6 @@ public class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
 
-    /// Inventory Snapshot
-    public static final Supplier<AttachmentType<InventorySnapshot>> INVENTORY_SNAPSHOT = ATTACHMENT_TYPES.register(
-            "inventory_snapshot",
-            () -> AttachmentType.builder(InventorySnapshot::new).serialize(InventorySnapshot.CODEC).build());
     public static final Supplier<AttachmentType<List<ItemStack>>> RESPAWN_ITEMS = ATTACHMENT_TYPES.register(
             "respawn_items",
             () -> AttachmentType.builder(() -> (List<ItemStack>) new ArrayList<ItemStack>())
@@ -45,8 +39,12 @@ public class WotrAttachments {
                     .build());
 
     /// Rift
-    public static final Supplier<AttachmentType<Boolean>> DIED_IN_RIFT = ATTACHMENT_TYPES.register(
-            "died_in_rift", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).copyOnDeath().build());
+    public static final Supplier<AttachmentType<RiftParticipation>> DIED_IN_RIFT = ATTACHMENT_TYPES.register(
+            "died_in_rift",
+            () -> AttachmentType.builder(() -> RiftParticipation.EMPTY)
+                    .serialize(RiftParticipation.CODEC)
+                    .copyOnDeath()
+                    .build());
     public static final Supplier<AttachmentType<StatSnapshot>> PRE_RIFT_STATS = ATTACHMENT_TYPES.register(
             "pre_rift_stats",
             () -> AttachmentType.builder(() -> new StatSnapshot()).serialize(StatSnapshot.CODEC).copyOnDeath().build());

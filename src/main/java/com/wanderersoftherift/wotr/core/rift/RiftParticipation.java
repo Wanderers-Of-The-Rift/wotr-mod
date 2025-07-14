@@ -4,8 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
+import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshotSystem;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -27,4 +30,12 @@ public record RiftParticipation(InventorySnapshot entranceInventory, ResourceKey
             Vec3.CODEC.fieldOf("previous_position").forGetter(RiftParticipation::previousPosition)
     ).apply(ins, RiftParticipation::new));
 
+    public static void pushParticipation(ServerPlayer player, ResourceKey<Level> riftDimension) {
+        var currentParticipations = player.getData(WotrAttachments.PARTICIPATIONS);
+        var newParticipation = new RiftParticipation(
+                InventorySnapshotSystem.captureSnapshot(player,
+                        currentParticipations.stream().map(it -> it.entranceInventory).toList()),
+                player.level().dimension(), riftDimension, player.position());
+        currentParticipations.add(newParticipation);
+    }
 }

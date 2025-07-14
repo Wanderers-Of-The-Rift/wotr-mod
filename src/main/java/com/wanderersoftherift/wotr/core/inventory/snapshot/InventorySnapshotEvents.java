@@ -1,42 +1,40 @@
 package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
-import net.minecraft.server.level.ServerLevel;
+import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
+import java.util.stream.Collectors;
+
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class InventorySnapshotEvents {
     @SubscribeEvent
     private static void onDropsFromDeath(LivingDropsEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            InventorySnapshotSystem.retainSnapshotItemsOnDeath(player, event);
+            var deathParticipation = player.getData(WotrAttachments.DIED_IN_RIFT);
+            if (deathParticipation != RiftParticipation.EMPTY) {
+                var remainingParticipations = player.getData(WotrAttachments.PARTICIPATIONS);
+                InventorySnapshotSystem.retainSnapshotItemsOnDeath(player, event,
+                        deathParticipation.entranceInventory(),
+                        remainingParticipations.stream().map(it -> it.entranceInventory()).toList());
+            }
         }
     }
 
     @SubscribeEvent
     private static void onPlayerDeath(PlayerEvent.PlayerRespawnEvent event) {
         if (!event.isEndConquered() && event.getEntity() instanceof ServerPlayer player) {
-            InventorySnapshotSystem.restoreItemsOnRespawn(player);
+            InventorySnapshotSystem.restoreItemsOnRespawn(player,
+                    player.getData(WotrAttachments.PARTICIPATIONS)
+                            .stream()
+                            .map(it -> it.entranceInventory().id())
+                            .collect(Collectors.toSet()));
         }
     }
 
-    @SubscribeEvent
-    private static void onPlayerEnterDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!(event.getEntity().level() instanceof ServerLevel level)
-                || !(event.getEntity() instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-        boolean fromRift = RiftLevelManager.isRift(level.getServer().getLevel(event.getFrom()));
-        boolean toRift = RiftLevelManager.isRift(level.getServer().getLevel(event.getTo()));
-        if (!fromRift && toRift) {
-            InventorySnapshotSystem.captureSnapshot(serverPlayer);
-        } else if (fromRift && !toRift) {
-            InventorySnapshotSystem.clearSnapshot(serverPlayer);
-        }
-    }
 }

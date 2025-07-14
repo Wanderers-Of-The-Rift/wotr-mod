@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -78,10 +79,11 @@ public class RiftObjectiveEvents {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getEntity().getData(WotrAttachments.DIED_IN_RIFT)
+        if (event.getEntity().getData(WotrAttachments.DIED_IN_RIFT) == RiftParticipation.EMPTY
                 || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
+        // TODO: what if player dies in multiple rifts simultaneously?
         player.openMenu(new SimpleMenuProvider(
                 (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                         ContainerLevelAccess.create(player.level(), p.getOnPos()), RiftCompleteMenu.FLAG_FAILED,
@@ -91,7 +93,7 @@ public class RiftObjectiveEvents {
             // TODO: Do we need rift config for losing a rift?
             generateObjectiveLoot(menu, player, FAIL_TABLE, new RiftConfig(0));
         }
-        player.setData(WotrAttachments.DIED_IN_RIFT, false);
+        player.setData(WotrAttachments.DIED_IN_RIFT, RiftParticipation.EMPTY);
     }
 
     @SubscribeEvent
@@ -102,7 +104,7 @@ public class RiftObjectiveEvents {
             return;
         }
         RiftData riftData = RiftData.get(riftLevel);
-        if (RiftData.get(riftLevel).getPlayers().contains(event.getEntity().getUUID())) {
+        if (RiftData.get(riftLevel).containsPlayer(event.getEntity().getUUID())) {
             // Player hasn't actually left the level
             return;
         }

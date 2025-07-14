@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.entity.portal;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
@@ -90,11 +91,14 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
             return;
         }
         generated = true;
-        if (RiftData.get(lvl).isBannedFromRift(player)) {
+        var riftData = RiftData.get(lvl);
+        if (riftData.isBannedFromRift(player)) {
             return;
         }
 
-        RiftData.get(lvl).addPlayer(player.getUUID());
+        riftData.addPlayer(player.getUUID());
+
+        RiftParticipation.pushParticipation(player, lvl.dimension());
 
         var riftSpawnCoords = getRiftSpawnCoords();
         player.setData(WotrAttachments.PRE_RIFT_STATS, new StatSnapshot(player));

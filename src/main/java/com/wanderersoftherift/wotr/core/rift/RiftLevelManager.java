@@ -47,6 +47,7 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -101,26 +102,49 @@ public final class RiftLevelManager {
      * @return The rift level with the given id, if it exists
      */
     public static @Nullable ServerLevel getRiftLevel(ResourceLocation id) {
+        return getRiftLevel(ResourceKey.create(Registries.DIMENSION, id));
+    }
+
+    public static @Nullable ServerLevel getRiftLevel(ResourceKey<Level> id) {
         var server = ServerLifecycleHooks.getCurrentServer();
 
-        ServerLevel serverLevel = server.forgeGetWorldMap().get(ResourceKey.create(Registries.DIMENSION, id));
+        ServerLevel serverLevel = server.forgeGetWorldMap().get(id);
         if (serverLevel != null && isRift(serverLevel)) {
             return serverLevel;
         }
         return null;
     }
 
-    public static void onPlayerDeath(ServerPlayer player, ServerLevel level) {
-        if (!isRift(level)) {
-            return;
+    public static boolean onPlayerDeath(ServerPlayer player, LivingDeathEvent event) {
+        RiftParticipation lastDeathParticipation = null;
+        var participations = player.getData(WotrAttachments.PARTICIPATIONS);
+        var topOfTheStackIndex = participations.size() - 1;
+        for (var participationIndex = topOfTheStackIndex; participationIndex >= 0; participationIndex--) {
+            var participation = participations.get(participationIndex);
+            var level = getRiftLevel(participation.riftDimension());
+            if (level == null) {
+                participations.remove(participationIndex);
+                continue;
+            }
+            var riftData = RiftData.get(level);
+
+            if (riftData.containsPlayer(player) && NeoForge.EVENT_BUS.post(new RiftEvent.PlayerDied(player, level,
+                    riftData.getConfig(), event.getSource(), topOfTheStackIndex == participationIndex)).isCanceled()) {
+                break;
+            }
+            lastDeathParticipation = participation;
+            participations.remove(participationIndex);
+            riftData.removePlayer(player);
+            if (riftData.isRiftEmpty()) {
+                unregisterAndDeleteLevel(level);
+            }
         }
-        RiftData riftData = RiftData.get(player.serverLevel());
-        NeoForge.EVENT_BUS.post(new RiftEvent.PlayerDied(player, player.serverLevel(), riftData.getConfig()));
-        riftData.removePlayer(player);
-        if (riftData.isRiftEmpty()) {
-            unregisterAndDeleteLevel(player.serverLevel());
+        if (lastDeathParticipation != null) {
+            player.setData(WotrAttachments.DIED_IN_RIFT, lastDeathParticipation);
+        } else {
+            player.setData(WotrAttachments.DIED_IN_RIFT, RiftParticipation.EMPTY);
         }
-        player.setData(WotrAttachments.DIED_IN_RIFT, true);
+        return participations.size() != 0 && lastDeathParticipation != null;
     }
 
     /**
@@ -139,7 +163,6 @@ public final class RiftLevelManager {
         if (respawnKey == riftLevel.dimension()) {
             respawnKey = Level.OVERWORLD;
         }
-
         ServerLevel respawnDimension = riftLevel.getServer().getLevel(respawnKey);
         if (respawnDimension == null) {
             respawnDimension = riftLevel.getServer().overworld();
@@ -149,11 +172,14 @@ public final class RiftLevelManager {
             return false;
         }
 
+        var participations = player.getData(WotrAttachments.PARTICIPATIONS);
+        participations.removeLast();
+
         var respawnPos = riftData.getPortalPos().above();
         riftData.removePlayer(player);
         player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(),
                 Set.of(), player.getRespawnAngle(), 0, true);
-        if (riftData.getPlayers().isEmpty()) {
+        if (riftData.isRiftEmpty()) {
             RiftLevelManager.unregisterAndDeleteLevel(riftLevel);
         }
         return true;
@@ -277,7 +303,7 @@ public final class RiftLevelManager {
             return;
         }
         RiftData riftData = RiftData.get(level);
-        if (!riftData.getPlayers().isEmpty()) {
+        if (!riftData.isRiftEmpty()) {
             // multiplayer - delete after all players leave
             return;
         }
