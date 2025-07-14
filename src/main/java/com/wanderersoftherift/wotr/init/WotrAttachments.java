@@ -10,7 +10,9 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
+import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
+import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -33,6 +35,12 @@ public class WotrAttachments {
             "respawn_items",
             () -> AttachmentType.builder(() -> (List<ItemStack>) new ArrayList<ItemStack>())
                     .serialize(ItemStack.CODEC.listOf())
+                    .copyOnDeath()
+                    .build());
+    public static final Supplier<AttachmentType<List<RiftParticipation>>> PARTICIPATIONS = ATTACHMENT_TYPES.register(
+            "rift_participations",
+            () -> AttachmentType.builder(() -> (List<RiftParticipation>) new ArrayList<RiftParticipation>())
+                    .serialize(MutableListCodec.of(RiftParticipation.CODEC))
                     .copyOnDeath()
                     .build());
 
