@@ -152,35 +152,43 @@ public final class RiftLevelManager {
      * @return Whether the player was successfully removed from a rift
      */
     public static boolean returnPlayerFromRift(ServerPlayer player) {
-        ServerLevel riftLevel = player.serverLevel();
+        ServerLevel playerLevel = player.serverLevel();
+
+        var participations = player.getData(WotrAttachments.PARTICIPATIONS);
+        if (participations.isEmpty()) {
+            return false;
+        }
+        var participation = participations.removeLast();
+        ServerLevel riftLevel = RiftLevelManager.getRiftLevel(participation.riftDimension());
         if (!isRift(riftLevel)) {
             return false;
         }
 
         RiftData riftData = RiftData.get(riftLevel);
 
-        ResourceKey<Level> respawnKey = riftData.getPortalDimension();
-        if (respawnKey == riftLevel.dimension()) {
-            respawnKey = Level.OVERWORLD;
+        ResourceKey<Level> respawnKey = participation.previousDimension();
+        if (!participation.riftDimension().equals(playerLevel.dimension())) {
+            WanderersOfTheRift.LOGGER.error("player {} is tying to leave rift {} but is in {}",
+                    player.getName().getString(), participation.riftDimension().location(),
+                    playerLevel.dimension().location());
         }
-        ServerLevel respawnDimension = riftLevel.getServer().getLevel(respawnKey);
+        var server = playerLevel.getServer();
+        ServerLevel respawnDimension = server.getLevel(respawnKey);
         if (respawnDimension == null) {
-            respawnDimension = riftLevel.getServer().overworld();
+            WanderersOfTheRift.LOGGER.error("dimension {} not found, teleporting to overworld instead", respawnKey);
+            respawnDimension = server.overworld();
         }
 
         if (!riftData.containsPlayer(player)) {
             return false;
         }
 
-        var participations = player.getData(WotrAttachments.PARTICIPATIONS);
-        participations.removeLast();
-
-        var respawnPos = riftData.getPortalPos().above();
+        var respawnPos = participation.previousPosition();
         riftData.removePlayer(player);
-        player.teleportTo(respawnDimension, respawnPos.getCenter().x(), respawnPos.getY(), respawnPos.getCenter().z(),
-                Set.of(), player.getRespawnAngle(), 0, true);
+        player.teleportTo(respawnDimension, respawnPos.x(), respawnPos.y(), respawnPos.z(), Set.of(),
+                player.getRespawnAngle(), 0, true);
         if (riftData.isRiftEmpty()) {
-            RiftLevelManager.unregisterAndDeleteLevel(riftLevel);
+            RiftLevelManager.unregisterAndDeleteLevel(playerLevel);
         }
         return true;
     }
