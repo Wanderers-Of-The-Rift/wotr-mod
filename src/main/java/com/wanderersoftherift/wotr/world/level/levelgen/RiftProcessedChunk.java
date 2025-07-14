@@ -3,9 +3,11 @@ package com.wanderersoftherift.wotr.world.level.levelgen;
 import com.wanderersoftherift.wotr.mixin.AccessorPalettedContainer;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
 import com.wanderersoftherift.wotr.util.ShiftMath;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.util.ZeroBitStorage;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -21,7 +23,6 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.List;
 
 /**
@@ -104,10 +105,12 @@ public class RiftProcessedChunk {
         var air = Blocks.AIR.defaultBlockState();
         var oldSection = sectionArray[sectionIndex];
         var size = 0;
-        var uniqueStatesList = new BlockState[LevelChunkSection.SECTION_SIZE];
+        // var uniqueStatesList = new BlockState[LevelChunkSection.SECTION_SIZE];
+        var uniqueStatesList = new BlockState[257]; // no need to check more than that, if there is so many unique
+                                                    // states, registry is used
         var uniqueStatesHashTable = new BlockState[64];
         var uniqueStatesIndexHashTable = new int[64];
-        var uniqueStatesFallback = new IdentityHashMap<BlockState, Integer>();
+        var uniqueStatesFallback = new Reference2IntOpenHashMap<BlockState>();
         for (var state : blocks) {
             var actualState = state == null ? air : state;
             var idx = System.identityHashCode(actualState) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
@@ -120,6 +123,9 @@ public class RiftProcessedChunk {
                 uniqueStatesList[size] = actualState;
                 uniqueStatesFallback.putIfAbsent(actualState, size++);
             }
+            if (size > 256) {
+                break;
+            }
         }
 
         if (size == 0) {
@@ -128,9 +134,9 @@ public class RiftProcessedChunk {
         var bits = ShiftMath.shiftForCeilPow2(size);
 
         var registry = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
+        var strat = PalettedContainer.Strategy.SECTION_STATES;
         if (bits == 0) {
-            var strat = PalettedContainer.Strategy.SECTION_STATES;
-            var config = strat.<BlockState>getConfiguration(registry, 0);
+            var config = strat.<BlockState>getConfiguration(registry, bits);
             var storage = new ZeroBitStorage(LevelChunkSection.SECTION_SIZE);
             var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage,
                     List.of(uniqueStatesList[0]));
@@ -140,50 +146,63 @@ public class RiftProcessedChunk {
 
         var useRegistry = bits > 8;
         if (useRegistry) {
-            bits = ShiftMath.shiftForCeilPow2(registry.size());
+            bits = Mth.ceillog2(registry.size());
+        } else {
+            var shiftBitsPow2 = Integer.max(ShiftMath.shiftForCeilPow2(bits), 2);
+            bits = 1 << shiftBitsPow2;
         }
 
-        var shiftBitsPow2 = Integer.max(ShiftMath.shiftForCeilPow2(bits), 2);
-        var bitsPowerOfTwo = 1 << shiftBitsPow2;
+        var config = strat.<BlockState>getConfiguration(registry, bits);
+        var valuesPerLong = Math.floorDiv(64, bits);
+        var longs = new long[Math.ceilDiv(LevelChunkSection.SECTION_SIZE, valuesPerLong)];
+        var storage = new SimpleBitStorage(bits, LevelChunkSection.SECTION_SIZE, longs);
 
-        var strat = PalettedContainer.Strategy.SECTION_STATES;
-        var config = strat.<BlockState>getConfiguration(registry, bitsPowerOfTwo);
+        if (Integer.bitCount(bits) == 1) {
 
-        var valuesPerLong = 64 >> shiftBitsPow2;
-        var longs = new long[LevelChunkSection.SECTION_SIZE / valuesPerLong];
+            for (int i = 0; i < longs.length; i++) {
+                var value = 0L;
+                for (int j = valuesPerLong - 1; j >= 0; j--) {
+                    value <<= bits;
+                    var idx = i * valuesPerLong + j;
+                    var state = blocks[idx];
+                    if (state == null) {
+                        state = air;
+                    }
+                    if (useRegistry) {
+                        value |= registry.getId(state);
+                        continue;
+                    }
+                    var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
+                    var state2 = uniqueStatesHashTable[uniqueIdx];
+                    if (state2 == null) {
+                        // should not be possible
+                    } else if (state2 != state) {
+                        value |= uniqueStatesFallback.get(state);
+                    } else {
+                        value |= uniqueStatesIndexHashTable[uniqueIdx];
+                    }
 
-        for (int i = 0; i < longs.length; i++) {
-            var value = 0L;
-            for (int j = valuesPerLong - 1; j >= 0; j--) {
-                value <<= bitsPowerOfTwo;
-                var idx = i * valuesPerLong + j;
-                var state = blocks[idx];
+                }
+                longs[i] = value;
+            }
+        } else {
+
+            for (int i = 0; i < LevelChunkSection.SECTION_SIZE; i++) {
+                var state = blocks[i];
                 if (state == null) {
                     state = air;
                 }
-                if (useRegistry) {
-                    value |= registry.getId(state);
-                    continue;
-                }
-                var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
-                var state2 = uniqueStatesHashTable[uniqueIdx];
-                if (state2 == null) {
-                    // should not be possible
-                } else if (state2 != state) {
-                    value |= uniqueStatesFallback.get(state);
-                } else {
-                    value |= uniqueStatesIndexHashTable[uniqueIdx];
-                }
-
+                var value = registry.getId(state);
+                storage.set(i, value);
             }
-            longs[i] = value;
         }
 
-        var storage = new SimpleBitStorage(bitsPowerOfTwo, LevelChunkSection.SECTION_SIZE, longs);
-
-        var stateList = new ArrayList<BlockState>(size);
-        for (int i = 0; i < size; i++) {
-            stateList.add(uniqueStatesList[i]);
+        List<BlockState> stateList = null;
+        if (!useRegistry) {
+            stateList = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                stateList.add(uniqueStatesList[i]);
+            }
         }
 
         var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage, stateList);
