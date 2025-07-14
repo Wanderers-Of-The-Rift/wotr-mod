@@ -18,11 +18,11 @@ public record GuildInfo(ResourceLocation emblem) {
 
     public static Component getDisplayName(Holder<GuildInfo> guild) {
         ResourceLocation loc = ResourceLocation.parse(guild.getRegisteredName());
-        return Component.translatable("guild." + loc.getNamespace() + "." + loc.getPath());
+        return Component.translatable(loc.toLanguageKey("guild"));
     }
 
     public static Component getRankTitle(Holder<GuildInfo> guild, int rank) {
         ResourceLocation loc = ResourceLocation.parse(guild.getRegisteredName());
-        return Component.translatable("guild." + loc.getNamespace() + "." + loc.getPath() + ".rank." + rank);
+        return Component.translatable(loc.toLanguageKey("guild", "rank." + rank));
     }
 }

@@ -73,7 +73,7 @@ public class QuestState {
         this.holder = holder;
         if (holder instanceof ServerPlayer player) {
             for (int i = 0; i < goals.size(); i++) {
-                goals.get(i).registerActiveQuest(player, this, i);
+                goals.get(i).register(player, this, i);
             }
         }
     }

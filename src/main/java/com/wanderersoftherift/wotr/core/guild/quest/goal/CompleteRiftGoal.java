@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Goal;
-import com.wanderersoftherift.wotr.core.guild.quest.GoalEventListener;
 import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestEventHandler;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
@@ -47,27 +46,7 @@ public record CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, R
     }
 
     @Override
-    public void registerActiveQuest(ServerPlayer player, QuestState quest, int goalIndex) {
-        QuestEventHandler.registerDiedInRiftListener(player,
-                new GoalEventListener<>(quest, goalIndex, (event, state, index) -> {
-                    int progress = state.getGoalProgress(index);
-                    if (progress < count && completionLevel == RiftCompletionLevel.ENTER
-                            && predicate().matches(event.getConfig())) {
-                        state.setGoalProgress(index, progress + 1);
-                    }
-                }));
-        QuestEventHandler.registerRiftCompletionListener(player,
-                new GoalEventListener<>(quest, goalIndex, (event, state, index) -> {
-                    int progress = state.getGoalProgress(index);
-                    if (progress >= count) {
-                        return;
-                    }
-                    if (!event.isObjectiveComplete() && completionLevel == RiftCompletionLevel.COMPLETE) {
-                        return;
-                    }
-                    if (predicate.matches(event.getConfig())) {
-                        state.setGoalProgress(index, progress + 1);
-                    }
-                }));
+    public void register(ServerPlayer player, QuestState quest, int goalIndex) {
+        QuestEventHandler.registerRiftCompletionListener(player, quest, goalIndex);
     }
 }

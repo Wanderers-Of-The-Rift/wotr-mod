@@ -12,6 +12,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.CHARACTER_MENU_KEY;
 
+/**
+ * Event handling related to the character menu
+ */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class CharacterMenuClientEvents {
 

@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.SequencedMap;
 import java.util.UUID;
@@ -35,13 +36,9 @@ public final class ActiveQuests {
         this(holder, null);
     }
 
-    ActiveQuests(@NotNull IAttachmentHolder holder, @Nullable Data data) {
+    private ActiveQuests(@NotNull IAttachmentHolder holder, @Nullable Data data) {
         this.holder = holder;
-        if (data != null) {
-            this.data = data;
-        } else {
-            this.data = new Data();
-        }
+        this.data = Objects.requireNonNullElseGet(data, Data::new);
         for (QuestState quest : getQuestList()) {
             quest.setHolder(holder);
         }
@@ -109,7 +106,7 @@ public final class ActiveQuests {
      *
      * @param newQuests
      */
-    public void resyncFromServer(List<QuestState> newQuests) {
+    public void replaceAll(List<QuestState> newQuests) {
         data.quests().clear();
         for (QuestState newQuest : newQuests) {
             add(newQuest);

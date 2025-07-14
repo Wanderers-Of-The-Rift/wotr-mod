@@ -31,7 +31,7 @@ public record Currency(ResourceLocation icon, Optional<ResourceLocation> smallIc
 
     public static Component getDisplayName(Holder<Currency> currency) {
         ResourceLocation loc = ResourceLocation.parse(currency.getRegisteredName());
-        return Component.translatable("currency." + loc.getNamespace() + "." + loc.getPath());
+        return Component.translatable(loc.toLanguageKey("currency"));
     }
 
 }

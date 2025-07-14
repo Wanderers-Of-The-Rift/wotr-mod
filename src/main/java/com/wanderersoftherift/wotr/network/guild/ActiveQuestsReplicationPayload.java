@@ -34,6 +34,6 @@ public record ActiveQuestsReplicationPayload(List<QuestState> quests) implements
     }
 
     public void handleOnClient(final IPayloadContext context) {
-        context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).resyncFromServer(quests);
+        context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).replaceAll(quests);
     }
 }

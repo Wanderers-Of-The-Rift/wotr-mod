@@ -9,10 +9,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 /**
- * Adds Wanderer of the Rift additional tooltips
+ * Adds tooltips for currency providing items
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
-public class TooltipEvents {
+public class CurrencyTooltipEvents {
 
     @SubscribeEvent
     public static void itemTooltipEvent(ItemTooltipEvent event) {
