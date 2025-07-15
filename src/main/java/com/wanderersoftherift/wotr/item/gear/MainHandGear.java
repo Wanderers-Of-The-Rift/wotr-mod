@@ -12,8 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainHandGear extends AbstractGear{
-    /*public Holder<AbstractAbility> basic;
-    public Holder<AbstractAbility> secondary;*/
+    public ResourceLocation basic;
+    public ResourceLocation secondary;
 
     public static final MapCodec<MainHandGear> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
