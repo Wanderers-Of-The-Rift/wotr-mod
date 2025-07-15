@@ -23,8 +23,10 @@ import java.util.stream.Collectors;
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList),
-            Style.Serializer.CODEC.optionalFieldOf("style").forGetter(mod -> Optional.ofNullable(mod.getStyle()))
-    ).apply(inst, (tiers, styleOpt) -> new Modifier(tiers, styleOpt.orElse(null))));
+            Style.Serializer.CODEC.optionalFieldOf("style").forGetter(mod -> Optional.of(mod.getStyle()))
+    )
+            .apply(inst, (tiers, styleOpt) -> new Modifier(tiers,
+                    styleOpt.orElse(Style.EMPTY.withColor(ChatFormatting.GRAY)))));
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.MODIFIERS);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MODIFIERS);
@@ -42,10 +44,6 @@ public class Modifier {
     }
 
     public Style getStyle() {
-        if (style == null) {
-            return Style.EMPTY.withColor(ChatFormatting.GRAY);
-        }
-
         return style;
     }
 
