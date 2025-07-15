@@ -184,6 +184,7 @@ public final class RiftLevelManager {
         }
 
         var respawnPos = participation.previousPosition();
+        player.setData(WotrAttachments.EXITED_RIFT, participation);
         riftData.removePlayer(player);
         player.teleportTo(respawnDimension, respawnPos.x(), respawnPos.y(), respawnPos.z(), Set.of(),
                 player.getRespawnAngle(), 0, true);

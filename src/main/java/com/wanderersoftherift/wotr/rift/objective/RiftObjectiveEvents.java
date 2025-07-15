@@ -79,15 +79,15 @@ public class RiftObjectiveEvents {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (event.getEntity().getData(WotrAttachments.DIED_IN_RIFT) == RiftParticipation.EMPTY
-                || !(event.getEntity() instanceof ServerPlayer player)) {
+        var death = event.getEntity().getData(WotrAttachments.DIED_IN_RIFT);
+        if (death == RiftParticipation.EMPTY || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
         // TODO: what if player dies in multiple rifts simultaneously?
         player.openMenu(new SimpleMenuProvider(
                 (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                         ContainerLevelAccess.create(player.level(), p.getOnPos()), RiftCompleteMenu.FLAG_FAILED,
-                        player.getData(WotrAttachments.PRE_RIFT_STATS).getCustomStatDelta(player)),
+                        death.statSnapshot().getCustomStatDelta(player)),
                 Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
         if (player.containerMenu instanceof RiftCompleteMenu menu) {
             // TODO: Do we need rift config for losing a rift?
@@ -98,9 +98,11 @@ public class RiftObjectiveEvents {
 
     @SubscribeEvent
     public static void onPlayerLeaveLevel(PlayerEvent.PlayerChangedDimensionEvent event) {
-        ServerLevel riftLevel = RiftLevelManager.getRiftLevel(event.getFrom().location());
+        var live = event.getEntity().getData(WotrAttachments.EXITED_RIFT);
+        ServerLevel riftLevel = RiftLevelManager.getRiftLevel(live.riftDimension());
 
-        if (riftLevel == null || !(event.getEntity() instanceof ServerPlayer player)) {
+        if (riftLevel == null || live == RiftParticipation.EMPTY
+                || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
         RiftData riftData = RiftData.get(riftLevel);
@@ -116,12 +118,15 @@ public class RiftObjectiveEvents {
                         (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                                 ContainerLevelAccess.create(event.getEntity().level(), p.getOnPos()),
                                 success ? RiftCompleteMenu.FLAG_SUCCESS : RiftCompleteMenu.FLAG_SURVIVED,
-                                event.getEntity().getData(WotrAttachments.PRE_RIFT_STATS).getCustomStatDelta(player)),
+                                live.statSnapshot().getCustomStatDelta(player)), // this will include stats from
+                                                                                 // subrifts, maybe todo only this
+                                                                                 // specific rift?
                         Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
 
         if (event.getEntity().containerMenu instanceof RiftCompleteMenu menu) {
             generateObjectiveLoot(menu, player, success ? SUCCESS_TABLE : SURVIVE_TABLE, riftData.getConfig());
         }
+        event.getEntity().setData(WotrAttachments.EXITED_RIFT, RiftParticipation.EMPTY);
     }
 
     private static void generateObjectiveLoot(

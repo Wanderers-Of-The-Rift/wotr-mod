@@ -45,6 +45,13 @@ public class WotrAttachments {
                     .serialize(RiftParticipation.CODEC)
                     .copyOnDeath()
                     .build());
+
+    public static final Supplier<AttachmentType<RiftParticipation>> EXITED_RIFT = ATTACHMENT_TYPES.register(
+            "exited_rift",
+            () -> AttachmentType.builder(() -> RiftParticipation.EMPTY)
+                    .serialize(RiftParticipation.CODEC)
+                    .copyOnDeath()
+                    .build());
     public static final Supplier<AttachmentType<StatSnapshot>> PRE_RIFT_STATS = ATTACHMENT_TYPES.register(
             "pre_rift_stats",
             () -> AttachmentType.builder(() -> new StatSnapshot()).serialize(StatSnapshot.CODEC).copyOnDeath().build());
