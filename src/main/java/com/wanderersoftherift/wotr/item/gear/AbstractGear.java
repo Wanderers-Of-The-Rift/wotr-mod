@@ -14,15 +14,15 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Function;
 
-import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.GEAR;
+import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.GEAR_PIECES;
 
 public abstract class AbstractGear {
 
     public static final Codec<AbstractGear> DIRECT_CODEC = WotrRegistries.GEAR_TYPES.byNameCodec()
             .dispatch(AbstractGear::getCodec, Function.identity());
-    public static final Codec<Holder<AbstractGear>> CODEC = LaxRegistryCodec.create(GEAR);
+    public static final Codec<Holder<AbstractGear>> CODEC = LaxRegistryCodec.create(GEAR_PIECES);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractGear>> STREAM_CODEC = ByteBufCodecs
-            .holderRegistry(GEAR);
+            .holderRegistry(GEAR_PIECES);
 
     private final ResourceLocation name;
     private ResourceLocation heldIcon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");

@@ -19,13 +19,15 @@ public class MainHandGear extends AbstractGear{
             instance -> instance
                     .group(ResourceLocation.CODEC.fieldOf("gear_name").forGetter(MainHandGear::getName),
                             ResourceLocation.CODEC.fieldOf("held_icon").forGetter(MainHandGear::getIcon),
-                            ResourceLocation.CODEC.fieldOf("model").forGetter(MainHandGear::getModel)
+                            ResourceLocation.CODEC.fieldOf("model").forGetter(MainHandGear::getModel),
+                            ResourceLocation.CODEC.fieldOf("basic").forGetter(MainHandGear::getBasic),
+                            ResourceLocation.CODEC.fieldOf("secondary").forGetter(MainHandGear::getSecondary)
                     ).apply(instance, MainHandGear::new));
 
-    public MainHandGear(ResourceLocation name, ResourceLocation icon, ResourceLocation model) {
+    public MainHandGear(ResourceLocation name, ResourceLocation icon, ResourceLocation model, ResourceLocation basic, ResourceLocation secondary) {
         super(name, icon, model);
-        /*this.basic = basic;
-        this.secondary = secondary;*/
+        this.basic = basic;
+        this.secondary = secondary;
     }
 
     @Override
@@ -33,11 +35,11 @@ public class MainHandGear extends AbstractGear{
         return CODEC;
     }
 
-    //public Holder<AbstractAbility> getBasic() {
-        //return this.basic;
+    public ResourceLocation getBasic() {
+        return this.basic;
+    }
 
-
-    //public Holder<AbstractAbility> getSecondary() {
-        //return this.secondary;
-
+    public ResourceLocation getSecondary() {
+        return this.secondary;
+    }
 }

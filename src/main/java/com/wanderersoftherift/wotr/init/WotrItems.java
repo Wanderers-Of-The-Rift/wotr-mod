@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
+import com.wanderersoftherift.wotr.item.gear.MainHandHolder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -82,6 +83,11 @@ public class WotrItems {
     public static final DeferredItem<Item> SKILL_THREAD = ITEMS.register("skill_thread",
             registryName -> new SkillThread(new Item.Properties().stacksTo(64)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("skill_thread")))));
+
+    //Gear
+    public static final DeferredItem<Item> GEAR_HOLDER = ITEMS.register("gear_holder",
+            registryName -> new Item(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("gear_holder")))));
 
     private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
         return ITEMS.register(idString, registryName -> new Item(new Item.Properties()

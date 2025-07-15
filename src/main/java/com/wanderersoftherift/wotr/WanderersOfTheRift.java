@@ -33,6 +33,7 @@ import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
+import com.wanderersoftherift.wotr.init.gear.WotrGearTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;
 import com.wanderersoftherift.wotr.init.loot.WotrLootModifiers;
@@ -105,6 +106,9 @@ public class WanderersOfTheRift {
         WotrRiftLayoutLayers.LAYOUT_LAYERS.register(modEventBus);
         WotrRiftLayouts.LAYOUTS.register(modEventBus);
         WotrRiftShapes.RIFT_SHAPES.register(modEventBus);
+
+        //Gear
+        WotrGearTypes.GEAR_TYPES.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);

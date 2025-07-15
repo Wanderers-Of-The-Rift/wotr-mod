@@ -23,5 +23,4 @@ public class MainHandHolder extends Item {
         }
         return super.getName(stack);
     }
-
 }

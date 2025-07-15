@@ -77,6 +77,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.FRAMED_RUNEGEM_MONSTER, "Monster Runegem (Framed)");
         addItem(WotrItems.ABILITY_HOLDER, "Empty Ability");
         addItem(WotrItems.SKILL_THREAD, "Skill Thread");
+        addItem(WotrItems.GEAR_HOLDER, "Gear Holder");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
@@ -150,6 +151,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("itemGroup", "ability"), "Abilities");
         add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
         add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
+        add(WanderersOfTheRift.translationId("itemGroup", "gear"), "Gear");
 
         add("item." + WanderersOfTheRift.MODID + ".rift_key.themed", "Rift Key of %s");
 
@@ -189,6 +191,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
 
+        //Abilities
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
         add("ability." + WanderersOfTheRift.MODID + ".fireball_ability", "Fireball");
@@ -201,6 +204,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+
+        add("ability." + WanderersOfTheRift.MODID + ".wand_basic", "Magic Bolt");
+        add("ability." + WanderersOfTheRift.MODID + ".wand_secondary", "Barrage");
+
+        //Gear
+        add("gear." + WanderersOfTheRift.MODID + ".wand", "Wand");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 

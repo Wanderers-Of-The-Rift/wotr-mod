@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.item.gear.AbstractGear;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -77,6 +78,30 @@ public class WotrCreativeTabs {
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_GEAR_TAB = CREATIVE_MODE_TABS.register(
+            WanderersOfTheRift.MODID + "_gear",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".gear"))
+                    .withTabsBefore(WOTR_DEV_TAB.getId())
+                    .icon(WotrItems.GEAR_HOLDER::toStack)
+                    .displayItems((parameters, output) -> {
+                        output.accept(WotrItems.GEAR_HOLDER);
+                        parameters.holders().lookup(WotrRegistries.Keys.GEAR_PIECES).ifPresent((gear) -> {
+                            generateGearItems(output, gear);
+                        });
+                    })
+                    .build());
+
+    private static void generateGearItems(
+            CreativeModeTab.Output output,
+            HolderLookup.RegistryLookup<AbstractGear> registry) {
+        registry.listElements().forEach(gearHolder -> {
+            ItemStack item = WotrItems.GEAR_HOLDER.toStack();
+            item.set(WotrDataComponentType.GEAR, gearHolder);
+            output.accept(item);
+        });
+    }
 
     private static void generateAbilityItems(
             CreativeModeTab.Output output,
