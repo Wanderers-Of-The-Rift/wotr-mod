@@ -19,21 +19,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StandardAbility extends AbstractAbility {
+public class GearAbility extends AbstractAbility {
 
-    public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
+    public static final MapCodec<GearAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
-                    .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
-                            ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
+                    .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(GearAbility::getName),
+                            ResourceLocation.CODEC.fieldOf("icon").forGetter(GearAbility::getIcon),
                             Codec.INT.fieldOf("cooldown").forGetter(ability -> (int) ability.getBaseCooldown()),
-                            Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
+                            Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(GearAbility::getBaseManaCost),
                             Codec.list(AbstractEffect.DIRECT_CODEC)
                                     .optionalFieldOf("effects", Collections.emptyList())
-                                    .forGetter(StandardAbility::getEffects)
-                    ).apply(instance, StandardAbility::new));
+                                    .forGetter(GearAbility::getEffects)
+                    ).apply(instance, GearAbility::new));
 
-    public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
-            List<AbstractEffect> effects) {
+    public GearAbility(ResourceLocation resourceLocation, ResourceLocation icon, int baseCooldown, int manaCost,
+                       List<AbstractEffect> effects) {
         super(resourceLocation, icon, effects, baseCooldown);
         setBaseManaCost(manaCost);
     }
@@ -44,12 +44,12 @@ public class StandardAbility extends AbstractAbility {
     }
 
     @Override
-    public void onActivate(Player player, int slot, ItemStack abilityItem) {
+    public void onActivate(Player player, int slot, ItemStack abilityItem) {}
+
+    @Override
+    public void onActivate(Player player, ItemStack abilityItem) {
         if (!this.canPlayerUse(player)) {
             player.displayClientMessage(Component.literal("You cannot use this"), true);
-            return;
-        }
-        if (this.isOnCooldown(player, slot)) {
             return;
         }
         AbilityContext abilityContext = new AbilityContext(player, abilityItem);
@@ -65,18 +65,15 @@ public class StandardAbility extends AbstractAbility {
             if (player instanceof ServerPlayer) {
                 manaData.useAmount(player, manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-                this.setCooldown(player, slot,
-                        abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
+                //this.setCooldown(player, slot,
+                        //abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
             } else {
-                PacketDistributor.sendToServer(new UseAbilityPayload(slot));
+                PacketDistributor.sendToServer(new UseAbilityPayload(99));
             }
         } finally {
             abilityContext.disableModifiers();
         }
     }
-
-    @Override
-    public void onActivate(Player player, ItemStack abilityItem) {}
 
     @Override
     public void onDeactivate(Player player, int slot) {}

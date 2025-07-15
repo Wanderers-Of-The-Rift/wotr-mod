@@ -1,4 +1,9 @@
 {
+  "type": "wotr:main_hand",
+  "gear_name": "wotr:wand",
+  "held_icon": "minecraft:textures/mob_effect/speed.png",
+  "model": "minecraft:textures/mob_effect/speed.png",
+
   "tiers": [
     {
       "modifiers": [

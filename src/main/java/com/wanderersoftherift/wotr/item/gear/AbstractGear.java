@@ -29,14 +29,20 @@ public abstract class AbstractGear {
     private ResourceLocation model;
     private Component displayName;
 
-    public AbstractGear(ResourceLocation name, ResourceLocation heldIcon, ResourceLocation model, Component displayName){
+    public AbstractGear(ResourceLocation name, ResourceLocation heldIcon, ResourceLocation model){
         this.name = name;
         this.heldIcon = heldIcon;
         this.model = model;
-        this.displayName = displayName;
+        this.displayName = Component.translatable("gear." + getName().getNamespace() + "." + getName().getPath());
     }
 
     public abstract MapCodec<? extends AbstractGear> getCodec();
 
+    public ResourceLocation getName() {return name;}
 
+    public ResourceLocation getIcon() {return heldIcon;}
+
+    public ResourceLocation getModel() {return model;}
+
+    public Component getDisplayName() {return displayName;}
 }

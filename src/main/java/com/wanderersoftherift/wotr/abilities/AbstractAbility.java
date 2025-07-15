@@ -82,7 +82,11 @@ public abstract class AbstractAbility {
 
     public abstract void onActivate(Player player, int slot, ItemStack abilityItem);
 
+    public abstract void onActivate(Player player, ItemStack abilityItem);
+
     public abstract void onDeactivate(Player player, int slot);
+
+    public abstract void onDeactivate(Player player);
 
     public boolean canPlayerUse(Player player) {
 //        return p.getData(ModAbilities.ABILITY_UNLOCKED_ATTACHMENTS.get(this.getName()));

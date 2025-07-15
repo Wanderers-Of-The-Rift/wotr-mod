@@ -30,27 +30,51 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
             return;
         }
-        AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
-        ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
-        if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
-            return;
-        }
-        AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
-        abilitySlots.setSelectedSlot(slot());
+        if (slot == 99){
+            ItemStack abilityItem = player.getMainHandItem();
+            if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
+                return;
+            }
+            AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
+            if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
+            {
+                if (!ability.isToggled(player)) {
+                    ability.onActivate(player, abilityItem);
+                } else {
+                    ability.onDeactivate(player);
+                }
 
-        if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
-        {
-            if (!ability.isToggled(player)) {
-                ability.onActivate(player, slot(), abilityItem);
+                if (ability.canPlayerUse(player)) {
+                    ability.toggle(player);
+                }
             } else {
-                ability.onDeactivate(player, slot());
+                ability.onActivate(player, abilityItem);
             }
+        }
 
-            if (ability.canPlayerUse(player)) {
-                ability.toggle(player);
+        else
+        {
+            AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
+            ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
+            if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
+                return;
             }
-        } else {
-            ability.onActivate(player, slot(), abilityItem);
+            AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
+            abilitySlots.setSelectedSlot(slot());
+            if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
+            {
+                if (!ability.isToggled(player)) {
+                    ability.onActivate(player, slot(), abilityItem);
+                } else {
+                    ability.onDeactivate(player, slot());
+                }
+
+                if (ability.canPlayerUse(player)) {
+                    ability.toggle(player);
+                }
+            } else {
+                ability.onActivate(player, slot(), abilityItem);
+            }
         }
     }
 }
