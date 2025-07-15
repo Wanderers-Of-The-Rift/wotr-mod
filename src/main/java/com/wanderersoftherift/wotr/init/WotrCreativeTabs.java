@@ -107,9 +107,11 @@ public class WotrCreativeTabs {
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<AbstractAbility> registry) {
         registry.listElements().forEach(abilityHolder -> {
-            ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
-            item.set(WotrDataComponentType.ABILITY, abilityHolder);
-            output.accept(item);
+            if(abilityHolder.is(WotrTags.Abilities.RIFT_DROPS)) {
+                ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
+                item.set(WotrDataComponentType.ABILITY, abilityHolder);
+                output.accept(item);
+            }
         });
     }
 
