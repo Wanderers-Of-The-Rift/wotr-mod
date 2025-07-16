@@ -115,13 +115,17 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         addTheme("buzzy_bees", "Buzzy Bees");
         addTheme("cave", "Cave");
+        addTheme("color", "Color");
+        addTheme("deepfrost", "Deepfrost");
+        addTheme("desert", "Desert");
         addTheme("forest", "Forest");
-        addTheme("processor", "Processor");
+        addTheme("jungle", "Jungle");
+        addTheme("meadow", "Meadow");
+        addTheme("mesa", "Mesa");
         addTheme("mushroom", "Mushroom");
         addTheme("nether", "Nether");
         addTheme("noir", "Noir");
-        addTheme("mesa", "Mesa");
-        addTheme("desert", "Desert");
+        addTheme("processor", "Processor");
         addTheme("swamp", "Swamp");
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
