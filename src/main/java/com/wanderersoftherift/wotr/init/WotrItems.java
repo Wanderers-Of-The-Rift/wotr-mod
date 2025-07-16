@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
+import com.wanderersoftherift.wotr.item.WotrArmor;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -16,9 +17,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -82,6 +82,10 @@ public class WotrItems {
     public static final DeferredItem<Item> SKILL_THREAD = ITEMS.register("skill_thread",
             registryName -> new SkillThread(new Item.Properties().stacksTo(64)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("skill_thread")))));
+
+    // Armor
+    public static final DeferredItem<Item> NOIR_HELMET = ITEMS.register("noir_helmet",
+            () -> new WotrArmor(EquipmentSlot.HEAD, "noir_helmet", 165));
 
     private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
         return ITEMS.register(idString, registryName -> new Item(new Item.Properties()
