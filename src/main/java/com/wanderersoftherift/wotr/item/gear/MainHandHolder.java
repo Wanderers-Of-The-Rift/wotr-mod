@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
  * Item for holding gear data.
  */
 public class MainHandHolder extends Item {
+
     public MainHandHolder(Properties properties) {
         super(properties);
     }

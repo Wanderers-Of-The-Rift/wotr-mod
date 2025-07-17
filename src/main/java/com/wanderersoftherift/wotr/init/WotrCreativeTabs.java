@@ -95,13 +95,14 @@ public class WotrCreativeTabs {
 
     private static void generateGearItems(
             CreativeModeTab.Output output,
-            HolderLookup.RegistryLookup<AbstractGear> registry) {
-        registry.listElements().forEach(gearHolder -> {
-            ItemStack item = WotrItems.GEAR_HOLDER.toStack();
-            item.set(WotrDataComponentType.GEAR, gearHolder);
-            output.accept(item);
-        });
-    }
+            HolderLookup.RegistryLookup<AbstractGear> registry)
+        {
+            registry.listElements().forEach(gearHolder -> {
+                ItemStack item = WotrItems.GEAR_HOLDER.toStack();
+                item.set(WotrDataComponentType.GEAR.get(), gearHolder);
+                output.accept(item);
+            });
+        }
 
     private static void generateAbilityItems(
             CreativeModeTab.Output output,

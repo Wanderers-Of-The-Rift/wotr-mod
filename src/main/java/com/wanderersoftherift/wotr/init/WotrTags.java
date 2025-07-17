@@ -86,6 +86,15 @@ public class WotrTags {
         }
     }
 
+    public static class Gear {
+
+        public static final TagKey<AbstractAbility> GEAR_ABILITY = createTag("gear_ability");
+
+        private static TagKey<AbstractAbility> createTag(String name) {
+            return TagKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", name));
+        }
+    }
+
     public static class RiftThemes {
 
         public static final TagKey<RiftTheme> RANDOM_SELECTABLE = createTag("random_selectable");
