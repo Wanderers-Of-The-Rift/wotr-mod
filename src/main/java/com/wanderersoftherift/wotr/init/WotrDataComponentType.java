@@ -40,6 +40,10 @@ public class WotrDataComponentType {
             "item_rift_tier", Codec.INT, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<LootBox>> LOOT_BOX = register("loot_box",
             LootBox.CODEC, null);
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> INFUSED = register("infused",
+            Codec.BOOL, null);
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<AbstractAbility>>> ABILITY = register(
             "ability", AbstractAbility.CODEC, AbstractAbility.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AbilityUpgradePool>> ABILITY_UPGRADE_POOL = register(

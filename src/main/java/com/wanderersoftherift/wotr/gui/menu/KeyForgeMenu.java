@@ -1,28 +1,30 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.gui.menu.slot.EssenceInputSlot;
-import com.wanderersoftherift.wotr.gui.menu.slot.KeyOutputSlot;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.init.recipe.WotrRecipeTypes;
 import com.wanderersoftherift.wotr.item.crafting.EssenceRecipeInput;
 import com.wanderersoftherift.wotr.item.crafting.KeyForgeRecipe;
+import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
+import com.wanderersoftherift.wotr.item.handler.TakeOnlyItemHandler;
+import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
     private static final int OUTPUT_SLOTS = 1;
     private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
     private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
-    private static final int INPUT_SLOTS_X = 7;
+    private static final int INPUT_SLOTS_X = 8;
     private static final int INPUT_SLOTS_Y = 18;
     private static final int INPUT_SLOT_X_OFFSET = 54;
     private static final int INPUT_SLOT_Y_OFFSET = 54;
@@ -55,8 +57,8 @@ public class KeyForgeMenu extends AbstractContainerMenu {
             .build();
 
     private final ContainerLevelAccess access;
-    private final Container inputContainer;
-    private final ResultContainer resultContainer;
+    private final IItemHandlerModifiable inputItems;
+    private final ItemStackHandler resultItems;
     private final DataSlot tierPercent;
 
     public KeyForgeMenu(int containerId, Inventory playerInventory) {
@@ -67,22 +69,64 @@ public class KeyForgeMenu extends AbstractContainerMenu {
         super(WotrMenuTypes.KEY_FORGE_MENU.get(), containerId);
         this.access = access;
         this.tierPercent = DataSlot.standalone();
-        this.inputContainer = new SimpleContainer(INPUT_SLOTS) {
+        this.inputItems = new ItemStackHandler(INPUT_SLOTS) {
             @Override
-            public void setChanged() {
-                super.setChanged();
-                KeyForgeMenu.this.slotsChanged(this);
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                if (slot == 0) {
+                    if (stack.has(WotrDataComponentType.INFUSED)) {
+                        return false;
+                    }
+                    return access.evaluate(
+                            (level, blockPos) -> level.getServer()
+                                    .getRecipeManager()
+                                    .recipeMap()
+                                    .byType(WotrRecipeTypes.KEY_FORGE_RECIPE.get())
+                                    .stream()
+                                    .map(x -> x.value().getInput())
+                                    .anyMatch(x -> x.test(stack))
+                    ).orElse(false);
+                } else {
+                    return stack.getItemHolder().getData(WotrDataMaps.ESSENCE_VALUE_DATA) != null;
+                }
             }
         };
-        this.resultContainer = new ResultContainer();
-        addSlot(new Slot(inputContainer, 0, 34, 45));
+        IItemHandlerModifiable inputSlotHandler = new ChangeAwareItemHandler(inputItems) {
+            @Override
+            public void onSlotChanged(int slot, ItemStack oldStack, ItemStack newStack) {
+                access.execute((level, pos) -> {
+                    if (level instanceof ServerLevel) {
+                        update();
+                    }
+                });
+            }
+        };
+
+        resultItems = new ItemStackHandler(1);
+        IItemHandlerModifiable resultSlotHandler = new ChangeAwareItemHandler(new TakeOnlyItemHandler(resultItems)) {
+            @Override
+            public void onSlotChanged(int slot, ItemStack oldStack, ItemStack newStack) {
+                access.execute((level, pos) -> {
+                    if (!oldStack.isEmpty() && newStack.isEmpty()) {
+                        for (int i = 0; i < inputItems.getSlots(); i++) {
+                            ItemStack stackInSlot = inputItems.getStackInSlot(i);
+                            if (!stackInSlot.isEmpty()) {
+                                inputItems.extractItem(i, stackInSlot.getCount(), false);
+                            }
+                        }
+                        update();
+                    }
+                });
+            }
+        };
+
+        addSlot(new SlotItemHandler(inputSlotHandler, 0, 35, 45));
         for (int slotY = 0; slotY < 2; slotY++) {
             for (int slotX = 0; slotX < 2; slotX++) {
-                addSlot(new EssenceInputSlot(inputContainer, slotY * 2 + slotX + 1,
+                addSlot(new SlotItemHandler(inputSlotHandler, slotY * 2 + slotX + 1,
                         INPUT_SLOTS_X + INPUT_SLOT_X_OFFSET * slotX, INPUT_SLOTS_Y + INPUT_SLOT_Y_OFFSET * slotY));
             }
         }
-        addSlot(new KeyOutputSlot(resultContainer, 0, 148, 78, inputContainer));
+        addSlot(new SlotItemHandler(resultSlotHandler, 0, 148, 78));
 
         addStandardInventorySlots(playerInventory, 8, 114);
 
@@ -91,15 +135,6 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     public int getTierPercent() {
         return tierPercent.get();
-    }
-
-    @Override
-    public void slotsChanged(@NotNull Container container) {
-        this.access.execute((level, pos) -> {
-            if (level instanceof ServerLevel) {
-                update();
-            }
-        });
     }
 
     @Override
@@ -114,16 +149,21 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     @Override
     public void removed(@NotNull Player player) {
-        this.access.execute((world, pos) -> this.clearContainer(player, inputContainer));
+        this.access.execute((world, pos) -> {
+            if (player instanceof ServerPlayer serverPlayer) {
+                ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, inputItems);
+            }
+        });
+
     }
 
     private void update() {
         access.execute((level, pos) -> {
-            ItemStack inputItem = inputContainer.getItem(0);
+            ItemStack inputItem = inputItems.getStackInSlot(0);
             List<ItemStack> essenceSources = new ArrayList<>();
-            for (int slot = 1; slot < inputContainer.getContainerSize(); slot++) {
-                if (!inputContainer.getItem(slot).isEmpty()) {
-                    essenceSources.add(inputContainer.getItem(slot));
+            for (int slot = 1; slot < inputItems.getSlots(); slot++) {
+                if (!inputItems.getStackInSlot(slot).isEmpty()) {
+                    essenceSources.add(inputItems.getStackInSlot(slot));
                 }
             }
             EssenceRecipeInput recipeInput = new EssenceRecipeInput(inputItem, essenceSources);
@@ -172,22 +212,23 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
     private void updateOutput(EssenceRecipeInput input) {
         int tier = tierPercent.get() / 100;
-        if (tier == 0 && !resultContainer.isEmpty()) {
-            resultContainer.clearContent();
+        if (tier == 0 && !resultItems.getStackInSlot(0).isEmpty()) {
+            resultItems.setStackInSlot(0, ItemStack.EMPTY);
             return;
         }
 
         if (tier > 0 && !input.getInputItem().isEmpty()) {
             ItemStack output = input.getInputItem().copyWithCount(1);
             applyKeyforgeRecipes(output, input);
-            if (output.getComponents().equals(input.getInputItem().getComponents())) {
-                resultContainer.setItem(0, ItemStack.EMPTY);
+            if (ItemStack.isSameItemSameComponents(output, input.getInputItem())) {
+                resultItems.setStackInSlot(0, ItemStack.EMPTY);
             } else {
                 output.set(WotrDataComponentType.ITEM_RIFT_TIER, tier);
-                resultContainer.setItem(0, output);
+                output.set(WotrDataComponentType.INFUSED, true);
+                resultItems.setStackInSlot(0, output);
             }
         } else {
-            resultContainer.clearContent();
+            resultItems.setStackInSlot(0, ItemStack.EMPTY);
         }
     }
 

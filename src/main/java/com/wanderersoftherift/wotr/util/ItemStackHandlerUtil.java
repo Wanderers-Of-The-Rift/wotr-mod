@@ -2,14 +2,14 @@ package com.wanderersoftherift.wotr.util;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public final class ItemStackHandlerUtil {
     private ItemStackHandlerUtil() {
 
     }
 
-    public static void placeInPlayerInventoryOrDrop(ServerPlayer player, ItemStackHandler handler) {
+    public static void placeInPlayerInventoryOrDrop(ServerPlayer player, IItemHandler handler) {
         for (int i = 0; i < handler.getSlots(); i++) {
             // TODO: may need extra logic to handle oversized stacks
             placeInPlayerInventoryOrDrop(player, handler.getStackInSlot(i).copy());

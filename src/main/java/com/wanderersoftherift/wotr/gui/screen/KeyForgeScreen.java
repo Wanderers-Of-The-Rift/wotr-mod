@@ -33,9 +33,9 @@ public class KeyForgeScreen extends AbstractContainerScreen<KeyForgeMenu> {
     private static final int BACKGROUND_HEIGHT = 256;
     private static final int BAR_WIDTH = 14;
     private static final int BAR_HEIGHT = 45;
-    private static final int BAR_X = 89;
+    private static final int BAR_X = 105;
     private static final int BAR_Y = 34;
-    private static final int TIER_X = 96;
+    private static final int TIER_X = 112;
     private static final int TIER_Y = 23;
 
     public KeyForgeScreen(KeyForgeMenu menu, Inventory playerInventory, Component title) {
