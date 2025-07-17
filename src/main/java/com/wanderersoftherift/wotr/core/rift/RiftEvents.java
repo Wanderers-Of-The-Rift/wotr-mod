@@ -71,9 +71,9 @@ public class RiftEvents {
             if (deathParticipation != RiftParticipation.EMPTY) {
                 var newRift = RiftLevelManager.getRiftLevel(deathParticipation.previousDimension());
                 if (newRift != null) {
-                    var position = DEFAULT_RIFT_EXIT_POSITION.offset(3, 0, 3);
+                    var position = deathParticipation.previousPosition();
                     event.getEntity()
-                            .teleportTo(newRift, position.getX(), position.getY(), position.getZ(), Set.of(),
+                            .teleportTo(newRift, position.x(), position.y(), position.z(), Set.of(),
                                     event.getEntity().getYRot(), event.getEntity().getXRot(), false);
                 }
             }
