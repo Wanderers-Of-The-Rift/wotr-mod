@@ -49,9 +49,12 @@ public final class InventorySnapshotSystem {
     }
 
     /**
-     * Generates a snapshot for the given player
+     * Generates a snapshot for the given player. Stackable items that are part of any snapshot in `validSnapshot` will
+     * not be overwritten.
      *
-     * @param player The player to generate a snapshot for
+     * @param player         The player to generate a snapshot for
+     * @param validSnapshots lis to snapshots that will continue to be valid even after death and thus should not be
+     *                       removed
      */
 
     public static InventorySnapshot captureSnapshot(ServerPlayer player, List<InventorySnapshot> validSnapshots) {
@@ -63,10 +66,13 @@ public final class InventorySnapshotSystem {
 
     /**
      * Updates the snapshot for the player's death. This will reduce the captured items to what the player still had on
-     * them at time of death.
+     * them at time of death. Non-stackable items are restored only from `snapshot`, stackable items are restored from
+     * all snapshots.
      *
      * @param player
      * @param event
+     * @param snapshot       the newest snapshot to be restored
+     * @param otherSnapshots snapshots other than `snapshot` that will also be restored
      */
     public static void retainSnapshotItemsOnDeath(
             ServerPlayer player,
