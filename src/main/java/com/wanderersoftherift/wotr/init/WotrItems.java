@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
+import com.wanderersoftherift.wotr.item.gear.GearItem;
 import com.wanderersoftherift.wotr.item.gear.GearMaterial;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
@@ -40,8 +41,8 @@ public class WotrItems {
             BuilderGlasses::new);
 
     // Gear
-    public static final DeferredItem<SwordItem> WAND = ITEMS.registerItem(
-            "wand", props -> new SwordItem(GearMaterial.WAND_MATERIAL, GearMaterial.WAND_MATERIAL.attackDamageBonus(),GearMaterial.WAND_MATERIAL.speed(),props));
+    public static final DeferredItem<GearItem> WAND = ITEMS.registerItem(
+            "wand", props -> new GearItem(GearMaterial.WAND_MATERIAL, GearMaterial.WAND_MATERIAL.attackDamageBonus(),GearMaterial.WAND_MATERIAL.speed(),props, ResourceLocation.fromNamespaceAndPath("wotr", "wand_missile")));
 
     // Runegems
     public static final DeferredItem<Item> RUNEGEM = ITEMS.register("runegem",

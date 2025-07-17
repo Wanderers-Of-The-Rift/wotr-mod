@@ -43,6 +43,8 @@ public class WotrDataComponentType {
             LootBox.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<AbstractAbility>>> ABILITY = register(
             "ability", AbstractAbility.CODEC, AbstractAbility.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<AbstractAbility>>> BASIC = register(
+            "basic", AbstractAbility.CODEC, AbstractAbility.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AbilityUpgradePool>> ABILITY_UPGRADE_POOL = register(
             "ability_upgrade_pool", AbilityUpgradePool.CODEC, AbilityUpgradePool.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<RiftConfig>> RIFT_CONFIG = register(

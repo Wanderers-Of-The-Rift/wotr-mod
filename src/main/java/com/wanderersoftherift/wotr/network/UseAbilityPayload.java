@@ -40,7 +40,7 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
             if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
             {
                 if (!ability.isToggled(player)) {
-                    ability.onActivateGear(player, weapon);
+                    ability.onActivateGear(player, weapon, false);
                 } else {
                     ability.onDeactivate(player, slot()); //Need to make an onDeactivateGear
                 }
@@ -49,9 +49,35 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
                     ability.toggle(player);
                 }
             } else {
-                ability.onActivateGear(player, weapon);
+                ability.onActivateGear(player, weapon, false);
             }
-        }else {
+        }
+        if (slot == 98) { //Handles the item in hand
+            if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
+                return;
+            }
+            ItemStack weapon = player.getItemHeldByArm(player.getMainArm());
+            if (weapon.isEmpty() || !weapon.has(WotrDataComponentType.BASIC)) {
+                return;
+            }
+            AbstractAbility ability = weapon.get(WotrDataComponentType.BASIC).value();
+
+            if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
+            {
+                if (!ability.isToggled(player)) {
+                    ability.onActivateGear(player, weapon, true);
+                } else {
+                    ability.onDeactivate(player, slot()); //Need to make an onDeactivateGear
+                }
+
+                if (ability.canPlayerUse(player)) {
+                    ability.toggle(player);
+                }
+            } else {
+                ability.onActivateGear(player, weapon, true);
+            }
+        }
+        else {
             if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
                 return;
             }

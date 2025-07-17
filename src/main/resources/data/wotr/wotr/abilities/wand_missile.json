@@ -2,7 +2,7 @@
   "type": "wotr:gear_ability",
   "gear_type": "wotr:wand",
   "ability_name": "wotr:wand_missile_ability",
-  "cooldown": 1,
+  "cooldown": 10,
   "effects": [
     {
       "type": "wotr:simple_projectile_effect",

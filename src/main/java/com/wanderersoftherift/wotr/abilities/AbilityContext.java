@@ -41,6 +41,14 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
         return null;
     }
 
+    public AbstractAbility getBasic() {
+        Holder<AbstractAbility> holder = abilityItem.get(WotrDataComponentType.BASIC);
+        if (holder != null) {
+            return holder.value();
+        }
+        return null;
+    }
+
     /**
      * Enables all modifiers that impact the ability
      */

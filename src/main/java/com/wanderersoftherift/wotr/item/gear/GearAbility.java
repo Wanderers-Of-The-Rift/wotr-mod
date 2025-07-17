@@ -53,30 +53,52 @@ public class GearAbility extends AbstractAbility {
     }
 
     @Override
-    public void onActivateGear(Player player, ItemStack abilityItem){
+    public void onActivateGear(Player player, ItemStack abilityItem, Boolean isBasic){
         if (!this.canPlayerUse(player)) {
             player.displayClientMessage(Component.literal("You cannot use this"), true);
             return;
         }
-        AbilityContext abilityContext = new AbilityContext(player, abilityItem);
-        abilityContext.enableModifiers();
-        try {
-            int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-            ManaData manaData = player.getData(WotrAttachments.MANA);
-            if (manaCost > 0) {
-                if (manaData.getAmount() < manaCost) {
-                    return;
+        if (!isBasic) {
+            AbilityContext abilityContext = new AbilityContext(player, abilityItem);
+            abilityContext.enableModifiers();
+            try {
+                int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
+                ManaData manaData = player.getData(WotrAttachments.MANA);
+                if (manaCost > 0) {
+                    if (manaData.getAmount() < manaCost) {
+                        return;
+                    }
                 }
-            }
-            if (player instanceof ServerPlayer) {
-                manaData.useAmount(player, manaCost);
-                this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-            } else {
-                PacketDistributor.sendToServer(new UseAbilityPayload(99));
+                if (player instanceof ServerPlayer) {
+                    manaData.useAmount(player, manaCost);
+                    this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
+                } else {
+                    PacketDistributor.sendToServer(new UseAbilityPayload(99));
+                }
+            } finally {
+                abilityContext.disableModifiers();
             }
         }
-        finally{
-            abilityContext.disableModifiers();
+        else {
+            AbilityContext abilityContext = new AbilityContext(player, abilityItem);
+            abilityContext.enableModifiers();
+            try {
+                int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
+                ManaData manaData = player.getData(WotrAttachments.MANA);
+                if (manaCost > 0) {
+                    if (manaData.getAmount() < manaCost) {
+                        return;
+                    }
+                }
+                if (player instanceof ServerPlayer) {
+                    manaData.useAmount(player, manaCost);
+                    this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
+                } else {
+                    PacketDistributor.sendToServer(new UseAbilityPayload(98));
+                }
+            } finally {
+                abilityContext.disableModifiers();
+            }
         }
     }
 

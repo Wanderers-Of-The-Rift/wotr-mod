@@ -28,13 +28,36 @@ public class GearEvents {
 
         Player player = Minecraft.getInstance().player;
         ItemStack weapon = player.getItemHeldByArm(player.getMainArm());
-        AbstractAbility ability = new AbilityContext(player, weapon).getAbility();
+        AbstractAbility ability = new AbilityContext(player, weapon).getBasic();
 
             if (ability != null){
-                ability.onActivateGear(player, weapon);
-                player.displayClientMessage(Component.literal(String.valueOf(player.getAttackStrengthScale(0.0F))), true);
+                /*if (player.getAttackStrengthScale(0.0F) == 1.0f){
+                    ability.onActivateGear(player, weapon, true);
+                }*/
+                ability.onActivateGear(player, weapon, true);
+                player.displayClientMessage(Component.literal(String.valueOf(player.getCurrentItemAttackStrengthDelay())), true);
+                //player.displayClientMessage(Component.literal(String.valueOf(player.getAttackStrengthScale(0.0F))), true);
             }
 
+
+    }
+
+    @SubscribeEvent
+    public static void castSecondary(PlayerInteractEvent.RightClickEmpty event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null || minecraft.gameMode == null
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+            return;
+        }
+
+        Player player = Minecraft.getInstance().player;
+        ItemStack weapon = player.getItemHeldByArm(player.getMainArm());
+        AbstractAbility ability = new AbilityContext(player, weapon).getAbility();
+
+        if (ability != null) {
+            ability.onActivateGear(player, weapon, false);
+            player.displayClientMessage(Component.literal(String.valueOf(player.getAttackStrengthScale(0.0F))), true);
+        }
     }
 
     public static void startBasicCooldown(){

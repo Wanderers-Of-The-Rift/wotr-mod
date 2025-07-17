@@ -4,16 +4,21 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.item.gear.GearAbility;
+import com.wanderersoftherift.wotr.item.gear.GearItem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class WotrCreativeTabs {
@@ -99,12 +104,14 @@ public class WotrCreativeTabs {
     private static void generateGear(
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<AbstractAbility> registry) {
+        ItemStack wand = WotrItems.WAND.toStack();
+        Holder.Reference<AbstractAbility> wandAbility1 = registry.getOrThrow(ResourceKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", "wand_missile")));
+        Holder.Reference<AbstractAbility> wandAbility2 = registry.getOrThrow(ResourceKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", "wand_barrage")));
         registry.listElements().forEach(abilityHolder -> {
-            if(abilityHolder.is(WotrTags.Abilities.GEAR_ABILITIES)) {
-                ItemStack item = WotrItems.WAND.toStack();
-                item.set(WotrDataComponentType.ABILITY, abilityHolder);
-                output.accept(item);
-            }
+                //ItemStack item = WotrItems.WAND.toStack();
+            wand.set(WotrDataComponentType.BASIC, wandAbility1);
+            wand.set(WotrDataComponentType.ABILITY, wandAbility2);
+            output.accept(wand);
         });
     }
 

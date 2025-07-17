@@ -76,7 +76,7 @@ public class StandardAbility extends AbstractAbility {
     }
 
     @Override
-    public void onActivateGear(Player player, ItemStack item){}
+    public void onActivateGear(Player player, ItemStack item, Boolean isBasic){}
 
     @Override
     public void onDeactivate(Player player, int slot) {
