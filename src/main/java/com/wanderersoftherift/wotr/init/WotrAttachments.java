@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
-import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -52,9 +51,6 @@ public class WotrAttachments {
                     .serialize(RiftParticipation.CODEC)
                     .copyOnDeath()
                     .build());
-    public static final Supplier<AttachmentType<StatSnapshot>> PRE_RIFT_STATS = ATTACHMENT_TYPES.register(
-            "pre_rift_stats",
-            () -> AttachmentType.builder(() -> new StatSnapshot()).serialize(StatSnapshot.CODEC).copyOnDeath().build());
     public static final Supplier<AttachmentType<BannedRiftList>> BANNED_RIFTS = ATTACHMENT_TYPES
             .register("banned_rifts", () -> AttachmentType.builder(() -> new BannedRiftList()).build());
 
