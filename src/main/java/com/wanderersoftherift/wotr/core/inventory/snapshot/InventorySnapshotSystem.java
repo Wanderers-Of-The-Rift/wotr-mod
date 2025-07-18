@@ -170,9 +170,7 @@ public final class InventorySnapshotSystem {
         private final List<ItemStack> snapshotItems;
         private final Set<UUID> snapshotIds;
 
-        public
-
-        RespawnItemsCalculator(ServerPlayer player, InventorySnapshot lastSnapshot,
+        public RespawnItemsCalculator(ServerPlayer player, InventorySnapshot lastSnapshot,
                 List<InventorySnapshot> otherSnapshots, Collection<ItemEntity> heldItems) {
             this.player = player;
             this.containerTypes = player.level().registryAccess().lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
