@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.client.render.blockentity.RiftMobSpawnerBlock
 import com.wanderersoftherift.wotr.client.render.entity.AltSpiderRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.RiftPortalRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.SimpleEffectProjectileRenderer;
+import com.wanderersoftherift.wotr.client.render.entity.mob.NoirZombieRenderer;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import net.minecraft.world.entity.EntityType;
@@ -32,5 +33,6 @@ public class WotrEntityRenderers {
         event.registerBlockEntityRenderer(WotrBlockEntities.DITTO_BLOCK_ENTITY.get(), DittoBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(WotrBlockEntities.RIFT_MOB_SPAWNER.get(),
                 RiftMobSpawnerBlockEntityRenderer::new);
+        event.registerEntityRenderer(WotrEntities.NOIR_ZOMBIE.get(), NoirZombieRenderer::new);
     }
 }

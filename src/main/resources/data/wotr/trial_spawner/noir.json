@@ -1,0 +1,38 @@
+{
+  "loot_tables_to_eject": [
+    {
+      "data": "wotr:chests/rift_spawner/default",
+      "weight": 10
+    }
+  ],
+  "simultaneous_mobs": 3.0,
+  "simultaneous_mobs_added_per_player": 0.5,
+  "spawn_potentials": [
+    {
+      "data": {
+        "entity": {
+          "id": "wotr:noir_zombie",
+          "ArmorItems": [
+            {},
+            {},
+            {},
+            {
+              "id": "wotr:noir_helmet",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "weight": 5
+    },
+    {
+      "data": {
+        "entity": {
+          "id": "wotr:noir_zombie"
+        }
+      },
+      "weight": 3
+    }
+  ],
+  "ticks_between_spawn": 20
+}

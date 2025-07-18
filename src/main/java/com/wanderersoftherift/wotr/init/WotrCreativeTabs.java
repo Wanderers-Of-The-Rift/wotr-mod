@@ -74,6 +74,7 @@ public class WotrCreativeTabs {
                     .icon(() -> WotrBlocks.PROCESSOR_BLOCK_3.getBlock().get().asItem().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.BUILDER_GLASSES);
+                        output.accept(WotrItems.NOIR_HELMET);
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
