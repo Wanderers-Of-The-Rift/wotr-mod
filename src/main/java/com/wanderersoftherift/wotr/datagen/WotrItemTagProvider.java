@@ -24,7 +24,8 @@ public class WotrItemTagProvider extends ItemTagsProvider {
         // spotless:off
 
         tag(Tags.Items.HIDDEN_FROM_RECIPE_VIEWERS)
-                .add(WotrItems.BASE_ABILITY_HOLDER.get());
+                .add(WotrItems.BASE_ABILITY_HOLDER.get())
+                .add(WotrItems.BASE_CURRENCY_BAG.get());
 
         /* Handles all the socketable Armor */
         tag(WotrTags.Items.SOCKETABLE_HELMET_SLOT)

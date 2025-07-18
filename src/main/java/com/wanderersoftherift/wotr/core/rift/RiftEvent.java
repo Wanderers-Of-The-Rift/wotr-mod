@@ -41,6 +41,26 @@ public abstract class RiftEvent extends Event {
         }
     }
 
+    public static class PlayerCompletedRift extends RiftEvent {
+        private ServerPlayer player;
+        private boolean objectiveComplete;
+
+        public PlayerCompletedRift(ServerPlayer player, boolean objectiveComplete, ServerLevel level,
+                RiftConfig config) {
+            super(level, config);
+            this.player = player;
+            this.objectiveComplete = objectiveComplete;
+        }
+
+        public ServerPlayer getPlayer() {
+            return player;
+        }
+
+        public boolean isObjectiveComplete() {
+            return objectiveComplete;
+        }
+    }
+
     /**
      * Event when a player dies in a rift
      */
