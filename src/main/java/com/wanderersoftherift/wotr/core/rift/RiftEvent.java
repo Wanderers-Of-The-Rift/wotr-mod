@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.core.rift;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.neoforged.bus.api.Event;
 
 public abstract class RiftEvent extends Event {
@@ -47,14 +48,43 @@ public abstract class RiftEvent extends Event {
     public static class PlayerDied extends RiftEvent {
 
         private ServerPlayer player;
+        private final DamageSource source;
+        private final boolean isTopOfTheStack;
+        private boolean canceled = false;
 
-        public PlayerDied(ServerPlayer player, ServerLevel level, RiftConfig config) {
+        public PlayerDied(ServerPlayer player, ServerLevel level, RiftConfig config, DamageSource source,
+                boolean isTopOfTheStack) {
             super(level, config);
             this.player = player;
+            this.source = source;
+            this.isTopOfTheStack = isTopOfTheStack;
         }
 
         public ServerPlayer getPlayer() {
             return player;
+        }
+
+        /*
+         * note: heal player using setHealth or after cancellation
+         */
+        public PlayerDied cancel() {
+            this.canceled = true;
+            if (isTopOfTheStack && player.getHealth() <= 0) {
+                player.setHealth(Float.intBitsToFloat(1));
+            }
+            return this;
+        }
+
+        public boolean isCanceled() {
+            return canceled;
+        }
+
+        public DamageSource getSource() {
+            return source;
+        }
+
+        public boolean isTopOfTheStack() {
+            return isTopOfTheStack;
         }
     }
 }
