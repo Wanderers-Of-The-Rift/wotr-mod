@@ -5,10 +5,10 @@ import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
-import com.wanderersoftherift.wotr.gui.menu.slot.QuestItemStackHandler;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.item.handler.QuestItemStackHandler;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -20,12 +20,24 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Menu for handing in items and completing a quest with all goals met. It includes:
+ * <ul>
+ * <li>A data slot with the index of the quest being completed</li>
+ * <li>A Hand-in slot that accepts items that are required to complete the quest (if any)</li>
+ * <li>The standard player inventory slots</li>
+ * </ul>
+ * <p>
+ * Items that are handed in are added to the progress of relevant quest goals. Excess is returned to the player.
+ * </p>
+ */
 public class QuestCompletionMenu extends AbstractContainerMenu {
     private static final int HAND_IN_SLOTS = 1;
     private static final QuickMover MOVER = QuickMover.create()
@@ -83,15 +95,16 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         access.execute((level, blockPos) -> {
             QuestState quest = getQuestState();
             for (int index = 0; index < quest.goalCount(); index++) {
-                if (!quest.isGoalComplete(index) && quest.getGoal(index) instanceof GiveItemGoal goal) {
+                if (!quest.isGoalComplete(index)
+                        && quest.getGoal(index) instanceof GiveItemGoal(Ingredient item, int count)) {
                     for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
                         ItemStack itemsToHandIn = handInItems.getStackInSlot(slot);
                         if (itemsToHandIn.isEmpty()) {
                             continue;
                         }
 
-                        if (goal.item().test(itemsToHandIn)) {
-                            int remainingItems = goal.progressTarget() - quest.getGoalProgress(index);
+                        if (item.test(itemsToHandIn)) {
+                            int remainingItems = count - quest.getGoalProgress(index);
                             if (itemsToHandIn.getCount() >= remainingItems) {
                                 quest.setGoalProgress(index, quest.getGoalProgress(index) + remainingItems);
                                 handInItems.extractItem(slot, remainingItems, false);
@@ -129,7 +142,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
         if (player instanceof ServerPlayer serverPlayer) {
             ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, handInItems);

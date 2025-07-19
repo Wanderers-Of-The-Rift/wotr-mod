@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.guild.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -29,8 +28,8 @@ import java.util.stream.Collectors;
  */
 public final class ActiveQuests {
 
-    private final IAttachmentHolder holder;
-    @NotNull private final Data data;
+    private final @NotNull IAttachmentHolder holder;
+    private final @NotNull Data data;
 
     public ActiveQuests(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -77,15 +76,6 @@ public final class ActiveQuests {
                 PacketDistributor.sendToPlayer(player, new QuestRemovedPayload(questId));
             }
         }
-    }
-
-    /**
-     * @param origin  The quest that generated this active quest
-     * @param goals   The goals of the quest
-     * @param rewards The rewards of the quest
-     */
-    public void add(Holder<Quest> origin, List<Goal> goals, List<Reward> rewards) {
-        add(origin, goals, rewards);
     }
 
     /**

@@ -3,12 +3,12 @@
     {
       "type": "wotr:fixed_give_item",
       "item": "minecraft:gold_ingot",
-      "quantity": 4
+      "count": 4
     },
     {
       "type": "wotr:fixed_give_item",
       "item": "minecraft:iron_ingot",
-      "quantity": 4
+      "count": 4
     }
   ],
   "rewards": [

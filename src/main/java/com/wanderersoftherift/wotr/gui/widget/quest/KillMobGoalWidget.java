@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
-import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -13,12 +12,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Display widget for the {@link KillMobGoal}
+ */
 public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
     private static final String GOAL_MESSAGE = WanderersOfTheRift.translationId("container", "quest.goal.kill");
     private final Font font;
     private final KillMobGoal goal;
-    private Style textStyle = Style.EMPTY.withColor(ColorUtil.OFF_BLACK);
 
+    private Style textStyle = Style.EMPTY.withColor(ColorUtil.OFF_BLACK);
     private int progress;
 
     public KillMobGoalWidget(KillMobGoal goal) {
@@ -38,24 +40,25 @@ public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
     }
 
     @Override
+    public void setProgress(int amount) {
+        progress = amount;
+    }
+
+    @Override
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Component name = goal.mobLabel();
         guiGraphics.drawString(font,
-                Component.translatable(GOAL_MESSAGE, name, progress, goal.progressTarget()).withStyle(textStyle),
-                getX(), getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
+                Component.translatable(GOAL_MESSAGE, name, progress, goal.count()).withStyle(textStyle), getX(),
+                getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
     }
 
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+        // TODO
     }
 
     @Override
     protected boolean isValidClickButton(int button) {
         return false;
-    }
-
-    @Override
-    public void setProgress(int amount) {
-        progress = amount;
     }
 }

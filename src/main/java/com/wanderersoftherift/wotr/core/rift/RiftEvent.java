@@ -41,9 +41,12 @@ public abstract class RiftEvent extends Event {
         }
     }
 
+    /**
+     * Event when a player completes (with or without objective) a rift
+     */
     public static class PlayerCompletedRift extends RiftEvent {
-        private ServerPlayer player;
-        private boolean objectiveComplete;
+        private final ServerPlayer player;
+        private final boolean objectiveComplete;
 
         public PlayerCompletedRift(ServerPlayer player, boolean objectiveComplete, ServerLevel level,
                 RiftConfig config) {

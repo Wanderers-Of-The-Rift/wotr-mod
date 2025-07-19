@@ -26,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The QuestCompletionScreen shows a player's progress on a quest and allows handing in items and completing the quest
+ */
 public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompletionMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/quest/completion.png");

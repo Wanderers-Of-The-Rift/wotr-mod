@@ -16,6 +16,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This menu presents the player with available quests that they can select. The quest list is replicated outside of the
+ * menu.
+ */
 public class QuestGiverMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private final List<QuestState> availableQuests;
@@ -48,7 +52,6 @@ public class QuestGiverMenu extends AbstractContainerMenu {
     }
 
     public void acceptQuest(ServerPlayer player, int index) {
-        // TODO: check quest is valid in this context
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty() && index >= 0 && index < availableQuests.size()) {
             activeQuests.add(availableQuests.get(index));
@@ -62,10 +65,16 @@ public class QuestGiverMenu extends AbstractContainerMenu {
         availableQuestsDirty = true;
     }
 
+    /**
+     * @return Whether the available quests have changed and the screen should update
+     */
     public boolean isDirty() {
         return availableQuestsDirty;
     }
 
+    /**
+     * Removes the dirty marker
+     */
     public void clearDirty() {
         availableQuestsDirty = false;
     }

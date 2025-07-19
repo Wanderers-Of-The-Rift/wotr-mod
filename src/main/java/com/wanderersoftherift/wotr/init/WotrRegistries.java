@@ -66,7 +66,7 @@ public class WotrRegistries {
             Keys.CONTAINER_TYPES).create();
     public static final Registry<CharacterMenuItem> CHARACTER_MENU_ITEMS = new RegistryBuilder<>(
             Keys.CHARACTER_MENU_ITEMS
-    ).create();
+    ).sync(true).create();
     public static final Registry<MapCodec<? extends GoalProvider>> GOAL_PROVIDER_TYPES = new RegistryBuilder<>(
             Keys.GOAL_PROVIDER_TYPES).create();
     public static final Registry<GoalType<?>> GOAL_TYPES = new RegistryBuilder<>(Keys.GOAL_TYPES).sync(true).create();

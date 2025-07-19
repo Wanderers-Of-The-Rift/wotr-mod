@@ -14,6 +14,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class WotrGoalDisplays {
+
     @SubscribeEvent
     private static void registerWidgets(RegisterGoalDisplaysEvent event) {
         event.register(GiveItemGoal.class, GiveItemGoalWidget::new);

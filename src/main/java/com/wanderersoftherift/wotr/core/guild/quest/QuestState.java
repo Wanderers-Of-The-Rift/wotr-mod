@@ -137,7 +137,7 @@ public class QuestState {
      */
     public boolean isGoalComplete(int index) {
         Preconditions.checkArgument(index >= 0 && index < goalProgress.length, "Index out of bounds");
-        return goalProgress[index] >= getGoal(index).progressTarget();
+        return goalProgress[index] >= getGoal(index).count();
     }
 
     /**

@@ -29,6 +29,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A character screen displaying quests the player has accepted //TODO: Currently it only shows one quest
+ */
 public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/character/background.png");

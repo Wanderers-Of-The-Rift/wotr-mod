@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.widget.lookup;
 
-import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
+import com.wanderersoftherift.wotr.gui.widget.quest.GoalDisplay;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
 

@@ -10,11 +10,17 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * This reward provider generates {@link ItemReward}s from a loot table. Where possible the generated items are combined
+ * 
+ * @param lootTable
+ */
 public record LootTableRewardProvider(ResourceKey<LootTable> lootTable) implements RewardProvider {
     public static final MapCodec<LootTableRewardProvider> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
@@ -29,7 +35,7 @@ public record LootTableRewardProvider(ResourceKey<LootTable> lootTable) implemen
     }
 
     @Override
-    public List<Reward> generateReward(LootParams params) {
+    public @NotNull List<Reward> generateReward(LootParams params) {
         LootTable table = params.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
         return condense(table.getRandomItems(params)).stream().<Reward>map(ItemReward::new).toList();
     }

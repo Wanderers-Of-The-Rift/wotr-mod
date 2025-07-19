@@ -16,6 +16,8 @@ public record GuildInfo(ResourceLocation emblem) {
             ResourceLocation.CODEC.fieldOf("emblem").forGetter(GuildInfo::emblem)
     ).apply(instance, GuildInfo::new));
 
+    // TODO: Max rank? reputation reqs? What else do we need to capture about guilds?
+
     public static Component getDisplayName(Holder<GuildInfo> guild) {
         ResourceLocation loc = ResourceLocation.parse(guild.getRegisteredName());
         return Component.translatable(loc.toLanguageKey("guild"));

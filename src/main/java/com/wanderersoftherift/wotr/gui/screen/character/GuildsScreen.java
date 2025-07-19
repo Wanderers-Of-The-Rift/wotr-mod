@@ -18,6 +18,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A character screen displays information on guilds the player is affiliated with
+ */
 public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
 
     private ScrollContainerWidget<GuildDisplay> guilds;
@@ -54,19 +57,20 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
     private static class GuildDisplay extends AbstractWidget implements ScrollContainerEntry {
 
         private static final int EMBLEM_SIZE = 64;
+        private static final int DISPLAY_HEIGHT = 68;
 
-        private Font font;
-        private Holder<GuildInfo> guild;
+        private final Font font;
+        private final Holder<GuildInfo> guild;
 
         public GuildDisplay(Font font, Holder<GuildInfo> guild) {
-            super(0, 0, 300, 68, GuildInfo.getDisplayName(guild));
+            super(0, 0, 300, DISPLAY_HEIGHT, GuildInfo.getDisplayName(guild));
             this.font = font;
             this.guild = guild;
         }
 
         @Override
         public int getHeight(int width) {
-            return 68;
+            return DISPLAY_HEIGHT;
         }
 
         @Override
@@ -87,8 +91,8 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
         }
 
         @Override
-        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+        protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+            // TODO
         }
     }
 }

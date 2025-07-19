@@ -15,21 +15,22 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Menu for guild trading
+ */
 public class TradingMenu extends AbstractContainerMenu {
 
     private static final QuickMover MOVER = QuickMover.create().forPlayerSlots(1).forSlot(0).tryMoveToPlayer().build();
 
     private final ContainerLevelAccess access;
-    private final ChangeAwareItemHandler purchaseItem;
-    private final SlotItemHandler purchaseSlot;
+    private final ItemStackHandler purchaseItem;
     private final Wallet wallet;
 
     private Holder<TradeListing> currentTrade;
-    private boolean updatingTrade = false;
 
     public TradingMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL,
@@ -40,11 +41,12 @@ public class TradingMenu extends AbstractContainerMenu {
         super(WotrMenuTypes.TRADING_MENU.get(), containerId);
         this.access = access;
         this.wallet = wallet;
-        this.purchaseItem = new ChangeAwareItemHandler(new ItemStackHandler(1)) {
+        this.purchaseItem = new ItemStackHandler(1);
+        IItemHandler purchaseSlotHandler = new ChangeAwareItemHandler(purchaseItem) {
             @Override
             public void onSlotChanged(int slot, ItemStack oldStack, ItemStack newStack) {
                 access.execute((level, pos) -> {
-                    if (!updatingTrade && currentTrade != null) {
+                    if (currentTrade != null) {
                         for (Object2IntMap.Entry<Holder<Currency>> costElement : currentTrade.value()
                                 .getPrice()
                                 .object2IntEntrySet()) {
@@ -55,8 +57,7 @@ public class TradingMenu extends AbstractContainerMenu {
                 });
             }
         };
-        purchaseSlot = new TakeAllOnlyItemHandlerSlot(purchaseItem, 0, 112, 22);
-        this.addSlot(purchaseSlot);
+        this.addSlot(new TakeAllOnlyItemHandlerSlot(purchaseSlotHandler, 0, 112, 22));
 
         addStandardInventorySlots(playerInventory, 108, 84);
     }
@@ -93,13 +94,11 @@ public class TradingMenu extends AbstractContainerMenu {
     }
 
     private void updateTradeSlot() {
-        updatingTrade = true;
         if (canPay(currentTrade.value().getPrice())) {
             purchaseItem.setStackInSlot(0, currentTrade.value().getOutputItem().copy());
         } else {
             purchaseItem.setStackInSlot(0, ItemStack.EMPTY);
         }
-        updatingTrade = false;
     }
 
     private boolean canPay(Object2IntMap<Holder<Currency>> price) {

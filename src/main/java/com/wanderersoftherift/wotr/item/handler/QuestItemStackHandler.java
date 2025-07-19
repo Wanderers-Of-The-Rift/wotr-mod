@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.gui.menu.slot;
+package com.wanderersoftherift.wotr.item.handler;
 
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
@@ -9,14 +9,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
+/**
+ * ItemStackHandler that only accepts quest items
+ */
 public class QuestItemStackHandler extends ItemStackHandler {
 
     private final Supplier<QuestState> quest;
 
+    /**
+     * @param questSupplier A supplier that provides the quest state to accept items for
+     */
     public QuestItemStackHandler(Supplier<QuestState> questSupplier) {
-        this.quest = questSupplier;
+        this(questSupplier, 1);
     }
 
+    /**
+     * @param questSupplier A supplier that provides the quest state to accept items for
+     * @param size          The number of slots in this ItemStackHandler
+     */
     public QuestItemStackHandler(Supplier<QuestState> questSupplier, int size) {
         super(size);
         this.quest = questSupplier;

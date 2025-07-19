@@ -10,10 +10,17 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A goal provider for generating GiveItem goals
+ *
+ * @param item  The type of item required
+ * @param count A number provider for the count of items required
+ */
 public record GiveItemGoalProvider(Ingredient item, NumberProvider count) implements GoalProvider {
 
     public static final MapCodec<GiveItemGoalProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -27,7 +34,7 @@ public record GiveItemGoalProvider(Ingredient item, NumberProvider count) implem
     }
 
     @Override
-    public List<Goal> generateGoal(LootParams params) {
+    public @NotNull List<Goal> generateGoal(LootParams params) {
         return List.of(new GiveItemGoal(item, count.getInt(new LootContext.Builder(params).create(Optional.empty()))));
     }
 }

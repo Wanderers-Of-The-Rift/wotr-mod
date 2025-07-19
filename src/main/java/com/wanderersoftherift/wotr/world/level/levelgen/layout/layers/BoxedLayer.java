@@ -37,7 +37,7 @@ public record BoxedLayer(Vec3i start, Vec3i size, LayeredRiftLayout.LayoutLayer.
         }
     }
 
-    public static record Factory(Vec3i start, Vec3i size, List<LayeredRiftLayout.LayoutLayer.Factory> sublayers)
+    public record Factory(Vec3i start, Vec3i size, List<LayeredRiftLayout.LayoutLayer.Factory> sublayers)
             implements LayeredRiftLayout.LayoutLayer.Factory {
 
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(

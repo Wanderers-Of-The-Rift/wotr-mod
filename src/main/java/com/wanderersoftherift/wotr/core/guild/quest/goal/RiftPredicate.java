@@ -16,6 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
+/**
+ * A predicate for assessing a rift
+ *
+ * @param tier      An optional minimum rift tier required
+ * @param theme     An optional rift theme required
+ * @param objective An optional objective required
+ */
 public record RiftPredicate(Optional<Integer> tier, Optional<Holder<RiftTheme>> theme,
         Optional<Holder<ObjectiveType>> objective) {
 
@@ -36,13 +43,11 @@ public record RiftPredicate(Optional<Integer> tier, Optional<Holder<RiftTheme>> 
             return false;
         }
 
-        if (theme.isPresent()
-                && (!config.theme().isPresent() || !config.theme().get().value().equals(theme.get().value()))) {
+        if (theme.isPresent() && !config.theme().map(actual -> actual.equals(theme.get())).orElse(false)) {
             return false;
         }
 
-        if (objective.isPresent()
-                && (!config.objective().isPresent() || !config.theme().get().value().equals(objective.get().value()))) {
+        if (objective.isPresent() && !config.objective().map(actual -> actual.equals(objective.get())).orElse(false)) {
             return false;
         }
 

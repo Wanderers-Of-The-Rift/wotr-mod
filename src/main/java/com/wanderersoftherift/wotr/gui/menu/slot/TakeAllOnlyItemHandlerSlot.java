@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/**
+ * Slot for an ItemHandler that only allows items to be removed
+ */
 public class TakeAllOnlyItemHandlerSlot extends SlotItemHandler {
     public TakeAllOnlyItemHandlerSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
@@ -27,7 +30,7 @@ public class TakeAllOnlyItemHandlerSlot extends SlotItemHandler {
     }
 
     @Override
-    public Optional<ItemStack> tryRemove(int count, int decrement, Player player) {
+    public @NotNull Optional<ItemStack> tryRemove(int count, int decrement, @NotNull Player player) {
         if (count != getItem().getCount()) {
             return Optional.empty();
         }
