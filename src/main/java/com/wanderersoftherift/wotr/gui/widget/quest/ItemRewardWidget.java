@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.gui.widget.scrollentry;
+package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.core.guild.quest.reward.ItemReward;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
@@ -10,7 +10,11 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * Display for an {@link ItemReward}
+ */
 public class ItemRewardWidget extends AbstractWidget {
     private final ItemStack rewardItem;
 
@@ -28,8 +32,8 @@ public class ItemRewardWidget extends AbstractWidget {
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+        // TODO
     }
 
     @Override

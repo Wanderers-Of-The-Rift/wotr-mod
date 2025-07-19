@@ -21,6 +21,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * This menu provides rewards to the player after they complete a quest.
+ * <p>
+ * Item rewards are handle by populating a small inventory with their items - overflow are given straight to the player
+ * or dropped at the player's location. Other rewards have their icon displayed and are rewarded when the menu is
+ * closed.
+ * </p>
+ */
 public class QuestRewardMenu extends AbstractContainerMenu {
 
     private static final int NUM_REWARD_SLOTS = 9;
@@ -86,6 +94,8 @@ public class QuestRewardMenu extends AbstractContainerMenu {
         }
     }
 
+    // TODO: Remove linkage to quest, just provide rewards and replicate to player - this allows quest to be removed
+    // earlier and prevent duplication by crashing the server/game
     public void addRewards(ServerPlayer player) {
         access.execute((level, pos) -> {
             QuestState quest = activeQuests.getQuestState(selectedQuest.get());

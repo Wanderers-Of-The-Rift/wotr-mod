@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
-import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.ChatFormatting;
@@ -18,9 +17,14 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * Display widget for the {@link GiveItemGoal}
+ */
 public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     private static final String TEXT_ID = WanderersOfTheRift.translationId("container", "quest.goal.give");
+    private static final int ICON_SIZE = 16;
     private final Font font;
     private final GiveItemGoal goal;
 
@@ -28,14 +32,10 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     private Style textStyle = Style.EMPTY.withColor(ChatFormatting.DARK_GRAY);
 
     public GiveItemGoalWidget(GiveItemGoal goal) {
-        super(0, 0, 100, 18, Component.empty());
+        super(0, 0, 100, ICON_SIZE, Component.empty());
         this.font = Minecraft.getInstance().font;
         this.goal = goal;
         updateMessage();
-    }
-
-    private void updateMessage() {
-        setMessage(Component.translatable(TEXT_ID, progress, goal.progressTarget()).withStyle(textStyle));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
 
     @Override
     public int getHeight(int width) {
-        return 16;
+        return ICON_SIZE;
     }
 
     @Override
@@ -58,8 +58,8 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
         ItemStack displayItem = goal.item().display().resolveForFirstStack(contextmap);
         guiGraphics.renderFakeItem(displayItem, getX() + messageWidth, getY());
 
-        if (mouseX >= getX() + messageWidth && mouseX <= getX() + messageWidth + 16 && mouseY >= getY() + 1
-                && mouseY <= getY() + 17) {
+        if (mouseX >= getX() + messageWidth && mouseX <= getX() + messageWidth + ICON_SIZE && mouseY >= getY() + 1
+                && mouseY <= getY() + ICON_SIZE + 1) {
             setTooltip(Tooltip.create(
                     ComponentUtil.joinWithNewLines(Screen.getTooltipFromItem(Minecraft.getInstance(), displayItem))));
         } else {
@@ -68,8 +68,8 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+        // TODO
     }
 
     @Override
@@ -80,5 +80,10 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     @Override
     public void setProgress(int amount) {
         progress = amount;
+        updateMessage();
+    }
+
+    private void updateMessage() {
+        setMessage(Component.translatable(TEXT_ID, progress, goal.count()).withStyle(textStyle));
     }
 }

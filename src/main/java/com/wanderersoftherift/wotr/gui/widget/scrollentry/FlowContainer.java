@@ -68,7 +68,7 @@ public class FlowContainer extends AbstractWidget implements ScrollContainerEntr
 
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
-
+        // TODO
     }
 
     private interface ChildAction {

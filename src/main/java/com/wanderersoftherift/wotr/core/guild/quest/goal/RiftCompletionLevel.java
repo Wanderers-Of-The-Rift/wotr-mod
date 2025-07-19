@@ -11,9 +11,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntFunction;
 
+/**
+ * Defines the different levels of rift completion that may be required by the {@link CompleteRiftGoal}
+ */
 public enum RiftCompletionLevel implements StringRepresentable {
-    ENTER(0, "attempt", Component.translatable(WanderersOfTheRift.translationId("goal", "rift.attempt"))),
+    /**
+     * The rift was attempted - regardless of whether the player survived
+     */
+    ATTEMPT(0, "attempt", Component.translatable(WanderersOfTheRift.translationId("goal", "rift.attempt"))),
+    /**
+     * The player at least survived the rift
+     */
     SURVIVE(1, "survive", Component.translatable(WanderersOfTheRift.translationId("goal", "rift.survive"))),
+    /**
+     * The player successfully completed the rift
+     */
     COMPLETE(2, "complete", Component.translatable(WanderersOfTheRift.translationId("goal", "rift.complete")));
 
     public static final StringRepresentable.StringRepresentableCodec<RiftCompletionLevel> CODEC = StringRepresentable
@@ -39,6 +51,9 @@ public enum RiftCompletionLevel implements StringRepresentable {
         return id;
     }
 
+    /**
+     * @return A component for displaying the level of completion
+     */
     public Component getDisplay() {
         return display;
     }

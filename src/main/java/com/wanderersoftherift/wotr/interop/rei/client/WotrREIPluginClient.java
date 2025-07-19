@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
-import me.shedaniel.rei.api.client.registry.screen.ExclusionZones;
 import me.shedaniel.rei.api.client.registry.screen.OverlayDecider;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
@@ -46,12 +45,8 @@ public class WotrREIPluginClient implements REIClientPlugin {
     }
 
     @Override
-    public void registerExclusionZones(ExclusionZones zones) {
-
-    }
-
-    @Override
     public void registerScreens(ScreenRegistry registry) {
+        // Exclude character screens from REI
         registry.registerDecider(new OverlayDecider() {
             @Override
             public <R extends Screen> boolean isHandingScreen(Class<R> screen) {

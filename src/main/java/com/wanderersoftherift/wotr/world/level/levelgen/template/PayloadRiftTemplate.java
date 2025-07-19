@@ -165,7 +165,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         }
     }
 
-    public static interface TemplatePayload {
+    public interface TemplatePayload {
         void processPayloadBlocks(
                 PayloadRiftTemplate template,
                 RiftProcessedRoom destination,

@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Goal;
 import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestEventHandler;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,6 +13,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
+/**
+ * A goal to complete some number of rifts, with optional conditions
+ * 
+ * @param count           The number of rifts to complete
+ * @param completionLevel Minimum level at which the rift must be completed
+ * @param predicate       Any conditions on whether a rift will count for completion
+ */
 public record CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, RiftPredicate predicate)
         implements Goal {
 
@@ -41,12 +47,7 @@ public record CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, R
     }
 
     @Override
-    public int progressTarget() {
-        return count;
-    }
-
-    @Override
     public void register(ServerPlayer player, QuestState quest, int goalIndex) {
-        QuestEventHandler.registerRiftCompletionListener(player, quest, goalIndex);
+        GoalEventHandler.registerRiftCompletionListener(player, quest, goalIndex);
     }
 }

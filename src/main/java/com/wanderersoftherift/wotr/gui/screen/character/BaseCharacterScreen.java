@@ -21,6 +21,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * The base character screen, which all character subscreens implement. This provides the common appearance of all
+ * character screens - primarily the list of submenus that can be opened.
+ * 
+ * @param <T>
+ */
 public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends EnhancedContainerScreen<T> {
     protected static final int MENU_BAR_WIDTH = 100;
 
@@ -41,7 +47,8 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
         for (int i = 0; i < items.size(); i++) {
             var item = items.get(i);
             menuSelection.children()
-                    .add(new MenuItem(item.name(), i, 0, 0, 94, font, menu.getType() == item.menuType()));
+                    .add(new MenuItem(item.name(), i, 0, 0, MENU_BAR_WIDTH - 6, font,
+                            menu.getType() == item.menuType()));
         }
         addRenderableWidget(menuSelection);
     }
@@ -74,12 +81,14 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
                 .id("textures/gui/container/character/menu_item_selected.png");
         private static final ResourceLocation HOVERED = WanderersOfTheRift
                 .id("textures/gui/container/character/menu_item_hovered.png");
+        private static final int MENU_ITEM_HEIGHT = 15;
+
         private final Font font;
         private final boolean selected;
         private final int index;
 
         public MenuItem(Component title, int index, int x, int y, int width, Font font, boolean selected) {
-            super(x, y, width, 15, title);
+            super(x, y, width, MENU_ITEM_HEIGHT, title);
             this.font = font;
             this.selected = selected;
             this.index = index;
@@ -87,11 +96,11 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
 
         @Override
         public int getHeight(int width) {
-            return 15;
+            return MENU_ITEM_HEIGHT;
         }
 
         @Override
-        protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
             ResourceLocation texture = BACKGROUND;
             if (selected) {
                 texture = SELECTED;
@@ -99,13 +108,14 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
                 texture = HOVERED;
             }
 
-            guiGraphics.blit(RenderType::guiTextured, texture, getX(), getY(), 0, 0, 94, 15, 94, 15);
+            guiGraphics.blit(RenderType::guiTextured, texture, getX(), getY(), 0, 0, 94, MENU_ITEM_HEIGHT, 94,
+                    MENU_ITEM_HEIGHT);
             guiGraphics.drawString(font, getMessage(), getX() + 3, getY() + 4, ChatFormatting.WHITE.getColor(), true);
         }
 
         @Override
-        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+        protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+            // TODO
         }
 
         @Override

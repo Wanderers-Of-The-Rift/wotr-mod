@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.quest.Goal;
 import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestEventHandler;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,17 +13,24 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 
-public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int quantity) implements Goal {
+/**
+ * A goal to kill mobs
+ * 
+ * @param mob      A predicate for the type of mobs that must be killed
+ * @param rawLabel A translation string for displaying the type of mob
+ * @param count    The number of mobs that need to be killed
+ */
+public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int count) implements Goal {
 
     public static final MapCodec<KillMobGoal> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     EntityTypePredicate.CODEC.fieldOf("mob").forGetter(KillMobGoal::mob),
                     Codec.STRING.fieldOf("mob_label").forGetter(KillMobGoal::rawLabel),
-                    Codec.INT.optionalFieldOf("quantity", 1).forGetter(KillMobGoal::quantity)
+                    Codec.INT.optionalFieldOf("count", 1).forGetter(KillMobGoal::count)
             ).apply(instance, KillMobGoal::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, KillMobGoal> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8, KillMobGoal::rawLabel, ByteBufCodecs.INT, KillMobGoal::quantity,
+            ByteBufCodecs.STRING_UTF8, KillMobGoal::rawLabel, ByteBufCodecs.INT, KillMobGoal::count,
             (label, quantity) -> new KillMobGoal(null, label, quantity)
     );
 
@@ -36,25 +42,15 @@ public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int quantity
     }
 
     @Override
-    public int progressTarget() {
-        return quantity;
-    }
-
-    @Override
     public void register(ServerPlayer player, QuestState questState, int goalIndex) {
-        QuestEventHandler.registerKillMobGoal(player, questState, goalIndex);
+        GoalEventHandler.registerKillMobGoal(player, questState, goalIndex);
     }
 
-    public EntityTypePredicate mob() {
-        return mob;
-    }
-
+    /**
+     * @return A component for displaying the name of the mob classification
+     */
     public Component mobLabel() {
         return Component.translatable(rawLabel);
-    }
-
-    public int quantity() {
-        return quantity;
     }
 
 }

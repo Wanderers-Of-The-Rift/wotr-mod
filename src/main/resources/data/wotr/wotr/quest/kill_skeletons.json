@@ -4,7 +4,7 @@
       "type": "wotr:fixed_kill_mob",
       "mob": "#minecraft:skeletons",
       "mob_label": "mobgroup.minecraft.skeletons",
-      "quantity": 4
+      "count": 4
     }
   ],
   "rewards": [

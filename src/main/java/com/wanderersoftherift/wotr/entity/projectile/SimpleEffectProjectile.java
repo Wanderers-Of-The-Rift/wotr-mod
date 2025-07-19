@@ -723,7 +723,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         setNoGravity(!config.gravityAffected());
     }
 
-    public static enum Pickup {
+    public enum Pickup {
         DISALLOWED,
         ALLOWED,
         CREATIVE_ONLY;

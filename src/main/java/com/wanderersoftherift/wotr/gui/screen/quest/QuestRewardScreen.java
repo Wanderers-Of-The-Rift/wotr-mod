@@ -15,6 +15,9 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A screen for displaying rewards from completing a quest
+ */
 public class QuestRewardScreen extends EnhancedContainerScreen<QuestRewardMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/quest_complete/background.png");

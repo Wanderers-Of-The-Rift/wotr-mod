@@ -26,9 +26,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+/**
+ * A screen for trading with guilds. Provides a list of available trades of which one can be selected, and a display of
+ * available currency for spending.
+ */
 public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
@@ -73,7 +78,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
@@ -122,8 +127,8 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         }
 
         @Override
-        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+        protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+            // TODO
         }
     }
 
@@ -135,6 +140,8 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
                 .id("textures/gui/container/ability_bench/selected_choice_button.png");
         private static final ResourceLocation HOVERED_BUTTON = WanderersOfTheRift
                 .id("textures/gui/container/ability_bench/hovered_choice_button.png");
+
+        private static final int OPTION_HEIGHT = 21;
 
         private final Holder<TradeListing> listing;
         private final Font font;
@@ -149,7 +156,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 
         @Override
         public int getHeight(int width) {
-            return 21;
+            return OPTION_HEIGHT;
         }
 
         @Override
@@ -170,7 +177,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
             int xOffset = getX() + 3;
             for (Object2IntMap.Entry<Holder<Currency>> entry : listing.value().getPrice().object2IntEntrySet()) {
                 String cost = Integer.toString(entry.getIntValue());
-                guiGraphics.drawString(font, cost, xOffset, getY() + (21 - font.lineHeight) / 2,
+                guiGraphics.drawString(font, cost, xOffset, getY() + (OPTION_HEIGHT - font.lineHeight) / 2,
                         ChatFormatting.WHITE.getColor(), true);
                 xOffset += font.width(cost) + 2;
 
@@ -181,8 +188,8 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         }
 
         @Override
-        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+        protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+            // TODO
         }
     }
 }

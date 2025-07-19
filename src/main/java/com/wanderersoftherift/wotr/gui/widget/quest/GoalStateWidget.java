@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
-import com.wanderersoftherift.wotr.gui.widget.GoalDisplay;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import net.minecraft.ChatFormatting;
@@ -13,7 +12,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * Display widget for displaying overall goal state. This includes a checkbox for completion and the goal-specific
+ * display
+ */
 public class GoalStateWidget extends AbstractWidget implements ScrollContainerEntry {
     private static final ResourceLocation INCOMPLETE_BOX = WanderersOfTheRift
             .id("textures/gui/container/quest/incomplete.png");
@@ -22,6 +26,7 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     private static final int STATE_BOX_SIZE = 8;
     private static final int STATE_BOX_VERT_OFFSET = 4;
     private static final int STATE_BOX_HORIZ_OFFSET = 4;
+
     private final QuestState quest;
     private final int goalIndex;
     private final GoalDisplay goalWidget;
@@ -51,7 +56,7 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int x = getX();
         int y = getY();
         ResourceLocation texture;
@@ -75,8 +80,8 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+        // TODO, although this is possibly up to the child widgets
     }
 
     @Override

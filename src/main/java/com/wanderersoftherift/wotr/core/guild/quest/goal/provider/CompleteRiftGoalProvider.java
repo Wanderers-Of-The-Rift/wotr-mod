@@ -14,10 +14,20 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Provider for generating CompleteRiftGoals.
+ *
+ * @param completionLevel The completion level required
+ * @param tier            A number provider for the range of tier to generate
+ * @param themes          A list of possible themes requirements, which may be empty for no theme required
+ * @param objectives      A list of possible objective requirements, which may be empty for no objective required
+ * @param count           A number provider for the number of rifts required to be completed
+ */
 public record CompleteRiftGoalProvider(RiftCompletionLevel completionLevel, Optional<NumberProvider> tier,
         List<Holder<RiftTheme>> themes, List<Holder<ObjectiveType>> objectives, NumberProvider count)
         implements GoalProvider {
@@ -42,7 +52,7 @@ public record CompleteRiftGoalProvider(RiftCompletionLevel completionLevel, Opti
     }
 
     @Override
-    public List<Goal> generateGoal(LootParams params) {
+    public @NotNull List<Goal> generateGoal(LootParams params) {
         LootContext context = new LootContext.Builder(params).create(Optional.empty());
         Optional<Integer> finalTier = tier.map(provider -> provider.getInt(context));
         Optional<Holder<RiftTheme>> theme;

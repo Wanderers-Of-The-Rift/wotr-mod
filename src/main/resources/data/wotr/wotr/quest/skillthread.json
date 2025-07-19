@@ -3,7 +3,7 @@
     {
       "type": "wotr:fixed_give_item",
       "item": "wotr:skill_thread",
-      "quantity": 4
+      "count": 4
     }
   ],
   "rewards": [

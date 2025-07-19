@@ -1,9 +1,7 @@
-package com.wanderersoftherift.wotr.core.guild.quest;
+package com.wanderersoftherift.wotr.core.guild.quest.goal;
 
-import com.wanderersoftherift.wotr.core.guild.quest.goal.CompleteRiftGoal;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.RiftCompletionLevel;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.RiftPredicate;
+import com.wanderersoftherift.wotr.core.guild.quest.GoalEventListenerRegistrar;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,8 +9,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
+/**
+ * Event handlers for supporting goals
+ */
 @EventBusSubscriber
-public class QuestEventHandler {
+public class GoalEventHandler {
 
     private static final GoalEventListenerRegistrar<LivingDeathEvent> KILL_MOB_GOALS = new GoalEventListenerRegistrar<>(
             (event, player, state, index) -> {
@@ -20,7 +21,7 @@ public class QuestEventHandler {
                     return;
                 }
                 int goalProgress = state.getGoalProgress(index);
-                if (goalProgress < goal.progressTarget() && goal.mob().matches(event.getEntity().getType())) {
+                if (goalProgress < goal.count() && goal.mob().matches(event.getEntity().getType())) {
                     state.setGoalProgress(index, goalProgress + 1);
                 }
             });
@@ -50,7 +51,7 @@ public class QuestEventHandler {
                     return;
                 }
                 int progress = state.getGoalProgress(index);
-                if (progress < count && completionLevel == RiftCompletionLevel.ENTER
+                if (progress < count && completionLevel == RiftCompletionLevel.ATTEMPT
                         && predicate.matches(event.getConfig())) {
                     state.setGoalProgress(index, progress + 1);
                 }

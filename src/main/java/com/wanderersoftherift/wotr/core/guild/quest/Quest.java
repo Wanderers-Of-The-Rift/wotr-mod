@@ -14,16 +14,13 @@ import java.util.Optional;
 
 /**
  * Defines a quest that a player can undertake.
- * <p>
- * A quest is composed of
- * <ul>
- * <li>Display information</li>
- * <li>A list of goals that need to be completed before the quest is complete</li>
- * <li>A list of rewards that are provided upon completion</li>
- * </ul>
- * </p>
+ *
+ * @param icon    An icon to display with the quest
+ * @param goals   A list of goal providers that will generate the goals that must be completed to complete the quest
+ * @param rewards A list of reward providers that will generate the rewards for completing the quest
  */
-public final class Quest {
+public record Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, List<RewardProvider> rewards) {
+
     public static final Codec<Quest> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(Quest::icon),
             GoalProvider.DIRECT_CODEC.listOf().optionalFieldOf("goals", List.of()).forGetter(Quest::goals),
@@ -32,44 +29,12 @@ public final class Quest {
 
     public static final Codec<Holder<Quest>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.QUESTS);
 
-    private final Optional<ResourceLocation> icon;
-
-    private final List<GoalProvider> goals;
-    private final List<RewardProvider> rewards;
-
-    public Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, List<RewardProvider> rewards) {
-        this.icon = icon;
-        this.goals = goals;
-        this.rewards = rewards;
-    }
-
     public List<Goal> generateGoals(LootParams params) {
         return goals.stream().flatMap(x -> x.generateGoal(params).stream()).toList();
     }
 
     public List<Reward> generateRewards(LootParams params) {
         return rewards.stream().flatMap(x -> x.generateReward(params).stream()).toList();
-    }
-
-    /**
-     * @return Display icon for the quest
-     */
-    public Optional<ResourceLocation> icon() {
-        return icon;
-    }
-
-    /**
-     * @return The goals for the quest
-     */
-    public List<GoalProvider> goals() {
-        return goals;
-    }
-
-    /**
-     * @return The rewards for completing the quest
-     */
-    public List<RewardProvider> rewards() {
-        return rewards;
     }
 
     /**

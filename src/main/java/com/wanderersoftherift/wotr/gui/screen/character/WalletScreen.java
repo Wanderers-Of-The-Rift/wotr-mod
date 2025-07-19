@@ -19,6 +19,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A character screen displaying the player's currencies
+ */
 public class WalletScreen extends BaseCharacterScreen<WalletMenu> {
     public static final int ICON_SIZE = 16;
 
@@ -96,7 +99,7 @@ public class WalletScreen extends BaseCharacterScreen<WalletMenu> {
 
         @Override
         protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-
+            // TODO
         }
     }
 }
