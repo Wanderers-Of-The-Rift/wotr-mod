@@ -70,7 +70,7 @@ public abstract class RiftEvent extends Event {
         public PlayerDied cancel() {
             this.canceled = true;
             if (isTopOfTheStack && player.getHealth() <= 0) {
-                player.setHealth(Float.floatToRawIntBits(1));
+                player.setHealth(Float.intBitsToFloat(1));
             }
             return this;
         }
