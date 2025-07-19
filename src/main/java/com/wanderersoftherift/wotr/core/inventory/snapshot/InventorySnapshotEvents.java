@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
+import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,8 +16,8 @@ public class InventorySnapshotEvents {
     @SubscribeEvent
     private static void onDropsFromDeath(LivingDropsEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var deathParticipation = player.getData(WotrAttachments.DIED_IN_RIFT);
-            if (deathParticipation != RiftParticipation.EMPTY) {
+            var deathParticipation = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
+            if (deathParticipation != RiftEntryState.EMPTY) {
                 var remainingParticipations = player.getData(WotrAttachments.PARTICIPATIONS);
                 InventorySnapshotSystem.retainSnapshotItemsOnDeath(player, event,
                         deathParticipation.entranceInventory(),

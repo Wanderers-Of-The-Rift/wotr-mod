@@ -13,29 +13,27 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public record RiftParticipation(InventorySnapshot entranceInventory, ResourceKey<Level> previousDimension,
+public record RiftEntryState(InventorySnapshot entranceInventory, ResourceKey<Level> previousDimension,
         ResourceKey<Level> riftDimension, Vec3 previousPosition, StatSnapshot statSnapshot) {
 
-    public static final RiftParticipation EMPTY = new RiftParticipation(new InventorySnapshot(),
+    public static final RiftEntryState EMPTY = new RiftEntryState(new InventorySnapshot(),
             ResourceKey.create(Registries.DIMENSION, WanderersOfTheRift.id("empty")),
             ResourceKey.create(Registries.DIMENSION, WanderersOfTheRift.id("empty")), new Vec3(0, 0, 0),
             new StatSnapshot());
 
-    public static final Codec<RiftParticipation> CODEC = RecordCodecBuilder.create(ins -> ins.group(
-            InventorySnapshot.CODEC.fieldOf("entrance_inventory").forGetter(RiftParticipation::entranceInventory),
+    public static final Codec<RiftEntryState> CODEC = RecordCodecBuilder.create(ins -> ins.group(
+            InventorySnapshot.CODEC.fieldOf("entrance_inventory").forGetter(RiftEntryState::entranceInventory),
             ResourceKey.codec(Registries.DIMENSION)
                     .fieldOf("previous_dimension")
-                    .forGetter(RiftParticipation::previousDimension),
-            ResourceKey.codec(Registries.DIMENSION)
-                    .fieldOf("rift_dimension")
-                    .forGetter(RiftParticipation::riftDimension),
-            Vec3.CODEC.fieldOf("previous_position").forGetter(RiftParticipation::previousPosition),
-            StatSnapshot.CODEC.fieldOf("stats").forGetter(RiftParticipation::statSnapshot)
-    ).apply(ins, RiftParticipation::new));
+                    .forGetter(RiftEntryState::previousDimension),
+            ResourceKey.codec(Registries.DIMENSION).fieldOf("rift_dimension").forGetter(RiftEntryState::riftDimension),
+            Vec3.CODEC.fieldOf("previous_position").forGetter(RiftEntryState::previousPosition),
+            StatSnapshot.CODEC.fieldOf("stats").forGetter(RiftEntryState::statSnapshot)
+    ).apply(ins, RiftEntryState::new));
 
     public static void pushParticipation(ServerPlayer player, ResourceKey<Level> riftDimension) {
         var currentParticipations = player.getData(WotrAttachments.PARTICIPATIONS);
-        var newParticipation = new RiftParticipation(
+        var newParticipation = new RiftEntryState(
                 InventorySnapshotSystem.captureSnapshot(player,
                         currentParticipations.stream().map(it -> it.entranceInventory).toList()),
                 player.level().dimension(), riftDimension, player.position(), new StatSnapshot(player));

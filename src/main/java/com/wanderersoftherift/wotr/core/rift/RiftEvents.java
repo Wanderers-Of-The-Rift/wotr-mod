@@ -67,8 +67,8 @@ public class RiftEvents {
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var deathParticipation = player.getData(WotrAttachments.DIED_IN_RIFT);
-            if (deathParticipation != RiftParticipation.EMPTY) {
+            var deathParticipation = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
+            if (deathParticipation != RiftEntryState.EMPTY) {
                 var newRift = RiftLevelManager.getRiftLevel(deathParticipation.previousDimension());
                 if (newRift != null) {
                     var position = deathParticipation.previousPosition();

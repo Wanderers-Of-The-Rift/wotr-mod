@@ -116,7 +116,7 @@ public final class RiftLevelManager {
     }
 
     public static boolean onPlayerDeath(ServerPlayer player, LivingDeathEvent event) {
-        RiftParticipation lastDeathParticipation = null;
+        RiftEntryState lastDeathParticipation = null;
         var participations = player.getData(WotrAttachments.PARTICIPATIONS);
         var topOfTheStackIndex = participations.size() - 1;
         for (var participationIndex = topOfTheStackIndex; participationIndex >= 0; participationIndex--) {
@@ -140,9 +140,9 @@ public final class RiftLevelManager {
             }
         }
         if (lastDeathParticipation != null) {
-            player.setData(WotrAttachments.DIED_IN_RIFT, lastDeathParticipation);
+            player.setData(WotrAttachments.DEATH_RIFT_ENTRY_STATE, lastDeathParticipation);
         } else {
-            player.setData(WotrAttachments.DIED_IN_RIFT, RiftParticipation.EMPTY);
+            player.setData(WotrAttachments.DEATH_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
         }
         return participations.size() != 0 && lastDeathParticipation != null;
     }
@@ -184,7 +184,7 @@ public final class RiftLevelManager {
         }
 
         var respawnPos = participation.previousPosition();
-        player.setData(WotrAttachments.EXITED_RIFT, participation);
+        player.setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, participation);
         riftData.removePlayer(player);
         player.teleportTo(respawnDimension, respawnPos.x(), respawnPos.y(), respawnPos.z(), Set.of(),
                 player.getRespawnAngle(), 0, true);

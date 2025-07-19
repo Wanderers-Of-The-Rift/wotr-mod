@@ -8,7 +8,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
-import com.wanderersoftherift.wotr.core.rift.RiftParticipation;
+import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -30,25 +30,25 @@ public class WotrAttachments {
                     .serialize(ItemStack.CODEC.listOf())
                     .copyOnDeath()
                     .build());
-    public static final Supplier<AttachmentType<List<RiftParticipation>>> PARTICIPATIONS = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<List<RiftEntryState>>> PARTICIPATIONS = ATTACHMENT_TYPES.register(
             "rift_participations",
-            () -> AttachmentType.builder(() -> (List<RiftParticipation>) new ArrayList<RiftParticipation>())
-                    .serialize(MutableListCodec.of(RiftParticipation.CODEC))
+            () -> AttachmentType.builder(() -> (List<RiftEntryState>) new ArrayList<RiftEntryState>())
+                    .serialize(MutableListCodec.of(RiftEntryState.CODEC))
                     .copyOnDeath()
                     .build());
 
     /// Rift
-    public static final Supplier<AttachmentType<RiftParticipation>> DIED_IN_RIFT = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<RiftEntryState>> DEATH_RIFT_ENTRY_STATE = ATTACHMENT_TYPES.register(
             "died_in_rift",
-            () -> AttachmentType.builder(() -> RiftParticipation.EMPTY)
-                    .serialize(RiftParticipation.CODEC)
+            () -> AttachmentType.builder(() -> RiftEntryState.EMPTY)
+                    .serialize(RiftEntryState.CODEC)
                     .copyOnDeath()
                     .build());
 
-    public static final Supplier<AttachmentType<RiftParticipation>> EXITED_RIFT = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<RiftEntryState>> EXITED_RIFT_ENTRY_STATE = ATTACHMENT_TYPES.register(
             "exited_rift",
-            () -> AttachmentType.builder(() -> RiftParticipation.EMPTY)
-                    .serialize(RiftParticipation.CODEC)
+            () -> AttachmentType.builder(() -> RiftEntryState.EMPTY)
+                    .serialize(RiftEntryState.CODEC)
                     .copyOnDeath()
                     .build());
     public static final Supplier<AttachmentType<BannedRiftList>> BANNED_RIFTS = ATTACHMENT_TYPES
