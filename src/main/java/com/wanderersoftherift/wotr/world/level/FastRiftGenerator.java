@@ -8,11 +8,14 @@ import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
-import com.wanderersoftherift.wotr.world.level.levelgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CachedRiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CoreRiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.ExtraRiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
@@ -117,13 +120,24 @@ public class FastRiftGenerator extends ChunkGenerator {
         this.config = config;
         this.filler = new SingleBlockChunkGeneratable(customBlock);
 
-        this.roomGenerator = new RiftRoomGenerator( // todo make configurable
-                RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                        this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR),
-                List.of(new PerimeterGeneratable(customBlock, layout.get())), List.of(
-                        new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws()
+        roomGenerator = new CachedRiftRoomGenerator(
+                new ExtraRiftRoomGenerator(
+                        new PerimeterGeneratable(customBlock), new CoreRiftRoomGenerator(
+                                RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                                        this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR),
+                                List.of(
+                                        new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws()
+                                )
+                        )
                 )
         );
+        /*
+         * this.roomGenerator = new RiftRoomGenerator( // todo make configurable
+         * RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+         * this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR), List.of(new
+         * PerimeterGeneratable(customBlock)), List.of( new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new
+         * ShuffleJigsaws() ) );
+         */
     }
 
     @Override
@@ -225,7 +239,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             if (space instanceof RoomRiftSpace roomSpace) {
                 chunkFutures[i] = roomGenerator.getAndRemoveRoomChunk(position, roomSpace, level);
             } else {
-                chunkFutures[i] = roomGenerator.chunkOf(filler, level, position);
+                chunkFutures[i] = RiftRoomGenerator.chunkOf(filler, level, position);
             }
         }
         for (Future<RiftProcessedChunk> generatedRoomChunkFuture : chunkFutures) {

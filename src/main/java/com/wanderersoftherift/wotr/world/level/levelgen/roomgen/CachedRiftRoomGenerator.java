@@ -1,0 +1,69 @@
+package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
+
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+import java.lang.ref.WeakReference;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+public record CachedRiftRoomGenerator(
+        ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> cache,
+        RiftRoomGenerator baseGenerator) implements RiftRoomGenerator {
+    public CachedRiftRoomGenerator(ExtraRiftRoomGenerator extraRiftRoomGenerator) {
+        this(new ConcurrentHashMap<>(), extraRiftRoomGenerator);
+    }
+
+    @Override
+    public CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
+            RoomRiftSpace space,
+            ServerLevelAccessor world) {
+        var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
+        var processedRoomFuture = cache.compute(space.origin(), (key, oldFuture) -> {
+            if (oldFuture == null) {
+                return newFuture;
+            }
+            if (!oldFuture.isDone()) {
+                return oldFuture;
+            }
+            try {
+                var gn = oldFuture.get(0, TimeUnit.MICROSECONDS);
+                if (gn.refersTo(null)) {
+                    return newFuture;
+                } else {
+                    return oldFuture;
+                }
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                throw new IllegalStateException("failed to immediately get result of completed future", e);
+            }
+        });
+        if (processedRoomFuture == newFuture) {
+            return CompletableFuture.supplyAsync(() -> {
+                var newRoom = baseGenerator.getOrCreateFutureProcessedRoom(space, world);
+                RiftProcessedRoom processedRoom2 = null;
+                try {
+                    processedRoom2 = newRoom.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+                newFuture.complete(new WeakReference<>(processedRoom2));
+                return processedRoom2;
+            }, Thread::startVirtualThread);
+        }
+        var newResult = new CompletableFuture<RiftProcessedRoom>();
+        processedRoomFuture.thenAccept((weak) -> {
+            var value = weak.get();
+            if (value == null) {
+                getOrCreateFutureProcessedRoom(space, world).thenAccept(newResult::complete);
+            } else {
+                newResult.complete(value);
+            }
+        });
+        return newResult;
+    }
+}
