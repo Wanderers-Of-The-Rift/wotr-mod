@@ -5,10 +5,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.Event;
 
+import javax.annotation.Nonnull;
+
 public abstract class RiftEvent extends Event {
 
+    protected RiftConfig config;
     private ServerLevel level;
-    private RiftConfig config;
 
     public RiftEvent(ServerLevel level, RiftConfig config) {
         this.level = level;
@@ -26,9 +28,34 @@ public abstract class RiftEvent extends Event {
     /**
      * Event when a new rift has been created
      */
-    public static class Created extends RiftEvent {
-        public Created(ServerLevel level, RiftConfig config) {
+    public abstract static class Created extends RiftEvent {
+        private final ServerPlayer firstPlayer;
+
+        public Created(ServerLevel level, RiftConfig config, ServerPlayer firstPlayer) {
             super(level, config);
+            this.firstPlayer = firstPlayer;
+        }
+
+        public ServerPlayer getFirstPlayer() {
+            return firstPlayer;
+        }
+
+        public static class Pre extends Created {
+
+            public Pre(RiftConfig config, ServerPlayer firstPlayer) {
+                super(null, config, firstPlayer);
+            }
+
+            public void setConfig(RiftConfig config) {
+                this.config = config;
+            }
+        }
+
+        public static class Post extends Created {
+
+            public Post(@Nonnull ServerLevel level, RiftConfig config, ServerPlayer firstPlayer) {
+                super(level, config, firstPlayer);
+            }
         }
     }
 

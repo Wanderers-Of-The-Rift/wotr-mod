@@ -187,7 +187,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     public static record Factory(BoxedRiftShape riftShape, Optional<Integer> seed,
-            List<LayeredRiftLayout.LayoutLayer.Factory> layers) implements RiftLayout.Factory {
+            List<LayeredRiftLayout.LayoutLayer.Factory> layers) implements LayeredRiftLayout.Factory {
 
         public static final MapCodec<LayeredFiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
@@ -207,6 +207,11 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         public RiftLayout createLayout(MinecraftServer server, int seed) {
             return new LayeredFiniteRiftLayout(riftShape, this.seed.orElse(seed),
                     layers.stream().map(it -> it.createLayer(server)).toList());
+        }
+
+        @Override
+        public LayeredRiftLayout.Factory withLayers(List<LayoutLayer.Factory> layers) {
+            return new Factory(riftShape, seed, layers);
         }
     }
 }

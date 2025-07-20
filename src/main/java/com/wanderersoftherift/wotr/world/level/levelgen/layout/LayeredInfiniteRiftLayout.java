@@ -87,7 +87,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     public record Factory(RiftShape riftShape, Optional<Integer> seed, List<LayoutLayer.Factory> layers)
-            implements RiftLayout.Factory {
+            implements LayeredRiftLayout.Factory {
 
         public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
@@ -107,6 +107,11 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         public RiftLayout createLayout(MinecraftServer server, int seed) {
             return new LayeredInfiniteRiftLayout(riftShape, this.seed.orElse(seed),
                     layers.stream().map(it -> it.createLayer(server)).toList());
+        }
+
+        @Override
+        public LayeredRiftLayout.Factory withLayers(List<LayoutLayer.Factory> layers) {
+            return new Factory(riftShape, seed, layers);
         }
     }
 

@@ -84,7 +84,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
         var axisDir = plDir.getAxisDirection().getStep();
 
         ServerLevel lvl = RiftLevelManager.getOrCreateRiftLevel(riftId, level.dimension(),
-                pos.relative(axis, 3 * axisDir), getRiftConfig());
+                pos.relative(axis, 3 * axisDir), getRiftConfig(), player);
         if (lvl == null) {
             player.displayClientMessage(Component.translatable(WanderersOfTheRift.MODID + ".rift.create.failed"), true);
             return;

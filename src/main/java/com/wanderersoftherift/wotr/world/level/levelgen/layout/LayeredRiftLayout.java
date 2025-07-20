@@ -9,8 +9,15 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface LayeredRiftLayout extends RiftLayout {
+
+    interface Factory extends RiftLayout.Factory {
+        List<LayoutLayer.Factory> layers();
+
+        Factory withLayers(List<LayoutLayer.Factory> layers);
+    }
 
     interface LayoutLayer {
         void generateSection(LayoutSection section, RandomSource source, ArrayList<RiftSpace> allSpaces);
