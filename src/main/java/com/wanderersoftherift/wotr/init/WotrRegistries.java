@@ -14,11 +14,14 @@ import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -55,6 +58,12 @@ public class WotrRegistries {
             Keys.RIFT_SHAPE_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
+    public static final Registry<MapCodec<? extends RiftRoomGenerator>> RIFT_ROOM_GENERATOR_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_ROOM_GENERATOR_TYPES).create();
+    public static final Registry<MapCodec<? extends JigsawListProcessor>> JIGSAW_LIST_PROCESSOR_TYPES = new RegistryBuilder<>(
+            Keys.JIGSAW_LIST_PROCESSOR_TYPES).create();
+    public static final Registry<MapCodec<? extends RiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
 
     public static final class Keys {
 
@@ -100,6 +109,12 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
+        public static final ResourceKey<Registry<MapCodec<? extends RiftRoomGenerator>>> RIFT_ROOM_GENERATOR_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_room_generator"));
+        public static final ResourceKey<Registry<MapCodec<? extends JigsawListProcessor>>> JIGSAW_LIST_PROCESSOR_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/jigsaw_list_processor"));
+        public static final ResourceKey<Registry<MapCodec<? extends RiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));;
 
         private Keys() {
         }
@@ -119,6 +134,9 @@ public class WotrRegistries {
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
+        event.register(RIFT_ROOM_GENERATOR_TYPES);
+        event.register(JIGSAW_LIST_PROCESSOR_TYPES);
+        event.register(RIFT_BUILTIN_GENERATABLE_TYPES);
     }
 
     @SubscribeEvent

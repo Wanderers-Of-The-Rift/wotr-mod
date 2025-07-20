@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -14,12 +16,24 @@ import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public record CoreRiftRoomGenerator(PositionalRandomFactory randomFactory, List<JigsawListProcessor> jigsawProcessors)
-        implements RiftRoomGenerator {
+public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) implements RiftRoomGenerator {
+
+    public static final MapCodec<CoreRiftRoomGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            JigsawListProcessor.CODEC.listOf()
+                    .fieldOf("jigsaw_list_processors")
+                    .forGetter(CoreRiftRoomGenerator::jigsawProcessors)
+    ).apply(instance, CoreRiftRoomGenerator::new));
+
+    @Override
+    public MapCodec<? extends RiftRoomGenerator> codec() {
+        return CODEC;
+    }
+
     @Override
     public CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,
-            ServerLevelAccessor world) {
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory) {
         var processedRoom2 = new RiftProcessedRoom(space);
         var origin = processedRoom2.space.origin();
         var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
@@ -44,4 +58,10 @@ public record CoreRiftRoomGenerator(PositionalRandomFactory randomFactory, List<
         processedRoom2.markAsComplete();
         return CompletableFuture.completedFuture(processedRoom2);
     }
+
+    @Override
+    public RiftRoomGenerator copyIfNeeded() {
+        return this;
+    }
+
 }

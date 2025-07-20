@@ -6,6 +6,9 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
@@ -14,6 +17,10 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.Predefined
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CachedRiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CoreRiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.LayerGeneratableRiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
@@ -21,10 +28,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @EventBusSubscriber
@@ -38,7 +47,22 @@ public class RiftConfigInitialization {
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
         var config = baseConfig.withSeedIfAbsent(seed)
                 .withThemeIfAbsent(riftTheme)
-                .withLayoutIfAbsent(baseConfig.layout().orElse(defaultLayout(baseConfig.tier(), seed)));
+                .withLayoutIfAbsent(baseConfig.layout().orElse(defaultLayout(baseConfig.tier(), seed)))
+                .withRoomGeneratorIfAbsent(
+                        new CachedRiftRoomGenerator(
+                                new LayerGeneratableRiftRoomGenerator(
+                                        new PerimeterGeneratable(Blocks.BEDROCK.defaultBlockState()),
+                                        new CoreRiftRoomGenerator(
+                                                List.of(
+                                                        new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"),
+                                                        new ShuffleJigsaws(),
+                                                        new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
+                                                                WanderersOfTheRift.id("rift/poi/anomaly"), 1)
+                                                )
+                                        )
+                                )
+                        )
+                );
         return config;
     }
 

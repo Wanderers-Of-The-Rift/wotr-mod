@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
@@ -69,6 +70,11 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         this.jigsaws = jigsaws;
         this.identifier = identifier;
 
+    }
+
+    @Override
+    public MapCodec<? extends RiftGeneratable> codec() {
+        return null;
     }
 
     @Override

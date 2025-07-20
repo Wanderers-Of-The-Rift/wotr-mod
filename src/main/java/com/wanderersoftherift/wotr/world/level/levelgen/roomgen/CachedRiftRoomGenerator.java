@@ -1,9 +1,12 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CompletableFuture;
@@ -15,14 +18,27 @@ import java.util.concurrent.TimeoutException;
 public record CachedRiftRoomGenerator(
         ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> cache,
         RiftRoomGenerator baseGenerator) implements RiftRoomGenerator {
-    public CachedRiftRoomGenerator(ExtraRiftRoomGenerator extraRiftRoomGenerator) {
+
+    public static final MapCodec<CachedRiftRoomGenerator> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance
+                    .group(RiftRoomGenerator.CODEC.fieldOf("base_room_generator")
+                            .forGetter(CachedRiftRoomGenerator::baseGenerator))
+                    .apply(instance, CachedRiftRoomGenerator::new));
+
+    public CachedRiftRoomGenerator(RiftRoomGenerator extraRiftRoomGenerator) {
         this(new ConcurrentHashMap<>(), extraRiftRoomGenerator);
+    }
+
+    @Override
+    public MapCodec<? extends RiftRoomGenerator> codec() {
+        return CODEC;
     }
 
     @Override
     public CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,
-            ServerLevelAccessor world) {
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory) {
         var newFuture = new CompletableFuture<WeakReference<RiftProcessedRoom>>();
         var processedRoomFuture = cache.compute(space.origin(), (key, oldFuture) -> {
             if (oldFuture == null) {
@@ -44,7 +60,7 @@ public record CachedRiftRoomGenerator(
         });
         if (processedRoomFuture == newFuture) {
             return CompletableFuture.supplyAsync(() -> {
-                var newRoom = baseGenerator.getOrCreateFutureProcessedRoom(space, world);
+                var newRoom = baseGenerator.getOrCreateFutureProcessedRoom(space, world, randomFactory);
                 RiftProcessedRoom processedRoom2 = null;
                 try {
                     processedRoom2 = newRoom.get();
@@ -59,11 +75,16 @@ public record CachedRiftRoomGenerator(
         processedRoomFuture.thenAccept((weak) -> {
             var value = weak.get();
             if (value == null) {
-                getOrCreateFutureProcessedRoom(space, world).thenAccept(newResult::complete);
+                getOrCreateFutureProcessedRoom(space, world, randomFactory).thenAccept(newResult::complete);
             } else {
                 newResult.complete(value);
             }
         });
         return newResult;
+    }
+
+    @Override
+    public RiftRoomGenerator copyIfNeeded() {
+        return new CachedRiftRoomGenerator(baseGenerator.copyIfNeeded());
     }
 }
