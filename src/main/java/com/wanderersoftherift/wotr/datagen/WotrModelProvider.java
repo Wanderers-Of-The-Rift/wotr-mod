@@ -99,6 +99,12 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
                 .with(createFacingDispatchFromUpModel()));
 
+        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly_base");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator
+                .multiVariant(WotrBlocks.ANOMALY_BASE.get(),
+                        Variant.variant().with(VariantProperties.MODEL, baseAnomalyBaseModel))
+                .with(createFacingDispatchFromUpModel()));
+
         blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAVEL.get(), TexturedModel.CUBE.updateTexture(
                 mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/gravel"))));
 
