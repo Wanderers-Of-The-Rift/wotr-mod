@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
@@ -126,7 +127,9 @@ public class FastRiftGenerator extends ChunkGenerator {
                                 RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                                         this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR),
                                 List.of(
-                                        new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws()
+                                        new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws(),
+                                        new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
+                                                WanderersOfTheRift.id("rift/poi/anomaly"), 1)
                                 )
                         )
                 )
