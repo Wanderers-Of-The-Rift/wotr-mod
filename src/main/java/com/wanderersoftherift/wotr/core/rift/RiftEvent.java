@@ -1,11 +1,13 @@
 package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.Event;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public abstract class RiftEvent extends Event {
 
@@ -42,12 +44,20 @@ public abstract class RiftEvent extends Event {
 
         public static class Pre extends Created {
 
-            public Pre(RiftConfig config, ServerPlayer firstPlayer) {
+            private final ArrayList<JigsawListProcessor> jigsawProcessorList;
+
+            public Pre(RiftConfig config, ServerPlayer firstPlayer,
+                    ArrayList<JigsawListProcessor> jigsawProcessorList) {
                 super(null, config, firstPlayer);
+                this.jigsawProcessorList = jigsawProcessorList;
             }
 
             public void setConfig(RiftConfig config) {
                 this.config = config;
+            }
+
+            public ArrayList<JigsawListProcessor> getJigsawProcessorList() {
+                return jigsawProcessorList;
             }
         }
 

@@ -164,8 +164,7 @@ public final class RiftLevelManager {
             return null;
         }
 
-        config = RiftConfigInitialization.initializeConfig(config, server);
-        config = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
+        config = RiftConfigInitialization.initializeConfig(config, server, firstPlayer);
         var loadedRiftHeight = config.layout()
                 .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS);
         if (loadedRiftHeight.isEmpty()) {
