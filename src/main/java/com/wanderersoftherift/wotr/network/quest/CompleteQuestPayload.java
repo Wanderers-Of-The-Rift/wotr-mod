@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network.guild;
+package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
@@ -13,6 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Client to server payload to complete a quest in the quest completion menu
+ *
+ * @param questId
+ */
 public record CompleteQuestPayload(UUID questId) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<CompleteQuestPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "complete_quest"));

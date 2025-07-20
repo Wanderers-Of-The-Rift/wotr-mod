@@ -8,7 +8,7 @@ import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.network.guild.AvailableQuestsPayload;
+import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;

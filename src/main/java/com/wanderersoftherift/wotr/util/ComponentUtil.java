@@ -4,13 +4,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 
 public class ComponentUtil {
 
-    public static MutableComponent joinWithNewLines(Collection<Component> components) {
+    /**
+     * @param components
+     * @return A single component combining the provided components, separated by newlines
+     */
+    public static MutableComponent joinWithNewLines(@NotNull Collection<Component> components) {
         MutableComponent result = Component.empty();
         boolean first = true;
         for (Component component : components) {

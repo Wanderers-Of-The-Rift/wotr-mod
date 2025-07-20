@@ -14,7 +14,7 @@ import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.SpacerEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.WrappedTextEntry;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;

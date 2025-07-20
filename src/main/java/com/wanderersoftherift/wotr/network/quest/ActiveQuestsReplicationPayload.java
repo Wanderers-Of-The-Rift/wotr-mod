@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network.guild;
+package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
@@ -15,6 +15,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Server to client payload for full replication of active quests
+ *
+ * @param quests
+ */
 public record ActiveQuestsReplicationPayload(List<QuestState> quests) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ActiveQuestsReplicationPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "active_quest_replication"));

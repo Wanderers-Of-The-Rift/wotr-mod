@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network.guild;
+package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.toast.GoalToast;
@@ -16,6 +16,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Server to client payload to update the progress of a single goal of an active quest
+ * 
+ * @param quest
+ * @param goalIndex
+ * @param progress
+ */
 public record QuestGoalUpdatePayload(UUID quest, int goalIndex, int progress) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<QuestGoalUpdatePayload> TYPE = new CustomPacketPayload.Type<>(

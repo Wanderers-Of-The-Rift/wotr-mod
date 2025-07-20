@@ -14,7 +14,7 @@ import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.SpacerEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.WrappedTextEntry;
-import com.wanderersoftherift.wotr.network.guild.AcceptQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.AcceptQuestPayload;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;

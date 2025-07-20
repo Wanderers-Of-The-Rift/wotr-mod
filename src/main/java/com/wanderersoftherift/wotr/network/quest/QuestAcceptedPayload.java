@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network.guild;
+package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
@@ -10,6 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Server to client payload to accept a quest in the Quest Giver menu
+ * 
+ * @param quest
+ */
 public record QuestAcceptedPayload(QuestState quest) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<QuestAcceptedPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "quest_accepted"));
