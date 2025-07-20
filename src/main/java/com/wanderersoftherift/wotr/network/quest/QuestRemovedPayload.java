@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.network.guild;
+package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Server to client payload to remove a quest from the player (due to completion or being abandoned)
+ * 
+ * @param quest
+ */
 public record QuestRemovedPayload(UUID quest) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<QuestRemovedPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "quest_removed"));

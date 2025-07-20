@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr.gui.menu.character;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,7 +23,7 @@ import java.util.Set;
  */
 public abstract class BaseCharacterMenu extends AbstractContainerMenu {
 
-    private static List<CharacterMenuItem> characterMenuItems;
+    private static List<Holder<CharacterMenuItem>> characterMenuItems;
 
     protected BaseCharacterMenu(@Nullable MenuType<?> menuType, int containerId) {
         super(menuType, containerId);
@@ -31,10 +33,11 @@ public abstract class BaseCharacterMenu extends AbstractContainerMenu {
      * @param registryAccess
      * @return A consistently sorted list of character menu items to be displayed on each character screen
      */
-    public static List<CharacterMenuItem> getSortedMenuItems(RegistryAccess registryAccess) {
+    public static List<Holder<CharacterMenuItem>> getSortedMenuItems(RegistryAccess registryAccess) {
         if (characterMenuItems == null) {
-            characterMenuItems = sortItems(
-                    registryAccess.lookupOrThrow(WotrRegistries.Keys.CHARACTER_MENU_ITEMS).stream().toList());
+            Registry<CharacterMenuItem> registry = registryAccess
+                    .lookupOrThrow(WotrRegistries.Keys.CHARACTER_MENU_ITEMS);
+            characterMenuItems = sortItems(registry.stream().map(registry::wrapAsHolder).toList());
         }
         return characterMenuItems;
     }
@@ -46,32 +49,32 @@ public abstract class BaseCharacterMenu extends AbstractContainerMenu {
      * @param items
      * @return A sorted list of {@link CharacterMenuItem}
      */
-    private static List<CharacterMenuItem> sortItems(List<CharacterMenuItem> items) {
-        List<CharacterMenuItem> open = new ArrayList<>(items);
+    private static List<Holder<CharacterMenuItem>> sortItems(List<Holder<CharacterMenuItem>> items) {
+        List<Holder<CharacterMenuItem>> open = new ArrayList<>(items);
         Set<MenuType<?>> closed = new HashSet<>();
-        List<CharacterMenuItem> result = new ArrayList<>();
+        List<Holder<CharacterMenuItem>> result = new ArrayList<>();
         // Detect reference loops
         int remaining = Integer.MAX_VALUE;
         while (!open.isEmpty() && open.size() < remaining) {
             remaining = open.size();
 
-            Iterator<CharacterMenuItem> iterator = open.iterator();
+            Iterator<Holder<CharacterMenuItem>> iterator = open.iterator();
             while (iterator.hasNext()) {
-                CharacterMenuItem item = iterator.next();
-                if (item.orderHint() == OrderHint.NONE || item.relativeTo() == null) {
+                Holder<CharacterMenuItem> item = iterator.next();
+                if (item.value().orderHint() == OrderHint.NONE || item.value().relativeTo() == null) {
                     result.add(item);
-                    closed.add(item.menuType());
+                    closed.add(item.value().menuType());
                     iterator.remove();
-                } else if (closed.contains(item.relativeTo())) {
+                } else if (closed.contains(item.value().relativeTo())) {
                     int index = 0;
                     while (index < result.size()) {
-                        if (result.get(index).menuType() == item.relativeTo()) {
+                        if (result.get(index).value().menuType() == item.value().relativeTo()) {
                             break;
                         }
                         index++;
                     }
-                    result.add((item.orderHint() == OrderHint.BEFORE ? index : index + 1), item);
-                    closed.add(item.menuType());
+                    result.add((item.value().orderHint() == OrderHint.BEFORE ? index : index + 1), item);
+                    closed.add(item.value().menuType());
                     iterator.remove();
                 }
             }

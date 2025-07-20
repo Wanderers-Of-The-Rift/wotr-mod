@@ -25,6 +25,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+/**
+ * A DataComponent for items that give an amount of currency when consumed
+ * 
+ * @param currency
+ * @param amount
+ */
 public record CurrencyProvider(Holder<Currency> currency, int amount) implements ConsumableListener, TooltipProvider {
     public static final Codec<CurrencyProvider> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Currency.CODEC.fieldOf("currency").forGetter(CurrencyProvider::currency),

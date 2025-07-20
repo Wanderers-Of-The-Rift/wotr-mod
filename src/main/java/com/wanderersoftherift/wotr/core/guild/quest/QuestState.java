@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.network.guild.QuestGoalUpdatePayload;
+import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;

@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.core.guild.quest;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
-import com.wanderersoftherift.wotr.network.guild.QuestRemovedPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;

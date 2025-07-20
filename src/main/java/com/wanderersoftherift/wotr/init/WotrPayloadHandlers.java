@@ -18,19 +18,18 @@ import com.wanderersoftherift.wotr.network.ability.SetEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
-import com.wanderersoftherift.wotr.network.charactermenu.SelectCharacterMenuPayload;
-import com.wanderersoftherift.wotr.network.guild.AbandonQuestPayload;
-import com.wanderersoftherift.wotr.network.guild.AcceptQuestPayload;
-import com.wanderersoftherift.wotr.network.guild.ActiveQuestsReplicationPayload;
-import com.wanderersoftherift.wotr.network.guild.AvailableQuestsPayload;
-import com.wanderersoftherift.wotr.network.guild.CompleteQuestPayload;
-import com.wanderersoftherift.wotr.network.guild.HandInQuestItemPayload;
-import com.wanderersoftherift.wotr.network.guild.QuestAcceptedPayload;
-import com.wanderersoftherift.wotr.network.guild.QuestGoalUpdatePayload;
-import com.wanderersoftherift.wotr.network.guild.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.network.guild.SelectTradePayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
+import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.AcceptQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.ActiveQuestsReplicationPayload;
+import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
+import com.wanderersoftherift.wotr.network.quest.CompleteQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
+import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -121,8 +120,6 @@ public class WotrPayloadHandlers {
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,
                 OpenCharacterMenuPayload::handleOnServer);
-        registrar.playToServer(SelectCharacterMenuPayload.TYPE, SelectCharacterMenuPayload.STREAM_CODEC,
-                SelectCharacterMenuPayload::handleOnServer);
     }
 
     @SubscribeEvent

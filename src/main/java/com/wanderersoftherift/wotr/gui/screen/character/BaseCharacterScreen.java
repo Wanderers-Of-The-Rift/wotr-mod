@@ -6,20 +6,19 @@ import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
-import com.wanderersoftherift.wotr.network.charactermenu.SelectCharacterMenuPayload;
+import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * The base character screen, which all character subscreens implement. This provides the common appearance of all
@@ -43,12 +42,9 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
         topPos = 0;
         menuSelection = new ScrollContainerWidget<>(0, 0, MENU_BAR_WIDTH, 320);
 
-        List<CharacterMenuItem> items = BaseCharacterMenu.getSortedMenuItems(minecraft.level.registryAccess());
-        for (int i = 0; i < items.size(); i++) {
-            var item = items.get(i);
+        for (var item : BaseCharacterMenu.getSortedMenuItems(minecraft.level.registryAccess())) {
             menuSelection.children()
-                    .add(new MenuItem(item.name(), i, 0, 0, MENU_BAR_WIDTH - 6, font,
-                            menu.getType() == item.menuType()));
+                    .add(new MenuItem(item, 0, 0, MENU_BAR_WIDTH - 6, font, menu.getType() == item.value().menuType()));
         }
         addRenderableWidget(menuSelection);
     }
@@ -85,13 +81,13 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
 
         private final Font font;
         private final boolean selected;
-        private final int index;
+        private final Holder<CharacterMenuItem> characterMenuItem;
 
-        public MenuItem(Component title, int index, int x, int y, int width, Font font, boolean selected) {
-            super(x, y, width, MENU_ITEM_HEIGHT, title);
+        public MenuItem(Holder<CharacterMenuItem> characterMenu, int x, int y, int width, Font font, boolean selected) {
+            super(x, y, width, MENU_ITEM_HEIGHT, characterMenu.value().name());
             this.font = font;
             this.selected = selected;
-            this.index = index;
+            this.characterMenuItem = characterMenu;
         }
 
         @Override
@@ -121,7 +117,7 @@ public abstract class BaseCharacterScreen<T extends BaseCharacterMenu> extends E
         @Override
         public void onClick(double mouseX, double mouseY, int button) {
             if (!selected) {
-                PacketDistributor.sendToServer(new SelectCharacterMenuPayload(index));
+                PacketDistributor.sendToServer(new OpenCharacterMenuPayload(characterMenuItem));
             }
         }
     }
