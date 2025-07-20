@@ -62,6 +62,58 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
         this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.of(seed));
     }
 
+    public RiftConfig withSeedIfAbsent(int seed) {
+        if (this.seed.isPresent()) {
+            return this;
+        } else {
+            return withSeed(seed);
+        }
+    }
+
+    public RiftConfig withLayoutIfAbsent(RiftLayout.Factory layout) {
+        if (this.layout.isPresent()) {
+            return this;
+        } else {
+            return withLayout(layout);
+        }
+    }
+
+    public RiftConfig withObjectiveIfAbsent(Holder<ObjectiveType> objective) {
+        if (this.objective.isPresent()) {
+            return this;
+        } else {
+            return withObjective(objective);
+        }
+    }
+
+    public RiftConfig withThemeIfAbsent(Holder<RiftTheme> theme) {
+        if (this.theme.isPresent()) {
+            return this;
+        } else {
+            return withTheme(theme);
+        }
+    }
+
+    public RiftConfig withSeed(int seed) {
+        return new RiftConfig(tier, theme, objective, layout, Optional.of(seed));
+    }
+
+    public RiftConfig withLayout(RiftLayout.Factory layout) {
+        return new RiftConfig(tier, theme, objective, Optional.of(layout), seed);
+    }
+
+    public RiftConfig withObjective(Holder<ObjectiveType> objective) {
+        return new RiftConfig(tier, theme, Optional.of(objective), layout, seed);
+    }
+
+    public RiftConfig withTheme(Holder<RiftTheme> theme) {
+        return new RiftConfig(tier, Optional.of(theme), objective, layout, seed);
+    }
+
+    public RiftConfig withTier(int tier) {
+        return new RiftConfig(tier, theme, objective, layout, seed);
+    }
+
     /**
      * @deprecated Rather than having RiftConfig on an item should migrate to using individual data components
      * @return Components to add to the tooltip
@@ -91,62 +143,5 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
                     .withColor(ChatFormatting.GRAY.getColor()));
         });
         return result;
-    }
-
-    public Builder modify() {
-        return new Builder(this);
-    }
-
-    public static class Builder {
-        private int tier;
-        private Optional<Holder<RiftTheme>> theme;
-        private Optional<Holder<ObjectiveType>> objective;
-        private Optional<RiftLayout.Factory> layout;
-        private Optional<Integer> seed;
-
-        public Builder() {
-            this.tier = 0;
-            this.theme = Optional.empty();
-            this.objective = Optional.empty();
-            this.layout = Optional.empty();
-            this.seed = Optional.empty();
-        }
-
-        private Builder(RiftConfig source) {
-            this.tier = source.tier;
-            this.theme = source.theme;
-            this.objective = source.objective;
-            this.layout = source.layout;
-            this.seed = source.seed;
-        }
-
-        public Builder tier(int tier) {
-            this.tier = tier;
-            return this;
-        }
-
-        public Builder theme(Holder<RiftTheme> theme) {
-            this.theme = Optional.of(theme);
-            return this;
-        }
-
-        public Builder objective(Holder<ObjectiveType> objective) {
-            this.objective = Optional.of(objective);
-            return this;
-        }
-
-        public Builder layout(RiftLayout.Factory layout) {
-            this.layout = Optional.of(layout);
-            return this;
-        }
-
-        public Builder seed(int seed) {
-            this.seed = Optional.of(seed);
-            return this;
-        }
-
-        public RiftConfig build() {
-            return new RiftConfig(tier, theme, objective, layout, seed);
-        }
     }
 }

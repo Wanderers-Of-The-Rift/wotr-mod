@@ -64,7 +64,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(tier));
-        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().tier(tier).build());
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.withTier(tier));
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_tier"), tier), true);
@@ -77,7 +77,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().theme(theme).build());
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.withTheme(theme));
         context.getSource()
                 .sendSuccess(
                         () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
@@ -92,7 +92,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().objective(objective).build());
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.withObjective(objective));
         context.getSource()
                 .sendSuccess(() -> Component.translatable(
                         WanderersOfTheRift.translationId("command", "rift_key.set_objective"),
@@ -106,7 +106,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(WotrDataComponentType.RIFT_CONFIG, config.modify().seed(seed).build());
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.withSeed(seed));
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_seed"), seed), true);
