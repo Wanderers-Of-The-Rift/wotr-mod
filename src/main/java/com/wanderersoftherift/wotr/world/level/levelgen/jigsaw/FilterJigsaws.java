@@ -1,13 +1,12 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.jigsaw;
 
-import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.Iterator;
 import java.util.List;
 
-public record FilterJigsaws(String namespace, String pathPattern) implements RiftGeneratable.JigsawProcessor {
+public record FilterJigsaws(String namespace, String pathPattern) implements JigsawListProcessor {
     @Override
     public void processJigsaws(List<StructureTemplate.JigsawBlockInfo> jigsaws, RandomSource random) {
         Iterator<StructureTemplate.JigsawBlockInfo> iterator = jigsaws.iterator();

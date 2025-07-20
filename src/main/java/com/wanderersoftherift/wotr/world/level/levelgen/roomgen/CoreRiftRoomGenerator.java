@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.core.Vec3i;
@@ -13,8 +14,8 @@ import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public record CoreRiftRoomGenerator(PositionalRandomFactory randomFactory,
-        List<RiftGeneratable.JigsawProcessor> jigsawProcessors) implements RiftRoomGenerator {
+public record CoreRiftRoomGenerator(PositionalRandomFactory randomFactory, List<JigsawListProcessor> jigsawProcessors)
+        implements RiftRoomGenerator {
     @Override
     public CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,

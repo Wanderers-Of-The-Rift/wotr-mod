@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
@@ -38,7 +39,7 @@ public interface RiftGeneratable {
             MinecraftServer server,
             RandomSource random,
             long[] mask,
-            List<JigsawProcessor> jigsawProcessors) {
+            List<JigsawListProcessor> jigsawProcessors) {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
@@ -224,10 +225,6 @@ public interface RiftGeneratable {
 
     private static Direction auxiliaryDirection(StructureTemplate.JigsawBlockInfo jigsaw, TripleMirror mirror) {
         return mirror.applyToBlockState(jigsaw.info().state()).getValue(JigsawBlock.ORIENTATION).top();
-    }
-
-    interface JigsawProcessor {
-        void processJigsaws(List<StructureTemplate.JigsawBlockInfo> jigsaws, RandomSource random);
     }
 
 }
