@@ -78,7 +78,6 @@ public class AnomalyBlockEntity extends BlockEntity {
 //  ]
 //}
 
-
     public InteractionResult onAnomalyClick(Player player, InteractionHand hand) {
         if (!level.isClientSide && !isShutDown) {
             isShutDown = true;
