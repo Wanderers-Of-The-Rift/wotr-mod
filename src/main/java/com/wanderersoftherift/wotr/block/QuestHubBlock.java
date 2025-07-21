@@ -27,7 +27,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A block that provides access to selecting and completing quests
@@ -36,6 +38,7 @@ public class QuestHubBlock extends Block {
 
     public static final Component CONTAINER_TITLE = Component
             .translatable(WanderersOfTheRift.translationId("container", "quest.selection"));
+    private static final int QUEST_SELECTION_SIZE = 5;
 
     public QuestHubBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -53,12 +56,21 @@ public class QuestHubBlock extends Block {
 
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
-            List<QuestState> quests = generateQuestList(level, serverPlayer);
+            List<QuestState> availableQuests;
+            if (serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS).isEmpty()) {
+                availableQuests = generateQuestList(level, serverPlayer);
+                serverPlayer.setData(WotrAttachments.AVAILABLE_QUESTS, availableQuests);
+            } else {
+                availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
+            }
+
             player.openMenu(
-                    new SimpleMenuProvider((containerId, playerInventory, p) -> new QuestGiverMenu(containerId,
-                            playerInventory, ContainerLevelAccess.create(level, pos), quests), CONTAINER_TITLE)
+                    new SimpleMenuProvider(
+                            (containerId, playerInventory, p) -> new QuestGiverMenu(containerId, playerInventory,
+                                    ContainerLevelAccess.create(level, pos), new ArrayList<>(availableQuests)),
+                            CONTAINER_TITLE)
             );
-            PacketDistributor.sendToPlayer(serverPlayer, new AvailableQuestsPayload(quests));
+            PacketDistributor.sendToPlayer(serverPlayer, new AvailableQuestsPayload(availableQuests));
         } else {
             player.openMenu(
                     new SimpleMenuProvider(
@@ -74,9 +86,15 @@ public class QuestHubBlock extends Block {
     private static @NotNull List<QuestState> generateQuestList(Level level, ServerPlayer serverPlayer) {
         LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
         Registry<Quest> questRegistry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
-        return questRegistry.stream()
-                .map(x -> new QuestState(questRegistry.wrapAsHolder(x), x.generateGoals(params),
-                        x.generateRewards(params)))
-                .toList();
+        List<Quest> quests = questRegistry.stream().collect(Collectors.toList());
+        List<QuestState> generatedQuests = new ArrayList<>();
+        for (int i = 0; i < QUEST_SELECTION_SIZE && !quests.isEmpty(); i++) {
+            int index = level.random.nextInt(quests.size());
+            Quest quest = quests.get(index);
+            generatedQuests.add(new QuestState(questRegistry.wrapAsHolder(quest), quest.generateGoals(params),
+                    quest.generateRewards(params)));
+            quests.remove(index);
+        }
+        return generatedQuests;
     }
 }
