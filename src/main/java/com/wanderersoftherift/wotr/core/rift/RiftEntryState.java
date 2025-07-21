@@ -31,12 +31,12 @@ public record RiftEntryState(InventorySnapshot entranceInventory, ResourceKey<Le
             StatSnapshot.CODEC.fieldOf("stats").forGetter(RiftEntryState::statSnapshot)
     ).apply(ins, RiftEntryState::new));
 
-    public static void pushParticipation(ServerPlayer player, ResourceKey<Level> riftDimension) {
-        var currentParticipations = player.getData(WotrAttachments.PARTICIPATIONS);
-        var newParticipation = new RiftEntryState(
+    public static void pushEntryState(ServerPlayer player, ResourceKey<Level> riftDimension) {
+        var currentEntryStates = player.getData(WotrAttachments.RIFT_ENTRY_STATES);
+        var newEntryState = new RiftEntryState(
                 InventorySnapshotSystem.captureSnapshot(player,
-                        currentParticipations.stream().map(it -> it.entranceInventory).toList()),
+                        currentEntryStates.stream().map(it -> it.entranceInventory).toList()),
                 player.level().dimension(), riftDimension, player.position(), new StatSnapshot(player));
-        currentParticipations.add(newParticipation);
+        currentEntryStates.add(newEntryState);
     }
 }

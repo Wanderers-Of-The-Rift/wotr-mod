@@ -96,7 +96,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
 
         riftData.addPlayer(player.getUUID());
 
-        RiftEntryState.pushParticipation(player, lvl.dimension());
+        RiftEntryState.pushEntryState(player, lvl.dimension());
 
         var riftSpawnCoords = getRiftSpawnCoords();
         player.teleportTo(lvl, riftSpawnCoords.x, riftSpawnCoords.y, riftSpawnCoords.z, Set.of(), player.getYRot(), 0,

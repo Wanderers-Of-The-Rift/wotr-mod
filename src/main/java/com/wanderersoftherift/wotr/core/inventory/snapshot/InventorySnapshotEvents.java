@@ -9,32 +9,28 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.util.stream.Collectors;
-
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class InventorySnapshotEvents {
     @SubscribeEvent
     private static void onDropsFromDeath(LivingDropsEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            var deathParticipation = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
-            if (deathParticipation != RiftEntryState.EMPTY) {
-                var remainingParticipations = player.getData(WotrAttachments.PARTICIPATIONS);
-                InventorySnapshotSystem.retainSnapshotItemsOnDeath(player, event,
-                        deathParticipation.entranceInventory(),
-                        remainingParticipations.stream().map(it -> it.entranceInventory()).toList());
-            }
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
         }
+        var deathRiftEntryState = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
+        if (deathRiftEntryState == RiftEntryState.EMPTY) {
+            return;
+        }
+        var remainingRiftEntryStates = player.getData(WotrAttachments.RIFT_ENTRY_STATES);
+        InventorySnapshotSystem.retainSnapshotItemsOnDeath(player, event, deathRiftEntryState.entranceInventory(),
+                remainingRiftEntryStates.stream().map(RiftEntryState::entranceInventory).toList());
     }
 
     @SubscribeEvent
     private static void onPlayerDeath(PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.isEndConquered() && event.getEntity() instanceof ServerPlayer player) {
-            InventorySnapshotSystem.restoreItemsOnRespawn(player,
-                    player.getData(WotrAttachments.PARTICIPATIONS)
-                            .stream()
-                            .map(it -> it.entranceInventory().id())
-                            .collect(Collectors.toSet()));
+        if (event.isEndConquered() || !(event.getEntity() instanceof ServerPlayer player)) {
+            return;
         }
+        InventorySnapshotSystem.restoreItemsOnRespawn(player, InventorySnapshotSystem.snapshotsToIdSet(
+                player.getData(WotrAttachments.RIFT_ENTRY_STATES).stream().map(RiftEntryState::entranceInventory)));
     }
-
 }

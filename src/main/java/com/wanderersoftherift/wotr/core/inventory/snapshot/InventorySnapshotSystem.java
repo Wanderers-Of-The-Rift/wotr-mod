@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * System for capturing Inventory Snapshots and applying them on death and respawn of a player
@@ -48,6 +49,12 @@ public final class InventorySnapshotSystem {
     private InventorySnapshotSystem() {
     }
 
+    public static HashSet<UUID> snapshotsToIdSet(Stream<InventorySnapshot> snapshotStream) {
+        var snapshotIds = new HashSet<UUID>();
+        snapshotStream.map(InventorySnapshot::id).forEach(snapshotIds::add);
+        return snapshotIds;
+    }
+
     /**
      * Generates a snapshot for the given player. Stackable items that are part of any snapshot in `validSnapshot` will
      * not be overwritten.
@@ -58,9 +65,7 @@ public final class InventorySnapshotSystem {
      */
 
     public static InventorySnapshot captureSnapshot(ServerPlayer player, List<InventorySnapshot> validSnapshots) {
-        var snapshotIds = new HashSet<UUID>();
-        validSnapshots.stream().map(it -> it.id()).forEach(snapshotIds::add);
-        clearItemIds(player, snapshotIds);
+        clearItemIds(player, snapshotsToIdSet(validSnapshots.stream()));
         return new InventorySnapshotBuilder(player).build();
     }
 
@@ -99,12 +104,13 @@ public final class InventorySnapshotSystem {
      */
     public static void restoreItemsOnRespawn(ServerPlayer player, Set<UUID> keptIds) {
         for (ItemStack item : player.getData(WotrAttachments.RESPAWN_ITEMS)) {
-            if (!player.getInventory().add(item)) {
-                item.applyComponents(REMOVE_SNAPSHOT_ID_PATCH);
-                player.level()
-                        .addFreshEntity(new ItemEntity(player.level(), player.position().x, player.position().y,
-                                player.position().z, item));
+            if (player.getInventory().add(item)) {
+                continue;
             }
+            item.applyComponents(REMOVE_SNAPSHOT_ID_PATCH);
+            player.level()
+                    .addFreshEntity(new ItemEntity(player.level(), player.position().x, player.position().y,
+                            player.position().z, item));
         }
         player.setData(WotrAttachments.RESPAWN_ITEMS, new ArrayList<>());
         clearItemIds(player, keptIds);
@@ -147,14 +153,14 @@ public final class InventorySnapshotSystem {
             }
             if (item.isStackable()) {
                 items.add(item.copy());
-            } else {
-                if (!item.has(WotrDataComponentType.INVENTORY_SNAPSHOT_ID)) {
-                    containerItem.applyComponents(addSnapshotIdPatch);
-                }
+                return;
+            }
+            if (!item.has(WotrDataComponentType.INVENTORY_SNAPSHOT_ID)) {
+                containerItem.applyComponents(addSnapshotIdPatch);
+            }
 
-                for (ContainerItemWrapper content : getContents(containerTypes, item)) {
-                    captureItem(content);
-                }
+            for (ContainerItemWrapper content : getContents(containerTypes, item)) {
+                captureItem(content);
             }
         }
 
@@ -175,9 +181,8 @@ public final class InventorySnapshotSystem {
             this.player = player;
             this.containerTypes = player.level().registryAccess().lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
             this.snapshotItems = new ArrayList<>(lastSnapshot.items());
-            this.snapshotIds = new HashSet<>();
-            snapshotIds.add(lastSnapshot.id());
-            otherSnapshots.stream().map(it -> it.id()).forEach(snapshotIds::add);
+            this.snapshotIds = snapshotsToIdSet(otherSnapshots.stream());
+            this.snapshotIds.add(lastSnapshot.id());
             processInventoryItems(heldItems);
         }
 
@@ -259,20 +264,18 @@ public final class InventorySnapshotSystem {
             int index = 0;
             while (dropCount > 0 && index < snapshotItems.size()) {
                 ItemStack snapshotItem = snapshotItems.get(index);
-                if (ItemStack.isSameItemSameComponents(item, snapshotItem)) {
-
-                    if (dropCount < snapshotItem.getCount()) {
-                        var newStack = snapshotItem.copy();
-                        newStack.shrink(dropCount);
-                        snapshotItems.set(index, newStack);
-                        dropCount = 0;
-                    } else {
-                        snapshotItems.remove(index);
-                        dropCount -= snapshotItem.getCount();
-                    }
-                } else {
+                if (!ItemStack.isSameItemSameComponents(item, snapshotItem)) {
                     index++;
+                    continue;
                 }
+                if (dropCount < snapshotItem.getCount()) {
+                    var newStack = snapshotItem.copy();
+                    newStack.shrink(dropCount);
+                    snapshotItems.set(index, newStack);
+                    return 0;
+                }
+                snapshotItems.remove(index);
+                dropCount -= snapshotItem.getCount();
             }
             return dropCount;
         }

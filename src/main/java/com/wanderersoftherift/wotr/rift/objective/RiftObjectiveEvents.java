@@ -79,8 +79,11 @@ public class RiftObjectiveEvents {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        var deathRiftEntryState = event.getEntity().getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
-        if (deathRiftEntryState == RiftEntryState.EMPTY || !(event.getEntity() instanceof ServerPlayer player)) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        var deathRiftEntryState = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
+        if (deathRiftEntryState == RiftEntryState.EMPTY) {
             return;
         }
         // TODO: what if player dies in multiple rifts simultaneously?
@@ -98,36 +101,38 @@ public class RiftObjectiveEvents {
 
     @SubscribeEvent
     public static void onPlayerLeaveLevel(PlayerEvent.PlayerChangedDimensionEvent event) {
-        var exitedRiftEntryState = event.getEntity().getData(WotrAttachments.EXITED_RIFT_ENTRY_STATE);
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        var exitedRiftEntryState = player.getData(WotrAttachments.EXITED_RIFT_ENTRY_STATE);
         ServerLevel riftLevel = RiftLevelManager.getRiftLevel(exitedRiftEntryState.riftDimension());
 
-        if (riftLevel == null || exitedRiftEntryState == RiftEntryState.EMPTY
-                || !(event.getEntity() instanceof ServerPlayer player)) {
+        if (riftLevel == null || exitedRiftEntryState == RiftEntryState.EMPTY) {
             return;
         }
         RiftData riftData = RiftData.get(riftLevel);
-        if (RiftData.get(riftLevel).containsPlayer(event.getEntity().getUUID())) {
+        if (RiftData.get(riftLevel).containsPlayer(player.getUUID())) {
             // Player hasn't actually left the level
             return;
         }
 
         OngoingObjective objective = LevelRiftObjectiveData.getFromLevel(riftLevel).getObjective();
         boolean success = objective != null && objective.isComplete();
-        event.getEntity()
-                .openMenu(new SimpleMenuProvider(
-                        (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
-                                ContainerLevelAccess.create(event.getEntity().level(), p.getOnPos()),
-                                success ? RiftCompleteMenu.FLAG_SUCCESS : RiftCompleteMenu.FLAG_SURVIVED,
-                                exitedRiftEntryState.statSnapshot().getCustomStatDelta(player)), // this will include
-                                                                                                 // stats from
-                        // subrifts, maybe todo only this
-                        // specific rift?
-                        Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
+        player.openMenu(new SimpleMenuProvider(
+                (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
+                        ContainerLevelAccess.create(player.level(), p.getOnPos()),
+                        success ? RiftCompleteMenu.FLAG_SUCCESS : RiftCompleteMenu.FLAG_SURVIVED, exitedRiftEntryState
+                                .statSnapshot()
+                                .getCustomStatDelta(player)/*
+                                                            * this will include stats from subrifts, maybe todo only
+                                                            * this specific rift?
+                                                            */),
+                Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
 
-        if (event.getEntity().containerMenu instanceof RiftCompleteMenu menu) {
+        if (player.containerMenu instanceof RiftCompleteMenu menu) {
             generateObjectiveLoot(menu, player, success ? SUCCESS_TABLE : SURVIVE_TABLE, riftData.getConfig());
         }
-        event.getEntity().setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
+        player.setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
     }
 
     private static void generateObjectiveLoot(

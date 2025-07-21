@@ -30,8 +30,8 @@ public class WotrAttachments {
                     .serialize(ItemStack.CODEC.listOf())
                     .copyOnDeath()
                     .build());
-    public static final Supplier<AttachmentType<List<RiftEntryState>>> PARTICIPATIONS = ATTACHMENT_TYPES.register(
-            "rift_participations",
+    public static final Supplier<AttachmentType<List<RiftEntryState>>> RIFT_ENTRY_STATES = ATTACHMENT_TYPES.register(
+            "rift_entry_states",
             () -> AttachmentType.builder(() -> (List<RiftEntryState>) new ArrayList<RiftEntryState>())
                     .serialize(MutableListCodec.of(RiftEntryState.CODEC))
                     .copyOnDeath()
