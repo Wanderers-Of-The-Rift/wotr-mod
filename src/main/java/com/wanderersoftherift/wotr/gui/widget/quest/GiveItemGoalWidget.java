@@ -14,10 +14,13 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Display widget for the {@link GiveItemGoal}
@@ -25,11 +28,13 @@ import org.jetbrains.annotations.NotNull;
 public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     private static final String TEXT_ID = WanderersOfTheRift.translationId("container", "quest.goal.give");
     private static final int ICON_SIZE = 16;
+    private static final float ITEM_DISPLAY_TIME = 30.0f;
     private final Font font;
     private final GiveItemGoal goal;
 
     private int progress;
     private Style textStyle = Style.EMPTY.withColor(ChatFormatting.DARK_GRAY);
+    private float time = 0;
 
     public GiveItemGoalWidget(GiveItemGoal goal) {
         super(0, 0, 100, ICON_SIZE, Component.empty());
@@ -51,17 +56,25 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        time += partialTick;
+
         guiGraphics.drawString(font, getMessage(), getX(), getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK,
                 false);
         int messageWidth = font.width(getMessage());
         ContextMap contextmap = SlotDisplayContext.fromLevel(Minecraft.getInstance().level);
-        ItemStack displayItem = goal.item().display().resolveForFirstStack(contextmap);
-        guiGraphics.renderFakeItem(displayItem, getX() + messageWidth, getY());
+        List<ItemStack> possibleItems = goal.item().display().resolveForStacks(contextmap);
+        if (!possibleItems.isEmpty()) {
+            ItemStack displayItem = possibleItems.get(Mth.floor(this.time / ITEM_DISPLAY_TIME) % possibleItems.size());
+            guiGraphics.renderFakeItem(displayItem, getX() + messageWidth, getY());
 
-        if (mouseX >= getX() + messageWidth && mouseX <= getX() + messageWidth + ICON_SIZE && mouseY >= getY() + 1
-                && mouseY <= getY() + ICON_SIZE + 1) {
-            setTooltip(Tooltip.create(
-                    ComponentUtil.joinWithNewLines(Screen.getTooltipFromItem(Minecraft.getInstance(), displayItem))));
+            if (mouseX >= getX() + messageWidth && mouseX <= getX() + messageWidth + ICON_SIZE && mouseY >= getY() + 1
+                    && mouseY <= getY() + ICON_SIZE + 1) {
+                setTooltip(Tooltip.create(
+                        ComponentUtil
+                                .joinWithNewLines(Screen.getTooltipFromItem(Minecraft.getInstance(), displayItem))));
+            } else {
+                setTooltip(null);
+            }
         } else {
             setTooltip(null);
         }

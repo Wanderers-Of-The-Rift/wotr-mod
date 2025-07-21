@@ -7,7 +7,7 @@
     },
     {
       "type": "wotr:fixed_give_item",
-      "item": "minecraft:iron_ingot",
+      "item": "#minecraft:planks",
       "count": 4
     }
   ],
