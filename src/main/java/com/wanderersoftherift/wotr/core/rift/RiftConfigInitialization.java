@@ -96,12 +96,7 @@ public class RiftConfigInitialization {
         return config;
     }
 
-    private static void initializeJigsawProcessors(ArrayList<JigsawListProcessor> jigsawProcessorList) {
-        jigsawProcessorList.add(new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"));
-        jigsawProcessorList.add(new ShuffleJigsaws());
-    }
-
-    public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {
+    static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {
 
         var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
                 seed * 5624397638181617163L);
@@ -110,6 +105,11 @@ public class RiftConfigInitialization {
 
         return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, themeRandom)
                 .orElseThrow(() -> new IllegalStateException("No rift themes available"));
+    }
+
+    private static void initializeJigsawProcessors(ArrayList<JigsawListProcessor> jigsawProcessorList) {
+        jigsawProcessorList.add(new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"));
+        jigsawProcessorList.add(new ShuffleJigsaws());
     }
 
     private static RiftRoomGenerator defaultRoomGenerator(List<JigsawListProcessor> jigsawListProcessors) {
@@ -141,10 +141,8 @@ public class RiftConfigInitialization {
                 new Vec3i(-1, -1, -1)));
         result.add(new RingLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_stable"),
                 RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5));
-        result.add(new RingLayer.Factory(
-                new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_unstable"),
-                        RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
-                10));
+        result.add(new RingLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_unstable"),
+                RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 10));
         result.add(new ChaosLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
                 RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY)));
         return result;

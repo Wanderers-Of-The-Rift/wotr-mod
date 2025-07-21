@@ -48,8 +48,8 @@ public record CachedRiftRoomGenerator(
                 return oldFuture;
             }
             try {
-                var gn = oldFuture.get(0, TimeUnit.MICROSECONDS);
-                if (gn.refersTo(null)) {
+                var futureNow = oldFuture.get(0, TimeUnit.MICROSECONDS);
+                if (futureNow.refersTo(null)) {
                     return newFuture;
                 } else {
                     return oldFuture;

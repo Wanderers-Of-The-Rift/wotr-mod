@@ -31,8 +31,6 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.Optional;
-
 /**
  * Event subscriber for objective handling
  */
@@ -57,24 +55,22 @@ public class RiftObjectiveEvents {
                                 RandomSource.create(event.getConfig().seed().get() + 668_453_148))
                         .orElseThrow(() -> new IllegalStateException("No objectives available")));
 
-        var config = event.getConfig();
-        event.setConfig(config.withObjective(objectiveType));
+        event.setConfig(event.getConfig().withObjective(objectiveType));
     }
 
     @SubscribeEvent
     public static void onPlayerJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getEntity().level() instanceof ServerLevel serverLevel
-                && event.getEntity() instanceof ServerPlayer player) {
-            var data = RiftData.get(serverLevel);
-            if (data.getObjective().isPresent()) {
-                PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(data.getObjective()));
-                Component objectiveStartMessage = data.getObjective().get().getObjectiveStartMessage();
-                if (objectiveStartMessage != null) {
-                    player.displayClientMessage(objectiveStartMessage, false);
-                }
-            } else {
-                PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(Optional.empty()));
-            }
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        var objective = RiftData.get(player.serverLevel()).getObjective();
+        PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(objective));
+        if (objective.isEmpty()) {
+            return;
+        }
+        Component objectiveStartMessage = objective.get().getObjectiveStartMessage();
+        if (objectiveStartMessage != null) {
+            player.displayClientMessage(objectiveStartMessage, false);
         }
     }
 
