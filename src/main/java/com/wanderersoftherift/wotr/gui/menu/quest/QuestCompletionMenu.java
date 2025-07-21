@@ -3,12 +3,14 @@ package com.wanderersoftherift.wotr.gui.menu.quest;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import com.wanderersoftherift.wotr.core.guild.quest.Reward;
 import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.item.handler.QuestItemStackHandler;
+import com.wanderersoftherift.wotr.network.quest.QuestRewardsPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -23,8 +25,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -125,20 +129,27 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
     public void completeQuest(ServerPlayer player, UUID questId) {
         QuestState questState = getQuestState();
-        if (!questState.getId().equals(questId) || !questState.isComplete()) {
+        if (!questState.getId().equals(questId) || !questState.isComplete()
+                || !player.getData(WotrAttachments.ACTIVE_QUESTS).remove(questState.getId())) {
             return;
         }
+
+        // Remove the quest so the player cannot take it again, if it is still available
+        player.getData(WotrAttachments.AVAILABLE_QUESTS).removeIf(x -> x.getId().equals(questState.getId()));
+        player.closeContainer();
+
+        List<Reward> rewards = questState.getRewards();
         access.execute((level, blockPos) -> {
-            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(player, handInItems);
-            player.closeContainer();
             player.openMenu(new SimpleMenuProvider(
                     (containerId, playerInventory, p) -> {
                         var menu = new QuestRewardMenu(containerId, playerInventory,
-                                ContainerLevelAccess.create(level, p.getOnPos()), quests, selectedQuest.get());
-                        menu.addRewards(player);
+                                ContainerLevelAccess.create(level, p.getOnPos()));
+                        menu.setRewards(p, rewards);
                         return menu;
                     }, Component.translatable(WanderersOfTheRift.translationId("container", "quest_complete"))));
         });
+        PacketDistributor.sendToPlayer(player,
+                new QuestRewardsPayload(rewards.stream().filter(x -> !x.isItem()).toList()));
     }
 
     @Override

@@ -69,13 +69,16 @@ public final class ActiveQuests {
      * Removes a quest from the active quests
      *
      * @param questId
+     * @return whether a quest was removed
      */
-    public void remove(UUID questId) {
+    public boolean remove(UUID questId) {
         if (data.quests().remove(questId) != null) {
             if (holder instanceof ServerPlayer player) {
                 PacketDistributor.sendToPlayer(player, new QuestRemovedPayload(questId));
             }
+            return true;
         }
+        return false;
     }
 
     /**

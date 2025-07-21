@@ -30,6 +30,7 @@ import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestRewardsPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -98,6 +99,8 @@ public class WotrPayloadHandlers {
                 WalletUpdatePayload::handleOnClient);
         registrar.playToServer(SelectTradePayload.TYPE, SelectTradePayload.STREAM_CODEC,
                 SelectTradePayload::handleOnServer);
+
+        // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
                 AcceptQuestPayload::handleOnServer);
         registrar.playToClient(ActiveQuestsReplicationPayload.TYPE, ActiveQuestsReplicationPayload.STREAM_CODEC,
@@ -116,6 +119,8 @@ public class WotrPayloadHandlers {
                 AbandonQuestPayload::handleOnServer);
         registrar.playToClient(AvailableQuestsPayload.TYPE, AvailableQuestsPayload.STREAM_CODEC,
                 AvailableQuestsPayload::handleOnClient);
+        registrar.playToClient(QuestRewardsPayload.TYPE, QuestRewardsPayload.STREAM_CODEC,
+                QuestRewardsPayload::handleOnClient);
 
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,
