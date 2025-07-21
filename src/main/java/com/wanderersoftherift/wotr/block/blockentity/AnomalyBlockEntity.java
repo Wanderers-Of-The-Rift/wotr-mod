@@ -10,6 +10,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -54,6 +56,29 @@ public class AnomalyBlockEntity extends BlockEntity {
         }
     }
 
+//    desired datapackable json functioning
+//{
+//  "effects": [
+//    {
+//      "weight": 3,
+//      "trigger": "on_click",
+//      "actions": [
+//        { "type": "mob_effect", "effect": "minecraft:regeneration", "duration": 400, "amplifier": 1 },
+//        { "type": "spawn_entity", "entity": "minecraft:zombie", "count": 1 }
+//      ]
+//    },
+//    {
+//      "weight": 2,
+//      "trigger": "on_item",
+//      "item": "minecraft:diamond",
+//      "actions": [
+//        { "type": "mob_effect", "effect": "minecraft:levitation", "duration": 200, "amplifier": 2 }
+//      ]
+//    }
+//  ]
+//}
+
+
     public InteractionResult onAnomalyClick(Player player, InteractionHand hand) {
         if (!level.isClientSide && !isShutDown) {
             isShutDown = true;
@@ -69,8 +94,7 @@ public class AnomalyBlockEntity extends BlockEntity {
             player.displayClientMessage(Component.literal("Anomaly shut down"), false);
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 400, 1));
             // Spawn zombie at random nearby location (like spawners)
-            net.minecraft.world.entity.monster.Zombie zombie = new net.minecraft.world.entity.monster.Zombie(
-                    net.minecraft.world.entity.EntityType.ZOMBIE, level);
+            Zombie zombie = new Zombie(EntityType.ZOMBIE, level);
 
             // Random offset similar to spawner logic
             double offsetX = (level.random.nextDouble() - level.random.nextDouble()) * 2.0;
