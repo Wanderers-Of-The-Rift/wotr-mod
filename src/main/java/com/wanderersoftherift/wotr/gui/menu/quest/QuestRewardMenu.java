@@ -90,6 +90,8 @@ public class QuestRewardMenu extends AbstractContainerMenu {
             for (Reward reward : rewards) {
                 reward.apply(serverPlayer);
             }
+            // Remove the quest so the player cannot take it again, if it is still available
+            player.getData(WotrAttachments.AVAILABLE_QUESTS).removeIf(x -> x.getId().equals(questState.getId()));
             activeQuests.remove(questState.getId());
         }
     }

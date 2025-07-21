@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
 import com.wanderersoftherift.wotr.core.rift.stats.StatSnapshot;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class WotrAttachments {
@@ -73,6 +75,12 @@ public class WotrAttachments {
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());
+    public static final Supplier<AttachmentType<List<QuestState>>> AVAILABLE_QUESTS = ATTACHMENT_TYPES.register(
+            "available_quests",
+            () -> AttachmentType.<List<QuestState>>builder(() -> new ArrayList<>())
+                    .serialize(Codec.list(QuestState.CODEC).xmap(ArrayList::new, Function.identity()))
+                    .copyOnDeath()
+                    .build());
     public static final Supplier<AttachmentType<ActiveQuests>> ACTIVE_QUESTS = ATTACHMENT_TYPES.register(
             "active_quests",
             () -> AttachmentType.builder(ActiveQuests::new)
