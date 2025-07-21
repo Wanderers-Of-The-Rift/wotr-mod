@@ -1,10 +1,10 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
-import com.wanderersoftherift.wotr.core.guild.quest.Reward;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;

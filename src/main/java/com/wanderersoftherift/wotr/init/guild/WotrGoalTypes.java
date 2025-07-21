@@ -2,14 +2,14 @@ package com.wanderersoftherift.wotr.init.guild;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.GoalProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.CompleteRiftGoal;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.KillMobGoal;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.provider.CompleteRiftGoalProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.provider.GiveItemGoalProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.provider.PoolGoalProvider;
+import com.wanderersoftherift.wotr.core.quest.GoalProvider;
+import com.wanderersoftherift.wotr.core.quest.GoalType;
+import com.wanderersoftherift.wotr.core.quest.goal.CompleteRiftGoal;
+import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.quest.goal.KillMobGoal;
+import com.wanderersoftherift.wotr.core.quest.goal.provider.CompleteRiftGoalProvider;
+import com.wanderersoftherift.wotr.core.quest.goal.provider.GiveItemGoalProvider;
+import com.wanderersoftherift.wotr.core.quest.goal.provider.PoolGoalProvider;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

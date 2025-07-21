@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu.quest;
 
-import com.wanderersoftherift.wotr.core.guild.quest.Reward;
+import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;

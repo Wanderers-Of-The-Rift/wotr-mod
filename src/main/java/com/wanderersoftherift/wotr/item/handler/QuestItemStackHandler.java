@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.item.handler;
 
-import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
