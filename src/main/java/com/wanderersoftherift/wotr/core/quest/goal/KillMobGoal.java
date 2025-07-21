@@ -1,11 +1,11 @@
-package com.wanderersoftherift.wotr.core.guild.quest.goal;
+package com.wanderersoftherift.wotr.core.quest.goal;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.quest.Goal;
-import com.wanderersoftherift.wotr.core.guild.quest.GoalType;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.Goal;
+import com.wanderersoftherift.wotr.core.quest.GoalType;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;

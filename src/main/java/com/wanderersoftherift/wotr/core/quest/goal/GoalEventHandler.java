@@ -1,7 +1,7 @@
-package com.wanderersoftherift.wotr.core.guild.quest.goal;
+package com.wanderersoftherift.wotr.core.quest.goal;
 
-import com.wanderersoftherift.wotr.core.guild.quest.GoalEventListenerRegistrar;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.GoalEventListenerRegistrar;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;

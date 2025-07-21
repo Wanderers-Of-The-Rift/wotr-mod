@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.block;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.quest.Quest;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;

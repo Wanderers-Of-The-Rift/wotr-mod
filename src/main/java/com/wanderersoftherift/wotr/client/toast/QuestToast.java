@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.client.toast;
 
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
+import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;

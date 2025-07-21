@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.quest;
+package com.wanderersoftherift.wotr.core.quest;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

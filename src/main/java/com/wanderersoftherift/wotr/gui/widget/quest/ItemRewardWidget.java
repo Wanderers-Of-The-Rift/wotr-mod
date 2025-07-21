@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.widget.quest;
 
-import com.wanderersoftherift.wotr.core.guild.quest.reward.ItemReward;
+import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

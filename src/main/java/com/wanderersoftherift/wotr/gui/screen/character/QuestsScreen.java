@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.guild.quest.Quest;
-import com.wanderersoftherift.wotr.core.guild.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.quest.Quest;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;

@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.quest;
+package com.wanderersoftherift.wotr.core.quest;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;

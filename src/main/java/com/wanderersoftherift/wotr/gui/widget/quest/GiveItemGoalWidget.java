@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.ChatFormatting;

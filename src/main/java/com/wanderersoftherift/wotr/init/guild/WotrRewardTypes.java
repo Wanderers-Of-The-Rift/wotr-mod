@@ -2,10 +2,10 @@ package com.wanderersoftherift.wotr.init.guild;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.quest.RewardProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.RewardType;
-import com.wanderersoftherift.wotr.core.guild.quest.reward.ItemReward;
-import com.wanderersoftherift.wotr.core.guild.quest.reward.provider.LootTableRewardProvider;
+import com.wanderersoftherift.wotr.core.quest.RewardProvider;
+import com.wanderersoftherift.wotr.core.quest.RewardType;
+import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
+import com.wanderersoftherift.wotr.core.quest.reward.provider.LootTableRewardProvider;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

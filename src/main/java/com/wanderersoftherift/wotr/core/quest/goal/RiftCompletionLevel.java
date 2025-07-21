@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.quest.goal;
+package com.wanderersoftherift.wotr.core.quest.goal;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import io.netty.buffer.ByteBuf;

@@ -1,10 +1,10 @@
-package com.wanderersoftherift.wotr.core.guild.quest.reward.provider;
+package com.wanderersoftherift.wotr.core.quest.reward.provider;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.quest.Reward;
-import com.wanderersoftherift.wotr.core.guild.quest.RewardProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.reward.ItemReward;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.core.quest.RewardProvider;
+import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;

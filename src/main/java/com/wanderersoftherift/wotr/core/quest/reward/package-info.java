@@ -1,4 +1,4 @@
 /**
  * This package provides different types of rewards that a quest can provide on completion
  */
-package com.wanderersoftherift.wotr.core.guild.quest.reward;
+package com.wanderersoftherift.wotr.core.quest.reward;

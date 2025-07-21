@@ -1,10 +1,10 @@
-package com.wanderersoftherift.wotr.core.guild.quest.goal.provider;
+package com.wanderersoftherift.wotr.core.quest.goal.provider;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.quest.Goal;
-import com.wanderersoftherift.wotr.core.guild.quest.GoalProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.quest.Goal;
+import com.wanderersoftherift.wotr.core.quest.GoalProvider;
+import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;

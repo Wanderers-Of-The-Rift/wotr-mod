@@ -1,9 +1,9 @@
-package com.wanderersoftherift.wotr.core.guild.quest.reward;
+package com.wanderersoftherift.wotr.core.quest.reward;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.quest.Reward;
-import com.wanderersoftherift.wotr.core.guild.quest.RewardType;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.core.quest.RewardType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;

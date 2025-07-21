@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.quest;
+package com.wanderersoftherift.wotr.core.quest;
 
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;

@@ -1,12 +1,12 @@
-package com.wanderersoftherift.wotr.core.guild.quest.goal.provider;
+package com.wanderersoftherift.wotr.core.quest.goal.provider;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.quest.Goal;
-import com.wanderersoftherift.wotr.core.guild.quest.GoalProvider;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.CompleteRiftGoal;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.RiftCompletionLevel;
-import com.wanderersoftherift.wotr.core.guild.quest.goal.RiftPredicate;
+import com.wanderersoftherift.wotr.core.quest.Goal;
+import com.wanderersoftherift.wotr.core.quest.GoalProvider;
+import com.wanderersoftherift.wotr.core.quest.goal.CompleteRiftGoal;
+import com.wanderersoftherift.wotr.core.quest.goal.RiftCompletionLevel;
+import com.wanderersoftherift.wotr.core.quest.goal.RiftPredicate;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
