@@ -1,9 +1,0 @@
-{
-  "price" : {
-    "wotr:notorized_fish": 10
-  },
-  "outputItem" : {
-    "id": "minecraft:stick",
-    "count": 10
-  }
-}

@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.GoalType;
@@ -87,8 +86,6 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("container_type"));
         public static final ResourceKey<Registry<Currency>> CURRENCIES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("currency"));
-        public static final ResourceKey<Registry<TradeListing>> TRADE_LISTING = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("trade_listing"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
         public static final ResourceKey<Registry<ImplicitConfig>> GEAR_IMPLICITS_CONFIG = ResourceKey
@@ -162,7 +159,6 @@ public class WotrRegistries {
         event.register(GOAL_TYPES);
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
-
     }
 
     @SubscribeEvent
@@ -178,7 +174,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.TRADE_LISTING, TradeListing.CODEC, TradeListing.CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
     }
