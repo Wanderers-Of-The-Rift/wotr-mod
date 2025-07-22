@@ -5,7 +5,6 @@ import com.wanderersoftherift.wotr.gui.menu.AbilityBenchMenu;
 import com.wanderersoftherift.wotr.gui.menu.KeyForgeMenu;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
-import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
@@ -34,9 +33,6 @@ public class WotrMenuTypes {
 
     public static final Supplier<MenuType<RiftCompleteMenu>> RIFT_COMPLETE_MENU = MENUS.register("rift_complete_menu",
             () -> new MenuType<>(RiftCompleteMenu::new, FeatureFlags.DEFAULT_FLAGS));
-
-    public static final Supplier<MenuType<TradingMenu>> TRADING_MENU = MENUS.register("trading_menu",
-            () -> new MenuType<>(TradingMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     /// Quest Menus
 
