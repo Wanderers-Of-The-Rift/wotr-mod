@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.item.gear.AbstractGearAbility;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
@@ -55,6 +56,8 @@ public class WotrRegistries {
             Keys.RIFT_SHAPE_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
+    public static final Registry<MapCodec<? extends AbstractGearAbility>> GEAR_ABILITY_TYPES = new RegistryBuilder<>(
+            Keys.GEAR_ABILITY_TYPES).create();
 
     public static final class Keys {
 
@@ -100,6 +103,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
+        public static final ResourceKey<Registry<AbstractGearAbility>> GEAR_ABILITIES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("gear_abilities"));
+        public static final ResourceKey<Registry<MapCodec<? extends AbstractGearAbility>>> GEAR_ABILITY_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("gear_ability_types"));
 
         private Keys() {
         }
