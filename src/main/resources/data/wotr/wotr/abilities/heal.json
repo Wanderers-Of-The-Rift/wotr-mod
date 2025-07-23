@@ -27,7 +27,7 @@
       }
     }
   ],
-  "icon": "minecraft:textures/mob_effect/regeneration.png",
+  "icon": "wotr:textures/ability/icon/heal.png",
   "requirements": [
     {
       "type": "wotr:ability_resource",
