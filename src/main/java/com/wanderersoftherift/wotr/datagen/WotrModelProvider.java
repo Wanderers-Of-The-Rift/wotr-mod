@@ -133,7 +133,7 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(WotrItems.ABILITY_HOLDER.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_ability_holder"),
                         new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER, new AbilityEmblemProvider(),
-                                0.625f, 0f, 0f, -0.045f)));
+                                1f, 0f, 0f, -0.033f)));
 
         itemModels.itemModelOutput.accept(WotrItems.CURRENCY_BAG.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_currency_bag"),
