@@ -22,10 +22,7 @@ import java.util.List;
  */
 public class CompleteRiftGoalWidget extends AbstractWidget implements GoalDisplay {
 
-    private static final String SINGULAR_GOAL_MESSAGE = WanderersOfTheRift.translationId("container",
-            "quest.goal.complete_rift");
-    private static final String PLURAL_GOAL_MESSAGE = WanderersOfTheRift.translationId("container",
-            "quest.goal.complete_rifts");
+    private static final String MESSAGE = WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts");
 
     private final Font font;
     private final CompleteRiftGoal goal;
@@ -77,19 +74,10 @@ public class CompleteRiftGoalWidget extends AbstractWidget implements GoalDispla
         if (!predicateText.getString(1).isEmpty()) {
             predicateText.append(" ");
         }
-        int target = goal.count();
-        if (target == 1) {
-            setMessage(
-                    Component
-                            .translatable(SINGULAR_GOAL_MESSAGE, goal.completionLevel().getDisplay(), predicateText,
-                                    progress, goal.count())
-                            .withStyle(textStyle));
-        } else {
-            setMessage(
-                    Component
-                            .translatable(PLURAL_GOAL_MESSAGE, goal.completionLevel().getDisplay(), predicateText,
-                                    progress, goal.count())
-                            .withStyle(textStyle));
-        }
+        setMessage(
+                Component
+                        .translatable(MESSAGE, goal.completionLevel().getDisplay(), predicateText, progress,
+                                goal.count())
+                        .withStyle(textStyle));
     }
 }

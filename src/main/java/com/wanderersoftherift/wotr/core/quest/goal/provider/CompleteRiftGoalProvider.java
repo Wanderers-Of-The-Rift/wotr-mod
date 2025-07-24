@@ -6,7 +6,10 @@ import com.wanderersoftherift.wotr.core.quest.Goal;
 import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.goal.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.quest.goal.RiftCompletionLevel;
-import com.wanderersoftherift.wotr.core.quest.goal.RiftPredicate;
+import com.wanderersoftherift.wotr.core.rift.predicate.RiftObjectivePredicate;
+import com.wanderersoftherift.wotr.core.rift.predicate.RiftPredicate;
+import com.wanderersoftherift.wotr.core.rift.predicate.RiftThemePredicate;
+import com.wanderersoftherift.wotr.core.rift.predicate.RiftTierPredicate;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
@@ -54,18 +57,19 @@ public record CompleteRiftGoalProvider(RiftCompletionLevel completionLevel, Opti
     @Override
     public @NotNull List<Goal> generateGoal(LootParams params) {
         LootContext context = new LootContext.Builder(params).create(Optional.empty());
-        Optional<Integer> finalTier = tier.map(provider -> provider.getInt(context));
-        Optional<Holder<RiftTheme>> theme;
+        Optional<RiftTierPredicate> finalTier = tier.map(provider -> new RiftTierPredicate(provider.getInt(context)));
+        Optional<RiftThemePredicate> theme;
         if (themes.isEmpty()) {
             theme = Optional.empty();
         } else {
-            theme = Optional.of(themes.get(context.getRandom().nextInt(themes.size())));
+            theme = Optional.of(new RiftThemePredicate(themes.get(context.getRandom().nextInt(themes.size()))));
         }
-        Optional<Holder<ObjectiveType>> objective;
+        Optional<RiftObjectivePredicate> objective;
         if (objectives.isEmpty()) {
             objective = Optional.empty();
         } else {
-            objective = Optional.of(objectives.get(context.getRandom().nextInt(objectives.size())));
+            objective = Optional
+                    .of(new RiftObjectivePredicate(objectives.get(context.getRandom().nextInt(objectives.size()))));
         }
         return List.of(new CompleteRiftGoal(count.getInt(context), completionLevel,
                 new RiftPredicate(finalTier, theme, objective)));
