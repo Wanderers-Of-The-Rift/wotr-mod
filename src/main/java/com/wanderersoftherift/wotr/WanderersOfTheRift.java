@@ -49,6 +49,7 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
+import com.wanderersoftherift.wotr.item.gear.WotrGearAbilityTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Registry;
@@ -108,6 +109,7 @@ public class WanderersOfTheRift {
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
+        WotrGearAbilityTypes.GEAR_ABILITY_TYPES.register(modEventBus);
         WotrEffects.EFFECTS.register(modEventBus);
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
 

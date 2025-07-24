@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.codec.LaxRegistryCodec;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,12 +15,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.function.Function;
 
-import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
+import static com.wanderersoftherift.wotr.init.WotrItems.WAND;
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.GEAR_ABILITIES;
 
 public abstract class AbstractGearAbility {
@@ -37,9 +39,11 @@ public abstract class AbstractGearAbility {
     private boolean isToggle = false;
 
     private ItemStack gearPiece;
+    private ResourceLocation gearLocation;
 
-    public AbstractGearAbility(ResourceLocation abilityName, List<AbstractEffect> effects) {
+    public AbstractGearAbility(ResourceLocation abilityName, ResourceLocation gear, List<AbstractEffect> effects) {
         this.name = abilityName;
+        this.gearLocation = gear;
         this.effects = effects;
     }
     public abstract MapCodec<? extends AbstractGearAbility> getCodec();
@@ -47,6 +51,11 @@ public abstract class AbstractGearAbility {
     public ResourceLocation getName() {
         return name;
     }
+
+    public ResourceLocation getGearLocation() {
+        return gearLocation;
+    }
+
     public List<AbstractEffect> getEffects() {
         return this.effects;
     }
@@ -54,5 +63,7 @@ public abstract class AbstractGearAbility {
 
     public abstract void onDeactivate(Player player);
 
-    public ItemStack getItem() {return gearPiece;}
+    public ItemStack getItem() {
+        return gearPiece;
+        }
 }

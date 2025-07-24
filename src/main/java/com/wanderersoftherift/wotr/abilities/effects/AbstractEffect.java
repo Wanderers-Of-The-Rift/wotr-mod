@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.gear.GearAbilityContext;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -54,6 +55,12 @@ public abstract class AbstractEffect {
     public abstract MapCodec<? extends AbstractEffect> getCodec();
 
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
+        for (AbstractEffect effect : getEffects()) {
+            effect.apply(user, blocks, context);
+        }
+    }
+
+    public void apply(Entity user, List<BlockPos> blocks, GearAbilityContext context) {
         for (AbstractEffect effect : getEffects()) {
             effect.apply(user, blocks, context);
         }

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.item.gear.AbstractGearAbility;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -11,6 +12,10 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.apache.commons.lang3.ObjectUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WotrCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister
@@ -78,6 +83,20 @@ public class WotrCreativeTabs {
                     })
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_GEAR_TAB = CREATIVE_MODE_TABS.register(
+            WanderersOfTheRift.MODID + "_gear",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".gear"))
+                    .withTabsBefore(WOTR_DEV_TAB.getId())
+                    .icon(WotrItems.WAND::toStack)
+                    .displayItems((parameters, output) -> {
+                        output.accept(WotrItems.WAND);
+                        parameters.holders().lookup(WotrRegistries.Keys.GEAR_ABILITIES).ifPresent((abilities) -> {
+                            generateGear(output, abilities);
+                        });
+                    })
+                    .build());
+
     private static void generateAbilityItems(
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<AbstractAbility> registry) {
@@ -86,6 +105,24 @@ public class WotrCreativeTabs {
             item.set(WotrDataComponentType.ABILITY, abilityHolder);
             output.accept(item);
         });
+    }
+
+    private static void generateGear(
+            CreativeModeTab.Output output,
+            HolderLookup.RegistryLookup<AbstractGearAbility> registry) {
+        ArrayList<ItemStack> toBeSent = new ArrayList<ItemStack>() {};
+        registry.listElements().forEach(abilityHolder -> {
+            if (!toBeSent.contains(abilityHolder.value().getItem())) {
+                ItemStack item = abilityHolder.value().getItem();
+                item.set(WotrDataComponentType.GEAR_BASIC, abilityHolder);
+                toBeSent.add(item);
+            }
+            else {
+                int i = toBeSent.indexOf(abilityHolder.value().getItem());
+                toBeSent.get(i).set(WotrDataComponentType.GEAR_SECONDARY, abilityHolder);
+            }
+        });
+        toBeSent.forEach(output::accept);
     }
 
     private static void generateRunegems(

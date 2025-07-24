@@ -126,6 +126,7 @@ public class WotrRegistries {
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
+        event.register(GEAR_ABILITY_TYPES);
     }
 
     @SubscribeEvent
@@ -140,5 +141,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GEAR_ABILITIES, AbstractGearAbility.DIRECT_CODEC, AbstractGearAbility.DIRECT_CODEC);
     }
 }

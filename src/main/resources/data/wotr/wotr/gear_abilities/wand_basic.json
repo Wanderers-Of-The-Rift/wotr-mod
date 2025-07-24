@@ -1,5 +1,5 @@
 {
-  "type": "wotr:basic_gear_ability",
+  "type": "wotr:gear_basic",
   "ability_name": "wotr:wand_basic",
   "gear": "wotr:wand",
   "effects": [
