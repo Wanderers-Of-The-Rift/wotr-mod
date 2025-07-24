@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.client.toast.GoalToast;
-import com.wanderersoftherift.wotr.client.toast.QuestToast;
+import com.wanderersoftherift.wotr.client.toast.QuestCompleteToast;
+import com.wanderersoftherift.wotr.client.toast.QuestGoalCompleteToast;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
@@ -44,9 +44,9 @@ public record QuestGoalUpdatePayload(UUID quest, int goalIndex, int progress) im
             if (goalIndex >= 0 && goalIndex < state.goalCount()) {
                 state.setGoalProgress(goalIndex, progress);
                 if (state.isComplete()) {
-                    Minecraft.getInstance().getToastManager().addToast(new QuestToast(state.getOrigin()));
+                    Minecraft.getInstance().getToastManager().addToast(new QuestCompleteToast(state.getOrigin()));
                 } else if (state.isGoalComplete(goalIndex)) {
-                    Minecraft.getInstance().getToastManager().addToast(new GoalToast(state, goalIndex));
+                    Minecraft.getInstance().getToastManager().addToast(new QuestGoalCompleteToast(state, goalIndex));
                 }
             }
         });

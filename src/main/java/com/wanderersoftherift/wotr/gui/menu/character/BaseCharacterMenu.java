@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
  * BaseCharacterMenu provides the base for all character menus
@@ -54,29 +55,28 @@ public abstract class BaseCharacterMenu extends AbstractContainerMenu {
         Set<MenuType<?>> closed = new HashSet<>();
         List<Holder<CharacterMenuItem>> result = new ArrayList<>();
         // Detect reference loops
-        int remaining = Integer.MAX_VALUE;
-        while (!open.isEmpty() && open.size() < remaining) {
-            remaining = open.size();
+        boolean changed = true;
+        while (!open.isEmpty() && changed) {
+            changed = false;
 
             Iterator<Holder<CharacterMenuItem>> iterator = open.iterator();
             while (iterator.hasNext()) {
                 Holder<CharacterMenuItem> item = iterator.next();
-                if (item.value().orderHint() == OrderHint.NONE || item.value().relativeTo() == null) {
-                    result.add(item);
-                    closed.add(item.value().menuType());
-                    iterator.remove();
-                } else if (closed.contains(item.value().relativeTo())) {
-                    int index = 0;
-                    while (index < result.size()) {
-                        if (result.get(index).value().menuType() == item.value().relativeTo()) {
-                            break;
-                        }
-                        index++;
+                int insertAt = result.size();
+                if (item.value().relativeTo() != null) {
+                    if (!closed.contains(item.value().relativeTo())) {
+                        continue;
                     }
-                    result.add((item.value().orderHint() == OrderHint.BEFORE ? index : index + 1), item);
-                    closed.add(item.value().menuType());
-                    iterator.remove();
+                    int index = IntStream.range(0, result.size())
+                            .filter(i -> result.get(i).value().menuType() == item.value().relativeTo())
+                            .findFirst()
+                            .getAsInt();
+                    insertAt = item.value().orderHint().insertAt(index);
                 }
+                result.add(insertAt, item);
+                closed.add(item.value().menuType());
+                iterator.remove();
+                changed = true;
             }
         }
         result.addAll(open);

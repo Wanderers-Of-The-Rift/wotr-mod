@@ -21,7 +21,7 @@ public class WotrCharacterMenuItems {
             WotrMenuTypes.GUILDS_MENU.get(),
             (id, inventory, player) -> new GuildMenu(id, inventory,
                     ContainerLevelAccess.create(player.level(), player.getOnPos())),
-            OrderHint.NONE, null
+            OrderHint.BEFORE, null
     ));
 
     public static final Holder<CharacterMenuItem> WALLET = MENU_ITEMS.register("wallet", () -> new CharacterMenuItem(

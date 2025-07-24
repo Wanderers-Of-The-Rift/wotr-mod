@@ -22,7 +22,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -99,23 +98,20 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         access.execute((level, blockPos) -> {
             QuestState quest = getQuestState();
             for (int index = 0; index < quest.goalCount(); index++) {
-                if (!quest.isGoalComplete(index)
-                        && quest.getGoal(index) instanceof GiveItemGoal(Ingredient item, int count)) {
+                if (!quest.isGoalComplete(index) && quest.getGoal(index) instanceof GiveItemGoal goal) {
                     for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
-                        ItemStack itemsToHandIn = handInItems.getStackInSlot(slot);
-                        if (itemsToHandIn.isEmpty()) {
+                        ItemStack submittedItem = handInItems.getStackInSlot(slot);
+                        if (submittedItem.isEmpty() || !goal.item().test(submittedItem)) {
                             continue;
                         }
 
-                        if (item.test(itemsToHandIn)) {
-                            int remainingItems = count - quest.getGoalProgress(index);
-                            if (itemsToHandIn.getCount() >= remainingItems) {
-                                quest.setGoalProgress(index, quest.getGoalProgress(index) + remainingItems);
-                                handInItems.extractItem(slot, remainingItems, false);
-                            } else {
-                                quest.setGoalProgress(index, quest.getGoalProgress(index) + itemsToHandIn.getCount());
-                                handInItems.extractItem(slot, itemsToHandIn.getCount(), false);
-                            }
+                        int remainingItems = goal.count() - quest.getGoalProgress(index);
+                        if (submittedItem.getCount() >= remainingItems) {
+                            quest.setGoalProgress(index, quest.getGoalProgress(index) + remainingItems);
+                            handInItems.extractItem(slot, remainingItems, false);
+                        } else {
+                            quest.setGoalProgress(index, quest.getGoalProgress(index) + submittedItem.getCount());
+                            handInItems.extractItem(slot, submittedItem.getCount(), false);
                         }
                     }
                 }

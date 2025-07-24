@@ -56,13 +56,7 @@ public class QuestHubBlock extends Block {
 
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
-            List<QuestState> availableQuests;
-            if (serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS).isEmpty()) {
-                availableQuests = generateQuestList(level, serverPlayer);
-                serverPlayer.setData(WotrAttachments.AVAILABLE_QUESTS, availableQuests);
-            } else {
-                availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
-            }
+            List<QuestState> availableQuests = getAvailableQuests(level, serverPlayer);
 
             player.openMenu(
                     new SimpleMenuProvider(
@@ -83,17 +77,32 @@ public class QuestHubBlock extends Block {
         return InteractionResult.CONSUME;
     }
 
-    private static @NotNull List<QuestState> generateQuestList(Level level, ServerPlayer serverPlayer) {
+    private static @NotNull List<QuestState> getAvailableQuests(Level level, ServerPlayer serverPlayer) {
+        List<QuestState> availableQuests;
+        if (serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS).isEmpty()) {
+            availableQuests = generateNewQuestList(level, serverPlayer);
+            serverPlayer.setData(WotrAttachments.AVAILABLE_QUESTS, availableQuests);
+        } else {
+            availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
+        }
+        return availableQuests;
+    }
+
+    private static @NotNull List<QuestState> generateNewQuestList(Level level, ServerPlayer serverPlayer) {
         LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
         Registry<Quest> questRegistry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
         List<Quest> quests = questRegistry.stream().collect(Collectors.toList());
         List<QuestState> generatedQuests = new ArrayList<>();
         for (int i = 0; i < QUEST_SELECTION_SIZE && !quests.isEmpty(); i++) {
             int index = level.random.nextInt(quests.size());
-            Quest quest = quests.get(index);
+            Quest quest;
+            if (index < quests.size() - 1) {
+                quest = quests.set(index, quests.removeLast());
+            } else {
+                quest = quests.removeLast();
+            }
             generatedQuests.add(new QuestState(questRegistry.wrapAsHolder(quest), quest.generateGoals(params),
                     quest.generateRewards(params)));
-            quests.remove(index);
         }
         return generatedQuests;
     }

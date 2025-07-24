@@ -28,18 +28,17 @@ public class GoalEventHandler {
 
     private static final GoalEventListenerRegistrar<RiftEvent.PlayerCompletedRift> RIFT_COMPLETION_SUCCESS_GOALS = new GoalEventListenerRegistrar<>(
             (event, player, state, index) -> {
-                if (!(state.getGoal(
-                        index) instanceof CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, RiftPredicate predicate))) {
+                if (!(state.getGoal(index) instanceof CompleteRiftGoal goal)) {
                     return;
                 }
                 int progress = state.getGoalProgress(index);
-                if (progress >= count) {
+                if (progress >= goal.count()) {
                     return;
                 }
-                if (!event.isObjectiveComplete() && completionLevel == RiftCompletionLevel.COMPLETE) {
+                if (!event.isObjectiveComplete() && goal.completionLevel() == RiftCompletionLevel.COMPLETE) {
                     return;
                 }
-                if (predicate.matches(event.getConfig())) {
+                if (goal.predicate().matches(event.getConfig())) {
                     state.setGoalProgress(index, progress + 1);
                 }
             });
@@ -47,12 +46,12 @@ public class GoalEventHandler {
     private static final GoalEventListenerRegistrar<RiftEvent.PlayerDied> RIFT_COMPLETION_DIED_GOALS = new GoalEventListenerRegistrar<>(
             (event, player, state, index) -> {
                 if (!(state.getGoal(
-                        index) instanceof CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, RiftPredicate predicate))) {
+                        index) instanceof CompleteRiftGoal goal)) {
                     return;
                 }
                 int progress = state.getGoalProgress(index);
-                if (progress < count && completionLevel == RiftCompletionLevel.ATTEMPT
-                        && predicate.matches(event.getConfig())) {
+                if (progress < goal.count() && goal.completionLevel() == RiftCompletionLevel.ATTEMPT
+                        && goal.predicate().matches(event.getConfig())) {
                     state.setGoalProgress(index, progress + 1);
                 }
             });
