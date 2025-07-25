@@ -60,6 +60,8 @@ public class WotrRegistries {
             Keys.CONTAINER_TYPES).create();
     public static final Registry<MapCodec<? extends RiftRoomGenerator>> RIFT_ROOM_GENERATOR_TYPES = new RegistryBuilder<>(
             Keys.RIFT_ROOM_GENERATOR_TYPES).create();
+    public static final Registry<MapCodec<? extends RiftRoomGenerator.Factory>> RIFT_ROOM_GENERATOR_FACTORY_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_ROOM_GENERATOR_FACTORY_TYPES).create();
     public static final Registry<MapCodec<? extends JigsawListProcessor>> JIGSAW_LIST_PROCESSOR_TYPES = new RegistryBuilder<>(
             Keys.JIGSAW_LIST_PROCESSOR_TYPES).create();
     public static final Registry<MapCodec<? extends RiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
@@ -111,6 +113,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftRoomGenerator>>> RIFT_ROOM_GENERATOR_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_room_generator"));
+        public static final ResourceKey<Registry<MapCodec<? extends RiftRoomGenerator.Factory>>> RIFT_ROOM_GENERATOR_FACTORY_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_room_generator_factory"));
         public static final ResourceKey<Registry<MapCodec<? extends JigsawListProcessor>>> JIGSAW_LIST_PROCESSOR_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/jigsaw_list_processor"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
@@ -135,6 +139,7 @@ public class WotrRegistries {
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
         event.register(RIFT_ROOM_GENERATOR_TYPES);
+        event.register(RIFT_ROOM_GENERATOR_FACTORY_TYPES);
         event.register(JIGSAW_LIST_PROCESSOR_TYPES);
         event.register(RIFT_BUILTIN_GENERATABLE_TYPES);
     }

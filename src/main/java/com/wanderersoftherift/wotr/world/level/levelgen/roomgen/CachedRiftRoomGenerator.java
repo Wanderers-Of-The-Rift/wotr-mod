@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import net.minecraft.core.Vec3i;
@@ -83,8 +84,19 @@ public record CachedRiftRoomGenerator(
         return newResult;
     }
 
-    @Override
-    public RiftRoomGenerator copyIfNeeded() {
-        return new CachedRiftRoomGenerator(baseGenerator.copyIfNeeded());
+    public record Factory(RiftRoomGenerator.Factory baseFactory) implements RiftRoomGenerator.Factory {
+        public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+                .group(RiftRoomGenerator.Factory.CODEC.fieldOf("base").forGetter(Factory::baseFactory))
+                .apply(instance, Factory::new));
+
+        @Override
+        public RiftRoomGenerator create(RiftConfig jigsawListProcessors) {
+            return new CachedRiftRoomGenerator(baseFactory.create(jigsawListProcessors));
+        }
+
+        @Override
+        public MapCodec<? extends RiftRoomGenerator.Factory> codec() {
+            return CODEC;
+        }
     }
 }

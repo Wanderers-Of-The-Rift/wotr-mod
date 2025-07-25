@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 public interface RiftRoomGenerator {
 
@@ -44,5 +46,12 @@ public interface RiftRoomGenerator {
         return CompletableFuture.completedFuture(tmpRoom.getAndRemoveChunk(tmpRoom.space.origin()));
     }
 
-    RiftRoomGenerator copyIfNeeded();
+    interface Factory {
+        Codec<Factory> CODEC = WotrRegistries.RIFT_ROOM_GENERATOR_FACTORY_TYPES.byNameCodec()
+                .dispatch(Factory::codec, Function.identity());
+
+        RiftRoomGenerator create(RiftConfig config);
+
+        MapCodec<? extends Factory> codec();
+    }
 }

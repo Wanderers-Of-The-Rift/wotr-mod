@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -61,13 +61,19 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
         return CompletableFuture.completedFuture(processedRoom2);
     }
 
-    @Override
-    public RiftRoomGenerator copyIfNeeded() {
-        if (jigsawProcessors instanceof ArrayList<JigsawListProcessor>) {
-            return new CoreRiftRoomGenerator(ImmutableList.copyOf(jigsawProcessors));
-        } else {
-            return this;
+    public record Factory() implements RiftRoomGenerator.Factory {
+        public static final Factory INSTANCE = new Factory();
+
+        public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.point(INSTANCE));
+
+        @Override
+        public RiftRoomGenerator create(RiftConfig config) {
+            return new CoreRiftRoomGenerator(ImmutableList.copyOf(config.jigsawProcessors()));
+        }
+
+        @Override
+        public MapCodec<? extends RiftRoomGenerator.Factory> codec() {
+            return CODEC;
         }
     }
-
 }

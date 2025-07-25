@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.core.rift;
 
+import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
@@ -8,6 +9,7 @@ import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
@@ -31,15 +33,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@EventBusSubscriber
+// @EventBusSubscriber
 public class RiftConfigInitialization {
 
     public static final int DEFAULT_RIFT_HEIGHT_IN_CHUNKS = 24;
@@ -49,7 +48,7 @@ public class RiftConfigInitialization {
      * 
      * @param event
      */
-    @SubscribeEvent
+    // @SubscribeEvent
     private static void appendObjectiveGenerationStuff(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
         var objectiveOptional = config.objective();
@@ -58,25 +57,30 @@ public class RiftConfigInitialization {
         }
         var objective = objectiveOptional.get().value();
         var player = event.getFirstPlayer();
-        /*
-         * for replacing POIs:
-         *
-         * event.getJigsawProcessorList().add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
-         * WanderersOfTheRift.id("rift/poi/anomaly"), 1));
-         */
+
+        // for replacing POIs:
+        var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
+                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
+                        WanderersOfTheRift.id("rift/poi/anomaly"), 1))
+                .addAll(config.jigsawProcessors())
+                .build();
+        config = config.withJigsawProcessors(newJigsawProcessors);
+
         var layout = config.layout().get();
         if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
-            var layers = new ArrayList<>(layeredLayout.layers());
-            /*
-             * for placing special rooms:
-             * 
-             * layers.add(0, new PredefinedRoomLayer.Factory(new
-             * RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
-             * RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), new Vec3i(-1, -1, 2)));
-             */
-            layout = layeredLayout.withLayers(layers);
+            config = config
+                    .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
+                            .add(
+                                    // For placing special rooms:
+                                    new PredefinedRoomLayer.Factory(
+                                            new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
+                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
+                                            new Vec3i(-1, -1, 2))
+                            )
+                            .addAll(layeredLayout.layers())
+                            .build()));
         }
-        event.setConfig(config.withLayout(layout));
+        event.setConfig(config);
     }
 
     static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server, ServerPlayer firstPlayer) {
@@ -84,16 +88,11 @@ public class RiftConfigInitialization {
         int seed = baseConfig.seed().orElseGet(random::nextInt);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
 
-        var jigsawProcessorList = new ArrayList<JigsawListProcessor>();
-        initializeJigsawProcessors(jigsawProcessorList);
-
-        var config = baseConfig.withSeedIfAbsent(seed)
+        return baseConfig.withSeedIfAbsent(seed)
                 .withThemeIfAbsent(riftTheme)
                 .withLayoutIfAbsent(baseConfig.layout().orElse(defaultLayout(baseConfig.tier(), seed)))
-                .withRoomGeneratorIfAbsent(defaultRoomGenerator(jigsawProcessorList));
-        config = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer, jigsawProcessorList))
-                .getConfig();
-        return config;
+                .withRoomGeneratorIfAbsent(defaultRoomGenerator())
+                .withJigsawProcessors(initializeJigsawProcessors());
     }
 
     static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {
@@ -107,17 +106,16 @@ public class RiftConfigInitialization {
                 .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
 
-    private static void initializeJigsawProcessors(ArrayList<JigsawListProcessor> jigsawProcessorList) {
-        jigsawProcessorList.add(new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"));
-        jigsawProcessorList.add(new ShuffleJigsaws());
+    private static List<JigsawListProcessor> initializeJigsawProcessors() {
+        return ImmutableList.of(new FilterJigsaws(WanderersOfTheRift.MODID, "rift/ring_"), new ShuffleJigsaws());
+
     }
 
-    private static RiftRoomGenerator defaultRoomGenerator(List<JigsawListProcessor> jigsawListProcessors) {
-        return new CachedRiftRoomGenerator(
-                new LayerGeneratableRiftRoomGenerator(
-                        new PerimeterGeneratable(Blocks.BEDROCK.defaultBlockState()), new CoreRiftRoomGenerator(
-                                jigsawListProcessors
-                        )
+    private static RiftRoomGenerator.Factory defaultRoomGenerator() {
+        return new CachedRiftRoomGenerator.Factory(
+                new LayerGeneratableRiftRoomGenerator.Factory(
+                        new PerimeterGeneratable(Blocks.BEDROCK.defaultBlockState()),
+                        CoreRiftRoomGenerator.Factory.INSTANCE
                 )
         );
     }

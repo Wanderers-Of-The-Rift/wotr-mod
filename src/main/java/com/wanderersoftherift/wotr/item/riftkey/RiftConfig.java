@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -17,6 +18,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +32,8 @@ import java.util.Optional;
  */
 // TODO: Move into core.rift
 public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<Holder<ObjectiveType>> objective,
-        Optional<RiftLayout.Factory> layout, Optional<RiftRoomGenerator> roomGenerator, boolean generatePassages,
-        Optional<Integer> seed) {
+        Optional<RiftLayout.Factory> layout, Optional<RiftRoomGenerator.Factory> roomGenerator,
+        boolean generatePassages, List<JigsawListProcessor> jigsawProcessors, Optional<Integer> seed) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder
             .create(instance -> instance
@@ -39,9 +41,12 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
                             RiftTheme.CODEC.optionalFieldOf("theme").forGetter(RiftConfig::theme),
                             ObjectiveType.CODEC.optionalFieldOf("objective").forGetter(RiftConfig::objective),
                             RiftLayout.Factory.CODEC.optionalFieldOf("layout").forGetter(RiftConfig::layout),
-                            RiftRoomGenerator.CODEC.optionalFieldOf("room_generator")
+                            RiftRoomGenerator.Factory.CODEC.optionalFieldOf("room_generator")
                                     .forGetter(RiftConfig::roomGenerator),
                             Codec.BOOL.optionalFieldOf("passages", true).forGetter(RiftConfig::generatePassages),
+                            JigsawListProcessor.CODEC.listOf()
+                                    .optionalFieldOf("jigsaw_processors", Collections.emptyList())
+                                    .forGetter(RiftConfig::jigsawProcessors),
                             Codec.INT.optionalFieldOf("seed").forGetter(RiftConfig::seed))
                     .apply(instance, RiftConfig::new));
 
@@ -51,22 +56,26 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
             ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES).apply(ByteBufCodecs::optional), RiftConfig::theme,
             ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES).apply(ByteBufCodecs::optional), RiftConfig::objective,
             ByteBufCodecs.fromCodec(RiftLayout.Factory.CODEC).apply(ByteBufCodecs::optional), RiftConfig::layout,
-            ByteBufCodecs.fromCodec(RiftRoomGenerator.CODEC).apply(ByteBufCodecs::optional), RiftConfig::roomGenerator,
+            ByteBufCodecs.fromCodec(RiftRoomGenerator.Factory.CODEC).apply(ByteBufCodecs::optional), RiftConfig::roomGenerator,
             ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional).map(it->it.orElse(true), Optional::of), RiftConfig::generatePassages,
+            ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()), RiftConfig::jigsawProcessors,
             ByteBufCodecs.INT.apply(ByteBufCodecs::optional), RiftConfig::seed,
             RiftConfig::new);
     // spotless:on
 
     public RiftConfig(int tier) {
-        this(tier, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), true, Optional.empty());
+        this(tier, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), true,
+                Collections.emptyList(), Optional.empty());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme) {
-        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.empty(), true, Optional.empty());
+        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.empty(), true,
+                Collections.emptyList(), Optional.empty());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme, int seed) {
-        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.empty(), true, Optional.of(seed));
+        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.empty(), true,
+                Collections.emptyList(), Optional.of(seed));
     }
 
     public RiftConfig withSeedIfAbsent(int seed) {
@@ -85,7 +94,7 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
         }
     }
 
-    public RiftConfig withRoomGeneratorIfAbsent(RiftRoomGenerator generator) {
+    public RiftConfig withRoomGeneratorIfAbsent(RiftRoomGenerator.Factory generator) {
         if (this.roomGenerator.isPresent()) {
             return this;
         } else {
@@ -110,35 +119,44 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
     }
 
     public RiftConfig withSeed(int seed) {
-        return new RiftConfig(tier, theme, objective, layout, roomGenerator, generatePassages, Optional.of(seed));
+        return new RiftConfig(tier, theme, objective, layout, roomGenerator, generatePassages, jigsawProcessors,
+                Optional.of(seed));
     }
 
     public RiftConfig withLayout(RiftLayout.Factory layout) {
-        return new RiftConfig(tier, theme, objective, Optional.of(layout), roomGenerator, generatePassages, seed);
+        return new RiftConfig(tier, theme, objective, Optional.of(layout), roomGenerator, generatePassages,
+                jigsawProcessors, seed);
     }
 
-    public RiftConfig withRoomGenerator(RiftRoomGenerator roomGenerator) {
-        return new RiftConfig(tier, theme, objective, layout, Optional.of(roomGenerator), generatePassages, seed);
+    public RiftConfig withJigsawProcessors(List<JigsawListProcessor> processors) {
+        return new RiftConfig(tier, theme, objective, layout, roomGenerator, generatePassages, processors, seed);
+    }
+
+    public RiftConfig withRoomGenerator(RiftRoomGenerator.Factory roomGenerator) {
+        return new RiftConfig(tier, theme, objective, layout, Optional.of(roomGenerator), generatePassages,
+                jigsawProcessors, seed);
     }
 
     public RiftConfig withObjective(Holder<ObjectiveType> objective) {
-        return new RiftConfig(tier, theme, Optional.of(objective), layout, roomGenerator, generatePassages, seed);
+        return new RiftConfig(tier, theme, Optional.of(objective), layout, roomGenerator, generatePassages,
+                jigsawProcessors, seed);
     }
 
     public RiftConfig withTheme(Holder<RiftTheme> theme) {
-        return new RiftConfig(tier, Optional.of(theme), objective, layout, roomGenerator, generatePassages, seed);
+        return new RiftConfig(tier, Optional.of(theme), objective, layout, roomGenerator, generatePassages,
+                jigsawProcessors, seed);
     }
 
     public RiftConfig withTier(int tier) {
-        return new RiftConfig(tier, theme, objective, layout, roomGenerator, generatePassages, seed);
+        return new RiftConfig(tier, theme, objective, layout, roomGenerator, generatePassages, jigsawProcessors, seed);
     }
 
     public RiftConfig withPassages() {
-        return new RiftConfig(tier, theme, objective, layout, roomGenerator, true, seed);
+        return new RiftConfig(tier, theme, objective, layout, roomGenerator, true, jigsawProcessors, seed);
     }
 
     public RiftConfig withoutPassages() {
-        return new RiftConfig(tier, theme, objective, layout, roomGenerator, false, seed);
+        return new RiftConfig(tier, theme, objective, layout, roomGenerator, false, jigsawProcessors, seed);
     }
 
     /**

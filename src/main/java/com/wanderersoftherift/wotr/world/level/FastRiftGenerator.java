@@ -116,7 +116,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                 this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR);
-        this.roomGenerator = config.roomGenerator().get().copyIfNeeded();
+        this.roomGenerator = config.roomGenerator().get().create(config);
     }
 
     @Override
