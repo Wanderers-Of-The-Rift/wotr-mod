@@ -58,8 +58,6 @@ public class WotrRegistries {
             Keys.RIFT_SHAPE_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
-    public static final Registry<MapCodec<? extends RiftRoomGenerator>> RIFT_ROOM_GENERATOR_TYPES = new RegistryBuilder<>(
-            Keys.RIFT_ROOM_GENERATOR_TYPES).create();
     public static final Registry<MapCodec<? extends RiftRoomGenerator.Factory>> RIFT_ROOM_GENERATOR_FACTORY_TYPES = new RegistryBuilder<>(
             Keys.RIFT_ROOM_GENERATOR_FACTORY_TYPES).create();
     public static final Registry<MapCodec<? extends JigsawListProcessor>> JIGSAW_LIST_PROCESSOR_TYPES = new RegistryBuilder<>(
@@ -111,8 +109,6 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
-        public static final ResourceKey<Registry<MapCodec<? extends RiftRoomGenerator>>> RIFT_ROOM_GENERATOR_TYPES = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_room_generator"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftRoomGenerator.Factory>>> RIFT_ROOM_GENERATOR_FACTORY_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_room_generator_factory"));
         public static final ResourceKey<Registry<MapCodec<? extends JigsawListProcessor>>> JIGSAW_LIST_PROCESSOR_TYPES = ResourceKey
@@ -138,7 +134,6 @@ public class WotrRegistries {
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
-        event.register(RIFT_ROOM_GENERATOR_TYPES);
         event.register(RIFT_ROOM_GENERATOR_FACTORY_TYPES);
         event.register(JIGSAW_LIST_PROCESSOR_TYPES);
         event.register(RIFT_BUILTIN_GENERATABLE_TYPES);

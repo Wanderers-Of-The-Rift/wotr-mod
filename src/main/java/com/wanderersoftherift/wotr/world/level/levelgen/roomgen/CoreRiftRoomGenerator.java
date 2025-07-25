@@ -20,17 +20,6 @@ import java.util.concurrent.CompletableFuture;
 
 public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) implements RiftRoomGenerator {
 
-    public static final MapCodec<CoreRiftRoomGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            JigsawListProcessor.CODEC.listOf()
-                    .fieldOf("jigsaw_list_processors")
-                    .forGetter(CoreRiftRoomGenerator::jigsawProcessors)
-    ).apply(instance, CoreRiftRoomGenerator::new));
-
-    @Override
-    public MapCodec<? extends RiftRoomGenerator> codec() {
-        return CODEC;
-    }
-
     @Override
     public CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
             RoomRiftSpace space,

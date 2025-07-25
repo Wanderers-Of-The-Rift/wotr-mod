@@ -20,11 +20,6 @@ import java.util.function.Function;
 
 public interface RiftRoomGenerator {
 
-    Codec<RiftRoomGenerator> CODEC = WotrRegistries.RIFT_ROOM_GENERATOR_TYPES.byNameCodec()
-            .dispatch(fac -> fac.codec(), codec -> codec);
-
-    MapCodec<? extends RiftRoomGenerator> codec();
-
     default Future<RiftProcessedChunk> getAndRemoveRoomChunk(
             Vec3i sectionPos,
             RoomRiftSpace space,

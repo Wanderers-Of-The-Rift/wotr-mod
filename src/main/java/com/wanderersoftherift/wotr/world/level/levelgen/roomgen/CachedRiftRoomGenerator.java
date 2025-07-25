@@ -20,19 +20,8 @@ public record CachedRiftRoomGenerator(
         ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> cache,
         RiftRoomGenerator baseGenerator) implements RiftRoomGenerator {
 
-    public static final MapCodec<CachedRiftRoomGenerator> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> instance
-                    .group(RiftRoomGenerator.CODEC.fieldOf("base_room_generator")
-                            .forGetter(CachedRiftRoomGenerator::baseGenerator))
-                    .apply(instance, CachedRiftRoomGenerator::new));
-
     public CachedRiftRoomGenerator(RiftRoomGenerator extraRiftRoomGenerator) {
         this(new ConcurrentHashMap<>(), extraRiftRoomGenerator);
-    }
-
-    @Override
-    public MapCodec<? extends RiftRoomGenerator> codec() {
-        return CODEC;
     }
 
     @Override

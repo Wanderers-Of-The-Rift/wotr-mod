@@ -15,18 +15,6 @@ import java.util.concurrent.CompletableFuture;
 
 public record LayerGeneratableRiftRoomGenerator(RiftGeneratable generatable, RiftRoomGenerator baseGenerator)
         implements RiftRoomGenerator {
-    public static final MapCodec<LayerGeneratableRiftRoomGenerator> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> instance.group(
-                    RiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("generatable")
-                            .forGetter(LayerGeneratableRiftRoomGenerator::generatable),
-                    RiftRoomGenerator.CODEC.fieldOf("base_room_generator")
-                            .forGetter(LayerGeneratableRiftRoomGenerator::baseGenerator))
-                    .apply(instance, LayerGeneratableRiftRoomGenerator::new));
-
-    @Override
-    public MapCodec<? extends RiftRoomGenerator> codec() {
-        return CODEC;
-    }
 
     @Override
     public CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
