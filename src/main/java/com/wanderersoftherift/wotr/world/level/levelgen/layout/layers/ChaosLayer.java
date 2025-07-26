@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout.layers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
@@ -188,7 +189,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
         ).apply(it, Factory::new));
 
         @Override
-        public LayeredRiftLayout.LayoutLayer createLayer(MinecraftServer server) {
+        public LayeredRiftLayout.LayoutLayer createLayer(MinecraftServer server, RiftConfig riftConfig) {
             return new ChaosLayer(roomRandomizerFactory.createRandomizer(server));
         }
 
