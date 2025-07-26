@@ -19,7 +19,7 @@ public final class WotrRewardTypes {
     public static final DeferredRegister<DualCodec<? extends Reward>> REWARD_TYPES = DeferredRegister
             .create(WotrRegistries.Keys.REWARD_TYPES, WanderersOfTheRift.MODID);
 
-    public static final Supplier<MapCodec<? extends RewardProvider>> LOOT_TABLE_RWARD = REWARD_PROVIDER_TYPES
+    public static final Supplier<MapCodec<? extends RewardProvider>> LOOT_TABLE_REWARD = REWARD_PROVIDER_TYPES
             .register("loot_table", () -> LootTableRewardProvider.CODEC);
     public static final Supplier<DualCodec<? extends Reward>> ITEM_REWARD = register("item", () -> ItemReward.TYPE);
 
