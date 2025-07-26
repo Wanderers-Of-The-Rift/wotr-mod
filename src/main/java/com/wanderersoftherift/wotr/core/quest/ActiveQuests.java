@@ -13,8 +13,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -50,8 +49,8 @@ public final class ActiveQuests {
     /**
      * @return The active quests
      */
-    public Collection<QuestState> getQuestList() {
-        return Collections.unmodifiableCollection(data.quests().values());
+    public List<QuestState> getQuestList() {
+        return new ArrayList<>(data.quests().values());
     }
 
     /**
@@ -108,10 +107,6 @@ public final class ActiveQuests {
 
     public Optional<QuestState> getQuestState(UUID quest) {
         return Optional.ofNullable(data.quests().get(quest));
-    }
-
-    public QuestState getQuestState(int slot) {
-        return data.quests().values().stream().skip(slot).findFirst().orElse(null);
     }
 
     private record Data(SequencedMap<UUID, QuestState> quests) {

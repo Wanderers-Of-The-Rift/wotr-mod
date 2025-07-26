@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
@@ -51,6 +50,8 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
 
     private boolean confirmAbandon = false;
     private Button abandonQuest;
+    private List<QuestState> activeQuests;
+    private int selectedQuest = 0;
 
     public QuestsScreen(QuestMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -62,12 +63,12 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
         questInfo = new ScrollContainerWidget<>(300, 30, 300, 140);
         addRenderableWidget(questInfo);
 
-        ActiveQuests activeQuests = Minecraft.getInstance().player.getData(WotrAttachments.ACTIVE_QUESTS);
+        activeQuests = Minecraft.getInstance().player.getData(WotrAttachments.ACTIVE_QUESTS).getQuestList();
         abandonQuest = Button.builder(ABANDON_LABEL, button -> {
             if (confirmAbandon) {
                 button.setMessage(ABANDON_LABEL);
                 confirmAbandon = false;
-                PacketDistributor.sendToServer(new AbandonQuestPayload(activeQuests.getQuestState(0).getId()));
+                PacketDistributor.sendToServer(new AbandonQuestPayload(activeQuests.get(selectedQuest).getId()));
                 questInfo.children().clear();
                 button.visible = false;
             } else {
@@ -78,7 +79,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
         addRenderableWidget(abandonQuest);
 
         if (!activeQuests.isEmpty()) {
-            QuestState questState = activeQuests.getQuestState(0);
+            QuestState questState = activeQuests.get(selectedQuest);
             questInfo.children().add(new LabelEntry(font, Quest.title(questState.getOrigin()), 4));
             questInfo.children().add(new WrappedTextEntry(font, Quest.description(questState.getOrigin())));
             questInfo.children().add(new SpacerEntry(4));

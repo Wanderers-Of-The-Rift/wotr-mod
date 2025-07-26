@@ -9,6 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,38 +35,30 @@ public record RiftPredicate(Optional<RiftTierPredicate> tier, Optional<RiftTheme
     );
 
     public boolean matches(RiftConfig config) {
-        if (!tier.map(x -> x.match(config)).orElse(true)) {
-            return false;
+        for (var subpredicate : subpredicates()) {
+            if (!subpredicate.map(x -> x.match(config)).orElse(true)) {
+                return false;
+            }
         }
-
-        if (!theme.map(x -> x.match(config)).orElse(true)) {
-            return false;
-        }
-
-        return objective.map(x -> x.match(config)).orElse(true);
+        return true;
     }
 
     public MutableComponent displayText() {
         MutableComponent result = Component.empty();
         boolean empty = true;
-        if (tier.isPresent()) {
-            result.append(tier.get().displayText());
-            empty = false;
-        }
-        if (theme.isPresent()) {
-            if (!empty) {
-                result.append(" ");
+        for (var subpredicate : subpredicates()) {
+            if (subpredicate.isPresent()) {
+                if (!empty) {
+                    result.append(" ");
+                }
+                result.append(subpredicate.get().displayText());
+                empty = false;
             }
-            result.append(theme.get().displayText());
-            empty = false;
-        }
-        if (objective.isPresent()) {
-            if (!empty) {
-                result.append(" ");
-            }
-            result.append(objective.get().displayText());
-            empty = false;
         }
         return result;
+    }
+
+    private Iterable<Optional<? extends RiftConfigPredicate>> subpredicates() {
+        return List.of(tier, theme, objective);
     }
 }

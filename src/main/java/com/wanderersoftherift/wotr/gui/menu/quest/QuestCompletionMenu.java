@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
+import com.wanderersoftherift.wotr.gui.menu.slot.UUIDDataSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
@@ -28,6 +29,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -51,25 +53,29 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
             .build();
 
     private final ContainerLevelAccess access;
-    private final DataSlot selectedQuest;
     private final ItemStackHandler handInItems;
     private final ActiveQuests quests;
 
+    private final UUIDDataSlot selectedQuest = new UUIDDataSlot();
+
     public QuestCompletionMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL,
-                Minecraft.getInstance().player.getData(WotrAttachments.ACTIVE_QUESTS), 0);
+                Minecraft.getInstance().player.getData(WotrAttachments.ACTIVE_QUESTS), null);
     }
 
     public QuestCompletionMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
-            ActiveQuests activeQuests, int questIndex) {
+            ActiveQuests activeQuests, UUID selected) {
         super(WotrMenuTypes.QUEST_COMPLETION_MENU.get(), containerId);
 
         this.access = access;
         this.quests = activeQuests;
-        this.selectedQuest = DataSlot.standalone();
-        selectedQuest.set(questIndex);
-        addDataSlot(selectedQuest);
-        handInItems = new QuestItemStackHandler(() -> quests.getQuestState(selectedQuest.get()), HAND_IN_SLOTS);
+        if (selected != null) {
+            selectedQuest.set(selected);
+        }
+        for (DataSlot slot : selectedQuest.createSlots()) {
+            addDataSlot(slot);
+        }
+        handInItems = new QuestItemStackHandler(() -> getQuestState().orElse(null), HAND_IN_SLOTS);
         for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
             addSlot(new SlotItemHandler(handInItems, slot, 162 + slot * 18, 32));
         }
@@ -86,7 +92,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         return stillValid(this.access, player, WotrBlocks.QUEST_HUB.get());
     }
 
-    public QuestState getQuestState() {
+    public Optional<QuestState> getQuestState() {
         return quests.getQuestState(selectedQuest.get());
     }
 
@@ -96,7 +102,10 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
     public void handIn(ServerPlayer player) {
         access.execute((level, blockPos) -> {
-            QuestState quest = getQuestState();
+            if (getQuestState().isEmpty()) {
+                return;
+            }
+            QuestState quest = getQuestState().get();
             for (int index = 0; index < quest.goalCount(); index++) {
                 if (!quest.isGoalComplete(index) && quest.getGoal(index) instanceof GiveItemGoal goal) {
                     for (int slot = 0; slot < HAND_IN_SLOTS; slot++) {
@@ -124,7 +133,10 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
     }
 
     public void completeQuest(ServerPlayer player, UUID questId) {
-        QuestState questState = getQuestState();
+        if (getQuestState().isEmpty()) {
+            return;
+        }
+        QuestState questState = getQuestState().get();
         if (!questState.getId().equals(questId) || !questState.isComplete()
                 || !player.getData(WotrAttachments.ACTIVE_QUESTS).remove(questState.getId())) {
             return;

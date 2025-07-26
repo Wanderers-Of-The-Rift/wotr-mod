@@ -21,7 +21,7 @@ public record RiftThemePredicate(Holder<RiftTheme> theme) implements RiftConfigP
 
     @Override
     public boolean match(RiftConfig config) {
-        return !config.theme().map(actual -> actual.equals(theme)).orElse(false);
+        return config.theme().map(actual -> actual.equals(theme)).orElse(false);
     }
 
     @Override

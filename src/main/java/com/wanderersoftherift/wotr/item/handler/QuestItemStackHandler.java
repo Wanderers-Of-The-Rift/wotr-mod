@@ -40,13 +40,15 @@ public class QuestItemStackHandler extends ItemStackHandler {
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         QuestState questState = quest.get();
+        if (questState == null) {
+            return false;
+        }
         for (int i = 0; i < questState.goalCount(); i++) {
             if (!questState.isGoalComplete(i) && questState.getGoal(i) instanceof GiveItemGoal goal
                     && goal.item().test(stack)) {
                 return true;
             }
         }
-
         return false;
     }
 
