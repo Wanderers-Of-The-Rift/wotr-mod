@@ -1,0 +1,22 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essence_type": "wotr:earth",
+      "min_percent": 20.0
+    },
+    {
+      "essence_type": "wotr:plant",
+      "min_percent": 20.0
+    },
+    {
+      "essence_type": "wotr:light",
+      "min_percent": 10.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:meadow"
+  },
+  "priority": 10
+}

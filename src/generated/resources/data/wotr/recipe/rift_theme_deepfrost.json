@@ -1,0 +1,22 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essence_type": "wotr:nether",
+      "min_percent": 10.0
+    },
+    {
+      "essence_type": "wotr:water",
+      "min_percent": 30.0
+    },
+    {
+      "essence_type": "wotr:death",
+      "min_percent": 10.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:deepfrost"
+  },
+  "priority": 10
+}

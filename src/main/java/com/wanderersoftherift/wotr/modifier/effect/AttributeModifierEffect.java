@@ -126,10 +126,11 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
             sign = "negative";
         }
 
-        MutableComponent cmp = Component
-                .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign, roundedValue,
-                        Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(style);
+        MutableComponent cmp = Component.translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign,
+                roundedValue, Component.translatable(attribute.value().getDescriptionId()));
+        if (style != null) {
+            cmp = cmp.withStyle(style);
+        }
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
@@ -143,10 +144,12 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
             sign = "negative";
         }
 
-        MutableComponent cmp = Component
-                .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
-                        Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(style);
+        MutableComponent cmp = Component.translatable(
+                "modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
+                Component.translatable(attribute.value().getDescriptionId()));
+        if (style != null) {
+            cmp = cmp.withStyle(style);
+        }
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 }

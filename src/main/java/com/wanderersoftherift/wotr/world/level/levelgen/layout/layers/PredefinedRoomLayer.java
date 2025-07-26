@@ -34,7 +34,7 @@ public class PredefinedRoomLayer implements LayeredRiftLayout.LayoutLayer {
         }
     }
 
-    public static record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory, Vec3i position)
+    public record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory, Vec3i position)
             implements LayeredRiftLayout.LayoutLayer.Factory {
 
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(

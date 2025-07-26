@@ -465,7 +465,7 @@ public final class RiftMobSpawner implements IOwnedSpawner {
         void markUpdated();
     }
 
-    public static enum FlameParticle {
+    public enum FlameParticle {
         NORMAL(ParticleTypes.FLAME),
         OMINOUS(ParticleTypes.SOUL_FIRE_FLAME);
 

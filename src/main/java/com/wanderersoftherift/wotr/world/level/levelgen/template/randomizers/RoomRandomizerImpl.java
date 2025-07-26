@@ -116,7 +116,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         }
     }
 
-    public static record Factory(ResourceLocation pool, RiftSpaceHolderFactory spaceHolderFactory)
+    public record Factory(ResourceLocation pool, RiftSpaceHolderFactory spaceHolderFactory)
             implements RoomRandomizer.Factory {
 
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
@@ -133,7 +133,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         }
     }
 
-    public static interface RiftSpaceHolderFactory {
+    public interface RiftSpaceHolderFactory {
         RiftSpaceHolder create(List<RiftGeneratable> templates, RoomConverter converter);
     }
 

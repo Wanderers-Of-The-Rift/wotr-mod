@@ -181,7 +181,7 @@ public class ChaosLayer implements LayeredRiftLayout.LayoutLayer {
         }
     }
 
-    public static record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory)
+    public record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory)
             implements LayeredRiftLayout.LayoutLayer.Factory {
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
                 RoomRandomizerImpl.Factory.CODEC.fieldOf("room_randomizer").forGetter(Factory::roomRandomizerFactory)

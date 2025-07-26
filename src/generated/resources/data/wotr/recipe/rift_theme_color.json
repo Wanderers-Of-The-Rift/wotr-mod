@@ -1,0 +1,18 @@
+{
+  "type": "wotr:key_forge_recipe",
+  "essence_reqs": [
+    {
+      "essence_type": "wotr:water",
+      "min_percent": 25.0
+    },
+    {
+      "essence_type": "wotr:fabric",
+      "min_percent": 25.0
+    }
+  ],
+  "output": {
+    "type": "wotr:rift_theme",
+    "value": "wotr:color"
+  },
+  "priority": 10
+}

@@ -16,6 +16,7 @@ public final class ColorUtil {
     public static final int ORANGE_RED = 0xFF4500;
     public static final int DARK_ORANGE = 0xFF8C00;
     public static final int GREEN = 0x00FF7F;
+    public static final int LIGHT_GREEN = 0x88FF88;
     public static final int LIME_GREEN = 0x32CD32;
     public static final int SEA_GREEN = 0x3CB371;
     public static final int FOREST_GREEN = 0x228B22;

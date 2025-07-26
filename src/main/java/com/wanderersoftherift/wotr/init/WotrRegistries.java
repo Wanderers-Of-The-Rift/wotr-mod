@@ -7,13 +7,22 @@ import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
+import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.core.quest.Goal;
+import com.wanderersoftherift.wotr.core.quest.GoalProvider;
+import com.wanderersoftherift.wotr.core.quest.Quest;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.core.quest.RewardProvider;
+import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.serialization.DualCodec;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
@@ -55,6 +64,19 @@ public class WotrRegistries {
             Keys.RIFT_SHAPE_TYPES).create();
     public static final Registry<ContainerType> CONTAINER_TYPE = new RegistryBuilder<>(
             Keys.CONTAINER_TYPES).create();
+    public static final Registry<CharacterMenuItem> CHARACTER_MENU_ITEMS = new RegistryBuilder<>(
+            Keys.CHARACTER_MENU_ITEMS
+    ).sync(true).create();
+    public static final Registry<MapCodec<? extends GoalProvider>> GOAL_PROVIDER_TYPES = new RegistryBuilder<>(
+            Keys.GOAL_PROVIDER_TYPES).create();
+    public static final Registry<DualCodec<? extends Goal>> GOAL_TYPES = new RegistryBuilder<>(Keys.GOAL_TYPES)
+            .sync(true)
+            .create();
+    public static final Registry<MapCodec<? extends RewardProvider>> REWARD_PROVIDER_TYPES = new RegistryBuilder<>(
+            Keys.REWARD_PROVIDER_TYPES).create();
+    public static final Registry<DualCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
+            .sync(true)
+            .create();
 
     public static final class Keys {
 
@@ -66,6 +88,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
         public static final ResourceKey<Registry<ContainerType>> CONTAINER_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("container_type"));
+        public static final ResourceKey<Registry<Currency>> CURRENCIES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("currency"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
         public static final ResourceKey<Registry<ImplicitConfig>> GEAR_IMPLICITS_CONFIG = ResourceKey
@@ -100,6 +124,21 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
+        public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
+
+        public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("quest"));
+        public static final ResourceKey<Registry<MapCodec<? extends GoalProvider>>> GOAL_PROVIDER_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal_provider_type"));
+        public static final ResourceKey<Registry<DualCodec<? extends Goal>>> GOAL_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("goal_type"));
+        public static final ResourceKey<Registry<MapCodec<? extends RewardProvider>>> REWARD_PROVIDER_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("reward_provider_type"));
+        public static final ResourceKey<Registry<DualCodec<? extends Reward>>> REWARD_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("reward_type"));
 
         private Keys() {
         }
@@ -119,6 +158,11 @@ public class WotrRegistries {
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
         event.register(CONTAINER_TYPE);
+        event.register(CHARACTER_MENU_ITEMS);
+        event.register(GOAL_PROVIDER_TYPES);
+        event.register(GOAL_TYPES);
+        event.register(REWARD_PROVIDER_TYPES);
+        event.register(REWARD_TYPES);
     }
 
     @SubscribeEvent
@@ -133,5 +177,8 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
     }
 }

@@ -1,0 +1,19 @@
+{
+  "goals": [
+    {
+      "type": "wotr:fixed_kill_mob",
+      "mob": "#minecraft:skeletons",
+      "mob_label": "mobgroup.minecraft.skeletons",
+      "count": 4
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 8,
+        "id": "minecraft:gold_ingot"
+      }
+    }
+  ]
+}
