@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.quest.Goal;
-import com.wanderersoftherift.wotr.core.quest.GoalType;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.predicate.RiftPredicate;
+import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -40,10 +40,10 @@ public record CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, R
             CompleteRiftGoal::new
     );
 
-    public static final GoalType<CompleteRiftGoal> TYPE = new GoalType<>(CODEC, STREAM_CODEC);
+    public static final DualCodec<CompleteRiftGoal> TYPE = new DualCodec<>(CODEC, STREAM_CODEC);
 
     @Override
-    public GoalType<?> getType() {
+    public DualCodec<CompleteRiftGoal> getType() {
         return TYPE;
     }
 

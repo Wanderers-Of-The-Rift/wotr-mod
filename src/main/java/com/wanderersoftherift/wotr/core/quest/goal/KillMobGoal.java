@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.quest.Goal;
-import com.wanderersoftherift.wotr.core.quest.GoalType;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -34,10 +34,10 @@ public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int count) i
             (label, quantity) -> new KillMobGoal(null, label, quantity)
     );
 
-    public static final GoalType<KillMobGoal> TYPE = new GoalType<>(CODEC, STREAM_CODEC);
+    public static final DualCodec<KillMobGoal> TYPE = new DualCodec<>(CODEC, STREAM_CODEC);
 
     @Override
-    public GoalType<KillMobGoal> getType() {
+    public DualCodec<KillMobGoal> getType() {
         return TYPE;
     }
 
