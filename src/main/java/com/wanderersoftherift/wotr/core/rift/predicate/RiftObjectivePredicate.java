@@ -19,7 +19,7 @@ public record RiftObjectivePredicate(Holder<ObjectiveType> objective) implements
 
     @Override
     public boolean match(RiftConfig config) {
-        return !config.objective().map(actual -> actual.equals(objective)).orElse(false);
+        return config.objective().map(actual -> actual.equals(objective)).orElse(false);
     }
 
     @Override

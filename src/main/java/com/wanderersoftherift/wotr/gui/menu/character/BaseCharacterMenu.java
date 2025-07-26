@@ -13,10 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 /**
@@ -52,7 +51,6 @@ public abstract class BaseCharacterMenu extends AbstractContainerMenu {
      */
     private static List<Holder<CharacterMenuItem>> sortItems(List<Holder<CharacterMenuItem>> items) {
         List<Holder<CharacterMenuItem>> open = new ArrayList<>(items);
-        Set<MenuType<?>> closed = new HashSet<>();
         List<Holder<CharacterMenuItem>> result = new ArrayList<>();
         // Detect reference loops
         boolean changed = true;
@@ -64,17 +62,15 @@ public abstract class BaseCharacterMenu extends AbstractContainerMenu {
                 Holder<CharacterMenuItem> item = iterator.next();
                 int insertAt = result.size();
                 if (item.value().relativeTo() != null) {
-                    if (!closed.contains(item.value().relativeTo())) {
+                    OptionalInt index = IntStream.range(0, result.size())
+                            .filter(i -> result.get(i).value().menuType() == item.value().relativeTo())
+                            .findFirst();
+                    if (index.isEmpty()) {
                         continue;
                     }
-                    int index = IntStream.range(0, result.size())
-                            .filter(i -> result.get(i).value().menuType() == item.value().relativeTo())
-                            .findFirst()
-                            .getAsInt();
-                    insertAt = item.value().orderHint().insertAt(index);
+                    insertAt = item.value().orderHint().insertAt(index.getAsInt());
                 }
                 result.add(insertAt, item);
-                closed.add(item.value().menuType());
                 iterator.remove();
                 changed = true;
             }

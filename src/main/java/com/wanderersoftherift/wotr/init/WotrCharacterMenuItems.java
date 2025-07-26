@@ -20,8 +20,7 @@ public class WotrCharacterMenuItems {
             Component.translatable(WanderersOfTheRift.translationId("container", "guilds")),
             WotrMenuTypes.GUILDS_MENU.get(),
             (id, inventory, player) -> new GuildMenu(id, inventory,
-                    ContainerLevelAccess.create(player.level(), player.getOnPos())),
-            OrderHint.BEFORE, null
+                    ContainerLevelAccess.create(player.level(), player.getOnPos()))
     ));
 
     public static final Holder<CharacterMenuItem> WALLET = MENU_ITEMS.register("wallet", () -> new CharacterMenuItem(
@@ -29,7 +28,7 @@ public class WotrCharacterMenuItems {
             WotrMenuTypes.WALLET_MENU.get(),
             (id, inventory, player) -> new WalletMenu(id, inventory,
                     ContainerLevelAccess.create(player.level(), player.getOnPos())),
-            OrderHint.AFTER, WotrMenuTypes.GUILDS_MENU.get()
+            WotrMenuTypes.GUILDS_MENU.get(), OrderHint.AFTER
     ));
 
     public static final Holder<CharacterMenuItem> QUESTS = MENU_ITEMS.register("quests", () -> new CharacterMenuItem(
@@ -37,7 +36,7 @@ public class WotrCharacterMenuItems {
             WotrMenuTypes.QUEST_MENU.get(),
             (id, inventory, player) -> new QuestMenu(id, inventory,
                     ContainerLevelAccess.create(player.level(), player.getOnPos())),
-            OrderHint.AFTER, WotrMenuTypes.WALLET_MENU.get()
+            WotrMenuTypes.WALLET_MENU.get(), OrderHint.AFTER
     ));
 
 }
