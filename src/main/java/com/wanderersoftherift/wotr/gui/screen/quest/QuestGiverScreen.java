@@ -87,9 +87,8 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
             for (int i = 0; i < menu.getAvailableQuests().size(); i++) {
                 final int index = i;
                 QuestState quest = menu.getAvailableQuests().get(i);
-                questsWidget.children()
-                        .add(new ButtonEntry(Quest.title(quest.getOrigin()), QUEST_ITEM_HEIGHT,
-                                () -> selectQuest(index)));
+                questsWidget.addChild(
+                        new ButtonEntry(Quest.title(quest.getOrigin()), QUEST_ITEM_HEIGHT, () -> selectQuest(index)));
             }
             menu.clearDirty();
         }
@@ -100,23 +99,21 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
         QuestState quest = menu.getAvailableQuests().get(index);
 
         questInfo.children().clear();
-        questInfo.children().add(new LabelEntry(font, Quest.title(quest.getOrigin()), 4));
-        questInfo.children().add(new WrappedTextEntry(font, Quest.description(quest.getOrigin())));
-        questInfo.children().add(new SpacerEntry(4));
-        questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 0));
+        questInfo.addChild(new LabelEntry(font, Quest.title(quest.getOrigin()), 4))
+                .addChild(new WrappedTextEntry(font, Quest.description(quest.getOrigin())))
+                .addChild(new SpacerEntry(4))
+                .addChild(new LabelEntry(font, GOAL_LABEL, 0));
         for (int i = 0; i < quest.goalCount(); i++) {
-            questInfo.children().add(new GoalStateWidget(quest, i));
+            questInfo.addChild(new GoalStateWidget(quest, i));
         }
-        questInfo.children().add(new SpacerEntry(2));
-        questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
+        questInfo.addChild(new SpacerEntry(2)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
         List<AbstractWidget> rewards = quest.getRewards()
                 .stream()
                 .map(RewardDisplays::createFor)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
-        questInfo.children().add(new FlowContainer(rewards, 2));
-        questInfo.children().add(new SpacerEntry(2));
+        questInfo.addChild(new FlowContainer(rewards, 2)).addChild(new SpacerEntry(2));
         questInfo.setScrollAmount(0);
         // Accept button
         accept.visible = true;

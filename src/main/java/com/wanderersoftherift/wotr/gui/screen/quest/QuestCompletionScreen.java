@@ -99,17 +99,16 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
         }
         questInfo = new ScrollContainerWidget<>(leftPos + 5, topPos + 32, 149, 160);
         for (int i = 0; i < currentQuest.goalCount(); i++) {
-            questInfo.children().add(new GoalStateWidget(currentQuest, i));
+            questInfo.addChild(new GoalStateWidget(currentQuest, i));
         }
-        questInfo.children().add(new SpacerEntry(6));
-        questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
+        questInfo.addChild(new SpacerEntry(6)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
         List<AbstractWidget> rewards = currentQuest.getRewards()
                 .stream()
                 .map(RewardDisplays::createFor)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
-        questInfo.children().add(new FlowContainer(rewards, 2));
+        questInfo.addChild(new FlowContainer(rewards, 2));
         addRenderableWidget(questInfo);
     }
 

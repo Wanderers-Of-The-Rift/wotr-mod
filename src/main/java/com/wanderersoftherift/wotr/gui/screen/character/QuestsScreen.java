@@ -80,22 +80,21 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
 
         if (!activeQuests.isEmpty()) {
             QuestState questState = activeQuests.get(selectedQuest);
-            questInfo.children().add(new LabelEntry(font, Quest.title(questState.getOrigin()), 4));
-            questInfo.children().add(new WrappedTextEntry(font, Quest.description(questState.getOrigin())));
-            questInfo.children().add(new SpacerEntry(4));
-            questInfo.children().add(new LabelEntry(font, GOAL_LABEL, 0));
+            questInfo.addChild(new LabelEntry(font, Quest.title(questState.getOrigin()), 4))
+                    .addChild(new WrappedTextEntry(font, Quest.description(questState.getOrigin())))
+                    .addChild(new SpacerEntry(4))
+                    .addChild(new LabelEntry(font, GOAL_LABEL, 0));
             for (int i = 0; i < questState.goalCount(); i++) {
-                questInfo.children().add(new GoalStateWidget(questState, i));
+                questInfo.addChild(new GoalStateWidget(questState, i));
             }
-            questInfo.children().add(new SpacerEntry(2));
-            questInfo.children().add(new LabelEntry(font, REWARDS_LABEL, 4));
+            questInfo.addChild(new SpacerEntry(2)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
             List<AbstractWidget> rewards = questState.getRewards()
                     .stream()
                     .map(RewardDisplays::createFor)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .toList();
-            questInfo.children().add(new FlowContainer(rewards, 2));
+            questInfo.addChild(new FlowContainer(rewards, 2));
         } else {
             abandonQuest.visible = false;
         }
