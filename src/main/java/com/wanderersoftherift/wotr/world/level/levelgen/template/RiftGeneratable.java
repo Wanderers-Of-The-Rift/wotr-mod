@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -84,7 +85,10 @@ public interface RiftGeneratable {
                     .toList();
 
             if (childJigsawList.isEmpty()) {
-                continue;// todo possibly multiple attempts
+                WanderersOfTheRift.LOGGER.info(
+                        "failed to spawn poi {} in room {} at jigsaw location {}, report this to build team",
+                        jigsaw.pool(), generatable.identifier(), jigsaw.info().pos());
+                continue;
             }
             var childJigsaw = childJigsawList.get(random.nextInt(childJigsawList.size()));
             var childPrimaryDirection = simplifiedDirection(childJigsaw, TripleMirror.NONE);
