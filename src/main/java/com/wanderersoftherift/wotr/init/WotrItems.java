@@ -42,7 +42,7 @@ public class WotrItems {
 
     //Gear
     public static final DeferredItem<OneHandRanged> WAND = ITEMS.register("wand",
-            OneHandRanged -> new OneHandRanged(new Item.Properties()
+            registryName -> new OneHandRanged(new Item.Properties()
                     .stacksTo(1)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("wand")))));
 
