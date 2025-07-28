@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.item.gear;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;

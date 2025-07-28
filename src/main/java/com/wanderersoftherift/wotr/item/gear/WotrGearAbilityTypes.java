@@ -2,8 +2,6 @@ package com.wanderersoftherift.wotr.item.gear;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.abilities.StandardAbility;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

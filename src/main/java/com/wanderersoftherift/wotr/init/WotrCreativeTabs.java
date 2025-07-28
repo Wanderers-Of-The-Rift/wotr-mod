@@ -106,7 +106,6 @@ public class WotrCreativeTabs {
     private static void generateGear(
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<AbstractGearAbility> registry) {
-        //ArrayList<ItemStack> toBeSent = new ArrayList<ItemStack>() {};
         ItemStack item = WotrItems.WAND.toStack();
         registry.listElements().forEach(abilityHolder -> {
             if ("wotr:gear_basic".equals(abilityHolder.value().getType().toString())) {

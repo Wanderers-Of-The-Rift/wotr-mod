@@ -1,9 +1,6 @@
 package com.wanderersoftherift.wotr.network;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.gear.AbstractGearAbility;
 import io.netty.buffer.ByteBuf;
@@ -43,20 +40,5 @@ public record UseGearAbilityPayload(boolean isBasic) implements CustomPacketPayl
             AbstractGearAbility secondary = abilityItem.get(WotrDataComponentType.GEAR_SECONDARY).value();
             secondary.onActivate(player, abilityItem);
         }
-/*            if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
-            {
-                if (!ability.isToggled(player)) {
-                    ability.onActivate(player, slot(), abilityItem);
-                } else {
-                    ability.onDeactivate(player, slot());
-                }
-
-                if (ability.canPlayerUse(player)) {
-                    ability.toggle(player);
-                }
-            } else {
-                ability.onActivate(player, slot(), abilityItem);
-            } */
-
     }
 }

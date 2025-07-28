@@ -5,8 +5,6 @@ import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
-import com.wanderersoftherift.wotr.item.gear.AbstractGearAbility;
-import com.wanderersoftherift.wotr.item.gear.BasicGearAbility;
 import com.wanderersoftherift.wotr.item.gear.OneHandRanged;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
@@ -40,10 +38,9 @@ public class WotrItems {
     public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register("builder_glasses",
             BuilderGlasses::new);
 
-    //Gear
+    // Gear
     public static final DeferredItem<OneHandRanged> WAND = ITEMS.register("wand",
-            registryName -> new OneHandRanged(new Item.Properties()
-                    .stacksTo(1)
+            registryName -> new OneHandRanged(new Item.Properties().stacksTo(1)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("wand")))));
 
     // Runegems
