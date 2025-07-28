@@ -65,6 +65,9 @@ public interface RiftGeneratable {
             var pool = jigsaw.pool();
             var next = RiftTemplates.random(server, pool, random);
             if (next == null) {
+                if (!("minecraft".equals(pool.getNamespace()) && "empty".equals(pool.getPath()))) {
+                    WanderersOfTheRift.LOGGER.info("empty pool {}", pool);
+                }
                 continue;
             }
 
