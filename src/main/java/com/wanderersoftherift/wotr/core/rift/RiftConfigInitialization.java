@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
-import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
@@ -38,50 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-// @EventBusSubscriber
 public class RiftConfigInitialization {
 
     public static final int DEFAULT_RIFT_HEIGHT_IN_CHUNKS = 24;
-
-    /**
-     * Example of an event for modifying rift generator settings
-     * 
-     * @param event
-     */
-    // @SubscribeEvent
-    private static void appendObjectiveGenerationStuff(RiftEvent.Created.Pre event) {
-        var config = event.getConfig();
-        var objectiveOptional = config.objective();
-        if (!objectiveOptional.isPresent()) {
-            return;
-        }
-        var objective = objectiveOptional.get().value();
-        var player = event.getFirstPlayer();
-
-        // for replacing POIs:
-        var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
-                        WanderersOfTheRift.id("rift/poi/anomaly"), 1))
-                .addAll(config.jigsawProcessors())
-                .build();
-        config = config.withJigsawProcessors(newJigsawProcessors);
-
-        var layout = config.layout().get();
-        if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
-            config = config
-                    .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
-                            .add(
-                                    // For placing special rooms:
-                                    new PredefinedRoomLayer.Factory(
-                                            new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
-                                                    RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
-                                            new Vec3i(-1, -1, 2))
-                            )
-                            .addAll(layeredLayout.layers())
-                            .build()));
-        }
-        event.setConfig(config);
-    }
 
     static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server, ServerPlayer firstPlayer) {
         var random = RandomSource.create();
