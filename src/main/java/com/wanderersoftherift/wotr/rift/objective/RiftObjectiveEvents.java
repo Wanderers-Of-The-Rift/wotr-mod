@@ -52,7 +52,7 @@ public class RiftObjectiveEvents {
                         .registryAccess()
                         .lookupOrThrow(WotrRegistries.Keys.OBJECTIVES)
                         .getRandomElementOf(WotrTags.Objectives.RANDOM_SELECTABLE,
-                                RandomSource.create(event.getConfig().seed().get() + 668_453_148))
+                                RandomSource.create(event.getConfig().riftGen().seed().get() + 668_453_148))
                         .orElseThrow(() -> new IllegalStateException("No objectives available")));
 
         event.setConfig(event.getConfig().withObjective(objectiveType));

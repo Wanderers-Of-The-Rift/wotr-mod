@@ -57,7 +57,7 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
 
         @Override
         public RiftRoomGenerator create(RiftConfig config) {
-            return new CoreRiftRoomGenerator(ImmutableList.copyOf(config.jigsawProcessors()));
+            return new CoreRiftRoomGenerator(ImmutableList.copyOf(config.riftGen().jigsawProcessors()));
         }
 
         @Override

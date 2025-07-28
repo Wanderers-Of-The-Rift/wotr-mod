@@ -15,6 +15,7 @@ public class RiftConfigInitializationEvents {
     // @SubscribeEvent
     private static void example(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
+        var riftGenConfig = config.riftGen();
 
         // get objective:
         var objectiveOptional = config.objective();
@@ -30,13 +31,13 @@ public class RiftConfigInitializationEvents {
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/5"),
                         WanderersOfTheRift.id("rift/new_pool"), 1))
-                .addAll(config.jigsawProcessors())
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
-        config = config.withJigsawProcessors(newJigsawProcessors);
+        riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
 
-        var layout = config.layout().get();
+        var layout = riftGenConfig.layout().get();
         if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
-            config = config
+            riftGenConfig = riftGenConfig
                     .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
                             .add(
                                     // For placing special rooms:
@@ -48,12 +49,13 @@ public class RiftConfigInitializationEvents {
                             .addAll(layeredLayout.layers())
                             .build()));
         }
-        event.setConfig(config);
+        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
     }
 
     // @SubscribeEvent(priority = EventPriority.LOW)
     private static void appendDefaultAnomalies(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
+        var riftGenConfig = config.riftGen();
         var chance = 0.1f;
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
@@ -64,15 +66,16 @@ public class RiftConfigInitializationEvents {
                         WanderersOfTheRift.id("rift/anomaly/halfway/3"), chance))
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/inwall/3"),
                         WanderersOfTheRift.id("rift/anomaly/inwall/3"), chance))
-                .addAll(config.jigsawProcessors())
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
-        config = config.withJigsawProcessors(newJigsawProcessors);
-        event.setConfig(config);
+        riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
+        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
     }
 
     // @SubscribeEvent
     private static void appendRandomSizeReduction(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
+        var riftGenConfig = config.riftGen();
         var chance = 0.2f;
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/5"),
@@ -83,9 +86,9 @@ public class RiftConfigInitializationEvents {
                         WanderersOfTheRift.id("rift/poi/halfway/3"), chance))
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/inwall/5"),
                         WanderersOfTheRift.id("rift/poi/inwall/3"), chance))
-                .addAll(config.jigsawProcessors())
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
-        config = config.withJigsawProcessors(newJigsawProcessors);
-        event.setConfig(config);
+        riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
+        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
     }
 }

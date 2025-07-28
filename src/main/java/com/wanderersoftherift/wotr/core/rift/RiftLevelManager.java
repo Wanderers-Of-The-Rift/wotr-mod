@@ -166,7 +166,8 @@ public final class RiftLevelManager {
 
         config = RiftConfigInitialization.initializeConfig(config, server, firstPlayer);
         config = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
-        var loadedRiftHeight = config.layout()
+        var loadedRiftHeight = config.riftGen()
+                .layout()
                 .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS);
         if (loadedRiftHeight.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("missing values in RiftConfig");
@@ -350,7 +351,7 @@ public final class RiftLevelManager {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        int seed = config.seed().orElseGet(() -> new Random().nextInt());
+        int seed = config.riftGen().seed().orElseGet(() -> new Random().nextInt());
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
                 new DerivedLevelData(worldData, worldData.overworldData()),

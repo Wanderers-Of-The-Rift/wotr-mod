@@ -106,7 +106,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         RiftConfig config = key.getOrDefault(WotrDataComponentType.RIFT_CONFIG, new RiftConfig(0));
-        key.set(WotrDataComponentType.RIFT_CONFIG, config.withSeed(seed));
+        key.set(WotrDataComponentType.RIFT_CONFIG, config.withRiftGenerationConfig(config.riftGen().withSeed(seed)));
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_seed"), seed), true);

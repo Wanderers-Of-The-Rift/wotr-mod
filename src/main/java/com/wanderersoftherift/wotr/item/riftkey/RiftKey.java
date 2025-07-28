@@ -28,7 +28,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,6 +139,6 @@ public class RiftKey extends Item {
         Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RIFT_OBJECTIVE);
         Integer seed = stack.get(WotrDataComponentType.RIFT_SEED);
         return new RiftConfig(tier, Optional.ofNullable(riftTheme), Optional.ofNullable(objective),
-                Optional.empty()/* todo */, Optional.empty(), true, Collections.emptyList(), Optional.ofNullable(seed));
+                RiftGenerationConfig.EMPTY.withSeed(seed));
     }
 }

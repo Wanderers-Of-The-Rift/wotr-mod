@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
@@ -43,14 +44,15 @@ public class RiftConfigInitialization {
 
     static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server, ServerPlayer firstPlayer) {
         var random = RandomSource.create();
-        int seed = baseConfig.seed().orElseGet(random::nextInt);
+        int seed = baseConfig.riftGen().seed().orElseGet(random::nextInt);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
 
-        return baseConfig.withSeedIfAbsent(seed)
-                .withThemeIfAbsent(riftTheme)
-                .withLayoutIfAbsent(baseConfig.layout().orElse(defaultLayout(baseConfig.tier(), seed)))
-                .withRoomGeneratorIfAbsent(defaultRoomGenerator())
-                .withJigsawProcessors(initializeJigsawProcessors());
+        return baseConfig.withRiftGenerationConfig(
+                new RiftGenerationConfig(
+                        Optional.of(baseConfig.riftGen().layout().orElse(defaultLayout(baseConfig.tier(), seed))),
+                        Optional.of(defaultRoomGenerator()), true, initializeJigsawProcessors(), Optional.of(seed)
+                )
+        ).withThemeIfAbsent(riftTheme);
     }
 
     static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {

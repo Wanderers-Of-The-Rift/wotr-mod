@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
@@ -115,8 +116,8 @@ public class FastRiftGenerator extends ChunkGenerator {
         this.filler = new SingleBlockChunkGeneratable(customBlock);
 
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR);
-        this.roomGenerator = config.roomGenerator().get().create(config);
+                this.getRiftGenerationConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR);
+        this.roomGenerator = this.getRiftGenerationConfig().roomGenerator().get().create(config);
     }
 
     @Override
@@ -128,9 +129,16 @@ public class FastRiftGenerator extends ChunkGenerator {
         return config;
     }
 
+    public RiftGenerationConfig getRiftGenerationConfig() {
+        return getRiftConfig().riftGen();
+    }
+
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, config.layout().get().createLayout(server, config.seed().get(), config));
+            layout.compareAndSet(null,
+                    getRiftGenerationConfig().layout()
+                            .get()
+                            .createLayout(server, getRiftGenerationConfig().seed().get(), config));
         }
         return layout.get();
     }
@@ -142,7 +150,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         runCorridorBlender(chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftConfig().seed().orElse(0) + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
+                this.getRiftGenerationConfig().seed().orElse(0) + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
@@ -238,7 +246,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     private void runCorridorBlender(ChunkAccess chunk, PositionalRandomFactory randomFactory, WorldGenLevel level) {
-        if (!config.generatePassages()) {
+        if (!getRiftGenerationConfig().generatePassages()) {
             return;
         }
         var rng = randomFactory.at(chunk.getPos().x, 0, chunk.getPos().z);
