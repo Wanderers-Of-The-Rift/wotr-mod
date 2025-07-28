@@ -13,18 +13,18 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class WotrJigsawListProcessors {
-    public static final DeferredRegister<MapCodec<? extends JigsawListProcessor>> JIGSAL_LIST_PROCESSORS = DeferredRegister
+    public static final DeferredRegister<MapCodec<? extends JigsawListProcessor>> JIGSAW_LIST_PROCESSORS = DeferredRegister
             .create(WotrRegistries.JIGSAW_LIST_PROCESSOR_TYPES, WanderersOfTheRift.MODID);
 
-    public static final Supplier<MapCodec<ShuffleJigsaws>> SHUFFLE_JIGSAWS = JIGSAL_LIST_PROCESSORS.register("shuffle",
+    public static final Supplier<MapCodec<ShuffleJigsaws>> SHUFFLE_JIGSAWS = JIGSAW_LIST_PROCESSORS.register("shuffle",
             () -> ShuffleJigsaws.CODEC);
 
-    public static final Supplier<MapCodec<ReplaceJigsaws>> REPLACE_JIGSAWS = JIGSAL_LIST_PROCESSORS.register("replace",
+    public static final Supplier<MapCodec<ReplaceJigsaws>> REPLACE_JIGSAWS = JIGSAW_LIST_PROCESSORS.register("replace",
             () -> ReplaceJigsaws.CODEC);
 
-    public static final Supplier<MapCodec<FilterJigsaws>> FILTER_JIGSAWS = JIGSAL_LIST_PROCESSORS.register("filter",
+    public static final Supplier<MapCodec<FilterJigsaws>> FILTER_JIGSAWS = JIGSAW_LIST_PROCESSORS.register("filter",
             () -> FilterJigsaws.CODEC);
-    public static final Supplier<MapCodec<ReplaceJigsawsBulk>> FILTER_JIGSAWS_BOLK = JIGSAL_LIST_PROCESSORS
+    public static final Supplier<MapCodec<ReplaceJigsawsBulk>> FILTER_JIGSAWS_BOLK = JIGSAW_LIST_PROCESSORS
             .register("replace_bulk", () -> ReplaceJigsawsBulk.CODEC);
 
 }

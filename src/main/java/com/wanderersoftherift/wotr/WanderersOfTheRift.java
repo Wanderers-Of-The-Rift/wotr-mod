@@ -99,7 +99,7 @@ public class WanderersOfTheRift {
         WotrRiftShapes.RIFT_SHAPES.register(modEventBus);
         WotrRiftBuiltinGeneratables.RIFT_BUILTIN_GENERATABLES.register(modEventBus);
         WotrRiftRoomGeneratorFactories.RIFT_ROOM_GENERATOR_FACTORIES.register(modEventBus);
-        WotrJigsawListProcessors.JIGSAL_LIST_PROCESSORS.register(modEventBus);
+        WotrJigsawListProcessors.JIGSAW_LIST_PROCESSORS.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);

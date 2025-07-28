@@ -25,27 +25,25 @@ public class StringBlockStateCodec implements Codec<BlockState> {
 
     @Override
     public <T> DataResult<Pair<BlockState, T>> decode(DynamicOps<T> ops, T input) {
-        if (ops instanceof RegistryOps<?> rops) {
-            var regInfo = rops.lookupProvider.lookup(Registries.BLOCK).get();
-            if (regInfo instanceof RegistryOps.RegistryInfo<Block>(HolderLookup lookup, var a, var b)) {
-                var stringResult = Codec.STRING.decode(ops, input);
-                if (stringResult.isSuccess()) {
-
-                    try {
-                        return DataResult
-                                .success(new Pair<>(BlockStateParser
-                                        .parseForBlock((HolderLookup<Block>) lookup,
-                                                stringResult.getOrThrow().getFirst(), false)
-                                        .blockState(), stringResult.getOrThrow().getSecond()));
-                    } catch (CommandSyntaxException e) {
-                        return DataResult.error(() -> e.getMessage());
-                    }
-                }
-                return (DataResult<Pair<BlockState, T>>) (DataResult) stringResult;
-
-            }
+        if (!(ops instanceof RegistryOps<?> registryOps)) {
+            return SIMPLE.decode(ops, input);
         }
-        return SIMPLE.decode(ops, input);
+        var regInfo = registryOps.lookupProvider.lookup(Registries.BLOCK).get();
+        if (!(regInfo instanceof RegistryOps.RegistryInfo<Block>(HolderLookup lookup, var a, var b))) {
+            return SIMPLE.decode(ops, input);
+        }
+        var stringResult = Codec.STRING.decode(ops, input);
+        if (!stringResult.isSuccess()) {
+            return (DataResult<Pair<BlockState, T>>) (DataResult) stringResult;
+        }
+
+        try {
+            return DataResult.success(new Pair<>(BlockStateParser
+                    .parseForBlock((HolderLookup<Block>) lookup, stringResult.getOrThrow().getFirst(), false)
+                    .blockState(), stringResult.getOrThrow().getSecond()));
+        } catch (CommandSyntaxException e) {
+            return DataResult.error(() -> e.getMessage());
+        }
     }
 
     @Override
