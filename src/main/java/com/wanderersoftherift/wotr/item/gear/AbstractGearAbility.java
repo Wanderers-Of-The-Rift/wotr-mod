@@ -37,7 +37,8 @@ public abstract class AbstractGearAbility {
     private Holder<Item> gearPiece;
     private ResourceLocation type;
 
-    public AbstractGearAbility(ResourceLocation abilityName, Holder<Item> gear, List<AbstractEffect> effects, ResourceLocation type) {
+    public AbstractGearAbility(ResourceLocation abilityName, Holder<Item> gear, List<AbstractEffect> effects,
+            ResourceLocation type) {
         this.name = abilityName;
         this.gearPiece = gear;
         this.effects = effects;

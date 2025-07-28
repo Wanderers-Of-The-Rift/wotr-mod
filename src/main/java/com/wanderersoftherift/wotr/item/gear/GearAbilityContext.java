@@ -36,8 +36,7 @@ public record GearAbilityContext(@NotNull LivingEntity caster, ItemStack ability
         Holder<AbstractGearAbility> holder;
         if (isBasic) {
             holder = abilityItem.get(WotrDataComponentType.GEAR_BASIC);
-        }
-        else {
+        } else {
             holder = abilityItem.get(WotrDataComponentType.GEAR_SECONDARY);
         }
         if (holder != null) {

@@ -28,9 +28,11 @@ public class SecondaryGearAbility extends AbstractGearAbility {
                                     .forGetter(SecondaryGearAbility::getEffects)
                     ).apply(instance, SecondaryGearAbility::new));
 
-    public SecondaryGearAbility(ResourceLocation resourceLocation, Holder<Item> gear, ResourceLocation type, List<AbstractEffect> effects) {
+    public SecondaryGearAbility(ResourceLocation resourceLocation, Holder<Item> gear, ResourceLocation type,
+            List<AbstractEffect> effects) {
         super(resourceLocation, gear, effects, type);
     }
+
     @Override
     public MapCodec<? extends AbstractGearAbility> getCodec() {
         return CODEC;
@@ -52,5 +54,6 @@ public class SecondaryGearAbility extends AbstractGearAbility {
     }
 
     @Override
-    public void onDeactivate(Player player) {}
+    public void onDeactivate(Player player) {
+    }
 }
