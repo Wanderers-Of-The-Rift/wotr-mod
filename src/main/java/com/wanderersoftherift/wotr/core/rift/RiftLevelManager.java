@@ -362,9 +362,6 @@ public final class RiftLevelManager {
         riftData.setPortalPos(portalPos);
         riftData.setConfig(config);
 
-        riftData.setTheme(config.theme()
-                /* note: cannot be empty at this point */.orElse(
-                        RiftConfigInitialization.getRandomTheme(riftLevel.getServer(), seed)));
         riftData.setObjective(config.objective().map(objectiveType -> objectiveType.value().generate(riftLevel)));
 
         return riftLevel;

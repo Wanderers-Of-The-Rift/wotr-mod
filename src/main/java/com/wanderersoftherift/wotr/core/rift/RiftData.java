@@ -36,7 +36,6 @@ public class RiftData extends SavedData {
             BlockPos.CODEC.fieldOf("PortalPos").forGetter(RiftData::getPortalPos),
             UUIDUtil.STRING_CODEC.listOf().fieldOf("Players").forGetter(RiftData::getPlayers),
             UUIDUtil.STRING_CODEC.listOf().fieldOf("BannedPlayers").forGetter(RiftData::getBannedPlayers),
-            RiftTheme.CODEC.optionalFieldOf("Theme").forGetter(RiftData::getTheme),
             OngoingObjective.DIRECT_CODEC.optionalFieldOf("Objective").forGetter(RiftData::getObjective),
             RiftConfig.CODEC.fieldOf("Config").forGetter(RiftData::getConfig)
     ).apply(instance, RiftData::new));
@@ -45,18 +44,15 @@ public class RiftData extends SavedData {
     private BlockPos portalPos;
     private final List<UUID> players;
     private final List<UUID> bannedPlayers;
-    private Optional<Holder<RiftTheme>> theme;
     private Optional<OngoingObjective> objective;
     private RiftConfig config;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players,
-            List<UUID> bannedPlayers, Optional<Holder<RiftTheme>> theme, Optional<OngoingObjective> objective,
-            RiftConfig config) {
+            List<UUID> bannedPlayers, Optional<OngoingObjective> objective, RiftConfig config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new ArrayList<>(Objects.requireNonNull(players));
         this.bannedPlayers = new ArrayList<>(Objects.requireNonNull(bannedPlayers));
-        this.theme = theme;
         this.objective = objective;
         this.config = config;
     }
@@ -72,8 +68,7 @@ public class RiftData extends SavedData {
             BlockPos portalPos,
             RiftConfig config) {
         return new SavedData.Factory<>(
-                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(), Optional.empty(),
-                        config),
+                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(), config),
                 RiftData::load);
     }
 
@@ -153,16 +148,7 @@ public class RiftData extends SavedData {
     }
 
     public Optional<Holder<RiftTheme>> getTheme() {
-        return theme;
-    }
-
-    public void setTheme(Optional<Holder<RiftTheme>> theme) {
-        this.theme = theme;
-        this.setDirty();
-    }
-
-    public void setTheme(Holder<RiftTheme> theme) {
-        setTheme(Optional.of(theme));
+        return config.theme();
     }
 
     public void setObjective(Optional<OngoingObjective> objective) {
