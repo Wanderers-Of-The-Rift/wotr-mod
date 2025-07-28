@@ -3,15 +3,9 @@ package com.wanderersoftherift.wotr.item.gear;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.abilities.StandardAbility;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.network.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.UseGearAbilityPayload;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -23,18 +17,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BasicGearAbility extends AbstractGearAbility {
-    public static final MapCodec<BasicGearAbility> CODEC = RecordCodecBuilder.mapCodec(
+public class SecondaryGearAbility extends AbstractGearAbility {
+    public static final MapCodec<SecondaryGearAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
-                    .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(BasicGearAbility::getName),
-                            Item.CODEC.fieldOf("gear").forGetter(BasicGearAbility::getItem),
-                            ResourceLocation.CODEC.fieldOf("type").forGetter(BasicGearAbility::getType),
+                    .group(ResourceLocation.CODEC.fieldOf("ability_name").forGetter(SecondaryGearAbility::getName),
+                            Item.CODEC.fieldOf("gear").forGetter(SecondaryGearAbility::getItem),
+                            ResourceLocation.CODEC.fieldOf("type").forGetter(SecondaryGearAbility::getType),
                             Codec.list(AbstractEffect.DIRECT_CODEC)
                                     .optionalFieldOf("effects", Collections.emptyList())
-                                    .forGetter(BasicGearAbility::getEffects)
-                    ).apply(instance, BasicGearAbility::new));
+                                    .forGetter(SecondaryGearAbility::getEffects)
+                    ).apply(instance, SecondaryGearAbility::new));
 
-    public BasicGearAbility(ResourceLocation resourceLocation, Holder<Item> gear, ResourceLocation type, List<AbstractEffect> effects) {
+    public SecondaryGearAbility(ResourceLocation resourceLocation, Holder<Item> gear, ResourceLocation type, List<AbstractEffect> effects) {
         super(resourceLocation, gear, effects, type);
     }
     @Override

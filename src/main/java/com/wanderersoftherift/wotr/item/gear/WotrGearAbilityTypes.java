@@ -19,5 +19,7 @@ public class WotrGearAbilityTypes {
      */
     public static final Supplier<MapCodec<? extends AbstractGearAbility>> BASIC_GEAR_ABILITY = GEAR_ABILITY_TYPES
             .register("gear_basic", () -> BasicGearAbility.CODEC);
+    public static final Supplier<MapCodec<? extends AbstractGearAbility>> SECONDARY_GEAR_ABILITY = GEAR_ABILITY_TYPES
+            .register("gear_secondary", () -> SecondaryGearAbility.CODEC);
 
 }

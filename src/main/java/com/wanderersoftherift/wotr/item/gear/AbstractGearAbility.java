@@ -38,32 +38,35 @@ public abstract class AbstractGearAbility {
     private Holder<Attribute> durationAttribute = null;
     private boolean isToggle = false;
 
-    private ItemStack gearPiece;
-    private ResourceLocation gearLocation;
+    private Holder<Item> gearPiece;
+    private ResourceLocation type;
 
-    public AbstractGearAbility(ResourceLocation abilityName, ResourceLocation gear, List<AbstractEffect> effects) {
+    public AbstractGearAbility(ResourceLocation abilityName, Holder<Item> gear, List<AbstractEffect> effects, ResourceLocation type) {
         this.name = abilityName;
-        this.gearLocation = gear;
+        this.gearPiece = gear;
         this.effects = effects;
+        this.type = type;
     }
+
     public abstract MapCodec<? extends AbstractGearAbility> getCodec();
 
     public ResourceLocation getName() {
         return name;
     }
 
-    public ResourceLocation getGearLocation() {
-        return gearLocation;
-    }
-
     public List<AbstractEffect> getEffects() {
         return this.effects;
     }
+
     public abstract void onActivate(Player player, ItemStack gear);
 
     public abstract void onDeactivate(Player player);
 
-    public ItemStack getItem() {
+    public Holder<Item> getItem() {
         return gearPiece;
-        }
+    }
+
+    public ResourceLocation getType() {
+        return type;
+    }
 }
