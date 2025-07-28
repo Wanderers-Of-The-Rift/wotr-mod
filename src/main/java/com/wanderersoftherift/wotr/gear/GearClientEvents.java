@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.gear;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.gear.AbstractGearAbility;
 import net.minecraft.client.Minecraft;
@@ -23,7 +22,7 @@ public class GearClientEvents {
         }
 
         Player player = Minecraft.getInstance().player;
-        if(input.isAttack() && player.getWeaponItem().has(WotrDataComponentType.GEAR_BASIC)) {
+        if (input.isAttack() && player.getWeaponItem().has(WotrDataComponentType.GEAR_BASIC)) {
             AbstractGearAbility basic = player.getWeaponItem().get(WotrDataComponentType.GEAR_BASIC).value();
         }
     }

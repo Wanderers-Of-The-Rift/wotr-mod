@@ -9,14 +9,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.apache.commons.lang3.ObjectUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WotrCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister
@@ -114,17 +109,13 @@ public class WotrCreativeTabs {
         //ArrayList<ItemStack> toBeSent = new ArrayList<ItemStack>() {};
         ItemStack item = WotrItems.WAND.toStack();
         registry.listElements().forEach(abilityHolder -> {
-            if (abilityHolder.value().getType().toString().equals("wotr:gear_basic")) {
+            if ("wotr:gear_basic".equals(abilityHolder.value().getType().toString())) {
                 item.set(WotrDataComponentType.GEAR_BASIC, abilityHolder);
-            }
-            else if (abilityHolder.value().getType().toString().equals("wotr:gear_secondary")){
+            } else if ("wotr:gear_secondary".equals(abilityHolder.value().getType().toString())) {
                 item.set(WotrDataComponentType.GEAR_SECONDARY, abilityHolder);
-                //int i = toBeSent.indexOf(abilityHolder.value().getItem());
-                //toBeSent.get(i).set(WotrDataComponentType.GEAR_SECONDARY, abilityHolder);
             }
         });
         output.accept(item);
-        //toBeSent.forEach(output::accept);
     }
 
     private static void generateRunegems(
