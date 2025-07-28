@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsawsBulk;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -23,5 +24,7 @@ public class WotrJigsawListProcessors {
 
     public static final Supplier<MapCodec<FilterJigsaws>> FILTER_JIGSAWS = JIGSAL_LIST_PROCESSORS.register("filter",
             () -> FilterJigsaws.CODEC);
+    public static final Supplier<MapCodec<ReplaceJigsawsBulk>> FILTER_JIGSAWS_BOLK = JIGSAL_LIST_PROCESSORS
+            .register("replace_bulk", () -> ReplaceJigsawsBulk.CODEC);
 
 }

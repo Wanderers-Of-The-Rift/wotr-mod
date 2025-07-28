@@ -4,10 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsawsBulk;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Vec3i;
+
+import java.util.Map;
 
 // @EventBusSubscriber
 public class RiftConfigInitializationEvents {
@@ -58,14 +61,16 @@ public class RiftConfigInitializationEvents {
         var riftGenConfig = config.riftGen();
         var chance = 0.1f;
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/3"),
-                        WanderersOfTheRift.id("rift/anomaly/free/3"), chance))
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/ceiling/3"),
-                        WanderersOfTheRift.id("rift/anomaly/ceiling/3"), chance))
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/halfway/3"),
-                        WanderersOfTheRift.id("rift/anomaly/halfway/3"), chance))
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/inwall/3"),
-                        WanderersOfTheRift.id("rift/anomaly/inwall/3"), chance))
+                .add(new ReplaceJigsawsBulk(Map.of(
+                        WanderersOfTheRift.id("rift/poi/free/3"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/free/3"), chance),
+                        WanderersOfTheRift.id("rift/poi/ceiling/3"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/ceiling/3"), chance),
+                        WanderersOfTheRift.id("rift/poi/halfway/3"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/halfway/3"), chance),
+                        WanderersOfTheRift.id("rift/poi/inwall/3"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/inwall/3"), chance)
+                )))
                 .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
@@ -78,14 +83,16 @@ public class RiftConfigInitializationEvents {
         var riftGenConfig = config.riftGen();
         var chance = 0.2f;
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/5"),
-                        WanderersOfTheRift.id("rift/poi/free/3"), chance))
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/ceiling/5"),
-                        WanderersOfTheRift.id("rift/poi/ceiling/3"), chance))
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/halfway/5"),
-                        WanderersOfTheRift.id("rift/poi/halfway/3"), chance))
-                .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/inwall/5"),
-                        WanderersOfTheRift.id("rift/poi/inwall/3"), chance))
+                .add(new ReplaceJigsawsBulk(Map.of(
+                        WanderersOfTheRift.id("rift/poi/free/5"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/free/5"), chance),
+                        WanderersOfTheRift.id("rift/poi/ceiling/5"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/ceiling/5"), chance),
+                        WanderersOfTheRift.id("rift/poi/halfway/5"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/halfway/5"), chance),
+                        WanderersOfTheRift.id("rift/poi/inwall/5"),
+                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/inwall/5"), chance)
+                )))
                 .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
