@@ -37,7 +37,7 @@ public record CompleteRiftGoalProvider(RiftCompletionLevel completionLevel, Opti
 
     public static final MapCodec<CompleteRiftGoalProvider> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
-                    RiftCompletionLevel.CODEC.optionalFieldOf("completionLevel", RiftCompletionLevel.COMPLETE)
+                    RiftCompletionLevel.CODEC.optionalFieldOf("completion_level", RiftCompletionLevel.COMPLETE)
                             .forGetter(CompleteRiftGoalProvider::completionLevel),
                     NumberProviders.CODEC.optionalFieldOf("tier").forGetter(CompleteRiftGoalProvider::tier),
                     RiftTheme.CODEC.listOf()
