@@ -481,12 +481,12 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public void giveAnomalyLoot(ServerPlayer player) {
-        // Gives scaled version of rift-completion loot to the player
+        // Gives scaled version of wooden chest loot to the player
         if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
         ResourceKey<LootTable> anomalyLootTable = ResourceKey.create(Registries.LOOT_TABLE,
-                ResourceLocation.parse("wotr:rift_objective/success"));
+                ResourceLocation.parse("wotr:chests/wooden"));
         LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(anomalyLootTable);
         LootParams lootParams = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, player)
                 .create(LootContextParamSets.EMPTY);

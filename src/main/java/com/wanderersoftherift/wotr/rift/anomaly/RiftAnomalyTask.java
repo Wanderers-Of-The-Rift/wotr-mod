@@ -13,7 +13,7 @@ public record RiftAnomalyTask(String type, // Type of the task, battle, bundle o
                                            // is optional
         int weight, // Weight of the task, used for random selection. Default is 1
         Optional<EffectData> effect, // Optional effect to apply
-        float lootModifier, // Optional loot modifier, base loot is rift completion table, default is 0.2f
+        float lootModifier, // Optional loot modifier, base loot is wooden chest table. Default is 0.2f
         int bundleMin, // Optional minimum number of items in a bundle, default is 3
         int bundleMax, // Optional maximum number of items in a bundle, default is 5
         float battleScale, // Optional scale for mobs spawned, default is 1.0f
