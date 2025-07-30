@@ -181,6 +181,7 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
 
+        itemModels.generateFlatItem(WotrItems.ANOMALY_NEEDLE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.RAW_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.SHAPED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);

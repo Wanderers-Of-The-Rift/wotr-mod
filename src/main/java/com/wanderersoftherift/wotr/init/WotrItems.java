@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
+import com.wanderersoftherift.wotr.item.tools.AnomalyNeedle;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -37,6 +38,10 @@ public class WotrItems {
     public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register("builder_glasses",
             BuilderGlasses::new);
 
+    public static final DeferredItem<Item> ANOMALY_NEEDLE = ITEMS.register("anomaly_needle",
+            registryName -> new AnomalyNeedle(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("anomaly_needle")))
+                    .stacksTo(1)));
     // Runegems
     public static final DeferredItem<Item> RUNEGEM = ITEMS.register("runegem",
             registryName -> new Runegem(new Item.Properties()

@@ -65,6 +65,7 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
+        addItem(WotrItems.ANOMALY_NEEDLE, "Anomaly Needle");
         addItem(WotrItems.RUNEGEM, "Runegem");
         addItem(WotrItems.RIFT_KEY, "Rift Key");
         addItem(WotrItems.RAW_RUNEGEM_GEODE, "Runegem Geode (Raw)");
@@ -266,6 +267,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
         add("tooltip." + WanderersOfTheRift.MODID + ".empty_socket", "(Empty Slot)");
         add("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", "Hold [%s] for additional information");
+        add("tooltip." + WanderersOfTheRift.MODID + ".anomaly_needle_charge", "Charge: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");

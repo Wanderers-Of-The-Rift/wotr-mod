@@ -45,6 +45,8 @@ public class WotrDataComponentType {
             "ability", AbstractAbility.CODEC, AbstractAbility.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AbilityUpgradePool>> ABILITY_UPGRADE_POOL = register(
             "ability_upgrade_pool", AbilityUpgradePool.CODEC, AbilityUpgradePool.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ANOMALY_NEEDLE_CHARGE = register(
+            "anomaly_needle_charge", Codec.INT, null);
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<RiftConfig>> RIFT_CONFIG = register(
             "rift_config", RiftConfig.CODEC, RiftConfig.STREAM_CODEC);

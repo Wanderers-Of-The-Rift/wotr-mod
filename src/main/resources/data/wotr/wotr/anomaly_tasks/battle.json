@@ -1,0 +1,9 @@
+{
+  "type": "battle",
+  "effect" :{
+    "id" : "minecraft:regeneration",
+    "duration" : 200,
+    "amplifier" : 1
+  },
+  "battle_scale" : 2.0
+}

@@ -79,6 +79,14 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_rune", this.has(WotrItems.RUNEGEM))
                 .save(this.output);
 
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, WotrItems.ANOMALY_NEEDLE.asItem())
+                .pattern("  i")
+                .pattern(" i ")
+                .pattern("i  ")
+                .define('i', Items.IRON_INGOT)
+                .unlockedBy("has_iron_ingot", this.has(Items.IRON_INGOT))
+                .save(this.output);
+
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, WotrBlocks.QUEST_HUB.asItem())
                 .pattern("sGs")
                 .pattern("sGs")

@@ -11,15 +11,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.util.List;
+
 public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBlockEntity> {
+    // Copies a lot of the rift portal rendering code, but smaller
 
     private static final ResourceLocation OUTER_ANOMALY_LOCATION = WanderersOfTheRift
             .id("textures/entity/outer_rift.png");
@@ -56,27 +61,23 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
             int packedLight,
             int packedOverlay) {
         poseStack.pushPose();
-
-        // Move to center of block
         poseStack.translate(0.5, 0.5, 0.5);
 
-        // Scale to half the size of rift portal
-        float scaleMultiplier = blockEntity.getScale();
+        // # Anomaly Portal render #
+        float scaleMultiplier = blockEntity.getScale(); // Make thin when anomaly completed
         float width = 0.6f * scaleMultiplier;
         float height = 0.8f;
         poseStack.scale(width, height, width);
 
-        // Face camera while remaining vertical (horizontal rotation only)
         Vector3f cameraPos = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().toVector3f();
         Vector3f blockPos = new Vector3f((float) blockEntity.getBlockPos().getX() + 0.5f,
                 (float) blockEntity.getBlockPos().getY() + 0.5f, (float) blockEntity.getBlockPos().getZ() + 0.5f);
-        Vector3f dir = blockPos.sub(cameraPos); // This matches RiftPortalRenderer: entity position - camera position
-        dir.y = 0; // Remove vertical component for horizontal-only rotation
+        Vector3f dir = blockPos.sub(cameraPos);
+        dir.y = 0;
         if (dir.lengthSquared() < 0.001f) {
             dir = new Vector3f(1, 0, 0);
         }
 
-        // Set up shader uniforms like rift portal
         CompiledShaderProgram shader = RenderSystem.setShader(WotrShaders.RIFT_PORTAL);
         if (shader != null) {
             Uniform screenSize = shader.getUniform("ScreenSize");
@@ -91,12 +92,10 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
                 float y = Mth.wrapDegrees(Minecraft.getInstance().getEntityRenderDispatcher().camera.getYRot());
                 view.set(x, y);
             }
-
             shader.apply();
         }
 
         poseStack.mulPose(new Quaternionf().lookAlong(dir, new Vector3f(0, -1, 0)));
-
         PoseStack.Pose pose = poseStack.last();
         VertexConsumer vertexConsumer = buffer.getBuffer(RENDER_TYPE);
 
@@ -106,5 +105,37 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
         vertex(vertexConsumer, pose, packedLight, -0.5f, 0.5f, 0.0f, 0, 0);
 
         poseStack.popPose();
+
+        // # Anomaly Item render #
+        List<BlockState> displayBlocks = blockEntity.getDisplayBlocks();
+        // only render if there are items to display
+        if (!displayBlocks.isEmpty()) {
+            int woolCount = displayBlocks.size();
+            float radius = 0.35f;
+            float yOffset = 0.3f; // Height above anomaly
+            BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
+            long time;
+            if (blockEntity.getLevel() != null) {
+                time = blockEntity.getLevel().getGameTime();
+            } else {
+                time = 0;
+            }
+            float rotationSpeed = 0.05f; // rotation speed
+
+            for (int i = 0; i < woolCount; i++) {
+                poseStack.pushPose();
+                poseStack.translate(0.4, 0.4, 0.4);
+                double angle = (2 * Math.PI / woolCount) * i + (time * rotationSpeed);
+                float x = Mth.cos((float) angle) * radius;
+                float z = Mth.sin((float) angle) * radius;
+                poseStack.translate(x, yOffset, z);
+                poseStack.scale(0.2f, 0.2f, 0.2f); // rendered item scale
+
+                blockRenderer.renderSingleBlock(
+                        displayBlocks.get(i), poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY
+                );
+                poseStack.popPose();
+            }
+        }
     }
 }
