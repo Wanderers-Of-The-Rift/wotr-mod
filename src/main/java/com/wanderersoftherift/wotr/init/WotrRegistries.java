@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfigCustomData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
@@ -64,6 +65,8 @@ public class WotrRegistries {
             Keys.JIGSAW_LIST_PROCESSOR_TYPES).create();
     public static final Registry<MapCodec<? extends RiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
             Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
+    public static final Registry<MapCodec<? extends RiftConfigCustomData>> RIFT_CONFIG_CUSTOM_DATA_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_CONFIG_CUSTOM_DATA_TYPES).create();
 
     public static final class Keys {
 
@@ -115,6 +118,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/jigsaw_list_processor"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));;
+        public static final ResourceKey<Registry<MapCodec<? extends RiftConfigCustomData>>> RIFT_CONFIG_CUSTOM_DATA_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));;
 
         private Keys() {
         }
@@ -137,6 +142,7 @@ public class WotrRegistries {
         event.register(RIFT_ROOM_GENERATOR_FACTORY_TYPES);
         event.register(JIGSAW_LIST_PROCESSOR_TYPES);
         event.register(RIFT_BUILTIN_GENERATABLE_TYPES);
+        event.register(RIFT_CONFIG_CUSTOM_DATA_TYPES);
     }
 
     @SubscribeEvent

@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.item.riftkey;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -15,7 +16,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -28,14 +31,17 @@ import java.util.Optional;
  */
 // TODO: Move into core.rift
 public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<Holder<ObjectiveType>> objective,
-        RiftGenerationConfig riftGen) {
+        RiftGenerationConfig riftGen,
+        Map<Holder<MapCodec<? extends RiftConfigCustomData>>, RiftConfigCustomData> customData) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder
             .create(instance -> instance.group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
                     RiftTheme.CODEC.optionalFieldOf("theme").forGetter(RiftConfig::theme),
                     ObjectiveType.CODEC.optionalFieldOf("objective").forGetter(RiftConfig::objective),
                     RiftGenerationConfig.CODEC.optionalFieldOf("rift_gen", RiftGenerationConfig.EMPTY)
-                            .forGetter(RiftConfig::riftGen)
+                            .forGetter(RiftConfig::riftGen),
+                    RiftConfigCustomData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", new HashMap<>())
+                            .forGetter(RiftConfig::customData)
             ).apply(instance, RiftConfig::new));
 
     // spotless:off
@@ -44,19 +50,20 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
                 ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES).apply(ByteBufCodecs::optional), RiftConfig::theme,
                 ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES).apply(ByteBufCodecs::optional), RiftConfig::objective,
                 RiftGenerationConfig.STREAM_CODEC, RiftConfig::riftGen,
+                RiftConfigCustomData.DISPATCHED_MAP_STREAM_CODEC, RiftConfig::customData,
             RiftConfig::new);
     // spotless:on
 
     public RiftConfig(int tier) {
-        this(tier, Optional.empty(), Optional.empty(), RiftGenerationConfig.EMPTY);
+        this(tier, Optional.empty(), Optional.empty(), RiftGenerationConfig.EMPTY, new HashMap<>());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme) {
-        this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY);
+        this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY, new HashMap<>());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme, int seed) {
-        this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY.withSeed(seed));
+        this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY.withSeed(seed), new HashMap<>());
     }
 
     public RiftConfig withObjectiveIfAbsent(Holder<ObjectiveType> objective) {
@@ -76,19 +83,27 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
     }
 
     public RiftConfig withRiftGenerationConfig(RiftGenerationConfig riftGen) {
-        return new RiftConfig(tier, theme, objective, riftGen);
+        return new RiftConfig(tier, theme, objective, riftGen, customData);
     }
 
     public RiftConfig withObjective(Holder<ObjectiveType> objective) {
-        return new RiftConfig(tier, theme, Optional.of(objective), riftGen);
+        return new RiftConfig(tier, theme, Optional.of(objective), riftGen, customData);
     }
 
     public RiftConfig withTheme(Holder<RiftTheme> theme) {
-        return new RiftConfig(tier, Optional.of(theme), objective, riftGen);
+        return new RiftConfig(tier, Optional.of(theme), objective, riftGen, customData);
     }
 
     public RiftConfig withTier(int tier) {
-        return new RiftConfig(tier, theme, objective, riftGen);
+        return new RiftConfig(tier, theme, objective, riftGen, customData);
+    }
+
+    public <T extends RiftConfigCustomData> T getCustomData(Holder<MapCodec<T>> key) {
+        return (T) customData.get(key);
+    }
+
+    public <T extends RiftConfigCustomData> T putCustomData(Holder<MapCodec<T>> key, T newValue) {
+        return (T) customData.put((Holder<MapCodec<? extends RiftConfigCustomData>>) (Object) key, newValue);
     }
 
     /**
