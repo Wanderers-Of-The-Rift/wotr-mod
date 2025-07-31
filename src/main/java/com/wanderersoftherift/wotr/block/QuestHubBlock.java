@@ -78,12 +78,10 @@ public class QuestHubBlock extends Block {
     }
 
     private static @NotNull List<QuestState> getAvailableQuests(Level level, ServerPlayer serverPlayer) {
-        List<QuestState> availableQuests;
+        List<QuestState> availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
         if (serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS).isEmpty()) {
             availableQuests = generateNewQuestList(level, serverPlayer);
             serverPlayer.setData(WotrAttachments.AVAILABLE_QUESTS, availableQuests);
-        } else {
-            availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
         }
         return availableQuests;
     }
