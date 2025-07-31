@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.item;
+package com.wanderersoftherift.wotr.item.ability;
 
 import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;

@@ -8,9 +8,11 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,14 +29,18 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
 
-    public static final AttachmentSerializerFromDataCodec<Data, AbilitySlots> SERIALIZER = new AttachmentSerializerFromDataCodec<Data, AbilitySlots>(
+    private static final AttachmentSerializerFromDataCodec<Data, AbilitySlots> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
             Data.CODEC, AbilitySlots::new, AbilitySlots::data);
 
     private final IAttachmentHolder holder;
     private final NonNullList<ItemStack> abilities = NonNullList.withSize(ABILITY_BAR_SIZE, ItemStack.EMPTY);
     private int selected = 0;
 
-    public AbilitySlots(@NotNull IAttachmentHolder holder, @Nullable Data data) {
+    public AbilitySlots(@NotNull IAttachmentHolder holder) {
+        this(holder, null);
+    }
+
+    private AbilitySlots(@NotNull IAttachmentHolder holder, @Nullable Data data) {
         this.holder = holder;
         if (data != null) {
             var abilities = data.abilities();
@@ -43,6 +49,10 @@ public class AbilitySlots implements IItemHandlerModifiable {
             }
             this.selected = data.selected();
         }
+    }
+
+    public static IAttachmentSerializer<Tag, AbilitySlots> getSerializer() {
+        return SERIALIZER;
     }
 
     private Data data() {
