@@ -71,11 +71,6 @@ public class QuestState {
 
     public void setHolder(IAttachmentHolder holder) {
         this.holder = holder;
-        if (holder instanceof ServerPlayer player) {
-            for (int i = 0; i < goals.size(); i++) {
-                goals.get(i).register(player, this, i);
-            }
-        }
     }
 
     public UUID getId() {
@@ -148,9 +143,11 @@ public class QuestState {
      */
     public void setGoalProgress(int index, int amount) {
         Preconditions.checkArgument(index >= 0 && index < goalProgress.length, "Index out of bounds");
-        goalProgress[index] = amount;
-        if (holder instanceof ServerPlayer player) {
-            PacketDistributor.sendToPlayer(player, new QuestGoalUpdatePayload(id, index, amount));
+        if (goalProgress[index] != amount) {
+            goalProgress[index] = amount;
+            if (holder instanceof ServerPlayer player) {
+                PacketDistributor.sendToPlayer(player, new QuestGoalUpdatePayload(id, index, amount));
+            }
         }
     }
 }
