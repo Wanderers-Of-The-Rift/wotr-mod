@@ -7,6 +7,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A provider that wraps a single reward
@@ -16,8 +18,12 @@ import java.util.List;
  */
 public record FixedRewardProvider<T extends Reward>(T reward) implements RewardProvider {
 
+    private static final Map<MapCodec<? extends Reward>, MapCodec<FixedRewardProvider<?>>> CODEC_CACHE = new ConcurrentHashMap<>();
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends Reward> MapCodec<FixedRewardProvider<T>> codec(MapCodec<T> rewardCodec) {
-        return rewardCodec.xmap(FixedRewardProvider::new, FixedRewardProvider::reward);
+        return (MapCodec) CODEC_CACHE.computeIfAbsent(rewardCodec,
+                (rc) -> (MapCodec<FixedRewardProvider<?>>) (MapCodec) generateCodec(rc));
     }
 
     @Override
@@ -28,6 +34,10 @@ public record FixedRewardProvider<T extends Reward>(T reward) implements RewardP
     @Override
     public @NotNull List<Reward> generateReward(LootParams params) {
         return List.of(reward);
+    }
+
+    private static <T extends Reward> MapCodec<FixedRewardProvider<T>> generateCodec(MapCodec<T> rewardCodec) {
+        return rewardCodec.xmap(FixedRewardProvider::new, FixedRewardProvider::reward);
     }
 
 }
