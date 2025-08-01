@@ -7,13 +7,13 @@ import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.item.ability.Cooldown;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,44 +46,39 @@ public class StandardAbility extends AbstractAbility {
     }
 
     @Override
-    public void onActivate(Player player, int slot, ItemStack abilityItem) {
-        if (!this.canPlayerUse(player)) {
-            player.displayClientMessage(Component.literal("You cannot use this"), true);
-            return;
+    public boolean onActivate(LivingEntity caster, ItemStack abilityItem) {
+        if (!this.canUse(caster)) {
+            if (caster instanceof ServerPlayer player) {
+                // TODO: Proper translatable component, or maybe we remove this?
+                player.displayClientMessage(Component.literal("You cannot use this"), true);
+            }
+            return false;
         }
-        if (this.isOnCooldown(player, slot)) {
-            return;
+        if (abilityItem.getOrDefault(WotrDataComponentType.COOLDOWN, new Cooldown()).onCooldown(caster.level())) {
+            return false;
         }
-        AbilityContext abilityContext = new AbilityContext(player, abilityItem);
+        AbilityContext abilityContext = new AbilityContext(caster, abilityItem);
         abilityContext.enableModifiers();
         try {
             int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-            ManaData manaData = player.getData(WotrAttachments.MANA);
+            ManaData manaData = caster.getData(WotrAttachments.MANA);
             if (manaCost > 0) {
                 if (manaData.getAmount() < manaCost) {
-                    return;
+                    return false;
                 }
             }
-            if (player instanceof ServerPlayer) {
+            // TODO: Attachment holder pattern on mana pool
+            if (caster instanceof ServerPlayer player) {
                 manaData.useAmount(player, manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-                this.setCooldown(player, slot,
-                        abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
-            } else {
-                PacketDistributor.sendToServer(new UseAbilityPayload(slot));
             }
+            long time = caster.level().getGameTime();
+            Cooldown cooldown = new Cooldown(time,
+                    time + (int) abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
+            abilityItem.set(WotrDataComponentType.COOLDOWN, cooldown);
         } finally {
             abilityContext.disableModifiers();
         }
-    }
-
-    @Override
-    public void onDeactivate(Player player, int slot) {
-
-    }
-
-    @Override
-    public void tick(Player player) {
-
+        return true;
     }
 }

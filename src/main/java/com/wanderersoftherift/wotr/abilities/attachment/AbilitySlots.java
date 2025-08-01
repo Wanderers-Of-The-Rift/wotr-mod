@@ -2,8 +2,6 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -92,20 +90,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
     /**
      * @return The list of the contents of the ability slots. Empty slots will contain Item.EMPTY.
      */
-    public List<ItemStack> getAbilitySlots() {
+    public List<ItemStack> getRawSlots() {
         return Collections.unmodifiableList(abilities);
-    }
-
-    /**
-     * @param slot
-     * @return The ability of the item in the given slot, or null.
-     */
-    public AbstractAbility getAbilityInSlot(int slot) {
-        ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty() && stack.has(WotrDataComponentType.ABILITY)) {
-            return stack.get(WotrDataComponentType.ABILITY).value();
-        }
-        return null;
     }
 
     @Override

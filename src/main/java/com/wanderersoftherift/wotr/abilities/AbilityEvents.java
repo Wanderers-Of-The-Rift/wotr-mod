@@ -2,25 +2,20 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
-import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
-import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
@@ -58,32 +53,6 @@ public class AbilityEvents {
             tickAttachedEffects(level);
             tickMana(level);
         }
-    }
-
-    @SubscribeEvent
-    public static void playerTick(PlayerTickEvent.Post event) {
-        Player p = event.getEntity();
-
-        PlayerCooldownData cooldowns = p.getData(WotrAttachments.ABILITY_COOLDOWNS);
-        cooldowns.reduceCooldowns();
-        p.setData(WotrAttachments.ABILITY_COOLDOWNS, cooldowns);
-
-        // TODO replace this with similar situation to above
-        PlayerDurationData durations = p.getData(WotrAttachments.DURATIONS);
-        AbilitySlots abilitySlots = p.getData(WotrAttachments.ABILITY_SLOTS);
-        for (int slot = 0; slot < abilitySlots.getSlots(); slot++) {
-            AbstractAbility ability = abilitySlots.getAbilityInSlot(slot);
-            if (ability != null && durations.isDurationRunning(ability.getName())) {
-                if (durations.get(ability.getName()) == 1) {
-                    ability.onDeactivate(p, slot);
-                }
-                if (ability.isActive(p)) {
-                    ability.tick(p);
-                }
-            }
-        }
-
-        durations.reduceDurations();
     }
 
     @SubscribeEvent
