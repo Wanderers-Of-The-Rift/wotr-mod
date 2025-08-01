@@ -51,6 +51,10 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
         return this;
     }
 
+    public void addChildren(T... items) {
+        children.addAll(List.of(items));
+    }
+
     @Override
     protected int contentHeight() {
         return children.stream().map(x -> x.getHeight(width - SCROLLBAR_SPACE)).reduce(0, Integer::sum);
