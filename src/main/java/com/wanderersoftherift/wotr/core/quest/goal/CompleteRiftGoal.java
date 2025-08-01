@@ -4,13 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.quest.Goal;
-import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.predicate.RiftPredicate;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
@@ -47,8 +45,4 @@ public record CompleteRiftGoal(int count, RiftCompletionLevel completionLevel, R
         return TYPE;
     }
 
-    @Override
-    public void register(ServerPlayer player, QuestState quest, int goalIndex) {
-        GoalEventHandler.registerRiftCompletionListener(player, quest, goalIndex);
-    }
 }
