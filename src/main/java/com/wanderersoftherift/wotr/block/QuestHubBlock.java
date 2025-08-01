@@ -93,10 +93,11 @@ public class QuestHubBlock extends Block {
         List<QuestState> generatedQuests = new ArrayList<>();
         for (int i = 0; i < QUEST_SELECTION_SIZE && !quests.isEmpty(); i++) {
             int index = level.random.nextInt(quests.size());
-            Quest quest = quests.removeLast();
+            Quest quest = quests.get(index);
             if (index < quests.size() - 1) {
-                quest = quests.set(index, quests.removeLast());
+                quest = quests.set(index, quests.getLast());
             }
+            quests.removeLast();
             generatedQuests.add(new QuestState(questRegistry.wrapAsHolder(quest), quest.generateGoals(params),
                     quest.generateRewards(params)));
         }
