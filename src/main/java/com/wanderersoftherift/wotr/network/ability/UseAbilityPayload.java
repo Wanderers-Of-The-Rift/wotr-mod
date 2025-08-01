@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.item.ability.Cooldown;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -12,6 +13,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record UseAbilityPayload(int slot) implements CustomPacketPayload {
@@ -38,19 +40,9 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
         abilitySlots.setSelectedSlot(slot());
 
-        if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
-        {
-            if (!ability.isToggled(player)) {
-                ability.onActivate(player, slot(), abilityItem);
-            } else {
-                ability.onDeactivate(player, slot());
-            }
-
-            if (ability.canPlayerUse(player)) {
-                ability.toggle(player);
-            }
-        } else {
-            ability.onActivate(player, slot(), abilityItem);
-        }
+        ability.onActivate(player, abilityItem);
+        Cooldown cooldown = abilityItem.get(WotrDataComponentType.COOLDOWN);
+        PacketDistributor.sendToPlayer(player,
+                new AbilityCooldownUpdatePayload(slot, cooldown.from(), cooldown.until()));
     }
 }
