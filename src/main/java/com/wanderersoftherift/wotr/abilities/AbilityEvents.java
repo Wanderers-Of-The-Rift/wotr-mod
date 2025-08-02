@@ -59,9 +59,7 @@ public class AbilityEvents {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent respawnEvent) {
         AttributeInstance maxManaAttribute = respawnEvent.getEntity().getAttribute(WotrAttributes.MAX_MANA);
         if (maxManaAttribute != null) {
-            respawnEvent.getEntity()
-                    .getData(WotrAttachments.MANA)
-                    .setAmount(respawnEvent.getEntity(), (int) maxManaAttribute.getValue());
+            respawnEvent.getEntity().getData(WotrAttachments.MANA).setAmount((float) maxManaAttribute.getValue());
         }
     }
 
@@ -79,7 +77,7 @@ public class AbilityEvents {
     public static void tickMana(ServerLevel level) {
         level.getPlayers(player -> player.hasData(WotrAttachments.MANA)).forEach(player -> {
             ManaData data = player.getData(WotrAttachments.MANA);
-            data.tick(player);
+            data.tick();
         });
     }
 }

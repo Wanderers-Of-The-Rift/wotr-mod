@@ -68,7 +68,7 @@ public class StandardAbility extends Ability {
             }
             // TODO: Attachment holder pattern on mana pool
             if (caster instanceof ServerPlayer player) {
-                manaData.useAmount(player, manaCost);
+                manaData.useAmount(manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
             }
             long time = caster.level().getGameTime();
