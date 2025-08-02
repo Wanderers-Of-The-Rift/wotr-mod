@@ -33,7 +33,7 @@ public abstract class Ability {
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Ability>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITIES);
 
-    private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
+    private ResourceLocation icon;
     private Optional<ResourceLocation> smallIcon = Optional.empty();
 
     private final List<AbilityEffect> effects;

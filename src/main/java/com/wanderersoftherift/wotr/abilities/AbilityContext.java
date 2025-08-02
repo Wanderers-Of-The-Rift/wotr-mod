@@ -43,7 +43,7 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     /**
      * Enables all modifiers that impact the ability
      */
-    public void enableModifiers() {
+    public void enableUpgradeModifiers() {
         /*
          * if (caster != null && !caster.isRemoved()) { ModifierHelper.enableModifier(caster); }
          */
@@ -57,9 +57,9 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     }
 
     /**
-     * Disables all modifiers that were enabled by {@link #enableModifiers()}
+     * Disables all modifiers that were enabled by {@link #enableUpgradeModifiers()}
      */
-    public void disableModifiers() {
+    public void disableUpgradeModifiers() {
         /*
          * if (caster != null && !caster.isRemoved()) { ModifierHelper.disableModifier(caster); }
          */

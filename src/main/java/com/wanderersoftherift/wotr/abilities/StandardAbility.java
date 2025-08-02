@@ -57,7 +57,7 @@ public class StandardAbility extends Ability {
             return false;
         }
         AbilityContext abilityContext = new AbilityContext(caster, abilityItem);
-        abilityContext.enableModifiers();
+        abilityContext.enableUpgradeModifiers();
         try {
             int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
             ManaData manaData = caster.getData(WotrAttachments.MANA);
@@ -76,7 +76,7 @@ public class StandardAbility extends Ability {
                     time + (int) abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
             abilityItem.set(WotrDataComponentType.COOLDOWN, cooldown);
         } finally {
-            abilityContext.disableModifiers();
+            abilityContext.disableUpgradeModifiers();
         }
         return true;
     }

@@ -106,13 +106,13 @@ public class SimpleProjectileEffect extends AbilityEffect {
     }
 
     public void applyDelayed(Level level, Entity target, List<BlockPos> blocks, AbilityContext context) {
-        context.enableModifiers();
+        context.enableUpgradeModifiers();
         try {
             applyParticlesToTarget(target);
             applyParticlesToTargetBlocks(level, blocks);
             super.apply(target, blocks, context);
         } finally {
-            context.disableModifiers();
+            context.disableUpgradeModifiers();
         }
     }
 
