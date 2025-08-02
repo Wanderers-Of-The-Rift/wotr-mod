@@ -19,6 +19,7 @@ import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
+import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
@@ -44,6 +45,8 @@ public class WotrRegistries {
             Keys.ABILITY_TYPES).create();
     public static final Registry<MapCodec<? extends AbilityEffect>> EFFECTS = new RegistryBuilder<>(
             Keys.EFFECTS).create();
+    public static final Registry<MapCodec<? extends WotrEquipmentSlot>> EQUIPMENT_SLOTS = new RegistryBuilder<>(
+            Keys.EQUIPMENT_SLOTS).create();
     public static final Registry<MapCodec<? extends InputBlockState>> INPUT_BLOCKSTATE_TYPES = new RegistryBuilder<>(
             Keys.INPUT_BLOCKSTATE_TYPES).create();
     public static final Registry<MapCodec<? extends AbstractModifierEffect>> MODIFIER_TYPES = new RegistryBuilder<>(
@@ -92,6 +95,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("currency"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
+        public static final ResourceKey<Registry<MapCodec<? extends WotrEquipmentSlot>>> EQUIPMENT_SLOTS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("equipment_slot_type"));
         public static final ResourceKey<Registry<ImplicitConfig>> GEAR_IMPLICITS_CONFIG = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("implicit_config"));
         public static final ResourceKey<Registry<Modifier>> MODIFIERS = ResourceKey
@@ -154,6 +159,7 @@ public class WotrRegistries {
         event.register(ABILITY_TYPES);
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);
+        event.register(EQUIPMENT_SLOTS);
         event.register(LAYOUT_TYPES);
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);

@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.modifier;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -18,11 +20,21 @@ import java.util.List;
 
 public record WotrEquipmentSlotFromMC(EquipmentSlot minecraftSlot, TagKey<Item> tag) implements WotrEquipmentSlot {
 
+    public static final MapCodec<WotrEquipmentSlotFromMC> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance.group(
+                    EquipmentSlot.CODEC.fieldOf("minecraft_slot").forGetter(WotrEquipmentSlotFromMC::minecraftSlot)
+            ).apply(instance, WotrEquipmentSlotFromMC::fromVanillaSlot));
+
     // has same order as net.minecraft.world.entity.EquipmentSlot enum
     public static final List<WotrEquipmentSlotFromMC> SLOTS;
 
-    public static WotrEquipmentSlot fromVanillaSlot(EquipmentSlot vanillaSlot) {
+    public static WotrEquipmentSlotFromMC fromVanillaSlot(EquipmentSlot vanillaSlot) {
         return SLOTS.get(vanillaSlot.ordinal());
+    }
+
+    @Override
+    public MapCodec<? extends WotrEquipmentSlot> codec() {
+        return CODEC;
     }
 
     @Override

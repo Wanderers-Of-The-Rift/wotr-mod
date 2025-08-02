@@ -190,12 +190,12 @@ public class AttachedEffectData {
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, ticks, caster)) {
                 AbilityContext triggerContext = context.toContext(getCaster(level));
-                triggerContext.enableModifiers();
+                triggerContext.enableUpgradeModifiers();
                 try {
                     attachEffect.getEffects()
                             .forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
                 } finally {
-                    triggerContext.disableModifiers();
+                    triggerContext.disableUpgradeModifiers();
                 }
                 triggeredTimes++;
             }
