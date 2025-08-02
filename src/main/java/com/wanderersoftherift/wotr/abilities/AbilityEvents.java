@@ -41,9 +41,9 @@ public class AbilityEvents {
         WanderersOfTheRift.LOGGER
                 .info("Server loaded pack exists: " + event.getServer().registryAccess().lookup(ABILITIES).isPresent());
         if (event.getServer().registryAccess().lookup(ABILITIES).isPresent()) {
-            for (AbstractAbility ability : event.getServer().registryAccess().lookup(ABILITIES).get()) {
-                WanderersOfTheRift.LOGGER.info(ability.getName().toString());
-            }
+            event.getServer().registryAccess().lookup(ABILITIES).get().asHolderIdMap().forEach((ability) -> {
+                WanderersOfTheRift.LOGGER.info(ability.getRegisteredName());
+            });
         }
     }
 

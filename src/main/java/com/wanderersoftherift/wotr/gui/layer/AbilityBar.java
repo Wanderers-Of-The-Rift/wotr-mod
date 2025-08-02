@@ -128,7 +128,7 @@ public final class AbilityBar implements ConfigurableLayer {
                 Holder<AbstractAbility> ability = abilityItem.get(WotrDataComponentType.ABILITY);
                 if (ability != null) {
                     graphics.renderComponentTooltip(Minecraft.getInstance().font,
-                            List.of(ability.value().getDisplayName()), mouseScreenPos.x, mouseScreenPos.y + 8);
+                            List.of(AbstractAbility.getDisplayName(ability)), mouseScreenPos.x, mouseScreenPos.y + 8);
                 }
             });
         }

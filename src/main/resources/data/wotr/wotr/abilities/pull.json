@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard_ability",
-  "ability_name": "wotr:pull",
   "icon": "minecraft:textures/mob_effect/darkness.png",
   "cooldown": 10,
   "effects": [

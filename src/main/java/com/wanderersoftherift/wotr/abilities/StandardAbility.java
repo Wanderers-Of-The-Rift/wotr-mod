@@ -24,19 +24,18 @@ public class StandardAbility extends AbstractAbility {
 
     public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    ResourceLocation.CODEC.fieldOf("ability_name").forGetter(StandardAbility::getName),
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("smallIcon").forGetter(StandardAbility::getSmallIcon),
-                    Codec.INT.fieldOf("cooldown").forGetter(ability -> (int) ability.getBaseCooldown()),
+                    Codec.INT.fieldOf("cooldown").forGetter(AbstractAbility::getBaseCooldown),
                     Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
                     Codec.list(AbstractEffect.DIRECT_CODEC)
                             .optionalFieldOf("effects", Collections.emptyList())
                             .forGetter(StandardAbility::getEffects)
             ).apply(instance, StandardAbility::new));
 
-    public StandardAbility(ResourceLocation resourceLocation, ResourceLocation icon,
-            Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost, List<AbstractEffect> effects) {
-        super(resourceLocation, icon, smallIcon, effects, baseCooldown);
+    public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
+            List<AbstractEffect> effects) {
+        super(icon, smallIcon, effects, baseCooldown);
         setBaseManaCost(manaCost);
     }
 
