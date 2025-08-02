@@ -9,11 +9,15 @@ import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.network.ability.SetEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
+import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,29 +30,37 @@ import java.util.Map;
 /**
  * AttachedEffectData is an attachment that allows effects to be attached to an entity. They persist until their caster
  * is no longer available or their ContinueEffectPredicate returns false. They will trigger whenever their
- * TriggerPredicate is true. *
+ * TriggerPredicate is true.
  */
 public class AttachedEffectData {
-    public static final Codec<AttachedEffectData> CODEC = AttachedEffect.CODEC.listOf()
-            .xmap(AttachedEffectData::new, x -> x.effects);
+    private static final AttachmentSerializerFromDataCodec<List<AttachedEffect>, AttachedEffectData> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
+            AttachedEffect.CODEC.listOf(), AttachedEffectData::new, (x) -> x.effects);
 
+    private final IAttachmentHolder holder;
     private final List<AttachedEffect> effects;
 
-    public AttachedEffectData() {
-        this(new ArrayList<>());
+    public AttachedEffectData(@NotNull IAttachmentHolder holder) {
+        this(holder, new ArrayList<>());
     }
 
-    private AttachedEffectData(List<AttachedEffect> effects) {
+    private AttachedEffectData(IAttachmentHolder holder, List<AttachedEffect> effects) {
+        this.holder = holder;
         this.effects = new ArrayList<>(effects);
+    }
+
+    public static IAttachmentSerializer<Tag, AttachedEffectData> getSerializer() {
+        return SERIALIZER;
     }
 
     /**
      * Ticks all effects, and removes expired effect markers.
-     * 
-     * @param attachedTo The entity this data is attached to
-     * @param level      The level the entity is within
+     *
+     * @param level The level the entity is within
      */
-    public void tick(LivingEntity attachedTo, ServerLevel level) {
+    public void tick(ServerLevel level) {
+        if (!(holder instanceof LivingEntity attachedTo)) {
+            return;
+        }
         List<AttachedEffect> removedEffects = tickEffects(attachedTo, level);
         updateMarkers(attachedTo, removedEffects);
     }

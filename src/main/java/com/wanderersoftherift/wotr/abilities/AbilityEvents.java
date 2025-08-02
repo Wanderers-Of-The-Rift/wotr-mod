@@ -69,7 +69,7 @@ public class AbilityEvents {
         level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
                 entity -> entity.hasData(WotrAttachments.ATTACHED_EFFECTS)).forEach(entity -> {
                     AttachedEffectData data = entity.getData(WotrAttachments.ATTACHED_EFFECTS);
-                    data.tick(entity, level);
+                    data.tick(level);
                     if (data.isEmpty()) {
                         entity.removeData(WotrAttachments.ATTACHED_EFFECTS);
                     }
