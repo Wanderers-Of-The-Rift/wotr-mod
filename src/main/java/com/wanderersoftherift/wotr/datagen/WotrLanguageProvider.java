@@ -218,8 +218,8 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
-        add("ability." + WanderersOfTheRift.MODID + ".fireball_ability", "Fireball");
-        add("ability." + WanderersOfTheRift.MODID + ".icicles_ability", "Icicles");
+        add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
+        add("ability." + WanderersOfTheRift.MODID + ".icicles", "Icicles");
         add("ability." + WanderersOfTheRift.MODID + ".mega_boost", "Mega Boost");
         add("ability." + WanderersOfTheRift.MODID + ".dash", "Dash");
         add("ability." + WanderersOfTheRift.MODID + ".summon_skeletons", "Summon Skeletons");

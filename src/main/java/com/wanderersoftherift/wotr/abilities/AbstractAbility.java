@@ -33,10 +33,8 @@ public abstract class AbstractAbility {
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITIES);
 
-    private final ResourceLocation name;
     private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
     private Optional<ResourceLocation> smallIcon = Optional.empty();
-    private Component displayName;
 
     private final List<AbstractEffect> effects;
     private int baseCooldown = 0;
@@ -45,14 +43,16 @@ public abstract class AbstractAbility {
     private Holder<Attribute> durationAttribute = null;
     private boolean isToggle = false;
 
-    public AbstractAbility(ResourceLocation abilityName, ResourceLocation icon, Optional<ResourceLocation> smallIcon,
-            List<AbstractEffect> effects, int baseCooldown) {
-        this.name = abilityName;
+    public AbstractAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, List<AbstractEffect> effects,
+            int baseCooldown) {
         this.effects = effects;
         this.icon = icon;
         this.smallIcon = smallIcon;
-        this.displayName = Component.translatable("ability." + getName().getNamespace() + "." + getName().getPath());
         this.baseCooldown = baseCooldown;
+    }
+
+    public static Component getDisplayName(Holder<AbstractAbility> ability) {
+        return Component.translatable(ResourceLocation.parse(ability.getRegisteredName()).toLanguageKey("ability"));
     }
 
     public abstract MapCodec<? extends AbstractAbility> getCodec();
@@ -86,14 +86,6 @@ public abstract class AbstractAbility {
     // TODO: Any use case for this?
     public boolean canUse(LivingEntity caster) {
         return true;
-    }
-
-    public ResourceLocation getName() {
-        return name;
-    }
-
-    public Component getDisplayName() {
-        return displayName;
     }
 
     public int getBaseCooldown() {

@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard_ability",
-  "ability_name": "wotr:fireball_ability",
   "cooldown": 60,
   "effects": [
     {
