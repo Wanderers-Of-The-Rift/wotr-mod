@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.core.BlockPos;
@@ -25,36 +25,36 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class AbstractEffect {
-    public static final Codec<AbstractEffect> DIRECT_CODEC = WotrRegistries.EFFECTS.byNameCodec()
-            .dispatch(AbstractEffect::getCodec, Function.identity());
+public abstract class AbilityEffect {
+    public static final Codec<AbilityEffect> DIRECT_CODEC = WotrRegistries.EFFECTS.byNameCodec()
+            .dispatch(AbilityEffect::getCodec, Function.identity());
 
-    private final AbstractTargeting targeting;
-    private final List<AbstractEffect> effects;
+    private final AbilityTargeting targeting;
+    private final List<AbilityEffect> effects;
     private final Optional<ParticleInfo> particles;
 
-    public AbstractEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles) {
+    public AbilityEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles) {
         this.targeting = targeting;
         this.effects = effects;
         this.particles = particles;
     }
 
-    protected static <T extends AbstractEffect> Products.P3<RecordCodecBuilder.Mu<T>, AbstractTargeting, List<AbstractEffect>, Optional<ParticleInfo>> commonFields(
+    protected static <T extends AbilityEffect> Products.P3<RecordCodecBuilder.Mu<T>, AbilityTargeting, List<AbilityEffect>, Optional<ParticleInfo>> commonFields(
             RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
-                AbstractTargeting.DIRECT_CODEC.fieldOf("targeting").forGetter(AbstractEffect::getTargeting),
-                Codec.list(AbstractEffect.DIRECT_CODEC)
+                AbilityTargeting.DIRECT_CODEC.fieldOf("targeting").forGetter(AbilityEffect::getTargeting),
+                Codec.list(AbilityEffect.DIRECT_CODEC)
                         .optionalFieldOf("effects", Collections.emptyList())
-                        .forGetter(AbstractEffect::getEffects),
+                        .forGetter(AbilityEffect::getEffects),
                 Codec.optionalField("particles", ParticleInfo.CODEC.codec(), true)
-                        .forGetter(AbstractEffect::getParticles)
+                        .forGetter(AbilityEffect::getParticles)
         );
     }
 
-    public abstract MapCodec<? extends AbstractEffect> getCodec();
+    public abstract MapCodec<? extends AbilityEffect> getCodec();
 
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
-        for (AbstractEffect effect : getEffects()) {
+        for (AbilityEffect effect : getEffects()) {
             effect.apply(user, blocks, context);
         }
     }
@@ -96,11 +96,11 @@ public abstract class AbstractEffect {
                 Math.random(), Math.random(), 2);
     }
 
-    public AbstractTargeting getTargeting() {
+    public AbilityTargeting getTargeting() {
         return targeting;
     }
 
-    public List<AbstractEffect> getEffects() {
+    public List<AbilityEffect> getEffects() {
         return this.effects;
     }
 
@@ -110,7 +110,7 @@ public abstract class AbstractEffect {
 
     public Set<Holder<Attribute>> getApplicableAttributes() {
         return getEffects().stream()
-                .map(AbstractEffect::getApplicableAttributes)
+                .map(AbilityEffect::getApplicableAttributes)
                 .flatMap(Set::stream)
                 .collect(Collectors.toSet());
     }
@@ -126,7 +126,7 @@ public abstract class AbstractEffect {
         if (getTargeting().isRelevant(modifierEffect)) {
             return true;
         }
-        for (AbstractEffect child : effects) {
+        for (AbilityEffect child : effects) {
             if (child.isRelevant(modifierEffect)) {
                 return true;
             }

@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
@@ -98,7 +98,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             ItemStack item = container.getItem(0);
 
             if (!item.isEmpty() && !item.has(WotrDataComponentType.ABILITY_UPGRADE_POOL)) {
-                Holder<AbstractAbility> ability = item.get(WotrDataComponentType.ABILITY);
+                Holder<Ability> ability = item.get(WotrDataComponentType.ABILITY);
                 RegistryAccess registryAccess = level.registryAccess();
 
                 AbilityUpgradePool upgradePool = new AbilityUpgradePool.Mutable()
@@ -112,7 +112,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 canLevel.set(0);
             } else {
                 AbilityUpgradePool upgradePool = getUpgradePool();
-                Holder<AbstractAbility> ability = getAbility();
+                Holder<Ability> ability = getAbility();
                 if (upgradePool.canLevelUp(level.registryAccess(), ability.value())) {
                     canLevel.set(1);
                 } else {
@@ -140,7 +140,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
     /**
      * @return The ability on the ability item, or null
      */
-    public @Nullable Holder<AbstractAbility> getAbility() {
+    public @Nullable Holder<Ability> getAbility() {
         ItemStack item = getAbilityItem();
         return item.get(WotrDataComponentType.ABILITY);
     }

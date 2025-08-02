@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RaycastTargeting extends AbstractTargeting {
+public class RaycastTargeting extends AbilityTargeting {
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).and(Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange)
             ).apply(instance, RaycastTargeting::new));
@@ -36,7 +36,7 @@ public class RaycastTargeting extends AbstractTargeting {
     }
 
     @Override
-    public MapCodec<? extends AbstractTargeting> getCodec() {
+    public MapCodec<? extends AbilityTargeting> getCodec() {
         return CODEC;
     }
 

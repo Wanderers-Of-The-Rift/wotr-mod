@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.entity.projectile;
 
 import com.google.common.collect.Lists;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
@@ -89,7 +89,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     @Nullable private List<Entity> piercedAndKilledEntities;
     private ItemStack pickupItemStack = this.getDefaultPickupItem();
     @Nullable private ItemStack firedFromWeapon = null;
-    private AbstractAbility ability;
+    private Ability ability;
     private ItemStack abilityItem;
     private SimpleProjectileEffect effect;
     private SimpleProjectileConfig config;
@@ -98,7 +98,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         super(type, level);
     }
 
-    public void setAbility(AbstractAbility ability) {
+    public void setAbility(Ability ability) {
         this.ability = ability;
     }
 

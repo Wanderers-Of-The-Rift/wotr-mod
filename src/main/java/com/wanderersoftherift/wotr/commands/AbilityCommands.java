@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -40,10 +40,7 @@ public class AbilityCommands {
                                         IntegerArgumentType.getInteger(ctx, "choices"))))));
     }
 
-    private static int addAbilityToCurrentItem(
-            CommandSourceStack source,
-            Holder<AbstractAbility> ability,
-            int choices) {
+    private static int addAbilityToCurrentItem(CommandSourceStack source, Holder<Ability> ability, int choices) {
         try {
             ServerPlayer player = source.getPlayerOrException();
             ItemStack item = player.getInventory().getSelected();
@@ -63,7 +60,7 @@ public class AbilityCommands {
 
     public static ItemStack generateAbilityItem(
             ItemStack item,
-            Holder<AbstractAbility> ability,
+            Holder<Ability> ability,
             int choices,
             ServerLevel serverLevel) {
         if (item.isEmpty()) {

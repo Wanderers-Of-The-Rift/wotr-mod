@@ -4,25 +4,24 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 import java.util.Optional;
 
-public class BreakBlockEffect extends AbstractEffect {
+public class BreakBlockEffect extends AbilityEffect {
 
     public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance).apply(instance, BreakBlockEffect::new));
+            .mapCodec(instance -> AbilityEffect.commonFields(instance).apply(instance, BreakBlockEffect::new));
 
-    public BreakBlockEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
-            Optional<ParticleInfo> particles) {
+    public BreakBlockEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles) {
         super(targeting, effects, particles);
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 

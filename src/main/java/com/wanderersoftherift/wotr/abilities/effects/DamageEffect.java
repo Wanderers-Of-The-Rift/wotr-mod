@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
@@ -21,9 +21,9 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 import java.util.Optional;
 
-public class DamageEffect extends AbstractEffect {
+public class DamageEffect extends AbilityEffect {
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(instance.group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),
                             DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::getDamageTypeKey)))
                     .apply(instance, DamageEffect::new));
@@ -31,7 +31,7 @@ public class DamageEffect extends AbstractEffect {
     private float damageAmount = 0;
     private final Holder<DamageType> damageTypeKey;
 
-    public DamageEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+    public DamageEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             float amount, Holder<DamageType> damageTypeKey) {
         super(targeting, effects, particles);
         this.damageAmount = amount;
@@ -47,7 +47,7 @@ public class DamageEffect extends AbstractEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 

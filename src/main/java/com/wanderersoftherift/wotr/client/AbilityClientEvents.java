@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -90,7 +90,7 @@ public final class AbilityClientEvents {
 
     private static void useAbilitySlot(AbilitySlots abilitySlots, int slot, Player player) {
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
-        Holder<AbstractAbility> ability = abilityItem.get(WotrDataComponentType.ABILITY);
+        Holder<Ability> ability = abilityItem.get(WotrDataComponentType.ABILITY);
         if (ability != null && ability.value().onActivate(player, abilityItem)) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }

@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.HolderLookup;
@@ -11,7 +11,7 @@ import net.minecraft.tags.TagEntry;
 
 import java.util.concurrent.CompletableFuture;
 
-public class WotrAbilityTagsProvider extends TagsProvider<AbstractAbility> {
+public class WotrAbilityTagsProvider extends TagsProvider<Ability> {
     // Get parameters from the `GatherDataEvent`s.
     public WotrAbilityTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         // Second parameter is the registry key we are generating the tags for.

@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.loot.functions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.commands.AbilityCommands;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
@@ -32,10 +32,10 @@ public class AbilityHolderFunction extends LootItemConditionalFunction {
 
     private final int minLevel;
     private final int maxLevel;
-    private final HolderSet<AbstractAbility> abilities;
+    private final HolderSet<Ability> abilities;
 
     protected AbilityHolderFunction(List<LootItemCondition> predicates, int minLevel, int maxLevel,
-            HolderSet<AbstractAbility> abilities) {
+            HolderSet<Ability> abilities) {
         super(predicates);
         this.minLevel = minLevel;
         this.maxLevel = maxLevel;
@@ -50,7 +50,7 @@ public class AbilityHolderFunction extends LootItemConditionalFunction {
         return maxLevel;
     }
 
-    public HolderSet<AbstractAbility> getAbilities() {
+    public HolderSet<Ability> getAbilities() {
         return abilities;
     }
 
@@ -62,7 +62,7 @@ public class AbilityHolderFunction extends LootItemConditionalFunction {
     @Override
     protected ItemStack run(ItemStack itemStack, LootContext lootContext) {
         RandomSource random = lootContext.getRandom();
-        Optional<Holder<AbstractAbility>> randomElement = abilities.getRandomElement(random);
+        Optional<Holder<Ability>> randomElement = abilities.getRandomElement(random);
         if (randomElement.isEmpty()) {
             return itemStack;
         }
@@ -70,7 +70,7 @@ public class AbilityHolderFunction extends LootItemConditionalFunction {
         return AbilityCommands.generateAbilityItem(itemStack, randomElement.get(), choices, lootContext.getLevel());
     }
 
-    public static Builder<?> setAbilityOptions(int minLevel, int maxLevel, HolderSet<AbstractAbility> abilities) {
+    public static Builder<?> setAbilityOptions(int minLevel, int maxLevel, HolderSet<Ability> abilities) {
         return simpleBuilder(
                 (lootItemConditions) -> new AbilityHolderFunction(lootItemConditions, minLevel, maxLevel, abilities));
     }

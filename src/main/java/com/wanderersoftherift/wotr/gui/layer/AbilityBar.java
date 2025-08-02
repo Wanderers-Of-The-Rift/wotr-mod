@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.layer;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
@@ -106,7 +106,7 @@ public final class AbilityBar implements ConfigurableLayer {
 
         for (int i = 0; i < abilitySlots.getSlots(); i++) {
             ItemStack abilityItem = abilitySlots.getStackInSlot(i);
-            Holder<AbstractAbility> ability = abilityItem.get(WotrDataComponentType.ABILITY);
+            Holder<Ability> ability = abilityItem.get(WotrDataComponentType.ABILITY);
             if (ability == null) {
                 continue;
             }
@@ -125,10 +125,10 @@ public final class AbilityBar implements ConfigurableLayer {
             Vector2i mouseScreenPos = GuiUtil.getMouseScreenPosition();
             orientation.getSlotAt(pos, abilitySlots.getSlots(), mouseScreenPos.x, mouseScreenPos.y).ifPresent(slot -> {
                 ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
-                Holder<AbstractAbility> ability = abilityItem.get(WotrDataComponentType.ABILITY);
+                Holder<Ability> ability = abilityItem.get(WotrDataComponentType.ABILITY);
                 if (ability != null) {
                     graphics.renderComponentTooltip(Minecraft.getInstance().font,
-                            List.of(AbstractAbility.getDisplayName(ability)), mouseScreenPos.x, mouseScreenPos.y + 8);
+                            List.of(Ability.getDisplayName(ability)), mouseScreenPos.x, mouseScreenPos.y + 8);
                 }
             });
         }
@@ -146,7 +146,7 @@ public final class AbilityBar implements ConfigurableLayer {
             GuiGraphics graphics,
             int xOffset,
             int yOffset,
-            Holder<AbstractAbility> ability,
+            Holder<Ability> ability,
             float cooldownFraction) {
         if (ability != null) {
             graphics.blit(RenderType::guiTextured, ability.value().getIcon(), xOffset, yOffset, 0, 0, ICON_SIZE,

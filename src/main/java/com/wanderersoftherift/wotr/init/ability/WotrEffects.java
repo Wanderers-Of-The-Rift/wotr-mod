@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.init.ability;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
+import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ApplyStatusEffect;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.BlankEffect;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 public class WotrEffects {
 
-    public static final DeferredRegister<MapCodec<? extends AbstractEffect>> EFFECTS = DeferredRegister
+    public static final DeferredRegister<MapCodec<? extends AbilityEffect>> EFFECTS = DeferredRegister
             .create(WotrRegistries.Keys.EFFECTS, WanderersOfTheRift.MODID);
 
     public static final Supplier<MapCodec<? extends AttachEffect>> ATTACH_EFFECT = EFFECTS.register("attach_effect",
@@ -48,8 +48,8 @@ public class WotrEffects {
             .register("movement_effect", () -> MovementEffect.CODEC);
     public static final Supplier<MapCodec<? extends DamageEffect>> DAMAGE_EFFECT = EFFECTS.register("damage_effect",
             () -> DamageEffect.CODEC);
-    public static final Supplier<MapCodec<? extends AbstractEffect>> HEAL_EFFECT = EFFECTS.register("heal_effect",
+    public static final Supplier<MapCodec<? extends AbilityEffect>> HEAL_EFFECT = EFFECTS.register("heal_effect",
             () -> HealEffect.CODEC);
-    public static final Supplier<MapCodec<? extends AbstractEffect>> TARGET_EFFECT = EFFECTS.register("target_effect",
+    public static final Supplier<MapCodec<? extends AbilityEffect>> TARGET_EFFECT = EFFECTS.register("target_effect",
             () -> TargetEffect.CODEC);
 }

@@ -32,8 +32,8 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     /**
      * @return The ability
      */
-    public AbstractAbility getAbility() {
-        Holder<AbstractAbility> holder = abilityItem.get(WotrDataComponentType.ABILITY);
+    public Ability getAbility() {
+        Holder<Ability> holder = abilityItem.get(WotrDataComponentType.ABILITY);
         if (holder != null) {
             return holder.value();
         }

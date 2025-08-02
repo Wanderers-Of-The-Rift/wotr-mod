@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -37,7 +37,7 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
             return;
         }
-        AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
+        Ability ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
         abilitySlots.setSelectedSlot(slot());
 
         ability.onActivate(player, abilityItem);

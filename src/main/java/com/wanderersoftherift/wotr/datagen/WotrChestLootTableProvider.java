@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
@@ -133,7 +133,7 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
     }
 
     private void generateAbilityLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        HolderLookup.RegistryLookup<AbstractAbility> reg = registries.lookupOrThrow(WotrRegistries.Keys.ABILITIES);
+        HolderLookup.RegistryLookup<Ability> reg = registries.lookupOrThrow(WotrRegistries.Keys.ABILITIES);
         consumer.accept(getResourceKey("rift/ability"), LootTable.lootTable()
                 .withPool(
                         LootPool.lootPool()

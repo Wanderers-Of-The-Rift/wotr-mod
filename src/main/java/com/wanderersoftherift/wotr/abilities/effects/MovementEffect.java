@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerChunkCache;
@@ -17,9 +17,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Optional;
 
-public class MovementEffect extends AbstractEffect {
+public class MovementEffect extends AbilityEffect {
     public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity))
                     .and(RelativeFrame.CODEC.optionalFieldOf("relativeFrame", RelativeFrame.TARGET_FACING)
                             .forGetter(MovementEffect::getRelativeFrame))
@@ -28,7 +28,7 @@ public class MovementEffect extends AbstractEffect {
     private final Vec3 velocity;
     private final RelativeFrame relativeFrame;
 
-    public MovementEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+    public MovementEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             Vec3 velocity, RelativeFrame relativeFrame) {
         super(targeting, effects, particles);
         this.velocity = velocity;
@@ -36,7 +36,7 @@ public class MovementEffect extends AbstractEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 
