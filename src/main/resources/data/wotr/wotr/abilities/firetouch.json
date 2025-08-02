@@ -33,7 +33,7 @@
               "type": "wotr:movement_effect",
               "targeting": {
                 "type": "wotr:area_targeting",
-                "range": 0,
+                "range": 10,
                 "include_self": false,
                 "target": {
                   "sentiment": "any"

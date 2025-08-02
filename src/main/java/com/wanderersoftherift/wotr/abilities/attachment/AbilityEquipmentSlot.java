@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -26,7 +27,7 @@ public record AbilityEquipmentSlot(int slot) implements WotrEquipmentSlot {
     }
 
     @Override
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return "ability_slot_" + slot;
     }
 }
