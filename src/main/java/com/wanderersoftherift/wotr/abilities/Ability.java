@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
+import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
@@ -25,25 +25,25 @@ import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
 
-public abstract class AbstractAbility {
+public abstract class Ability {
 
-    public static final Codec<AbstractAbility> DIRECT_CODEC = WotrRegistries.ABILITY_TYPES.byNameCodec()
-            .dispatch(AbstractAbility::getCodec, Function.identity());
-    public static final Codec<Holder<AbstractAbility>> CODEC = LaxRegistryCodec.create(ABILITIES);
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AbstractAbility>> STREAM_CODEC = ByteBufCodecs
+    public static final Codec<Ability> DIRECT_CODEC = WotrRegistries.ABILITY_TYPES.byNameCodec()
+            .dispatch(Ability::getCodec, Function.identity());
+    public static final Codec<Holder<Ability>> CODEC = LaxRegistryCodec.create(ABILITIES);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Ability>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITIES);
 
     private ResourceLocation icon = ResourceLocation.withDefaultNamespace("textures/misc/forcefield.png");
     private Optional<ResourceLocation> smallIcon = Optional.empty();
 
-    private final List<AbstractEffect> effects;
+    private final List<AbilityEffect> effects;
     private int baseCooldown = 0;
     private int baseManaCost;
 
     private Holder<Attribute> durationAttribute = null;
     private boolean isToggle = false;
 
-    public AbstractAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, List<AbstractEffect> effects,
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, List<AbilityEffect> effects,
             int baseCooldown) {
         this.effects = effects;
         this.icon = icon;
@@ -51,11 +51,11 @@ public abstract class AbstractAbility {
         this.baseCooldown = baseCooldown;
     }
 
-    public static Component getDisplayName(Holder<AbstractAbility> ability) {
+    public static Component getDisplayName(Holder<Ability> ability) {
         return Component.translatable(ResourceLocation.parse(ability.getRegisteredName()).toLanguageKey("ability"));
     }
 
-    public abstract MapCodec<? extends AbstractAbility> getCodec();
+    public abstract MapCodec<? extends Ability> getCodec();
 
     public void setIcon(ResourceLocation location) {
         icon = location;
@@ -69,7 +69,7 @@ public abstract class AbstractAbility {
         return smallIcon;
     }
 
-    public List<AbstractEffect> getEffects() {
+    public List<AbilityEffect> getEffects() {
         return this.effects;
     }
 
@@ -124,7 +124,7 @@ public abstract class AbstractAbility {
                 return true;
             }
         }
-        for (AbstractEffect effect : effects) {
+        for (AbilityEffect effect : effects) {
             if (effect.isRelevant(modifierEffect)) {
                 return true;
             }

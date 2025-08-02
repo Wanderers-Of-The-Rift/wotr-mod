@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class AbstractTargeting {
+public abstract class AbilityTargeting {
 
-    public static final Codec<AbstractTargeting> DIRECT_CODEC = WotrRegistries.EFFECT_TARGETING_TYPES.byNameCodec()
-            .dispatch(AbstractTargeting::getCodec, Function.identity());
+    public static final Codec<AbilityTargeting> DIRECT_CODEC = WotrRegistries.EFFECT_TARGETING_TYPES.byNameCodec()
+            .dispatch(AbilityTargeting::getCodec, Function.identity());
 
     private final TargetPredicate targetPredicate;
 
-    public AbstractTargeting(TargetPredicate targetPredicate) {
+    public AbilityTargeting(TargetPredicate targetPredicate) {
         this.targetPredicate = targetPredicate;
     }
 
-    public abstract MapCodec<? extends AbstractTargeting> getCodec();
+    public abstract MapCodec<? extends AbilityTargeting> getCodec();
 
     /**
      * @param currentEntity This is the entity which is using the effect, this can be any entity down a chain based on
@@ -71,9 +71,9 @@ public abstract class AbstractTargeting {
         return targetPredicate;
     }
 
-    protected static <T extends AbstractTargeting> Products.P1<RecordCodecBuilder.Mu<T>, TargetPredicate> commonFields(
+    protected static <T extends AbilityTargeting> Products.P1<RecordCodecBuilder.Mu<T>, TargetPredicate> commonFields(
             RecordCodecBuilder.Instance<T> instance) {
         return instance.group(TargetPredicate.CODEC.optionalFieldOf("target", new TargetPredicate())
-                .forGetter(AbstractTargeting::getTargetPredicate));
+                .forGetter(AbilityTargeting::getTargetPredicate));
     }
 }

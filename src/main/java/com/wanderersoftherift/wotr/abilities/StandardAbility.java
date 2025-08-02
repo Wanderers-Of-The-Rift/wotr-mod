@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
-import com.wanderersoftherift.wotr.abilities.effects.AbstractEffect;
+import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -20,27 +20,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class StandardAbility extends AbstractAbility {
+public class StandardAbility extends Ability {
 
     public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("smallIcon").forGetter(StandardAbility::getSmallIcon),
-                    Codec.INT.fieldOf("cooldown").forGetter(AbstractAbility::getBaseCooldown),
+                    Codec.INT.fieldOf("cooldown").forGetter(Ability::getBaseCooldown),
                     Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
-                    Codec.list(AbstractEffect.DIRECT_CODEC)
+                    Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("effects", Collections.emptyList())
                             .forGetter(StandardAbility::getEffects)
             ).apply(instance, StandardAbility::new));
 
     public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
-            List<AbstractEffect> effects) {
+            List<AbilityEffect> effects) {
         super(icon, smallIcon, effects, baseCooldown);
         setBaseManaCost(manaCost);
     }
 
     @Override
-    public MapCodec<? extends AbstractAbility> getCodec() {
+    public MapCodec<? extends Ability> getCodec() {
         return CODEC;
     }
 

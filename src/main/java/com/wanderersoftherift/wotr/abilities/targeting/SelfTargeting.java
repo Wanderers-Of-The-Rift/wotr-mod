@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 
-public class SelfTargeting extends AbstractTargeting {
+public class SelfTargeting extends AbilityTargeting {
 
     public static final MapCodec<SelfTargeting> CODEC = RecordCodecBuilder
             .mapCodec(instance -> commonFields(instance).apply(instance, SelfTargeting::new));
@@ -19,7 +19,7 @@ public class SelfTargeting extends AbstractTargeting {
     }
 
     @Override
-    public MapCodec<? extends AbstractTargeting> getCodec() {
+    public MapCodec<? extends AbilityTargeting> getCodec() {
         return CODEC;
     }
 

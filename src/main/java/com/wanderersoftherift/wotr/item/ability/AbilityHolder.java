@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.item.ability;
 
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -18,9 +18,9 @@ public class AbilityHolder extends Item {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        Holder<AbstractAbility> abilityHolder = stack.get(WotrDataComponentType.ABILITY);
+        Holder<Ability> abilityHolder = stack.get(WotrDataComponentType.ABILITY);
         if (abilityHolder != null) {
-            return AbstractAbility.getDisplayName(abilityHolder);
+            return Ability.getDisplayName(abilityHolder);
         }
         return super.getName(stack);
     }
