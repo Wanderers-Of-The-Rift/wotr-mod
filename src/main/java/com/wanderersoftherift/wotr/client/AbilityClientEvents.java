@@ -105,7 +105,7 @@ public final class AbilityClientEvents {
         }
 
         ManaData manaData = player.getData(WotrAttachments.MANA);
-        manaData.tick(player);
+        manaData.tick();
     }
 
 }
