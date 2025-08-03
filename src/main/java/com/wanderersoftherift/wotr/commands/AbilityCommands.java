@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -69,7 +70,7 @@ public class AbilityCommands {
         AbilityUpgradePool.Mutable upgradePool = new AbilityUpgradePool.Mutable();
         upgradePool.generateChoices(serverLevel.registryAccess(), ability.value(), choices, serverLevel.random, 3);
         DataComponentPatch patch = DataComponentPatch.builder()
-                .set(WotrDataComponentType.ABILITY.get(), ability)
+                .set(WotrDataComponentType.ABILITY.get(), new ActivatableAbility(ability))
                 .set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool.toImmutable())
                 .build();
         item.applyComponents(patch);

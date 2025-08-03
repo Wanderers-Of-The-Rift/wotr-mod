@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.HolderLookup;
@@ -90,7 +91,7 @@ public class WotrCreativeTabs {
             HolderLookup.RegistryLookup<Ability> registry) {
         registry.listElements().forEach(abilityHolder -> {
             ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
-            item.set(WotrDataComponentType.ABILITY, abilityHolder);
+            item.set(WotrDataComponentType.ABILITY, new ActivatableAbility(abilityHolder));
             output.accept(item);
         });
     }

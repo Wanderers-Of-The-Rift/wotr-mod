@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.crafting.EssencePredicate;
 import com.wanderersoftherift.wotr.item.crafting.KeyForgeRecipe;
 import net.minecraft.core.HolderGetter;
@@ -91,8 +92,8 @@ public class WotrRecipeProvider extends RecipeProvider {
 
         ItemStack dodgeSkillGem = WotrItems.ABILITY_HOLDER.toStack();
         dodgeSkillGem.applyComponents(DataComponentPatch.builder()
-                .set(WotrDataComponentType.ABILITY.get(),
-                        DeferredHolder.create(WotrRegistries.Keys.ABILITIES, WanderersOfTheRift.id("dash")))
+                .set(WotrDataComponentType.ABILITY.get(), new ActivatableAbility(
+                        DeferredHolder.create(WotrRegistries.Keys.ABILITIES, WanderersOfTheRift.id("dash"))))
                 .build());
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, dodgeSkillGem)
                 .pattern("ggg")
@@ -106,7 +107,8 @@ public class WotrRecipeProvider extends RecipeProvider {
         ItemStack fireballSkillGem = WotrItems.ABILITY_HOLDER.toStack();
         fireballSkillGem.applyComponents(DataComponentPatch.builder()
                 .set(WotrDataComponentType.ABILITY.get(),
-                        DeferredHolder.create(WotrRegistries.Keys.ABILITIES, WanderersOfTheRift.id("fireball")))
+                        new ActivatableAbility(DeferredHolder.create(WotrRegistries.Keys.ABILITIES,
+                                WanderersOfTheRift.id("fireball"))))
                 .build());
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, fireballSkillGem)
                 .pattern("ggg")
@@ -119,8 +121,8 @@ public class WotrRecipeProvider extends RecipeProvider {
 
         ItemStack healSkillGem = WotrItems.ABILITY_HOLDER.toStack();
         healSkillGem.applyComponents(DataComponentPatch.builder()
-                .set(WotrDataComponentType.ABILITY.get(),
-                        DeferredHolder.create(WotrRegistries.Keys.ABILITIES, WanderersOfTheRift.id("heal")))
+                .set(WotrDataComponentType.ABILITY.get(), new ActivatableAbility(
+                        DeferredHolder.create(WotrRegistries.Keys.ABILITIES, WanderersOfTheRift.id("heal"))))
                 .build());
         ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, healSkillGem)
                 .pattern("ggg")

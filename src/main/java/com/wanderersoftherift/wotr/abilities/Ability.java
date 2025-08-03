@@ -2,11 +2,8 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
-import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,11 +12,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -34,18 +28,12 @@ public abstract class Ability {
             .holderRegistry(ABILITIES);
 
     private ResourceLocation icon;
-    private Optional<ResourceLocation> smallIcon = Optional.empty();
+    private Optional<ResourceLocation> smallIcon;
 
-    private final List<AbilityEffect> effects;
     private int baseCooldown = 0;
     private int baseManaCost;
 
-    private Holder<Attribute> durationAttribute = null;
-    private boolean isToggle = false;
-
-    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, List<AbilityEffect> effects,
-            int baseCooldown) {
-        this.effects = effects;
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown) {
         this.icon = icon;
         this.smallIcon = smallIcon;
         this.baseCooldown = baseCooldown;
@@ -69,10 +57,6 @@ public abstract class Ability {
         return smallIcon;
     }
 
-    public List<AbilityEffect> getEffects() {
-        return this.effects;
-    }
-
     public int getBaseManaCost() {
         return baseManaCost;
     }
@@ -92,43 +76,5 @@ public abstract class Ability {
         return baseCooldown;
     }
 
-    /*
-     * TOGGLE STUFF BELOW
-     */
-    public boolean isToggle() {
-        return this.isToggle;
-    }
-
-    public void setIsToggle(boolean shouldToggle) {
-        this.isToggle = shouldToggle;
-    }
-
-    public boolean isToggled(Player player) {
-//        return ModAbilities.TOGGLE_ATTACHMENTS.containsKey(this.getName()) && p.getData(ModAbilities.TOGGLE_ATTACHMENTS.get(this.getName()));
-        return false;
-    }
-
-    public void toggle(Player player) {
-        // Change the toggle to opposite and then tell the player
-//        if(TOGGLE_ATTACHMENTS.containsKey(this.getName())) p.setData(TOGGLE_ATTACHMENTS.get(this.getName()), !IsToggled(p));
-//        PacketDistributor.sendToPlayer((ServerPlayer) p, new ToggleState(this.getName().toString(), IsToggled(p)));
-    }
-
-    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        if (modifierEffect instanceof AttributeModifierEffect attributeModifierEffect) {
-            Holder<Attribute> attribute = attributeModifierEffect.getAttribute();
-            if (WotrAttributes.COOLDOWN.equals(attribute) && baseCooldown > 0) {
-                return true;
-            }
-            if (WotrAttributes.MANA_COST.equals(attribute) && baseManaCost > 0) {
-                return true;
-            }
-        }
-        for (AbilityEffect effect : effects) {
-            if (effect.isRelevant(modifierEffect)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public abstract boolean isRelevantModifier(AbstractModifierEffect modifierEffect);
 }
