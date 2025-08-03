@@ -1,0 +1,23 @@
+{
+    "fallback": "wotr:rift/poi_terminator",
+    "elements": [
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/inwall/3/mineshaft-1-wout",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/inwall/3/doorway-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        }
+    ]
+}
