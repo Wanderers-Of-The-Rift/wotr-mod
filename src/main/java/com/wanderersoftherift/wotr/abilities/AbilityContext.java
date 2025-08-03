@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
@@ -33,9 +34,9 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
      * @return The ability
      */
     public Ability getAbility() {
-        Holder<Ability> holder = abilityItem.get(WotrDataComponentType.ABILITY);
-        if (holder != null) {
-            return holder.value();
+        ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+        if (abilityComponent != null) {
+            return abilityComponent.ability().value();
         }
         return null;
     }

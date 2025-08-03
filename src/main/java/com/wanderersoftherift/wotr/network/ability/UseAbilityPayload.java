@@ -37,7 +37,7 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
             return;
         }
-        Ability ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
+        Ability ability = abilityItem.get(WotrDataComponentType.ABILITY).ability().value();
         abilitySlots.setSelectedSlot(slot());
 
         ability.onActivate(player, abilityItem);

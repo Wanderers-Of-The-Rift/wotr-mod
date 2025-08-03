@@ -2,9 +2,8 @@ package com.wanderersoftherift.wotr.client.render.item.emblem;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import net.minecraft.core.Holder;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -18,9 +17,12 @@ public class AbilityEmblemProvider implements EmblemProvider {
 
     @Override
     public ResourceLocation getIcon(ItemStack item) {
-        Holder<Ability> holder = item.get(WotrDataComponentType.ABILITY);
-        if (holder != null) {
-            return holder.value().getSmallIcon().orElse(holder.value().getIcon());
+        ActivatableAbility abilityComponent = item.get(WotrDataComponentType.ABILITY);
+        if (abilityComponent != null) {
+            return abilityComponent.ability()
+                    .value()
+                    .getSmallIcon()
+                    .orElse(abilityComponent.ability().value().getIcon());
         }
         return null;
     }

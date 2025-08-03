@@ -9,10 +9,14 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.ability.Cooldown;
+import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -33,10 +37,17 @@ public class StandardAbility extends Ability {
                             .forGetter(StandardAbility::getEffects)
             ).apply(instance, StandardAbility::new));
 
+    private final List<AbilityEffect> effects;
+
     public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
             List<AbilityEffect> effects) {
-        super(icon, smallIcon, effects, baseCooldown);
+        super(icon, smallIcon, baseCooldown);
+        this.effects = new ArrayList<>(effects);
         setBaseManaCost(manaCost);
+    }
+
+    public List<AbilityEffect> getEffects() {
+        return effects;
     }
 
     @Override
@@ -66,7 +77,6 @@ public class StandardAbility extends Ability {
                     return false;
                 }
             }
-            // TODO: Attachment holder pattern on mana pool
             if (caster instanceof ServerPlayer player) {
                 manaData.useAmount(manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
@@ -79,5 +89,23 @@ public class StandardAbility extends Ability {
             abilityContext.disableUpgradeModifiers();
         }
         return true;
+    }
+
+    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
+        if (modifierEffect instanceof AttributeModifierEffect attributeModifierEffect) {
+            Holder<Attribute> attribute = attributeModifierEffect.getAttribute();
+            if (WotrAttributes.COOLDOWN.equals(attribute) && getBaseCooldown() > 0) {
+                return true;
+            }
+            if (WotrAttributes.MANA_COST.equals(attribute) && getBaseManaCost() > 0) {
+                return true;
+            }
+        }
+        for (AbilityEffect effect : effects) {
+            if (effect.isRelevant(modifierEffect)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

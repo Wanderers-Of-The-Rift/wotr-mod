@@ -1,16 +1,15 @@
 package com.wanderersoftherift.wotr.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -90,8 +89,8 @@ public final class AbilityClientEvents {
 
     private static void useAbilitySlot(AbilitySlots abilitySlots, int slot, Player player) {
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
-        Holder<Ability> ability = abilityItem.get(WotrDataComponentType.ABILITY);
-        if (ability != null && ability.value().onActivate(player, abilityItem)) {
+        ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+        if (abilityComponent != null && abilityComponent.ability().value().onActivate(player, abilityItem)) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }
         abilitySlots.setSelectedSlot(slot);

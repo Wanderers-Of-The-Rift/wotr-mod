@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.gui.config.UIOrientation;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.ability.Cooldown;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.ChatFormatting;
@@ -106,13 +107,13 @@ public final class AbilityBar implements ConfigurableLayer {
 
         for (int i = 0; i < abilitySlots.getSlots(); i++) {
             ItemStack abilityItem = abilitySlots.getStackInSlot(i);
-            Holder<Ability> ability = abilityItem.get(WotrDataComponentType.ABILITY);
-            if (ability == null) {
+            ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+            if (abilityComponent == null) {
                 continue;
             }
             Cooldown cooldown = abilityItem.getOrDefault(WotrDataComponentType.COOLDOWN, new Cooldown());
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
-                    ability, cooldown.remainingFraction(level));
+                    abilityComponent.ability(), cooldown.remainingFraction(level));
         }
         renderSelected(graphics, pos.x + abilitySlots.getSelectedSlot() * slotOffset.x(),
                 pos.y + abilitySlots.getSelectedSlot() * slotOffset.y());
@@ -125,10 +126,11 @@ public final class AbilityBar implements ConfigurableLayer {
             Vector2i mouseScreenPos = GuiUtil.getMouseScreenPosition();
             orientation.getSlotAt(pos, abilitySlots.getSlots(), mouseScreenPos.x, mouseScreenPos.y).ifPresent(slot -> {
                 ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
-                Holder<Ability> ability = abilityItem.get(WotrDataComponentType.ABILITY);
-                if (ability != null) {
+                ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+                if (abilityComponent != null) {
                     graphics.renderComponentTooltip(Minecraft.getInstance().font,
-                            List.of(Ability.getDisplayName(ability)), mouseScreenPos.x, mouseScreenPos.y + 8);
+                            List.of(Ability.getDisplayName(abilityComponent.ability())), mouseScreenPos.x,
+                            mouseScreenPos.y + 8);
                 }
             });
         }
