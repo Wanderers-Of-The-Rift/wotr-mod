@@ -9,11 +9,14 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-import java.util.Map;
+import java.util.HashMap;
 
-// @EventBusSubscriber
+@EventBusSubscriber
 public class RiftConfigInitializationEvents {
+    private static final ImmutableList<String> POI_VARIANTS = ImmutableList.of("free", "ceiling", "halfway", "inwall");
 
     // @SubscribeEvent
     private static void example(RiftEvent.Created.Pre event) {
@@ -59,18 +62,17 @@ public class RiftConfigInitializationEvents {
     private static void appendDefaultAnomalies(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
         var riftGenConfig = config.riftGen();
-        var chance = 0.1f;
+        var chance = 0.15f;
+        var replacementMap = new HashMap<ResourceLocation, ReplaceJigsawsBulk.Replacement>();
+        for (var variant : POI_VARIANTS) {
+            for (int size = 3; size <= 3 /* todo increase once we have more anomaly POIs */; size += 2) {
+                replacementMap.put(
+                        WanderersOfTheRift.id("rift/poi/" + variant + "/" + size), new ReplaceJigsawsBulk.Replacement(
+                                WanderersOfTheRift.id("rift/anomaly/" + variant + "/" + size), chance));
+            }
+        }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
-                .add(new ReplaceJigsawsBulk(Map.of(
-                        WanderersOfTheRift.id("rift/poi/free/3"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/free/3"), chance),
-                        WanderersOfTheRift.id("rift/poi/ceiling/3"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/ceiling/3"), chance),
-                        WanderersOfTheRift.id("rift/poi/halfway/3"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/halfway/3"), chance),
-                        WanderersOfTheRift.id("rift/poi/inwall/3"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/inwall/3"), chance)
-                )))
+                .add(new ReplaceJigsawsBulk(replacementMap))
                 .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
@@ -81,18 +83,19 @@ public class RiftConfigInitializationEvents {
     private static void appendRandomSizeReduction(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
         var riftGenConfig = config.riftGen();
-        var chance = 0.2f;
+        var chance = 0.25f;
+
+        var replacementMap = new HashMap<ResourceLocation, ReplaceJigsawsBulk.Replacement>();
+        for (var variant : POI_VARIANTS) {
+            for (int size = 3; size < 11; size += 2) {
+                replacementMap.put(
+                        WanderersOfTheRift.id("rift/poi/" + variant + "/" + (size + 2)),
+                        new ReplaceJigsawsBulk.Replacement(
+                                WanderersOfTheRift.id("rift/poi/" + variant + "/" + size), chance));
+            }
+        }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
-                .add(new ReplaceJigsawsBulk(Map.of(
-                        WanderersOfTheRift.id("rift/poi/free/5"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/free/5"), chance),
-                        WanderersOfTheRift.id("rift/poi/ceiling/5"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/ceiling/5"), chance),
-                        WanderersOfTheRift.id("rift/poi/halfway/5"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/halfway/5"), chance),
-                        WanderersOfTheRift.id("rift/poi/inwall/5"),
-                        new ReplaceJigsawsBulk.Replacement(WanderersOfTheRift.id("rift/anomaly/inwall/5"), chance)
-                )))
+                .add(new ReplaceJigsawsBulk(replacementMap))
                 .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
