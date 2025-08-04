@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.commands.CurrencyCommands;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.EssenceCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
+import com.wanderersoftherift.wotr.commands.ManaCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
@@ -33,6 +34,7 @@ public final class WotrCommands {
         new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new HudCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new CurrencyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new ManaCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
 
         if (FMLEnvironment.dist.isClient()) {
             RiftMapCommands.register(event.getDispatcher(), event.getBuildContext());

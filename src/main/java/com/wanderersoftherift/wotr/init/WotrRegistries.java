@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
-import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
@@ -180,7 +180,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.RUNEGEM_DATA, RunegemData.CODEC, RunegemData.CODEC);
         event.dataPackRegistry(Keys.GEAR_IMPLICITS_CONFIG, ImplicitConfig.CODEC, ImplicitConfig.CODEC);
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);
-        event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
+        event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.DIRECT_CODEC, EffectMarker.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITIES, Ability.DIRECT_CODEC, Ability.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);

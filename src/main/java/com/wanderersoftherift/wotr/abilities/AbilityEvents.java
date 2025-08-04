@@ -2,8 +2,9 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
-import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
+import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
+import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
@@ -48,9 +49,15 @@ public class AbilityEvents {
     }
 
     @SubscribeEvent
+    public static void dimensionChanged(PlayerEvent.PlayerChangedDimensionEvent event) {
+        event.getEntity().getData(WotrAttachments.ATTACHED_EFFECTS).replicateAttachments();
+    }
+
+    @SubscribeEvent
     public static void serverTick(ServerTickEvent.Pre event) {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             tickAttachedEffects(level);
+            tickActiveEffects(level);
             tickMana(level);
         }
     }
@@ -66,11 +73,19 @@ public class AbilityEvents {
     public static void tickAttachedEffects(ServerLevel level) {
         level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
                 entity -> entity.hasData(WotrAttachments.ATTACHED_EFFECTS)).forEach(entity -> {
-                    AttachedEffectData data = entity.getData(WotrAttachments.ATTACHED_EFFECTS);
+                    AttachedEffects data = entity.getData(WotrAttachments.ATTACHED_EFFECTS);
                     data.tick();
                     if (data.isEmpty()) {
                         entity.removeData(WotrAttachments.ATTACHED_EFFECTS);
                     }
+                });
+    }
+
+    public static void tickActiveEffects(ServerLevel level) {
+        level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
+                entity -> entity.hasData(WotrAttachments.ONGOING_ABILITIES)).forEach(entity -> {
+                    OngoingAbilities data = entity.getData(WotrAttachments.ONGOING_ABILITIES);
+                    data.tick();
                 });
     }
 

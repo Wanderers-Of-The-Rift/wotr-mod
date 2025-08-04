@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
+import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
@@ -15,13 +15,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 /**
  * The context for processing an ability.
  *
+ * @param instanceId  A unique id for this ability activation
+ * @param ability     The ability itself
  * @param caster      The caster of the ability
  * @param abilityItem The item holding the ability (and any upgrades)
+ * @param slot        The equipment slot the ability item is in, if any
  */
-public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem) {
+public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
+        ItemStack abilityItem, WotrEquipmentSlot slot) {
 
     /**
      * @return The level the ability was used within
@@ -31,23 +37,16 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     }
 
     /**
-     * @return The ability
+     * @return The current game time
      */
-    public Ability getAbility() {
-        ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
-        if (abilityComponent != null) {
-            return abilityComponent.ability().value();
-        }
-        return null;
+    public long getGameTime() {
+        return level().getGameTime();
     }
 
     /**
      * Enables all modifiers that impact the ability
      */
     public void enableUpgradeModifiers() {
-        /*
-         * if (caster != null && !caster.isRemoved()) { ModifierHelper.enableModifier(caster); }
-         */
         AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {
@@ -61,9 +60,6 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
      * Disables all modifiers that were enabled by {@link #enableUpgradeModifiers()}
      */
     public void disableUpgradeModifiers() {
-        /*
-         * if (caster != null && !caster.isRemoved()) { ModifierHelper.disableModifier(caster); }
-         */
         AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {

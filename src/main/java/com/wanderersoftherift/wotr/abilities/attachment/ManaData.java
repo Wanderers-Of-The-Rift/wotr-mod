@@ -50,6 +50,9 @@ public class ManaData {
      * @param quantity The quantity of mana to consume
      */
     public void useAmount(float quantity) {
+        if (quantity == 0) {
+            return;
+        }
         setAmount(amount - quantity);
     }
 
@@ -60,6 +63,7 @@ public class ManaData {
      */
     public void setAmount(float value) {
         this.amount = Math.clamp(value, 0, maxAmount());
+
         if (holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new ManaChangePayload(amount));
         }

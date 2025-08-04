@@ -1,12 +1,12 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "icon": "minecraft:textures/mob_effect/fire_resistance.png",
   "cooldown": 200,
   "effects": [
     {
-      "type": "wotr:attach_effect",
+      "type": "wotr:attach",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
       "continue": {
         "duration": 200
@@ -17,9 +17,9 @@
       },
       "effects": [
         {
-          "type": "wotr:attach_effect",
+          "type": "wotr:attach",
           "targeting": {
-            "type": "wotr:self_targeting"
+            "type": "wotr:self"
           },
           "continue": {
             "duration": 200
@@ -30,9 +30,9 @@
           },
           "effects": [
             {
-              "type": "wotr:movement_effect",
+              "type": "wotr:movement",
               "targeting": {
-                "type": "wotr:area_targeting",
+                "type": "wotr:area",
                 "range": 10,
                 "include_self": false,
                 "target": {

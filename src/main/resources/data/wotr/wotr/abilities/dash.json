@@ -1,11 +1,11 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "cooldown": 200,
   "effects": [
     {
-      "type": "wotr:movement_effect",
+      "type": "wotr:movement",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
       "velocity": [
         0.0,
@@ -14,9 +14,9 @@
       ]
     },
     {
-      "type": "wotr:movement_effect",
+      "type": "wotr:movement",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
       "velocity": [
         0.0,
@@ -26,12 +26,12 @@
       "relativeFrame": "absolute"
     },
     {
-      "type": "wotr:sound_effect",
+      "type": "wotr:sound",
       "sound": {
         "sound_id": "minecraft:entity.breeze.charge"
       },
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       }
     }
   ],
