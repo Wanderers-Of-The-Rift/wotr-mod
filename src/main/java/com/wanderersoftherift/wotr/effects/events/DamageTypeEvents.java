@@ -10,6 +10,7 @@ public class DamageTypeEvents {
 
     @SubscribeEvent
     public static void onLivingDamageEventPost(LivingDamageEvent.Post event) {
+
         /*
          * if (WotrDamageTypes.FIRE_DAMAGE.equals(event.getSource().typeHolder().getKey())) {
          * event.getEntity().addEffect(new MobEffectInstance(WotrMobEffects.FIRE_BURN_EFFECT, 20 * 30)); }

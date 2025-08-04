@@ -8,6 +8,9 @@ import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
 import com.wanderersoftherift.wotr.abilities.attachment.PlayerDurationData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
+import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import net.minecraft.world.item.ItemStack;
@@ -77,4 +80,19 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
             () -> AttachmentType.builder(ManaData::new).serialize(ManaData.CODEC).build());
 
+    /// Guilds
+    public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
+            () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());
+    public static final Supplier<AttachmentType<List<QuestState>>> AVAILABLE_QUESTS = ATTACHMENT_TYPES.register(
+            "available_quests",
+            () -> AttachmentType.<List<QuestState>>builder(() -> new ArrayList<>())
+                    .serialize(MutableListCodec.of(QuestState.CODEC))
+                    .copyOnDeath()
+                    .build());
+    public static final Supplier<AttachmentType<ActiveQuests>> ACTIVE_QUESTS = ATTACHMENT_TYPES.register(
+            "active_quests",
+            () -> AttachmentType.builder(ActiveQuests::new)
+                    .serialize(ActiveQuests.getSerializer())
+                    .copyOnDeath()
+                    .build());
 }

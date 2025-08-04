@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Style;
@@ -16,14 +17,15 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList),
-            Style.Serializer.CODEC.optionalFieldOf("style").forGetter(mod -> Optional.ofNullable(mod.getStyle()))
-    ).apply(inst, (tiers, styleOpt) -> new Modifier(tiers, styleOpt.orElse(null))));
+            Style.Serializer.CODEC.optionalFieldOf("style", Style.EMPTY.withColor(ChatFormatting.GRAY))
+                    .forGetter(Modifier::getStyle))
+            .apply(inst, Modifier::new)
+    );
     public static final Codec<Holder<Modifier>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.MODIFIERS);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MODIFIERS);

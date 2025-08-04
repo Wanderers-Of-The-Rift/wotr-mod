@@ -26,6 +26,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -118,6 +119,9 @@ public class RiftObjectiveEvents {
 
         OngoingObjective objective = LevelRiftObjectiveData.getFromLevel(riftLevel).getObjective();
         boolean success = objective != null && objective.isComplete();
+
+        NeoForge.EVENT_BUS.post(new RiftEvent.PlayerCompletedRift(player, success, riftLevel, riftData.getConfig()));
+
         player.openMenu(new SimpleMenuProvider(
                 (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                         ContainerLevelAccess.create(player.level(), p.getOnPos()),

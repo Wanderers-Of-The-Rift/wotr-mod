@@ -21,7 +21,13 @@ public class WotrRiftThemeTagsProvider extends TagsProvider<RiftTheme> {
     @Override
     protected void addTags(HolderLookup.Provider lookupProvider) {
         tag(WotrTags.RiftThemes.RANDOM_SELECTABLE).add(TagEntry.optionalElement(WanderersOfTheRift.id("cave")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("buzzy_bees")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("desert")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("forest")))
-                .add(TagEntry.optionalElement(WanderersOfTheRift.id("mushroom")));
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("mesa")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("mushroom")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("nether")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("noir")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("swamp")));
     }
 }

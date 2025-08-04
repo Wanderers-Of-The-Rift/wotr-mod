@@ -12,6 +12,9 @@
           "model": "wotr:geo/ability/fireball.geo.json",
           "texture": "wotr:textures/ability/fireball.png"
         },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
+        },
         "velocity": 1.6
       },
       "effects": [

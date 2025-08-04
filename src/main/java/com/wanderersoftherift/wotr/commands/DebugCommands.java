@@ -27,7 +27,6 @@ public class DebugCommands extends BaseCommand {
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
-
     }
 
     private int devWorld(CommandContext<CommandSourceStack> stack) {

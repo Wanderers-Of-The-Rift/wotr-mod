@@ -105,22 +105,7 @@ public class RiftCompleteMenu extends AbstractContainerMenu {
 
     public void addReward(ItemStack item, ServerPlayer player) {
         access.execute((level, pos) -> {
-            ItemStack residual = item;
-            for (int i = 0; i < rewards.getSlots(); i++) {
-                if (rewards.getStackInSlot(i).isEmpty()) {
-                    residual = rewards.insertItem(i, residual, false);
-                    if (residual.isEmpty()) {
-                        return;
-                    }
-                }
-            }
-            if (!residual.isEmpty()) {
-                if (player.isRemoved() || player.hasDisconnected()) {
-                    player.drop(item, false);
-                } else {
-                    player.getInventory().placeItemBackInInventory(item);
-                }
-            }
+            ItemStackHandlerUtil.addOrGiveToPlayerOrDrop(item, rewards, player);
         });
     }
 }

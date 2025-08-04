@@ -186,7 +186,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         return riftShape;
     }
 
-    public static record Factory(BoxedRiftShape riftShape, Optional<Integer> seed,
+    public record Factory(BoxedRiftShape riftShape, Optional<Integer> seed,
             List<LayeredRiftLayout.LayoutLayer.Factory> layers) implements RiftLayout.Factory {
 
         public static final MapCodec<LayeredFiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
