@@ -1,15 +1,15 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "icon" : "minecraft:textures/item/iron_pickaxe.png",
   "cooldown": 1,
   "strength": "wotr:large_boost_strength",
   "effects": [
     {
-      "type": "wotr:damage_effect",
+      "type": "wotr:damage",
       "amount": 1,
       "damage_type": "wotr:fire",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
       "effects": [],
       "particles": {

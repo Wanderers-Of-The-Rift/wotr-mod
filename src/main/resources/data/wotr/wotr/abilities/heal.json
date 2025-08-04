@@ -1,12 +1,12 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "cooldown": 200,
   "effects": [
     {
-      "type": "wotr:heal_effect",
+      "type": "wotr:heal",
       "amount": 2.0,
       "targeting": {
-        "type": "wotr:area_targeting",
+        "type": "wotr:area",
         "range": 2.0,
         "target": {
           "sentiment": "not_foe"
@@ -14,12 +14,12 @@
       }
     },
     {
-      "type": "wotr:sound_effect",
+      "type": "wotr:sound",
       "sound": {
         "sound_id": "minecraft:entity.splash_potion.break"
       },
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       }
     }
   ],

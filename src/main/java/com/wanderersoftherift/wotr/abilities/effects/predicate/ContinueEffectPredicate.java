@@ -27,7 +27,7 @@ public record ContinueEffectPredicate(Optional<EntityPredicate> targetPredicate,
     ).apply(instance, ContinueEffectPredicate::new));
 
     public ContinueEffectPredicate() {
-        this(Optional.empty(), Optional.empty(), 0, 1);
+        this(Optional.empty(), Optional.empty(), 0, 0);
     }
 
     public boolean matches(Entity target, int tick, int triggerCount, Entity caster) {

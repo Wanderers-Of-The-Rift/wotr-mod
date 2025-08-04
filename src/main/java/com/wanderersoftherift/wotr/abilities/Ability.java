@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
@@ -12,9 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -59,6 +55,38 @@ public abstract class Ability {
         return smallIcon;
     }
 
+    public boolean canActivate(AbilityContext context) {
+        return true;
+    }
+
+    public void clientActivate(AbilityContext context) {
+
+    }
+
+    /**
+     * @param context
+     * @return Whether the ability is finished
+     */
+    public abstract boolean activate(AbilityContext context);
+
+    /**
+     *
+     * @param contest
+     * @param age
+     * @return Whether the ability is finished
+     */
+    public boolean tick(AbilityContext contest, long age) {
+        return true;
+    }
+
+    ///  Cooldown
+
+    public int getBaseCooldown() {
+        return baseCooldown;
+    }
+
+    ///  Costs
+
     public int getBaseManaCost() {
         return baseManaCost;
     }
@@ -67,16 +95,6 @@ public abstract class Ability {
         this.baseManaCost = baseManaCost;
     }
 
-    public abstract boolean onActivate(LivingEntity caster, ItemStack abilityItem, @Nullable WotrEquipmentSlot slot);
-
-    // TODO: Any use case for this?
-    public boolean canUse(LivingEntity caster) {
-        return true;
-    }
-
-    public int getBaseCooldown() {
-        return baseCooldown;
-    }
-
     public abstract boolean isRelevantModifier(AbstractModifierEffect modifierEffect);
+
 }

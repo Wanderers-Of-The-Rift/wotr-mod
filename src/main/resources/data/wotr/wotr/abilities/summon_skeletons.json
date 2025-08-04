@@ -1,28 +1,28 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "icon" : "minecraft:textures/item/bone.png",
   "cooldown": 40,
   "effects": [
     {
-      "type": "wotr:target_effect",
+      "type": "wotr:target",
       "targeting": {
-        "type": "wotr:raycast_targeting",
+        "type": "wotr:raycast",
         "range": 200
       },
       "effects": [
         {
-          "type": "wotr:summon_effect",
+          "type": "wotr:summon",
           "targeting": {
-            "type": "wotr:area_targeting",
+            "type": "wotr:area",
             "range": 25
           },
           "entity_type": "minecraft:skeleton",
           "amount": 3,
           "effects": [
             {
-              "type": "wotr:movement_effect",
+              "type": "wotr:movement",
               "targeting": {
-                "type": "wotr:self_targeting"
+                "type": "wotr:self"
               },
               "velocity": [
                 0,
