@@ -165,10 +165,10 @@ public final class RiftLevelManager {
         }
 
         config = RiftConfigInitialization.initializeConfig(config, server, firstPlayer);
-        config = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
-        var loadedRiftHeight = config.riftGen()
+        var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
+        var loadedRiftHeight = finalConfig.riftGen()
                 .layout()
-                .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS);
+                .map(fac -> fac.riftShape(finalConfig).levelCount() + FastRiftGenerator.MARGIN_LAYERS);
         if (loadedRiftHeight.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("missing values in RiftConfig");
             return null;
@@ -177,7 +177,8 @@ public final class RiftLevelManager {
         var riftDimensionType = getRiftDimensionTypeForHeight(requestedRiftHeightChunks);
         int actualRiftHeight = riftDimensionType.getKey();
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(overworld, requestedRiftHeightChunks, actualRiftHeight, config);
+        ChunkGenerator chunkGen = getRiftChunkGenerator(overworld, requestedRiftHeightChunks, actualRiftHeight,
+                finalConfig);
         if (chunkGen == null) {
             return null;
         }
@@ -187,7 +188,7 @@ public final class RiftLevelManager {
             return null;
         }
 
-        ServerLevel level = createRift(id, stem, portalDimension, portalPos, config);
+        ServerLevel level = createRift(id, stem, portalDimension, portalPos, finalConfig);
 
         Registry<Level> registry = dimensionRegistry.get();
         if (registry instanceof MappedRegistry<Level> mappedRegistry) {
@@ -201,7 +202,7 @@ public final class RiftLevelManager {
         level.getServer().forgeGetWorldMap().put(level.dimension(), level);
         level.getServer().markWorldsDirty();
 
-        NeoForge.EVENT_BUS.post(new RiftEvent.Created.Post(level, config, firstPlayer));
+        NeoForge.EVENT_BUS.post(new RiftEvent.Created.Post(level, finalConfig, firstPlayer));
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
 
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));

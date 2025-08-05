@@ -26,6 +26,6 @@ public interface RiftLayout extends CorridorValidator {
 
         RiftLayout createLayout(MinecraftServer server, int seed, RiftConfig riftConfig);
 
-        RiftShape riftShape();
+        RiftShape riftShape(RiftConfig config);
     }
 }

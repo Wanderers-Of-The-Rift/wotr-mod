@@ -7,18 +7,15 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
-import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.DefaultLayoutFactory;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CachedRiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CoreRiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.LayerGeneratableRiftRoomGenerator;
@@ -40,8 +37,6 @@ import java.util.Optional;
 
 public class RiftConfigInitialization {
 
-    public static final int DEFAULT_RIFT_HEIGHT_IN_CHUNKS = 24;
-
     static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server, ServerPlayer firstPlayer) {
         var random = RandomSource.create();
         int seed = baseConfig.riftGen().seed().orElseGet(random::nextInt);
@@ -49,7 +44,7 @@ public class RiftConfigInitialization {
 
         return baseConfig.withRiftGenerationConfig(
                 new RiftGenerationConfig(
-                        Optional.of(baseConfig.riftGen().layout().orElse(defaultLayout(baseConfig.tier(), seed))),
+                        Optional.of(baseConfig.riftGen().layout().orElse(defaultLayout())),
                         Optional.of(defaultRoomGenerator()), true, initializeJigsawProcessors(), Optional.of(seed)
                 )
         ).withThemeIfAbsent(riftTheme);
@@ -80,14 +75,8 @@ public class RiftConfigInitialization {
         );
     }
 
-    private static RiftLayout.Factory defaultLayout(int tier, int seed) {
-        var layerCount = DEFAULT_RIFT_HEIGHT_IN_CHUNKS - FastRiftGenerator.MARGIN_LAYERS;
-        var factory = new LayeredFiniteRiftLayout.Factory(
-                new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0, layerCount),
-                        new Vec3i(-1 - 3 * tier, -layerCount / 2, -1 - 3 * tier),
-                        new Vec3i(3 + 6 * tier, layerCount, 3 + 6 * tier)),
-                Optional.of(seed), defaultLayers());
-        return factory;
+    private static RiftLayout.Factory defaultLayout() {
+        return new DefaultLayoutFactory(defaultLayers());
     }
 
     private static ArrayList<LayeredRiftLayout.LayoutLayer.Factory> defaultLayers() {

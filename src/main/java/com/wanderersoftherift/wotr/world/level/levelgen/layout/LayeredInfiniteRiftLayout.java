@@ -114,6 +114,11 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         public LayeredRiftLayout.Factory withLayers(List<LayoutLayer.Factory> layers) {
             return new Factory(riftShape, seed, layers);
         }
+
+        @Override
+        public RiftShape riftShape(RiftConfig config) {
+            return riftShape();
+        }
     }
 
     private class Region implements LayeredRiftLayout.LayoutSection {

@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
@@ -213,6 +214,11 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         @Override
         public LayeredRiftLayout.Factory withLayers(List<LayoutLayer.Factory> layers) {
             return new Factory(riftShape, seed, layers);
+        }
+
+        @Override
+        public RiftShape riftShape(RiftConfig config) {
+            return riftShape();
         }
     }
 }
