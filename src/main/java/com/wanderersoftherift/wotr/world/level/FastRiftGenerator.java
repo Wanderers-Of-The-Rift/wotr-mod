@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
@@ -67,17 +65,9 @@ public class FastRiftGenerator extends ChunkGenerator {
     public static final int SEED_ADJUSTMENT_ROOM_GENERATOR = 949_616_156;
     public static final int SEED_ADJUSTMENT_CORRIDOR_BLENDER = 496_415;
 
-    public static final int MAX_MEASUREMENT_PAUSE_MILLISECONDS = 3000;
-
     private final int layerCount;
-
     private final int dimensionHeightBlocks;
-    private final AtomicInteger inFlightChunks = new AtomicInteger(0);
-
-    private final AtomicInteger completedChunks = new AtomicInteger(0);
-    private final AtomicInteger completedChunksInWindow = new AtomicInteger(0);
-    private final AtomicLong lastChunkStart = new AtomicLong(0);
-    private long generationStart = 0;
+    private final PerformanceMeasurement performanceMeasurement = new PerformanceMeasurement();
     private final RiftConfig config;
     private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
     private final RiftRoomGenerator roomGenerator;
@@ -97,7 +87,6 @@ public class FastRiftGenerator extends ChunkGenerator {
         var riftGenerationConfig = this.getRiftGenerationConfig();
 
         this.blender = new CorridorBlender(layerCount, riftGenerationConfig);
-
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                 riftGenerationConfig.seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
         this.roomGenerator = riftGenerationConfig.roomGenerator().get().create(config);
@@ -156,7 +145,6 @@ public class FastRiftGenerator extends ChunkGenerator {
             BiomeManager biomeManager,
             StructureManager structureManager,
             ChunkAccess chunk) {
-
     }
 
     public int layerCount() {
@@ -169,12 +157,10 @@ public class FastRiftGenerator extends ChunkGenerator {
             StructureManager structureManager,
             RandomState random,
             ChunkAccess chunk) {
-
     }
 
     @Override
     public void spawnOriginalMobs(WorldGenRegion level) {
-
     }
 
     @Override
@@ -188,13 +174,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             RandomState randomState,
             StructureManager structureManager,
             ChunkAccess chunk) {
-        var time = System.currentTimeMillis();
-        if (inFlightChunks.getAndIncrement() == 0 && time - lastChunkStart.get() > MAX_MEASUREMENT_PAUSE_MILLISECONDS) {
-            generationStart = time;
-            completedChunksInWindow.set(0);
-        }
-
-        lastChunkStart.updateAndGet((value) -> Math.max(value, time));
+        performanceMeasurement.chunkStarted();
 
         return CompletableFuture.supplyAsync(() -> {
             var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
@@ -204,13 +184,6 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     private void runRiftGeneration(ChunkAccess chunk, ServerLevelAccessor level) {
-
-        if (false) { // for testing how quick is generation of empty world
-            inFlightChunks.decrementAndGet();
-            completedChunks.incrementAndGet();
-            completedChunksInWindow.incrementAndGet();
-            return;
-        }
         Future<RiftProcessedChunk>[] chunkFutures = new Future[layerCount];
         var layout = getOrCreateLayout(level.getServer());
         var roomGenerator = getRoomGenerator();
@@ -234,9 +207,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             }
 
         }
-        inFlightChunks.decrementAndGet();
-        completedChunks.incrementAndGet();
-        completedChunksInWindow.incrementAndGet();
+        performanceMeasurement.chunkEnded();
     }
 
     @Override
@@ -280,12 +251,7 @@ public class FastRiftGenerator extends ChunkGenerator {
                 }
             }
         }
-        info.add("performance");
-        info.add("all generated chunks: " + completedChunks.get());
-        info.add("window chunks: " + completedChunksInWindow.get());
-        info.add("window time: " + (lastChunkStart.get() - generationStart));
-        info.add("window CPS: " + (completedChunksInWindow.get() * 1000.0 / (lastChunkStart.get() - generationStart)));
-        info.add("currently generating chunks: " + inFlightChunks.get());
+        performanceMeasurement.addDebugScreenInfo(info);
     }
 
     public int getDimensionHeightBlocks() {
