@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
@@ -100,7 +101,8 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
     private final RiftRoomGenerator roomGenerator;
     private final PositionalRandomFactory roomGeneratorRNG;
-    private RiftGeneratable filler;
+    private final AtomicReference<CorridorValidator> corridorValidator = new AtomicReference<>();
+    private final RiftGeneratable filler;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
             ResourceLocation defaultBlock, RiftConfig config) {
@@ -131,6 +133,14 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftGenerationConfig getRiftGenerationConfig() {
         return getRiftConfig().riftGen();
+    }
+
+    public CorridorValidator getOrCreateCorridorValidator(MinecraftServer server) {
+        if (corridorValidator.get() == null) {
+            var layout = getOrCreateLayout(server);
+            corridorValidator.compareAndSet(null, CorridorValidator.or(layout, CorridorValidator.opposite(layout)));
+        }
+        return corridorValidator.get();
     }
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
@@ -247,25 +257,25 @@ public class FastRiftGenerator extends ChunkGenerator {
             return;
         }
         var rng = randomFactory.at(chunk.getPos().x, 0, chunk.getPos().z);
-        var layout = getOrCreateLayout(level.getServer());
+        var validator = getOrCreateCorridorValidator(level.getServer());
         for (int i = 0; i < layerCount; i++) {
             var chunkX = chunk.getPos().x;
             var chunkY = i - layerCount / 2;
             var chunkZ = chunk.getPos().z;
-            runCorridorBlenderDirectional(layout, chunkX, chunkY, chunkZ, NORTH, level, rng);
-            runCorridorBlenderDirectional(layout, chunkX, chunkY, chunkZ, WEST, level, rng);
+            runCorridorBlenderDirectional(validator, chunkX, chunkY, chunkZ, NORTH, level, rng);
+            runCorridorBlenderDirectional(validator, chunkX, chunkY, chunkZ, WEST, level, rng);
         }
     }
 
     private void runCorridorBlenderDirectional(
-            RiftLayout layout,
+            CorridorValidator validator,
             int chunkX,
             int chunkY,
             int chunkZ,
             Direction direction,
             WorldGenLevel level,
             RandomSource rng) {
-        if (layout.validateCorridor(chunkX, chunkY, chunkZ, direction)) {
+        if (validator.validateCorridor(chunkX, chunkY, chunkZ, direction)) {
             for (int x = 0; x < CORRIDOR_WIDTH; x++) {
                 for (int y = 0; y < CORRIDOR_HEIGHT; y++) {
                     var pos = new BlockPos(

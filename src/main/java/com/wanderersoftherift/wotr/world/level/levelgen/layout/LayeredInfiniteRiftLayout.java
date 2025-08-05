@@ -63,7 +63,8 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         return region.getSpaceAt(x, y, z);
     }
 
-    private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
+    @Override
+    public boolean validateCorridor(int x, int y, int z, Direction d) {
         var space = getChunkSpace(x, y, z);
         if (space == null || space instanceof VoidRiftSpace) {
             return false;
@@ -79,12 +80,6 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d) {
-        return hasCorridorSingle(x, y, z, d)
-                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
     public record Factory(RiftShape riftShape, Optional<Long> seed, List<LayoutLayer.Factory> layers)
