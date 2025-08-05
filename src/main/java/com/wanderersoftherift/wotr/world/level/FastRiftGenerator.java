@@ -7,9 +7,9 @@ import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
@@ -17,12 +17,10 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -49,8 +47,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minecraft.core.Direction.NORTH;
-import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.AIR;
 
 // https://wiki.fabricmc.net/tutorial:chunkgenerator
@@ -60,22 +56,13 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
-            Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
+            Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layerCount),
             Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
             RiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("filler").forGetter(FastRiftGenerator::getFiller),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
 
     public static final int MARGIN_LAYERS = 2;
-
-    public static final int CORRIDOR_WIDTH = 5;
-    public static final int CORRIDOR_HEIGHT = 7;
-    public static final int CORRIDOR_START_X = 6;
-    public static final int CORRIDOR_START_Y = 5;
-    public static final int CORRIDOR_OPTIONAL_START_X = 1; // optionals are in corridor space
-    public static final int CORRIDOR_OPTIONAL_START_Y = 2;
-    public static final int CORRIDOR_OPTIONAL_END_X = 3;
-    public static final int CORRIDOR_OPTIONAL_END_Y = 4;
 
     public static final int SEED_ADJUSTMENT_ROOM_GENERATOR = 949_616_156;
     public static final int SEED_ADJUSTMENT_CORRIDOR_BLENDER = 496_415;
@@ -97,6 +84,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final PositionalRandomFactory roomGeneratorRNG;
     private final AtomicReference<CorridorValidator> corridorValidator = new AtomicReference<>();
     private final RiftGeneratable filler;
+    private final CorridorBlender blender;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks, RiftGeneratable filler,
             RiftConfig config) {
@@ -106,9 +94,13 @@ public class FastRiftGenerator extends ChunkGenerator {
         this.config = config;
         this.filler = filler;
 
+        var riftGenerationConfig = this.getRiftGenerationConfig();
+
+        this.blender = new CorridorBlender(layerCount, riftGenerationConfig);
+
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
-        this.roomGenerator = this.getRiftGenerationConfig().roomGenerator().get().create(config);
+                riftGenerationConfig.seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
+        this.roomGenerator = riftGenerationConfig.roomGenerator().get().create(config);
     }
 
     @Override
@@ -149,8 +141,10 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
-        runCorridorBlender(chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
+        blender.runCorridorBlender(getOrCreateCorridorValidator(level.getServer()), chunk,
+                RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                        this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
+                level);
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
@@ -165,7 +159,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     }
 
-    private int layersCount() {
+    public int layerCount() {
         return layerCount;
     }
 
@@ -243,71 +237,6 @@ public class FastRiftGenerator extends ChunkGenerator {
         inFlightChunks.decrementAndGet();
         completedChunks.incrementAndGet();
         completedChunksInWindow.incrementAndGet();
-    }
-
-    private void runCorridorBlender(ChunkAccess chunk, PositionalRandomFactory randomFactory, WorldGenLevel level) {
-        if (!getRiftGenerationConfig().generatePassages()) {
-            return;
-        }
-        var rng = randomFactory.at(chunk.getPos().x, 0, chunk.getPos().z);
-        var validator = getOrCreateCorridorValidator(level.getServer());
-        for (int i = 0; i < layerCount; i++) {
-            var chunkX = chunk.getPos().x;
-            var chunkY = i - layerCount / 2;
-            var chunkZ = chunk.getPos().z;
-            runCorridorBlenderDirectional(validator, chunkX, chunkY, chunkZ, NORTH, level, rng);
-            runCorridorBlenderDirectional(validator, chunkX, chunkY, chunkZ, WEST, level, rng);
-        }
-    }
-
-    private void runCorridorBlenderDirectional(
-            CorridorValidator validator,
-            int chunkX,
-            int chunkY,
-            int chunkZ,
-            Direction direction,
-            WorldGenLevel level,
-            RandomSource rng) {
-        if (validator.validateCorridor(chunkX, chunkY, chunkZ, direction)) {
-            for (int x = 0; x < CORRIDOR_WIDTH; x++) {
-                for (int y = 0; y < CORRIDOR_HEIGHT; y++) {
-                    var pos = new BlockPos(
-                            (chunkX << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)
-                                    - (x + CORRIDOR_START_X) * direction.getStepZ(),
-                            (chunkY << RiftProcessedChunk.CHUNK_HEIGHT_SHIFT) + CORRIDOR_START_Y + y,
-                            (chunkZ << RiftProcessedChunk.CHUNK_WIDTH_SHIFT)
-                                    - (x + CORRIDOR_START_X) * direction.getStepX());
-                    var posOffset = pos.relative(direction);
-                    var state = level.getBlockState(pos.relative(direction.getOpposite()));
-                    if (x >= CORRIDOR_OPTIONAL_START_X && x <= CORRIDOR_OPTIONAL_END_X && y >= CORRIDOR_OPTIONAL_START_Y
-                            && y <= CORRIDOR_OPTIONAL_END_Y) {
-                        if (rng.nextBoolean()) {
-                            state = level.getBlockState(posOffset);
-                        }
-                    } else {
-                        if (rng.nextBoolean() || !isStateAllowedByCorridorBlender(state, direction)) {
-                            var newState = level.getBlockState(posOffset);
-                            if (isStateAllowedByCorridorBlender(newState, direction)) {
-                                state = level.getBlockState(posOffset);
-                            }
-                        }
-                    }
-                    if (!isStateAllowedByCorridorBlender(state, direction)) {
-                        state = AIR.defaultBlockState();
-                    }
-                    level.setBlock(pos, state, 0);
-                }
-            }
-        }
-    }
-
-    private boolean isStateAllowedByCorridorBlender(BlockState state, Direction direction) {
-        if (!state.canOcclude()) {
-            return false;
-        }
-        var shape = state.getOcclusionShape();
-        return ProcessorUtil.isFaceFullFast(shape, direction) == ProcessorUtil.isFaceFullFast(shape,
-                direction.getOpposite());
     }
 
     @Override
