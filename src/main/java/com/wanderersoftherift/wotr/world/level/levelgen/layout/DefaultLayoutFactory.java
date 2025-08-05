@@ -30,7 +30,7 @@ public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> l
     }
 
     @Override
-    public RiftLayout createLayout(MinecraftServer server, int seed, RiftConfig riftConfig) {
+    public RiftLayout createLayout(MinecraftServer server, RiftConfig riftConfig) {
         var shape = riftShape(riftConfig);
         RiftLayout.Factory factory;
         if (shape instanceof BoxedRiftShape boxedRiftShape) {
@@ -38,7 +38,7 @@ public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> l
         } else {
             factory = new LayeredInfiniteRiftLayout.Factory(shape, riftConfig.riftGen().seed(), layers);
         }
-        return factory.createLayout(server, seed, riftConfig);
+        return factory.createLayout(server, riftConfig);
     }
 
     @Override

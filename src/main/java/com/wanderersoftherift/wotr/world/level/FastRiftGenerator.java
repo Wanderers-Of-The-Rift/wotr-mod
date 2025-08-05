@@ -135,10 +135,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null,
-                    getRiftGenerationConfig().layout()
-                            .get()
-                            .createLayout(server, getRiftGenerationConfig().seed().get(), config));
+            layout.compareAndSet(null, getRiftGenerationConfig().layout().get().createLayout(server, config));
         }
         return layout.get();
     }

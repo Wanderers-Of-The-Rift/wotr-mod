@@ -24,7 +24,7 @@ public interface RiftLayout extends CorridorValidator {
 
         MapCodec<? extends Factory> codec();
 
-        RiftLayout createLayout(MinecraftServer server, int seed, RiftConfig riftConfig);
+        RiftLayout createLayout(MinecraftServer server, RiftConfig riftConfig);
 
         RiftShape riftShape(RiftConfig config);
     }
