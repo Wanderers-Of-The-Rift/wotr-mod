@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -26,6 +27,7 @@ import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -329,7 +331,7 @@ public final class RiftLevelManager {
             return null;
         }
         return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount, dimensionHeightBlocks,
-                ResourceLocation.withDefaultNamespace("bedrock"), config);
+                new SingleBlockChunkGeneratable(Blocks.BEDROCK.defaultBlockState()), config);
     }
 
     private static ServerLevel createRift(

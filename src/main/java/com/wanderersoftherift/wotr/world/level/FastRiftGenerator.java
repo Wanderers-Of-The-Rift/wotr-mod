@@ -15,15 +15,11 @@ import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.RandomSource;
@@ -34,7 +30,6 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -67,9 +62,10 @@ public class FastRiftGenerator extends ChunkGenerator {
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layersCount),
             Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
-            ResourceLocation.CODEC.fieldOf("custom_block").forGetter(FastRiftGenerator::getCustomBlockID),
+            RiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("filler").forGetter(FastRiftGenerator::getFiller),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
+
     public static final int MARGIN_LAYERS = 2;
 
     public static final int CORRIDOR_WIDTH = 5;
@@ -88,9 +84,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     private final int layerCount;
 
-    private final ResourceLocation customBlockID;
     private final int dimensionHeightBlocks;
-    private final BlockState customBlock;
     private final AtomicInteger inFlightChunks = new AtomicInteger(0);
 
     private final AtomicInteger completedChunks = new AtomicInteger(0);
@@ -104,18 +98,13 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final AtomicReference<CorridorValidator> corridorValidator = new AtomicReference<>();
     private final RiftGeneratable filler;
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
-            ResourceLocation defaultBlock, RiftConfig config) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks, RiftGeneratable filler,
+            RiftConfig config) {
         super(biomeSource);
         this.layerCount = layerCount;
         this.dimensionHeightBlocks = dimensionHeightBlocks;
-        this.customBlock = BuiltInRegistries.BLOCK.get(defaultBlock)
-                .map(Holder.Reference::value)
-                .map(Block::defaultBlockState)
-                .orElse(AIR.defaultBlockState());
-        this.customBlockID = defaultBlock;
         this.config = config;
-        this.filler = new SingleBlockChunkGeneratable(customBlock);
+        this.filler = filler;
 
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                 this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
@@ -129,6 +118,10 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftConfig getRiftConfig() {
         return config;
+    }
+
+    private RiftGeneratable getFiller() {
+        return filler;
     }
 
     public RiftGenerationConfig getRiftGenerationConfig() {
@@ -364,10 +357,6 @@ public class FastRiftGenerator extends ChunkGenerator {
         info.add("window time: " + (lastChunkStart.get() - generationStart));
         info.add("window CPS: " + (completedChunksInWindow.get() * 1000.0 / (lastChunkStart.get() - generationStart)));
         info.add("currently generating chunks: " + inFlightChunks.get());
-    }
-
-    public ResourceLocation getCustomBlockID() {
-        return customBlockID;
     }
 
     public int getDimensionHeightBlocks() {
