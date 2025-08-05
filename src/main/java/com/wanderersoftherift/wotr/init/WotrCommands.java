@@ -7,7 +7,6 @@ import com.wanderersoftherift.wotr.commands.CurrencyCommands;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.EssenceCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
-import com.wanderersoftherift.wotr.commands.InventorySnapshotCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
@@ -25,7 +24,6 @@ public final class WotrCommands {
 
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
-        InventorySnapshotCommands.register(event.getDispatcher(), event.getBuildContext());
         SpawnPieceCommand.register(event.getDispatcher(), event.getBuildContext());
         new DebugCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         AbilityCommands.register(event.getDispatcher(), event.getBuildContext());
