@@ -352,7 +352,7 @@ public final class RiftLevelManager {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        int seed = config.riftGen().seed().orElseGet(() -> new Random().nextInt());
+        var seed = config.riftGen().seed().orElseGet(() -> new Random().nextLong());
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
                 new DerivedLevelData(worldData, worldData.overworldData()),

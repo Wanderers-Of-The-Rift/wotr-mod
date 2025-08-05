@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
         Optional<RiftRoomGenerator.Factory> roomGenerator, boolean generatePassages,
-        List<JigsawListProcessor> jigsawProcessors, Optional<Integer> seed) {
+        List<JigsawListProcessor> jigsawProcessors, Optional<Long> seed) {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
@@ -26,7 +26,7 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
                     JigsawListProcessor.CODEC.listOf()
                             .optionalFieldOf("jigsaw_processors", Collections.emptyList())
                             .forGetter(RiftGenerationConfig::jigsawProcessors),
-                    Codec.INT.optionalFieldOf("seed").forGetter(RiftGenerationConfig::seed)
+                    Codec.LONG.optionalFieldOf("seed").forGetter(RiftGenerationConfig::seed)
             ).apply(instance, RiftGenerationConfig::new));
 
     // spotless:off
@@ -35,14 +35,14 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
                 ByteBufCodecs.fromCodec(RiftRoomGenerator.Factory.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::roomGenerator,
                 ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional).map(it->it.orElse(true), Optional::of), RiftGenerationConfig::generatePassages,
                 ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()), RiftGenerationConfig::jigsawProcessors,
-                ByteBufCodecs.INT.apply(ByteBufCodecs::optional), RiftGenerationConfig::seed,
+                ByteBufCodecs.LONG.apply(ByteBufCodecs::optional), RiftGenerationConfig::seed,
             RiftGenerationConfig::new);
     // spotless:on
 
     public static final RiftGenerationConfig EMPTY = new RiftGenerationConfig(Optional.empty(), Optional.empty(), true,
             Collections.emptyList(), Optional.empty());
 
-    public RiftGenerationConfig withSeedIfAbsent(int seed) {
+    public RiftGenerationConfig withSeedIfAbsent(long seed) {
         if (this.seed.isPresent()) {
             return this;
         } else {
@@ -66,7 +66,7 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
         }
     }
 
-    public RiftGenerationConfig withSeed(int seed) {
+    public RiftGenerationConfig withSeed(long seed) {
         return new RiftGenerationConfig(layout, roomGenerator, generatePassages, jigsawProcessors, Optional.of(seed));
     }
 

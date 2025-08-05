@@ -51,8 +51,8 @@ public class WotrDataComponentType {
             "rift_theme", RiftTheme.CODEC, RiftTheme.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<ObjectiveType>>> RIFT_OBJECTIVE = register(
             "rift_objective", ObjectiveType.CODEC, ObjectiveType.STREAM_CODEC);
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_SEED = register(
-            "rift_seed", Codec.INT, ByteBufCodecs.INT);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> RIFT_SEED = register(
+            "rift_seed", Codec.LONG, ByteBufCodecs.LONG);
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(
             String name,

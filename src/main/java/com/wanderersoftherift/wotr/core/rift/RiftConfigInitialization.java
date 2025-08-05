@@ -39,7 +39,7 @@ public class RiftConfigInitialization {
 
     static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server, ServerPlayer firstPlayer) {
         var random = RandomSource.create();
-        int seed = baseConfig.riftGen().seed().orElseGet(random::nextInt);
+        var seed = baseConfig.riftGen().seed().orElseGet(random::nextLong);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
 
         return baseConfig.withRiftGenerationConfig(
@@ -50,7 +50,7 @@ public class RiftConfigInitialization {
         ).withThemeIfAbsent(riftTheme);
     }
 
-    static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {
+    static Holder<RiftTheme> getRandomTheme(MinecraftServer server, long seed) {
 
         var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
                 seed * 5624397638181617163L);

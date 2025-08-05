@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.commands;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -54,8 +55,8 @@ public class RiftKeyCommands extends BaseCommand {
                                         ResourceKeyArgument.resolveKey(ctx, objectiveArg,
                                                 WotrRegistries.Keys.OBJECTIVES, ERROR_INVALID_OBJECTIVE)))))
                 .then(Commands.literal("seed")
-                        .then(Commands.argument(seedArg, IntegerArgumentType.integer())
-                                .executes(ctx -> configSeed(ctx, IntegerArgumentType.getInteger(ctx, seedArg)))));
+                        .then(Commands.argument(seedArg, LongArgumentType.longArg())
+                                .executes(ctx -> configSeed(ctx, LongArgumentType.getLong(ctx, seedArg)))));
     }
 
     private int configTier(CommandContext<CommandSourceStack> context, int tier) {
@@ -100,7 +101,7 @@ public class RiftKeyCommands extends BaseCommand {
         return 1;
     }
 
-    private int configSeed(CommandContext<CommandSourceStack> context, int seed) {
+    private int configSeed(CommandContext<CommandSourceStack> context, long seed) {
         ItemStack key = getRiftKey(context);
         if (key.isEmpty()) {
             return 0;

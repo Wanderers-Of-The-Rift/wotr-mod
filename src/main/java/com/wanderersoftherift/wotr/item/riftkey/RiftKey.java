@@ -108,7 +108,7 @@ public class RiftKey extends Item {
                     Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", objectiveName)
                             .withColor(ChatFormatting.GRAY.getColor()));
         }
-        Integer seed = stack.get(WotrDataComponentType.RIFT_SEED);
+        var seed = stack.get(WotrDataComponentType.RIFT_SEED);
         if (seed != null) {
             components.add(Component.translatable(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), seed)
                     .withColor(ChatFormatting.GRAY.getColor()));
@@ -138,7 +138,7 @@ public class RiftKey extends Item {
         int tier = stack.getOrDefault(WotrDataComponentType.ITEM_RIFT_TIER, 0);
         Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RIFT_THEME);
         Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RIFT_OBJECTIVE);
-        Integer seed = stack.get(WotrDataComponentType.RIFT_SEED);
+        var seed = stack.get(WotrDataComponentType.RIFT_SEED);
         return new RiftConfig(tier, Optional.ofNullable(riftTheme), Optional.ofNullable(objective),
                 RiftGenerationConfig.EMPTY.withSeed(seed), new HashMap<>());
     }

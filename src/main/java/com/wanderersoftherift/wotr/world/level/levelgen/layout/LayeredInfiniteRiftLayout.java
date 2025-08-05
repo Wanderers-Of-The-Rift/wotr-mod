@@ -31,11 +31,11 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
     private final ConcurrentHashMap<Vector2i, Region> regions = new ConcurrentHashMap<>();
 
-    private final int seed;
+    private final long seed;
     private final RiftShape riftShape;
     private final List<LayoutLayer> layers;
 
-    public LayeredInfiniteRiftLayout(RiftShape riftShape, int seed, List<LayoutLayer> layers) {
+    public LayeredInfiniteRiftLayout(RiftShape riftShape, long seed, List<LayoutLayer> layers) {
         this.layers = layers;
         this.seed = seed;
         this.riftShape = riftShape;
@@ -87,13 +87,13 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
                 || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
     }
 
-    public record Factory(RiftShape riftShape, Optional<Integer> seed, List<LayoutLayer.Factory> layers)
+    public record Factory(RiftShape riftShape, Optional<Long> seed, List<LayoutLayer.Factory> layers)
             implements LayeredRiftLayout.Factory {
 
         public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
                         RiftShape.CODEC.fieldOf("shape").forGetter(LayeredInfiniteRiftLayout.Factory::riftShape),
-                        Codec.INT.optionalFieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
+                        Codec.LONG.optionalFieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
                                 .forGetter(LayeredInfiniteRiftLayout.Factory::layers)

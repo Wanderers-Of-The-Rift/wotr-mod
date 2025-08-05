@@ -62,7 +62,7 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
         this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY, new HashMap<>());
     }
 
-    public RiftConfig(int tier, Holder<RiftTheme> theme, int seed) {
+    public RiftConfig(int tier, Holder<RiftTheme> theme, long seed) {
         this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY.withSeed(seed), new HashMap<>());
     }
 

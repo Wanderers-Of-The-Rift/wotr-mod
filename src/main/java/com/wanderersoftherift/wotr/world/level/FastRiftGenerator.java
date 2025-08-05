@@ -116,7 +116,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         this.filler = new SingleBlockChunkGeneratable(customBlock);
 
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftGenerationConfig().seed().orElse(0) + SEED_ADJUSTMENT_ROOM_GENERATOR);
+                this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
         this.roomGenerator = this.getRiftGenerationConfig().roomGenerator().get().create(config);
     }
 
@@ -147,7 +147,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         runCorridorBlender(chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                this.getRiftGenerationConfig().seed().orElse(0) + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
+                this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 

@@ -31,7 +31,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
 
     private final FiniteRiftShape riftShape;
     private final int layerCount;
-    private final int seed;
+    private final long seed;
     private final RiftSpace[] spaces;
 
     private final long[] emptySpaces;
@@ -39,7 +39,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     private final CompletableFuture<Unit> generationCompletion = new CompletableFuture<>();
     private final List<LayoutLayer> layers;
 
-    public LayeredFiniteRiftLayout(FiniteRiftShape riftShape, int seed, List<LayoutLayer> layers) {
+    public LayeredFiniteRiftLayout(FiniteRiftShape riftShape, long seed, List<LayoutLayer> layers) {
         layerCount = riftShape.levelCount();
         this.riftShape = riftShape;
         this.layers = layers;
@@ -188,13 +188,13 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         return riftShape;
     }
 
-    public static record Factory(BoxedRiftShape riftShape, Optional<Integer> seed,
+    public static record Factory(BoxedRiftShape riftShape, Optional<Long> seed,
             List<LayeredRiftLayout.LayoutLayer.Factory> layers) implements LayeredRiftLayout.Factory {
 
         public static final MapCodec<LayeredFiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
                         BoxedRiftShape.CODEC.fieldOf("shape").forGetter(LayeredFiniteRiftLayout.Factory::riftShape),
-                        Codec.INT.optionalFieldOf("seed").forGetter(LayeredFiniteRiftLayout.Factory::seed),
+                        Codec.LONG.optionalFieldOf("seed").forGetter(LayeredFiniteRiftLayout.Factory::seed),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
                                 .forGetter(LayeredFiniteRiftLayout.Factory::layers)
