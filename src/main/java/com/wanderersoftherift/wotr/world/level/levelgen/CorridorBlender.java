@@ -17,11 +17,11 @@ import static net.minecraft.world.level.block.Blocks.AIR;
 
 public record CorridorBlender(int layerCount, RiftGenerationConfig config) {
 
-    public static final int CORRIDOR_WIDTH = 5;
-    public static final int CORRIDOR_HEIGHT = 7;
     public static final int CORRIDOR_START_X = 6;
     public static final int CORRIDOR_START_Y = 5;
-    public static final int CORRIDOR_OPTIONAL_START_X = 1; // optionals are in corridor space
+    public static final int CORRIDOR_WIDTH = 5;
+    public static final int CORRIDOR_HEIGHT = 7;
+    public static final int CORRIDOR_OPTIONAL_START_X = 1; // optional region is relative to the corridor
     public static final int CORRIDOR_OPTIONAL_START_Y = 2;
     public static final int CORRIDOR_OPTIONAL_END_X = 3;
     public static final int CORRIDOR_OPTIONAL_END_Y = 4;
