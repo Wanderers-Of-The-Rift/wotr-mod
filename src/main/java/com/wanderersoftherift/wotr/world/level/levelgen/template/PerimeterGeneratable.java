@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftBuiltinGeneratables;
 import com.wanderersoftherift.wotr.serialization.StringBlockStateCodec;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -94,6 +95,6 @@ public record PerimeterGeneratable(BlockState perimeterBlock) implements Seriali
 
     @Override
     public String identifier() {
-        return "wotr:builtin:perimeter";
+        return WotrRiftBuiltinGeneratables.PERIMETER_GENERATABLE.getId().toString() + "[builtin]";
     }
 }
