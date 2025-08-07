@@ -52,7 +52,7 @@ public class RingLayer implements LayeredRiftLayout.LayoutLayer {
         }
     }
 
-    public static record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory, int radius)
+    public record Factory(RoomRandomizerImpl.Factory roomRandomizerFactory, int radius)
             implements LayeredRiftLayout.LayoutLayer.Factory {
 
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(

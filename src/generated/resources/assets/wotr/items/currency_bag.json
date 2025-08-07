@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "wotr:item/base_currency_bag",
+    "model": {
+      "type": "wotr:emblem",
+      "base_item": "wotr:base_currency_bag",
+      "emblem_provider": {
+        "type": "wotr:currency",
+        "currency": {}
+      },
+      "y_offset": -0.125,
+      "z_offset": -0.045
+    }
+  }
+}

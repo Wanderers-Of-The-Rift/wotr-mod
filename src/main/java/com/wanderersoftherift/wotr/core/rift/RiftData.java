@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.core.rift;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
@@ -21,11 +22,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @ParametersAreNonnullByDefault
@@ -34,16 +35,16 @@ public class RiftData extends SavedData {
     public static final MapCodec<RiftData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceKey.codec(Registries.DIMENSION).fieldOf("PortalDimension").forGetter(RiftData::getPortalDimension),
             BlockPos.CODEC.fieldOf("PortalPos").forGetter(RiftData::getPortalPos),
-            UUIDUtil.STRING_CODEC.listOf().fieldOf("Players").forGetter(RiftData::getPlayers),
-            UUIDUtil.STRING_CODEC.listOf().fieldOf("BannedPlayers").forGetter(RiftData::getBannedPlayers),
+            UUIDUtil.STRING_CODEC.listOf().fieldOf("Players").forGetter(RiftData::getPlayerList),
+            UUIDUtil.STRING_CODEC.listOf().fieldOf("BannedPlayers").forGetter(RiftData::getBannedPlayerList),
             OngoingObjective.DIRECT_CODEC.optionalFieldOf("Objective").forGetter(RiftData::getObjective),
             RiftConfig.CODEC.fieldOf("Config").forGetter(RiftData::getConfig)
     ).apply(instance, RiftData::new));
 
     private ResourceKey<Level> portalDimension;
     private BlockPos portalPos;
-    private final List<UUID> players;
-    private final List<UUID> bannedPlayers;
+    private final Set<UUID> players;
+    private final Set<UUID> bannedPlayers;
     private Optional<OngoingObjective> objective;
     private RiftConfig config;
 
@@ -51,8 +52,8 @@ public class RiftData extends SavedData {
             List<UUID> bannedPlayers, Optional<OngoingObjective> objective, RiftConfig config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
-        this.players = new ArrayList<>(Objects.requireNonNull(players));
-        this.bannedPlayers = new ArrayList<>(Objects.requireNonNull(bannedPlayers));
+        this.players = new HashSet<>(Objects.requireNonNull(players));
+        this.bannedPlayers = new HashSet<>(Objects.requireNonNull(bannedPlayers));
         this.objective = objective;
         this.config = config;
     }
@@ -104,12 +105,12 @@ public class RiftData extends SavedData {
         this.setDirty();
     }
 
-    public List<UUID> getPlayers() {
-        return Collections.unmodifiableList(this.players);
+    public List<UUID> getPlayerList() {
+        return ImmutableList.copyOf(this.players);
     }
 
-    public List<UUID> getBannedPlayers() {
-        return Collections.unmodifiableList(bannedPlayers);
+    public List<UUID> getBannedPlayerList() {
+        return ImmutableList.copyOf(bannedPlayers);
     }
 
     public void addPlayer(UUID player) {
@@ -140,11 +141,19 @@ public class RiftData extends SavedData {
     }
 
     public boolean containsPlayer(Player player) {
-        return players.contains(player.getUUID());
+        return containsPlayer(player.getUUID());
+    }
+
+    public boolean containsPlayer(UUID player) {
+        return players.contains(player);
     }
 
     public boolean isBannedFromRift(Player player) {
-        return bannedPlayers.contains(player.getUUID());
+        return isBannedFromRift(player.getUUID());
+    }
+
+    public boolean isBannedFromRift(UUID player) {
+        return bannedPlayers.contains(player);
     }
 
     public Optional<Holder<RiftTheme>> getTheme() {
