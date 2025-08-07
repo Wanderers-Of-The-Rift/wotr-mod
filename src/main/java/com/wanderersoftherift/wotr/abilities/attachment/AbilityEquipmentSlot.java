@@ -6,6 +6,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.serialization.DualCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import org.jetbrains.annotations.NotNull;
@@ -19,13 +23,19 @@ public record AbilityEquipmentSlot(int slot) implements WotrEquipmentSlot {
             Codec.INT.fieldOf("slot").forGetter(AbilityEquipmentSlot::slot)
     ).apply(instance, AbilityEquipmentSlot::new));
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, AbilityEquipmentSlot> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT, AbilityEquipmentSlot::slot, AbilityEquipmentSlot::new
+    );
+
+    public static final DualCodec<AbilityEquipmentSlot> TYPE = new DualCodec<>(CODEC, STREAM_CODEC);
+
     public static final List<AbilityEquipmentSlot> SLOTS = IntStream.range(0, AbilitySlots.ABILITY_BAR_SIZE)
             .mapToObj(AbilityEquipmentSlot::new)
             .toList();
 
     @Override
-    public MapCodec<? extends WotrEquipmentSlot> codec() {
-        return CODEC;
+    public DualCodec<AbilityEquipmentSlot> type() {
+        return TYPE;
     }
 
     @Override

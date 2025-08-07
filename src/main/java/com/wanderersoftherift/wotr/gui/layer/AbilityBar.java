@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.gui.layer;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
@@ -12,7 +14,6 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
-import com.wanderersoftherift.wotr.item.ability.Cooldown;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
@@ -28,7 +29,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -93,7 +93,6 @@ public final class AbilityBar implements ConfigurableLayer {
             return;
         }
         LocalPlayer player = Minecraft.getInstance().player;
-        Level level = player.level();
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         if (abilitySlots.getSlots() == 0) {
             return;
@@ -105,15 +104,17 @@ public final class AbilityBar implements ConfigurableLayer {
         orientation.renderBackground(graphics, pos, abilitySlots.getSlots());
         Vector2ic slotOffset = orientation.getSlotOffset();
 
+        AbilityCooldowns cooldowns = player.getData(WotrAttachments.ABILITY_COOLDOWNS);
+
         for (int i = 0; i < abilitySlots.getSlots(); i++) {
             ItemStack abilityItem = abilitySlots.getStackInSlot(i);
             ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
             if (abilityComponent == null) {
                 continue;
             }
-            Cooldown cooldown = abilityItem.getOrDefault(WotrDataComponentType.COOLDOWN, new Cooldown());
+            float cooldown = cooldowns.getCooldownFraction(new AbilityEquipmentSlot(i));
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
-                    abilityComponent.ability(), cooldown.remainingFraction(level));
+                    abilityComponent.ability(), cooldown);
         }
         renderSelected(graphics, pos.x + abilitySlots.getSelectedSlot() * slotOffset.x(),
                 pos.y + abilitySlots.getSelectedSlot() * slotOffset.y());

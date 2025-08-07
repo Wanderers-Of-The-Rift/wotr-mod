@@ -45,8 +45,8 @@ public class WotrRegistries {
             Keys.ABILITY_TYPES).create();
     public static final Registry<MapCodec<? extends AbilityEffect>> EFFECTS = new RegistryBuilder<>(
             Keys.EFFECTS).create();
-    public static final Registry<MapCodec<? extends WotrEquipmentSlot>> EQUIPMENT_SLOTS = new RegistryBuilder<>(
-            Keys.EQUIPMENT_SLOTS).create();
+    public static final Registry<DualCodec<? extends WotrEquipmentSlot>> EQUIPMENT_SLOTS = new RegistryBuilder<>(
+            Keys.EQUIPMENT_SLOTS).sync(true).create();
     public static final Registry<MapCodec<? extends InputBlockState>> INPUT_BLOCKSTATE_TYPES = new RegistryBuilder<>(
             Keys.INPUT_BLOCKSTATE_TYPES).create();
     public static final Registry<MapCodec<? extends AbstractModifierEffect>> MODIFIER_TYPES = new RegistryBuilder<>(
@@ -95,7 +95,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("currency"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
-        public static final ResourceKey<Registry<MapCodec<? extends WotrEquipmentSlot>>> EQUIPMENT_SLOTS = ResourceKey
+        public static final ResourceKey<Registry<DualCodec<? extends WotrEquipmentSlot>>> EQUIPMENT_SLOTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("equipment_slot_type"));
         public static final ResourceKey<Registry<ImplicitConfig>> GEAR_IMPLICITS_CONFIG = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("implicit_config"));

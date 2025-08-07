@@ -5,7 +5,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
-import com.wanderersoftherift.wotr.item.ability.Cooldown;
 import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
@@ -45,8 +44,6 @@ public class WotrDataComponentType {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ActivatableAbility>> ABILITY = register(
             "ability", ActivatableAbility.CODEC, ActivatableAbility.STREAM_CODEC);
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Cooldown>> COOLDOWN = register(
-            "cooldown", Cooldown.CODEC, null);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AbilityUpgradePool>> ABILITY_UPGRADE_POOL = register(
             "ability_upgrade_pool", AbilityUpgradePool.CODEC, AbilityUpgradePool.STREAM_CODEC);
 
