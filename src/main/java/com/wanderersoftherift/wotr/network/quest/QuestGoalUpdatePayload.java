@@ -1,10 +1,8 @@
 package com.wanderersoftherift.wotr.network.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.client.toast.QuestCompleteToast;
-import com.wanderersoftherift.wotr.client.toast.QuestGoalCompleteToast;
+import com.wanderersoftherift.wotr.client.WotrClientHandlers;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -43,10 +41,9 @@ public record QuestGoalUpdatePayload(UUID quest, int goalIndex, int progress) im
         context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).getQuestState(quest).ifPresent(state -> {
             if (goalIndex >= 0 && goalIndex < state.goalCount()) {
                 state.setGoalProgress(goalIndex, progress);
-                if (state.isComplete()) {
-                    Minecraft.getInstance().getToastManager().addToast(new QuestCompleteToast(state.getOrigin()));
-                } else if (state.isGoalComplete(goalIndex)) {
-                    Minecraft.getInstance().getToastManager().addToast(new QuestGoalCompleteToast(state, goalIndex));
+                // Only execute client-side code when actually on the client
+                if (context.player().level().isClientSide()) {
+                    WotrClientHandlers.handleQuestGoalUpdate(state, goalIndex);
                 }
             }
         });
