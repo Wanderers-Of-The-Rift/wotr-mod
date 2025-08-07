@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
@@ -48,21 +49,21 @@ public class RiftConfigInitialization {
                 new RiftGenerationConfig(
                         Optional.of(baseConfig.riftGen().layout().orElse(defaultLayout())),
                         Optional.of(baseConfig.riftGen().roomGenerator().orElse(defaultRoomGenerator())),
-                        Optional.of(baseConfig.riftGen().corridors().orElse(defaultCorridorBlender())),
+                        Optional.of(baseConfig.riftGen().postProcessingSteps().orElse(defaultPostProcessingSteps())),
                         Optional.of(baseConfig.riftGen().jigsawProcessors().orElse(initializeJigsawProcessors())),
                         Optional.of(seed)
                 )
         ).withThemeIfAbsent(riftTheme);
     }
 
-    private static CorridorBlender defaultCorridorBlender() {
-        return new CorridorBlender(
+    private static List<RiftPostProcessingStep> defaultPostProcessingSteps() {
+        return List.of(new CorridorBlender(
                 new SerializableCorridorValidator.Or(
                         new SerializableCorridorValidator.GeneratorLayout(), new SerializableCorridorValidator.Opposite(
                                 new SerializableCorridorValidator.GeneratorLayout()
                         )
                 )
-        );
+        ));
     }
 
     static Holder<RiftTheme> getRandomTheme(MinecraftServer server, long seed) {

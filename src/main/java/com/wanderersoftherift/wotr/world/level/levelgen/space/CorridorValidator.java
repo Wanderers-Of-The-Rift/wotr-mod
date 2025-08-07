@@ -2,12 +2,13 @@ package com.wanderersoftherift.wotr.world.level.levelgen.space;
 
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.core.Direction;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * checks if corridor is real
  */
 public interface CorridorValidator {
 
-    boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator);
+    boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator, MinecraftServer server);
 
 }

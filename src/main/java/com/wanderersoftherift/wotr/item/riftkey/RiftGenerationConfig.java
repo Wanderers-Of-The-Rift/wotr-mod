@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.item.riftkey;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
-        Optional<RiftRoomGenerator.Factory> roomGenerator, Optional<CorridorBlender> corridors,
+        Optional<RiftRoomGenerator.Factory> roomGenerator, Optional<List<RiftPostProcessingStep>> postProcessingSteps,
         Optional<List<JigsawListProcessor>> jigsawProcessors, Optional<Long> seed) {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
@@ -22,7 +22,9 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
                     RiftLayout.Factory.CODEC.optionalFieldOf("layout").forGetter(RiftGenerationConfig::layout),
                     RiftRoomGenerator.Factory.CODEC.optionalFieldOf("room_generator")
                             .forGetter(RiftGenerationConfig::roomGenerator),
-                    CorridorBlender.CODEC.optionalFieldOf("passages").forGetter(RiftGenerationConfig::corridors),
+                    RiftPostProcessingStep.CODEC.listOf()
+                            .optionalFieldOf("post_processing_steps")
+                            .forGetter(RiftGenerationConfig::postProcessingSteps),
                     JigsawListProcessor.CODEC.listOf()
                             .optionalFieldOf("jigsaw_processors")
                             .forGetter(RiftGenerationConfig::jigsawProcessors),
@@ -33,7 +35,7 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftGenerationConfig> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.fromCodec(RiftLayout.Factory.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::layout,
                 ByteBufCodecs.fromCodec(RiftRoomGenerator.Factory.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::roomGenerator,
-                ByteBufCodecs.fromCodec(CorridorBlender.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::corridors,
+                ByteBufCodecs.fromCodec(RiftPostProcessingStep.CODEC).apply(ByteBufCodecs.list()).apply(ByteBufCodecs::optional), RiftGenerationConfig::postProcessingSteps,
                 ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()).apply(ByteBufCodecs::optional), RiftGenerationConfig::jigsawProcessors,
                 ByteBufCodecs.LONG.apply(ByteBufCodecs::optional), RiftGenerationConfig::seed,
             RiftGenerationConfig::new);
@@ -74,32 +76,35 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
         }
     }
 
-    public RiftGenerationConfig withCorridorBlenderIfAbsent(CorridorBlender blender) {
+    public RiftGenerationConfig withCorridorBlenderIfAbsent(List<RiftPostProcessingStep> steps) {
         if (this.roomGenerator.isPresent()) {
             return this;
         } else {
-            return withCorridorBlender(blender);
+            return withPostProcessingSteps(steps);
         }
     }
 
     public RiftGenerationConfig withSeed(long seed) {
-        return new RiftGenerationConfig(layout, roomGenerator, corridors, jigsawProcessors, Optional.of(seed));
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors,
+                Optional.of(seed));
     }
 
     public RiftGenerationConfig withLayout(RiftLayout.Factory layout) {
-        return new RiftGenerationConfig(Optional.of(layout), roomGenerator, corridors, jigsawProcessors, seed);
+        return new RiftGenerationConfig(Optional.of(layout), roomGenerator, postProcessingSteps, jigsawProcessors,
+                seed);
     }
 
     public RiftGenerationConfig withRoomGenerator(RiftRoomGenerator.Factory roomGenerator) {
-        return new RiftGenerationConfig(layout, Optional.of(roomGenerator), corridors, jigsawProcessors, seed);
+        return new RiftGenerationConfig(layout, Optional.of(roomGenerator), postProcessingSteps, jigsawProcessors,
+                seed);
     }
 
     public RiftGenerationConfig withJigsawProcessors(List<JigsawListProcessor> processors) {
-        return new RiftGenerationConfig(layout, roomGenerator, corridors, Optional.of(processors), seed);
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, Optional.of(processors), seed);
     }
 
-    public RiftGenerationConfig withCorridorBlender(CorridorBlender blender) {
-        return new RiftGenerationConfig(layout, roomGenerator, Optional.of(blender), jigsawProcessors, seed);
+    public RiftGenerationConfig withPostProcessingSteps(List<RiftPostProcessingStep> steps) {
+        return new RiftGenerationConfig(layout, roomGenerator, Optional.of(steps), jigsawProcessors, seed);
     }
 
 }

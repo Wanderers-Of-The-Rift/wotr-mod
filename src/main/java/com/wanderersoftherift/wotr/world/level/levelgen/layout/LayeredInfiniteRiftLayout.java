@@ -65,7 +65,13 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
+    public boolean validateCorridor(
+            int x,
+            int y,
+            int z,
+            Direction d,
+            FastRiftGenerator generator,
+            MinecraftServer server) {
         var space = getChunkSpace(x, y, z);
         if (space == null || space instanceof VoidRiftSpace) {
             return false;

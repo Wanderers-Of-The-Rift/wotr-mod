@@ -15,6 +15,7 @@ import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
@@ -70,6 +71,8 @@ public class WotrRegistries {
             Keys.RIFT_CONFIG_CUSTOM_DATA_TYPES).create();
     public static final Registry<MapCodec<? extends SerializableCorridorValidator>> RIFT_CORRIDOR_VALIDATORS = new RegistryBuilder<>(
             Keys.RIFT_CORRIDOR_VALIDATORS).create();
+    public static final Registry<MapCodec<? extends RiftPostProcessingStep>> RIFT_POST_STEPS = new RegistryBuilder<>(
+            Keys.RIFT_POST_STEPS).create();
 
     public static final class Keys {
 
@@ -125,6 +128,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));;
         public static final ResourceKey<Registry<MapCodec<? extends SerializableCorridorValidator>>> RIFT_CORRIDOR_VALIDATORS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));;
+        public static final ResourceKey<Registry<MapCodec<? extends RiftPostProcessingStep>>> RIFT_POST_STEPS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));;
 
         private Keys() {
         }
@@ -151,6 +156,7 @@ public class WotrRegistries {
         event.register(RIFT_BUILTIN_GENERATABLE_TYPES);
         event.register(RIFT_CONFIG_CUSTOM_DATA_TYPES);
         event.register(RIFT_CORRIDOR_VALIDATORS);
+        event.register(RIFT_POST_STEPS);
     }
 
     @SubscribeEvent

@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.core.Direction;
+import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
 import java.util.function.Function;
@@ -31,8 +32,14 @@ public interface SerializableCorridorValidator extends CorridorValidator {
         }
 
         @Override
-        public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
-            return generator.getOrCreateLayout(null).validateCorridor(x, y, z, d, generator);
+        public boolean validateCorridor(
+                int x,
+                int y,
+                int z,
+                Direction d,
+                FastRiftGenerator generator,
+                MinecraftServer server) {
+            return generator.getOrCreateLayout(server).validateCorridor(x, y, z, d, generator, server);
         }
     }
 
@@ -47,8 +54,14 @@ public interface SerializableCorridorValidator extends CorridorValidator {
         }
 
         @Override
-        public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
-            return base().validateCorridor(x, y, z, d, generator);
+        public boolean validateCorridor(
+                int x,
+                int y,
+                int z,
+                Direction d,
+                FastRiftGenerator generator,
+                MinecraftServer server) {
+            return base().validateCorridor(x, y, z, d, generator, server);
         }
     }
 
@@ -63,9 +76,15 @@ public interface SerializableCorridorValidator extends CorridorValidator {
         }
 
         @Override
-        public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
+        public boolean validateCorridor(
+                int x,
+                int y,
+                int z,
+                Direction d,
+                FastRiftGenerator generator,
+                MinecraftServer server) {
             return base().validateCorridor(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite(),
-                    generator);
+                    generator, server);
         }
     }
 
@@ -80,8 +99,14 @@ public interface SerializableCorridorValidator extends CorridorValidator {
         }
 
         @Override
-        public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
-            return !base().validateCorridor(x, y, z, d, generator);
+        public boolean validateCorridor(
+                int x,
+                int y,
+                int z,
+                Direction d,
+                FastRiftGenerator generator,
+                MinecraftServer server) {
+            return !base().validateCorridor(x, y, z, d, generator, server);
         }
     }
 
@@ -101,8 +126,14 @@ public interface SerializableCorridorValidator extends CorridorValidator {
         }
 
         @Override
-        public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
-            return base.stream().anyMatch(it -> it.validateCorridor(x, y, z, d, generator));
+        public boolean validateCorridor(
+                int x,
+                int y,
+                int z,
+                Direction d,
+                FastRiftGenerator generator,
+                MinecraftServer server) {
+            return base.stream().anyMatch(it -> it.validateCorridor(x, y, z, d, generator, server));
         }
     }
 
@@ -122,8 +153,14 @@ public interface SerializableCorridorValidator extends CorridorValidator {
         }
 
         @Override
-        public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
-            return base.stream().allMatch(it -> it.validateCorridor(x, y, z, d, generator));
+        public boolean validateCorridor(
+                int x,
+                int y,
+                int z,
+                Direction d,
+                FastRiftGenerator generator,
+                MinecraftServer server) {
+            return base.stream().allMatch(it -> it.validateCorridor(x, y, z, d, generator, server));
         }
     }
 }

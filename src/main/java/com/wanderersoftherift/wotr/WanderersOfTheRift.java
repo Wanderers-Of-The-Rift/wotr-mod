@@ -41,6 +41,7 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftBuiltinGeneratables;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftPostProcessingSteps;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftRoomGeneratorFactories;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
@@ -102,6 +103,7 @@ public class WanderersOfTheRift {
         WotrRiftRoomGeneratorFactories.RIFT_ROOM_GENERATOR_FACTORIES.register(modEventBus);
         WotrJigsawListProcessors.JIGSAW_LIST_PROCESSORS.register(modEventBus);
         WotrCorridorValidators.CORRIDOR_VALIDATORS.register(modEventBus);
+        WotrRiftPostProcessingSteps.RIFT_POST_STEPS.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);

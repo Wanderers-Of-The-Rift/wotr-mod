@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -118,13 +119,12 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
-        var blenderOptional = getRiftGenerationConfig().corridors();
-        if (blenderOptional.isPresent()) { // cannot actually be empty right now unless some event rips it out
-            var blender = blenderOptional.get();
-            blender.runCorridorBlender(this, chunk,
+        var stepsOptional = getRiftGenerationConfig().postProcessingSteps();
+        for (var step : stepsOptional.orElse(Collections.emptyList())) {
+            step.runPostProcessing(this, chunk,
                     RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                             this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
-                    level, layerCount);
+                    level);
         }
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
