@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
@@ -61,6 +62,10 @@ public class WotrAttachments {
                     .serialize(AbilitySlots.getSerializer())
                     .copyOnDeath()
                     .build());
+    public static final Supplier<AttachmentType<AbilityCooldowns>> ABILITY_COOLDOWNS = ATTACHMENT_TYPES.register(
+            "ability_cooldowns",
+            () -> AttachmentType.builder(AbilityCooldowns::new).serialize(AbilityCooldowns.getSerializer()).build()
+    );
     public static final Supplier<AttachmentType<AttachedEffectData>> ATTACHED_EFFECTS = ATTACHMENT_TYPES.register(
             "attached_effects",
             () -> AttachmentType.builder(AttachedEffectData::new)

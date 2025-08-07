@@ -7,8 +7,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.item.ability.Cooldown;
+import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.Holder;
@@ -18,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +56,7 @@ public class StandardAbility extends Ability {
     }
 
     @Override
-    public boolean onActivate(LivingEntity caster, ItemStack abilityItem) {
+    public boolean onActivate(LivingEntity caster, ItemStack abilityItem, @Nullable WotrEquipmentSlot slot) {
         if (!this.canUse(caster)) {
             if (caster instanceof ServerPlayer player) {
                 // TODO: Proper translatable component, or maybe we remove this?
@@ -64,7 +64,7 @@ public class StandardAbility extends Ability {
             }
             return false;
         }
-        if (abilityItem.getOrDefault(WotrDataComponentType.COOLDOWN, new Cooldown()).onCooldown(caster.level())) {
+        if (slot != null && caster.getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(slot)) {
             return false;
         }
         AbilityContext abilityContext = new AbilityContext(caster, abilityItem);
@@ -81,10 +81,11 @@ public class StandardAbility extends Ability {
                 manaData.useAmount(manaCost);
                 this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
             }
-            long time = caster.level().getGameTime();
-            Cooldown cooldown = new Cooldown(time,
-                    time + (int) abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
-            abilityItem.set(WotrDataComponentType.COOLDOWN, cooldown);
+            if (slot != null) {
+                caster.getData(WotrAttachments.ABILITY_COOLDOWNS)
+                        .setCooldown(slot,
+                                (int) abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
+            }
         } finally {
             abilityContext.disableUpgradeModifiers();
         }

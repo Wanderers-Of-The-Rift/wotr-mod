@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
@@ -13,6 +14,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -65,7 +67,7 @@ public abstract class Ability {
         this.baseManaCost = baseManaCost;
     }
 
-    public abstract boolean onActivate(LivingEntity caster, ItemStack abilityItem);
+    public abstract boolean onActivate(LivingEntity caster, ItemStack abilityItem, @Nullable WotrEquipmentSlot slot);
 
     // TODO: Any use case for this?
     public boolean canUse(LivingEntity caster) {
