@@ -7,11 +7,9 @@ import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
-import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
@@ -73,9 +71,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
     private final RiftRoomGenerator roomGenerator;
     private final PositionalRandomFactory roomGeneratorRNG;
-    private final AtomicReference<CorridorValidator> corridorValidator = new AtomicReference<>();
     private final SerializableRiftGeneratable filler;
-    private final CorridorBlender blender;
 
     public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
             SerializableRiftGeneratable filler, RiftConfig config) {
@@ -87,7 +83,6 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         var riftGenerationConfig = this.getRiftGenerationConfig();
 
-        this.blender = new CorridorBlender(layerCount, riftGenerationConfig);
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                 riftGenerationConfig.seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
         this.roomGenerator = riftGenerationConfig.roomGenerator().get().create(config);
@@ -110,14 +105,6 @@ public class FastRiftGenerator extends ChunkGenerator {
         return getRiftConfig().riftGen();
     }
 
-    public CorridorValidator getOrCreateCorridorValidator(MinecraftServer server) {
-        if (corridorValidator.get() == null) {
-            var layout = getOrCreateLayout(server);
-            corridorValidator.compareAndSet(null, CorridorValidator.or(layout, CorridorValidator.opposite(layout)));
-        }
-        return corridorValidator.get();
-    }
-
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
             layout.compareAndSet(null, getRiftGenerationConfig().layout().get().createLayout(server, config));
@@ -131,10 +118,14 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
-        blender.runCorridorBlender(getOrCreateCorridorValidator(level.getServer()), chunk,
-                RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                        this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
-                level);
+        var blenderOptional = getRiftGenerationConfig().corridors();
+        if (blenderOptional.isPresent()) { // cannot actually be empty right now unless some event rips it out
+            var blender = blenderOptional.get();
+            blender.runCorridorBlender(this, chunk,
+                    RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                            this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
+                    level, layerCount);
+        }
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 

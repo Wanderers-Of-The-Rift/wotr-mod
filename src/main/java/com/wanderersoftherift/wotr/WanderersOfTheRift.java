@@ -33,6 +33,7 @@ import com.wanderersoftherift.wotr.init.recipe.WotrRecipeSerializers;
 import com.wanderersoftherift.wotr.init.recipe.WotrRecipeTypes;
 import com.wanderersoftherift.wotr.init.recipe.WotrSlotDisplayTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrChunkGenerators;
+import com.wanderersoftherift.wotr.init.worldgen.WotrCorridorValidators;
 import com.wanderersoftherift.wotr.init.worldgen.WotrInputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrJigsawListProcessors;
 import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
@@ -100,6 +101,7 @@ public class WanderersOfTheRift {
         WotrRiftBuiltinGeneratables.RIFT_BUILTIN_GENERATABLES.register(modEventBus);
         WotrRiftRoomGeneratorFactories.RIFT_ROOM_GENERATOR_FACTORIES.register(modEventBus);
         WotrJigsawListProcessors.JIGSAW_LIST_PROCESSORS.register(modEventBus);
+        WotrCorridorValidators.CORRIDOR_VALIDATORS.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);

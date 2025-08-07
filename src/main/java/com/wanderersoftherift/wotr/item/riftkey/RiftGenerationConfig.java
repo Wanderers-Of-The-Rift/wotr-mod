@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.item.riftkey;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
@@ -9,22 +10,21 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
-        Optional<RiftRoomGenerator.Factory> roomGenerator, boolean generatePassages,
-        List<JigsawListProcessor> jigsawProcessors, Optional<Long> seed) {
+        Optional<RiftRoomGenerator.Factory> roomGenerator, Optional<CorridorBlender> corridors,
+        Optional<List<JigsawListProcessor>> jigsawProcessors, Optional<Long> seed) {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     RiftLayout.Factory.CODEC.optionalFieldOf("layout").forGetter(RiftGenerationConfig::layout),
                     RiftRoomGenerator.Factory.CODEC.optionalFieldOf("room_generator")
                             .forGetter(RiftGenerationConfig::roomGenerator),
-                    Codec.BOOL.optionalFieldOf("passages", true).forGetter(RiftGenerationConfig::generatePassages),
+                    CorridorBlender.CODEC.optionalFieldOf("passages").forGetter(RiftGenerationConfig::corridors),
                     JigsawListProcessor.CODEC.listOf()
-                            .optionalFieldOf("jigsaw_processors", Collections.emptyList())
+                            .optionalFieldOf("jigsaw_processors")
                             .forGetter(RiftGenerationConfig::jigsawProcessors),
                     Codec.LONG.optionalFieldOf("seed").forGetter(RiftGenerationConfig::seed)
             ).apply(instance, RiftGenerationConfig::new));
@@ -33,14 +33,14 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftGenerationConfig> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.fromCodec(RiftLayout.Factory.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::layout,
                 ByteBufCodecs.fromCodec(RiftRoomGenerator.Factory.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::roomGenerator,
-                ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional).map(it->it.orElse(true), Optional::of), RiftGenerationConfig::generatePassages,
-                ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()), RiftGenerationConfig::jigsawProcessors,
+                ByteBufCodecs.fromCodec(CorridorBlender.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::corridors,
+                ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()).apply(ByteBufCodecs::optional), RiftGenerationConfig::jigsawProcessors,
                 ByteBufCodecs.LONG.apply(ByteBufCodecs::optional), RiftGenerationConfig::seed,
             RiftGenerationConfig::new);
     // spotless:on
 
-    public static final RiftGenerationConfig EMPTY = new RiftGenerationConfig(Optional.empty(), Optional.empty(), true,
-            Collections.emptyList(), Optional.empty());
+    public static final RiftGenerationConfig EMPTY = new RiftGenerationConfig(Optional.empty(), Optional.empty(),
+            Optional.empty(), Optional.empty(), Optional.empty());
 
     public RiftGenerationConfig withSeedIfAbsent(long seed) {
         if (this.seed.isPresent()) {
@@ -66,28 +66,40 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
         }
     }
 
+    public RiftGenerationConfig withJigsawProcessorsIfAbsent(List<JigsawListProcessor> processors) {
+        if (this.jigsawProcessors.isPresent()) {
+            return this;
+        } else {
+            return withJigsawProcessors(processors);
+        }
+    }
+
+    public RiftGenerationConfig withCorridorBlenderIfAbsent(CorridorBlender blender) {
+        if (this.roomGenerator.isPresent()) {
+            return this;
+        } else {
+            return withCorridorBlender(blender);
+        }
+    }
+
     public RiftGenerationConfig withSeed(long seed) {
-        return new RiftGenerationConfig(layout, roomGenerator, generatePassages, jigsawProcessors, Optional.of(seed));
+        return new RiftGenerationConfig(layout, roomGenerator, corridors, jigsawProcessors, Optional.of(seed));
     }
 
     public RiftGenerationConfig withLayout(RiftLayout.Factory layout) {
-        return new RiftGenerationConfig(Optional.of(layout), roomGenerator, generatePassages, jigsawProcessors, seed);
+        return new RiftGenerationConfig(Optional.of(layout), roomGenerator, corridors, jigsawProcessors, seed);
     }
 
     public RiftGenerationConfig withRoomGenerator(RiftRoomGenerator.Factory roomGenerator) {
-        return new RiftGenerationConfig(layout, Optional.of(roomGenerator), generatePassages, jigsawProcessors, seed);
+        return new RiftGenerationConfig(layout, Optional.of(roomGenerator), corridors, jigsawProcessors, seed);
     }
 
     public RiftGenerationConfig withJigsawProcessors(List<JigsawListProcessor> processors) {
-        return new RiftGenerationConfig(layout, roomGenerator, generatePassages, processors, seed);
+        return new RiftGenerationConfig(layout, roomGenerator, corridors, Optional.of(processors), seed);
     }
 
-    public RiftGenerationConfig withPassages() {
-        return new RiftGenerationConfig(layout, roomGenerator, true, jigsawProcessors, seed);
-    }
-
-    public RiftGenerationConfig withoutPassages() {
-        return new RiftGenerationConfig(layout, roomGenerator, false, jigsawProcessors, seed);
+    public RiftGenerationConfig withCorridorBlender(CorridorBlender blender) {
+        return new RiftGenerationConfig(layout, roomGenerator, Optional.of(blender), jigsawProcessors, seed);
     }
 
 }

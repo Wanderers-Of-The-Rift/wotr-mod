@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
@@ -20,6 +21,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CachedRiftRoomGe
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CoreRiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.LayerGeneratableRiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.SerializableCorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -45,9 +47,22 @@ public class RiftConfigInitialization {
         return baseConfig.withRiftGenerationConfig(
                 new RiftGenerationConfig(
                         Optional.of(baseConfig.riftGen().layout().orElse(defaultLayout())),
-                        Optional.of(defaultRoomGenerator()), true, initializeJigsawProcessors(), Optional.of(seed)
+                        Optional.of(baseConfig.riftGen().roomGenerator().orElse(defaultRoomGenerator())),
+                        Optional.of(baseConfig.riftGen().corridors().orElse(defaultCorridorBlender())),
+                        Optional.of(baseConfig.riftGen().jigsawProcessors().orElse(initializeJigsawProcessors())),
+                        Optional.of(seed)
                 )
         ).withThemeIfAbsent(riftTheme);
+    }
+
+    private static CorridorBlender defaultCorridorBlender() {
+        return new CorridorBlender(
+                new SerializableCorridorValidator.Or(
+                        new SerializableCorridorValidator.GeneratorLayout(), new SerializableCorridorValidator.Opposite(
+                                new SerializableCorridorValidator.GeneratorLayout()
+                        )
+                )
+        );
     }
 
     static Holder<RiftTheme> getRandomTheme(MinecraftServer server, long seed) {

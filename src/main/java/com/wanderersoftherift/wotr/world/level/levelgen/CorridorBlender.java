@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
-import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.SerializableCorridorValidator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -15,7 +17,11 @@ import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.AIR;
 
-public record CorridorBlender(int layerCount, RiftGenerationConfig config) {
+public record CorridorBlender(SerializableCorridorValidator validator) {
+
+    public static final Codec<CorridorBlender> CODEC = RecordCodecBuilder.create(instance -> instance
+            .group(SerializableCorridorValidator.CODEC.fieldOf("validator").forGetter(CorridorBlender::validator))
+            .apply(instance, CorridorBlender::new));
 
     public static final int CORRIDOR_START_X = 6;
     public static final int CORRIDOR_START_Y = 5;
@@ -27,32 +33,30 @@ public record CorridorBlender(int layerCount, RiftGenerationConfig config) {
     public static final int CORRIDOR_OPTIONAL_END_Y = 4;
 
     public void runCorridorBlender(
-            CorridorValidator validator,
+            FastRiftGenerator generator,
             ChunkAccess chunk,
             PositionalRandomFactory randomFactory,
-            WorldGenLevel level) {
-        if (!config.generatePassages()) {
-            return;
-        }
+            WorldGenLevel level,
+            int layerCount) {
         var rng = randomFactory.at(chunk.getPos().x, 0, chunk.getPos().z);
         for (int i = 0; i < layerCount; i++) {
             var chunkX = chunk.getPos().x;
             var chunkY = i - layerCount / 2;
             var chunkZ = chunk.getPos().z;
-            runCorridorBlenderDirectional(validator, chunkX, chunkY, chunkZ, NORTH, level, rng);
-            runCorridorBlenderDirectional(validator, chunkX, chunkY, chunkZ, WEST, level, rng);
+            runCorridorBlenderDirectional(generator, chunkX, chunkY, chunkZ, NORTH, level, rng);
+            runCorridorBlenderDirectional(generator, chunkX, chunkY, chunkZ, WEST, level, rng);
         }
     }
 
     private void runCorridorBlenderDirectional(
-            CorridorValidator validator,
+            FastRiftGenerator generator,
             int chunkX,
             int chunkY,
             int chunkZ,
             Direction direction,
             WorldGenLevel level,
             RandomSource rng) {
-        if (validator.validateCorridor(chunkX, chunkY, chunkZ, direction)) {
+        if (validator.validateCorridor(chunkX, chunkY, chunkZ, direction, generator)) {
             for (int x = 0; x < CORRIDOR_WIDTH; x++) {
                 for (int y = 0; y < CORRIDOR_HEIGHT; y++) {
                     var pos = new BlockPos(

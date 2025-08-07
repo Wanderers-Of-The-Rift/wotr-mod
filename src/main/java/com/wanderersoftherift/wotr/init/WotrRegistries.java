@@ -22,6 +22,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.SerializableCorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Registry;
@@ -67,6 +68,8 @@ public class WotrRegistries {
             Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
     public static final Registry<MapCodec<? extends RiftConfigCustomData>> RIFT_CONFIG_CUSTOM_DATA_TYPES = new RegistryBuilder<>(
             Keys.RIFT_CONFIG_CUSTOM_DATA_TYPES).create();
+    public static final Registry<MapCodec<? extends SerializableCorridorValidator>> RIFT_CORRIDOR_VALIDATORS = new RegistryBuilder<>(
+            Keys.RIFT_CORRIDOR_VALIDATORS).create();
 
     public static final class Keys {
 
@@ -120,6 +123,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));;
         public static final ResourceKey<Registry<MapCodec<? extends RiftConfigCustomData>>> RIFT_CONFIG_CUSTOM_DATA_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));;
+        public static final ResourceKey<Registry<MapCodec<? extends SerializableCorridorValidator>>> RIFT_CORRIDOR_VALIDATORS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));;
 
         private Keys() {
         }
@@ -135,14 +140,17 @@ public class WotrRegistries {
         event.register(ABILITY_TYPES);
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);
+        event.register(CONTAINER_TYPE);
+
+        // worldgen registries
         event.register(LAYOUT_TYPES);
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
-        event.register(CONTAINER_TYPE);
         event.register(RIFT_ROOM_GENERATOR_FACTORY_TYPES);
         event.register(JIGSAW_LIST_PROCESSOR_TYPES);
         event.register(RIFT_BUILTIN_GENERATABLE_TYPES);
         event.register(RIFT_CONFIG_CUSTOM_DATA_TYPES);
+        event.register(RIFT_CORRIDOR_VALIDATORS);
     }
 
     @SubscribeEvent

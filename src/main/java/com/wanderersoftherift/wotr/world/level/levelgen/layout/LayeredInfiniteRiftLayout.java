@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
@@ -64,7 +65,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d) {
+    public boolean validateCorridor(int x, int y, int z, Direction d, FastRiftGenerator generator) {
         var space = getChunkSpace(x, y, z);
         if (space == null || space instanceof VoidRiftSpace) {
             return false;

@@ -12,6 +12,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.common.EventBusSubscriber;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 @EventBusSubscriber
@@ -37,7 +38,7 @@ public class RiftConfigInitializationEvents {
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/5"),
                         WanderersOfTheRift.id("rift/new_pool"), 1))
-                .addAll(riftGenConfig.jigsawProcessors())
+                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
 
@@ -73,7 +74,7 @@ public class RiftConfigInitializationEvents {
         }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsawsBulk(replacementMap))
-                .addAll(riftGenConfig.jigsawProcessors())
+                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
         event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
@@ -96,7 +97,7 @@ public class RiftConfigInitializationEvents {
         }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsawsBulk(replacementMap))
-                .addAll(riftGenConfig.jigsawProcessors())
+                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
         event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
