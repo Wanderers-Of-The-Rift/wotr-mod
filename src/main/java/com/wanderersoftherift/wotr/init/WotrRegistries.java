@@ -22,7 +22,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -63,7 +63,7 @@ public class WotrRegistries {
             Keys.RIFT_ROOM_GENERATOR_FACTORY_TYPES).create();
     public static final Registry<MapCodec<? extends JigsawListProcessor>> JIGSAW_LIST_PROCESSOR_TYPES = new RegistryBuilder<>(
             Keys.JIGSAW_LIST_PROCESSOR_TYPES).create();
-    public static final Registry<MapCodec<? extends RiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends SerializableRiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
             Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
     public static final Registry<MapCodec<? extends RiftConfigCustomData>> RIFT_CONFIG_CUSTOM_DATA_TYPES = new RegistryBuilder<>(
             Keys.RIFT_CONFIG_CUSTOM_DATA_TYPES).create();
@@ -116,7 +116,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_room_generator_factory"));
         public static final ResourceKey<Registry<MapCodec<? extends JigsawListProcessor>>> JIGSAW_LIST_PROCESSOR_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/jigsaw_list_processor"));
-        public static final ResourceKey<Registry<MapCodec<? extends RiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends SerializableRiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));;
         public static final ResourceKey<Registry<MapCodec<? extends RiftConfigCustomData>>> RIFT_CONFIG_CUSTOM_DATA_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));;

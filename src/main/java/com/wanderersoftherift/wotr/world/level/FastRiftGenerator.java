@@ -14,7 +14,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerato
 import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -56,7 +56,8 @@ public class FastRiftGenerator extends ChunkGenerator {
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layerCount),
             Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
-            RiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("filler").forGetter(FastRiftGenerator::getFiller),
+            SerializableRiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("filler")
+                    .forGetter(FastRiftGenerator::getFiller),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
 
@@ -73,11 +74,11 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final RiftRoomGenerator roomGenerator;
     private final PositionalRandomFactory roomGeneratorRNG;
     private final AtomicReference<CorridorValidator> corridorValidator = new AtomicReference<>();
-    private final RiftGeneratable filler;
+    private final SerializableRiftGeneratable filler;
     private final CorridorBlender blender;
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks, RiftGeneratable filler,
-            RiftConfig config) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
+            SerializableRiftGeneratable filler, RiftConfig config) {
         super(biomeSource);
         this.layerCount = layerCount;
         this.dimensionHeightBlocks = dimensionHeightBlocks;
@@ -101,7 +102,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         return config;
     }
 
-    private RiftGeneratable getFiller() {
+    private SerializableRiftGeneratable getFiller() {
         return filler;
     }
 

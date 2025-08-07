@@ -1,9 +1,6 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
@@ -21,11 +18,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface RiftGeneratable {
-
-    Codec<RiftGeneratable> BUILTIN_GENERATABLE_CODEC = WotrRegistries.RIFT_BUILTIN_GENERATABLE_TYPES.byNameCodec()
-            .dispatch(fac -> fac.codec(), codec -> codec);
-
-    MapCodec<? extends RiftGeneratable> codec();
 
     void processAndPlace(
             RiftProcessedRoom destination,

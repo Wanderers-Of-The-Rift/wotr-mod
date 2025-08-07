@@ -16,14 +16,14 @@ import java.util.List;
 /**
  * fills entire chunk with one block
  */
-public record SingleBlockChunkGeneratable(BlockState block) implements RiftGeneratable {
+public record SingleBlockChunkGeneratable(BlockState block) implements SerializableRiftGeneratable {
 
     public static final MapCodec<SingleBlockChunkGeneratable> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(StringBlockStateCodec.INSTANCE.fieldOf("block").forGetter(SingleBlockChunkGeneratable::block))
             .apply(instance, SingleBlockChunkGeneratable::new));
 
     @Override
-    public MapCodec<? extends RiftGeneratable> codec() {
+    public MapCodec<? extends SerializableRiftGeneratable> codec() {
         return CODEC;
     }
 

@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
-import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
@@ -26,11 +25,6 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
 
     public PlaceholderRiftTemplate(Vec3i size) {
         this.size = size;
-    }
-
-    @Override
-    public MapCodec<? extends RiftGeneratable> codec() {
-        return null;
     }
 
     @Override

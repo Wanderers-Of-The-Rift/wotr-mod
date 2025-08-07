@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * places bedrock around the room
  */
-public record PerimeterGeneratable(BlockState perimeterBlock) implements RiftGeneratable {
+public record PerimeterGeneratable(BlockState perimeterBlock) implements SerializableRiftGeneratable {
 
     public static final MapCodec<PerimeterGeneratable> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance
@@ -25,7 +25,7 @@ public record PerimeterGeneratable(BlockState perimeterBlock) implements RiftGen
                     .apply(instance, PerimeterGeneratable::new));
 
     @Override
-    public MapCodec<? extends RiftGeneratable> codec() {
+    public MapCodec<? extends SerializableRiftGeneratable> codec() {
         return CODEC;
     }
 

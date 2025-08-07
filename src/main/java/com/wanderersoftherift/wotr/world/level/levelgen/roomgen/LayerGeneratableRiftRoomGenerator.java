@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -34,10 +35,10 @@ public record LayerGeneratableRiftRoomGenerator(RiftGeneratable generatable, Rif
         });
     }
 
-    public record Factory(RiftGeneratable generatable, RiftRoomGenerator.Factory baseFactory)
+    public record Factory(SerializableRiftGeneratable generatable, RiftRoomGenerator.Factory baseFactory)
             implements RiftRoomGenerator.Factory {
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                RiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("layered_generatable")
+                SerializableRiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("layered_generatable")
                         .forGetter(Factory::generatable),
                 RiftRoomGenerator.Factory.CODEC.fieldOf("base").forGetter(Factory::baseFactory)
         ).apply(instance, Factory::new));
