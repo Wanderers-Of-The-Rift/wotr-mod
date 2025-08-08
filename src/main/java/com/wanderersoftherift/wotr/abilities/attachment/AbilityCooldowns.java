@@ -82,7 +82,7 @@ public class AbilityCooldowns {
     public Stream<CooldownInfo> getCooldowns() {
         return cooldowns.entrySet()
                 .stream()
-                .filter(x -> x.getValue().until() > getGameTime())
+                .filter(x -> x.getValue().to() > getGameTime())
                 .map(x -> new CooldownInfo(x.getKey(), x.getValue()));
     }
 
@@ -91,7 +91,7 @@ public class AbilityCooldowns {
      * @return Whether the given slot is on cooldown
      */
     public boolean isOnCooldown(WotrEquipmentSlot slot) {
-        return cooldowns.getOrDefault(slot, LongRange.EMPTY).until() > getGameTime();
+        return cooldowns.getOrDefault(slot, LongRange.EMPTY).to() > getGameTime();
     }
 
     public void setCooldown(WotrEquipmentSlot slot, long from, long until) {
