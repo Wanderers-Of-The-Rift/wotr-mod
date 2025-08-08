@@ -54,21 +54,19 @@ public class AttachedEffectData {
 
     /**
      * Ticks all effects, and removes expired effect markers.
-     *
-     * @param level The level the entity is within
      */
-    public void tick(ServerLevel level) {
+    public void tick() {
         if (!(holder instanceof LivingEntity attachedTo)) {
             return;
         }
-        List<AttachedEffect> removedEffects = tickEffects(attachedTo, level);
+        List<AttachedEffect> removedEffects = tickEffects(attachedTo);
         updateMarkers(attachedTo, removedEffects);
     }
 
-    private @NotNull List<AttachedEffect> tickEffects(LivingEntity attachedTo, ServerLevel level) {
+    private @NotNull List<AttachedEffect> tickEffects(LivingEntity attachedTo) {
         List<AttachedEffect> removedEffects = new ArrayList<>();
         for (AttachedEffect effect : ImmutableList.copyOf(effects)) {
-            if (effect.tick(attachedTo, level)) {
+            if (effect.tick(attachedTo)) {
                 removedEffects.add(effect);
             }
         }
@@ -180,16 +178,18 @@ public class AttachedEffectData {
          * Ticks this attached effect
          * 
          * @param attachedTo The entity it is attached to
-         * @param level      The level it is within
          * @return Whether this effect has expired and should be removed
          */
-        public boolean tick(Entity attachedTo, ServerLevel level) {
+        public boolean tick(Entity attachedTo) {
+            if (!(attachedTo.level() instanceof ServerLevel level)) {
+                return true;
+            }
             LivingEntity caster = getCaster(level);
             if (caster == null) {
                 return true;
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, ticks, caster)) {
-                AbilityContext triggerContext = context.toContext(getCaster(level));
+                AbilityContext triggerContext = context.toContext(caster);
                 triggerContext.enableUpgradeModifiers();
                 try {
                     attachEffect.getEffects()

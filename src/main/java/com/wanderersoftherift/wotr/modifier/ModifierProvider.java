@@ -10,10 +10,10 @@ import net.minecraft.world.item.ItemStack;
  */
 public interface ModifierProvider {
 
-    void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Visitor visitor);
+    void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action);
 
     @FunctionalInterface
-    interface Visitor {
+    interface Action {
         void accept(Holder<Modifier> modifierHolder, int tier, float roll, ModifierSource item);
     }
 }

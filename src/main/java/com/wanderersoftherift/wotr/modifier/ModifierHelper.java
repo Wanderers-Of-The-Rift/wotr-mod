@@ -15,14 +15,14 @@ public class ModifierHelper {
             ItemStack stack,
             WotrEquipmentSlot slot,
             LivingEntity entity,
-            ModifierProvider.Visitor visitor) {
-        stack.getAllOfType(ModifierProvider.class).forEach(x -> x.forEachModifier(stack, slot, entity, visitor));
+            ModifierProvider.Action action) {
+        stack.getAllOfType(ModifierProvider.class).forEach(x -> x.forEachModifier(stack, slot, entity, action));
     }
 
-    public static void runIterationOnEquipment(LivingEntity entity, ModifierProvider.Visitor visitor) {
+    public static void runIterationOnEquipment(LivingEntity entity, ModifierProvider.Action action) {
         var slots = NeoForge.EVENT_BUS.post(new CollectEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
         for (var wotrSlot : slots) {
-            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, visitor);
+            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, action);
         }
     }
 
