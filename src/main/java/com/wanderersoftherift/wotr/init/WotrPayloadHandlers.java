@@ -84,8 +84,12 @@ public class WotrPayloadHandlers {
         // Rift
         registrar.playToClient(BannedFromRiftPayload.TYPE, BannedFromRiftPayload.STREAM_CODEC,
                 BannedFromRiftPayload::handleOnClient);
+        registrar.playToClient(S2CRiftObjectiveStatusPacket.TYPE, S2CRiftObjectiveStatusPacket.STREAM_CODEC,
+                new S2CRiftObjectiveStatusPacket.S2CRiftObjectiveStatusPacketHandler());
         registrar.playToServer(C2SRuneAnvilApplyPacket.TYPE, C2SRuneAnvilApplyPacket.STREAM_CODEC,
                 new C2SRuneAnvilApplyPacket.C2SRuneAnvilApplyPacketHandler());
+        registrar.playToClient(S2CLevelListUpdatePacket.TYPE, S2CLevelListUpdatePacket.STREAM_CODEC,
+                new S2CLevelListUpdatePacket.S2CLevelListUpdatePacketHandler());
 
         // Guild
         registrar.playToClient(WalletReplicationPayload.TYPE, WalletReplicationPayload.STREAM_CODEC,
@@ -98,6 +102,12 @@ public class WotrPayloadHandlers {
                 AcceptQuestPayload::handleOnServer);
         registrar.playToClient(ActiveQuestsReplicationPayload.TYPE, ActiveQuestsReplicationPayload.STREAM_CODEC,
                 ActiveQuestsReplicationPayload::handleOnClient);
+        registrar.playToClient(QuestAcceptedPayload.TYPE, QuestAcceptedPayload.STREAM_CODEC,
+                QuestAcceptedPayload::handleOnClient);
+        registrar.playToClient(QuestRemovedPayload.TYPE, QuestRemovedPayload.STREAM_CODEC,
+                QuestRemovedPayload::handleOnClient);
+        registrar.playToClient(QuestGoalUpdatePayload.TYPE, QuestGoalUpdatePayload.STREAM_CODEC,
+                QuestGoalUpdatePayload::handleOnClient);
         registrar.playToServer(HandInQuestItemPayload.TYPE, HandInQuestItemPayload.STREAM_CODEC,
                 HandInQuestItemPayload::handleOnServer);
         registrar.playToServer(CompleteQuestPayload.TYPE, CompleteQuestPayload.STREAM_CODEC,
@@ -112,19 +122,6 @@ public class WotrPayloadHandlers {
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,
                 OpenCharacterMenuPayload::handleOnServer);
-
-        // Payload handlers, server vs client TODO: Make this neat
-        registrar.playToClient(QuestGoalUpdatePayload.TYPE, QuestGoalUpdatePayload.STREAM_CODEC,
-                QuestGoalUpdatePayload::handleOnClient);
-        registrar.playToClient(QuestAcceptedPayload.TYPE, QuestAcceptedPayload.STREAM_CODEC,
-                QuestAcceptedPayload::handleOnClient);
-        registrar.playToClient(QuestRemovedPayload.TYPE, QuestRemovedPayload.STREAM_CODEC,
-                QuestRemovedPayload::handleOnClient);
-        registrar.playToClient(S2CLevelListUpdatePacket.TYPE, S2CLevelListUpdatePacket.STREAM_CODEC,
-                new S2CLevelListUpdatePacket.S2CLevelListUpdatePacketHandler());
-        registrar.playToClient(S2CRiftObjectiveStatusPacket.TYPE, S2CRiftObjectiveStatusPacket.STREAM_CODEC,
-                new S2CRiftObjectiveStatusPacket.S2CRiftObjectiveStatusPacketHandler());
-
     }
 
     @SubscribeEvent
