@@ -67,7 +67,7 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
     }
 
     @Override
-    public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Visitor visitor) {
+    public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
         for (GearSocket socket : sockets()) {
             if (socket.isEmpty()) {
                 continue;
@@ -76,7 +76,7 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
             Holder<Modifier> modifier = modifierInstance.modifier();
             if (modifier != null) {
                 ModifierSource source = new GearSocketModifierSource(socket, this, slot, entity);
-                visitor.accept(modifier, modifierInstance.tier(), modifierInstance.roll(), source);
+                action.accept(modifier, modifierInstance.tier(), modifierInstance.roll(), source);
             }
         }
 

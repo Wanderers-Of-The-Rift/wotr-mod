@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
-import com.wanderersoftherift.wotr.util.TimeRange;
+import com.wanderersoftherift.wotr.util.LongRange;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +29,7 @@ public class AbilityCooldowns {
             Data.CODEC, AbilityCooldowns::new, AbilityCooldowns::data);
 
     private final IAttachmentHolder holder;
-    private final Map<WotrEquipmentSlot, TimeRange> cooldowns;
+    private final Map<WotrEquipmentSlot, LongRange> cooldowns;
 
     public AbilityCooldowns(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -41,7 +41,7 @@ public class AbilityCooldowns {
         if (data != null && holder instanceof Entity entity) {
             long gameTime = entity.level().getGameTime();
             for (var entry : data.cooldowns) {
-                cooldowns.put(entry.slot, entry.timeRange.offset(gameTime));
+                cooldowns.put(entry.slot, entry.range.offset(gameTime));
             }
         }
     }
@@ -60,7 +60,7 @@ public class AbilityCooldowns {
         long gameTime = entity.level().getGameTime();
         List<CooldownInfo> cooldownData = cooldowns.entrySet()
                 .stream()
-                .filter(x -> x.getValue().inRange(gameTime))
+                .filter(x -> x.getValue().contains(gameTime))
                 .map(x -> new CooldownInfo(x.getKey(), x.getValue().offset(-gameTime)))
                 .toList();
         return new Data(cooldownData);
@@ -72,8 +72,8 @@ public class AbilityCooldowns {
      * @param slot
      * @return The cooldown range for the given slot
      */
-    public TimeRange getCooldown(WotrEquipmentSlot slot) {
-        return cooldowns.getOrDefault(slot, TimeRange.NONE);
+    public LongRange getCooldown(WotrEquipmentSlot slot) {
+        return cooldowns.getOrDefault(slot, LongRange.EMPTY);
     }
 
     /**
@@ -91,11 +91,11 @@ public class AbilityCooldowns {
      * @return Whether the given slot is on cooldown
      */
     public boolean isOnCooldown(WotrEquipmentSlot slot) {
-        return cooldowns.getOrDefault(slot, TimeRange.NONE).until() > getGameTime();
+        return cooldowns.getOrDefault(slot, LongRange.EMPTY).until() > getGameTime();
     }
 
     public void setCooldown(WotrEquipmentSlot slot, long from, long until) {
-        cooldowns.put(slot, new TimeRange(from, until));
+        cooldowns.put(slot, new LongRange(from, until));
         if (holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new AbilityCooldownUpdatePayload(slot, from, until));
         }
@@ -113,14 +113,6 @@ public class AbilityCooldowns {
         cooldowns.clear();
     }
 
-    /**
-     * @param slot
-     * @return The remaining fraction of the cooldown
-     */
-    public float getCooldownFraction(WotrEquipmentSlot slot) {
-        return 1f - getCooldown(slot).fractionalPosition(getGameTime());
-    }
-
     private long getGameTime() {
         if (!(holder instanceof Entity entity)) {
             return 0;
@@ -128,10 +120,10 @@ public class AbilityCooldowns {
         return entity.level().getGameTime();
     }
 
-    public record CooldownInfo(WotrEquipmentSlot slot, TimeRange timeRange) {
+    public record CooldownInfo(WotrEquipmentSlot slot, LongRange range) {
         private static final Codec<CooldownInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 WotrEquipmentSlot.DIRECT_CODEC.fieldOf("slot").forGetter(CooldownInfo::slot),
-                TimeRange.CODEC.fieldOf("time_range").forGetter(CooldownInfo::timeRange)
+                LongRange.CODEC.fieldOf("time_range").forGetter(CooldownInfo::range)
         ).apply(instance, CooldownInfo::new));
     }
 

@@ -78,29 +78,15 @@ public class ManaData {
         if (!(holder instanceof LivingEntity entity)) {
             return;
         }
-        float maxMana = maxAmount();
-        if (amount < maxMana) {
-            tickRegen(entity, maxMana);
-        }
-        if (amount > 0) {
-            tickDegen(entity);
-        }
-    }
-
-    private void tickRegen(LivingEntity entity, float maxMana) {
+        float delta = 0;
         AttributeInstance manaRegenAttribute = entity.getAttribute(WotrAttributes.MANA_REGEN_RATE);
-        if (manaRegenAttribute == null) {
-            return;
+        if (manaRegenAttribute != null) {
+            delta += (float) manaRegenAttribute.getValue();
         }
-        amount = Math.min((float) (amount + manaRegenAttribute.getValue()), maxMana);
-    }
-
-    private void tickDegen(LivingEntity entity) {
         AttributeInstance manaDegenAttribute = entity.getAttribute(WotrAttributes.MANA_DEGEN_RATE);
-        if (manaDegenAttribute == null) {
-            return;
+        if (manaDegenAttribute != null) {
+            delta -= (float) manaDegenAttribute.getValue();
         }
-        amount = Math.max((float) (amount - manaDegenAttribute.getValue()), 0);
+        amount = Math.clamp(amount + delta, 0, maxAmount());
     }
-
 }

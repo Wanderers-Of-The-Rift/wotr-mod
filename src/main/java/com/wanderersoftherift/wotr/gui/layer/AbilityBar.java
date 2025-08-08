@@ -92,6 +92,7 @@ public final class AbilityBar implements ConfigurableLayer {
                 || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
+        long gameTime = Minecraft.getInstance().level.getGameTime();
         LocalPlayer player = Minecraft.getInstance().player;
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         if (abilitySlots.getSlots() == 0) {
@@ -112,7 +113,8 @@ public final class AbilityBar implements ConfigurableLayer {
             if (abilityComponent == null) {
                 continue;
             }
-            float cooldown = cooldowns.getCooldownFraction(new AbilityEquipmentSlot(i));
+            float cooldown = 1f - cooldowns.getCooldown(new AbilityEquipmentSlot(i))
+                    .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
                     abilityComponent.ability(), cooldown);
         }

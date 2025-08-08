@@ -22,7 +22,7 @@ public record AbilityCooldownReplicationPayload(List<AbilityCooldownUpdatePayloa
 
     public AbilityCooldownReplicationPayload(AbilityCooldowns data) {
         this(data.getCooldowns()
-                .map(x -> new AbilityCooldownUpdatePayload(x.slot(), x.timeRange().from(), x.timeRange().until()))
+                .map(x -> new AbilityCooldownUpdatePayload(x.slot(), x.range().from(), x.range().until()))
                 .toList());
     }
 

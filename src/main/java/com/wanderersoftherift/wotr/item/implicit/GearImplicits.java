@@ -33,11 +33,11 @@ public interface GearImplicits extends ModifierProvider {
     List<ModifierInstance> modifierInstances();
 
     @Override
-    default void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Visitor visitor) {
+    default void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
         List<ModifierInstance> modifierInstances = modifierInstances(stack, entity.level());
         for (ModifierInstance modifier : modifierInstances) {
             ModifierSource source = new GearImplicitModifierSource(this, slot, entity);
-            visitor.accept(modifier.modifier(), modifier.tier(), modifier.roll(), source);
+            action.accept(modifier.modifier(), modifier.tier(), modifier.roll(), source);
         }
     }
 }
