@@ -11,6 +11,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +42,15 @@ public record QuestGoalUpdatePayload(UUID quest, int goalIndex, int progress) im
     }
 
     public void handleOnClient(final IPayloadContext context) {
+        handleClientOnly(context);
+    }
+
+    /*
+     * Client-side only: references other Client-only classes and would cause crash if it existed on the server. The
+     * main handler still has to exist on client and server since it's directly referenced in the packet registration.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void handleClientOnly(final IPayloadContext context) {
         context.player().getData(WotrAttachments.ACTIVE_QUESTS.get()).getQuestState(quest).ifPresent(state -> {
             if (goalIndex >= 0 && goalIndex < state.goalCount()) {
                 state.setGoalProgress(goalIndex, progress);
