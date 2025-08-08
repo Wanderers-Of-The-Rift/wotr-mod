@@ -46,7 +46,7 @@ public record LongRange(long from, long to) {
         if (to == from) {
             return 1f;
         }
-        return Math.clamp((position - from - fractionalPart) / (to - from), 0f, 1f);
+        return Math.clamp((position - from + fractionalPart) / (to - from), 0f, 1f);
     }
 
     /**
