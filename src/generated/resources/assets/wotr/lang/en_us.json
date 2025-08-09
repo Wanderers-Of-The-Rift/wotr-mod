@@ -579,5 +579,8 @@
   "tooltip.wotr.runegem.shape": "Shape: %s",
   "tooltip.wotr.show_extra_info": "Hold [%s] for additional information",
   "tooltip.wotr.socket": "Sockets: ",
+  "trigger.wotr.deal_damage": "Deal Damage",
+  "trigger.wotr.take_damage": "Take Damage",
+  "trigger.wotr.tick": "Tick",
   "wotr.rift.create.failed": "Failed to create rift"
 }
