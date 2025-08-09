@@ -31,6 +31,10 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
             return;
         }
+        AbilityEquipmentSlot abilitySlot = AbilityEquipmentSlot.forSlot(slot);
+        if (abilitySlot == null) {
+            return;
+        }
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
         if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
@@ -39,6 +43,6 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         Ability ability = abilityItem.get(WotrDataComponentType.ABILITY).ability().value();
         abilitySlots.setSelectedSlot(slot());
 
-        ability.onActivate(player, abilityItem, new AbilityEquipmentSlot(slot));
+        ability.onActivate(player, abilityItem, abilitySlot);
     }
 }

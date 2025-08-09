@@ -113,7 +113,7 @@ public final class AbilityBar implements ConfigurableLayer {
             if (abilityComponent == null) {
                 continue;
             }
-            float cooldown = 1f - cooldowns.getCooldown(new AbilityEquipmentSlot(i))
+            float cooldown = 1f - cooldowns.getCooldown(AbilityEquipmentSlot.forSlot(i))
                     .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
                     abilityComponent.ability(), cooldown);

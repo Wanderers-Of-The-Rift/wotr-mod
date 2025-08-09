@@ -91,8 +91,9 @@ public final class AbilityClientEvents {
     private static void useAbilitySlot(AbilitySlots abilitySlots, int slot, Player player) {
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
         ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
-        if (abilityComponent != null
-                && abilityComponent.ability().value().onActivate(player, abilityItem, new AbilityEquipmentSlot(slot))) {
+        if (abilityComponent != null && abilityComponent.ability()
+                .value()
+                .onActivate(player, abilityItem, AbilityEquipmentSlot.forSlot(slot))) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }
         abilitySlots.setSelectedSlot(slot);
