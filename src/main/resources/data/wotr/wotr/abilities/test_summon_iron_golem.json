@@ -1,0 +1,23 @@
+{
+    "type": "wotr:standard_ability",
+    "icon" : "minecraft:textures/item/bone.png",
+    "cooldown": 40,
+            "effects": [
+                {
+                    "type": "wotr:summon_effect",
+                    "targeting": {
+                        "type": "wotr:area_targeting",
+                        "range": 5
+                    },
+                    "entity_type": "minecraft:iron_golem",
+                    "amount": 1,
+                    "effects": [
+                    ],
+                    "particles": {
+                        "user": "minecraft:bubble",
+                        "target": "minecraft:explosion"
+                    }
+                }
+            ],
+    "mana_cost": 10
+}

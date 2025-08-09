@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
@@ -89,6 +90,12 @@ public class WotrAttachments {
             "active_quests",
             () -> AttachmentType.builder(ActiveQuests::new)
                     .serialize(ActiveQuests.getSerializer())
+                    .copyOnDeath()
+                    .build());
+    public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
+            "ability_tracker",
+            () -> AttachmentType.builder(AbilityTracker::new)
+                    .serialize(AbilityTracker.getSerializer())
                     .copyOnDeath()
                     .build());
 }

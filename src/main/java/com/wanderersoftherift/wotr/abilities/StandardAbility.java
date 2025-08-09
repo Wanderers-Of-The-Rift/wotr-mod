@@ -77,10 +77,10 @@ public class StandardAbility extends Ability {
                     return false;
                 }
             }
-            if (caster instanceof ServerPlayer player) {
-                manaData.useAmount(manaCost);
-                this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-            }
+            // if (caster instanceof ServerPlayer player) {
+            manaData.useAmount(manaCost);
+            this.getEffects().forEach(effect -> effect.apply(caster, new ArrayList<>(), abilityContext));
+            // }
             if (slot != null) {
                 caster.getData(WotrAttachments.ABILITY_COOLDOWNS)
                         .setCooldown(slot,
