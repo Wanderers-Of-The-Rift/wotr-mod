@@ -166,8 +166,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     private void onSlotChanged(int slot, ItemStack original, ItemStack newStack) {
         if (holder instanceof LivingEntity livingEntity) {
-            ModifierHelper.disableModifier(original, livingEntity, new AbilityEquipmentSlot(slot));
-            ModifierHelper.enableModifier(newStack, livingEntity, new AbilityEquipmentSlot(slot));
+            ModifierHelper.disableModifier(original, livingEntity, AbilityEquipmentSlot.forSlot(slot));
+            ModifierHelper.enableModifier(newStack, livingEntity, AbilityEquipmentSlot.forSlot(slot));
         }
     }
 
