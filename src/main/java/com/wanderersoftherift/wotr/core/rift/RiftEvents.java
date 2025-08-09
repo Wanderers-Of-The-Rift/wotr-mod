@@ -73,7 +73,7 @@ public class RiftEvents {
             return;
         }
         var deathRiftEntryState = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
-        if (deathRiftEntryState == RiftEntryState.EMPTY) {
+        if (deathRiftEntryState.isEmpty()) {
             return;
         }
         var newRift = RiftLevelManager.getRiftLevel(deathRiftEntryState.previousDimension());
