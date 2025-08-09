@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.AbilityBenchBlock;
+import com.wanderersoftherift.wotr.block.AnomalyBaseBlock;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.DittoBlock;
 import com.wanderersoftherift.wotr.block.KeyForgeBlock;
@@ -87,6 +88,12 @@ public class WotrBlocks {
     public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = registerBlock("rift_spawner",
             () -> new RiftSpawnerBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("rift_spawner"))
+                    .strength(2.0f)
+                    .sound(SoundType.STONE)));
+
+    public static final DeferredBlock<AnomalyBaseBlock> ANOMALY_BASE = registerBlock("anomaly_base",
+            () -> new AnomalyBaseBlock(BlockBehaviour.Properties.of()
+                    .setId(blockId("anomaly_base"))
                     .strength(2.0f)
                     .sound(SoundType.STONE)));
 

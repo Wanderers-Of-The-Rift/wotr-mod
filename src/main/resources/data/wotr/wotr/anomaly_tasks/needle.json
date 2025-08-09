@@ -1,0 +1,15 @@
+{
+  "type": "needle",
+  "weight": 1,
+  "effect" :{
+    "id" : "minecraft:regeneration",
+    "duration" : 100,
+    "amplifier" : 1
+  },
+  "loot_modifier" : 5.0,
+  "selectable_themes" : [
+    "forest",
+    "jungle",
+    "swamp"
+  ]
+}
