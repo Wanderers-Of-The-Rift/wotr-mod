@@ -83,15 +83,15 @@ public class RiftObjectiveEvents {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        var deathRiftEntryState = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
-        if (deathRiftEntryState == RiftEntryState.EMPTY) {
+        RiftEntryState entryState = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
+        if (entryState.isEmpty()) {
             return;
         }
         // TODO: what if player dies in multiple rifts simultaneously?
         player.openMenu(new SimpleMenuProvider(
                 (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
                         ContainerLevelAccess.create(player.level(), p.getOnPos()), RiftCompleteMenu.FLAG_FAILED,
-                        deathRiftEntryState.statSnapshot().getCustomStatDelta(player)),
+                        entryState.statSnapshot().getCustomStatDelta(player)),
                 Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
         if (player.containerMenu instanceof RiftCompleteMenu menu) {
             // TODO: Do we need rift config for losing a rift?
@@ -108,7 +108,7 @@ public class RiftObjectiveEvents {
         var exitedRiftEntryState = player.getData(WotrAttachments.EXITED_RIFT_ENTRY_STATE);
         ServerLevel riftLevel = RiftLevelManager.getRiftLevel(exitedRiftEntryState.riftDimension());
 
-        if (riftLevel == null || exitedRiftEntryState == RiftEntryState.EMPTY) {
+        if (riftLevel == null || exitedRiftEntryState.isEmpty()) {
             return;
         }
         RiftData riftData = RiftData.get(riftLevel);

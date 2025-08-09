@@ -17,7 +17,7 @@ public class InventorySnapshotEvents {
             return;
         }
         var deathRiftEntryState = player.getData(WotrAttachments.DEATH_RIFT_ENTRY_STATE);
-        if (deathRiftEntryState == RiftEntryState.EMPTY) {
+        if (deathRiftEntryState.isEmpty()) {
             return;
         }
         var remainingRiftEntryStates = player.getData(WotrAttachments.RIFT_ENTRY_STATES);
