@@ -70,7 +70,7 @@ public class AbilityCooldowns {
 
     /**
      * @param slot
-     * @return The cooldown range for the given slot
+     * @return The cooldown range for the given slot, in ticks (for comparison with gameTime)
      */
     public LongRange getCooldown(WotrEquipmentSlot slot) {
         return cooldowns.getOrDefault(slot, LongRange.EMPTY);
@@ -94,6 +94,11 @@ public class AbilityCooldowns {
         return cooldowns.getOrDefault(slot, LongRange.EMPTY).to() > getGameTime();
     }
 
+    /**
+     * @param slot
+     * @param from  In ticks, in terms of gameTime
+     * @param until In ticks, in terms of gameTime
+     */
     public void setCooldown(WotrEquipmentSlot slot, long from, long until) {
         cooldowns.put(slot, new LongRange(from, until));
         if (holder instanceof ServerPlayer player) {
@@ -101,6 +106,11 @@ public class AbilityCooldowns {
         }
     }
 
+    /**
+     *
+     * @param slot
+     * @param length In ticks
+     */
     public void setCooldown(WotrEquipmentSlot slot, int length) {
         long gameTime = getGameTime();
         setCooldown(slot, gameTime, gameTime + length);
@@ -120,6 +130,11 @@ public class AbilityCooldowns {
         return entity.level().getGameTime();
     }
 
+    /**
+     *
+     * @param slot
+     * @param range The range of the cooldown, in ticks (comparable with gametime)
+     */
     public record CooldownInfo(WotrEquipmentSlot slot, LongRange range) {
         private static final Codec<CooldownInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 WotrEquipmentSlot.DIRECT_CODEC.fieldOf("slot").forGetter(CooldownInfo::slot),
