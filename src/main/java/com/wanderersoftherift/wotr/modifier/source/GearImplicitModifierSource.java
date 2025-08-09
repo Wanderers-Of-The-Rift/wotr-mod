@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.modifier.source;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 public class GearImplicitModifierSource implements ModifierSource {
     private final GearImplicits implicits;
@@ -18,5 +19,10 @@ public class GearImplicitModifierSource implements ModifierSource {
     @Override
     public String getSerializedName() {
         return "implicits_" + slot.getSerializedName();
+    }
+
+    @Override
+    public @Nullable WotrEquipmentSlot slot() {
+        return slot;
     }
 }

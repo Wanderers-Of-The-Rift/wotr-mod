@@ -26,6 +26,7 @@ import com.wanderersoftherift.wotr.init.WotrSoundEvents;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
+import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
 import com.wanderersoftherift.wotr.init.client.WotrEmblemProviders;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
@@ -111,6 +112,7 @@ public class WanderersOfTheRift {
         WotrGoalTypes.GOAL_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_PROVIDER_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_TYPES.register(modEventBus);
+        WotrTrackedAbilityTriggers.TRIGGERS.register(modEventBus);
 
         // Gear
         WotrEquipmentSlotTypes.EQUIPMENT_SLOTS.register(modEventBus);

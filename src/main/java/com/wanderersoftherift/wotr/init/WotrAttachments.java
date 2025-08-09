@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
@@ -117,4 +118,10 @@ public class WotrAttachments {
                     "mana_entity_registry",
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
             );
+    public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
+            "ability_tracker",
+            () -> AttachmentType.builder(AbilityTracker::new)
+                    .serialize(AbilityTracker.getSerializer())
+                    .copyOnDeath()
+                    .build());
 }

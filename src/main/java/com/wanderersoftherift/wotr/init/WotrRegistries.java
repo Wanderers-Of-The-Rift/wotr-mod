@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
+import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
@@ -80,6 +81,8 @@ public class WotrRegistries {
     public static final Registry<DualCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
             .sync(true)
             .create();
+    public static final Registry<MapCodec<? extends TrackedAbilityTrigger>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+            Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
 
     public static final class Keys {
 
@@ -133,6 +136,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
+        public static final ResourceKey<Registry<MapCodec<? extends TrackedAbilityTrigger>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
 
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("quest"));
@@ -169,6 +174,7 @@ public class WotrRegistries {
         event.register(GOAL_TYPES);
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
+        event.register(TRACKED_ABILITY_TRIGGERS);
     }
 
     @SubscribeEvent

@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 public class GearSocketModifierSource implements ModifierSource {
     private final GearSocket socket;
@@ -21,5 +22,10 @@ public class GearSocketModifierSource implements ModifierSource {
     @Override
     public String getSerializedName() {
         return slot.getSerializedName() + "_" + sockets.sockets().indexOf(socket);
+    }
+
+    @Override
+    public @Nullable WotrEquipmentSlot slot() {
+        return slot;
     }
 }
