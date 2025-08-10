@@ -434,7 +434,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
             }
 
             effect.applyDelayed(serverLevel, entity, List.of(entity.blockPosition()),
-                    abilityContext.toContext(livingOwner));
+                    abilityContext.toContext(livingOwner, level()));
         }
 
         if (this.getPierceLevel() <= 0) {
@@ -473,7 +473,8 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         if (effect != null && this.level() instanceof ServerLevel serverLevel
                 && this.getOwner() instanceof LivingEntity caster) {
 
-            effect.applyDelayed(serverLevel, this, List.of(result.getBlockPos()), abilityContext.toContext(caster));
+            effect.applyDelayed(serverLevel, this, List.of(result.getBlockPos()),
+                    abilityContext.toContext(caster, level()));
         }
 
         Vec3 vec31 = this.getDeltaMovement();
@@ -607,7 +608,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
                     .orElse(SimpleProjectileConfig.DEFAULT);
             setRenderConfig(this.config.renderConfig());
             if (this.getOwner() instanceof LivingEntity owner && abilityContext != null) {
-                this.configure(this.config, abilityContext.toContext(owner));
+                this.configure(this.config, abilityContext.toContext(owner, level()));
             }
         }
     }

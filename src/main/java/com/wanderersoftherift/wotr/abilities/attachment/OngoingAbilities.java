@@ -67,7 +67,8 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             WotrEquipmentSlot slot) {
-        AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, slot);
+        AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, slot,
+                entity.level());
         context.enableUpgradeModifiers();
         try {
             if (ability.value().canActivate(context)) {
@@ -90,7 +91,7 @@ public class OngoingAbilities {
                 .map(ActiveAbility::id)
                 .findFirst();
         UUID id = existing.orElseGet(UUID::randomUUID);
-        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, slot);
+        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, slot, entity.level());
         context.enableUpgradeModifiers();
         try {
             if (!ability.value().canActivate(context)) {
@@ -108,8 +109,9 @@ public class OngoingAbilities {
     public void tick() {
         for (ActiveAbility instance : ImmutableList.copyOf(activeAbilities)) {
             instance.age++;
-            AbilityContext context = new AbilityContext(instance.id, instance.ability, livingHolder(),
-                    instance.abilityItem, instance.slot.orElse(null));
+            LivingEntity attachedTo = livingHolder();
+            AbilityContext context = new AbilityContext(instance.id, instance.ability, attachedTo, instance.abilityItem,
+                    instance.slot.orElse(null), attachedTo.level());
             context.enableUpgradeModifiers();
             try {
                 if (instance.ability.value().tick(context, instance.age)) {
