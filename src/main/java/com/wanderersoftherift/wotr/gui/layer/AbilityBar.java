@@ -62,8 +62,6 @@ public final class AbilityBar implements ConfigurableLayer {
     private static final int SLOT_SIZE = 18;
     private static final int ICON_SIZE = 16;
 
-    private float time = 0;
-
     private final Orientation vertical = new Vertical();
     private final Orientation horizontal = new Horizontal();
 
@@ -89,8 +87,6 @@ public final class AbilityBar implements ConfigurableLayer {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, @NotNull DeltaTracker deltaTracker) {
-        time += deltaTracker.getRealtimeDeltaTicks();
-        time = time % 2;
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.options.hideGui || !getConfig().isVisible() || minecraft.gameMode == null
                 || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {

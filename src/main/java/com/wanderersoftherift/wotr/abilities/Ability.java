@@ -17,6 +17,9 @@ import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
 
+/**
+ * Base type for all abilities.
+ */
 public abstract class Ability {
 
     public static final Codec<Ability> DIRECT_CODEC = WotrRegistries.ABILITY_TYPES.byNameCodec()
@@ -43,24 +46,27 @@ public abstract class Ability {
 
     public abstract MapCodec<? extends Ability> getCodec();
 
-    public void setIcon(ResourceLocation location) {
-        icon = location;
-    }
-
+    /**
+     * @return An icon for displaying the ability in the ability bar. Will also be used for the ability holder if there
+     *         is no small icon
+     */
     public ResourceLocation getIcon() {
         return icon;
     }
 
+    /**
+     * @return An icon for displaying in the ability holder.
+     */
     public Optional<ResourceLocation> getSmallIcon() {
         return smallIcon;
     }
 
+    /**
+     * @param context
+     * @return Whether the ability can be activated
+     */
     public boolean canActivate(AbilityContext context) {
         return true;
-    }
-
-    public void clientActivate(AbilityContext context) {
-
     }
 
     /**
@@ -70,7 +76,17 @@ public abstract class Ability {
     public abstract boolean activate(AbilityContext context);
 
     /**
-     *
+     * Used to apply client-side effects
+     * 
+     * @param context
+     */
+    public void clientActivate(AbilityContext context) {
+
+    }
+
+    /**
+     * Ticks the ability while it is active
+     * 
      * @param contest
      * @param age
      * @return Whether the ability is finished
@@ -94,6 +110,8 @@ public abstract class Ability {
     public void setBaseManaCost(int baseManaCost) {
         this.baseManaCost = baseManaCost;
     }
+
+    ///  Upgrade support
 
     public abstract boolean isRelevantModifier(AbstractModifierEffect modifierEffect);
 

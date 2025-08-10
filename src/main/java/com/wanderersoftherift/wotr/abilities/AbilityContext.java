@@ -39,7 +39,7 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     /**
      * @return The current game time
      */
-    public long getGameTime() {
+    public long gameTime() {
         return level().getGameTime();
     }
 

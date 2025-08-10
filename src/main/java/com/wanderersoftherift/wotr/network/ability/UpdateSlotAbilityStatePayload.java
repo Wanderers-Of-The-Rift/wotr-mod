@@ -11,6 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Updates the ability state of a single equipment slot
+ * 
+ * @param slot   The slot
+ * @param active Whether it is active or not
+ */
 public record UpdateSlotAbilityStatePayload(WotrEquipmentSlot slot, boolean active) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<UpdateSlotAbilityStatePayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "slot_ability_state_update"));

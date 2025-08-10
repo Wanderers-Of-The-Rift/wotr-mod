@@ -49,15 +49,10 @@ public class AbilityEvents {
     }
 
     @SubscribeEvent
-    public static void dimensionChanged(PlayerEvent.PlayerChangedDimensionEvent event) {
-        event.getEntity().getData(WotrAttachments.ATTACHED_EFFECTS).replicateAttachments();
-    }
-
-    @SubscribeEvent
     public static void serverTick(ServerTickEvent.Pre event) {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             tickAttachedEffects(level);
-            tickActiveEffects(level);
+            tickActiveAbilities(level);
             tickMana(level);
         }
     }
@@ -81,7 +76,7 @@ public class AbilityEvents {
                 });
     }
 
-    public static void tickActiveEffects(ServerLevel level) {
+    public static void tickActiveAbilities(ServerLevel level) {
         level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
                 entity -> entity.hasData(WotrAttachments.ONGOING_ABILITIES)).forEach(entity -> {
                     OngoingAbilities data = entity.getData(WotrAttachments.ONGOING_ABILITIES);
@@ -90,9 +85,10 @@ public class AbilityEvents {
     }
 
     public static void tickMana(ServerLevel level) {
-        level.getPlayers(player -> player.hasData(WotrAttachments.MANA)).forEach(player -> {
-            ManaData data = player.getData(WotrAttachments.MANA);
-            data.tick();
-        });
+        level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity -> entity.hasData(WotrAttachments.MANA))
+                .forEach(entity -> {
+                    ManaData data = entity.getData(WotrAttachments.MANA);
+                    data.tick();
+                });
     }
 }
