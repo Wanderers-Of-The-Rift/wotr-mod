@@ -470,11 +470,10 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     protected void onHitBlock(BlockHitResult result) {
         this.lastState = this.level().getBlockState(result.getBlockPos());
         super.onHitBlock(result);
-        ItemStack itemstack = this.getWeaponItem();
         if (effect != null && this.level() instanceof ServerLevel serverLevel
                 && this.getOwner() instanceof LivingEntity caster) {
 
-            effect.applyDelayed(serverLevel, null, List.of(result.getBlockPos()), abilityContext.toContext(caster));
+            effect.applyDelayed(serverLevel, this, List.of(result.getBlockPos()), abilityContext.toContext(caster));
         }
 
         Vec3 vec31 = this.getDeltaMovement();
