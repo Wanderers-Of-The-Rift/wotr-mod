@@ -25,16 +25,10 @@ import java.util.UUID;
  * @param caster      The caster of the ability
  * @param abilityItem The item holding the ability (and any upgrades)
  * @param slot        The equipment slot the ability item is in, if any
+ * @param level       The level the ability is present in
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, WotrEquipmentSlot slot) {
-
-    /**
-     * @return The level the ability was used within
-     */
-    public Level level() {
-        return caster.level();
-    }
+        ItemStack abilityItem, WotrEquipmentSlot slot, Level level) {
 
     /**
      * @return The current game time

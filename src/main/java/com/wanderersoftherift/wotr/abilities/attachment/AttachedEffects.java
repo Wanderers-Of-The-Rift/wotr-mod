@@ -184,7 +184,7 @@ public class AttachedEffects {
                 return true;
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, ticks, caster)) {
-                AbilityContext triggerContext = context.toContext(caster);
+                AbilityContext triggerContext = context.toContext(caster, attachedTo.level());
                 triggerContext.enableUpgradeModifiers();
                 try {
                     attachEffect.getEffects()

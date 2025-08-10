@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -34,8 +35,8 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
                 Optional.ofNullable(context.slot()));
     }
 
-    public AbilityContext toContext(LivingEntity caster) {
-        return new AbilityContext(instanceId, ability, caster, abilityItem, slot.orElse(null));
+    public AbilityContext toContext(LivingEntity caster, Level level) {
+        return new AbilityContext(instanceId, ability, caster, abilityItem, slot.orElse(null), level);
     }
 
     public LivingEntity getCaster(MinecraftServer server) {
