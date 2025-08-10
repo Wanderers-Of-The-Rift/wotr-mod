@@ -532,6 +532,13 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         if (!this.pickupItemStack.isEmpty()) {
             compound.put("item", this.pickupItemStack.save(this.registryAccess()));
         }
+        if (effect != null) {
+            compound.put("effect",
+                    SimpleProjectileEffect.CODEC.encoder()
+                            .encodeStart(level().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                                    this.effect)
+                            .getOrThrow());
+        }
         if (abilityContext != null) {
             compound.put("ability_context",
                     StoredAbilityContext.CODEC
@@ -572,6 +579,13 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
                     .orElse(this.getDefaultPickupItem()));
         } else {
             this.setPickupItemStack(this.getDefaultPickupItem());
+        }
+        if (compound.contains("effect", Tag.TAG_COMPOUND)) {
+            effect = SimpleProjectileEffect.CODEC.decoder()
+                    .parse(level().registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("effect"))
+                    .resultOrPartial(x -> WanderersOfTheRift.LOGGER
+                            .error("Tried to load invalid simple projectile effect: '{}'", x))
+                    .orElse(null);
         }
         if (compound.contains("ability_context", Tag.TAG_COMPOUND)) {
             abilityContext = StoredAbilityContext.CODEC
