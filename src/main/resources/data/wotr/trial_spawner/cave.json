@@ -11,44 +11,37 @@
     {
       "data": {
         "entity": {
-          "id": "minecraft:zombie",
-            "ArmorItems": [
-                {},
-                {},
-                {},
-                {
-                "id": "minecraft:chainmail_helmet",
-                "count": 1
-                }
-            ],
-            "HandItems": [
-                {
-                    "id": "minecraft:iron_pickaxe",
-                    "count": 1
-                },
-                {
-                    "id": "minecraft:lantern",
-                    "count": 1
-                }
-            ]
+          "id": "wotr:rift_zombie",
+          "variant": "cave_zombie",
+          "HandItems": [
+            {
+              "id": "minecraft:iron_pickaxe",
+              "count": 1
+            },
+            {
+              "id": "minecraft:lantern",
+              "count": 1
+            }
+          ]
         }
       },
-      "weight": 1
+      "weight": 3
     },
     {
       "data": {
         "entity": {
-          "id": "minecraft:zombie",
+          "id": "wotr:rift_zombie",
+          "variant": "cave_zombie",
           "HandItems": [
             {
-              "id": "minecraft:stone_pickaxe",
+              "id": "minecraft:iron_pickaxe",
               "count": 1
             },
             {}
           ]
         }
       },
-      "weight": 2
+      "weight": 5
     }
   ],
   "ticks_between_spawn": 20

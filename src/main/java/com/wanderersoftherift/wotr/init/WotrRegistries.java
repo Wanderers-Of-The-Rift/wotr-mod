@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
+import com.wanderersoftherift.wotr.entity.mob.VariantData;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
@@ -100,6 +101,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout_layer"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftShape>>> RIFT_SHAPE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_shape"));
+        public static final ResourceKey<Registry<VariantData>> MOB_VARIANTS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
 
         private Keys() {
         }
@@ -133,5 +136,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.CODEC, EffectMarker.CODEC);
         event.dataPackRegistry(Keys.ABILITIES, AbstractAbility.DIRECT_CODEC, AbstractAbility.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.MOB_VARIANTS, VariantData.CODEC, VariantData.CODEC);
     }
 }
