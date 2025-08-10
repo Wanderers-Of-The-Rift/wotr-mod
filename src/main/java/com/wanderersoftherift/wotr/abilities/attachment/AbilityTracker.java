@@ -66,7 +66,8 @@ public class AbilityTracker {
                 .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
                 .wrapAsHolder(activation.codec());
         for (var tracked : abilities.get(typeHolder)) {
-            result |= tracked.ability.value().onActivate(entity, tracked.slot.getContent(entity), tracked.slot);
+            result |= tracked.ability.value()
+                    .onActivate(entity, tracked.slot == null ? null : tracked.slot.getContent(entity), tracked.slot);
         }
         return result;
     }
@@ -75,7 +76,7 @@ public class AbilityTracker {
         registerAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), slot);
     }
 
-    private void registerAbility(
+    public void registerAbility(
             Holder<MapCodec<? extends TrackedAbilityTrigger>> trigger,
             Holder<Ability> abilityHolder,
             @Nullable WotrEquipmentSlot slot) {
@@ -86,14 +87,15 @@ public class AbilityTracker {
         unregisterAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), slot);
     }
 
-    private void unregisterAbility(
+    public void unregisterAbility(
             Holder<MapCodec<? extends TrackedAbilityTrigger>> trigger,
             Holder<Ability> abilityHolder,
             @Nullable WotrEquipmentSlot slot) {
         if (slot == null) {
             abilities.get(trigger)
-                    .removeIf(trackedAbility -> trackedAbility.ability.equals(abilityHolder)
-                            && trackedAbility.slot == null);
+                    .removeIf(
+                            trackedAbility -> trackedAbility.ability.equals(abilityHolder)
+                                    && trackedAbility.slot == null);
         } else {
             abilities.get(trigger)
                     .removeIf(trackedAbility -> trackedAbility.ability.equals(abilityHolder)
