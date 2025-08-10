@@ -46,10 +46,6 @@ public class StandardAbility extends Ability {
         return CODEC;
     }
 
-    public List<AbilityEffect> getEffects() {
-        return effects;
-    }
-
     @Override
     public boolean canActivate(AbilityContext context) {
         if (context.slot() != null
@@ -78,6 +74,10 @@ public class StandardAbility extends Ability {
                             (int) context.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
         }
         return true;
+    }
+
+    private List<AbilityEffect> getEffects() {
+        return effects;
     }
 
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {

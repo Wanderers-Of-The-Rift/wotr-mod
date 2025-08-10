@@ -12,6 +12,9 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Removed attach effects created by this ability
+ */
 public class DetachOwnEffect extends AbilityEffect {
     public static final MapCodec<DetachOwnEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbilityEffect.commonFields(instance).apply(instance, DetachOwnEffect::new));

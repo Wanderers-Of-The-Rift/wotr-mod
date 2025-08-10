@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
-import com.wanderersoftherift.wotr.modifier.source.AbilityModifierSource;
+import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
@@ -40,7 +40,7 @@ public class ClientAttachEffects {
         if (holder instanceof Entity entity) {
             int index = 0;
             for (ModifierInstance modifier : modifiers) {
-                ModifierSource source = new AbilityModifierSource(id, index++);
+                ModifierSource source = new AttachEffectModifierSource(id, index++);
                 modifier.modifier().value().enableModifier(modifier.roll(), entity, source, modifier.tier());
             }
         }
@@ -55,7 +55,7 @@ public class ClientAttachEffects {
         if (holder instanceof Entity entity) {
             int index = 0;
             for (ModifierInstance modifier : removed.modifiers) {
-                ModifierSource source = new AbilityModifierSource(id, index++);
+                ModifierSource source = new AttachEffectModifierSource(id, index++);
                 modifier.modifier().value().disableModifier(modifier.roll(), entity, source, modifier.tier());
             }
         }

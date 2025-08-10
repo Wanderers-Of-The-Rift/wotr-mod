@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
-import com.wanderersoftherift.wotr.modifier.source.AbilityModifierSource;
+import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.network.ability.AttachEffectPayload;
 import com.wanderersoftherift.wotr.network.ability.DetachEffectPayload;
@@ -50,21 +50,8 @@ public class AttachedEffects {
         this.effects = new ArrayList<>(effects);
         if (holder instanceof Entity attachedTo) {
             for (var effect : effects) {
-                effect.attach(attachedTo);
+                effect.onAttach(attachedTo);
             }
-        }
-    }
-
-    public static IAttachmentSerializer<Tag, AttachedEffects> getSerializer() {
-        return SERIALIZER;
-    }
-
-    public void replicateEffects() {
-        if (!(holder instanceof ServerPlayer player)) {
-            return;
-        }
-        for (var effect : effects) {
-            effect.replicateAttach(player);
         }
     }
 
@@ -75,13 +62,9 @@ public class AttachedEffects {
         if (!(holder instanceof LivingEntity attachedTo)) {
             return;
         }
-        tickEffects(attachedTo);
-    }
-
-    private void tickEffects(LivingEntity attachedTo) {
         for (AttachedEffect effect : ImmutableList.copyOf(effects)) {
             if (effect.tick(attachedTo)) {
-                effect.detach(attachedTo);
+                effect.onDetach(attachedTo);
                 effects.remove(effect);
             }
         }
@@ -98,7 +81,7 @@ public class AttachedEffects {
             return;
         }
         AttachedEffect newEffect = new AttachedEffect(attachEffect, context);
-        newEffect.attach(entity);
+        newEffect.onAttach(entity);
         effects.add(newEffect);
     }
 
@@ -112,7 +95,7 @@ public class AttachedEffects {
         while (iterator.hasNext()) {
             AttachedEffect effect = iterator.next();
             if (effect.context.instanceId().equals(instanceId) && holder instanceof Entity entity) {
-                effect.detach(entity);
+                effect.onDetach(entity);
                 iterator.remove();
             }
         }
@@ -125,13 +108,20 @@ public class AttachedEffects {
         return effects.isEmpty();
     }
 
-    public void replicateAttachments() {
+    /**
+     * Replicates all effects to the holder
+     */
+    public void replicateEffects() {
         if (!(holder instanceof ServerPlayer player)) {
             return;
         }
-        for (AttachedEffect effect : effects) {
+        for (var effect : effects) {
             effect.replicateAttach(player);
         }
+    }
+
+    public static IAttachmentSerializer<Tag, AttachedEffects> getSerializer() {
+        return SERIALIZER;
     }
 
     private static class AttachedEffect {
@@ -150,10 +140,6 @@ public class AttachedEffects {
 
         private LivingEntity cachedCaster;
 
-        public AttachedEffect(AttachEffect effect, StoredAbilityContext context, int triggeredTimes, int ticks) {
-            this(UUID.randomUUID(), effect, context, triggeredTimes, ticks);
-        }
-
         private AttachedEffect(UUID id, AttachEffect effect, StoredAbilityContext context, int triggeredTimes,
                 int ticks) {
             this.id = id;
@@ -164,19 +150,19 @@ public class AttachedEffects {
         }
 
         public AttachedEffect(AttachEffect effect, AbilityContext context) {
-            this(effect, new StoredAbilityContext(context), 0, 0);
+            this(UUID.randomUUID(), effect, new StoredAbilityContext(context), 0, 0);
             this.cachedCaster = context.caster();
         }
 
-        public void attach(Entity attachedTo) {
+        public void onAttach(Entity attachedTo) {
             applyModifiers(attachedTo);
-            // player connection can be null because the player might be being constructed.
+            // player connection can be null because the player might still be in the process of being constructed.
             if (attachedTo instanceof ServerPlayer player && player.connection != null) {
                 replicateAttach(player);
             }
         }
 
-        public void detach(Entity attachedTo) {
+        public void onDetach(Entity attachedTo) {
             removeModifiers(attachedTo);
             if (attachedTo instanceof ServerPlayer player) {
                 replicateDetach(player);
@@ -220,14 +206,13 @@ public class AttachedEffects {
                     return cachedCaster;
                 }
             }
-            cachedCaster = context.getCaster(server);
-            return cachedCaster;
+            return context.getCaster(server);
         }
 
         private void applyModifiers(Entity attachedTo) {
             int index = 0;
             for (ModifierInstance modifier : attachEffect.getModifiers()) {
-                ModifierSource source = new AbilityModifierSource(id, index++);
+                ModifierSource source = new AttachEffectModifierSource(id, index++);
                 modifier.modifier().value().enableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
@@ -235,7 +220,7 @@ public class AttachedEffects {
         private void removeModifiers(Entity attachedTo) {
             int index = 0;
             for (ModifierInstance modifier : attachEffect.getModifiers()) {
-                ModifierSource source = new AbilityModifierSource(id, index++);
+                ModifierSource source = new AttachEffectModifierSource(id, index++);
                 modifier.modifier().value().disableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }

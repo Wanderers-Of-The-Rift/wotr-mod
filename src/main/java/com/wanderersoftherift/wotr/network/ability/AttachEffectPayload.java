@@ -20,8 +20,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- *
- *
+ * Replicates a single attach effect to a client
+ * 
+ * @param id        The instance id of the attach effect
+ * @param marker    An optional display marker
+ * @param modifiers A list of modifiers the effect provides
  */
 public record AttachEffectPayload(UUID id, Optional<Holder<EffectMarker>> marker, List<ModifierInstance> modifiers)
         implements CustomPacketPayload {

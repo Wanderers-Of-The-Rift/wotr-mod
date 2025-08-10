@@ -13,8 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- *
- *
+ * Replicates the removal of an attach effect
+ * 
+ * @param id The instance id of the effect
  */
 public record DetachEffectPayload(UUID id) implements CustomPacketPayload {
     public static final Type<DetachEffectPayload> TYPE = new Type<>(WanderersOfTheRift.id("detatch_effect"));

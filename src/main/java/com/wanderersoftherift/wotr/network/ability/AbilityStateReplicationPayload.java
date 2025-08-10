@@ -13,6 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Replicates the complete ability state of all equipment slots
+ * 
+ * @param activeSlots The list of active slots
+ */
 public record AbilityStateReplicationPayload(List<WotrEquipmentSlot> activeSlots) implements CustomPacketPayload {
     public static final Type<AbilityStateReplicationPayload> TYPE = new Type<>(
             WanderersOfTheRift.id("ability_state_replication"));

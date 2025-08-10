@@ -19,6 +19,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * An ability that can be toggled on and off
+ */
 public class ToggleAbility extends Ability {
 
     public static final MapCodec<ToggleAbility> CODEC = RecordCodecBuilder.mapCodec(
@@ -75,11 +78,6 @@ public class ToggleAbility extends Ability {
     }
 
     @Override
-    public void clientActivate(AbilityContext context) {
-        context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.slot(), true);
-    }
-
-    @Override
     public boolean activate(AbilityContext context) {
         if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.slot())) {
             deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
@@ -97,6 +95,11 @@ public class ToggleAbility extends Ability {
             }
             return false;
         }
+    }
+
+    @Override
+    public void clientActivate(AbilityContext context) {
+        context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.slot(), true);
     }
 
     @Override

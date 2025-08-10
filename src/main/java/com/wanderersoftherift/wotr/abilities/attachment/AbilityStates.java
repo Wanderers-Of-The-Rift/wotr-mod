@@ -18,6 +18,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Tracks the state of the abilities for each equipment slot, and replicates to holder clients
+ */
 public class AbilityStates {
 
     private static final AttachmentSerializerFromDataCodec<Data, AbilityStates> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
@@ -38,10 +41,19 @@ public class AbilityStates {
         }
     }
 
+    /**
+     * @return A collection of all active slots
+     */
     public Collection<WotrEquipmentSlot> getActiveSlots() {
         return Collections.unmodifiableSet(activeSlots);
     }
 
+    /**
+     * Sets the active state of the given slot
+     * 
+     * @param slot
+     * @param value
+     */
     public void setActive(WotrEquipmentSlot slot, boolean value) {
         boolean changed;
         if (value) {
@@ -54,6 +66,10 @@ public class AbilityStates {
         }
     }
 
+    /**
+     * @param slot
+     * @return Whether the slot has an active ability
+     */
     public boolean isActive(WotrEquipmentSlot slot) {
         return activeSlots.contains(slot);
     }
