@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
+import com.wanderersoftherift.wotr.abilities.effects.attachment.ClientAttachEffect;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -130,23 +132,23 @@ public class AttachedEffects {
                 AttachEffect.CODEC.fieldOf("attachEffect").forGetter(x -> x.attachEffect),
                 StoredAbilityContext.CODEC.fieldOf("context").forGetter(x -> x.context),
                 Codec.INT.fieldOf("triggeredTimes").forGetter(x -> x.triggeredTimes),
-                Codec.INT.fieldOf("ticks").forGetter(x -> x.ticks)).apply(instance, AttachedEffect::new));
+                Codec.INT.fieldOf("age").forGetter(x -> x.age)).apply(instance, AttachedEffect::new));
 
         private final UUID id;
         private final AttachEffect attachEffect;
         private final StoredAbilityContext context;
         private int triggeredTimes;
-        private int ticks;
+        private int age;
 
         private LivingEntity cachedCaster;
 
         private AttachedEffect(UUID id, AttachEffect effect, StoredAbilityContext context, int triggeredTimes,
-                int ticks) {
+                int age) {
             this.id = id;
             this.attachEffect = effect;
             this.context = context;
             this.triggeredTimes = triggeredTimes;
-            this.ticks = ticks;
+            this.age = age;
         }
 
         public AttachedEffect(AttachEffect effect, AbilityContext context) {
@@ -183,7 +185,7 @@ public class AttachedEffects {
             if (caster == null) {
                 return true;
             }
-            if (attachEffect.getTriggerPredicate().matches(attachedTo, ticks, caster)) {
+            if (attachEffect.getTriggerPredicate().matches(attachedTo, age, caster)) {
                 AbilityContext triggerContext = context.toContext(caster, attachedTo.level());
                 triggerContext.enableUpgradeModifiers();
                 try {
@@ -194,8 +196,8 @@ public class AttachedEffects {
                 }
                 triggeredTimes++;
             }
-            ticks++;
-            return !attachEffect.getContinuePredicate().matches(attachedTo, ticks, triggeredTimes, caster);
+            age++;
+            return !attachEffect.getContinuePredicate().matches(attachedTo, age, triggeredTimes, caster);
         }
 
         private LivingEntity getCaster(MinecraftServer server) {
@@ -227,8 +229,15 @@ public class AttachedEffects {
 
         private void replicateAttach(ServerPlayer player) {
             if (attachEffect.getDisplay().isPresent() || !attachEffect.getModifiers().isEmpty()) {
-                PacketDistributor.sendToPlayer(player,
-                        new AttachEffectPayload(id, attachEffect.getDisplay(), attachEffect.getModifiers()));
+                Optional<Long> until;
+                if (attachEffect.getContinuePredicate().duration() < Integer.MAX_VALUE) {
+                    until = Optional
+                            .of(player.level().getGameTime() + attachEffect.getContinuePredicate().duration() - age);
+                } else {
+                    until = Optional.empty();
+                }
+                PacketDistributor.sendToPlayer(player, new AttachEffectPayload(
+                        new ClientAttachEffect(id, attachEffect.getDisplay(), attachEffect.getModifiers(), until)));
             }
         }
 
