@@ -978,6 +978,10 @@
                     "weight": 1
                 }
             ]
+        },
+        {
+            "processor_type": "wotr:trial_spawner",
+            "config": "wotr:noir"
         }
     ]
 }
