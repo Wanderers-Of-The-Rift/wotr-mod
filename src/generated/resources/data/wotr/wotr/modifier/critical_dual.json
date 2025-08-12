@@ -1,0 +1,112 @@
+{
+  "style": {
+    "color": "#FF4500"
+  },
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_chance",
+          "id": "wotr:critical_chance",
+          "max_roll": 5.800000190734863,
+          "min_roll": 1.0,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_avoidance",
+          "id": "wotr:critical_avoidance",
+          "max_roll": 5.800000190734863,
+          "min_roll": 1.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_chance",
+          "id": "wotr:critical_chance",
+          "max_roll": 10.600000381469727,
+          "min_roll": 5.800000190734863,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_avoidance",
+          "id": "wotr:critical_avoidance",
+          "max_roll": 10.600000381469727,
+          "min_roll": 5.800000190734863,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_chance",
+          "id": "wotr:critical_chance",
+          "max_roll": 15.399999618530273,
+          "min_roll": 10.600000381469727,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_avoidance",
+          "id": "wotr:critical_avoidance",
+          "max_roll": 15.399999618530273,
+          "min_roll": 10.600000381469727,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_chance",
+          "id": "wotr:critical_chance",
+          "max_roll": 20.200000762939453,
+          "min_roll": 15.399999618530273,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_avoidance",
+          "id": "wotr:critical_avoidance",
+          "max_roll": 20.200000762939453,
+          "min_roll": 15.399999618530273,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_chance",
+          "id": "wotr:critical_chance",
+          "max_roll": 25.0,
+          "min_roll": 20.200000762939453,
+          "operation": "add_value"
+        },
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:critical_avoidance",
+          "id": "wotr:critical_avoidance",
+          "max_roll": 25.0,
+          "min_roll": 20.200000762939453,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 5
+    }
+  ]
+}

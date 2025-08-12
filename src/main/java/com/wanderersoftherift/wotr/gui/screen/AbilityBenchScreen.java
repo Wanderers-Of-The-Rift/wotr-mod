@@ -131,9 +131,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
             }
 
             if (needsUnlock && !hasUnlock) {
-                upgradeChoices.children()
-                        .add(new LockedBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, font,
-                                menu));
+                upgradeChoices.addChild(
+                        new LockedBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, font, menu));
             } else if (hasUnlock && !needsUnlock) {
                 upgradeChoices.children().removeLast();
             }

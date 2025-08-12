@@ -1,11 +1,16 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
+import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +31,9 @@ public class WotrCreativeTabs {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
                         WotrItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
+                        parameters.holders().lookup(WotrRegistries.Keys.CURRENCIES).ifPresent((currencies) -> {
+                            generateCurrencyBags(output, currencies);
+                        });
                     })
                     .build());
 
@@ -81,10 +89,23 @@ public class WotrCreativeTabs {
 
     private static void generateAbilityItems(
             CreativeModeTab.Output output,
-            HolderLookup.RegistryLookup<AbstractAbility> registry) {
+            HolderLookup.RegistryLookup<Ability> registry) {
         registry.listElements().forEach(abilityHolder -> {
             ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
-            item.set(WotrDataComponentType.ABILITY, abilityHolder);
+            item.set(WotrDataComponentType.ABILITY, new ActivatableAbility(abilityHolder));
+            output.accept(item);
+        });
+    }
+
+    private static void generateCurrencyBags(
+            CreativeModeTab.Output output,
+            HolderLookup.RegistryLookup<Currency> currencies) {
+        currencies.listElements().forEach(currency -> {
+            ItemStack item = WotrItems.CURRENCY_BAG.toStack();
+            ResourceLocation id = ResourceLocation.parse(currency.getRegisteredName());
+            item.set(WotrDataComponentType.CURRENCY_PROVIDER, new CurrencyProvider(currency, 100));
+            item.set(DataComponents.ITEM_NAME,
+                    Component.translatable(WanderersOfTheRift.translationId("currency", id)));
             output.accept(item);
         });
     }

@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard_ability",
-  "ability_name": "wotr:fireball_ability",
   "cooldown": 60,
   "effects": [
     {
@@ -11,6 +10,9 @@
           "animations": "wotr:animations/ability/fireball.animations.json",
           "model": "wotr:geo/ability/fireball.geo.json",
           "texture": "wotr:textures/ability/fireball.png"
+        },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
         },
         "velocity": 1.6
       },

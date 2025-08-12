@@ -1,11 +1,11 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
 import com.wanderersoftherift.wotr.item.WotrArmor;
+import com.wanderersoftherift.wotr.item.ability.AbilityHolder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -52,6 +52,21 @@ public class WotrItems {
                     registryName -> new RiftKey(new Item.Properties()
                             .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("rift_key")))
                             .stacksTo(1)));
+
+    public static final DeferredItem<Item> BASE_CURRENCY_BAG = ITEMS.register("base_currency_bag",
+            registryName -> new Item(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("base_currency_bag")))));
+
+    public static final DeferredItem<Item> CURRENCY_BAG = ITEMS.register("currency_bag",
+            registryName -> new Item(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("currency_bag")))
+                    .component(DataComponents.CONSUMABLE,
+                            Consumable.builder()
+                                    .consumeSeconds(0.1F)
+                                    .animation(ItemUseAnimation.DRINK)
+                                    .sound(SoundEvents.GENERIC_DRINK)
+                                    .hasConsumeParticles(false)
+                                    .build())));
 
     public static final DeferredItem<Item> RAW_RUNEGEM_GEODE = registerLootBox(
             RunegemTier.RAW.getName() + "_runegem_geode");

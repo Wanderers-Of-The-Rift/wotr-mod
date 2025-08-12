@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard_ability",
-  "ability_name": "wotr:heal",
   "cooldown": 200,
   "effects": [
     {

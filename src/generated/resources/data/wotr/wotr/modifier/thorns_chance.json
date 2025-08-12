@@ -1,0 +1,72 @@
+{
+  "style": {
+    "color": "#DC143C"
+  },
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:thorns_chance",
+          "id": "wotr:thorns_chance",
+          "max_roll": 10.0,
+          "min_roll": 0.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:thorns_chance",
+          "id": "wotr:thorns_chance",
+          "max_roll": 20.0,
+          "min_roll": 10.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:thorns_chance",
+          "id": "wotr:thorns_chance",
+          "max_roll": 30.0,
+          "min_roll": 20.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:thorns_chance",
+          "id": "wotr:thorns_chance",
+          "max_roll": 40.0,
+          "min_roll": 30.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "wotr:thorns_chance",
+          "id": "wotr:thorns_chance",
+          "max_roll": 50.0,
+          "min_roll": 40.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 5
+    }
+  ]
+}

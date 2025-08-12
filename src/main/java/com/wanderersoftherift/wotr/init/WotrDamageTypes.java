@@ -12,4 +12,6 @@ public class WotrDamageTypes {
             WanderersOfTheRift.id("ice"));
     public static final ResourceKey<DamageType> FIRE_BURN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,
             WanderersOfTheRift.id("fire_burn"));
+    public static final ResourceKey<DamageType> THORNS_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,
+            WanderersOfTheRift.id("thorns"));
 }

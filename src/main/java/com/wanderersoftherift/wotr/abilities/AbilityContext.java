@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
@@ -32,10 +33,10 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     /**
      * @return The ability
      */
-    public AbstractAbility getAbility() {
-        Holder<AbstractAbility> holder = abilityItem.get(WotrDataComponentType.ABILITY);
-        if (holder != null) {
-            return holder.value();
+    public Ability getAbility() {
+        ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+        if (abilityComponent != null) {
+            return abilityComponent.ability().value();
         }
         return null;
     }
@@ -43,7 +44,7 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     /**
      * Enables all modifiers that impact the ability
      */
-    public void enableModifiers() {
+    public void enableUpgradeModifiers() {
         /*
          * if (caster != null && !caster.isRemoved()) { ModifierHelper.enableModifier(caster); }
          */
@@ -57,9 +58,9 @@ public record AbilityContext(@NotNull LivingEntity caster, ItemStack abilityItem
     }
 
     /**
-     * Disables all modifiers that were enabled by {@link #enableModifiers()}
+     * Disables all modifiers that were enabled by {@link #enableUpgradeModifiers()}
      */
-    public void disableModifiers() {
+    public void disableUpgradeModifiers() {
         /*
          * if (caster != null && !caster.isRemoved()) { ModifierHelper.disableModifier(caster); }
          */

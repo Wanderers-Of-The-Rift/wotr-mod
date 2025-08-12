@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -80,9 +80,9 @@ public class WotrTags {
 
     public static class Abilities {
 
-        public static final TagKey<AbstractAbility> RIFT_DROPS = createTag("rift_drops");
+        public static final TagKey<Ability> RIFT_DROPS = createTag("rift_drops");
 
-        private static TagKey<AbstractAbility> createTag(String name) {
+        private static TagKey<Ability> createTag(String name) {
             return TagKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", name));
         }
     }

@@ -16,10 +16,16 @@ import java.util.List;
  */
 public class FlowContainer extends AbstractWidget implements ScrollContainerEntry {
     private final List<AbstractWidget> children;
+    private final int padding;
 
     public FlowContainer(Collection<AbstractWidget> children) {
+        this(children, 0);
+    }
+
+    public FlowContainer(Collection<AbstractWidget> children, int padding) {
         super(0, 0, 0, 0, Component.empty());
         this.children = new ArrayList<>(children);
+        this.padding = padding;
     }
 
     @Override
@@ -47,18 +53,22 @@ public class FlowContainer extends AbstractWidget implements ScrollContainerEntr
             int childWidth = child.getWidth();
             if (xOffset + childWidth > width) {
                 xOffset = 0;
-                yOffset += rowHeight;
+                yOffset += rowHeight + padding;
                 rowHeight = 0;
             }
             action.apply(child, xOffset, yOffset);
-            xOffset += childWidth;
+            xOffset += childWidth + padding;
             rowHeight = Math.max(rowHeight, child.getHeight());
         }
     }
 
+    protected boolean isValidClickButton(int button) {
+        return false;
+    }
+
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
-
+        // TODO
     }
 
     private interface ChildAction {

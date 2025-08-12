@@ -5,9 +5,9 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
+import com.wanderersoftherift.wotr.network.ability.AbilityCooldownReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
-import com.wanderersoftherift.wotr.network.ability.AbilitySlotsCooldownsPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
 import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
@@ -17,6 +17,19 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.SetEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateEffectMarkersPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
+import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
+import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
+import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.AcceptQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.ActiveQuestsReplicationPayload;
+import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
+import com.wanderersoftherift.wotr.network.quest.CompleteQuestPayload;
+import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
+import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
+import com.wanderersoftherift.wotr.network.quest.QuestRewardsPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -50,8 +63,6 @@ public class WotrPayloadHandlers {
                 AbilitySlotsContentPayload::handleOnClient);
         registrar.playToClient(AbilitySlotsUpdatePayload.TYPE, AbilitySlotsUpdatePayload.STREAM_CODEC,
                 AbilitySlotsUpdatePayload::handleOnClient);
-        registrar.playToClient(AbilitySlotsCooldownsPayload.TYPE, AbilitySlotsCooldownsPayload.STREAM_CODEC,
-                AbilitySlotsCooldownsPayload::handleOnClient);
 
         // Ability effect markers
         registrar.playToClient(SetEffectMarkerPayload.TYPE, SetEffectMarkerPayload.STREAM_CODEC,
@@ -61,6 +72,8 @@ public class WotrPayloadHandlers {
 
         registrar.playToServer(UseAbilityPayload.TYPE, UseAbilityPayload.STREAM_CODEC,
                 UseAbilityPayload::handleOnServer);
+        registrar.playToClient(AbilityCooldownReplicationPayload.TYPE, AbilityCooldownReplicationPayload.STREAM_CODEC,
+                AbilityCooldownReplicationPayload::handleOnClient);
         registrar.playToClient(AbilityCooldownUpdatePayload.TYPE, AbilityCooldownUpdatePayload.STREAM_CODEC,
                 AbilityCooldownUpdatePayload::handleOnClient);
         registrar.playToClient(AbilityToggleStatePayload.TYPE, AbilityToggleStatePayload.STREAM_CODEC,
@@ -77,15 +90,52 @@ public class WotrPayloadHandlers {
                 new C2SRuneAnvilApplyPacket.C2SRuneAnvilApplyPacketHandler());
         registrar.playToClient(S2CLevelListUpdatePacket.TYPE, S2CLevelListUpdatePacket.STREAM_CODEC,
                 new S2CLevelListUpdatePacket.S2CLevelListUpdatePacketHandler());
+
+        // Guild
+        registrar.playToClient(WalletReplicationPayload.TYPE, WalletReplicationPayload.STREAM_CODEC,
+                WalletReplicationPayload::handleOnClient);
+        registrar.playToClient(WalletUpdatePayload.TYPE, WalletUpdatePayload.STREAM_CODEC,
+                WalletUpdatePayload::handleOnClient);
+
+        // Quest
+        registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
+                AcceptQuestPayload::handleOnServer);
+        registrar.playToClient(ActiveQuestsReplicationPayload.TYPE, ActiveQuestsReplicationPayload.STREAM_CODEC,
+                ActiveQuestsReplicationPayload::handleOnClient);
+        registrar.playToClient(QuestAcceptedPayload.TYPE, QuestAcceptedPayload.STREAM_CODEC,
+                QuestAcceptedPayload::handleOnClient);
+        registrar.playToClient(QuestRemovedPayload.TYPE, QuestRemovedPayload.STREAM_CODEC,
+                QuestRemovedPayload::handleOnClient);
+        registrar.playToClient(QuestGoalUpdatePayload.TYPE, QuestGoalUpdatePayload.STREAM_CODEC,
+                QuestGoalUpdatePayload::handleOnClient);
+        registrar.playToServer(HandInQuestItemPayload.TYPE, HandInQuestItemPayload.STREAM_CODEC,
+                HandInQuestItemPayload::handleOnServer);
+        registrar.playToServer(CompleteQuestPayload.TYPE, CompleteQuestPayload.STREAM_CODEC,
+                CompleteQuestPayload::handleOnServer);
+        registrar.playToServer(AbandonQuestPayload.TYPE, AbandonQuestPayload.STREAM_CODEC,
+                AbandonQuestPayload::handleOnServer);
+        registrar.playToClient(AvailableQuestsPayload.TYPE, AvailableQuestsPayload.STREAM_CODEC,
+                AvailableQuestsPayload::handleOnClient);
+        registrar.playToClient(QuestRewardsPayload.TYPE, QuestRewardsPayload.STREAM_CODEC,
+                QuestRewardsPayload::handleOnClient);
+
+        // Character Menu
+        registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,
+                OpenCharacterMenuPayload::handleOnServer);
     }
 
     @SubscribeEvent
     public static void onPlayerJoinedEvent(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
+            PacketDistributor.sendToPlayer(player,
+                    new AbilityCooldownReplicationPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
             replicateEffectMarkers(player);
             replicateMana(player);
+            replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
+            PacketDistributor.sendToPlayer(player,
+                    new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
         }
     }
 
@@ -93,8 +143,13 @@ public class WotrPayloadHandlers {
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
+            PacketDistributor.sendToPlayer(player,
+                    new AbilityCooldownReplicationPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
             replicateEffectMarkers(player);
+            replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
+            PacketDistributor.sendToPlayer(player,
+                    new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
         }
     }
 
@@ -102,9 +157,14 @@ public class WotrPayloadHandlers {
     public static void onPlayerChangeDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
+            PacketDistributor.sendToPlayer(player,
+                    new AbilityCooldownReplicationPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
             replicateEffectMarkers(player);
             replicateMana(player);
+            replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
+            PacketDistributor.sendToPlayer(player,
+                    new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
         }
     }
 
@@ -115,9 +175,7 @@ public class WotrPayloadHandlers {
     private static void replicateAbilities(ServerPlayer player) {
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         PacketDistributor.sendToPlayer(player,
-                new AbilitySlotsContentPayload(abilitySlots.getAbilitySlots(), abilitySlots.getSelectedSlot()));
-        PacketDistributor.sendToPlayer(player,
-                new AbilitySlotsCooldownsPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
+                new AbilitySlotsContentPayload(abilitySlots.getRawSlots(), abilitySlots.getSelectedSlot()));
     }
 
     private static void replicateEffectMarkers(ServerPlayer player) {
@@ -127,6 +185,11 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new UpdateEffectMarkersPayload(displayData, Collections.emptyList()));
         }
+    }
+
+    private static void replicateWallet(ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player,
+                new WalletReplicationPayload(player.getData(WotrAttachments.WALLET).getAll()));
     }
 
 }

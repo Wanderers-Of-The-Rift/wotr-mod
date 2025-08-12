@@ -10,5 +10,5 @@
     "type": "wotr:rift_theme",
     "value": "wotr:forest"
   },
-  "priority": 0
+  "priority": 10
 }

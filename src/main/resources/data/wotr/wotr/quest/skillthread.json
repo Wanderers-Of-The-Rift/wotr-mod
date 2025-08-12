@@ -1,0 +1,18 @@
+{
+  "goals": [
+    {
+      "type": "wotr:fixed_give_item",
+      "item": "wotr:skill_thread",
+      "count": 4
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 8,
+        "id": "minecraft:gold_ingot"
+      }
+    }
+  ]
+}

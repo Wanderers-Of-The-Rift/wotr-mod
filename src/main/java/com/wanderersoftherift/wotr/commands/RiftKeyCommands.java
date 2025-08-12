@@ -41,7 +41,7 @@ public class RiftKeyCommands extends BaseCommand {
         String objectiveArg = "objective";
         String seedArg = "seed";
         builder.then(Commands.literal("tier")
-                .then(Commands.argument(tierArg, IntegerArgumentType.integer(0, 7))
+                .then(Commands.argument(tierArg, IntegerArgumentType.integer(0))
                         .executes(ctx -> configTier(ctx, IntegerArgumentType.getInteger(ctx, tierArg)))))
                 .then(Commands.literal("theme")
                         .then(Commands.argument(themeArg, ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_THEMES))

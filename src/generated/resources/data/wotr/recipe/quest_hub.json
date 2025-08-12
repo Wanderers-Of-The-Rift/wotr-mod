@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "g": "minecraft:gold_nugget",
+    "s": "minecraft:smooth_stone"
+  },
+  "pattern": [
+    "sGs",
+    "sGs",
+    "sgs"
+  ],
+  "result": {
+    "count": 1,
+    "id": "wotr:quest_hub"
+  }
+}

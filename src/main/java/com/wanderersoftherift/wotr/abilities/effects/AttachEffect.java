@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.ContinueEffectPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TriggerPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.BlockPos;
@@ -22,10 +22,10 @@ import java.util.Optional;
 /**
  * AttachEffect attaches all of its child effects to each target entity, with a durationTicks
  */
-public class AttachEffect extends AbstractEffect {
+public class AttachEffect extends AbilityEffect {
 
     public static final MapCodec<AttachEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate())
                             .forGetter(AttachEffect::getTriggerPredicate))
                     .and(ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
@@ -39,13 +39,13 @@ public class AttachEffect extends AbstractEffect {
     private final ContinueEffectPredicate continuePredicate;
     private final Holder<EffectMarker> display;
 
-    public AttachEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+    public AttachEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate,
             Optional<Holder<EffectMarker>> display) {
         this(targeting, effects, particles, triggerPredicate, continuePredicate, display.orElse(null));
     }
 
-    public AttachEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+    public AttachEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate,
             Holder<EffectMarker> display) {
         super(targeting, effects, particles);
@@ -70,7 +70,7 @@ public class AttachEffect extends AbstractEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 

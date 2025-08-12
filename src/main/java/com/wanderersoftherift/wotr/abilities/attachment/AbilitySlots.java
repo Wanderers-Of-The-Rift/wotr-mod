@@ -2,15 +2,15 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,14 +27,18 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     public static final int ABILITY_BAR_SIZE = 9;
 
-    public static final AttachmentSerializerFromDataCodec<Data, AbilitySlots> SERIALIZER = new AttachmentSerializerFromDataCodec<Data, AbilitySlots>(
+    private static final AttachmentSerializerFromDataCodec<Data, AbilitySlots> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
             Data.CODEC, AbilitySlots::new, AbilitySlots::data);
 
     private final IAttachmentHolder holder;
     private final NonNullList<ItemStack> abilities = NonNullList.withSize(ABILITY_BAR_SIZE, ItemStack.EMPTY);
     private int selected = 0;
 
-    public AbilitySlots(@NotNull IAttachmentHolder holder, @Nullable Data data) {
+    public AbilitySlots(@NotNull IAttachmentHolder holder) {
+        this(holder, null);
+    }
+
+    private AbilitySlots(@NotNull IAttachmentHolder holder, @Nullable Data data) {
         this.holder = holder;
         if (data != null) {
             var abilities = data.abilities();
@@ -43,6 +47,10 @@ public class AbilitySlots implements IItemHandlerModifiable {
             }
             this.selected = data.selected();
         }
+    }
+
+    public static IAttachmentSerializer<Tag, AbilitySlots> getSerializer() {
+        return SERIALIZER;
     }
 
     private Data data() {
@@ -82,20 +90,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
     /**
      * @return The list of the contents of the ability slots. Empty slots will contain Item.EMPTY.
      */
-    public List<ItemStack> getAbilitySlots() {
+    public List<ItemStack> getRawSlots() {
         return Collections.unmodifiableList(abilities);
-    }
-
-    /**
-     * @param slot
-     * @return The ability of the item in the given slot, or null.
-     */
-    public AbstractAbility getAbilityInSlot(int slot) {
-        ItemStack stack = getStackInSlot(slot);
-        if (!stack.isEmpty() && stack.has(WotrDataComponentType.ABILITY)) {
-            return stack.get(WotrDataComponentType.ABILITY).value();
-        }
-        return null;
     }
 
     @Override
@@ -170,8 +166,8 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     private void onSlotChanged(int slot, ItemStack original, ItemStack newStack) {
         if (holder instanceof LivingEntity livingEntity) {
-            ModifierHelper.disableModifier(original, livingEntity, new AbilityEquipmentSlot(slot));
-            ModifierHelper.enableModifier(newStack, livingEntity, new AbilityEquipmentSlot(slot));
+            ModifierHelper.disableModifier(original, livingEntity, AbilityEquipmentSlot.forSlot(slot));
+            ModifierHelper.enableModifier(newStack, livingEntity, AbilityEquipmentSlot.forSlot(slot));
         }
     }
 
