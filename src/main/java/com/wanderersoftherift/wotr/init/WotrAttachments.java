@@ -13,6 +13,7 @@ import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.entity.player.BaseStatistics;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.world.item.ItemStack;
@@ -98,6 +99,15 @@ public class WotrAttachments {
                     .serialize(ActiveQuests.getSerializer())
                     .copyOnDeath()
                     .build());
+
+    /// Player level
+    public static final Supplier<AttachmentType<BaseStatistics>> BASE_STATISTICS = ATTACHMENT_TYPES.register(
+            "base_statistics",
+            () -> AttachmentType.builder(BaseStatistics::new)
+                    .serialize(BaseStatistics.getSerializer())
+                    .copyOnDeath()
+                    .build());
+
 
     /// Level attachments
     public static final Supplier<AttachmentType<EntityAttachmentRegistry<AttachedEffects>>> ATTACHED_EFFECT_ENTITY_REGISTRY = ATTACHMENT_TYPES
