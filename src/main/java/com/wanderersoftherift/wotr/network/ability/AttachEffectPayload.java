@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.ClientAttachEffects;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.ClientAttachEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -25,7 +24,6 @@ public record AttachEffectPayload(ClientAttachEffect effect) implements CustomPa
     }
 
     public void handleOnClient(IPayloadContext context) {
-        ClientAttachEffects data = context.player().getData(WotrAttachments.CLIENT_ATTACH_EFFECTS);
-        data.add(effect);
+        context.player().getData(WotrAttachments.EFFECT_MARKERS).add(effect);
     }
 }

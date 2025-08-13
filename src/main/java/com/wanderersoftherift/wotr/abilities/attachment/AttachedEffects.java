@@ -228,7 +228,7 @@ public class AttachedEffects {
         }
 
         private void replicateAttach(ServerPlayer player) {
-            if (attachEffect.getDisplay().isPresent() || !attachEffect.getModifiers().isEmpty()) {
+            if (attachEffect.getDisplay().isPresent()) {
                 Optional<Long> until;
                 if (attachEffect.getContinuePredicate().duration() < Integer.MAX_VALUE) {
                     until = Optional
@@ -237,12 +237,12 @@ public class AttachedEffects {
                     until = Optional.empty();
                 }
                 PacketDistributor.sendToPlayer(player, new AttachEffectPayload(
-                        new ClientAttachEffect(id, attachEffect.getDisplay(), attachEffect.getModifiers(), until)));
+                        new ClientAttachEffect(id, attachEffect.getDisplay(), until)));
             }
         }
 
         private void replicateDetach(ServerPlayer player) {
-            if (attachEffect.getDisplay().isPresent() || !attachEffect.getModifiers().isEmpty()) {
+            if (attachEffect.getDisplay().isPresent()) {
                 PacketDistributor.sendToPlayer(player, new DetachEffectPayload(id));
             }
         }

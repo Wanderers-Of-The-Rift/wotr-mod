@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
-import com.wanderersoftherift.wotr.abilities.attachment.ClientAttachEffects;
+import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
@@ -71,8 +71,8 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<AttachedEffects>> ATTACHED_EFFECTS = ATTACHMENT_TYPES.register(
             "attached_effects",
             () -> AttachmentType.builder(AttachedEffects::new).serialize(AttachedEffects.getSerializer()).build());
-    public static final Supplier<AttachmentType<ClientAttachEffects>> CLIENT_ATTACH_EFFECTS = ATTACHMENT_TYPES.register(
-            "client_attach_effects", () -> AttachmentType.builder(ClientAttachEffects::new).build());
+    public static final Supplier<AttachmentType<EffectMarkers>> EFFECT_MARKERS = ATTACHMENT_TYPES.register(
+            "effect_markers", () -> AttachmentType.builder(EffectMarkers::new).build());
     public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
             () -> AttachmentType.builder(ManaData::new).serialize(ManaData.getSerializer()).build());
     public static final Supplier<AttachmentType<OngoingAbilities>> ONGOING_ABILITIES = ATTACHMENT_TYPES.register(
