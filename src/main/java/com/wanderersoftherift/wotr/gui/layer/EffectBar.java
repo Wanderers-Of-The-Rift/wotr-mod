@@ -54,7 +54,7 @@ public final class EffectBar implements ConfigurableLayer {
             return;
         }
         LocalPlayer player = Minecraft.getInstance().player;
-        List<MarkerDisplayInfo> markers = player.getData(WotrAttachments.CLIENT_ATTACH_EFFECTS).getMarkers();
+        List<MarkerDisplayInfo> markers = player.getData(WotrAttachments.EFFECT_MARKERS).getMarkers();
         if (markers.isEmpty()) {
             return;
         }

@@ -3,12 +3,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.ClientAttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.MarkerDisplayInfo;
-import com.wanderersoftherift.wotr.modifier.ModifierInstance;
-import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
-import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,15 +16,10 @@ import java.util.UUID;
 /**
  * Data tracking attach effects on the client side
  */
-public class ClientAttachEffects {
+public class EffectMarkers {
 
-    private final IAttachmentHolder holder;
     private final Map<UUID, ClientAttachEffect> attached = new LinkedHashMap<>();
     private final List<MarkerDisplayInfo> markers = new ArrayList<>();
-
-    public ClientAttachEffects(IAttachmentHolder holder) {
-        this.holder = holder;
-    }
 
     public List<MarkerDisplayInfo> getMarkers() {
         return Collections.unmodifiableList(markers);
@@ -38,13 +28,6 @@ public class ClientAttachEffects {
     public void add(ClientAttachEffect effect) {
         attached.put(effect.id(), effect);
         effect.marker().ifPresent(this::updateMarker);
-        if (holder instanceof Entity entity) {
-            int index = 0;
-            for (ModifierInstance modifier : effect.modifiers()) {
-                ModifierSource source = new AttachEffectModifierSource(effect.id(), index++);
-                modifier.modifier().value().enableModifier(modifier.roll(), entity, source, modifier.tier());
-            }
-        }
     }
 
     public void remove(UUID id) {
@@ -53,13 +36,6 @@ public class ClientAttachEffects {
             return;
         }
         removed.marker().ifPresent(this::updateMarker);
-        if (holder instanceof Entity entity) {
-            int index = 0;
-            for (ModifierInstance modifier : removed.modifiers()) {
-                ModifierSource source = new AttachEffectModifierSource(id, index++);
-                modifier.modifier().value().disableModifier(modifier.roll(), entity, source, modifier.tier());
-            }
-        }
     }
 
     private void updateMarker(Holder<EffectMarker> marker) {

@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.ClientAttachEffects;
+import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -28,7 +28,7 @@ public record DetachEffectPayload(UUID id) implements CustomPacketPayload {
     }
 
     public void handleOnClient(IPayloadContext context) {
-        ClientAttachEffects data = context.player().getData(WotrAttachments.CLIENT_ATTACH_EFFECTS);
+        EffectMarkers data = context.player().getData(WotrAttachments.EFFECT_MARKERS);
         data.remove(id);
     }
 }
