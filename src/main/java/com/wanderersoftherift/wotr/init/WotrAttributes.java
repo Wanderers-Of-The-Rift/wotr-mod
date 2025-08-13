@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -12,7 +13,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -22,6 +22,7 @@ public class WotrAttributes {
     public static final DeferredRegister<Attribute> WOTR_ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE,
             WanderersOfTheRift.MODID);
 
+    private static final List<DeferredHolder<Attribute, RangedAttribute>> ENTITY_ATTRIBUTES = new ArrayList<>();
     private static final List<DeferredHolder<Attribute, RangedAttribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
     /* Ability Attributes */
@@ -99,10 +100,32 @@ public class WotrAttributes {
             "life_leech",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "life_leech"), 0, 0, 1F));
 
-    public static List<DeferredHolder<Attribute, RangedAttribute>> getWotrAttributes() {
-        return Collections.unmodifiableList(PLAYER_ATTRIBUTES);
+    /// Primary stats
 
-    }
+    public static final DeferredHolder<Attribute, RangedAttribute> STRENGTH = registerAttribute(
+            "strength",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "strength"), 0, 0,
+                    20).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> CONSTITUTION = registerAttribute(
+            "constitution",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "constitution"),
+                    0, 0, 20).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> DEXTERITY = registerAttribute(
+            "dexterity",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "dexterity"), 0,
+                    0, 20).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> CHARISMA = registerAttribute(
+            "charisma",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "charisma"), 0, 0,
+                    20).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> INTELLIGENCE = registerAttribute(
+            "intelligence",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "intelligence"),
+                    0, 0, 20).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> WISDOM = registerAttribute(
+            "wisdom",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "wisdom"), 0, 0,
+                    20).setSyncable(true));
 
     /*
      * This adds the different attributes to the player for the different abilities
@@ -112,15 +135,28 @@ public class WotrAttributes {
             final String name,
             final Supplier<? extends RangedAttribute> sup) {
         DeferredHolder<Attribute, RangedAttribute> result = WOTR_ATTRIBUTES.register(name, sup);
+        ENTITY_ATTRIBUTES.add(result);
+        return result;
+    }
+
+    private static DeferredHolder<Attribute, RangedAttribute> registerPlayerAttribute(
+            final String name,
+            final Supplier<? extends RangedAttribute> sup) {
+        DeferredHolder<Attribute, RangedAttribute> result = WOTR_ATTRIBUTES.register(name, sup);
         PLAYER_ATTRIBUTES.add(result);
         return result;
     }
 
     @SubscribeEvent
     private static void addLivingAttribute(EntityAttributeModificationEvent event) {
-        for (DeferredHolder<Attribute, RangedAttribute> attribute : WotrAttributes.PLAYER_ATTRIBUTES) {
-            for (EntityType e : event.getTypes()) {
+        for (EntityType<? extends LivingEntity> e : event.getTypes()) {
+            for (DeferredHolder<Attribute, RangedAttribute> attribute : WotrAttributes.ENTITY_ATTRIBUTES) {
                 event.add(e, attribute);
+            }
+            if (EntityType.PLAYER.equals(e)) {
+                for (DeferredHolder<Attribute, RangedAttribute> attribute : WotrAttributes.PLAYER_ATTRIBUTES) {
+                    event.add(e, attribute);
+                }
             }
         }
     }
