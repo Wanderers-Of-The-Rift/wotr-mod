@@ -10,12 +10,11 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.Predefined
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Collections;
 import java.util.HashMap;
 
-@EventBusSubscriber
+// @EventBusSubscriber
 public class RiftConfigInitializationEvents {
     private static final ImmutableList<String> POI_VARIANTS = ImmutableList.of("free", "ceiling", "halfway", "inwall");
 
@@ -31,7 +30,7 @@ public class RiftConfigInitializationEvents {
         }
         var objective = objectiveOptional.get().value();
 
-        // get openning player:
+        // get opening player:
         var player = event.getFirstPlayer();
 
         // for replacing POIs:
