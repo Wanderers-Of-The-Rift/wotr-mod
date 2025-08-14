@@ -1,11 +1,13 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -31,6 +33,9 @@ public class ManaData {
     public ManaData(IAttachmentHolder holder, float amount) {
         this.holder = holder;
         this.amount = amount;
+        if (holder instanceof Entity entity) {
+            entity.level().getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY).add(WotrAttachments.MANA, entity);
+        }
     }
 
     public static IAttachmentSerializer<Tag, ManaData> getSerializer() {
