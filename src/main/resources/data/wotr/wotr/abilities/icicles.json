@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard_ability",
-  "ability_name": "wotr:icicles_ability",
   "cooldown": 10,
   "effects": [
     {

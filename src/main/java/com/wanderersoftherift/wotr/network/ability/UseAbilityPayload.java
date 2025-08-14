@@ -1,7 +1,8 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -30,27 +31,18 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
             return;
         }
+        AbilityEquipmentSlot abilitySlot = AbilityEquipmentSlot.forSlot(slot);
+        if (abilitySlot == null) {
+            return;
+        }
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
         if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
             return;
         }
-        AbstractAbility ability = abilityItem.get(WotrDataComponentType.ABILITY).value();
+        Ability ability = abilityItem.get(WotrDataComponentType.ABILITY).ability().value();
         abilitySlots.setSelectedSlot(slot());
 
-        if (ability.isToggle()) // Should check last toggle, because pressing a button can send multiple packets
-        {
-            if (!ability.isToggled(player)) {
-                ability.onActivate(player, slot(), abilityItem);
-            } else {
-                ability.onDeactivate(player, slot());
-            }
-
-            if (ability.canPlayerUse(player)) {
-                ability.toggle(player);
-            }
-        } else {
-            ability.onActivate(player, slot(), abilityItem);
-        }
+        ability.onActivate(player, abilityItem, abilitySlot);
     }
 }

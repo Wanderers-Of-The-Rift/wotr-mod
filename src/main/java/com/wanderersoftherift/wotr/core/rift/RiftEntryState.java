@@ -16,10 +16,11 @@ import net.minecraft.world.phys.Vec3;
 public record RiftEntryState(InventorySnapshot entranceInventory, ResourceKey<Level> previousDimension,
         ResourceKey<Level> riftDimension, Vec3 previousPosition, StatSnapshot statSnapshot) {
 
-    public static final RiftEntryState EMPTY = new RiftEntryState(new InventorySnapshot(),
-            ResourceKey.create(Registries.DIMENSION, WanderersOfTheRift.id("empty")),
-            ResourceKey.create(Registries.DIMENSION, WanderersOfTheRift.id("empty")), new Vec3(0, 0, 0),
-            new StatSnapshot());
+    public static final ResourceKey<Level> EMPTY_DIMENSION = ResourceKey.create(Registries.DIMENSION,
+            WanderersOfTheRift.id("empty"));
+
+    public static final RiftEntryState EMPTY = new RiftEntryState(new InventorySnapshot(), EMPTY_DIMENSION,
+            EMPTY_DIMENSION, new Vec3(0, 0, 0), new StatSnapshot());
 
     public static final Codec<RiftEntryState> CODEC = RecordCodecBuilder.create(ins -> ins.group(
             InventorySnapshot.CODEC.fieldOf("entrance_inventory").forGetter(RiftEntryState::entranceInventory),
@@ -38,5 +39,9 @@ public record RiftEntryState(InventorySnapshot entranceInventory, ResourceKey<Le
                         currentEntryStates.stream().map(it -> it.entranceInventory).toList()),
                 player.level().dimension(), riftDimension, player.position(), new StatSnapshot(player));
         currentEntryStates.add(newEntryState);
+    }
+
+    public boolean isEmpty() {
+        return EMPTY_DIMENSION.equals(previousDimension) && EMPTY_DIMENSION.equals(riftDimension);
     }
 }

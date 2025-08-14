@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
@@ -18,16 +18,16 @@ import java.util.Optional;
 /**
  * Effect that plays a sound. The sounds plays either as a Player or Hostile sound depending on the caster.
  */
-public class SoundEffect extends AbstractEffect {
+public class SoundEffect extends AbilityEffect {
 
     public static final MapCodec<SoundEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(SoundEvent.CODEC.fieldOf("sound").forGetter(SoundEffect::getSound))
                     .apply(instance, SoundEffect::new));
 
     private final Holder<SoundEvent> sound;
 
-    public SoundEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+    public SoundEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             Holder<SoundEvent> sound) {
         super(targeting, effects, particles);
         this.sound = sound;
@@ -63,7 +63,7 @@ public class SoundEffect extends AbstractEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 

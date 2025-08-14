@@ -1,8 +1,13 @@
 package com.wanderersoftherift.wotr.modifier;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,11 +23,29 @@ import java.util.List;
 
 public record WotrEquipmentSlotFromMC(EquipmentSlot minecraftSlot, TagKey<Item> tag) implements WotrEquipmentSlot {
 
+    public static final MapCodec<WotrEquipmentSlotFromMC> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance.group(
+                    EquipmentSlot.CODEC.fieldOf("minecraft_slot").forGetter(WotrEquipmentSlotFromMC::minecraftSlot)
+            ).apply(instance, WotrEquipmentSlotFromMC::fromVanillaSlot));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, WotrEquipmentSlotFromMC> STREAM_CODEC = StreamCodec
+            .composite(
+                    EquipmentSlot.STREAM_CODEC, WotrEquipmentSlotFromMC::minecraftSlot,
+                    WotrEquipmentSlotFromMC::fromVanillaSlot
+            );
+
+    public static final DualCodec<WotrEquipmentSlotFromMC> TYPE = new DualCodec<>(CODEC, STREAM_CODEC);
+
     // has same order as net.minecraft.world.entity.EquipmentSlot enum
     public static final List<WotrEquipmentSlotFromMC> SLOTS;
 
-    public static WotrEquipmentSlot fromVanillaSlot(EquipmentSlot vanillaSlot) {
+    public static WotrEquipmentSlotFromMC fromVanillaSlot(EquipmentSlot vanillaSlot) {
         return SLOTS.get(vanillaSlot.ordinal());
+    }
+
+    @Override
+    public DualCodec<? extends WotrEquipmentSlot> type() {
+        return TYPE;
     }
 
     @Override

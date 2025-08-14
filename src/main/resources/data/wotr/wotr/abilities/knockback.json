@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard_ability",
-  "ability_name": "wotr:knockback",
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
   "cooldown": 10,
   "effects": [

@@ -16,7 +16,7 @@ import net.minecraft.world.phys.AABB;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CubeAreaTargeting extends AbstractTargeting {
+public class CubeAreaTargeting extends AbilityTargeting {
     public static final MapCodec<CubeAreaTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance).and(Codec.FLOAT.fieldOf("range").forGetter(CubeAreaTargeting::getRange))
                     .and(
@@ -47,7 +47,7 @@ public class CubeAreaTargeting extends AbstractTargeting {
     }
 
     @Override
-    public MapCodec<? extends AbstractTargeting> getCodec() {
+    public MapCodec<? extends AbilityTargeting> getCodec() {
         return CODEC;
     }
 

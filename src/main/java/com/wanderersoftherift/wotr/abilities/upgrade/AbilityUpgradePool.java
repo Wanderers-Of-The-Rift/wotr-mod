@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities.upgrade;
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.util.FastUtils;
@@ -151,7 +151,7 @@ public class AbilityUpgradePool {
      * @param ability
      * @return Whether it still possible to level up this ability
      */
-    public boolean canLevelUp(RegistryAccess registryAccess, AbstractAbility ability) {
+    public boolean canLevelUp(RegistryAccess registryAccess, Ability ability) {
         return getChoiceCount() < AbilityUpgradePool.COST_PER_LEVEL.size()
                 && !determineChoices(registryAccess, ability, choices).isEmpty();
     }
@@ -227,7 +227,7 @@ public class AbilityUpgradePool {
          */
         public Mutable generateChoice(
                 RegistryAccess registryAccess,
-                AbstractAbility ability,
+                Ability ability,
                 RandomSource random,
                 int optionCount) {
             generateChoices(registryAccess, ability, 1, random, optionCount);
@@ -246,7 +246,7 @@ public class AbilityUpgradePool {
          */
         public Mutable generateChoices(
                 RegistryAccess registryAccess,
-                AbstractAbility ability,
+                Ability ability,
                 int count,
                 RandomSource random,
                 int optionCount) {
@@ -273,7 +273,7 @@ public class AbilityUpgradePool {
 
     private static Object2IntMap<Holder<AbilityUpgrade>> determineChoices(
             RegistryAccess registryAccess,
-            AbstractAbility ability,
+            Ability ability,
             List<List<Holder<AbilityUpgrade>>> existingChoices) {
         Registry<AbilityUpgrade> upgrades = registryAccess.lookupOrThrow(WotrRegistries.Keys.ABILITY_UPGRADES);
         Object2IntArrayMap<Holder<AbilityUpgrade>> availableUpgrades = upgrades.stream()
@@ -286,7 +286,7 @@ public class AbilityUpgradePool {
         return availableUpgrades;
     }
 
-    private static boolean isRelevant(AbilityUpgrade upgrade, AbstractAbility ability) {
+    private static boolean isRelevant(AbilityUpgrade upgrade, Ability ability) {
         for (AbstractModifierEffect modifierEffect : upgrade.modifierEffects()) {
             if (!ability.isRelevantModifier(modifierEffect)) {
                 return false;

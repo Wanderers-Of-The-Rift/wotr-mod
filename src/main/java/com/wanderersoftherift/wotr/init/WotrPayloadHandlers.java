@@ -5,9 +5,9 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
 import com.wanderersoftherift.wotr.abilities.effects.marker.EffectMarker;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
+import com.wanderersoftherift.wotr.network.ability.AbilityCooldownReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
-import com.wanderersoftherift.wotr.network.ability.AbilitySlotsCooldownsPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
 import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
@@ -63,8 +63,6 @@ public class WotrPayloadHandlers {
                 AbilitySlotsContentPayload::handleOnClient);
         registrar.playToClient(AbilitySlotsUpdatePayload.TYPE, AbilitySlotsUpdatePayload.STREAM_CODEC,
                 AbilitySlotsUpdatePayload::handleOnClient);
-        registrar.playToClient(AbilitySlotsCooldownsPayload.TYPE, AbilitySlotsCooldownsPayload.STREAM_CODEC,
-                AbilitySlotsCooldownsPayload::handleOnClient);
 
         // Ability effect markers
         registrar.playToClient(SetEffectMarkerPayload.TYPE, SetEffectMarkerPayload.STREAM_CODEC,
@@ -74,6 +72,8 @@ public class WotrPayloadHandlers {
 
         registrar.playToServer(UseAbilityPayload.TYPE, UseAbilityPayload.STREAM_CODEC,
                 UseAbilityPayload::handleOnServer);
+        registrar.playToClient(AbilityCooldownReplicationPayload.TYPE, AbilityCooldownReplicationPayload.STREAM_CODEC,
+                AbilityCooldownReplicationPayload::handleOnClient);
         registrar.playToClient(AbilityCooldownUpdatePayload.TYPE, AbilityCooldownUpdatePayload.STREAM_CODEC,
                 AbilityCooldownUpdatePayload::handleOnClient);
         registrar.playToClient(AbilityToggleStatePayload.TYPE, AbilityToggleStatePayload.STREAM_CODEC,
@@ -128,6 +128,8 @@ public class WotrPayloadHandlers {
     public static void onPlayerJoinedEvent(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
+            PacketDistributor.sendToPlayer(player,
+                    new AbilityCooldownReplicationPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
             replicateEffectMarkers(player);
             replicateMana(player);
             replicateWallet(player);
@@ -141,6 +143,8 @@ public class WotrPayloadHandlers {
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
+            PacketDistributor.sendToPlayer(player,
+                    new AbilityCooldownReplicationPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
             replicateEffectMarkers(player);
             replicateWallet(player);
             BannedFromRiftPayload.sendTo(player);
@@ -153,6 +157,8 @@ public class WotrPayloadHandlers {
     public static void onPlayerChangeDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             replicateAbilities(player);
+            PacketDistributor.sendToPlayer(player,
+                    new AbilityCooldownReplicationPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
             replicateEffectMarkers(player);
             replicateMana(player);
             replicateWallet(player);
@@ -169,9 +175,7 @@ public class WotrPayloadHandlers {
     private static void replicateAbilities(ServerPlayer player) {
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         PacketDistributor.sendToPlayer(player,
-                new AbilitySlotsContentPayload(abilitySlots.getAbilitySlots(), abilitySlots.getSelectedSlot()));
-        PacketDistributor.sendToPlayer(player,
-                new AbilitySlotsCooldownsPayload(player.getData(WotrAttachments.ABILITY_COOLDOWNS)));
+                new AbilitySlotsContentPayload(abilitySlots.getRawSlots(), abilitySlots.getSelectedSlot()));
     }
 
     private static void replicateEffectMarkers(ServerPlayer player) {

@@ -99,9 +99,10 @@ public class ManaBar implements ConfigurableLayer {
         int frame = Mth.floor(animCounter / TICKS_PER_FRAME);
 
         ManaData mana = player.getData(WotrAttachments.MANA);
+        int amount = (int) mana.getAmount();
 
-        renderBar(guiGraphics, pos, mana.getAmount(), maxMana, frame);
-        renderTooltip(guiGraphics, pos, mana.getAmount(), maxMana, width, height);
+        renderBar(guiGraphics, pos, amount, maxMana, frame);
+        renderTooltip(guiGraphics, pos, amount, maxMana, width, height);
     }
 
     private void renderBar(GuiGraphics graphics, Vector2i pos, int amount, int maxMana, int frame) {

@@ -6,16 +6,16 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.effects.util.TeleportInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TeleportEffect extends AbstractEffect {
+public class TeleportEffect extends AbilityEffect {
     public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::getTeleportInfo))
                     .apply(instance, TeleportEffect::new));
 
@@ -24,14 +24,14 @@ public class TeleportEffect extends AbstractEffect {
     // TODO look into handling different types of teleports and better handle relative motion
     // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
-    public TeleportEffect(AbstractTargeting targeting, List<AbstractEffect> effects, Optional<ParticleInfo> particles,
+    public TeleportEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             TeleportInfo teleInfo) {
         super(targeting, effects, particles);
         this.teleInfo = teleInfo;
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 

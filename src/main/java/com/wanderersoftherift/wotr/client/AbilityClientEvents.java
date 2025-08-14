@@ -1,14 +1,18 @@
 package com.wanderersoftherift.wotr.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
+import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -61,11 +65,7 @@ public final class AbilityClientEvents {
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         for (int i = 0; i < WotrKeyMappings.ABILITY_SLOT_KEYS.size(); i++) {
             while (ABILITY_SLOT_KEYS.get(i).consumeClick()) {
-                AbstractAbility ability = abilitySlots.getAbilityInSlot(i);
-                if (ability != null) {
-                    ability.onActivate(player, i, abilitySlots.getStackInSlot(i));
-                    abilitySlots.setSelectedSlot(i);
-                }
+                useAbilitySlot(abilitySlots, i, player);
             }
         }
 
@@ -80,15 +80,23 @@ public final class AbilityClientEvents {
         }
         while (USE_ABILITY_KEY.consumeClick()) {
             int slot = abilitySlots.getSelectedSlot();
-            AbstractAbility ability = abilitySlots.getAbilityInSlot(slot);
-            if (ability != null) {
-                ability.onActivate(player, slot, abilitySlots.getStackInSlot(slot));
-            }
+            useAbilitySlot(abilitySlots, slot, player);
             selectionUpdated = false; // Because using a slot selected the slot
         }
         if (selectionUpdated) {
             PacketDistributor.sendToServer(new SelectAbilitySlotPayload(abilitySlots.getSelectedSlot()));
         }
+    }
+
+    private static void useAbilitySlot(AbilitySlots abilitySlots, int slot, Player player) {
+        ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
+        ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+        if (abilityComponent != null && abilityComponent.ability()
+                .value()
+                .onActivate(player, abilityItem, AbilityEquipmentSlot.forSlot(slot))) {
+            PacketDistributor.sendToServer(new UseAbilityPayload(slot));
+        }
+        abilitySlots.setSelectedSlot(slot);
     }
 
     @SubscribeEvent
@@ -99,7 +107,7 @@ public final class AbilityClientEvents {
         }
 
         ManaData manaData = player.getData(WotrAttachments.MANA);
-        manaData.tick(player);
+        manaData.tick();
     }
 
 }
