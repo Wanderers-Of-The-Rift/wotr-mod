@@ -9,6 +9,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,7 +59,7 @@ public record CachedRiftRoomGenerator(
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }
-                newFuture.complete(new WeakReference<>(processedRoom2));
+                newFuture.complete(new CacheEntry(processedRoom2, processedRoom2.space.origin(), cache));
                 return processedRoom2;
             }, Thread::startVirtualThread);
         }
@@ -86,6 +88,34 @@ public record CachedRiftRoomGenerator(
         @Override
         public MapCodec<? extends RiftRoomGenerator.Factory> codec() {
             return CODEC;
+        }
+    }
+
+    private class CacheEntry extends WeakReference<RiftProcessedRoom> {
+
+        private static final ReferenceQueue<RiftProcessedRoom> QUEUE = new ReferenceQueue<>();
+
+        private static final Thread GC_THREAD = Thread.startVirtualThread(() -> {
+            while (true) {
+                try {
+                    Reference<? extends RiftProcessedRoom> ref = QUEUE.remove(0);
+                    if (ref instanceof CacheEntry cacheEntry) {
+                        cacheEntry.cache.remove(cacheEntry.position);
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        private final Vec3i position;
+        private final ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> cache;
+
+        public CacheEntry(RiftProcessedRoom referent, Vec3i position,
+                ConcurrentHashMap<Vec3i, CompletableFuture<WeakReference<RiftProcessedRoom>>> cache) {
+            super(referent, QUEUE);
+            this.position = position;
+            this.cache = cache;
         }
     }
 }
