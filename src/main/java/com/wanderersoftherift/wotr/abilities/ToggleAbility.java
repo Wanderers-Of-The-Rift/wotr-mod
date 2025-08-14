@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.abilities;
 
+import com.mojang.math.Constants;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -11,7 +13,6 @@ import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class ToggleAbility extends Ability {
                     Codec.INT.optionalFieldOf("cooldown", 0).forGetter(ToggleAbility::getBaseCooldown),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(ToggleAbility::getWarmupTime),
                     Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(ToggleAbility::getBaseManaCost),
-                    Codec.BOOL.optionalFieldOf("mana_required", true).forGetter(ToggleAbility::isManaRequired),
+                    Codec.BOOL.optionalFieldOf("deactivated_when_mana_exhausted", true)
+                            .forGetter(ToggleAbility::isDeactivatedWhenManaExhausted),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("activation_effects", Collections.emptyList())
                             .forGetter(ToggleAbility::getActivationEffects),
@@ -39,21 +41,18 @@ public class ToggleAbility extends Ability {
                             .optionalFieldOf("deactivation_effects", Collections.emptyList())
                             .forGetter(ToggleAbility::getDeactivationEffects)
             ).apply(instance, ToggleAbility::new));
-    public static final float MIN_MANA = 0.5f;
 
     private final int warmupTime;
-    private final int baseManaCost;
-    private final boolean manaRequired;
+    private final boolean deactivatedWhenManaExhausted;
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
 
     public ToggleAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int cooldown, int warmupTime,
-            int manaCost, boolean manaRequired, List<AbilityEffect> activationEffects,
+            int manaCost, boolean deactivatedWhenManaExhausted, List<AbilityEffect> activationEffects,
             List<AbilityEffect> deactivationEffects) {
-        super(icon, smallIcon, cooldown);
+        super(icon, smallIcon, cooldown, manaCost);
         this.warmupTime = warmupTime;
-        this.baseManaCost = manaCost;
-        this.manaRequired = manaRequired;
+        this.deactivatedWhenManaExhausted = deactivatedWhenManaExhausted;
         this.activationEffects = activationEffects;
         this.deactivationEffects = deactivationEffects;
     }
@@ -79,15 +78,12 @@ public class ToggleAbility extends Ability {
 
     @Override
     public boolean activate(AbilityContext context) {
-        if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.slot())) {
-            deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
-            if (context.caster() instanceof ServerPlayer) {
-                applyCooldown(context);
-            }
-            context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.slot(), false);
+        AbilityStates states = context.caster().getData(WotrAttachments.ABILITY_STATES);
+        if (states.isActive(context.slot())) {
+            deactivate(context, states);
             return true;
         } else {
-            context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.slot(), true);
+            states.setActive(context.slot(), true);
             float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
             context.caster().getData(WotrAttachments.MANA).useAmount(manaCost);
             if (warmupTime == 0) {
@@ -107,22 +103,18 @@ public class ToggleAbility extends Ability {
         if ((age - warmupTime) == 0) {
             activationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
         }
-        if (manaRequired && context.caster().getData(WotrAttachments.MANA).getAmount() < MIN_MANA) {
-            deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
-            context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.slot(), false);
-            applyCooldown(context);
+        if (deactivatedWhenManaExhausted
+                && context.caster().getData(WotrAttachments.MANA).getAmount() < Constants.EPSILON) {
+            deactivate(context, context.caster().getData(WotrAttachments.ABILITY_STATES));
             return true;
         }
         return false;
     }
 
-    private void applyCooldown(AbilityContext context) {
-        if (context.slot() != null) {
-            context.caster()
-                    .getData(WotrAttachments.ABILITY_COOLDOWNS)
-                    .setCooldown(context.slot(),
-                            (int) context.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
-        }
+    private void deactivate(AbilityContext context, AbilityStates states) {
+        deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
+        context.applyCooldown();
+        states.setActive(context.slot(), false);
     }
 
     @Override
@@ -149,13 +141,8 @@ public class ToggleAbility extends Ability {
         return false;
     }
 
-    @Override
-    public int getBaseManaCost() {
-        return baseManaCost;
-    }
-
-    public boolean isManaRequired() {
-        return manaRequired;
+    public boolean isDeactivatedWhenManaExhausted() {
+        return deactivatedWhenManaExhausted;
     }
 
     public int getWarmupTime() {

@@ -36,9 +36,8 @@ public class StandardAbility extends Ability {
 
     public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
             List<AbilityEffect> effects) {
-        super(icon, smallIcon, baseCooldown);
+        super(icon, smallIcon, baseCooldown, manaCost);
         this.effects = new ArrayList<>(effects);
-        setBaseManaCost(manaCost);
     }
 
     @Override
@@ -66,13 +65,9 @@ public class StandardAbility extends Ability {
         float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
         ManaData manaData = context.caster().getData(WotrAttachments.MANA);
         manaData.useAmount(manaCost);
-        this.getEffects().forEach(effect -> effect.apply(caster, new ArrayList<>(), context));
+        this.getEffects().forEach(effect -> effect.apply(caster, List.of(), context));
 
-        if (context.slot() != null) {
-            caster.getData(WotrAttachments.ABILITY_COOLDOWNS)
-                    .setCooldown(context.slot(),
-                            (int) context.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
-        }
+        context.applyCooldown();
         return true;
     }
 

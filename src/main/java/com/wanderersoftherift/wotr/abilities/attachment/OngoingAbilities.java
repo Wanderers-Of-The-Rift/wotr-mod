@@ -69,14 +69,11 @@ public class OngoingAbilities {
             WotrEquipmentSlot slot) {
         AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, slot,
                 entity.level());
-        context.enableUpgradeModifiers();
-        try {
+        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
                 return true;
             }
-        } finally {
-            context.disableUpgradeModifiers();
         }
         return false;
     }
@@ -92,39 +89,31 @@ public class OngoingAbilities {
                 .findFirst();
         UUID id = existing.orElseGet(UUID::randomUUID);
         AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, slot, entity.level());
-        context.enableUpgradeModifiers();
-        try {
+        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
             }
             if (!ability.value().activate(context)) {
                 activeAbilities.add(new ActiveAbility(context));
             }
-        } finally {
-            context.disableUpgradeModifiers();
         }
         return true;
     }
 
     public void tick() {
+        if (!(holder instanceof LivingEntity attachedTo)) {
+            return;
+        }
         for (ActiveAbility instance : ImmutableList.copyOf(activeAbilities)) {
             instance.age++;
-            LivingEntity attachedTo = livingHolder();
             AbilityContext context = new AbilityContext(instance.id, instance.ability, attachedTo, instance.abilityItem,
                     instance.slot.orElse(null), attachedTo.level());
-            context.enableUpgradeModifiers();
-            try {
+            try (var ignore = context.enableTemporaryUpgradeModifiers()) {
                 if (instance.ability.value().tick(context, instance.age)) {
                     activeAbilities.remove(instance);
                 }
-            } finally {
-                context.disableUpgradeModifiers();
             }
         }
-    }
-
-    private LivingEntity livingHolder() {
-        return (LivingEntity) holder;
     }
 
     private Data getData() {

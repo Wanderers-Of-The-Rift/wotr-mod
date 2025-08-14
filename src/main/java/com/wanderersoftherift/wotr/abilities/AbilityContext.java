@@ -2,10 +2,13 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import com.wanderersoftherift.wotr.util.ExceptionlessAutoClosable;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -40,7 +43,7 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     /**
      * Enables all modifiers that impact the ability
      */
-    public void enableUpgradeModifiers() {
+    public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
         AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {
@@ -48,19 +51,7 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
                 upgrade.modifierEffects().forEach(effect -> effect.enableModifier(0, caster, source));
             });
         }
-    }
-
-    /**
-     * Disables all modifiers that were enabled by {@link #enableUpgradeModifiers()}
-     */
-    public void disableUpgradeModifiers() {
-        AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
-        if (pool != null) {
-            pool.forEachSelected((selection, upgrade) -> {
-                ModifierSource source = new AbilityUpgradeModifierSource(selection);
-                upgrade.modifierEffects().forEach(effect -> effect.disableModifier(0, caster, source));
-            });
-        }
+        return this::disableUpgradeModifiers;
     }
 
     /**
@@ -82,5 +73,29 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
         float value = (float) attribute.getValue();
         attribute.removeModifier(baseModifier);
         return value;
+    }
+
+    /**
+     * Applies the cooldown for the current ability
+     */
+    public void applyCooldown() {
+        if (slot() != null) {
+            caster().getData(WotrAttachments.ABILITY_COOLDOWNS)
+                    .setCooldown(slot(),
+                            (int) getAbilityAttribute(WotrAttributes.COOLDOWN, ability().value().getBaseCooldown()));
+        }
+    }
+
+    /**
+     * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
+     */
+    private void disableUpgradeModifiers() {
+        AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
+        if (pool != null) {
+            pool.forEachSelected((selection, upgrade) -> {
+                ModifierSource source = new AbilityUpgradeModifierSource(selection);
+                upgrade.modifierEffects().forEach(effect -> effect.disableModifier(0, caster, source));
+            });
+        }
     }
 }

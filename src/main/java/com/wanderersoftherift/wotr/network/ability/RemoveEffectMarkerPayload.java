@@ -13,14 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Replicates the removal of an attach effect
+ * Replicates the removal of an effect marker
  * 
  * @param id The instance id of the effect
  */
-public record DetachEffectPayload(UUID id) implements CustomPacketPayload {
-    public static final Type<DetachEffectPayload> TYPE = new Type<>(WanderersOfTheRift.id("detatch_effect"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, DetachEffectPayload> STREAM_CODEC = StreamCodec
-            .composite(UUIDUtil.STREAM_CODEC, DetachEffectPayload::id, DetachEffectPayload::new);
+public record RemoveEffectMarkerPayload(UUID id) implements CustomPacketPayload {
+    public static final Type<RemoveEffectMarkerPayload> TYPE = new Type<>(
+            WanderersOfTheRift.id("remove_effect_marker"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, RemoveEffectMarkerPayload> STREAM_CODEC = StreamCodec
+            .composite(UUIDUtil.STREAM_CODEC, RemoveEffectMarkerPayload::id, RemoveEffectMarkerPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

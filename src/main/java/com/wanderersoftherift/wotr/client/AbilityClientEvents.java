@@ -62,7 +62,7 @@ public final class AbilityClientEvents {
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         for (int i = 0; i < WotrKeyMappings.ABILITY_SLOT_KEYS.size(); i++) {
             while (ABILITY_SLOT_KEYS.get(i).consumeClick()) {
-                useAbilitySlot(abilitySlots, i, player);
+                useAbilitySlot(i, player);
             }
         }
 
@@ -77,7 +77,7 @@ public final class AbilityClientEvents {
         }
         while (USE_ABILITY_KEY.consumeClick()) {
             int slot = abilitySlots.getSelectedSlot();
-            useAbilitySlot(abilitySlots, slot, player);
+            useAbilitySlot(slot, player);
             selectionUpdated = false; // Because using a slot selected the slot
         }
         if (selectionUpdated) {
@@ -85,7 +85,7 @@ public final class AbilityClientEvents {
         }
     }
 
-    private static void useAbilitySlot(AbilitySlots abilitySlots, int slot, Player player) {
+    private static void useAbilitySlot(int slot, Player player) {
         if (player.getData(WotrAttachments.ONGOING_ABILITIES).activate(AbilityEquipmentSlot.forSlot(slot))) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }

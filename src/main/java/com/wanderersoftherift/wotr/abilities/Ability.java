@@ -28,16 +28,17 @@ public abstract class Ability {
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Ability>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITIES);
 
-    private ResourceLocation icon;
-    private Optional<ResourceLocation> smallIcon;
+    private final ResourceLocation icon;
+    private final Optional<ResourceLocation> smallIcon;
 
-    private int baseCooldown = 0;
-    private int baseManaCost;
+    private final int baseCooldown;
+    private final int baseManaCost;
 
-    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown) {
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int baseManaCost) {
         this.icon = icon;
         this.smallIcon = smallIcon;
         this.baseCooldown = baseCooldown;
+        this.baseManaCost = baseManaCost;
     }
 
     public static Component getDisplayName(Holder<Ability> ability) {
@@ -105,10 +106,6 @@ public abstract class Ability {
 
     public int getBaseManaCost() {
         return baseManaCost;
-    }
-
-    public void setBaseManaCost(int baseManaCost) {
-        this.baseManaCost = baseManaCost;
     }
 
     ///  Upgrade support

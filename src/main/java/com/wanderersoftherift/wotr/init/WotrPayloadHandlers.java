@@ -9,10 +9,10 @@ import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityStateReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
-import com.wanderersoftherift.wotr.network.ability.AttachEffectPayload;
-import com.wanderersoftherift.wotr.network.ability.DetachEffectPayload;
+import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
 import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
+import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
@@ -61,10 +61,10 @@ public class WotrPayloadHandlers {
                 AbilitySlotsUpdatePayload::handleOnClient);
 
         // Ability effect markers
-        registrar.playToClient(AttachEffectPayload.TYPE, AttachEffectPayload.STREAM_CODEC,
-                AttachEffectPayload::handleOnClient);
-        registrar.playToClient(DetachEffectPayload.TYPE, DetachEffectPayload.STREAM_CODEC,
-                DetachEffectPayload::handleOnClient);
+        registrar.playToClient(AddEffectMarkerPayload.TYPE, AddEffectMarkerPayload.STREAM_CODEC,
+                AddEffectMarkerPayload::handleOnClient);
+        registrar.playToClient(RemoveEffectMarkerPayload.TYPE, RemoveEffectMarkerPayload.STREAM_CODEC,
+                RemoveEffectMarkerPayload::handleOnClient);
 
         registrar.playToServer(UseAbilityPayload.TYPE, UseAbilityPayload.STREAM_CODEC,
                 UseAbilityPayload::handleOnServer);
