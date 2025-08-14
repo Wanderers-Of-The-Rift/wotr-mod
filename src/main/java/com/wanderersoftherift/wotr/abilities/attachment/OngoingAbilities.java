@@ -5,13 +5,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
+import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -38,6 +41,10 @@ public class OngoingAbilities {
     private OngoingAbilities(IAttachmentHolder holder, Data data) {
         this.holder = holder;
         activeAbilities = new ArrayList<>(data.activeAbilities);
+        if (holder instanceof Entity entity) {
+            EntityAttachmentRegistry registry = entity.level().getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY);
+            registry.add(WotrAttachments.ONGOING_ABILITIES, entity);
+        }
     }
 
     public static IAttachmentSerializer<Tag, OngoingAbilities> getSerializer() {

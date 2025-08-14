@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
+import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -26,6 +27,11 @@ import java.util.function.Supplier;
 public class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
+
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry>> ENTITY_ATTACHMENT_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "entity_attachment_registry", () -> AttachmentType.builder(EntityAttachmentRegistry::new).build()
+            );
 
     public static final Supplier<AttachmentType<List<ItemStack>>> RESPAWN_ITEMS = ATTACHMENT_TYPES.register(
             "respawn_items",

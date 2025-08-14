@@ -7,12 +7,14 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.EffectMarkerInstance;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
+import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
@@ -54,6 +56,8 @@ public class AttachedEffects {
             for (var effect : effects) {
                 effect.onAttach(attachedTo);
             }
+            EntityAttachmentRegistry registry = attachedTo.level().getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY);
+            registry.add(WotrAttachments.ATTACHED_EFFECTS, attachedTo);
         }
     }
 
