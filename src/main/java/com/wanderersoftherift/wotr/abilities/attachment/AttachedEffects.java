@@ -6,12 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
-import com.wanderersoftherift.wotr.abilities.effects.attachment.ClientAttachEffect;
+import com.wanderersoftherift.wotr.abilities.effects.attachment.EffectMarkerInstance;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import com.wanderersoftherift.wotr.network.ability.AttachEffectPayload;
-import com.wanderersoftherift.wotr.network.ability.DetachEffectPayload;
+import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
+import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.Tag;
@@ -118,7 +118,7 @@ public class AttachedEffects {
             return;
         }
         for (var effect : effects) {
-            effect.replicateAttach(player);
+            effect.addEffectMarker(player);
         }
     }
 
@@ -160,14 +160,14 @@ public class AttachedEffects {
             applyModifiers(attachedTo);
             // player connection can be null because the player might still be in the process of being constructed.
             if (attachedTo instanceof ServerPlayer player && player.connection != null) {
-                replicateAttach(player);
+                addEffectMarker(player);
             }
         }
 
         public void onDetach(Entity attachedTo) {
             removeModifiers(attachedTo);
             if (attachedTo instanceof ServerPlayer player) {
-                replicateDetach(player);
+                removeEffectMarker(player);
             }
         }
 
@@ -187,12 +187,9 @@ public class AttachedEffects {
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, age, caster)) {
                 AbilityContext triggerContext = context.toContext(caster, attachedTo.level());
-                triggerContext.enableUpgradeModifiers();
-                try {
+                try (var ignore = triggerContext.enableTemporaryUpgradeModifiers()) {
                     attachEffect.getEffects()
                             .forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
-                } finally {
-                    triggerContext.disableUpgradeModifiers();
                 }
                 triggeredTimes++;
             }
@@ -202,48 +199,47 @@ public class AttachedEffects {
 
         private LivingEntity getCaster(MinecraftServer server) {
             if (cachedCaster != null) {
-                if (cachedCaster.isRemoved()) {
-                    return null;
-                } else {
-                    return cachedCaster;
+                if (cachedCaster.getRemovalReason() == Entity.RemovalReason.CHANGED_DIMENSION) {
+                    cachedCaster = context.getCaster(server);
+                } else if (cachedCaster.isRemoved()) {
+                    cachedCaster = null;
                 }
+            } else {
+                cachedCaster = context.getCaster(server);
             }
-            return context.getCaster(server);
+            return cachedCaster;
         }
 
         private void applyModifiers(Entity attachedTo) {
-            int index = 0;
-            for (ModifierInstance modifier : attachEffect.getModifiers()) {
-                ModifierSource source = new AttachEffectModifierSource(id, index++);
+            for (int i = 0; i < attachEffect.getModifiers().size(); i++) {
+                ModifierInstance modifier = attachEffect.getModifiers().get(i);
+                ModifierSource source = new AttachEffectModifierSource(id, i);
                 modifier.modifier().value().enableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
 
         private void removeModifiers(Entity attachedTo) {
-            int index = 0;
-            for (ModifierInstance modifier : attachEffect.getModifiers()) {
-                ModifierSource source = new AttachEffectModifierSource(id, index++);
+            for (int i = 0; i < attachEffect.getModifiers().size(); i++) {
+                ModifierInstance modifier = attachEffect.getModifiers().get(i);
+                ModifierSource source = new AttachEffectModifierSource(id, i);
                 modifier.modifier().value().disableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
 
-        private void replicateAttach(ServerPlayer player) {
+        private void addEffectMarker(ServerPlayer player) {
             if (attachEffect.getDisplay().isPresent()) {
-                Optional<Long> until;
+                Long until = null;
                 if (attachEffect.getContinuePredicate().duration() < Integer.MAX_VALUE) {
-                    until = Optional
-                            .of(player.level().getGameTime() + attachEffect.getContinuePredicate().duration() - age);
-                } else {
-                    until = Optional.empty();
+                    until = player.level().getGameTime() + attachEffect.getContinuePredicate().duration() - age;
                 }
-                PacketDistributor.sendToPlayer(player, new AttachEffectPayload(
-                        new ClientAttachEffect(id, attachEffect.getDisplay(), until)));
+                PacketDistributor.sendToPlayer(player, new AddEffectMarkerPayload(
+                        new EffectMarkerInstance(id, attachEffect.getDisplay(), Optional.ofNullable(until))));
             }
         }
 
-        private void replicateDetach(ServerPlayer player) {
+        private void removeEffectMarker(ServerPlayer player) {
             if (attachEffect.getDisplay().isPresent()) {
-                PacketDistributor.sendToPlayer(player, new DetachEffectPayload(id));
+                PacketDistributor.sendToPlayer(player, new RemoveEffectMarkerPayload(id));
             }
         }
 

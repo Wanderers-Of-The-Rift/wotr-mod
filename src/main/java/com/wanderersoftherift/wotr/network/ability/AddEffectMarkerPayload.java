@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.effects.attachment.ClientAttachEffect;
+import com.wanderersoftherift.wotr.abilities.effects.attachment.EffectMarkerInstance;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -10,13 +10,13 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Replicates a single attach effect to a client
+ * Replicates addition of an effect marker
  */
-public record AttachEffectPayload(ClientAttachEffect effect) implements CustomPacketPayload {
+public record AddEffectMarkerPayload(EffectMarkerInstance effect) implements CustomPacketPayload {
 
-    public static final Type<AttachEffectPayload> TYPE = new Type<>(WanderersOfTheRift.id("attach_effect"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, AttachEffectPayload> STREAM_CODEC = StreamCodec
-            .composite(ClientAttachEffect.STREAM_CODEC, AttachEffectPayload::effect, AttachEffectPayload::new);
+    public static final Type<AddEffectMarkerPayload> TYPE = new Type<>(WanderersOfTheRift.id("add_effect_marker"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, AddEffectMarkerPayload> STREAM_CODEC = StreamCodec
+            .composite(EffectMarkerInstance.STREAM_CODEC, AddEffectMarkerPayload::effect, AddEffectMarkerPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

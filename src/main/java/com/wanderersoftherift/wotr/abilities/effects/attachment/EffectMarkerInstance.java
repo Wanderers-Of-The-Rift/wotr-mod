@@ -12,16 +12,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Clientside information on an attached effect
+ * Clientside information to display an attached effect
  * 
  * @param id
  * @param marker
  * @param until
  */
-public record ClientAttachEffect(UUID id, Optional<Holder<EffectMarker>> marker, Optional<Long> until) {
-    public static final StreamCodec<RegistryFriendlyByteBuf, ClientAttachEffect> STREAM_CODEC = StreamCodec.composite(
-            UUIDUtil.STREAM_CODEC, ClientAttachEffect::id,
+public record EffectMarkerInstance(UUID id, Optional<Holder<EffectMarker>> marker, Optional<Long> until) {
+    public static final StreamCodec<RegistryFriendlyByteBuf, EffectMarkerInstance> STREAM_CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC, EffectMarkerInstance::id,
             ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(WotrRegistries.Keys.EFFECT_MARKERS)),
-            ClientAttachEffect::marker, ByteBufCodecs.optional(ByteBufCodecs.LONG), ClientAttachEffect::until,
-            ClientAttachEffect::new);
+            EffectMarkerInstance::marker, ByteBufCodecs.optional(ByteBufCodecs.LONG), EffectMarkerInstance::until,
+            EffectMarkerInstance::new);
 }
