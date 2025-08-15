@@ -127,6 +127,10 @@ public class OngoingAbilities {
         return new Data(activeAbilities);
     }
 
+    public boolean isEmpty() {
+        return activeAbilities.isEmpty();
+    }
+
     private static final class ActiveAbility {
 
         private static final Codec<ActiveAbility> CODEC = RecordCodecBuilder.create(instance -> instance.group(
