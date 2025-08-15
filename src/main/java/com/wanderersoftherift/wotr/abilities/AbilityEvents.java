@@ -74,6 +74,9 @@ public class AbilityEvents {
         level.getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY)
                 .forEach(WotrAttachments.ONGOING_ABILITIES, (entity, data) -> {
                     data.tick();
+                    if (data.isEmpty()) {
+                        entity.removeData(WotrAttachments.ONGOING_ABILITIES);
+                    }
                 });
     }
 
