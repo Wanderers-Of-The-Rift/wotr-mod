@@ -1,14 +1,14 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "icon" : "minecraft:textures/item/leather_boots.png",
   "cooldown": 1,
   "strength": "wotr:large_boost_strength",
   "effects":
   [
     {
-      "type": "wotr:projectile_effect",
+      "type": "wotr:projectile",
       "targeting": {
-        "type": "wotr:raycast_targeting",
+        "type": "wotr:raycast",
         "range": 200
       },
       "projectile_type": "minecraft:arrow",

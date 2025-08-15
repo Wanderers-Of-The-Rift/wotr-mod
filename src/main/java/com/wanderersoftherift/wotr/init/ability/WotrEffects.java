@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.BlankEffect;
 import com.wanderersoftherift.wotr.abilities.effects.BreakBlockEffect;
 import com.wanderersoftherift.wotr.abilities.effects.DamageEffect;
+import com.wanderersoftherift.wotr.abilities.effects.DetachOwnEffect;
 import com.wanderersoftherift.wotr.abilities.effects.HealEffect;
 import com.wanderersoftherift.wotr.abilities.effects.MovementEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ProjectileEffect;
@@ -26,30 +27,32 @@ public class WotrEffects {
     public static final DeferredRegister<MapCodec<? extends AbilityEffect>> EFFECTS = DeferredRegister
             .create(WotrRegistries.Keys.EFFECTS, WanderersOfTheRift.MODID);
 
-    public static final Supplier<MapCodec<? extends AttachEffect>> ATTACH_EFFECT = EFFECTS.register("attach_effect",
+    public static final Supplier<MapCodec<? extends AttachEffect>> ATTACH = EFFECTS.register("attach",
             () -> AttachEffect.CODEC);
-    public static final Supplier<MapCodec<? extends SoundEffect>> SOUND_EFFECT = EFFECTS.register("sound_effect",
+    public static final Supplier<MapCodec<? extends DetachOwnEffect>> DETACH_OWN = EFFECTS.register("detach_own",
+            () -> DetachOwnEffect.CODEC);
+    public static final Supplier<MapCodec<? extends SoundEffect>> SOUND = EFFECTS.register("sound",
             () -> SoundEffect.CODEC);
-    public static final Supplier<MapCodec<? extends BlankEffect>> BLANK_EFFECT = EFFECTS.register("blank_effect",
+    public static final Supplier<MapCodec<? extends BlankEffect>> BLANK = EFFECTS.register("blank",
             () -> BlankEffect.CODEC);
-    public static final Supplier<MapCodec<? extends SimpleProjectileEffect>> SIMPLE_PROJECTILE_EFFECT = EFFECTS
-            .register("simple_projectile_effect", () -> SimpleProjectileEffect.CODEC);
-    public static final Supplier<MapCodec<? extends ProjectileEffect>> PROJECTILE_EFFECT = EFFECTS
-            .register("projectile_effect", () -> ProjectileEffect.CODEC);
-    public static final Supplier<MapCodec<? extends SummonEffect>> SUMMON_EFFECT = EFFECTS.register("summon_effect",
+    public static final Supplier<MapCodec<? extends SimpleProjectileEffect>> SIMPLE_PROJECTILE = EFFECTS
+            .register("simple_projectile", () -> SimpleProjectileEffect.CODEC);
+    public static final Supplier<MapCodec<? extends ProjectileEffect>> PROJECTILE = EFFECTS.register("projectile",
+            () -> ProjectileEffect.CODEC);
+    public static final Supplier<MapCodec<? extends SummonEffect>> SUMMON = EFFECTS.register("summon",
             () -> SummonEffect.CODEC);
-    public static final Supplier<MapCodec<? extends BreakBlockEffect>> BREAK_EFFECT = EFFECTS.register("break_effect",
+    public static final Supplier<MapCodec<? extends BreakBlockEffect>> BREAK = EFFECTS.register("break",
             () -> BreakBlockEffect.CODEC);
-    public static final Supplier<MapCodec<? extends ApplyStatusEffect>> STATUS_EFFECT = EFFECTS
-            .register("status_effect", () -> ApplyStatusEffect.CODEC);
-    public static final Supplier<MapCodec<? extends TeleportEffect>> TELE_EFFECT = EFFECTS.register("teleport_effect",
+    public static final Supplier<MapCodec<? extends ApplyStatusEffect>> STATUS = EFFECTS.register("status",
+            () -> ApplyStatusEffect.CODEC);
+    public static final Supplier<MapCodec<? extends TeleportEffect>> TELEPORT = EFFECTS.register("teleport",
             () -> TeleportEffect.CODEC);
-    public static final Supplier<MapCodec<? extends MovementEffect>> MOVEMENT_EFFECT = EFFECTS
-            .register("movement_effect", () -> MovementEffect.CODEC);
-    public static final Supplier<MapCodec<? extends DamageEffect>> DAMAGE_EFFECT = EFFECTS.register("damage_effect",
+    public static final Supplier<MapCodec<? extends MovementEffect>> MOVEMENT = EFFECTS.register("movement",
+            () -> MovementEffect.CODEC);
+    public static final Supplier<MapCodec<? extends DamageEffect>> DAMAGE = EFFECTS.register("damage",
             () -> DamageEffect.CODEC);
-    public static final Supplier<MapCodec<? extends AbilityEffect>> HEAL_EFFECT = EFFECTS.register("heal_effect",
+    public static final Supplier<MapCodec<? extends AbilityEffect>> HEAL = EFFECTS.register("heal",
             () -> HealEffect.CODEC);
-    public static final Supplier<MapCodec<? extends AbilityEffect>> TARGET_EFFECT = EFFECTS.register("target_effect",
+    public static final Supplier<MapCodec<? extends AbilityEffect>> TARGET = EFFECTS.register("target",
             () -> TargetEffect.CODEC);
 }

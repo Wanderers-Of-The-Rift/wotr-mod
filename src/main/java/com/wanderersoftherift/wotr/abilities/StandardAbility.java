@@ -7,17 +7,12 @@ import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +24,7 @@ public class StandardAbility extends Ability {
     public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
-                    ResourceLocation.CODEC.optionalFieldOf("smallIcon").forGetter(StandardAbility::getSmallIcon),
+                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(StandardAbility::getSmallIcon),
                     Codec.INT.fieldOf("cooldown").forGetter(Ability::getBaseCooldown),
                     Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
@@ -41,13 +36,8 @@ public class StandardAbility extends Ability {
 
     public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
             List<AbilityEffect> effects) {
-        super(icon, smallIcon, baseCooldown);
+        super(icon, smallIcon, baseCooldown, manaCost);
         this.effects = new ArrayList<>(effects);
-        setBaseManaCost(manaCost);
-    }
-
-    public List<AbilityEffect> getEffects() {
-        return effects;
     }
 
     @Override
@@ -56,40 +46,33 @@ public class StandardAbility extends Ability {
     }
 
     @Override
-    public boolean onActivate(LivingEntity caster, ItemStack abilityItem, @Nullable WotrEquipmentSlot slot) {
-        if (!this.canUse(caster)) {
-            if (caster instanceof ServerPlayer player) {
-                // TODO: Proper translatable component, or maybe we remove this?
-                player.displayClientMessage(Component.literal("You cannot use this"), true);
-            }
+    public boolean canActivate(AbilityContext context) {
+        if (context.slot() != null
+                && context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.slot())) {
             return false;
         }
-        if (slot != null && caster.getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(slot)) {
+        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
+        ManaData manaData = context.caster().getData(WotrAttachments.MANA);
+        if (manaCost > 0 && manaData.getAmount() < manaCost) {
             return false;
-        }
-        AbilityContext abilityContext = new AbilityContext(caster, abilityItem);
-        abilityContext.enableUpgradeModifiers();
-        try {
-            int manaCost = (int) abilityContext.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-            ManaData manaData = caster.getData(WotrAttachments.MANA);
-            if (manaCost > 0) {
-                if (manaData.getAmount() < manaCost) {
-                    return false;
-                }
-            }
-            if (caster instanceof ServerPlayer player) {
-                manaData.useAmount(manaCost);
-                this.getEffects().forEach(effect -> effect.apply(player, new ArrayList<>(), abilityContext));
-            }
-            if (slot != null) {
-                caster.getData(WotrAttachments.ABILITY_COOLDOWNS)
-                        .setCooldown(slot,
-                                (int) abilityContext.getAbilityAttribute(WotrAttributes.COOLDOWN, getBaseCooldown()));
-            }
-        } finally {
-            abilityContext.disableUpgradeModifiers();
         }
         return true;
+    }
+
+    @Override
+    public boolean activate(AbilityContext context) {
+        LivingEntity caster = context.caster();
+        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
+        ManaData manaData = context.caster().getData(WotrAttachments.MANA);
+        manaData.useAmount(manaCost);
+        this.getEffects().forEach(effect -> effect.apply(caster, List.of(), context));
+
+        context.applyCooldown();
+        return true;
+    }
+
+    private List<AbilityEffect> getEffects() {
+        return effects;
     }
 
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {

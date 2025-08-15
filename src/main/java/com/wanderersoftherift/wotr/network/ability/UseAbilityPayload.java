@@ -1,18 +1,15 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record UseAbilityPayload(int slot) implements CustomPacketPayload {
@@ -36,13 +33,8 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
             return;
         }
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
-        ItemStack abilityItem = abilitySlots.getStackInSlot(slot());
-        if (abilityItem.isEmpty() || !abilityItem.has(WotrDataComponentType.ABILITY)) {
-            return;
-        }
-        Ability ability = abilityItem.get(WotrDataComponentType.ABILITY).ability().value();
         abilitySlots.setSelectedSlot(slot());
 
-        ability.onActivate(player, abilityItem, abilitySlot);
+        player.getData(WotrAttachments.ONGOING_ABILITIES).activate(abilitySlot);
     }
 }

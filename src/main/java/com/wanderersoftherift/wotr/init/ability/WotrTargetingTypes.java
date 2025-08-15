@@ -16,11 +16,11 @@ public class WotrTargetingTypes {
     public static final DeferredRegister<MapCodec<? extends AbilityTargeting>> TARGETING_TYPES = DeferredRegister
             .create(WotrRegistries.Keys.EFFECT_TARGETING_TYPES, WanderersOfTheRift.MODID);
 
-    public static final Supplier<MapCodec<SelfTargeting>> SELF_TARGETING = TARGETING_TYPES.register("self_targeting",
+    public static final Supplier<MapCodec<SelfTargeting>> SELF_TARGETING = TARGETING_TYPES.register("self",
             () -> SelfTargeting.CODEC);
-    public static final Supplier<MapCodec<RaycastTargeting>> RAYCAST_TARGETING = TARGETING_TYPES
-            .register("raycast_targeting", () -> RaycastTargeting.CODEC);
-    public static final Supplier<MapCodec<CubeAreaTargeting>> AREA_TARGETING = TARGETING_TYPES
-            .register("area_targeting", () -> CubeAreaTargeting.CODEC);
+    public static final Supplier<MapCodec<RaycastTargeting>> RAYCAST_TARGETING = TARGETING_TYPES.register("raycast",
+            () -> RaycastTargeting.CODEC);
+    public static final Supplier<MapCodec<CubeAreaTargeting>> AREA_TARGETING = TARGETING_TYPES.register("area",
+            () -> CubeAreaTargeting.CODEC);
 
 }

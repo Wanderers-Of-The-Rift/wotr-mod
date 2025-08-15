@@ -2,41 +2,54 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
+import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * A serializable form of an {@link AbilityContext} - this largely deals with the caster being stored as a UUID and
  * needing to be looked up in the level
  */
-public class StoredAbilityContext {
-    public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder
-            .create(instance -> instance.group(UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
-                    ItemStack.OPTIONAL_CODEC.fieldOf("abilityItem").forGetter(x -> x.abilityItem)
+public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId, ItemStack abilityItem,
+        Optional<WotrEquipmentSlot> slot) {
 
-            ).apply(instance, StoredAbilityContext::new));
-
-    private final UUID casterId;
-    private final ItemStack abilityItem;
+    public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            UUIDUtil.CODEC.fieldOf("instance_id").forGetter(x -> x.instanceId),
+            Ability.CODEC.fieldOf("ability").forGetter(x -> x.ability),
+            UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
+            ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
+            WotrEquipmentSlot.DIRECT_CODEC.optionalFieldOf("slot").forGetter(x -> x.slot)
+    ).apply(instance, StoredAbilityContext::new));
 
     public StoredAbilityContext(AbilityContext context) {
-        this.casterId = context.caster().getUUID();
-        this.abilityItem = context.abilityItem();
+        this(context.instanceId(), context.ability(), context.caster().getUUID(), context.abilityItem(),
+                Optional.ofNullable(context.slot()));
     }
 
-    public StoredAbilityContext(UUID casterId, ItemStack abilityItem) {
-        this.casterId = casterId;
-        this.abilityItem = abilityItem;
+    public AbilityContext toContext(LivingEntity caster, Level level) {
+        return new AbilityContext(instanceId, ability, caster, abilityItem, slot.orElse(null), level);
     }
 
-    public AbilityContext toContext(LivingEntity caster) {
-        return new AbilityContext(caster, abilityItem);
+    public LivingEntity getCaster(MinecraftServer server) {
+        for (ServerLevel level : server.getAllLevels()) {
+            Entity entity = level.getEntity(casterId);
+            if (entity != null) {
+                if (entity instanceof LivingEntity caster) {
+                    return caster;
+                }
+                return null;
+            }
+        }
+        return null;
     }
 
-    public UUID getCasterId() {
-        return casterId;
-    }
 }
