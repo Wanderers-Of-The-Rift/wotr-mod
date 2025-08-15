@@ -27,16 +27,17 @@ public class AttachEffect extends AbilityEffect {
 
     public static final MapCodec<AttachEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbilityEffect.commonFields(instance)
-                    .and(TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate())
-                            .forGetter(AttachEffect::getTriggerPredicate))
-                    .and(ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
-                            .forGetter(AttachEffect::getContinuePredicate))
-                    .and(RegistryFixedCodec.create(WotrRegistries.Keys.EFFECT_MARKERS)
-                            .optionalFieldOf("display")
-                            .forGetter(AttachEffect::getDisplay))
-                    .and(ModifierInstance.CODEC.listOf()
-                            .optionalFieldOf("modifiers", List.of())
-                            .forGetter(AttachEffect::getModifiers))
+                    .and(instance.group(
+                            TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate())
+                                    .forGetter(AttachEffect::getTriggerPredicate),
+                            ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
+                                    .forGetter(AttachEffect::getContinuePredicate),
+                            RegistryFixedCodec.create(WotrRegistries.Keys.EFFECT_MARKERS)
+                                    .optionalFieldOf("display")
+                                    .forGetter(AttachEffect::getDisplay),
+                            ModifierInstance.CODEC.listOf()
+                                    .optionalFieldOf("modifiers", List.of())
+                                    .forGetter(AttachEffect::getModifiers)))
                     .apply(instance, AttachEffect::new));
 
     private final TriggerPredicate triggerPredicate;
