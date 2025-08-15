@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * AttachedEffects is an attachment that allows effects to be attached to an entity. They persist until their caster is
@@ -69,11 +70,9 @@ public class AttachedEffects {
             return;
         }
         for (AttachedEffect effect : ImmutableList.copyOf(effects)) {
-            if (effect.tick(attachedTo)) {
-                effect.onDetach(attachedTo);
-                effects.remove(effect);
-            }
+            effect.tick(attachedTo);
         }
+        detachEffectsIf(AttachedEffect::isExpired);
     }
 
     /**
@@ -97,14 +96,20 @@ public class AttachedEffects {
      * @param instanceId The id of the ability instance
      */
     public void detach(UUID instanceId) {
-        var iterator = effects.iterator();
-        while (iterator.hasNext()) {
-            AttachedEffect effect = iterator.next();
-            if (effect.context.instanceId().equals(instanceId) && holder instanceof Entity entity) {
-                effect.onDetach(entity);
-                iterator.remove();
-            }
+        detachEffectsIf(effect -> effect.context.instanceId().equals(instanceId));
+    }
+
+    private void detachEffectsIf(Predicate<AttachedEffect> predicate) {
+        if (!(holder instanceof Entity entity)) {
+            return;
         }
+        this.effects.removeIf(effect -> {
+            if (predicate.test(effect)) {
+                effect.onDetach(entity);
+                return true;
+            }
+            return false;
+        });
     }
 
     /**
@@ -143,6 +148,7 @@ public class AttachedEffects {
         private final StoredAbilityContext context;
         private int triggeredTimes;
         private int age;
+        private boolean expired;
 
         private LivingEntity cachedCaster;
 
@@ -181,13 +187,15 @@ public class AttachedEffects {
          * @param attachedTo The entity it is attached to
          * @return Whether this effect has expired and should be removed
          */
-        public boolean tick(Entity attachedTo) {
+        public void tick(Entity attachedTo) {
             if (!(attachedTo.level() instanceof ServerLevel level)) {
-                return true;
+                expired = true;
+                return;
             }
             LivingEntity caster = getCaster(level.getServer());
             if (caster == null) {
-                return true;
+                expired = true;
+                return;
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, age, caster)) {
                 AbilityContext triggerContext = context.toContext(caster, attachedTo.level());
@@ -198,7 +206,11 @@ public class AttachedEffects {
                 triggeredTimes++;
             }
             age++;
-            return !attachEffect.getContinuePredicate().matches(attachedTo, age, triggeredTimes, caster);
+            expired = !attachEffect.getContinuePredicate().matches(attachedTo, age, triggeredTimes, caster);
+        }
+
+        public boolean isExpired() {
+            return expired;
         }
 
         private LivingEntity getCaster(MinecraftServer server) {
