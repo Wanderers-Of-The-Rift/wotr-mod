@@ -22,7 +22,9 @@ import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CachedRiftRoomGe
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.CoreRiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.LayerGeneratableRiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.SerializableCorridorValidator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.GeneratorLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Opposite;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Or;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.PerimeterGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
@@ -56,13 +58,7 @@ final class RiftConfigInitialization {
     }
 
     private static List<RiftPostProcessingStep> defaultPostProcessingSteps() {
-        return List.of(new CorridorBlender(
-                new SerializableCorridorValidator.Or(
-                        new SerializableCorridorValidator.GeneratorLayout(), new SerializableCorridorValidator.Opposite(
-                                new SerializableCorridorValidator.GeneratorLayout()
-                        )
-                )
-        ));
+        return List.of(new CorridorBlender(new Or(new GeneratorLayout(), new Opposite(new GeneratorLayout()))));
     }
 
     private static Holder<RiftTheme> getRandomTheme(MinecraftServer server, long seed) {

@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 

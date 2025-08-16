@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpaceCorridor;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;

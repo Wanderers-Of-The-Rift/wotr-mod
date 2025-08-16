@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.SerializableCorridorValidator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.SerializableCorridorValidator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;

@@ -33,7 +33,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.SerializableCorridorValidator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.SerializableCorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Registry;

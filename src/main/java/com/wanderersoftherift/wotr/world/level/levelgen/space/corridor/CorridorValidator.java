@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.world.level.levelgen.space;
+package com.wanderersoftherift.wotr.world.level.levelgen.space.corridor;
 
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.core.Direction;
