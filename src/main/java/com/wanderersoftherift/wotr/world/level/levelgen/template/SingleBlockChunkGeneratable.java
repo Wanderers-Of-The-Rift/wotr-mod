@@ -1,5 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftBuiltinGeneratables;
+import com.wanderersoftherift.wotr.serialization.StringBlockStateCodec;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import net.minecraft.core.Vec3i;
@@ -13,7 +17,16 @@ import java.util.List;
 /**
  * fills entire chunk with one block
  */
-public record SingleBlockChunkGeneratable(BlockState block) implements RiftGeneratable {
+public record SingleBlockChunkGeneratable(BlockState block) implements SerializableRiftGeneratable {
+
+    public static final MapCodec<SingleBlockChunkGeneratable> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+            .group(StringBlockStateCodec.INSTANCE.fieldOf("block").forGetter(SingleBlockChunkGeneratable::block))
+            .apply(instance, SingleBlockChunkGeneratable::new));
+
+    @Override
+    public MapCodec<? extends SerializableRiftGeneratable> codec() {
+        return CODEC;
+    }
 
     @Override
     public void processAndPlace(
@@ -39,6 +52,6 @@ public record SingleBlockChunkGeneratable(BlockState block) implements RiftGener
 
     @Override
     public String identifier() {
-        return "wotr:builtin:single_block";
+        return WotrRiftBuiltinGeneratables.SINGLE_BLOCK_CHUNK_GENERATABLE.getId().toString() + "[builtin]";
     }
 }

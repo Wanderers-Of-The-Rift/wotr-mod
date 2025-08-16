@@ -1,11 +1,11 @@
 package com.wanderersoftherift.wotr.item.riftkey;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -16,7 +16,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -25,41 +27,83 @@ import java.util.Optional;
  * @param tier      The tier of the rift
  * @param theme     The theme of the rift
  * @param objective The objective of the rift
- * @param seed      Optional, the seed for the rift
+ * @param riftGen   Additional generation config
  */
 // TODO: Move into core.rift
 public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<Holder<ObjectiveType>> objective,
-        Optional<RiftLayout.Factory> layout, Optional<Integer> seed) {
+        RiftGenerationConfig riftGen,
+        Map<Holder<MapCodec<? extends RiftConfigCustomData>>, RiftConfigCustomData> customData) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder
-            .create(instance -> instance
-                    .group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
-                            RiftTheme.CODEC.optionalFieldOf("theme").forGetter(RiftConfig::theme),
-                            ObjectiveType.CODEC.optionalFieldOf("objective").forGetter(RiftConfig::objective),
-                            RiftLayout.Factory.CODEC.optionalFieldOf("layout").forGetter(RiftConfig::layout),
-                            Codec.INT.optionalFieldOf("seed").forGetter(RiftConfig::seed))
-                    .apply(instance, RiftConfig::new));
+            .create(instance -> instance.group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
+                    RiftTheme.CODEC.optionalFieldOf("theme").forGetter(RiftConfig::theme),
+                    ObjectiveType.CODEC.optionalFieldOf("objective").forGetter(RiftConfig::objective),
+                    RiftGenerationConfig.CODEC.optionalFieldOf("rift_gen", RiftGenerationConfig.EMPTY)
+                            .forGetter(RiftConfig::riftGen),
+                    RiftConfigCustomData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", new HashMap<>())
+                            .forGetter(RiftConfig::customData)
+            ).apply(instance, RiftConfig::new));
 
     // spotless:off
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftConfig> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, RiftConfig::tier,
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES).apply(ByteBufCodecs::optional), RiftConfig::theme,
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES).apply(ByteBufCodecs::optional), RiftConfig::objective,
-            ByteBufCodecs.fromCodec(RiftLayout.Factory.CODEC).apply(ByteBufCodecs::optional), RiftConfig::layout,
-            ByteBufCodecs.INT.apply(ByteBufCodecs::optional), RiftConfig::seed,
+                ByteBufCodecs.INT, RiftConfig::tier,
+                ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES).apply(ByteBufCodecs::optional), RiftConfig::theme,
+                ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES).apply(ByteBufCodecs::optional), RiftConfig::objective,
+                RiftGenerationConfig.STREAM_CODEC, RiftConfig::riftGen,
+                RiftConfigCustomData.DISPATCHED_MAP_STREAM_CODEC, RiftConfig::customData,
             RiftConfig::new);
     // spotless:on
 
     public RiftConfig(int tier) {
-        this(tier, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+        this(tier, Optional.empty(), Optional.empty(), RiftGenerationConfig.EMPTY, new HashMap<>());
     }
 
     public RiftConfig(int tier, Holder<RiftTheme> theme) {
-        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.empty());
+        this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY, new HashMap<>());
     }
 
-    public RiftConfig(int tier, Holder<RiftTheme> theme, int seed) {
-        this(tier, Optional.of(theme), Optional.empty(), Optional.empty(), Optional.of(seed));
+    public RiftConfig(int tier, Holder<RiftTheme> theme, long seed) {
+        this(tier, Optional.of(theme), Optional.empty(), RiftGenerationConfig.EMPTY.withSeed(seed), new HashMap<>());
+    }
+
+    public RiftConfig withObjectiveIfAbsent(Holder<ObjectiveType> objective) {
+        if (this.objective.isPresent()) {
+            return this;
+        } else {
+            return withObjective(objective);
+        }
+    }
+
+    public RiftConfig withThemeIfAbsent(Holder<RiftTheme> theme) {
+        if (this.theme.isPresent()) {
+            return this;
+        } else {
+            return withTheme(theme);
+        }
+    }
+
+    public RiftConfig withRiftGenerationConfig(RiftGenerationConfig riftGen) {
+        return new RiftConfig(tier, theme, objective, riftGen, customData);
+    }
+
+    public RiftConfig withObjective(Holder<ObjectiveType> objective) {
+        return new RiftConfig(tier, theme, Optional.of(objective), riftGen, customData);
+    }
+
+    public RiftConfig withTheme(Holder<RiftTheme> theme) {
+        return new RiftConfig(tier, Optional.of(theme), objective, riftGen, customData);
+    }
+
+    public RiftConfig withTier(int tier) {
+        return new RiftConfig(tier, theme, objective, riftGen, customData);
+    }
+
+    public <T extends RiftConfigCustomData> T getCustomData(Holder<MapCodec<T>> key) {
+        return (T) customData.get(key);
+    }
+
+    public <T extends RiftConfigCustomData> T putCustomData(Holder<MapCodec<T>> key, T newValue) {
+        return (T) customData.put((Holder<MapCodec<? extends RiftConfigCustomData>>) (Object) key, newValue);
     }
 
     /**
@@ -86,67 +130,10 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
                     Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", objectiveName)
                             .withColor(ChatFormatting.GRAY.getColor()));
         });
-        seed.ifPresent(seed -> {
+        riftGen.seed().ifPresent(seed -> {
             result.add(Component.translatable(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), seed)
                     .withColor(ChatFormatting.GRAY.getColor()));
         });
         return result;
-    }
-
-    public Builder modify() {
-        return new Builder(this);
-    }
-
-    public static class Builder {
-        private int tier;
-        private Optional<Holder<RiftTheme>> theme;
-        private Optional<Holder<ObjectiveType>> objective;
-        private Optional<RiftLayout.Factory> layout;
-        private Optional<Integer> seed;
-
-        public Builder() {
-            this.tier = 0;
-            this.theme = Optional.empty();
-            this.objective = Optional.empty();
-            this.layout = Optional.empty();
-            this.seed = Optional.empty();
-        }
-
-        private Builder(RiftConfig source) {
-            this.tier = source.tier;
-            this.theme = source.theme;
-            this.objective = source.objective;
-            this.layout = source.layout;
-            this.seed = source.seed;
-        }
-
-        public Builder tier(int tier) {
-            this.tier = tier;
-            return this;
-        }
-
-        public Builder theme(Holder<RiftTheme> theme) {
-            this.theme = Optional.of(theme);
-            return this;
-        }
-
-        public Builder objective(Holder<ObjectiveType> objective) {
-            this.objective = Optional.of(objective);
-            return this;
-        }
-
-        public Builder layout(RiftLayout.Factory layout) {
-            this.layout = Optional.of(layout);
-            return this;
-        }
-
-        public Builder seed(int seed) {
-            this.seed = Optional.of(seed);
-            return this;
-        }
-
-        public RiftConfig build() {
-            return new RiftConfig(tier, theme, objective, layout, seed);
-        }
     }
 }

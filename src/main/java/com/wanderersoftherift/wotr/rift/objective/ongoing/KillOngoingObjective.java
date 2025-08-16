@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.rift.objective.LevelRiftObjectiveData;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ProgressObjective;
 import net.minecraft.network.chat.Component;
@@ -36,7 +36,7 @@ public class KillOngoingObjective implements ProgressObjective {
     }
 
     @Override
-    public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, LevelRiftObjectiveData data) {
+    public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, RiftData data) {
         if (isComplete()) {
             return false;
         }

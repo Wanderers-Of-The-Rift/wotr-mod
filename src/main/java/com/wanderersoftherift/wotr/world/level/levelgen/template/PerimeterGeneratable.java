@@ -1,8 +1,11 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftBuiltinGeneratables;
+import com.wanderersoftherift.wotr.serialization.StringBlockStateCodec;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.CorridorValidator;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,7 +17,18 @@ import java.util.List;
 /**
  * places bedrock around the room
  */
-public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator validator) implements RiftGeneratable {
+public record PerimeterGeneratable(BlockState perimeterBlock) implements SerializableRiftGeneratable {
+
+    public static final MapCodec<PerimeterGeneratable> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance
+                    .group(StringBlockStateCodec.INSTANCE.fieldOf("perimeter_block")
+                            .forGetter(PerimeterGeneratable::perimeterBlock))
+                    .apply(instance, PerimeterGeneratable::new));
+
+    @Override
+    public MapCodec<? extends SerializableRiftGeneratable> codec() {
+        return CODEC;
+    }
 
     @Override
     public void processAndPlace(
@@ -81,6 +95,6 @@ public record PerimeterGeneratable(BlockState perimeterBlock, CorridorValidator 
 
     @Override
     public String identifier() {
-        return "wotr:builtin:perimeter";
+        return WotrRiftBuiltinGeneratables.PERIMETER_GENERATABLE.getId().toString() + "[builtin]";
     }
 }

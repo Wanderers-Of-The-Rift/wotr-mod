@@ -65,7 +65,7 @@ public class ProcessorUtil {
 
         var riftSeed = 0L;
         if (((ServerChunkCache) level.getChunkSource()).getGenerator() instanceof FastRiftGenerator riftGenerator) {
-            var cfgSeed = riftGenerator.getRiftConfig().seed();
+            var cfgSeed = riftGenerator.getRiftConfig().riftGen().seed();
             if (cfgSeed.isPresent()) {
                 riftSeed = cfgSeed.get();
             }
