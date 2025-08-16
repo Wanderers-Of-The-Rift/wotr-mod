@@ -58,7 +58,7 @@ public interface RiftGeneratable {
             var next = RiftTemplates.random(server, pool, random);
             if (next == null) {
                 if (!("minecraft".equals(pool.getNamespace()) && "empty".equals(pool.getPath()))) {
-                    WanderersOfTheRift.LOGGER.info("empty pool {}", pool);
+                    WanderersOfTheRift.LOGGER.debug("empty pool {}", pool);
                 }
                 continue;
             }
@@ -80,7 +80,7 @@ public interface RiftGeneratable {
                     .toList();
 
             if (childJigsawList.isEmpty()) {
-                WanderersOfTheRift.LOGGER.info(
+                WanderersOfTheRift.LOGGER.warn(
                         "failed to spawn poi {} in room {} at jigsaw location {}, report this to build team",
                         jigsaw.pool(), generatable.identifier(), jigsaw.info().pos());
                 continue;
