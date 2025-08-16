@@ -1,0 +1,17 @@
+{
+  "attribute": "wotr:constitution",
+  "effects": [
+    {
+      "from" : 1,
+      "count": 20,
+      "cost": 1,
+      "modifiers": [
+        {
+          "attribute" : "minecraft:max_health",
+          "value": 6,
+          "operation": "add_value"
+        }
+      ]
+    }
+  ]
+}
