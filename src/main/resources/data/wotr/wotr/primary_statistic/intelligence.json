@@ -1,0 +1,27 @@
+{
+  "attribute": "wotr:intelligence",
+  "effects": [
+    {
+      "from" : 1,
+      "count": 20,
+      "cost": 1,
+      "modifiers": [
+        {
+          "attribute" : "wotr:max_mana",
+          "value": 10,
+          "operation": "add_value"
+        },
+        {
+          "attribute" : "wotr:mana_regen_rate",
+          "value": 1,
+          "operation": "add_value"
+        },
+        {
+          "attribute" : "wotr:ability_raw_damage",
+          "value": 2,
+          "operation": "add_value"
+        }
+      ]
+    }
+  ]
+}

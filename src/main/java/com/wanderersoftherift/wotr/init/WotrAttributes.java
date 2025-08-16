@@ -74,7 +74,13 @@ public class WotrAttributes {
                     WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0, Integer.MAX_VALUE)
                     .setSyncable(true));
 
-    // Critical
+    /// Combat
+
+    public static final DeferredHolder<Attribute, RangedAttribute> RANGED_ATTACK_DAMAGE = registerAttribute(
+            "ranged_attack_damage",
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "ranged_attack_damage"), 0, 0,
+                    2048.0));
+
     public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_CHANCE = registerAttribute(
             "critical_chance",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_chance"), 0, 0,
@@ -87,7 +93,6 @@ public class WotrAttributes {
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), 0, 0,
                     Integer.MAX_VALUE));
 
-    // Thorns
     public static final DeferredHolder<Attribute, RangedAttribute> THORNS_CHANCE = registerAttribute(
             "thorns_chance", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_chance"),
                     0, 0, Integer.MAX_VALUE));
@@ -95,7 +100,6 @@ public class WotrAttributes {
             "thorns_damage", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "thorns_damage"),
                     0, 0, Integer.MAX_VALUE));
 
-    // Life Leech
     public static final DeferredHolder<Attribute, RangedAttribute> LIFE_LEECH = registerAttribute(
             "life_leech",
             () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "life_leech"), 0, 0, 1F));
@@ -104,28 +108,21 @@ public class WotrAttributes {
 
     public static final DeferredHolder<Attribute, RangedAttribute> STRENGTH = registerAttribute(
             "strength",
-            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "strength"), 0, 0,
-                    20).setSyncable(true));
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "strength"), 0, 0, 100));
     public static final DeferredHolder<Attribute, RangedAttribute> CONSTITUTION = registerAttribute(
             "constitution",
-            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "constitution"),
-                    0, 0, 20).setSyncable(true));
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "constitution"), 0, 0, 100));
     public static final DeferredHolder<Attribute, RangedAttribute> DEXTERITY = registerAttribute(
             "dexterity",
-            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "dexterity"), 0,
-                    0, 20).setSyncable(true));
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "dexterity"), 0, 0, 100));
     public static final DeferredHolder<Attribute, RangedAttribute> CHARISMA = registerAttribute(
             "charisma",
-            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "charisma"), 0, 0,
-                    20).setSyncable(true));
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "charisma"), 0, 0, 100));
     public static final DeferredHolder<Attribute, RangedAttribute> INTELLIGENCE = registerAttribute(
             "intelligence",
-            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "intelligence"),
-                    0, 0, 20).setSyncable(true));
+            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "intelligence"), 0, 0, 100));
     public static final DeferredHolder<Attribute, RangedAttribute> WISDOM = registerAttribute(
-            "wisdom",
-            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "wisdom"), 0, 0,
-                    20).setSyncable(true));
+            "wisdom", () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "wisdom"), 0, 0, 100));
 
     /*
      * This adds the different attributes to the player for the different abilities

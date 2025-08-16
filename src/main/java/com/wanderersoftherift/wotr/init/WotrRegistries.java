@@ -18,6 +18,7 @@ import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
+import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfigCustomData;
@@ -147,6 +148,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ongoing_objective_type"));
         public static final ResourceKey<Registry<MapCodec<? extends OutputBlockState>>> OUTPUT_BLOCKSTATE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("output_blockstate_type"));
+        public static final ResourceKey<Registry<PrimaryStatistic>> PRIMARY_STATISTICS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("primary_statistic"));
         public static final ResourceKey<Registry<RiftTheme>> RIFT_THEMES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
         public static final ResourceKey<Registry<MapCodec<? extends AbilityTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
@@ -246,5 +249,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
     }
 }
