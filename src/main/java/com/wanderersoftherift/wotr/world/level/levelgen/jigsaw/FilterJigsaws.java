@@ -12,7 +12,7 @@ import java.util.List;
 public record FilterJigsaws(String namespace, String pathPattern) implements JigsawListProcessor {
     public static final MapCodec<FilterJigsaws> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("namespace").forGetter(FilterJigsaws::namespace),
-            Codec.STRING.fieldOf("path_prefix").forGetter(FilterJigsaws::pathPattern)
+            Codec.STRING.fieldOf("path_pattern").forGetter(FilterJigsaws::pathPattern)
     ).apply(instance, FilterJigsaws::new));
 
     @Override

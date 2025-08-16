@@ -201,7 +201,7 @@ public final class RiftLevelManager {
             return null;
         }
 
-        config = RiftConfigInitialization.initializeConfig(config, server, firstPlayer);
+        config = RiftConfigInitialization.initializeConfig(config, server);
         var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
         var loadedRiftHeight = finalConfig.riftGen()
                 .layout()

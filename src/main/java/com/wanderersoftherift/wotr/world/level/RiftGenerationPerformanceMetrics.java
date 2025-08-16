@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class PerformanceMeasurement {
+public class RiftGenerationPerformanceMetrics {
 
     public static final int MAX_MEASUREMENT_PAUSE_MILLISECONDS = 3000;
 

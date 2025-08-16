@@ -67,7 +67,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     private final int layerCount;
     private final int dimensionHeightBlocks;
-    private final PerformanceMeasurement performanceMeasurement = new PerformanceMeasurement();
+    private final RiftGenerationPerformanceMetrics riftGenerationPerformanceMetrics = new RiftGenerationPerformanceMetrics();
     private final RiftConfig config;
     private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
     private final RiftRoomGenerator roomGenerator;
@@ -166,7 +166,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             RandomState randomState,
             StructureManager structureManager,
             ChunkAccess chunk) {
-        performanceMeasurement.chunkStarted();
+        riftGenerationPerformanceMetrics.chunkStarted();
 
         return CompletableFuture.supplyAsync(() -> {
             var level = (ServerLevelAccessor) ((AccessorStructureManager) structureManager).getLevel();
@@ -199,7 +199,7 @@ public class FastRiftGenerator extends ChunkGenerator {
             }
 
         }
-        performanceMeasurement.chunkEnded();
+        riftGenerationPerformanceMetrics.chunkEnded();
     }
 
     @Override
@@ -243,7 +243,7 @@ public class FastRiftGenerator extends ChunkGenerator {
                 }
             }
         }
-        performanceMeasurement.addDebugScreenInfo(info);
+        riftGenerationPerformanceMetrics.addDebugScreenInfo(info);
     }
 
     public int getDimensionHeightBlocks() {

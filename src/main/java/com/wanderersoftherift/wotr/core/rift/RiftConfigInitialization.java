@@ -30,7 +30,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 
@@ -38,9 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RiftConfigInitialization {
+final class RiftConfigInitialization {
 
-    static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server, ServerPlayer firstPlayer) {
+    static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
         var random = RandomSource.create();
         var seed = baseConfig.riftGen().seed().orElseGet(random::nextLong);
         var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
@@ -66,7 +65,7 @@ public class RiftConfigInitialization {
         ));
     }
 
-    static Holder<RiftTheme> getRandomTheme(MinecraftServer server, long seed) {
+    private static Holder<RiftTheme> getRandomTheme(MinecraftServer server, long seed) {
 
         var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
                 seed * 5624397638181617163L);
