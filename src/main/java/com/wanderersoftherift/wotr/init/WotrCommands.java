@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
 import com.wanderersoftherift.wotr.commands.SpawnPieceCommand;
+import com.wanderersoftherift.wotr.commands.StatCommands;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -34,6 +35,7 @@ public final class WotrCommands {
         new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new HudCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new CurrencyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new StatCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new ManaCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
 
         if (FMLEnvironment.dist.isClient()) {

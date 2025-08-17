@@ -218,6 +218,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
+        add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
+        add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
+        add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
@@ -400,6 +403,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "max_mana"), "Max Mana");
         add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
+        add(WanderersOfTheRift.translationId("attribute", "strength"), "Strength");
+        add(WanderersOfTheRift.translationId("attribute", "dexterity"), "Dexterity");
+        add(WanderersOfTheRift.translationId("attribute", "constitution"), "Constitution");
+        add(WanderersOfTheRift.translationId("attribute", "intelligence"), "Intelligence");
+        add(WanderersOfTheRift.translationId("attribute", "wisdom"), "Wisdom");
+        add(WanderersOfTheRift.translationId("attribute", "charisma"), "Charisma");
+
         addRunegems();
         addModifiers();
 
