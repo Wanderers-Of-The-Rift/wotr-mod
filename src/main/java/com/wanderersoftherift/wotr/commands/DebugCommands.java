@@ -1,11 +1,8 @@
 package com.wanderersoftherift.wotr.commands;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -14,7 +11,6 @@ import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -32,26 +28,6 @@ public class DebugCommands extends BaseCommand {
         String amountArg = "amount";
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
-        builder.then(Commands.literal("setStrength")
-                .then(Commands.argument(amountArg, IntegerArgumentType.integer(0))
-                        .executes(ctx -> setStrength(ctx, IntegerArgumentType.getInteger(ctx, amountArg)))));
-        builder.then(Commands.literal("showStrength").executes(this::showStrength));
-    }
-
-    private int showStrength(CommandContext<CommandSourceStack> context) {
-        AttributeMap attributes = context.getSource().getPlayer().getAttributes();
-        context.getSource()
-                .getPlayer()
-                .sendSystemMessage(Component.literal("Strength: " + attributes.getValue(WotrAttributes.STRENGTH)));
-        return 1;
-    }
-
-    private int setStrength(CommandContext<CommandSourceStack> context, int amount) {
-        context.getSource()
-                .getPlayer()
-                .getData(WotrAttachments.BASE_STATISTICS)
-                .setStatistic(WotrAttributes.STRENGTH, amount);
-        return 1;
     }
 
     private int devWorld(CommandContext<CommandSourceStack> stack) {
