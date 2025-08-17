@@ -90,17 +90,21 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             WotrEquipmentSlot slot) {
-        Optional<UUID> existing = activeAbilities.stream()
+        Optional<UUID> existingId = activeAbilities.stream()
                 .filter(x -> x.matches(ability, slot))
                 .map(ActiveAbility::id)
                 .findFirst();
-        UUID id = existing.orElseGet(UUID::randomUUID);
+        boolean existing = existingId.isPresent();
+        UUID id = existingId.orElseGet(UUID::randomUUID);
         AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, slot, entity.level());
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
             }
-            if (!ability.value().activate(context)) {
+            boolean finished = ability.value().activate(context);
+            if (finished && existing) {
+                activeAbilities.removeIf(x -> x.id.equals(id));
+            } else if (!finished && !existing) {
                 activeAbilities.add(new ActiveAbility(context));
             }
         }
