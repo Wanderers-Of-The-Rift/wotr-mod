@@ -2,11 +2,14 @@ package com.wanderersoftherift.wotr.entity.player;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -25,6 +28,8 @@ public final class PrimaryStatistic {
             Attribute.CODEC.fieldOf("attribute").forGetter(PrimaryStatistic::attribute),
             StatisticRangeDefinition.CODEC.listOf().fieldOf("effects").forGetter(PrimaryStatistic::effects)
     ).apply(instance, PrimaryStatistic::new));
+    public static final Codec<Holder<PrimaryStatistic>> CODEC = RegistryFixedCodec
+            .create(WotrRegistries.Keys.PRIMARY_STATISTICS);
 
     private final ResourceLocation id;
     private final Holder<Attribute> primaryAttribute;
@@ -61,6 +66,11 @@ public final class PrimaryStatistic {
 
     }
 
+    public static Component displayName(Holder<PrimaryStatistic> stat) {
+        ResourceLocation statId = ResourceLocation.parse(stat.value().primaryAttribute.getRegisteredName());
+        return Component.translatable(statId.toLanguageKey("attribute"));
+    }
+
     public void apply(LivingEntity entity, int value) {
         int level = Math.clamp(value, 0, levels.length - 1);
         StatLevel statLevel = levels[level];
@@ -87,6 +97,22 @@ public final class PrimaryStatistic {
 
     public List<StatisticRangeDefinition> effects() {
         return effects;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof PrimaryStatistic other) {
+            return attribute().equals(other.attribute());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(primaryAttribute);
     }
 
     private record StatLevel(Object2DoubleMap<AttributeModifierType> modifiers, Set<AttributeModifierType> absent) {

@@ -108,7 +108,6 @@ public class WotrAttachments {
                     .copyOnDeath()
                     .build());
 
-
     /// Level attachments
     public static final Supplier<AttachmentType<EntityAttachmentRegistry<AttachedEffects>>> ATTACHED_EFFECT_ENTITY_REGISTRY = ATTACHMENT_TYPES
             .register(

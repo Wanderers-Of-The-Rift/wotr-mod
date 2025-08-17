@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +23,7 @@ public class BaseStatistics {
 
     private final IAttachmentHolder holder;
 
-    private final Object2IntMap<Holder<Attribute>> statistics = new Object2IntOpenHashMap<>();
+    private final Object2IntMap<Holder<PrimaryStatistic>> statistics = new Object2IntOpenHashMap<>();
 
     public BaseStatistics(IAttachmentHolder holder) {
         this(holder, null);
@@ -41,15 +40,15 @@ public class BaseStatistics {
         return new AttachmentSerializerFromDataCodec<>(Data.CODEC, BaseStatistics::new, x -> new Data(x.statistics));
     }
 
-    public int getStatistic(Holder<Attribute> stat) {
+    public int getStatistic(Holder<PrimaryStatistic> stat) {
         return statistics.getOrDefault(stat, 0);
     }
 
-    public void setStatistic(Holder<Attribute> stat, int value) {
+    public void setStatistic(Holder<PrimaryStatistic> stat, int value) {
         statistics.put(stat, value);
         if (holder instanceof Player player) {
             AttributeMap attributes = player.getAttributes();
-            attributes.getInstance(stat)
+            attributes.getInstance(stat.value().attribute())
                     .addOrReplacePermanentModifier(new AttributeModifier(WanderersOfTheRift.id("base_stat"), value,
                             AttributeModifier.Operation.ADD_VALUE));
         }
@@ -58,17 +57,17 @@ public class BaseStatistics {
     public void applyStatistics() {
         if (holder instanceof Player player) {
             AttributeMap attributes = player.getAttributes();
-            statistics.forEach((attribute, value) -> {
-                attributes.getInstance(attribute)
+            statistics.forEach((stat, value) -> {
+                attributes.getInstance(stat.value().attribute())
                         .addOrReplacePermanentModifier(new AttributeModifier(WanderersOfTheRift.id("base_stat"), value,
                                 AttributeModifier.Operation.ADD_VALUE));
             });
         }
     }
 
-    private record Data(Map<Holder<Attribute>, Integer> statistics) {
+    private record Data(Map<Holder<PrimaryStatistic>, Integer> statistics) {
         public static final Codec<Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.unboundedMap(Attribute.CODEC, Codec.INT).fieldOf("statistics").forGetter(Data::statistics)
+                Codec.unboundedMap(PrimaryStatistic.CODEC, Codec.INT).fieldOf("statistics").forGetter(Data::statistics)
         ).apply(instance, Data::new));
     }
 }
