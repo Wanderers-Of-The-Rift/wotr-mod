@@ -5,6 +5,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
+/**
+ * Event for when an attribute of a player changes
+ */
 public class PlayerAttributeChangedEvent extends PlayerEvent {
     private final Holder<Attribute> attribute;
 
@@ -13,6 +16,9 @@ public class PlayerAttributeChangedEvent extends PlayerEvent {
         this.attribute = attribute;
     }
 
+    /**
+     * @return The attribute that has changed
+     */
     public Holder<Attribute> getAttribute() {
         return attribute;
     }

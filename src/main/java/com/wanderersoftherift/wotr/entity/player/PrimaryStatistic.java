@@ -23,6 +23,18 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Defines a primary statistic
+ * <p>
+ * Primary Statistics are an attribute that modifies other attributes based on its level. This is defined in terms of
+ * ranges, but at runtime is converted into the effect that the stat has at each possible value. PrimaryStatistics are
+ * defined in data, so may be tweaked or changed by the mod pack.
+ * </p>
+ * <p>
+ * To support the possibility of change between each run of minecraft (due to updating the mod pack) the effects
+ * produced by primary statistics are temporary - they will be reapplied on log in.
+ * </p>
+ */
 public final class PrimaryStatistic {
     public static final Codec<PrimaryStatistic> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Attribute.CODEC.fieldOf("attribute").forGetter(PrimaryStatistic::attribute),
@@ -42,28 +54,30 @@ public final class PrimaryStatistic {
         this.primaryAttribute = attribute;
         this.effects = effects;
 
+        // Capture all attribute + operation combinations involved in this stat
         Set<AttributeModifierType> allModifierTypes = effects.stream()
                 .flatMap(x -> x.modifiers.stream())
                 .map(x -> new AttributeModifierType(id, x.attribute, x.operation))
                 .collect(Collectors.toUnmodifiableSet());
         int maxLevel = effects.stream().mapToInt(x -> x.from + x.count - 1).max().orElse(0);
 
-        List<List<StatisticModifier>> perLevel = new ArrayList<>();
+        // Determine level increments.
+        List<List<StatisticModifier>> incrementsPerLevel = new ArrayList<>();
         for (int i = 0; i <= maxLevel; i++) {
-            perLevel.add(new ArrayList<>());
+            incrementsPerLevel.add(new ArrayList<>());
         }
         for (var effect : effects) {
             for (int level = effect.from; level < effect.from + effect.count; level++) {
-                perLevel.get(level).addAll(effect.modifiers);
+                incrementsPerLevel.get(level).addAll(effect.modifiers);
             }
         }
 
+        // Accumulate final per level effects
         levels = new StatLevel[maxLevel + 1];
-        levels[0] = StatLevel.create(id, perLevel.getFirst(), allModifierTypes);
+        levels[0] = StatLevel.create(id, incrementsPerLevel.getFirst(), allModifierTypes);
         for (int level = 1; level <= maxLevel; level++) {
-            levels[level] = StatLevel.create(id, levels[level - 1], perLevel.get(level));
+            levels[level] = StatLevel.create(id, levels[level - 1], incrementsPerLevel.get(level));
         }
-
     }
 
     public static Component displayName(Holder<PrimaryStatistic> stat) {
@@ -71,6 +85,10 @@ public final class PrimaryStatistic {
         return Component.translatable(statId.toLanguageKey("attribute"));
     }
 
+    /**
+     * @param entity The entity to apply the stat to
+     * @param value  The value of the stat
+     */
     public void apply(LivingEntity entity, int value) {
         int level = Math.clamp(value, 0, levels.length - 1);
         StatLevel statLevel = levels[level];
@@ -91,6 +109,9 @@ public final class PrimaryStatistic {
         });
     }
 
+    /**
+     * @return The attribute that tracks this statistic
+     */
     public Holder<Attribute> attribute() {
         return primaryAttribute;
     }
@@ -115,6 +136,12 @@ public final class PrimaryStatistic {
         return Objects.hash(primaryAttribute);
     }
 
+    /**
+     * Describes the effect of the stat at a given level
+     * 
+     * @param modifiers The modifiers applied by this level
+     * @param absent    The modifiers that should be removed at this level (e.g. if decrementing the stat)
+     */
     private record StatLevel(Object2DoubleMap<AttributeModifierType> modifiers, Set<AttributeModifierType> absent) {
 
         public static StatLevel create(
@@ -141,6 +168,14 @@ public final class PrimaryStatistic {
 
     }
 
+    /**
+     * Definition of the modifiers to apply across a single or range of levels of the stat
+     * 
+     * @param from
+     * @param count
+     * @param cost
+     * @param modifiers
+     */
     public record StatisticRangeDefinition(int from, int count, int cost, List<StatisticModifier> modifiers) {
         public static final Codec<StatisticRangeDefinition> CODEC = RecordCodecBuilder
                 .create(instance -> instance.group(
@@ -153,6 +188,13 @@ public final class PrimaryStatistic {
                 ).apply(instance, StatisticRangeDefinition::new));
     }
 
+    /**
+     * Definition of a single attribute modifier
+     * 
+     * @param attribute
+     * @param operation
+     * @param value
+     */
     public record StatisticModifier(Holder<Attribute> attribute, AttributeModifier.Operation operation, double value) {
         public static final Codec<StatisticModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Attribute.CODEC.fieldOf("attribute").forGetter(StatisticModifier::attribute),
@@ -161,6 +203,9 @@ public final class PrimaryStatistic {
         ).apply(instance, StatisticModifier::new));
     }
 
+    /**
+     * Definition of a type of attribute modifier - everything but the value
+     */
     private static final class AttributeModifierType {
         private final Holder<Attribute> attribute;
         private final AttributeModifier.Operation operation;
@@ -200,11 +245,5 @@ public final class PrimaryStatistic {
         public int hashCode() {
             return Objects.hash(attribute, operation);
         }
-
-        @Override
-        public String toString() {
-            return "AttributeModifierType[" + "attribute=" + attribute + ", " + "operation=" + operation + ']';
-        }
-
     }
 }

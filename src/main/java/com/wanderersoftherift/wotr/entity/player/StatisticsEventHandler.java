@@ -13,6 +13,10 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Event subscriptions relating to managing a player's primary stats. This includes applying their stats when they login
+ * and applying updates when the stats change.
+ */
 @EventBusSubscriber
 public final class StatisticsEventHandler {
 
@@ -21,21 +25,21 @@ public final class StatisticsEventHandler {
     @SubscribeEvent
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            player.getData(WotrAttachments.BASE_STATISTICS).applyStatistics();
+            player.getData(WotrAttachments.PRIMARY_STATISTICS).applyStatistics();
         }
     }
 
     @SubscribeEvent
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            player.getData(WotrAttachments.BASE_STATISTICS).applyStatistics();
+            player.getData(WotrAttachments.PRIMARY_STATISTICS).applyStatistics();
         }
     }
 
     @SubscribeEvent
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            player.getData(WotrAttachments.BASE_STATISTICS).applyStatistics();
+            player.getData(WotrAttachments.PRIMARY_STATISTICS).applyStatistics();
         }
     }
 
