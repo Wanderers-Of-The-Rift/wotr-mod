@@ -54,7 +54,7 @@ public class StatCommands extends BaseCommand {
     }
 
     private int set(CommandContext<CommandSourceStack> context, Holder<PrimaryStatistic> stat, int amount) {
-        context.getSource().getPlayer().getData(WotrAttachments.BASE_STATISTICS).setStatistic(stat, amount);
+        context.getSource().getPlayer().getData(WotrAttachments.PRIMARY_STATISTICS).setStatistic(stat, amount);
         context.getSource()
                 .getPlayer()
                 .sendSystemMessage(

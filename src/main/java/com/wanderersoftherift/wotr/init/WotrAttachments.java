@@ -16,7 +16,7 @@ import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
-import com.wanderersoftherift.wotr.entity.player.BaseStatistics;
+import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
@@ -106,11 +106,11 @@ public class WotrAttachments {
                     .copyOnDeath()
                     .build());
 
-    /// Player level
-    public static final Supplier<AttachmentType<BaseStatistics>> BASE_STATISTICS = ATTACHMENT_TYPES.register(
-            "base_statistics",
-            () -> AttachmentType.builder(BaseStatistics::new)
-                    .serialize(BaseStatistics.getSerializer())
+    /// Player progression
+    public static final Supplier<AttachmentType<PrimaryStatistics>> PRIMARY_STATISTICS = ATTACHMENT_TYPES.register(
+            "primary_statistics",
+            () -> AttachmentType.builder(PrimaryStatistics::new)
+                    .serialize(PrimaryStatistics.getSerializer())
                     .copyOnDeath()
                     .build());
 
