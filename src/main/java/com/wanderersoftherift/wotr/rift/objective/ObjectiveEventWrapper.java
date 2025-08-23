@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.rift.objective;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -8,17 +9,15 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.Optional;
-
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID)
 public class ObjectiveEventWrapper {
 
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         if (event.getEntity().level() instanceof ServerLevel serverLevel) {
-            LevelRiftObjectiveData data = LevelRiftObjectiveData.getFromLevel(serverLevel);
-            if (data.getObjective() != null) {
-                boolean dirty = data.getObjective().onLivingDeath(event, serverLevel, data);
+            var data = RiftData.get(serverLevel);
+            if (data.getObjective().isPresent()) {
+                boolean dirty = data.getObjective().get().onLivingDeath(event, serverLevel, data);
                 if (dirty) {
                     data.setDirty();
                     broadcastObjectiveStatus(serverLevel, data);
@@ -27,8 +26,7 @@ public class ObjectiveEventWrapper {
         }
     }
 
-    private static void broadcastObjectiveStatus(ServerLevel serverLevel, LevelRiftObjectiveData data) {
-        PacketDistributor.sendToPlayersInDimension(serverLevel,
-                new S2CRiftObjectiveStatusPacket(Optional.ofNullable(data.getObjective())));
+    private static void broadcastObjectiveStatus(ServerLevel serverLevel, RiftData data) {
+        PacketDistributor.sendToPlayersInDimension(serverLevel, new S2CRiftObjectiveStatusPacket(data.getObjective()));
     }
 }

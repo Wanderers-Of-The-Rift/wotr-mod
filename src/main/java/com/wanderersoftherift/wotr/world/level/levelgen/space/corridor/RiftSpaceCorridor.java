@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.world.level.levelgen.space;
+package com.wanderersoftherift.wotr.world.level.levelgen.space.corridor;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;

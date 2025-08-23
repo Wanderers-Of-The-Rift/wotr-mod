@@ -5,41 +5,29 @@ import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
-import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.RingLayer;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
-import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
-import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -67,8 +55,6 @@ import java.util.stream.Stream;
  * Static manager for handing access to, creation, and destruction of a rift
  */
 public final class RiftLevelManager {
-
-    public static final int DEFAULT_RIFT_HEIGHT_IN_CHUNKS = 24;
 
     private RiftLevelManager() {
     }
@@ -200,7 +186,8 @@ public final class RiftLevelManager {
             ResourceLocation id,
             ResourceKey<Level> portalDimension,
             BlockPos portalPos,
-            RiftConfig config) {
+            RiftConfig config,
+            ServerPlayer firstPlayer) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var overworld = server.overworld();
 
@@ -214,9 +201,11 @@ public final class RiftLevelManager {
             return null;
         }
 
-        config = initializeConfig(config, server);
-        var loadedRiftHeight = config.layout()
-                .map(fac -> fac.riftShape().levelCount() + FastRiftGenerator.MARGIN_LAYERS);
+        config = RiftConfigInitialization.initializeConfig(config, server);
+        var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
+        var loadedRiftHeight = finalConfig.riftGen()
+                .layout()
+                .map(fac -> fac.riftShape(finalConfig).levelCount() + FastRiftGenerator.MARGIN_LAYERS);
         if (loadedRiftHeight.isEmpty()) {
             WanderersOfTheRift.LOGGER.error("missing values in RiftConfig");
             return null;
@@ -225,7 +214,8 @@ public final class RiftLevelManager {
         var riftDimensionType = getRiftDimensionTypeForHeight(requestedRiftHeightChunks);
         int actualRiftHeight = riftDimensionType.getKey();
 
-        ChunkGenerator chunkGen = getRiftChunkGenerator(overworld, requestedRiftHeightChunks, actualRiftHeight, config);
+        ChunkGenerator chunkGen = getRiftChunkGenerator(overworld, requestedRiftHeightChunks, actualRiftHeight,
+                finalConfig);
         if (chunkGen == null) {
             return null;
         }
@@ -235,7 +225,7 @@ public final class RiftLevelManager {
             return null;
         }
 
-        ServerLevel level = createRift(id, stem, portalDimension, portalPos, config);
+        ServerLevel level = createRift(id, stem, portalDimension, portalPos, finalConfig);
 
         Registry<Level> registry = dimensionRegistry.get();
         if (registry instanceof MappedRegistry<Level> mappedRegistry) {
@@ -249,7 +239,7 @@ public final class RiftLevelManager {
         level.getServer().forgeGetWorldMap().put(level.dimension(), level);
         level.getServer().markWorldsDirty();
 
-        NeoForge.EVENT_BUS.post(new RiftEvent.Created(level, config));
+        NeoForge.EVENT_BUS.post(new RiftEvent.Created.Post(level, finalConfig, firstPlayer));
         NeoForge.EVENT_BUS.post(new LevelEvent.Load(level));
 
         PacketDistributor.sendToAllPlayers(new S2CLevelListUpdatePacket(id, false));
@@ -366,41 +356,6 @@ public final class RiftLevelManager {
         level.getServer().overworld().save(null, true, false);
     }
 
-    private static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
-        var random = RandomSource.create();
-        int seed = baseConfig.seed().orElseGet(random::nextInt);
-        var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
-        return new RiftConfig(baseConfig.tier(), Optional.of(riftTheme), baseConfig.objective(),
-                baseConfig.layout().isPresent() ? baseConfig.layout()
-                        : Optional.of(
-                                defaultLayout(baseConfig.tier(), seed)),
-                Optional.of(seed));
-    }
-
-    private static RiftLayout.Factory defaultLayout(int tier, int seed) {
-        var layerCount = DEFAULT_RIFT_HEIGHT_IN_CHUNKS - FastRiftGenerator.MARGIN_LAYERS;
-        var factory = new LayeredFiniteRiftLayout.Factory(
-                new BoxedRiftShape(new CoarseDiamondRiftShape(2 + tier * 3, 3.0, layerCount),
-                        new Vec3i(-1 - 3 * tier, -layerCount / 2, -1 - 3 * tier),
-                        new Vec3i(3 + 6 * tier, layerCount, 3 + 6 * tier)),
-                Optional.of(seed), List.of(
-                        new PredefinedRoomLayer.Factory(
-                                new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
-                                        RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
-                                new Vec3i(-1, -1, -1)),
-                        new RingLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_stable"),
-                                RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY), 5),
-                        new RingLayer.Factory(
-                                new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_unstable"),
-                                        RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
-                                10),
-                        new ChaosLayer.Factory(new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_chaos"),
-                                RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY))
-
-                ));
-        return factory;
-    }
-
     private static ChunkGenerator getRiftChunkGenerator(
             ServerLevel overworld,
             int layerCount,
@@ -411,7 +366,7 @@ public final class RiftLevelManager {
             return null;
         }
         return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount, dimensionHeightBlocks,
-                ResourceLocation.withDefaultNamespace("bedrock"), config);
+                new SingleBlockChunkGeneratable(Blocks.BEDROCK.defaultBlockState()), config);
     }
 
     private static ServerLevel createRift(
@@ -434,7 +389,7 @@ public final class RiftLevelManager {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        int seed = config.seed().orElseGet(() -> new Random().nextInt());
+        var seed = config.riftGen().seed().orElseGet(() -> new Random().nextLong());
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
                 new DerivedLevelData(worldData, worldData.overworldData()),
@@ -445,20 +400,8 @@ public final class RiftLevelManager {
         riftData.setPortalPos(portalPos);
         riftData.setConfig(config);
 
-        riftData.setTheme(config.theme()
-                /* note: cannot be empty at this point */.orElse(getRandomTheme(riftLevel.getServer(), seed)));
+        riftData.setObjective(config.objective().map(objectiveType -> objectiveType.value().generate(riftLevel)));
 
         return riftLevel;
-    }
-
-    public static Holder<RiftTheme> getRandomTheme(MinecraftServer server, int seed) {
-
-        var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
-                seed * 5624397638181617163L);
-
-        Registry<RiftTheme> registry = server.registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);
-
-        return registry.getRandomElementOf(WotrTags.RiftThemes.RANDOM_SELECTABLE, themeRandom)
-                .orElseThrow(() -> new IllegalStateException("No rift themes available"));
     }
 }

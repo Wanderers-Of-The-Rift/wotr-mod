@@ -20,7 +20,7 @@ public interface RiftAdjacencyProcessor<T> {
     /**
      * Runs the processor on patch of blocks
      *
-     * @param data           value computed by {@link this.createData}
+     * @param data           value computed by {@link #createData}
      * @param adjacentBlocks Array of size 7. First 6 values are blocks adjecent to the central block, last is the
      *                       central block itself
      * @param isHidden       whether central block is fully surrounded by solid blocks
@@ -29,7 +29,7 @@ public interface RiftAdjacencyProcessor<T> {
     int processAdjacency(T data, BlockState[] adjacentBlocks, boolean isHidden);
 
     /**
-     * Creates data used as 1st parameter of {@link this.processAdjacency}, called once per template
+     * Creates data used as 1st parameter of {@link #processAdjacency}, called once per template
      */
     T createData(BlockPos structurePos, Vec3i pieceSize, ServerLevelAccessor world);
 
@@ -157,7 +157,7 @@ public interface RiftAdjacencyProcessor<T> {
 
     }
 
-    public static record ProcessorDataPair<T>(RiftAdjacencyProcessor<T> processor, T data) {
+    public record ProcessorDataPair<T>(RiftAdjacencyProcessor<T> processor, T data) {
         public static <T> ProcessorDataPair<T> create(
                 RiftAdjacencyProcessor<T> processor,
                 BlockPos structurePos,

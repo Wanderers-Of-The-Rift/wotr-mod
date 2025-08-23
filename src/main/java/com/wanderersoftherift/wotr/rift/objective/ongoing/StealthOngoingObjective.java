@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.rift.objective.LevelRiftObjectiveData;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -46,7 +46,7 @@ public class StealthOngoingObjective implements OngoingObjective {
     }
 
     @Override
-    public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, LevelRiftObjectiveData data) {
+    public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, RiftData data) {
         if (isComplete()) {
             return false;
         }

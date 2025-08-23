@@ -81,7 +81,7 @@ public class RiftTemplates {
         var result = new ArrayList<RiftGeneratable>();
         for (int idx = 0; idx < palettes.size(); idx++) {
             result.add(fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities,
-                    MessageFormat.format("{0}:{1}:{2}", id.getNamespace(), id.getPath(), idx)));
+                    MessageFormat.format("{0}:{1}[{2}]", id.getNamespace(), id.getPath(), idx)));
         }
         return result;
     }

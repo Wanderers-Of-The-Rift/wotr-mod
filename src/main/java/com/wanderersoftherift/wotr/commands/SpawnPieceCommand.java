@@ -11,6 +11,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
@@ -450,8 +451,8 @@ public class SpawnPieceCommand {
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
         RiftData riftData = RiftData.get(serverlevel);
-        Optional<Holder<RiftTheme>> originalTheme = riftData.getTheme();
-        riftData.setTheme(theme);
+        var originalConfig = riftData.getConfig();
+        riftData.setConfig(new RiftConfig(0, theme));
         try {
             Optional<StructureTemplate> optionalTemplate = structuretemplatemanager.get(template);
             if (optionalTemplate.isEmpty()) {
@@ -506,7 +507,7 @@ public class SpawnPieceCommand {
             return 0;
 
         } finally {
-            riftData.setTheme(originalTheme);
+            riftData.setConfig(originalConfig);
         }
     }
 
