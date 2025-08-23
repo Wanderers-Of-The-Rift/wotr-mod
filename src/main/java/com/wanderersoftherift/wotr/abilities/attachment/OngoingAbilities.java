@@ -10,7 +10,6 @@ import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
-import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.Tag;
@@ -42,8 +41,8 @@ public class OngoingAbilities {
         this.holder = holder;
         activeAbilities = new ArrayList<>(data.activeAbilities);
         if (holder instanceof Entity entity) {
-            EntityAttachmentRegistry registry = entity.level().getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY);
-            registry.add(WotrAttachments.ONGOING_ABILITIES, entity);
+            var registry = entity.level().getData(WotrAttachments.ONGOING_ABILITY_ENTITY_REGISTRY);
+            registry.add(entity);
         }
     }
 
