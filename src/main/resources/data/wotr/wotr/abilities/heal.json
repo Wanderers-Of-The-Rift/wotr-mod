@@ -24,5 +24,10 @@
     }
   ],
   "icon": "minecraft:textures/mob_effect/regeneration.png",
-  "mana_cost": 10
+  "cost": [
+    {
+      "type": "wotr:mana",
+      "amount": 10
+    }
+  ]
 }
