@@ -1,0 +1,57 @@
+package com.wanderersoftherift.wotr.abilities.triggers;
+
+import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
+import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.registries.DeferredHolder;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+
+/**
+ * Just a copy of {@link com.wanderersoftherift.wotr.util.EntityAttachmentRegistry}
+ *
+ */
+public class TriggerRegistry<T extends TrackedAbilityTrigger> {
+
+    private final DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<T>> type;
+    private final Set<Entity> entities = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
+    public TriggerRegistry(DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<T>> type) {
+        this.type = type;
+    }
+
+    /**
+     * Adds an entity to the registry for the given attachment type
+     *
+     * @param entity The entity to add
+     */
+    public void add(Entity entity) {
+        if (!entity.isRemoved()) {
+            entities.add(entity);
+        }
+    }
+
+    /**
+     * Iterates over all entities with the given attachment type
+     *
+     * @param consumer
+     */
+    public void forEach(BiConsumer<Entity, AbilityTracker> consumer) {
+        Iterator<Entity> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            Entity entity = iterator.next();
+            var tracker = AbilityTracker.forEntityNullable(entity);
+            if (entity.isRemoved() || tracker == null || !tracker.hasAbilitiesOnTrigger(type.getDelegate())) {
+                iterator.remove();
+                continue;
+            }
+            consumer.accept(entity, tracker);
+
+        }
+    }
+
+}

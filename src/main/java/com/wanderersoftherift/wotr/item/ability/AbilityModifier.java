@@ -30,9 +30,9 @@ public final class AbilityModifier extends AbstractModifierEffect {
                     ).apply(instance, AbilityModifier::new));
 
     private final Holder<Ability> providedAbility;
-    private final Holder<MapCodec<? extends TrackedAbilityTrigger>> trigger;
+    private final Holder<TrackedAbilityTrigger.Type<?>> trigger;
 
-    public AbilityModifier(Holder<Ability> providedAbility, Holder<MapCodec<? extends TrackedAbilityTrigger>> trigger) {
+    public AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.Type<?>> trigger) {
         this.providedAbility = providedAbility;
         this.trigger = trigger;
     }
@@ -74,7 +74,7 @@ public final class AbilityModifier extends AbstractModifierEffect {
         return providedAbility;
     }
 
-    public Holder<MapCodec<? extends TrackedAbilityTrigger>> trigger() {
+    public Holder<TrackedAbilityTrigger.Type<?>> trigger() {
         return trigger;
     }
 

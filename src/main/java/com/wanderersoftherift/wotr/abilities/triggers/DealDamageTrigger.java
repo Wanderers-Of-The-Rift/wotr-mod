@@ -11,14 +11,16 @@ import java.util.UUID;
 public record DealDamageTrigger(TakeDamageTrigger.SerializableDamageSource source, UUID victim, float amount)
         implements TrackedAbilityTrigger {
 
-    public static final MapCodec<DealDamageTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    private static final MapCodec<DealDamageTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             TakeDamageTrigger.SerializableDamageSource.CODEC.fieldOf("source").forGetter(DealDamageTrigger::source),
             UUIDUtil.CODEC.fieldOf("victim").forGetter(DealDamageTrigger::victim),
             Codec.FLOAT.fieldOf("amount").forGetter(DealDamageTrigger::amount)
     ).apply(instance, DealDamageTrigger::new));
 
+    public static final Type TYPE = new Type(CODEC, null);
+
     @Override
-    public MapCodec<? extends TrackedAbilityTrigger> codec() {
-        return CODEC;
+    public Type type() {
+        return TYPE;
     }
 }

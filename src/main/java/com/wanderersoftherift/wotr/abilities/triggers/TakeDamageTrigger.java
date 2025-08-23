@@ -15,14 +15,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 public record TakeDamageTrigger(SerializableDamageSource source, float amount) implements TrackedAbilityTrigger {
-    public static final MapCodec<TakeDamageTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    private static final MapCodec<TakeDamageTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             SerializableDamageSource.CODEC.fieldOf("source").forGetter(TakeDamageTrigger::source),
             Codec.FLOAT.fieldOf("amount").forGetter(TakeDamageTrigger::amount)
     ).apply(instance, TakeDamageTrigger::new));
 
+    public static final Type TYPE = new Type(CODEC, null);
+
     @Override
-    public MapCodec<? extends TrackedAbilityTrigger> codec() {
-        return CODEC;
+    public Type type() {
+        return TYPE;
     }
 
     record SerializableDamageSource(Holder<DamageType> type, Optional<UUID> directEntity, Optional<UUID> entity,
