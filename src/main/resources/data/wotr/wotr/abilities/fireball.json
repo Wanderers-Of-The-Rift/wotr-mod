@@ -41,5 +41,10 @@
     }
   ],
   "icon": "minecraft:textures/item/fire_charge.png",
-  "mana_cost": 10
+  "cost": [
+    {
+      "type": "wotr:food_level",
+      "amount": 2
+    }
+  ]
 }

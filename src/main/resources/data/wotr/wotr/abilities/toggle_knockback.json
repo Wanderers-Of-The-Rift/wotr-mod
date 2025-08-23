@@ -2,6 +2,11 @@
   "type": "wotr:toggle",
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
   "cooldown": 10,
+  "ongoing_requirements": [
+    {
+      "type": "wotr:mana"
+    }
+  ],
   "activation_effects": [
     {
       "type": "wotr:attach",

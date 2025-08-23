@@ -1,19 +1,15 @@
 package com.wanderersoftherift.wotr.abilities;
 
-import com.mojang.math.Constants;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,9 +27,16 @@ public class ToggleAbility extends Ability {
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(ToggleAbility::getSmallIcon),
                     Codec.INT.optionalFieldOf("cooldown", 0).forGetter(ToggleAbility::getBaseCooldown),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(ToggleAbility::getWarmupTime),
-                    Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(ToggleAbility::getBaseManaCost),
-                    Codec.BOOL.optionalFieldOf("deactivated_when_mana_exhausted", true)
-                            .forGetter(ToggleAbility::isDeactivatedWhenManaExhausted),
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("requirements", List.of())
+                            .forGetter(Ability::getActivationRequirements),
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("cost", List.of())
+                            .forGetter(Ability::getActivationCosts),
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("ongoing_requirements", List.of())
+                            .forGetter(ToggleAbility::getOngoingRequirements),
+
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("activation_effects", Collections.emptyList())
                             .forGetter(ToggleAbility::getActivationEffects),
@@ -43,16 +46,17 @@ public class ToggleAbility extends Ability {
             ).apply(instance, ToggleAbility::new));
 
     private final int warmupTime;
-    private final boolean deactivatedWhenManaExhausted;
+    private final List<AbilityRequirement> ongoingRequirements;
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
 
     public ToggleAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int cooldown, int warmupTime,
-            int manaCost, boolean deactivatedWhenManaExhausted, List<AbilityEffect> activationEffects,
+            List<AbilityRequirement> activationRequirements, List<AbilityRequirement> activationCosts,
+            List<AbilityRequirement> ongoingRequirements, List<AbilityEffect> activationEffects,
             List<AbilityEffect> deactivationEffects) {
-        super(icon, smallIcon, cooldown, manaCost);
+        super(icon, smallIcon, cooldown, activationRequirements, activationCosts);
         this.warmupTime = warmupTime;
-        this.deactivatedWhenManaExhausted = deactivatedWhenManaExhausted;
+        this.ongoingRequirements = ongoingRequirements;
         this.activationEffects = activationEffects;
         this.deactivationEffects = deactivationEffects;
     }
@@ -65,13 +69,8 @@ public class ToggleAbility extends Ability {
         } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         } else {
-            float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-
-            if (manaCost > 0) {
-                ManaData manaData = context.caster().getData(WotrAttachments.MANA);
-                return !(manaData.getAmount() < manaCost);
-            }
-            return true;
+            return getActivationRequirements().stream().allMatch(x -> x.check(context))
+                    && getActivationCosts().stream().allMatch(x -> x.check(context));
         }
     }
 
@@ -83,8 +82,7 @@ public class ToggleAbility extends Ability {
             return true;
         } else {
             states.setActive(context.source(), true);
-            float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-            context.caster().getData(WotrAttachments.MANA).useAmount(manaCost);
+            getActivationCosts().forEach(x -> x.pay(context));
             if (warmupTime == 0) {
                 return tick(context, 0);
             }
@@ -102,8 +100,7 @@ public class ToggleAbility extends Ability {
         if ((age - warmupTime) == 0) {
             activationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
         }
-        if (deactivatedWhenManaExhausted
-                && context.caster().getData(WotrAttachments.MANA).getAmount() < Constants.EPSILON) {
+        if (!ongoingRequirements.isEmpty() && ongoingRequirements.stream().anyMatch(x -> !x.check(context))) {
             deactivate(context, context.caster().getData(WotrAttachments.ABILITY_STATES));
             return true;
         }
@@ -118,14 +115,9 @@ public class ToggleAbility extends Ability {
 
     @Override
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        if (modifierEffect instanceof AttributeModifierEffect attributeModifierEffect) {
-            Holder<Attribute> attribute = attributeModifierEffect.getAttribute();
-            if (WotrAttributes.COOLDOWN.equals(attribute) && getBaseCooldown() > 0) {
-                return true;
-            }
-            if (WotrAttributes.MANA_COST.equals(attribute) && getBaseManaCost() > 0) {
-                return true;
-            }
+        if (getBaseCooldown() > 0 && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
+                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.getAttribute())) {
+            return true;
         }
         for (AbilityEffect effect : activationEffects) {
             if (effect.isRelevant(modifierEffect)) {
@@ -137,11 +129,11 @@ public class ToggleAbility extends Ability {
                 return true;
             }
         }
-        return false;
+        return super.isRelevantModifier(modifierEffect);
     }
 
-    public boolean isDeactivatedWhenManaExhausted() {
-        return deactivatedWhenManaExhausted;
+    public List<AbilityRequirement> getOngoingRequirements() {
+        return ongoingRequirements;
     }
 
     public int getWarmupTime() {
