@@ -94,7 +94,10 @@ public class AbilityTracker {
             WotrEquipmentSlot slot) {
         abilities.put(trigger, new TrackedAbility(slot, abilityHolder));
         if (holder instanceof Entity livingEntity && livingEntity.level() instanceof ServerLevel serverLevel) {
-            serverLevel.getData(trigger.value().registry().get()).add(livingEntity);
+            var registryTypeSupplier = trigger.value().registry();
+            if (registryTypeSupplier != null) {
+                serverLevel.getData(registryTypeSupplier.get()).add(livingEntity);
+            }
         }
     }
 
