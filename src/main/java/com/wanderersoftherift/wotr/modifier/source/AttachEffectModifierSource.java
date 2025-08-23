@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.modifier.source;
 
+import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -14,5 +16,10 @@ public record AttachEffectModifierSource(UUID uuid, int index) implements Modifi
     @Override
     public @NotNull String getSerializedName() {
         return "attach_effect_" + uuid.toString() + "_" + index;
+    }
+
+    @Override
+    public @Nullable WotrEquipmentSlot slot() {
+        return null;
     }
 }

@@ -1,12 +1,12 @@
 {
-    "type": "wotr:standard_ability",
+    "type": "wotr:standard",
     "icon" : "minecraft:textures/item/bone.png",
     "cooldown": 40,
             "effects": [
                 {
-                    "type": "wotr:summon_effect",
+                    "type": "wotr:summon",
                     "targeting": {
-                        "type": "wotr:area_targeting",
+                        "type": "wotr:area",
                         "range": 5
                     },
                     "entity_type": "minecraft:iron_golem",

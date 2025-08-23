@@ -59,8 +59,13 @@ public class OngoingAbilities {
         if (abilityComponent == null) {
             return false;
         }
-        Holder<Ability> ability = abilityComponent.ability();
+        return activate(slot, abilityItem, abilityComponent.ability());
+    }
 
+    public boolean activate(WotrEquipmentSlot slot, ItemStack abilityItem, Holder<Ability> ability) {
+        if (!(holder instanceof LivingEntity entity)) {
+            return false;
+        }
         if (entity.level().isClientSide()) {
             return clientsideActivate(entity, ability, abilityItem, slot);
         } else {
