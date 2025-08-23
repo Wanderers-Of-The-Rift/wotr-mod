@@ -1,0 +1,60 @@
+{
+  "loot_tables_to_eject": [
+    {
+      "data": "wotr:chests/rift_spawner/default",
+      "weight": 10
+    }
+  ],
+  "simultaneous_mobs": 3.0,
+  "simultaneous_mobs_added_per_player": 0.5,
+  "spawn_potentials": [
+    {
+      "data": {
+        "entity": {
+          "id": "minecraft:spider"
+        }
+      },
+      "weight": 3
+    },
+    {
+      "data": {
+        "entity": {
+          "id": "minecraft:spider",
+          "Passengers": [
+            {
+              "id": "minecraft:zombie",
+              "ArmorItems": [
+                {},
+                {
+                  "id": "minecraft:leather_leggings",
+                  "count": 1,
+                    "tag": {
+                        "display": {
+                        "color": 5197647
+                        }
+                    }
+                },
+                {
+                  "id": "minecraft:leather_chestplate",
+                  "count": 1,
+                  "tag": {
+                    "display": {
+                      "color": 5197647
+                    }
+                  }
+                },
+                {
+                  "id": "minecraft:azalea_leaves",
+                  "count": 1
+                }
+              ]
+            },
+            {}
+          ]
+        }
+      },
+      "weight": 1
+    }
+  ],
+  "ticks_between_spawn": 20
+}
