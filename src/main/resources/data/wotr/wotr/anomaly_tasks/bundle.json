@@ -1,0 +1,6 @@
+{
+  "type": "bundle",
+  "weight": 1,
+  "bundle_min": 2,
+  "bundle_max": 6
+}

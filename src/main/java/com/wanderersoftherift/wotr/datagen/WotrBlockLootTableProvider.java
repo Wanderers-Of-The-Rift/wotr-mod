@@ -40,6 +40,7 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(WotrBlocks.MOB_TRAP_BLOCK.get());
         dropSelf(WotrBlocks.SPRING_BLOCK.get());
         dropSelf(WotrBlocks.QUEST_HUB.get());
+        add(WotrBlocks.ANOMALY_BASE.get(), noDrop());
         add(WotrBlocks.RIFT_MOB_SPAWNER.get(), noDrop());
 
         addRiftConditionalDrop(WotrBlocks.NOGRAVGRAVEL.get(), Blocks.GRAVEL.asItem());
