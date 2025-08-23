@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
@@ -26,7 +25,12 @@ public class StandardAbility extends Ability {
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(StandardAbility::getSmallIcon),
                     Codec.INT.fieldOf("cooldown").forGetter(Ability::getBaseCooldown),
-                    Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("requirements", List.of())
+                            .forGetter(Ability::getActivationRequirements),
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("cost", List.of())
+                            .forGetter(Ability::getActivationCosts),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("effects", Collections.emptyList())
                             .forGetter(StandardAbility::getEffects)
@@ -34,9 +38,10 @@ public class StandardAbility extends Ability {
 
     private final List<AbilityEffect> effects;
 
-    public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
+    public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown,
+            List<AbilityRequirement> activationRequirements, List<AbilityRequirement> activationCosts,
             List<AbilityEffect> effects) {
-        super(icon, smallIcon, baseCooldown, manaCost);
+        super(icon, smallIcon, baseCooldown, activationRequirements, activationCosts);
         this.effects = new ArrayList<>(effects);
     }
 
@@ -50,20 +55,14 @@ public class StandardAbility extends Ability {
         if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         }
-        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-        ManaData manaData = context.caster().getData(WotrAttachments.MANA);
-        if (manaCost > 0 && manaData.getAmount() < manaCost) {
-            return false;
-        }
-        return true;
+        return getActivationCosts().stream().allMatch(x -> x.check(context))
+                && getActivationCosts().stream().allMatch(x -> x.check(context));
     }
 
     @Override
     public boolean activate(AbilityContext context) {
         LivingEntity caster = context.caster();
-        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-        ManaData manaData = context.caster().getData(WotrAttachments.MANA);
-        manaData.useAmount(manaCost);
+        getActivationCosts().forEach(x -> x.pay(context));
         this.getEffects().forEach(effect -> effect.apply(caster, List.of(), context));
 
         context.applyCooldown();
@@ -80,15 +79,12 @@ public class StandardAbility extends Ability {
             if (WotrAttributes.COOLDOWN.equals(attribute) && getBaseCooldown() > 0) {
                 return true;
             }
-            if (WotrAttributes.MANA_COST.equals(attribute) && getBaseManaCost() > 0) {
-                return true;
-            }
         }
         for (AbilityEffect effect : effects) {
             if (effect.isRelevant(modifierEffect)) {
                 return true;
             }
         }
-        return false;
+        return super.isRelevantModifier(modifierEffect);
     }
 }

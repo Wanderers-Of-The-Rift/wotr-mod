@@ -38,5 +38,10 @@
     }
   ],
   "icon": "wotr:textures/ability/icon/icicle.png",
-  "mana_cost": 2
+  "cost": [
+    {
+      "type": "wotr:mana",
+      "amount": 2
+    }
+  ]
 }

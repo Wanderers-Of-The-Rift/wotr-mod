@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
@@ -51,6 +52,8 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class WotrRegistries {
 
+    public static final Registry<MapCodec<? extends AbilityRequirement>> ABILITY_REQUIREMENT_TYPES = new RegistryBuilder<>(
+            Keys.ABILITY_REQUIREMENT_TYPES).create();
     public static final Registry<MapCodec<? extends Ability>> ABILITY_TYPES = new RegistryBuilder<>(
             Keys.ABILITY_TYPES).create();
     public static final Registry<MapCodec<? extends AbilityEffect>> EFFECTS = new RegistryBuilder<>(
@@ -113,6 +116,8 @@ public class WotrRegistries {
 
         public static final ResourceKey<Registry<Ability>> ABILITIES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("abilities"));
+        public static final ResourceKey<Registry<MapCodec<? extends AbilityRequirement>>> ABILITY_REQUIREMENT_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("ability_requirement_type"));
         public static final ResourceKey<Registry<MapCodec<? extends Ability>>> ABILITY_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_types"));
         public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADES = ResourceKey
@@ -204,6 +209,7 @@ public class WotrRegistries {
         event.register(OUTPUT_BLOCKSTATE_TYPES);
         event.register(OBJECTIVE_TYPES);
         event.register(ONGOING_OBJECTIVE_TYPES);
+        event.register(ABILITY_REQUIREMENT_TYPES);
         event.register(ABILITY_TYPES);
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);

@@ -25,6 +25,7 @@ import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
 import com.wanderersoftherift.wotr.init.WotrSoundEvents;
+import com.wanderersoftherift.wotr.init.ability.WotrAbilityRequirementTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
@@ -117,6 +118,7 @@ public class WanderersOfTheRift {
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
+        WotrAbilityRequirementTypes.ABILITY_REQUIREMENT_TYPES.register(modEventBus);
         WotrEffects.EFFECTS.register(modEventBus);
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
         WotrAbilitySourceTypes.ABILITY_SOURCE.register(modEventBus);
