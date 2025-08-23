@@ -34,7 +34,7 @@ public class ManaData {
         this.holder = holder;
         this.amount = amount;
         if (holder instanceof Entity entity) {
-            entity.level().getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY).add(WotrAttachments.MANA, entity);
+            entity.level().getData(WotrAttachments.MANA_ENTITY_REGISTRY).add(entity);
         }
     }
 

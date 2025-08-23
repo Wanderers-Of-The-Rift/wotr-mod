@@ -61,27 +61,25 @@ public class AbilityEvents {
     }
 
     public static void tickAttachedEffects(ServerLevel level) {
-        level.getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY)
-                .forEach(WotrAttachments.ATTACHED_EFFECTS, (entity, data) -> {
-                    data.tick();
-                    if (data.isEmpty()) {
-                        entity.removeData(WotrAttachments.ATTACHED_EFFECTS);
-                    }
-                });
+        level.getData(WotrAttachments.ATTACHED_EFFECT_ENTITY_REGISTRY).forEach((entity, data) -> {
+            data.tick();
+            if (data.isEmpty()) {
+                entity.removeData(WotrAttachments.ATTACHED_EFFECTS);
+            }
+        });
     }
 
     public static void tickActiveAbilities(ServerLevel level) {
-        level.getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY)
-                .forEach(WotrAttachments.ONGOING_ABILITIES, (entity, data) -> {
-                    data.tick();
-                    if (data.isEmpty()) {
-                        entity.removeData(WotrAttachments.ONGOING_ABILITIES);
-                    }
-                });
+        level.getData(WotrAttachments.ONGOING_ABILITY_ENTITY_REGISTRY).forEach((entity, data) -> {
+            data.tick();
+            if (data.isEmpty()) {
+                entity.removeData(WotrAttachments.ONGOING_ABILITIES);
+            }
+        });
     }
 
     public static void tickMana(ServerLevel level) {
-        level.getData(WotrAttachments.ENTITY_ATTACHMENT_REGISTRY).forEach(WotrAttachments.MANA, (entity, manaData) -> {
+        level.getData(WotrAttachments.MANA_ENTITY_REGISTRY).forEach((entity, manaData) -> {
             manaData.tick();
         });
     }

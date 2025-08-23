@@ -28,11 +28,6 @@ public class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
 
-    public static final Supplier<AttachmentType<EntityAttachmentRegistry>> ENTITY_ATTACHMENT_REGISTRY = ATTACHMENT_TYPES
-            .register(
-                    "entity_attachment_registry", () -> AttachmentType.builder(EntityAttachmentRegistry::new).build()
-            );
-
     public static final Supplier<AttachmentType<List<ItemStack>>> RESPAWN_ITEMS = ATTACHMENT_TYPES.register(
             "respawn_items",
             () -> AttachmentType.builder(() -> (List<ItemStack>) new ArrayList<ItemStack>())
@@ -103,4 +98,23 @@ public class WotrAttachments {
                     .serialize(ActiveQuests.getSerializer())
                     .copyOnDeath()
                     .build());
+
+    /// Level attachments
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<AttachedEffects>>> ATTACHED_EFFECT_ENTITY_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "attached_effect_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ATTACHED_EFFECTS)).build()
+            );
+
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<OngoingAbilities>>> ONGOING_ABILITY_ENTITY_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "ongoing_ability_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
+            );
+
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<ManaData>>> MANA_ENTITY_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "mana_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
+            );
 }
