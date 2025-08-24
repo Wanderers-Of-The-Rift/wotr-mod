@@ -19,12 +19,12 @@ public record GuildInfo(ResourceLocation emblem) {
     // TODO: Max rank? reputation reqs? What else do we need to capture about guilds?
 
     public static Component getDisplayName(Holder<GuildInfo> guild) {
-        ResourceLocation loc = ResourceLocation.parse(guild.getRegisteredName());
+        ResourceLocation loc = guild.getKey().location();
         return Component.translatable(loc.toLanguageKey("guild"));
     }
 
     public static Component getRankTitle(Holder<GuildInfo> guild, int rank) {
-        ResourceLocation loc = ResourceLocation.parse(guild.getRegisteredName());
+        ResourceLocation loc = guild.getKey().location();
         return Component.translatable(loc.toLanguageKey("guild", "rank." + rank));
     }
 }

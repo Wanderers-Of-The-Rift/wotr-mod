@@ -102,7 +102,7 @@ public class WotrCreativeTabs {
             HolderLookup.RegistryLookup<Currency> currencies) {
         currencies.listElements().forEach(currency -> {
             ItemStack item = WotrItems.CURRENCY_BAG.toStack();
-            ResourceLocation id = ResourceLocation.parse(currency.getRegisteredName());
+            ResourceLocation id = currency.getKey().location();
             item.set(WotrDataComponentType.CURRENCY_PROVIDER, new CurrencyProvider(currency, 100));
             item.set(DataComponents.ITEM_NAME,
                     Component.translatable(WanderersOfTheRift.translationId("currency", id)));
