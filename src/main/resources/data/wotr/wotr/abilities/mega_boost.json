@@ -1,7 +1,12 @@
 {
   "type": "wotr:standard",
   "icon" : "minecraft:textures/item/leather_boots.png",
-  "cooldown": 1,
+  "requirements" : [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 1
+    }
+  ],
   "effects":
   [
     {

@@ -1,7 +1,12 @@
 {
   "type": "wotr:standard",
   "icon" : "minecraft:textures/item/bone.png",
-  "cooldown": 40,
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ],
   "effects": [
     {
       "type": "wotr:target",

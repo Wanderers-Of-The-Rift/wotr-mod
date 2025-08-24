@@ -6,9 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
-import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -25,23 +23,21 @@ public class ToggleAbility extends Ability {
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(ToggleAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(ToggleAbility::getSmallIcon),
-                    Codec.INT.optionalFieldOf("cooldown", 0).forGetter(ToggleAbility::getBaseCooldown),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(ToggleAbility::getWarmupTime),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
                             .forGetter(Ability::getActivationRequirements),
                     AbilityRequirement.CODEC.listOf()
-                            .optionalFieldOf("cost", List.of())
-                            .forGetter(Ability::getActivationCosts),
-                    AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("ongoing_requirements", List.of())
                             .forGetter(ToggleAbility::getOngoingRequirements),
-
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("on_deactivation_costs", List.of())
+                            .forGetter(ToggleAbility::getOnDeactivationCosts),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("activation_effects", Collections.emptyList())
                             .forGetter(ToggleAbility::getActivationEffects),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
-                            .optionalFieldOf("deactivation_effects", Collections.emptyList())
+                            .optionalFieldOf("on_deactivation_effects", Collections.emptyList())
                             .forGetter(ToggleAbility::getDeactivationEffects)
             ).apply(instance, ToggleAbility::new));
 
@@ -49,14 +45,16 @@ public class ToggleAbility extends Ability {
     private final List<AbilityRequirement> ongoingRequirements;
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
+    private final List<AbilityRequirement> onDeactivationCosts;
 
-    public ToggleAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int cooldown, int warmupTime,
-            List<AbilityRequirement> activationRequirements, List<AbilityRequirement> activationCosts,
-            List<AbilityRequirement> ongoingRequirements, List<AbilityEffect> activationEffects,
+    public ToggleAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int warmupTime,
+            List<AbilityRequirement> activationRequirements, List<AbilityRequirement> ongoingRequirements,
+            List<AbilityRequirement> onDeactivationCosts, List<AbilityEffect> activationEffects,
             List<AbilityEffect> deactivationEffects) {
-        super(icon, smallIcon, cooldown, activationRequirements, activationCosts);
+        super(icon, smallIcon, activationRequirements);
         this.warmupTime = warmupTime;
         this.ongoingRequirements = ongoingRequirements;
+        this.onDeactivationCosts = onDeactivationCosts;
         this.activationEffects = activationEffects;
         this.deactivationEffects = deactivationEffects;
     }
@@ -69,8 +67,7 @@ public class ToggleAbility extends Ability {
         } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         } else {
-            return getActivationRequirements().stream().allMatch(x -> x.check(context))
-                    && getActivationCosts().stream().allMatch(x -> x.check(context));
+            return getActivationRequirements().stream().allMatch(x -> x.check(context));
         }
     }
 
@@ -82,7 +79,7 @@ public class ToggleAbility extends Ability {
             return true;
         } else {
             states.setActive(context.source(), true);
-            getActivationCosts().forEach(x -> x.pay(context));
+            getActivationRequirements().forEach(x -> x.pay(context));
             if (warmupTime == 0) {
                 return tick(context, 0);
             }
@@ -109,31 +106,24 @@ public class ToggleAbility extends Ability {
 
     private void deactivate(AbilityContext context, AbilityStates states) {
         deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
-        context.applyCooldown();
+        onDeactivationCosts.forEach(cost -> cost.pay(context));
         states.setActive(context.source(), false);
     }
 
     @Override
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        if (getBaseCooldown() > 0 && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.getAttribute())) {
-            return true;
-        }
-        for (AbilityEffect effect : activationEffects) {
-            if (effect.isRelevant(modifierEffect)) {
-                return true;
-            }
-        }
-        for (AbilityEffect effect : deactivationEffects) {
-            if (effect.isRelevant(modifierEffect)) {
-                return true;
-            }
-        }
-        return super.isRelevantModifier(modifierEffect);
+        return activationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
+                || deactivationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
+                || onDeactivationCosts.stream().anyMatch(x -> x.isRelevant(modifierEffect))
+                || super.isRelevantModifier(modifierEffect);
     }
 
     public List<AbilityRequirement> getOngoingRequirements() {
         return ongoingRequirements;
+    }
+
+    public List<AbilityRequirement> getOnDeactivationCosts() {
+        return onDeactivationCosts;
     }
 
     public int getWarmupTime() {

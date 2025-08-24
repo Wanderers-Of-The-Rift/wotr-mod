@@ -1,10 +1,13 @@
 {
   "type": "wotr:standard",
-  "cooldown": 200,
-  "cost": [
+  "requirements": [
     {
       "type": "wotr:mana",
       "amount": 10
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 200
     }
   ],
   "effects": [

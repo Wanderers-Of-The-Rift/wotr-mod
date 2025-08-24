@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init.ability;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
+import com.wanderersoftherift.wotr.abilities.requirement.CooldownCost;
 import com.wanderersoftherift.wotr.abilities.requirement.FoodLevelCost;
 import com.wanderersoftherift.wotr.abilities.requirement.LifeCost;
 import com.wanderersoftherift.wotr.abilities.requirement.ManaCost;
@@ -28,5 +29,8 @@ public class WotrAbilityRequirementTypes {
 
     public static final Supplier<MapCodec<? extends AbilityRequirement>> LIFE = ABILITY_REQUIREMENT_TYPES
             .register("life", () -> LifeCost.CODEC);
+
+    public static final Supplier<MapCodec<? extends AbilityRequirement>> COOLDOWN = ABILITY_REQUIREMENT_TYPES
+            .register("cooldown", () -> CooldownCost.CODEC);
 
 }

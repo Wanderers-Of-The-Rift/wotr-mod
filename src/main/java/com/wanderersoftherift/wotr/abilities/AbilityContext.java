@@ -3,8 +3,6 @@ package com.wanderersoftherift.wotr.abilities;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -79,15 +77,6 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
         float value = (float) attribute.getValue();
         attribute.removeModifier(baseModifier);
         return value;
-    }
-
-    /**
-     * Applies the cooldown for the current ability
-     */
-    public void applyCooldown() {
-        caster().getData(WotrAttachments.ABILITY_COOLDOWNS)
-                .setCooldown(source(),
-                        (int) getAbilityAttribute(WotrAttributes.COOLDOWN, ability().value().getBaseCooldown()));
     }
 
     /**
