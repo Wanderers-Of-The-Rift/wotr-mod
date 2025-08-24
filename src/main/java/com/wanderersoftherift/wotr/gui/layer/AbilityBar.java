@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.gui.layer;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
@@ -113,9 +113,10 @@ public final class AbilityBar implements ConfigurableLayer {
             if (abilityComponent == null) {
                 continue;
             }
-            float cooldown = 1f - cooldowns.getCooldown(AbilityEquipmentSlot.forSlot(i))
+            var abilitySource = AbilitySource.sourceForSlot(i);
+            float cooldown = 1f - cooldowns.getCooldown(abilitySource)
                     .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
-            boolean isActive = player.getData(WotrAttachments.ABILITY_STATES).isActive(AbilityEquipmentSlot.forSlot(i));
+            boolean isActive = player.getData(WotrAttachments.ABILITY_STATES).isActive(abilitySource);
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
                     abilityComponent.ability(), isActive, cooldown);
         }

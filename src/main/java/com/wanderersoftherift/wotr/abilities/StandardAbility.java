@@ -47,8 +47,7 @@ public class StandardAbility extends Ability {
 
     @Override
     public boolean canActivate(AbilityContext context) {
-        if (context.slot() != null
-                && context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.slot())) {
+        if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         }
         float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());

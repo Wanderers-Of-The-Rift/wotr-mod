@@ -98,11 +98,6 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         }
     }
 
-    @Override
-    public void applyModifier() {
-        // NOOP
-    }
-
     private Multimap<Holder<Attribute>, AttributeModifier> makeAttributeMap(double roll, ModifierSource source) {
         return ImmutableMultimap.of(this.attribute, this.getModifier(roll, source));
 
