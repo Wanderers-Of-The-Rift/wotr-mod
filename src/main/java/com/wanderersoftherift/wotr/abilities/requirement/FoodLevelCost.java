@@ -21,7 +21,7 @@ public record FoodLevelCost(int amount) implements AbilityRequirement {
     @Override
     public boolean check(AbilityContext context) {
         if (context.caster() instanceof Player player) {
-            return player.getFoodData().getFoodLevel() > 0;
+            return player.getFoodData().getFoodLevel() > amount;
         }
         return false;
     }
