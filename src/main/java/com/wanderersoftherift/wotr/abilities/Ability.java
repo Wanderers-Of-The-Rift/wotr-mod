@@ -42,7 +42,7 @@ public abstract class Ability {
     }
 
     public static Component getDisplayName(Holder<Ability> ability) {
-        return Component.translatable(ResourceLocation.parse(ability.getRegisteredName()).toLanguageKey("ability"));
+        return Component.translatable(ability.getKey().location().toLanguageKey("ability"));
     }
 
     public abstract MapCodec<? extends Ability> getCodec();

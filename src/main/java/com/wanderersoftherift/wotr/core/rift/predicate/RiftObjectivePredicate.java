@@ -24,7 +24,7 @@ public record RiftObjectivePredicate(Holder<ObjectiveType> objective) implements
 
     @Override
     public MutableComponent displayText() {
-        ResourceLocation id = ResourceLocation.parse(objective.getRegisteredName());
+        ResourceLocation id = objective.getKey().location();
         return Component.translatable(id.toLanguageKey("objective", "name"));
     }
 }

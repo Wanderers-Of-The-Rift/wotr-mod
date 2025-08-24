@@ -50,7 +50,7 @@ public final class PrimaryStatistic {
     private final StatLevel[] levels;
 
     public PrimaryStatistic(Holder<Attribute> attribute, List<StatisticRangeDefinition> effects) {
-        this.id = ResourceLocation.parse(attribute.getRegisteredName());
+        this.id = attribute.getKey().location();
         this.primaryAttribute = attribute;
         this.effects = effects;
 
@@ -77,7 +77,7 @@ public final class PrimaryStatistic {
     }
 
     public static Component displayName(Holder<PrimaryStatistic> stat) {
-        ResourceLocation statId = ResourceLocation.parse(stat.value().primaryAttribute.getRegisteredName());
+        ResourceLocation statId = stat.getKey().location();
         return Component.translatable(statId.toLanguageKey("attribute"));
     }
 
