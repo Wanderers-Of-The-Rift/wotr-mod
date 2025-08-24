@@ -62,15 +62,11 @@ public final class PrimaryStatistic {
         int maxLevel = effects.stream().mapToInt(x -> x.from + x.count - 1).max().orElse(0);
 
         // Determine level increments.
-        List<List<StatisticModifier>> incrementsPerLevel = new ArrayList<>();
-        for (int i = 0; i <= maxLevel; i++) {
-            incrementsPerLevel.add(new ArrayList<>());
-        }
-        for (var effect : effects) {
-            for (int level = effect.from; level < effect.from + effect.count; level++) {
-                incrementsPerLevel.get(level).addAll(effect.modifiers);
-            }
-        }
+        var incrementsPerLevel = IntStream.range(0, maxLevel + 1).map(level ->
+            effects.stream()
+                    .filter(effect -> effect.from >= level && effect.from + effect.count < level)
+                    .flatmap(effect -> effect.modifiers.stream()).toList()
+        ).toList();
 
         // Accumulate final per level effects
         levels = new StatLevel[maxLevel + 1];
