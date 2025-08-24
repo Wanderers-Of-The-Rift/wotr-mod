@@ -93,7 +93,7 @@ public class RiftKey extends Item {
 
         Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RIFT_THEME);
         if (riftTheme != null) {
-            ResourceLocation themeId = ResourceLocation.parse(riftTheme.getRegisteredName());
+            ResourceLocation themeId = riftTheme.getKey().location();
             Component themeName = Component
                     .translatable("rift_theme." + themeId.getNamespace() + "." + themeId.getPath());
             components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", themeName)
@@ -101,7 +101,7 @@ public class RiftKey extends Item {
         }
         Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RIFT_OBJECTIVE);
         if (objective != null) {
-            ResourceLocation objectiveLoc = ResourceLocation.parse(objective.getRegisteredName());
+            ResourceLocation objectiveLoc = objective.getKey().location();
             Component objectiveName = Component
                     .translatable("objective." + objectiveLoc.getNamespace() + "." + objectiveLoc.getPath() + ".name");
             components.add(

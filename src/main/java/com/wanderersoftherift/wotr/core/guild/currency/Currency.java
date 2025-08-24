@@ -30,7 +30,7 @@ public record Currency(ResourceLocation icon, Optional<ResourceLocation> smallIc
             .holderRegistry(WotrRegistries.Keys.CURRENCIES);
 
     public static Component getDisplayName(Holder<Currency> currency) {
-        ResourceLocation loc = ResourceLocation.parse(currency.getRegisteredName());
+        ResourceLocation loc = currency.getKey().location();
         return Component.translatable(loc.toLanguageKey("currency"));
     }
 

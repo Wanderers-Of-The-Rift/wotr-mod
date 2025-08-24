@@ -42,7 +42,7 @@ public record Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, L
      * @return The title for the quest
      */
     public static Component title(Holder<Quest> quest) {
-        ResourceLocation loc = ResourceLocation.parse(quest.getRegisteredName());
+        ResourceLocation loc = quest.getKey().location();
         return Component.translatable("quest." + loc.getNamespace() + "." + loc.getPath() + ".title");
     }
 
@@ -51,7 +51,7 @@ public record Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, L
      * @return The description of the quest
      */
     public static Component description(Holder<Quest> quest) {
-        ResourceLocation loc = ResourceLocation.parse(quest.getRegisteredName());
+        ResourceLocation loc = quest.getKey().location();
         return Component.translatable("quest." + loc.getNamespace() + "." + loc.getPath() + ".description");
     }
 

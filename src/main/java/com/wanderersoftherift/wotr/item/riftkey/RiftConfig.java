@@ -116,14 +116,14 @@ public record RiftConfig(int tier, Optional<Holder<RiftTheme>> theme, Optional<H
         result.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
                 .withColor(ChatFormatting.GRAY.getColor()));
         theme.ifPresent(x -> {
-            ResourceLocation themeId = ResourceLocation.parse(x.getRegisteredName());
+            ResourceLocation themeId = x.getKey().location();
             Component themeName = Component
                     .translatable("rift_theme." + themeId.getNamespace() + "." + themeId.getPath());
             result.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", themeName)
                     .withColor(ChatFormatting.GRAY.getColor()));
         });
         objective.ifPresent(x -> {
-            ResourceLocation objective = ResourceLocation.parse(x.getRegisteredName());
+            ResourceLocation objective = x.getKey().location();
             Component objectiveName = Component
                     .translatable("objective." + objective.getNamespace() + "." + objective.getPath() + ".name");
             result.add(
