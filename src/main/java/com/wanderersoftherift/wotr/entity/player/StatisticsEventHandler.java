@@ -1,17 +1,11 @@
 package com.wanderersoftherift.wotr.entity.player;
 
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
-import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Event subscriptions relating to managing a player's primary stats. This includes applying their stats when they login
@@ -19,8 +13,6 @@ import java.util.Map;
  */
 @EventBusSubscriber
 public final class StatisticsEventHandler {
-
-    private static final Map<Holder<Attribute>, PrimaryStatistic> statLookup = new HashMap<>();
 
     @SubscribeEvent
     public static void onPlayerSpawnEvent(PlayerEvent.PlayerRespawnEvent event) {
@@ -44,21 +36,12 @@ public final class StatisticsEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPrimaryStatChanged(PlayerAttributeChangedEvent event) {
-        PrimaryStatistic stat = getStat(event.getAttribute(), event.getEntity().level().registryAccess());
-        if (stat != null) {
+    public static void applySecondaryAttributeChanges(PlayerAttributeChangedEvent event) {
+        SecondaryAttributes data = event.getAttribute().getData(WotrDataMaps.SECONDARY_ATTRIBUTES);
+        if (data != null) {
             int value = (int) event.getEntity().getAttributeValue(event.getAttribute());
-            stat.apply(event.getEntity(), value);
+            data.apply(event.getEntity(), value);
         }
     }
 
-    private static PrimaryStatistic getStat(Holder<Attribute> attribute, RegistryAccess registries) {
-        if (statLookup.isEmpty()) {
-            registries.lookup(WotrRegistries.Keys.PRIMARY_STATISTICS)
-                    .get()
-                    .stream()
-                    .forEach(stat -> statLookup.put(stat.attribute(), stat));
-        }
-        return statLookup.get(attribute);
-    }
 }
