@@ -2,22 +2,22 @@
     "type": "wotr:standard",
     "icon" : "minecraft:textures/item/bone.png",
     "cooldown": 40,
+    "effects": [
+        {
+            "type": "wotr:summon",
+            "targeting": {
+                "type": "wotr:area",
+                "range": 5
+            },
+            "entity_type": "minecraft:iron_golem",
+            "amount": 1,
             "effects": [
-                {
-                    "type": "wotr:summon",
-                    "targeting": {
-                        "type": "wotr:area",
-                        "range": 5
-                    },
-                    "entity_type": "minecraft:iron_golem",
-                    "amount": 1,
-                    "effects": [
-                    ],
-                    "particles": {
-                        "user": "minecraft:bubble",
-                        "target": "minecraft:explosion"
-                    }
-                }
             ],
+            "particles": {
+                "user": "minecraft:bubble",
+                "target": "minecraft:explosion"
+            }
+        }
+    ],
     "mana_cost": 10
 }

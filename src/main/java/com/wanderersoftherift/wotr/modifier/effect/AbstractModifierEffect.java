@@ -33,7 +33,5 @@ public abstract class AbstractModifierEffect {
 
     public abstract void disableModifier(double roll, Entity entity, ModifierSource source);
 
-    public abstract void applyModifier();
-
     public abstract TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style);
 }

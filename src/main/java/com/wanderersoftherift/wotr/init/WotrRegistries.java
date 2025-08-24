@@ -81,7 +81,7 @@ public class WotrRegistries {
     public static final Registry<DualCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
             .sync(true)
             .create();
-    public static final Registry<TrackedAbilityTrigger.Type<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+    public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
             Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
 
     public static final class Keys {
@@ -136,7 +136,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
-        public static final ResourceKey<Registry<TrackedAbilityTrigger.Type<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+        public static final ResourceKey<Registry<TrackedAbilityTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
 
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey

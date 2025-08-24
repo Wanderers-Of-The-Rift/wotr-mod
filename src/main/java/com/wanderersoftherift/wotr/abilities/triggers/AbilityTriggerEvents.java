@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.abilities.triggers;
 
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.util.SerializableDamageSource;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,7 +19,7 @@ public class AbilityTriggerEvents {
         var victim = event.getEntity();
         AbilityTracker.forEntity(victim)
                 .triggerAbilities(new TakeDamageTrigger(
-                        new TakeDamageTrigger.SerializableDamageSource(event.getSource()), event.getNewDamage()));
+                        new SerializableDamageSource(event.getSource()), event.getNewDamage()));
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -36,8 +37,7 @@ public class AbilityTriggerEvents {
         if (attacker != null) {
             AbilityTracker.forEntity(attacker)
                     .triggerAbilities(new DealDamageTrigger(
-                            new TakeDamageTrigger.SerializableDamageSource(event.getSource()), victim.getUUID(),
-                            event.getAmount()));
+                            new SerializableDamageSource(event.getSource()), victim.getUUID(), event.getAmount()));
         }
     }
 }

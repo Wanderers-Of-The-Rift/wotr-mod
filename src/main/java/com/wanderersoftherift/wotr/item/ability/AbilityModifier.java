@@ -30,9 +30,9 @@ public final class AbilityModifier extends AbstractModifierEffect {
                     ).apply(instance, AbilityModifier::new));
 
     private final Holder<Ability> providedAbility;
-    private final Holder<TrackedAbilityTrigger.Type<?>> trigger;
+    private final Holder<TrackedAbilityTrigger.TriggerType<?>> trigger;
 
-    public AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.Type<?>> trigger) {
+    public AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.TriggerType<?>> trigger) {
         this.providedAbility = providedAbility;
         this.trigger = trigger;
     }
@@ -53,15 +53,9 @@ public final class AbilityModifier extends AbstractModifierEffect {
     }
 
     @Override
-    public void applyModifier() {
-        // what is this unused?
-    }
-
-    @Override
     public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
-        var text = Component.literal("")
-                .append(Component.translatable(
-                        WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())))
+        var text = Component.translatable(
+                WanderersOfTheRift.translationId("ability", providedAbility().getKey().location()))
                 .append(" when ")
                 .append(Component
                         .translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location())));
@@ -74,7 +68,7 @@ public final class AbilityModifier extends AbstractModifierEffect {
         return providedAbility;
     }
 
-    public Holder<TrackedAbilityTrigger.Type<?>> trigger() {
+    public Holder<TrackedAbilityTrigger.TriggerType<?>> trigger() {
         return trigger;
     }
 

@@ -17,15 +17,16 @@ import java.util.function.BiConsumer;
  */
 public class TriggerRegistry<T extends TrackedAbilityTrigger> {
 
-    private final DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<T>> type;
+    private final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<T>> type;
     private final Set<Entity> entities = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-    public TriggerRegistry(DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<T>> type) {
+    public TriggerRegistry(
+            DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<T>> type) {
         this.type = type;
     }
 
     /**
-     * Adds an entity to the registry for the given attachment type
+     * Adds an entity to the registry for abilities for the given trigger type
      *
      * @param entity The entity to add
      */
@@ -36,7 +37,7 @@ public class TriggerRegistry<T extends TrackedAbilityTrigger> {
     }
 
     /**
-     * Iterates over all entities with the given attachment type
+     * Iterates over all entities with abilities for the given trigger type
      *
      * @param consumer
      */
@@ -45,11 +46,16 @@ public class TriggerRegistry<T extends TrackedAbilityTrigger> {
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
             var tracker = AbilityTracker.forEntityNullable(entity);
-            if (entity.isRemoved() || tracker == null || !tracker.hasAbilitiesOnTrigger(type.getDelegate())) {
+            if (entity.isRemoved() || tracker.isEmpty()) {
                 iterator.remove();
                 continue;
             }
-            consumer.accept(entity, tracker);
+            var value = tracker.get();
+            if (!value.hasAbilitiesOnTrigger(type.getDelegate())) {
+                iterator.remove();
+            } else {
+                consumer.accept(entity, value);
+            }
 
         }
     }

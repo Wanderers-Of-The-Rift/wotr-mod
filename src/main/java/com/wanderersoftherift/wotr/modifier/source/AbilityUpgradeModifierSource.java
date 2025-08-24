@@ -18,6 +18,6 @@ public class AbilityUpgradeModifierSource implements ModifierSource {
 
     @Override
     public @Nullable WotrEquipmentSlot slot() {
-        return null; // todo
+        return null;
     }
 }

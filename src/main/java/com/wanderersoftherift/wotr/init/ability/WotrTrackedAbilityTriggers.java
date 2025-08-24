@@ -10,13 +10,13 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class WotrTrackedAbilityTriggers {
-    public static final DeferredRegister<TrackedAbilityTrigger.Type<?>> TRIGGERS = DeferredRegister
+    public static final DeferredRegister<TrackedAbilityTrigger.TriggerType<?>> TRIGGERS = DeferredRegister
             .create(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS, WanderersOfTheRift.MODID);
 
-    public static final DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<TickTrigger>> TICK_TRIGGER = TRIGGERS
-            .register("tick", () -> TickTrigger.TYPE);
-    public static final DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<TakeDamageTrigger>> TAKE_DAMAGE = TRIGGERS
-            .register("take_damage", () -> TakeDamageTrigger.TYPE);
-    public static final DeferredHolder<TrackedAbilityTrigger.Type<?>, TrackedAbilityTrigger.Type<DealDamageTrigger>> DEAL_DAMAGE = TRIGGERS
-            .register("deal_damage", () -> DealDamageTrigger.TYPE);
+    public static final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<TickTrigger>> TICK_TRIGGER = TRIGGERS
+            .register("tick", () -> TickTrigger.TRIGGER_TYPE);
+    public static final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<TakeDamageTrigger>> TAKE_DAMAGE = TRIGGERS
+            .register("take_damage", () -> TakeDamageTrigger.TRIGGER_TYPE);
+    public static final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<DealDamageTrigger>> DEAL_DAMAGE = TRIGGERS
+            .register("deal_damage", () -> DealDamageTrigger.TRIGGER_TYPE);
 }
