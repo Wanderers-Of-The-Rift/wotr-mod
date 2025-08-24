@@ -56,7 +56,7 @@ public class StandardAbility extends Ability {
                 && context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.slot())) {
             return false;
         }
-        return getActivationCosts().stream().allMatch(x -> x.check(context))
+        return getActivationRequirements().stream().allMatch(x -> x.check(context))
                 && getActivationCosts().stream().allMatch(x -> x.check(context));
     }
 
