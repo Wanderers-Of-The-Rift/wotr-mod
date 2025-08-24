@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
@@ -44,12 +45,12 @@ public final class AbilityModifier extends AbstractModifierEffect {
 
     @Override
     public void enableModifier(double roll, Entity entity, ModifierSource source) {
-        AbilityTracker.forEntity(entity).registerAbility(this, source.slot());
+        AbilityTracker.forEntity(entity).registerAbility(this, AbilitySource.byModifierSource(source));
     }
 
     @Override
     public void disableModifier(double roll, Entity entity, ModifierSource source) {
-        AbilityTracker.forEntity(entity).unregisterAbility(this, source.slot());
+        AbilityTracker.forEntity(entity).unregisterAbility(this, AbilitySource.byModifierSource(source));
     }
 
     @Override

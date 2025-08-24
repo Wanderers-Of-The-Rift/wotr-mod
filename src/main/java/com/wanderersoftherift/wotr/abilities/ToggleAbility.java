@@ -59,11 +59,10 @@ public class ToggleAbility extends Ability {
 
     @Override
     public boolean canActivate(AbilityContext context) {
-        if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.slot())) {
+        if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.source())) {
             // Can always deactivate
             return true;
-        } else if (context.slot() != null
-                && context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.slot())) {
+        } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         } else {
             float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
@@ -79,11 +78,11 @@ public class ToggleAbility extends Ability {
     @Override
     public boolean activate(AbilityContext context) {
         AbilityStates states = context.caster().getData(WotrAttachments.ABILITY_STATES);
-        if (states.isActive(context.slot())) {
+        if (states.isActive(context.source())) {
             deactivate(context, states);
             return true;
         } else {
-            states.setActive(context.slot(), true);
+            states.setActive(context.source(), true);
             float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
             context.caster().getData(WotrAttachments.MANA).useAmount(manaCost);
             if (warmupTime == 0) {
@@ -95,7 +94,7 @@ public class ToggleAbility extends Ability {
 
     @Override
     public void clientActivate(AbilityContext context) {
-        context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.slot(), true);
+        context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.source(), true);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class ToggleAbility extends Ability {
     private void deactivate(AbilityContext context, AbilityStates states) {
         deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
         context.applyCooldown();
-        states.setActive(context.slot(), false);
+        states.setActive(context.source(), false);
     }
 
     @Override

@@ -3,11 +3,11 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import com.wanderersoftherift.wotr.serialization.VoidCodec;
 import net.minecraft.core.Holder;
@@ -68,7 +68,7 @@ public class AbilityTracker {
                 .wrapAsHolder(activation.type());
         for (var tracked : abilities.get(typeHolder)) {
             result |= holder.getData(WotrAttachments.ONGOING_ABILITIES)
-                    .activate(tracked.slot, tracked.slot.getContent(entity), tracked.ability);
+                    .activate(tracked.source, tracked.source.getItem(entity), tracked.ability);
         }
         return result;
     }
@@ -77,15 +77,15 @@ public class AbilityTracker {
         return !abilities.get(activation).isEmpty();
     }
 
-    public void registerAbility(AbilityModifier abilityModifier, WotrEquipmentSlot slot) {
-        registerAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), slot);
+    public void registerAbility(AbilityModifier abilityModifier, AbilitySource source) {
+        registerAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), source);
     }
 
     public void registerAbility(
             Holder<TrackedAbilityTrigger.TriggerType<?>> trigger,
             Holder<Ability> abilityHolder,
-            WotrEquipmentSlot slot) {
-        abilities.put(trigger, new TrackedAbility(slot, abilityHolder));
+            AbilitySource source) {
+        abilities.put(trigger, new TrackedAbility(source, abilityHolder));
         if (holder instanceof Entity livingEntity && livingEntity.level() instanceof ServerLevel serverLevel) {
             var registryTypeSupplier = trigger.value().registry();
             if (registryTypeSupplier != null) {
@@ -94,20 +94,20 @@ public class AbilityTracker {
         }
     }
 
-    public void unregisterAbility(AbilityModifier abilityModifier, WotrEquipmentSlot slot) {
-        unregisterAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), slot);
+    public void unregisterAbility(AbilityModifier abilityModifier, AbilitySource source) {
+        unregisterAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), source);
     }
 
     public void unregisterAbility(
             Holder<TrackedAbilityTrigger.TriggerType<?>> trigger,
             Holder<Ability> abilityHolder,
-            WotrEquipmentSlot slot) {
+            AbilitySource source) {
         abilities.get(trigger)
                 .removeIf(trackedAbility -> Objects.equals(trackedAbility.ability, abilityHolder)
-                        && Objects.equals(slot, trackedAbility.slot));
+                        && Objects.equals(source, trackedAbility.source));
     }
 
-    record TrackedAbility(WotrEquipmentSlot slot, Holder<Ability> ability) {
+    record TrackedAbility(AbilitySource source, Holder<Ability> ability) {
     }
 
 }

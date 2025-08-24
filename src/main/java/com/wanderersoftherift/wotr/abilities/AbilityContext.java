@@ -5,7 +5,6 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ExceptionlessAutoClosable;
@@ -18,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -27,11 +27,11 @@ import java.util.UUID;
  * @param ability     The ability itself
  * @param caster      The caster of the ability
  * @param abilityItem The item holding the ability (and any upgrades)
- * @param slot        The equipment slot the ability item is in, if any
+ * @param source      The source the ability was provided by
  * @param level       The level the ability is present in
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, WotrEquipmentSlot slot, Level level) {
+        Optional<ItemStack> abilityItem, AbilitySource source, Level level) {
 
     /**
      * @return The current game time
@@ -44,14 +44,18 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * Enables all modifiers that impact the ability
      */
     public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
-        AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
-        if (pool != null) {
-            pool.forEachSelected((selection, upgrade) -> {
-                ModifierSource source = new AbilityUpgradeModifierSource(selection);
-                upgrade.modifierEffects().forEach(effect -> effect.enableModifier(0, caster, source));
-            });
+        if (abilityItem.isPresent()) {
+            var abilityItem = this.abilityItem().get();
+            AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
+            if (pool != null) {
+                pool.forEachSelected((selection, upgrade) -> {
+                    ModifierSource source = new AbilityUpgradeModifierSource(abilityItem, selection);
+                    upgrade.modifierEffects().forEach(effect -> effect.enableModifier(0, caster, source));
+                });
+                return this::disableUpgradeModifiers;
+            }
         }
-        return this::disableUpgradeModifiers;
+        return ExceptionlessAutoClosable.NOOP;
     }
 
     /**
@@ -79,21 +83,21 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * Applies the cooldown for the current ability
      */
     public void applyCooldown() {
-        if (slot() != null) {
-            caster().getData(WotrAttachments.ABILITY_COOLDOWNS)
-                    .setCooldown(slot(),
-                            (int) getAbilityAttribute(WotrAttributes.COOLDOWN, ability().value().getBaseCooldown()));
-        }
+        caster().getData(WotrAttachments.ABILITY_COOLDOWNS)
+                .setCooldown(source(),
+                        (int) getAbilityAttribute(WotrAttributes.COOLDOWN, ability().value().getBaseCooldown()));
     }
 
     /**
      * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
      */
     private void disableUpgradeModifiers() {
+        var abilityItem = this.abilityItem.get(); // optional cannot be empty since enableTemporaryUpgradeModifiers will
+                                                  // not use this method if it is
         AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {
-                ModifierSource source = new AbilityUpgradeModifierSource(selection);
+                ModifierSource source = new AbilityUpgradeModifierSource(abilityItem, selection);
                 upgrade.modifierEffects().forEach(effect -> effect.disableModifier(0, caster, source));
             });
         }

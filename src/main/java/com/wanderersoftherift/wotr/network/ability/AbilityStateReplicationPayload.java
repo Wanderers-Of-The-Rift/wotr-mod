@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -16,17 +16,17 @@ import java.util.List;
 /**
  * Replicates the complete ability state of all equipment slots
  * 
- * @param activeSlots The list of active slots
+ * @param activeSources The list of active slots
  */
-public record AbilityStateReplicationPayload(List<WotrEquipmentSlot> activeSlots) implements CustomPacketPayload {
+public record AbilityStateReplicationPayload(List<AbilitySource> activeSources) implements CustomPacketPayload {
     public static final Type<AbilityStateReplicationPayload> TYPE = new Type<>(
             WanderersOfTheRift.id("ability_state_replication"));
     public static final StreamCodec<RegistryFriendlyByteBuf, AbilityStateReplicationPayload> STREAM_CODEC = StreamCodec
-            .composite(WotrEquipmentSlot.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                    AbilityStateReplicationPayload::activeSlots, AbilityStateReplicationPayload::new);
+            .composite(AbilitySource.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                    AbilityStateReplicationPayload::activeSources, AbilityStateReplicationPayload::new);
 
     public AbilityStateReplicationPayload(AbilityStates abilityState) {
-        this(List.copyOf(abilityState.getActiveSlots()));
+        this(List.copyOf(abilityState.getActiveSources()));
     }
 
     @Override
@@ -35,7 +35,7 @@ public record AbilityStateReplicationPayload(List<WotrEquipmentSlot> activeSlots
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().getData(WotrAttachments.ABILITY_STATES).clearAndSetActive(activeSlots);
+        context.player().getData(WotrAttachments.ABILITY_STATES).clearAndSetActive(activeSources);
     }
 
 }

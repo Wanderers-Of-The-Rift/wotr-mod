@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.abilities.AbilitySource;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import com.wanderersoftherift.wotr.util.LongRange;
@@ -29,7 +29,7 @@ public class AbilityCooldowns {
             Data.CODEC, AbilityCooldowns::new, AbilityCooldowns::data);
 
     private final IAttachmentHolder holder;
-    private final Map<WotrEquipmentSlot, LongRange> cooldowns;
+    private final Map<AbilitySource, LongRange> cooldowns;
 
     public AbilityCooldowns(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -41,7 +41,7 @@ public class AbilityCooldowns {
         if (data != null && holder instanceof Entity entity) {
             long gameTime = entity.level().getGameTime();
             for (var entry : data.cooldowns) {
-                cooldowns.put(entry.slot, entry.range.offset(gameTime));
+                cooldowns.put(entry.source, entry.range.offset(gameTime));
             }
         }
     }
@@ -72,7 +72,7 @@ public class AbilityCooldowns {
      * @param slot
      * @return The cooldown range for the given slot, in ticks (for comparison with gameTime)
      */
-    public LongRange getCooldown(WotrEquipmentSlot slot) {
+    public LongRange getCooldown(AbilitySource slot) {
         return cooldowns.getOrDefault(slot, LongRange.EMPTY);
     }
 
@@ -87,33 +87,33 @@ public class AbilityCooldowns {
     }
 
     /**
-     * @param slot
+     * @param source
      * @return Whether the given slot is on cooldown
      */
-    public boolean isOnCooldown(WotrEquipmentSlot slot) {
-        return cooldowns.getOrDefault(slot, LongRange.EMPTY).to() > getGameTime();
+    public boolean isOnCooldown(AbilitySource source) {
+        return cooldowns.getOrDefault(source, LongRange.EMPTY).to() > getGameTime();
     }
 
     /**
-     * @param slot
-     * @param from  In ticks, in terms of gameTime
-     * @param until In ticks, in terms of gameTime
+     * @param source
+     * @param from   In ticks, in terms of gameTime
+     * @param until  In ticks, in terms of gameTime
      */
-    public void setCooldown(WotrEquipmentSlot slot, long from, long until) {
-        cooldowns.put(slot, new LongRange(from, until));
+    public void setCooldown(AbilitySource source, long from, long until) {
+        cooldowns.put(source, new LongRange(from, until));
         if (holder instanceof ServerPlayer player) {
-            PacketDistributor.sendToPlayer(player, new AbilityCooldownUpdatePayload(slot, from, until));
+            PacketDistributor.sendToPlayer(player, new AbilityCooldownUpdatePayload(source, from, until));
         }
     }
 
     /**
      *
-     * @param slot
+     * @param source
      * @param length In ticks
      */
-    public void setCooldown(WotrEquipmentSlot slot, int length) {
+    public void setCooldown(AbilitySource source, int length) {
         long gameTime = getGameTime();
-        setCooldown(slot, gameTime, gameTime + length);
+        setCooldown(source, gameTime, gameTime + length);
     }
 
     /**
@@ -132,12 +132,12 @@ public class AbilityCooldowns {
 
     /**
      *
-     * @param slot
-     * @param range The range of the cooldown, in ticks (comparable with gametime)
+     * @param source
+     * @param range  The range of the cooldown, in ticks (comparable with gametime)
      */
-    public record CooldownInfo(WotrEquipmentSlot slot, LongRange range) {
+    public record CooldownInfo(AbilitySource source, LongRange range) {
         private static final Codec<CooldownInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                WotrEquipmentSlot.DIRECT_CODEC.fieldOf("slot").forGetter(CooldownInfo::slot),
+                AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(CooldownInfo::source),
                 LongRange.CODEC.fieldOf("time_range").forGetter(CooldownInfo::range)
         ).apply(instance, CooldownInfo::new));
     }

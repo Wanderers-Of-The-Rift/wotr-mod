@@ -8,8 +8,9 @@ import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.EffectMarkerInstance;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.modifier.ModifierHelper;
-import com.wanderersoftherift.wotr.modifier.VirtualEquipmentSlot;
+import com.wanderersoftherift.wotr.modifier.ModifierInstance;
+import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
+import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -110,6 +111,14 @@ public class AttachedEffects {
         });
     }
 
+    public List<ModifierInstance> getModifiers(UUID id) {
+        return this.effects.stream()
+                .filter(it -> it.id.equals(id))
+                .map(it -> it.attachEffect.getModifiers())
+                .findAny()
+                .orElse(Collections.emptyList());
+    }
+
     /**
      * @return if there are no attached effects
      */
@@ -142,7 +151,6 @@ public class AttachedEffects {
                 Codec.INT.fieldOf("age").forGetter(x -> x.age)).apply(instance, AttachedEffect::new));
 
         private final UUID id;
-        private final VirtualEquipmentSlot equipmentSlot;
         private final AttachEffect attachEffect;
         private final StoredAbilityContext context;
         private int triggeredTimes;
@@ -158,7 +166,6 @@ public class AttachedEffects {
             this.context = context;
             this.triggeredTimes = triggeredTimes;
             this.age = age;
-            this.equipmentSlot = new VirtualEquipmentSlot("attached_effect_" + id, effect.getModifiers());
         }
 
         public AttachedEffect(AttachEffect effect, AbilityContext context) {
@@ -227,16 +234,18 @@ public class AttachedEffects {
         }
 
         private void applyModifiers(Entity attachedTo) {
-            var slot = this.equipmentSlot;
-            if (attachedTo instanceof LivingEntity livingEntity) {
-                ModifierHelper.enableModifier(slot.getContent(attachedTo), livingEntity, slot);
+            for (int i = 0; i < attachEffect.getModifiers().size(); i++) {
+                ModifierInstance modifier = attachEffect.getModifiers().get(i);
+                ModifierSource source = new AttachEffectModifierSource(id, i);
+                modifier.modifier().value().enableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
 
         private void removeModifiers(Entity attachedTo) {
-            var slot = this.equipmentSlot;
-            if (attachedTo instanceof LivingEntity livingEntity) {
-                ModifierHelper.disableModifier(slot.getContent(attachedTo), livingEntity, slot);
+            for (int i = 0; i < attachEffect.getModifiers().size(); i++) {
+                ModifierInstance modifier = attachEffect.getModifiers().get(i);
+                ModifierSource source = new AttachEffectModifierSource(id, i);
+                modifier.modifier().value().disableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
 
