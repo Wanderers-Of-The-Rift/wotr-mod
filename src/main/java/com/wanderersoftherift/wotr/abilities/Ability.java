@@ -2,10 +2,8 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
-import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -34,17 +32,13 @@ public abstract class Ability {
     private final ResourceLocation icon;
     private final Optional<ResourceLocation> smallIcon;
 
-    private final int baseCooldown;
     private final List<AbilityRequirement> activationRequirements;
-    private final List<AbilityRequirement> activationCosts;
 
-    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown,
-            List<AbilityRequirement> activationRequirements, List<AbilityRequirement> activationCosts) {
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
+            List<AbilityRequirement> activationRequirements) {
         this.icon = icon;
         this.smallIcon = smallIcon;
-        this.baseCooldown = baseCooldown;
         this.activationRequirements = activationRequirements;
-        this.activationCosts = activationCosts;
     }
 
     public static Component getDisplayName(Holder<Ability> ability) {
@@ -102,33 +96,16 @@ public abstract class Ability {
         return true;
     }
 
-    ///  Cooldown
-
-    public int getBaseCooldown() {
-        return baseCooldown;
-    }
-
     ///  Costs
 
     public List<AbilityRequirement> getActivationRequirements() {
         return activationRequirements;
     }
 
-    public List<AbilityRequirement> getActivationCosts() {
-        return activationCosts;
-    }
-
     ///  Upgrade support
 
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        if (getBaseCooldown() > 0 && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.getAttribute())) {
-            return true;
-        }
-        if (activationCosts.stream().anyMatch(x -> x.isRelevantModifier(modifierEffect))) {
-            return true;
-        }
-        return false;
+        return activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
     }
 
 }

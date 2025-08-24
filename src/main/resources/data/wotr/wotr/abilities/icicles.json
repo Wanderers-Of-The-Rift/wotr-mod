@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard",
-  "cooldown": 10,
   "effects": [
     {
       "type": "wotr:simple_projectile",
@@ -38,10 +37,14 @@
     }
   ],
   "icon": "wotr:textures/ability/icon/icicle.png",
-  "cost": [
+  "requirements": [
     {
       "type": "wotr:mana",
       "amount": 2
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 10
     }
   ]
 }

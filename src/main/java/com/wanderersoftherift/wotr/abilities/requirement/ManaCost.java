@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities.requirement;
 
+import com.mojang.math.Constants;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,9 +11,10 @@ import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 
-public record ManaCost(float amount) implements AbilityRequirement {
+public record ManaCost(float amount, boolean consume) implements AbilityRequirement {
     public static final MapCodec<ManaCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.FLOAT.optionalFieldOf("amount", 0f).forGetter(ManaCost::amount)
+            Codec.FLOAT.optionalFieldOf("amount", Constants.EPSILON).forGetter(ManaCost::amount),
+            Codec.BOOL.optionalFieldOf("consume", true).forGetter(ManaCost::consume)
     ).apply(instance, ManaCost::new));
 
     @Override
@@ -28,13 +30,15 @@ public record ManaCost(float amount) implements AbilityRequirement {
 
     @Override
     public void pay(AbilityContext context) {
-        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, amount);
-        context.caster().getData(WotrAttachments.MANA).useAmount(manaCost);
+        if (consume) {
+            float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, amount);
+            context.caster().getData(WotrAttachments.MANA).useAmount(manaCost);
+        }
     }
 
     @Override
-    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
+    public boolean isRelevant(AbstractModifierEffect modifierEffect) {
+        return consume && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
                 && WotrAttributes.MANA_COST.equals(attributeModifierEffect.getAttribute());
     }
 }

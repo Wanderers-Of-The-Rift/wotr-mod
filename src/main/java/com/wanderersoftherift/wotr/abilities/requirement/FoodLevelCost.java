@@ -8,9 +8,10 @@ import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 
-public record FoodLevelCost(int amount) implements AbilityRequirement {
+public record FoodLevelCost(int amount, boolean consume) implements AbilityRequirement {
     public static final MapCodec<FoodLevelCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.INT.optionalFieldOf("amount", 0).forGetter(FoodLevelCost::amount)
+            Codec.INT.optionalFieldOf("amount", 1).forGetter(FoodLevelCost::amount),
+            Codec.BOOL.optionalFieldOf("consume", true).forGetter(FoodLevelCost::consume)
     ).apply(instance, FoodLevelCost::new));
 
     @Override
@@ -21,14 +22,14 @@ public record FoodLevelCost(int amount) implements AbilityRequirement {
     @Override
     public boolean check(AbilityContext context) {
         if (context.caster() instanceof Player player) {
-            return player.getFoodData().getFoodLevel() > amount;
+            return player.getFoodData().getFoodLevel() >= amount;
         }
         return false;
     }
 
     @Override
     public void pay(AbilityContext context) {
-        if (context.caster() instanceof Player player) {
+        if (consume && context.caster() instanceof Player player) {
             FoodData foodData = player.getFoodData();
             float remainingCost = amount;
             if (remainingCost > foodData.getSaturationLevel()) {

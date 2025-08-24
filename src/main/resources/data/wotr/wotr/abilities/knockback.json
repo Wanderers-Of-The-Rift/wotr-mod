@@ -1,7 +1,6 @@
 {
   "type": "wotr:standard",
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
-  "cooldown": 10,
   "effects": [
     {
       "type": "wotr:movement",

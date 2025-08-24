@@ -31,7 +31,7 @@ public interface AbilityRequirement {
         return false;
     }
 
-    default boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
+    default boolean isRelevant(AbstractModifierEffect modifierEffect) {
         return false;
     }
 }
