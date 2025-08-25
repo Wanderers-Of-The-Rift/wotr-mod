@@ -9,7 +9,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 
 public record RiftThemePredicate(Holder<RiftTheme> theme) implements RiftConfigPredicate {
 
@@ -27,6 +26,6 @@ public record RiftThemePredicate(Holder<RiftTheme> theme) implements RiftConfigP
     @Override
     public MutableComponent displayText() {
         return Component.translatable(
-                WanderersOfTheRift.translationId("rift_theme", ResourceLocation.parse(theme.getRegisteredName())));
+                WanderersOfTheRift.translationId("rift_theme", theme.getKey().location()));
     }
 }
