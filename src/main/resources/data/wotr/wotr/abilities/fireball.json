@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard",
-  "cooldown": 60,
   "effects": [
     {
       "type": "wotr:simple_projectile",
@@ -41,5 +40,14 @@
     }
   ],
   "icon": "minecraft:textures/item/fire_charge.png",
-  "mana_cost": 10
+  "requirements": [
+    {
+      "type": "wotr:food_level",
+      "amount": 2
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 30
+    }
+  ]
 }

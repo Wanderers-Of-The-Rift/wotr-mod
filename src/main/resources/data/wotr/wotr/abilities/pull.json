@@ -1,7 +1,12 @@
 {
   "type": "wotr:standard",
   "icon": "minecraft:textures/mob_effect/darkness.png",
-  "cooldown": 10,
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 10
+    }
+  ],
   "effects": [
     {
       "type": "wotr:movement",
