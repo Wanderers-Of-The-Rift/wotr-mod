@@ -34,15 +34,15 @@ import java.util.stream.IntStream;
 public final class SecondaryAttributes {
     public static final Codec<SecondaryAttributes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("base_modifier_id").forGetter(SecondaryAttributes::getBaseModifierId),
-            EffectConfiguration.CODEC.listOf().fieldOf("configuration").forGetter(SecondaryAttributes::effects)
+            ConfigurationItem.CODEC.listOf().fieldOf("configuration").forGetter(SecondaryAttributes::effects)
     ).apply(instance, SecondaryAttributes::new));
 
     private final ResourceLocation baseModifierId;
-    private final List<EffectConfiguration> effects;
+    private final List<ConfigurationItem> effects;
 
     private final StatLevel[] levels;
 
-    public SecondaryAttributes(ResourceLocation baseModifierId, List<EffectConfiguration> effects) {
+    public SecondaryAttributes(ResourceLocation baseModifierId, List<ConfigurationItem> effects) {
         this.baseModifierId = baseModifierId;
         this.effects = effects;
 
@@ -95,7 +95,7 @@ public final class SecondaryAttributes {
         });
     }
 
-    public List<EffectConfiguration> effects() {
+    public List<ConfigurationItem> effects() {
         return effects;
     }
 
@@ -142,14 +142,14 @@ public final class SecondaryAttributes {
      * @param range
      * @param modifiersPerLevel
      */
-    public record EffectConfiguration(int fromLevel, int range, List<StatisticModifier> modifiersPerLevel) {
-        public static final Codec<EffectConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.INT.fieldOf("from_level").forGetter(EffectConfiguration::fromLevel),
-                Codec.INT.optionalFieldOf("range", 1).forGetter(EffectConfiguration::range),
+    public record ConfigurationItem(int fromLevel, int range, List<StatisticModifier> modifiersPerLevel) {
+        public static final Codec<ConfigurationItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.INT.fieldOf("from_level").forGetter(ConfigurationItem::fromLevel),
+                Codec.INT.optionalFieldOf("range", 1).forGetter(ConfigurationItem::range),
                 StatisticModifier.CODEC.listOf()
                         .fieldOf("modifiers_per_level")
-                        .forGetter(EffectConfiguration::modifiersPerLevel)
-        ).apply(instance, EffectConfiguration::new));
+                        .forGetter(ConfigurationItem::modifiersPerLevel)
+        ).apply(instance, ConfigurationItem::new));
     }
 
     /**
