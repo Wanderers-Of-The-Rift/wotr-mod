@@ -44,13 +44,13 @@ public final class AbilityModifier extends AbstractModifierEffect {
     }
 
     @Override
-    public void enableModifier(double roll, Entity entity, ModifierSource source) {
-        AbilityTracker.forEntity(entity).registerAbility(this, AbilitySource.byModifierSource(source));
+    public void enableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
+        AbilityTracker.forEntity(entity).registerAbility(this, AbilitySource.byModifierSource(source, effectIndex));
     }
 
     @Override
-    public void disableModifier(double roll, Entity entity, ModifierSource source) {
-        AbilityTracker.forEntity(entity).unregisterAbility(this, AbilitySource.byModifierSource(source));
+    public void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
+        AbilityTracker.forEntity(entity).unregisterAbility(this, AbilitySource.byModifierSource(source, effectIndex));
     }
 
     @Override

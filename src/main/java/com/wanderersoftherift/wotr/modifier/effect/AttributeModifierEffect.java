@@ -85,14 +85,14 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public void enableModifier(double roll, Entity entity, ModifierSource source) {
+    public void enableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
         if (entity instanceof LivingEntity livingentity) {
             livingentity.getAttributes().addTransientAttributeModifiers(this.makeAttributeMap(roll, source));
         }
     }
 
     @Override
-    public void disableModifier(double roll, Entity entity, ModifierSource source) {
+    public void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
         if (entity instanceof LivingEntity livingentity) {
             livingentity.getAttributes().removeAttributeModifiers(this.makeAttributeMap(roll, source));
         }

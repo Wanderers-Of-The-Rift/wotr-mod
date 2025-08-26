@@ -29,9 +29,9 @@ public abstract class AbstractModifierEffect {
 
     public abstract MapCodec<? extends AbstractModifierEffect> getCodec();
 
-    public abstract void enableModifier(double roll, Entity entity, ModifierSource source);
+    public abstract void enableModifier(double roll, Entity entity, ModifierSource source, int effectIndex);
 
-    public abstract void disableModifier(double roll, Entity entity, ModifierSource source);
+    public abstract void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex);
 
     public abstract TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style);
 }

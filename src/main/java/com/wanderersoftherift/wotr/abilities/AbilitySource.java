@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -17,8 +18,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Stream;
 
 public interface AbilitySource {
 
@@ -28,8 +27,8 @@ public interface AbilitySource {
             .registry(WotrRegistries.Keys.ABILITY_SOURCES)
             .dispatch(AbilitySource::getType, DualCodec::streamCodec);
 
-    static AbilitySource byModifierSource(ModifierSource source) {
-        return new ModifierAbilitySource(source);
+    static AbilitySource byModifierSource(ModifierSource source, int effectIndex) {
+        return new ModifierAbilitySource(source, effectIndex);
     }
 
     static MainAbilitySource sourceForSlot(int slot) {
@@ -40,25 +39,26 @@ public interface AbilitySource {
 
     @Nullable ItemStack getItem(LivingEntity entity);
 
-    List<Holder<Ability>> getAbilities(Entity entity);
+    Holder<Ability> getAbility(Entity entity);
 
-    record ModifierAbilitySource(ModifierSource base) implements AbilitySource {
+    record ModifierAbilitySource(ModifierSource base, int effectIndex) implements AbilitySource {
 
         public static final DualCodec<ModifierAbilitySource> TYPE = new DualCodec<>(
-                ModifierSource.DIRECT_CODEC.fieldOf("modifier_source")
-                        .xmap(ModifierAbilitySource::new, ModifierAbilitySource::base),
-                StreamCodec.composite(
-                        ModifierSource.STREAM_CODEC, ModifierAbilitySource::base, ModifierAbilitySource::new
+                RecordCodecBuilder.mapCodec(instance -> instance.group(
+                        ModifierSource.DIRECT_CODEC.fieldOf("modifier_source").forGetter(ModifierAbilitySource::base),
+                        Codec.INT.fieldOf("effect_index").forGetter(ModifierAbilitySource::effectIndex)
+                ).apply(instance, ModifierAbilitySource::new)), StreamCodec.composite(
+                        ModifierSource.STREAM_CODEC, ModifierAbilitySource::base, ByteBufCodecs.INT,
+                        ModifierAbilitySource::effectIndex, ModifierAbilitySource::new
                 )
         );
 
         @Override
-        public List<Holder<Ability>> getAbilities(Entity entity) {
-            return base.getModifierEffects(entity)
-                    .stream()
-                    .flatMap(
-                            it -> it instanceof AbilityModifier modifier ? Stream.of(modifier.providedAbility()) : null)
-                    .toList();
+        public Holder<Ability> getAbility(Entity entity) {
+            if (base.getModifierEffects(entity).get(effectIndex) instanceof AbilityModifier ability) {
+                return ability.providedAbility();
+            }
+            return null;
         }
 
         @Override
@@ -95,8 +95,8 @@ public interface AbilitySource {
         }
 
         @Override
-        public List<Holder<Ability>> getAbilities(Entity entity) {
-            return List.of(slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability());
+        public Holder<Ability> getAbility(Entity entity) {
+            return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
         }
 
         public Holder<Ability> getMainAbility(Entity entity) {

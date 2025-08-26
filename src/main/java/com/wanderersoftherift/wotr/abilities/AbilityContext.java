@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ExceptionlessAutoClosable;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,7 +52,11 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
             if (pool != null) {
                 pool.forEachSelected((selection, upgrade) -> {
                     ModifierSource source = new AbilityUpgradeModifierSource(abilityItem, selection);
-                    upgrade.modifierEffects().forEach(effect -> effect.enableModifier(0, caster, source));
+                    List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
+                    for (int i = 0; i < modifierEffects.size(); i++) {
+                        AbstractModifierEffect effect = modifierEffects.get(i);
+                        effect.enableModifier(0, caster, source, i);
+                    }
                 });
                 return this::disableUpgradeModifiers;
             }
@@ -98,7 +104,11 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
         if (pool != null) {
             pool.forEachSelected((selection, upgrade) -> {
                 ModifierSource source = new AbilityUpgradeModifierSource(abilityItem, selection);
-                upgrade.modifierEffects().forEach(effect -> effect.disableModifier(0, caster, source));
+                List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
+                for (int i = 0; i < modifierEffects.size(); i++) {
+                    AbstractModifierEffect effect = modifierEffects.get(i);
+                    effect.disableModifier(0, caster, source, i);
+                }
             });
         }
     }
