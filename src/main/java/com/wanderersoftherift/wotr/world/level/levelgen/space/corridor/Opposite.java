@@ -7,10 +7,8 @@ import net.minecraft.server.MinecraftServer;
 
 public record Opposite(SerializableCorridorValidator base) implements SerializableCorridorValidator {
 
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Opposite> CODEC = SerializableCorridorValidator.CODEC
-            .fieldOf("base")
-            .xmap(com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Opposite::new,
-                    com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Opposite::base);
+    public static final MapCodec<Opposite> CODEC = SerializableCorridorValidator.CODEC.fieldOf("base")
+            .xmap(Opposite::new, Opposite::base);
 
     @Override
     public MapCodec<? extends SerializableCorridorValidator> codec() {

@@ -10,11 +10,9 @@ import java.util.List;
 
 public record And(List<SerializableCorridorValidator> base) implements SerializableCorridorValidator {
 
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.And> CODEC = SerializableCorridorValidator.CODEC
-            .listOf()
+    public static final MapCodec<And> CODEC = SerializableCorridorValidator.CODEC.listOf()
             .fieldOf("values")
-            .xmap(com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.And::new,
-                    com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.And::base);
+            .xmap(And::new, And::base);
 
     public And(SerializableCorridorValidator... values) {
         this(ImmutableList.copyOf(values));

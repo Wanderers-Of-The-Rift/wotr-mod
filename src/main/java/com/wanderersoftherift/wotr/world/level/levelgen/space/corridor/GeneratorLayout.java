@@ -7,10 +7,9 @@ import net.minecraft.server.MinecraftServer;
 
 public record GeneratorLayout() implements SerializableCorridorValidator {
 
-    public static final com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.GeneratorLayout INSTANCE = new com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.GeneratorLayout();
+    public static final GeneratorLayout INSTANCE = new GeneratorLayout();
 
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.GeneratorLayout> CODEC = MapCodec
-            .unit(INSTANCE);
+    public static final MapCodec<GeneratorLayout> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
     public MapCodec<? extends SerializableCorridorValidator> codec() {

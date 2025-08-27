@@ -10,11 +10,9 @@ import java.util.List;
 
 public record Or(List<SerializableCorridorValidator> base) implements SerializableCorridorValidator {
 
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Or> CODEC = SerializableCorridorValidator.CODEC
-            .listOf()
+    public static final MapCodec<Or> CODEC = SerializableCorridorValidator.CODEC.listOf()
             .fieldOf("values")
-            .xmap(com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Or::new,
-                    com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Or::base);
+            .xmap(Or::new, Or::base);
 
     public Or(SerializableCorridorValidator... values) {
         this(ImmutableList.copyOf(values));

@@ -7,10 +7,8 @@ import net.minecraft.server.MinecraftServer;
 
 public record Inverted(SerializableCorridorValidator base) implements SerializableCorridorValidator {
 
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Inverted> CODEC = SerializableCorridorValidator.CODEC
-            .fieldOf("base")
-            .xmap(com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Inverted::new,
-                    com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Inverted::base);
+    public static final MapCodec<Inverted> CODEC = SerializableCorridorValidator.CODEC.fieldOf("base")
+            .xmap(Inverted::new, Inverted::base);
 
     @Override
     public MapCodec<? extends SerializableCorridorValidator> codec() {

@@ -7,10 +7,8 @@ import net.minecraft.server.MinecraftServer;
 
 public record Identity(SerializableCorridorValidator base) implements SerializableCorridorValidator {
 
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Identity> CODEC = SerializableCorridorValidator.CODEC
-            .fieldOf("base")
-            .xmap(com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Identity::new,
-                    com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Identity::base);
+    public static final MapCodec<Identity> CODEC = SerializableCorridorValidator.CODEC.fieldOf("base")
+            .xmap(Identity::new, Identity::base);
 
     @Override
     public MapCodec<? extends SerializableCorridorValidator> codec() {
