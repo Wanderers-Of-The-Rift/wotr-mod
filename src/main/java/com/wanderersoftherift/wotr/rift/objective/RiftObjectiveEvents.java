@@ -18,20 +18,20 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-
-import java.util.Optional;
 
 /**
  * Event subscriber for objective handling
@@ -45,36 +45,34 @@ public class RiftObjectiveEvents {
     private static final ResourceKey<LootTable> SURVIVE_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
             WanderersOfTheRift.id("rift_objective/survive"));
 
-    @SubscribeEvent
-    public static void onRiftOpened(RiftEvent.Created event) {
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onRiftOpened(RiftEvent.Created.Pre event) {
         Holder<ObjectiveType> objectiveType = event.getConfig()
                 .objective()
-                .orElseGet(() -> event.getLevel()
+                .orElseGet(() -> event.getFirstPlayer()
+                        .getServer()
                         .registryAccess()
                         .lookupOrThrow(WotrRegistries.Keys.OBJECTIVES)
-                        .getRandomElementOf(WotrTags.Objectives.RANDOM_SELECTABLE, event.getLevel().getRandom())
+                        .getRandomElementOf(WotrTags.Objectives.RANDOM_SELECTABLE,
+                                RandomSource.create(event.getConfig().riftGen().seed().get() + 668_453_148))
                         .orElseThrow(() -> new IllegalStateException("No objectives available")));
 
-        OngoingObjective objective = objectiveType.value().generate(event.getLevel());
-        LevelRiftObjectiveData data = LevelRiftObjectiveData.getFromLevel(event.getLevel());
-        data.setObjective(objective);
+        event.setConfig(event.getConfig().withObjective(objectiveType));
     }
 
     @SubscribeEvent
     public static void onPlayerJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getEntity().level() instanceof ServerLevel serverLevel
-                && event.getEntity() instanceof ServerPlayer player) {
-            LevelRiftObjectiveData data = LevelRiftObjectiveData.getFromLevel(serverLevel);
-            if (data.getObjective() != null) {
-                PacketDistributor.sendToPlayer(player,
-                        new S2CRiftObjectiveStatusPacket(Optional.of(data.getObjective())));
-                Component objectiveStartMessage = data.getObjective().getObjectiveStartMessage();
-                if (objectiveStartMessage != null) {
-                    player.displayClientMessage(objectiveStartMessage, false);
-                }
-            } else {
-                PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(Optional.empty()));
-            }
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        var objective = RiftData.get(player.serverLevel()).getObjective();
+        PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(objective));
+        if (objective.isEmpty()) {
+            return;
+        }
+        Component objectiveStartMessage = objective.get().getObjectiveStartMessage();
+        if (objectiveStartMessage != null) {
+            player.displayClientMessage(objectiveStartMessage, false);
         }
     }
 
@@ -112,13 +110,13 @@ public class RiftObjectiveEvents {
             return;
         }
         RiftData riftData = RiftData.get(riftLevel);
-        if (RiftData.get(riftLevel).containsPlayer(player.getUUID())) {
+        if (riftData.containsPlayer(player)) {
             // Player hasn't actually left the level
             return;
         }
 
-        OngoingObjective objective = LevelRiftObjectiveData.getFromLevel(riftLevel).getObjective();
-        boolean success = objective != null && objective.isComplete();
+        var objective = riftData.getObjective();
+        boolean success = objective.isPresent() && objective.get().isComplete();
 
         NeoForge.EVENT_BUS.post(new RiftEvent.PlayerCompletedRift(player, success, riftLevel, riftData.getConfig()));
 

@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
@@ -10,7 +11,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Processor
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
@@ -30,11 +30,11 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
     private final ConcurrentHashMap<Vector2i, Region> regions = new ConcurrentHashMap<>();
 
-    private final int seed;
+    private final long seed;
     private final RiftShape riftShape;
     private final List<LayoutLayer> layers;
 
-    public LayeredInfiniteRiftLayout(RiftShape riftShape, int seed, List<LayoutLayer> layers) {
+    public LayeredInfiniteRiftLayout(RiftShape riftShape, long seed, List<LayoutLayer> layers) {
         this.layers = layers;
         this.seed = seed;
         this.riftShape = riftShape;
@@ -50,10 +50,6 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos) {
-        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
-    }
-
     public RiftSpace getChunkSpace(int x, int y, int z) {
         var region = getOrCreateRegion(x, z);
         var rand = ProcessorUtil.createRandom(
@@ -62,37 +58,13 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         return region.getSpaceAt(x, y, z);
     }
 
-    private boolean hasCorridorSingle(int x, int y, int z, Direction d) {
-        var space = getChunkSpace(x, y, z);
-        if (space == null || space instanceof VoidRiftSpace) {
-            return false;
-        }
-        var spaceOrigin = space.origin();
-        var dx = x - spaceOrigin.getX();
-        var dy = y - spaceOrigin.getY();
-        var dz = z - spaceOrigin.getZ();
-        for (var corridor : space.corridors()) {
-            if (corridor.direction() == d && corridor.position().getX() == dx && corridor.position().getY() == dy
-                    && corridor.position().getZ() == dz) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean validateCorridor(int x, int y, int z, Direction d) {
-        return hasCorridorSingle(x, y, z, d)
-                || hasCorridorSingle(x + d.getStepX(), y + d.getStepY(), z + d.getStepZ(), d.getOpposite());
-    }
-
-    public record Factory(RiftShape riftShape, Optional<Integer> seed, List<LayoutLayer.Factory> layers)
-            implements RiftLayout.Factory {
+    public record Factory(RiftShape riftShape, Optional<Long> seed, List<LayoutLayer.Factory> layers)
+            implements LayeredRiftLayout.Factory {
 
         public static final MapCodec<LayeredInfiniteRiftLayout.Factory> CODEC = RecordCodecBuilder
                 .mapCodec(it -> it.group(
                         RiftShape.CODEC.fieldOf("shape").forGetter(LayeredInfiniteRiftLayout.Factory::riftShape),
-                        Codec.INT.optionalFieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
+                        Codec.LONG.optionalFieldOf("seed").forGetter(LayeredInfiniteRiftLayout.Factory::seed),
                         LayoutLayer.Factory.CODEC.listOf()
                                 .fieldOf("layers")
                                 .forGetter(LayeredInfiniteRiftLayout.Factory::layers)
@@ -104,9 +76,19 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
         }
 
         @Override
-        public RiftLayout createLayout(MinecraftServer server, int seed) {
-            return new LayeredInfiniteRiftLayout(riftShape, this.seed.orElse(seed),
-                    layers.stream().map(it -> it.createLayer(server)).toList());
+        public RiftLayout createLayout(MinecraftServer server, RiftConfig riftConfig) {
+            return new LayeredInfiniteRiftLayout(riftShape, this.seed.orElse(riftConfig.riftGen().seed().get()),
+                    layers.stream().map(it -> it.createLayer(server, riftConfig)).toList());
+        }
+
+        @Override
+        public LayeredRiftLayout.Factory withLayers(List<LayoutLayer.Factory> layers) {
+            return new Factory(riftShape, seed, layers);
+        }
+
+        @Override
+        public RiftShape riftShape(RiftConfig config) {
+            return riftShape();
         }
     }
 
