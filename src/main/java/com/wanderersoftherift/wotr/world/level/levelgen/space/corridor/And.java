@@ -8,18 +8,18 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
 
-public record And(List<SerializableCorridorValidator> base) implements SerializableCorridorValidator {
+public record And(List<CorridorValidator> base) implements CorridorValidator {
 
-    public static final MapCodec<And> CODEC = SerializableCorridorValidator.CODEC.listOf()
+    public static final MapCodec<And> CODEC = CorridorValidator.CODEC.listOf()
             .fieldOf("values")
             .xmap(And::new, And::base);
 
-    public And(SerializableCorridorValidator... values) {
+    public And(CorridorValidator... values) {
         this(ImmutableList.copyOf(values));
     }
 
     @Override
-    public MapCodec<? extends SerializableCorridorValidator> codec() {
+    public MapCodec<? extends CorridorValidator> codec() {
         return CODEC;
     }
 

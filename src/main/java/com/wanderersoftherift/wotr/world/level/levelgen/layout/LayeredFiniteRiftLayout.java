@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
-import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
@@ -12,8 +11,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Processor
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
@@ -64,10 +61,6 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     }
 
     @Override
-    public RiftSpace getChunkSpace(Vec3i chunkPos) {
-        return getChunkSpace(chunkPos.getX(), chunkPos.getY(), chunkPos.getZ());
-    }
-
     public RiftSpace getChunkSpace(int x, int y, int z) {
         var origin = riftShape.getBoxStart();
         var rand = ProcessorUtil.createRandom(
@@ -158,31 +151,6 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
     @Override
     public long[] getEmptySpaces() {
         return emptySpaces;
-    }
-
-    @Override
-    public boolean validateCorridor(
-            int x,
-            int y,
-            int z,
-            Direction d,
-            FastRiftGenerator generator,
-            MinecraftServer server) {
-        var space = getChunkSpace(x, y, z);
-        if (space == null || space instanceof VoidRiftSpace) {
-            return false;
-        }
-        var spaceOrigin = space.origin();
-        var dx = x - spaceOrigin.getX();
-        var dy = y - spaceOrigin.getY();
-        var dz = z - spaceOrigin.getZ();
-        for (var corridor : space.corridors()) {
-            if (corridor.direction() == d && corridor.position().getX() == dx && corridor.position().getY() == dy
-                    && corridor.position().getZ() == dz) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

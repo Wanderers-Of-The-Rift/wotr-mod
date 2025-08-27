@@ -4,18 +4,18 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.And;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.GeneratorLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Identity;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Inverted;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Opposite;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.Or;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.SerializableCorridorValidator;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
 public class WotrCorridorValidators {
-    public static final DeferredRegister<MapCodec<? extends SerializableCorridorValidator>> CORRIDOR_VALIDATORS = DeferredRegister
+    public static final DeferredRegister<MapCodec<? extends CorridorValidator>> CORRIDOR_VALIDATORS = DeferredRegister
             .create(WotrRegistries.RIFT_CORRIDOR_VALIDATORS, WanderersOfTheRift.MODID);
 
     public static final Supplier<MapCodec<Identity>> IDENTITY_CORRIDOR_VALIDATOR = CORRIDOR_VALIDATORS

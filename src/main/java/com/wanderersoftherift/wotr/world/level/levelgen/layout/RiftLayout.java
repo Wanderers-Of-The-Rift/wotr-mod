@@ -6,7 +6,6 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 
@@ -14,8 +13,13 @@ import net.minecraft.server.MinecraftServer;
  * decides and remembers room placement in a rift, each space should be provided by RoomRandomizer (or it should be
  * VoidSpace or null)
  */
-public interface RiftLayout extends CorridorValidator {
-    RiftSpace getChunkSpace(Vec3i pos);
+public interface RiftLayout {
+
+    default RiftSpace getChunkSpace(Vec3i pos) {
+        return getChunkSpace(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    RiftSpace getChunkSpace(int x, int y, int z);
 
     interface Factory {
 

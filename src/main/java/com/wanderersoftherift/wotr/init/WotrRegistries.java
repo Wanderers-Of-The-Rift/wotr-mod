@@ -33,7 +33,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.SerializableCorridorValidator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Registry;
@@ -94,7 +94,7 @@ public class WotrRegistries {
             Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
     public static final Registry<MapCodec<? extends RiftConfigCustomData>> RIFT_CONFIG_CUSTOM_DATA_TYPES = new RegistryBuilder<>(
             Keys.RIFT_CONFIG_CUSTOM_DATA_TYPES).create();
-    public static final Registry<MapCodec<? extends SerializableCorridorValidator>> RIFT_CORRIDOR_VALIDATORS = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends CorridorValidator>> RIFT_CORRIDOR_VALIDATORS = new RegistryBuilder<>(
             Keys.RIFT_CORRIDOR_VALIDATORS).create();
     public static final Registry<MapCodec<? extends RiftPostProcessingStep>> RIFT_POST_STEPS = new RegistryBuilder<>(
             Keys.RIFT_POST_STEPS).create();
@@ -170,7 +170,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));;
         public static final ResourceKey<Registry<MapCodec<? extends RiftConfigCustomData>>> RIFT_CONFIG_CUSTOM_DATA_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));;
-        public static final ResourceKey<Registry<MapCodec<? extends SerializableCorridorValidator>>> RIFT_CORRIDOR_VALIDATORS = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends CorridorValidator>>> RIFT_CORRIDOR_VALIDATORS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));;
         public static final ResourceKey<Registry<MapCodec<? extends RiftPostProcessingStep>>> RIFT_POST_STEPS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));;

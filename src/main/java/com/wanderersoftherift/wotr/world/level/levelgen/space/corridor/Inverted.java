@@ -5,13 +5,13 @@ import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 
-public record Inverted(SerializableCorridorValidator base) implements SerializableCorridorValidator {
+public record Inverted(CorridorValidator base) implements CorridorValidator {
 
-    public static final MapCodec<Inverted> CODEC = SerializableCorridorValidator.CODEC.fieldOf("base")
+    public static final MapCodec<Inverted> CODEC = CorridorValidator.CODEC.fieldOf("base")
             .xmap(Inverted::new, Inverted::base);
 
     @Override
-    public MapCodec<? extends SerializableCorridorValidator> codec() {
+    public MapCodec<? extends CorridorValidator> codec() {
         return CODEC;
     }
 

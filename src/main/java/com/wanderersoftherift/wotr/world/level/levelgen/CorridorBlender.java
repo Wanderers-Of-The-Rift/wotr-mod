@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.SerializableCorridorValidator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -17,10 +17,10 @@ import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.WEST;
 import static net.minecraft.world.level.block.Blocks.AIR;
 
-public record CorridorBlender(SerializableCorridorValidator validator) implements RiftPostProcessingStep {
+public record CorridorBlender(CorridorValidator validator) implements RiftPostProcessingStep {
 
     public static final MapCodec<CorridorBlender> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-            .group(SerializableCorridorValidator.CODEC.fieldOf("validator").forGetter(CorridorBlender::validator))
+            .group(CorridorValidator.CODEC.fieldOf("validator").forGetter(CorridorBlender::validator))
             .apply(instance, CorridorBlender::new));
 
     public static final int CORRIDOR_START_X = 6;
