@@ -1,9 +1,9 @@
 {
-  "type": "wotr:standard_ability",
+  "type": "wotr:standard",
   "cooldown": 10,
   "effects": [
     {
-      "type": "wotr:simple_projectile_effect",
+      "type": "wotr:simple_projectile",
       "config": {
         "gravity_affected": false,
         "ground_persist_ticks": 20,
@@ -21,11 +21,11 @@
       },
       "effects": [
         {
-          "type": "wotr:damage_effect",
+          "type": "wotr:damage",
           "amount": 2.0,
           "damage_type": "wotr:ice",
           "targeting": {
-            "type": "wotr:self_targeting",
+            "type": "wotr:self",
             "target": {
               "sentiment": "not_friend"
             }
@@ -33,7 +33,7 @@
         }
       ],
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       }
     }
   ],

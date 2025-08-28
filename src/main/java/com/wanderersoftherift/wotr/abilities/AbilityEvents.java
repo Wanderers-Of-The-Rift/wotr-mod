@@ -2,15 +2,11 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
-import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -51,6 +47,7 @@ public class AbilityEvents {
     public static void serverTick(ServerTickEvent.Pre event) {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             tickAttachedEffects(level);
+            tickActiveAbilities(level);
             tickMana(level);
         }
     }
@@ -64,20 +61,26 @@ public class AbilityEvents {
     }
 
     public static void tickAttachedEffects(ServerLevel level) {
-        level.getEntities(EntityTypeTest.forClass(LivingEntity.class),
-                entity -> entity.hasData(WotrAttachments.ATTACHED_EFFECTS)).forEach(entity -> {
-                    AttachedEffectData data = entity.getData(WotrAttachments.ATTACHED_EFFECTS);
-                    data.tick();
-                    if (data.isEmpty()) {
-                        entity.removeData(WotrAttachments.ATTACHED_EFFECTS);
-                    }
-                });
+        level.getData(WotrAttachments.ATTACHED_EFFECT_ENTITY_REGISTRY).forEach((entity, data) -> {
+            data.tick();
+            if (data.isEmpty()) {
+                entity.removeData(WotrAttachments.ATTACHED_EFFECTS);
+            }
+        });
+    }
+
+    public static void tickActiveAbilities(ServerLevel level) {
+        level.getData(WotrAttachments.ONGOING_ABILITY_ENTITY_REGISTRY).forEach((entity, data) -> {
+            data.tick();
+            if (data.isEmpty()) {
+                entity.removeData(WotrAttachments.ONGOING_ABILITIES);
+            }
+        });
     }
 
     public static void tickMana(ServerLevel level) {
-        level.getPlayers(player -> player.hasData(WotrAttachments.MANA)).forEach(player -> {
-            ManaData data = player.getData(WotrAttachments.MANA);
-            data.tick();
+        level.getData(WotrAttachments.MANA_ENTITY_REGISTRY).forEach((entity, manaData) -> {
+            manaData.tick();
         });
     }
 }

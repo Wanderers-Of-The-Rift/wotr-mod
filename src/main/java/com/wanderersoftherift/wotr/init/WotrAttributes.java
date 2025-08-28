@@ -62,16 +62,16 @@ public class WotrAttributes {
 
     /* Mana */
     public static final DeferredHolder<Attribute, RangedAttribute> MAX_MANA = registerAttribute("max_mana",
-            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "max_mana"), 50, 0,
-                    Integer.MAX_VALUE));
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "max_mana"), 50,
+                    0, Integer.MAX_VALUE).setSyncable(true));
     public static final DeferredHolder<Attribute, RangedAttribute> MANA_REGEN_RATE = registerAttribute(
-            "mana_regen_rate",
-            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), 0.05, 0,
-                    Integer.MAX_VALUE));
+            "mana_regen_rate", () -> (RangedAttribute) new RangedAttribute(
+                    WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), 0.05, 0, Integer.MAX_VALUE)
+                    .setSyncable(true));
     public static final DeferredHolder<Attribute, RangedAttribute> MANA_DEGEN_RATE = registerAttribute(
-            "mana_degen_rate",
-            () -> new RangedAttribute(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0,
-                    Integer.MAX_VALUE));
+            "mana_degen_rate", () -> (RangedAttribute) new RangedAttribute(
+                    WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0, Integer.MAX_VALUE)
+                    .setSyncable(true));
 
     // Critical
     public static final DeferredHolder<Attribute, RangedAttribute> CRITICAL_CHANCE = registerAttribute(

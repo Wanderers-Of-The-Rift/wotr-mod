@@ -53,7 +53,9 @@ public class RiftProcessedChunk {
         for (int idx = 0; idx < blockEntities.size(); idx++) {
 
             var entity = blockEntities.get(idx);
-            if (entity != null && level != null) {
+            var pos = entity.getBlockPos();
+            if (entity != null && level != null && entity.isValidBlockState(
+                    getBlockState(pos.getX() & CHUNK_WIDTH_MASK, pos.getY(), pos.getZ() & CHUNK_WIDTH_MASK))) {
                 chunk.setBlockEntity(entity);
             }
         }

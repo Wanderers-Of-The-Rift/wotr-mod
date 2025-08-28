@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.entity.projectile;
 
 import com.google.common.collect.Lists;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
+import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
@@ -14,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -60,6 +61,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
+// TODO: Fix handling of on hit effect
 public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     private static final double ARROW_BASE_DAMAGE = 2.0;
     private static final int SHAKE_TIME = 7;
@@ -89,17 +91,12 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     @Nullable private List<Entity> piercedAndKilledEntities;
     private ItemStack pickupItemStack = this.getDefaultPickupItem();
     @Nullable private ItemStack firedFromWeapon = null;
-    private Ability ability;
-    private ItemStack abilityItem;
+    private StoredAbilityContext abilityContext;
     private SimpleProjectileEffect effect;
     private SimpleProjectileConfig config;
 
     public SimpleEffectProjectile(EntityType<SimpleEffectProjectile> type, Level level) {
         super(type, level);
-    }
-
-    public void setAbility(Ability ability) {
-        this.ability = ability;
     }
 
     public void setEffect(SimpleProjectileEffect effect) {
@@ -437,7 +434,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
             }
 
             effect.applyDelayed(serverLevel, entity, List.of(entity.blockPosition()),
-                    new AbilityContext(livingOwner, abilityItem));
+                    abilityContext.toContext(livingOwner, level()));
         }
 
         if (this.getPierceLevel() <= 0) {
@@ -473,12 +470,11 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     protected void onHitBlock(BlockHitResult result) {
         this.lastState = this.level().getBlockState(result.getBlockPos());
         super.onHitBlock(result);
-        ItemStack itemstack = this.getWeaponItem();
         if (effect != null && this.level() instanceof ServerLevel serverLevel
                 && this.getOwner() instanceof LivingEntity caster) {
 
-            effect.applyDelayed(serverLevel, null, List.of(result.getBlockPos()),
-                    new AbilityContext(caster, abilityItem));
+            effect.applyDelayed(serverLevel, this, List.of(result.getBlockPos()),
+                    abilityContext.toContext(caster, level()));
         }
 
         Vec3 vec31 = this.getDeltaMovement();
@@ -536,8 +532,19 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         if (!this.pickupItemStack.isEmpty()) {
             compound.put("item", this.pickupItemStack.save(this.registryAccess()));
         }
-        if (!this.abilityItem.isEmpty()) {
-            compound.put("abilityItem", this.abilityItem.save(this.registryAccess()));
+        if (effect != null) {
+            compound.put("effect",
+                    SimpleProjectileEffect.CODEC.encoder()
+                            .encodeStart(level().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                                    this.effect)
+                            .getOrThrow());
+        }
+        if (abilityContext != null) {
+            compound.put("ability_context",
+                    StoredAbilityContext.CODEC
+                            .encodeStart(level().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                                    this.abilityContext)
+                            .getOrThrow());
         }
         if (this.firedFromWeapon != null) {
             compound.put("weapon", this.firedFromWeapon.save(this.registryAccess(), new CompoundTag()));
@@ -554,7 +561,7 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.life = compound.getShort("life");
-        if (compound.contains("inBlockState", 10)) {
+        if (compound.contains("inBlockState", Tag.TAG_COMPOUND)) {
             this.lastState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK),
                     compound.getCompound("inBlockState"));
         }
@@ -567,32 +574,41 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
 
         this.pickup = AbstractArrow.Pickup.byOrdinal(compound.getByte("pickup"));
         this.setPierceLevel(compound.getByte("PierceLevel"));
-        if (compound.contains("item", 10)) {
+        if (compound.contains("item", Tag.TAG_COMPOUND)) {
             this.setPickupItemStack(ItemStack.parse(this.registryAccess(), compound.getCompound("item"))
                     .orElse(this.getDefaultPickupItem()));
         } else {
             this.setPickupItemStack(this.getDefaultPickupItem());
         }
-        if (compound.contains("abilityItem", 10)) {
-            this.setAbilityItem(ItemStack.parse(this.registryAccess(), compound.getCompound("abilityItem"))
-                    .orElse(this.getDefaultPickupItem()));
-        } else {
-            this.setAbilityItem(this.getDefaultPickupItem());
+        if (compound.contains("effect", Tag.TAG_COMPOUND)) {
+            effect = SimpleProjectileEffect.CODEC.decoder()
+                    .parse(level().registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("effect"))
+                    .resultOrPartial(x -> WanderersOfTheRift.LOGGER
+                            .error("Tried to load invalid simple projectile effect: '{}'", x))
+                    .orElse(null);
+        }
+        if (compound.contains("ability_context", Tag.TAG_COMPOUND)) {
+            abilityContext = StoredAbilityContext.CODEC
+                    .parse(level().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                            compound.get("ability_context"))
+                    .resultOrPartial(
+                            x -> WanderersOfTheRift.LOGGER.error("Tried to load invalid ability context: '{}'", x))
+                    .orElse(null);
         }
 
-        if (compound.contains("weapon", 10)) {
+        if (compound.contains("weapon", Tag.TAG_COMPOUND)) {
             this.firedFromWeapon = ItemStack.parse(this.registryAccess(), compound.getCompound("weapon")).orElse(null);
         } else {
             this.firedFromWeapon = null;
         }
 
-        if (compound.contains("config", 10)) {
+        if (compound.contains("config", Tag.TAG_COMPOUND)) {
             this.config = SimpleProjectileConfig.CODEC.parse(NbtOps.INSTANCE, compound.get("config"))
                     .resultOrPartial(value -> WanderersOfTheRift.LOGGER.warn("Invalid projectile config: {}", value))
                     .orElse(SimpleProjectileConfig.DEFAULT);
             setRenderConfig(this.config.renderConfig());
-            if (this.getOwner() instanceof LivingEntity owner) {
-                this.configure(this.config, new AbilityContext(owner, abilityItem));
+            if (this.getOwner() instanceof LivingEntity owner && abilityContext != null) {
+                this.configure(this.config, abilityContext.toContext(owner, level()));
             }
         }
     }
@@ -667,13 +683,8 @@ public class SimpleEffectProjectile extends Projectile implements GeoEntity {
         this.entityData.set(RENDER_CONFIG, renderConfig);
     }
 
-    public void setAbilityItem(ItemStack abilityItemStack) {
-        this.abilityItem = abilityItemStack;
-    }
-
     public void setAbilityContext(AbilityContext context) {
-        this.setAbility(context.getAbility());
-        this.setAbilityItem(context.abilityItem());
+        this.abilityContext = new StoredAbilityContext(context);
     }
 
     private void setFlag(int id, boolean value) {

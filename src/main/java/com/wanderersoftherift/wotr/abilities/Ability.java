@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
@@ -12,15 +11,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
 
+/**
+ * Base type for all abilities.
+ */
 public abstract class Ability {
 
     public static final Codec<Ability> DIRECT_CODEC = WotrRegistries.ABILITY_TYPES.byNameCodec()
@@ -29,16 +28,17 @@ public abstract class Ability {
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Ability>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(ABILITIES);
 
-    private ResourceLocation icon;
-    private Optional<ResourceLocation> smallIcon;
+    private final ResourceLocation icon;
+    private final Optional<ResourceLocation> smallIcon;
 
-    private int baseCooldown = 0;
-    private int baseManaCost;
+    private final int baseCooldown;
+    private final int baseManaCost;
 
-    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown) {
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int baseManaCost) {
         this.icon = icon;
         this.smallIcon = smallIcon;
         this.baseCooldown = baseCooldown;
+        this.baseManaCost = baseManaCost;
     }
 
     public static Component getDisplayName(Holder<Ability> ability) {
@@ -47,36 +47,69 @@ public abstract class Ability {
 
     public abstract MapCodec<? extends Ability> getCodec();
 
-    public void setIcon(ResourceLocation location) {
-        icon = location;
-    }
-
+    /**
+     * @return An icon for displaying the ability in the ability bar. Will also be used for the ability holder if there
+     *         is no small icon
+     */
     public ResourceLocation getIcon() {
         return icon;
     }
 
+    /**
+     * @return An icon for displaying in the ability holder.
+     */
     public Optional<ResourceLocation> getSmallIcon() {
         return smallIcon;
     }
 
-    public int getBaseManaCost() {
-        return baseManaCost;
-    }
-
-    public void setBaseManaCost(int baseManaCost) {
-        this.baseManaCost = baseManaCost;
-    }
-
-    public abstract boolean onActivate(LivingEntity caster, ItemStack abilityItem, @Nullable WotrEquipmentSlot slot);
-
-    // TODO: Any use case for this?
-    public boolean canUse(LivingEntity caster) {
+    /**
+     * @param context
+     * @return Whether the ability can be activated
+     */
+    public boolean canActivate(AbilityContext context) {
         return true;
     }
+
+    /**
+     * @param context
+     * @return Whether the ability is finished
+     */
+    public abstract boolean activate(AbilityContext context);
+
+    /**
+     * Used to apply client-side effects
+     * 
+     * @param context
+     */
+    public void clientActivate(AbilityContext context) {
+
+    }
+
+    /**
+     * Ticks the ability while it is active
+     * 
+     * @param contest
+     * @param age
+     * @return Whether the ability is finished
+     */
+    public boolean tick(AbilityContext contest, long age) {
+        return true;
+    }
+
+    ///  Cooldown
 
     public int getBaseCooldown() {
         return baseCooldown;
     }
 
+    ///  Costs
+
+    public int getBaseManaCost() {
+        return baseManaCost;
+    }
+
+    ///  Upgrade support
+
     public abstract boolean isRelevantModifier(AbstractModifierEffect modifierEffect);
+
 }

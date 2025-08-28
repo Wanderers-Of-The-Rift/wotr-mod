@@ -1,8 +1,11 @@
-package com.wanderersoftherift.wotr.abilities.effects.marker;
+package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -12,11 +15,13 @@ import net.minecraft.resources.ResourceLocation;
  * @param name
  */
 public record EffectMarker(ResourceLocation icon, String name) {
-    public static final Codec<EffectMarker> CODEC = RecordCodecBuilder
+    public static final Codec<EffectMarker> DIRECT_CODEC = RecordCodecBuilder
             .create(instance -> instance
                     .group(ResourceLocation.CODEC.fieldOf("icon").forGetter(EffectMarker::icon),
                             Codec.STRING.fieldOf("name").forGetter(EffectMarker::name))
                     .apply(instance, EffectMarker::new));
+    public static final Codec<Holder<EffectMarker>> CODEC = RegistryFixedCodec
+            .create(WotrRegistries.Keys.EFFECT_MARKERS);
 
     public Component getLabel() {
         return Component.translatable(name);

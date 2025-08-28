@@ -1,11 +1,13 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -31,6 +33,9 @@ public class ManaData {
     public ManaData(IAttachmentHolder holder, float amount) {
         this.holder = holder;
         this.amount = amount;
+        if (holder instanceof Entity entity) {
+            entity.level().getData(WotrAttachments.MANA_ENTITY_REGISTRY).add(entity);
+        }
     }
 
     public static IAttachmentSerializer<Tag, ManaData> getSerializer() {
@@ -50,6 +55,9 @@ public class ManaData {
      * @param quantity The quantity of mana to consume
      */
     public void useAmount(float quantity) {
+        if (quantity == 0) {
+            return;
+        }
         setAmount(amount - quantity);
     }
 
@@ -60,6 +68,7 @@ public class ManaData {
      */
     public void setAmount(float value) {
         this.amount = Math.clamp(value, 0, maxAmount());
+
         if (holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new ManaChangePayload(amount));
         }

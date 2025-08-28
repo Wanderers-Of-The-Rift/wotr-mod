@@ -3,15 +3,18 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffectData;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
+import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
+import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
-import com.wanderersoftherift.wotr.abilities.effects.marker.EffectDisplayData;
+import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
+import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -66,15 +69,19 @@ public class WotrAttachments {
             "ability_cooldowns",
             () -> AttachmentType.builder(AbilityCooldowns::new).serialize(AbilityCooldowns.getSerializer()).build()
     );
-    public static final Supplier<AttachmentType<AttachedEffectData>> ATTACHED_EFFECTS = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<AttachedEffects>> ATTACHED_EFFECTS = ATTACHMENT_TYPES.register(
             "attached_effects",
-            () -> AttachmentType.builder(AttachedEffectData::new)
-                    .serialize(AttachedEffectData.getSerializer())
-                    .build());
-    public static final Supplier<AttachmentType<EffectDisplayData>> EFFECT_DISPLAY = ATTACHMENT_TYPES
-            .register("effect_display", () -> AttachmentType.builder(() -> new EffectDisplayData()).build());
+            () -> AttachmentType.builder(AttachedEffects::new).serialize(AttachedEffects.getSerializer()).build());
+    public static final Supplier<AttachmentType<EffectMarkers>> EFFECT_MARKERS = ATTACHMENT_TYPES.register(
+            "effect_markers", () -> AttachmentType.builder(EffectMarkers::new).build());
     public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
             () -> AttachmentType.builder(ManaData::new).serialize(ManaData.getSerializer()).build());
+    public static final Supplier<AttachmentType<OngoingAbilities>> ONGOING_ABILITIES = ATTACHMENT_TYPES.register(
+            "ongoing_abilities",
+            () -> AttachmentType.builder(OngoingAbilities::new).serialize(OngoingAbilities.getSerializer()).build());
+    public static final Supplier<AttachmentType<AbilityStates>> ABILITY_STATES = ATTACHMENT_TYPES.register(
+            "ability_states",
+            () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
 
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
@@ -91,4 +98,23 @@ public class WotrAttachments {
                     .serialize(ActiveQuests.getSerializer())
                     .copyOnDeath()
                     .build());
+
+    /// Level attachments
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<AttachedEffects>>> ATTACHED_EFFECT_ENTITY_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "attached_effect_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ATTACHED_EFFECTS)).build()
+            );
+
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<OngoingAbilities>>> ONGOING_ABILITY_ENTITY_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "ongoing_ability_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
+            );
+
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<ManaData>>> MANA_ENTITY_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "mana_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
+            );
 }

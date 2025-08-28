@@ -115,8 +115,9 @@ public final class AbilityBar implements ConfigurableLayer {
             }
             float cooldown = 1f - cooldowns.getCooldown(AbilityEquipmentSlot.forSlot(i))
                     .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
+            boolean isActive = player.getData(WotrAttachments.ABILITY_STATES).isActive(AbilityEquipmentSlot.forSlot(i));
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
-                    abilityComponent.ability(), cooldown);
+                    abilityComponent.ability(), isActive, cooldown);
         }
         renderSelected(graphics, pos.x + abilitySlots.getSelectedSlot() * slotOffset.x(),
                 pos.y + abilitySlots.getSelectedSlot() * slotOffset.y());
@@ -152,13 +153,17 @@ public final class AbilityBar implements ConfigurableLayer {
             int xOffset,
             int yOffset,
             Holder<Ability> ability,
+            boolean isActive,
             float cooldownFraction) {
         if (ability != null) {
             graphics.blit(RenderType::guiTextured, ability.value().getIcon(), xOffset, yOffset, 0, 0, ICON_SIZE,
                     ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
 
-        if (cooldownFraction > 0) {
+        if (isActive) {
+            graphics.fill(xOffset, yOffset, xOffset + ICON_SIZE, yOffset + ICON_SIZE,
+                    0xAA000000 | ChatFormatting.GREEN.getColor());
+        } else if (cooldownFraction > 0) {
             int overlayHeight = Math.clamp((int) (Math.ceil((float) ICON_SIZE * cooldownFraction)), 1, ICON_SIZE);
             graphics.blit(RenderType::guiTextured, COOLDOWN_OVERLAY, xOffset, yOffset + ICON_SIZE - overlayHeight, 0, 0,
                     ICON_SIZE, overlayHeight, ICON_SIZE, ICON_SIZE);

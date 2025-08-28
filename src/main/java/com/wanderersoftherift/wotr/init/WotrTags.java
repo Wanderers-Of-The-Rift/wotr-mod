@@ -34,15 +34,15 @@ public class WotrTags {
         public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT = createTag("socketable_main_hand_slot");
         public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
 
-        public static final TagKey<Item> ROGUE_TYPE_GEAR = createTag("gear_type.rogue_type_gear");
-        public static final TagKey<Item> TANK_TYPE_GEAR = createTag("gear_type.tank_type_gear");
-        public static final TagKey<Item> BARBARIAN_TYPE_GEAR = createTag("gear_type.barbarian_type_gear");
-        public static final TagKey<Item> WIZARD_TYPE_GEAR = createTag("gear_type.wizard_type_gear");
+        public static final TagKey<Item> LEATHER_TYPE_GEAR = createTag("gear_type.leather_type_gear");
+        public static final TagKey<Item> IRON_TYPE_GEAR = createTag("gear_type.iron_type_gear");
+        public static final TagKey<Item> DIAMOND_TYPE_GEAR = createTag("gear_type.diamond_type_gear");
+        public static final TagKey<Item> GOLD_TYPE_GEAR = createTag("gear_type.gold_type_gear");
 
-        public static final TagKey<Item> ROGUE_TYPE_WEAPON = createTag("weapon_type.rogue_type_weapon");
-        public static final TagKey<Item> TANK_TYPE_WEAPON = createTag("weapon_type.tank_type_weapon");
-        public static final TagKey<Item> BARBARIAN_TYPE_WEAPON = createTag("weapon_type.barbarian_type_weapon");
-        public static final TagKey<Item> WIZARD_TYPE_WEAPON = createTag("weapon_type.wizard_type_weapon");
+        public static final TagKey<Item> RANGE_TYPE_WEAPON = createTag("weapon_type.range_type_weapon");
+        public static final TagKey<Item> IRON_TYPE_WEAPON = createTag("weapon_type.iron_type_weapon");
+        public static final TagKey<Item> DIAMOND_TYPE_WEAPON = createTag("weapon_type.diamond_type_weapon");
+        public static final TagKey<Item> GOLD_TYPE_WEAPON = createTag("weapon_type.gold_type_weapon");
         public static final TagKey<Item> ABILITY_SLOT_ACCEPTED = createTag("ability_slot_accepted");
 
         private static TagKey<Item> createTag(String name) {

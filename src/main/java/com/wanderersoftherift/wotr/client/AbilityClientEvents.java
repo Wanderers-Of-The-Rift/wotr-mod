@@ -5,14 +5,11 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
-import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -65,7 +62,7 @@ public final class AbilityClientEvents {
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         for (int i = 0; i < WotrKeyMappings.ABILITY_SLOT_KEYS.size(); i++) {
             while (ABILITY_SLOT_KEYS.get(i).consumeClick()) {
-                useAbilitySlot(abilitySlots, i, player);
+                useAbilitySlot(i, player);
             }
         }
 
@@ -80,7 +77,7 @@ public final class AbilityClientEvents {
         }
         while (USE_ABILITY_KEY.consumeClick()) {
             int slot = abilitySlots.getSelectedSlot();
-            useAbilitySlot(abilitySlots, slot, player);
+            useAbilitySlot(slot, player);
             selectionUpdated = false; // Because using a slot selected the slot
         }
         if (selectionUpdated) {
@@ -88,15 +85,10 @@ public final class AbilityClientEvents {
         }
     }
 
-    private static void useAbilitySlot(AbilitySlots abilitySlots, int slot, Player player) {
-        ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
-        ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
-        if (abilityComponent != null && abilityComponent.ability()
-                .value()
-                .onActivate(player, abilityItem, AbilityEquipmentSlot.forSlot(slot))) {
+    private static void useAbilitySlot(int slot, Player player) {
+        if (player.getData(WotrAttachments.ONGOING_ABILITIES).activate(AbilityEquipmentSlot.forSlot(slot))) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }
-        abilitySlots.setSelectedSlot(slot);
     }
 
     @SubscribeEvent

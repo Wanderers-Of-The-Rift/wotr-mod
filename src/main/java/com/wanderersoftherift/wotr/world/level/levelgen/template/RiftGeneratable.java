@@ -1,7 +1,9 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
@@ -38,7 +40,7 @@ public interface RiftGeneratable {
             MinecraftServer server,
             RandomSource random,
             long[] mask,
-            List<JigsawProcessor> jigsawProcessors) {
+            List<JigsawListProcessor> jigsawProcessors) {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
@@ -55,6 +57,9 @@ public interface RiftGeneratable {
             var pool = jigsaw.pool();
             var next = RiftTemplates.random(server, pool, random);
             if (next == null) {
+                if (!("minecraft".equals(pool.getNamespace()) && "empty".equals(pool.getPath()))) {
+                    WanderersOfTheRift.LOGGER.debug("empty pool {}", pool);
+                }
                 continue;
             }
 
@@ -75,7 +80,10 @@ public interface RiftGeneratable {
                     .toList();
 
             if (childJigsawList.isEmpty()) {
-                continue;// todo possibly multiple attempts
+                WanderersOfTheRift.LOGGER.warn(
+                        "failed to spawn poi {} in room {} at jigsaw location {}, report this to build team",
+                        jigsaw.pool(), generatable.identifier(), jigsaw.info().pos());
+                continue;
             }
             var childJigsaw = childJigsawList.get(random.nextInt(childJigsawList.size()));
             var childPrimaryDirection = simplifiedDirection(childJigsaw, TripleMirror.NONE);
@@ -224,10 +232,6 @@ public interface RiftGeneratable {
 
     private static Direction auxiliaryDirection(StructureTemplate.JigsawBlockInfo jigsaw, TripleMirror mirror) {
         return mirror.applyToBlockState(jigsaw.info().state()).getValue(JigsawBlock.ORIENTATION).top();
-    }
-
-    interface JigsawProcessor {
-        void processJigsaws(List<StructureTemplate.JigsawBlockInfo> jigsaws, RandomSource random);
     }
 
 }
