@@ -6,10 +6,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.neoforged.bus.api.Event;
 
+import javax.annotation.Nonnull;
+
 public abstract class RiftEvent extends Event {
 
+    protected RiftConfig config;
     private ServerLevel level;
-    private RiftConfig config;
 
     public RiftEvent(ServerLevel level, RiftConfig config) {
         this.level = level;
@@ -27,9 +29,44 @@ public abstract class RiftEvent extends Event {
     /**
      * Event when a new rift has been created
      */
-    public static class Created extends RiftEvent {
-        public Created(ServerLevel level, RiftConfig config) {
+    public abstract static class Created extends RiftEvent {
+        private final ServerPlayer firstPlayer;
+
+        public Created(ServerLevel level, RiftConfig config, ServerPlayer firstPlayer) {
             super(level, config);
+            this.firstPlayer = firstPlayer;
+        }
+
+        public ServerPlayer getFirstPlayer() {
+            return firstPlayer;
+        }
+
+        /**
+         * Invoked before the {@link ServerLevel} and {@link com.wanderersoftherift.wotr.world.level.FastRiftGenerator}
+         * of the rift are created. Could be used for modifying {@link RiftConfig} of the rift (some examples are in
+         * {@link RiftConfigInitializationEvents}). {@link #getLevel()} will return null.
+         */
+        public static class Pre extends Created {
+
+            public Pre(RiftConfig config, ServerPlayer firstPlayer) {
+                super(null, config, firstPlayer);
+            }
+
+            public void setConfig(RiftConfig config) {
+                this.config = config;
+            }
+        }
+
+        /**
+         * Invoked after the {@link ServerLevel} of the rift is created. Could be used for adding custom
+         * {@link net.minecraft.world.level.saveddata.SavedData} or attachments to the newly-created rift or modifying
+         * built-in {@link RiftData}.
+         */
+        public static class Post extends Created {
+
+            public Post(@Nonnull ServerLevel level, RiftConfig config, ServerPlayer firstPlayer) {
+                super(level, config, firstPlayer);
+            }
         }
     }
 

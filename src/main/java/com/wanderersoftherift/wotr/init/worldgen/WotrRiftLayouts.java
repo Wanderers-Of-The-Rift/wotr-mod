@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init.worldgen;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.DefaultLayoutFactory;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredFiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredInfiniteRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
@@ -18,5 +19,7 @@ public class WotrRiftLayouts {
             .register("layered_layout", () -> LayeredFiniteRiftLayout.Factory.CODEC);
     public static final Supplier<MapCodec<LayeredInfiniteRiftLayout.Factory>> INFINITE_LAYERED_LAYOUT = LAYOUTS
             .register("infinite_layered_layout", () -> LayeredInfiniteRiftLayout.Factory.CODEC);
+    public static final Supplier<MapCodec<DefaultLayoutFactory>> DEFAULT_LAYOUT = LAYOUTS.register("default_layout",
+            () -> DefaultLayoutFactory.CODEC);
 
 }

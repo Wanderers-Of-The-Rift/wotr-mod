@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.rift.objective;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -30,7 +31,7 @@ public interface OngoingObjective {
      * @param data        The rift objective data
      * @return Whether the objective's data has changed (and should be dirty/replicated)
      */
-    default boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, LevelRiftObjectiveData data) {
+    default boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, RiftData data) {
         return false;
     }
 
