@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.core.rift.predicate;
 
 import com.mojang.serialization.Codec;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;

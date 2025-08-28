@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.item.riftkey;
+package com.wanderersoftherift.wotr.core.rift;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @param objective The objective of the rift
  * @param riftGen   Additional generation config
  */
-// TODO: Move into core.rift
+
 public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType> objective,
         RiftGenerationConfig riftGen,
         Map<Holder<MapCodec<? extends RiftConfigCustomData>>, RiftConfigCustomData> customData) {

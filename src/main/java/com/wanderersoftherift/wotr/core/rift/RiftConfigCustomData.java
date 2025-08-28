@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.item.riftkey;
+package com.wanderersoftherift.wotr.core.rift;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
