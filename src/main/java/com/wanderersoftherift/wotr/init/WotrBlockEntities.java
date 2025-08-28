@@ -1,7 +1,11 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.block.blockentity.*;
+import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.RuneAnvilBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
