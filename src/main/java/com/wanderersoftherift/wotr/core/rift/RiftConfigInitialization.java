@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 final class RiftConfigInitialization {
@@ -49,18 +50,12 @@ final class RiftConfigInitialization {
         var themeOptional = item.get(WotrDataComponentType.RiftConfig.RIFT_THEME);
         var tierOptional = item.get(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER);
         var objectiveOptional = item.get(WotrDataComponentType.RiftConfig.RIFT_OBJECTIVE);
-        long seed;
-        if (seedOptional == null) {
-            seed = random.nextLong();
-        } else {
-            seed = seedOptional;
-        }
-        var theme = themeOptional == null ? getRandomTheme(server, seed) : themeOptional;
-        var tier = tierOptional == null ? 0 : tierOptional;
-        var objective = objectiveOptional == null ? defaultObjective(server, seed) : objectiveOptional;
-
+        long seed = Objects.requireNonNullElseGet(seedOptional, random::nextLong);
+        var objective = Objects.requireNonNullElseGet(objectiveOptional, () -> defaultObjective(server, seed));
+        var theme = Objects.requireNonNullElseGet(themeOptional, () -> getRandomTheme(server, seed));
+        var tier = Objects.requireNonNullElse(tierOptional, 0);
         return new RiftConfig(
-                tier, theme, objective, riftGen(seed, item, server), new HashMap<>()
+                tier, theme, objective, riftGen(seed, item, server), seed, new HashMap<>()
         );
     }
 
@@ -68,7 +63,7 @@ final class RiftConfigInitialization {
         /* todo rift-gen (presets?), remove optionals */
         return new RiftGenerationConfig(
                 Optional.of(defaultLayout()), Optional.of(defaultRoomGenerator()),
-                Optional.of(defaultPostProcessingSteps()), Optional.of(initializeJigsawProcessors()), Optional.of(seed)
+                Optional.of(defaultPostProcessingSteps()), Optional.of(initializeJigsawProcessors())
         );
     }
 

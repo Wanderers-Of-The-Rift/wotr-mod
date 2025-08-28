@@ -77,7 +77,7 @@ public class LayeredInfiniteRiftLayout implements LayeredRiftLayout {
 
         @Override
         public RiftLayout createLayout(MinecraftServer server, RiftConfig riftConfig) {
-            return new LayeredInfiniteRiftLayout(riftShape, this.seed.orElse(riftConfig.riftGen().seed().get()),
+            return new LayeredInfiniteRiftLayout(riftShape, this.seed.orElse(riftConfig.seed()),
                     layers.stream().map(it -> it.createLayer(server, riftConfig)).toList());
         }
 

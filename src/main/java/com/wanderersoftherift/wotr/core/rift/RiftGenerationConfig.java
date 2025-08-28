@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
         Optional<RiftRoomGenerator.Factory> roomGenerator, Optional<List<RiftPostProcessingStep>> postProcessingSteps,
-        Optional<List<JigsawListProcessor>> jigsawProcessors, Optional<Long> seed) {
+        Optional<List<JigsawListProcessor>> jigsawProcessors) {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
@@ -27,8 +27,7 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
                             .forGetter(RiftGenerationConfig::postProcessingSteps),
                     JigsawListProcessor.CODEC.listOf()
                             .optionalFieldOf("jigsaw_processors")
-                            .forGetter(RiftGenerationConfig::jigsawProcessors),
-                    Codec.LONG.optionalFieldOf("seed").forGetter(RiftGenerationConfig::seed)
+                            .forGetter(RiftGenerationConfig::jigsawProcessors)
             ).apply(instance, RiftGenerationConfig::new));
 
     // spotless:off
@@ -37,20 +36,11 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
                 ByteBufCodecs.fromCodec(RiftRoomGenerator.Factory.CODEC).apply(ByteBufCodecs::optional), RiftGenerationConfig::roomGenerator,
                 ByteBufCodecs.fromCodec(RiftPostProcessingStep.CODEC).apply(ByteBufCodecs.list()).apply(ByteBufCodecs::optional), RiftGenerationConfig::postProcessingSteps,
                 ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()).apply(ByteBufCodecs::optional), RiftGenerationConfig::jigsawProcessors,
-                ByteBufCodecs.LONG.apply(ByteBufCodecs::optional), RiftGenerationConfig::seed,
             RiftGenerationConfig::new);
     // spotless:on
 
     public static final RiftGenerationConfig EMPTY = new RiftGenerationConfig(Optional.empty(), Optional.empty(),
-            Optional.empty(), Optional.empty(), Optional.empty());
-
-    public RiftGenerationConfig withSeedIfAbsent(long seed) {
-        if (this.seed.isPresent()) {
-            return this;
-        } else {
-            return withSeed(seed);
-        }
-    }
+            Optional.empty(), Optional.empty());
 
     public RiftGenerationConfig withLayoutIfAbsent(RiftLayout.Factory layout) {
         if (this.layout.isPresent()) {
@@ -85,26 +75,23 @@ public record RiftGenerationConfig(Optional<RiftLayout.Factory> layout,
     }
 
     public RiftGenerationConfig withSeed(long seed) {
-        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors,
-                Optional.of(seed));
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors);
     }
 
     public RiftGenerationConfig withLayout(RiftLayout.Factory layout) {
-        return new RiftGenerationConfig(Optional.of(layout), roomGenerator, postProcessingSteps, jigsawProcessors,
-                seed);
+        return new RiftGenerationConfig(Optional.of(layout), roomGenerator, postProcessingSteps, jigsawProcessors);
     }
 
     public RiftGenerationConfig withRoomGenerator(RiftRoomGenerator.Factory roomGenerator) {
-        return new RiftGenerationConfig(layout, Optional.of(roomGenerator), postProcessingSteps, jigsawProcessors,
-                seed);
+        return new RiftGenerationConfig(layout, Optional.of(roomGenerator), postProcessingSteps, jigsawProcessors);
     }
 
     public RiftGenerationConfig withJigsawProcessors(List<JigsawListProcessor> processors) {
-        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, Optional.of(processors), seed);
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, Optional.of(processors));
     }
 
     public RiftGenerationConfig withPostProcessingSteps(List<RiftPostProcessingStep> steps) {
-        return new RiftGenerationConfig(layout, roomGenerator, Optional.of(steps), jigsawProcessors, seed);
+        return new RiftGenerationConfig(layout, roomGenerator, Optional.of(steps), jigsawProcessors);
     }
 
 }

@@ -47,7 +47,8 @@ public class RiftKeyCommands extends BaseCommand {
                         .then(Commands.argument(themeArg, ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_THEMES))
                                 .executes(ctx -> configTheme(ctx,
                                         ResourceKeyArgument.resolveKey(ctx, themeArg, WotrRegistries.Keys.RIFT_THEMES,
-                                                ERROR_INVALID_THEME)))))
+                                                ERROR_INVALID_THEME))))
+                        .then(Commands.literal("random").executes(ctx -> configTheme(ctx, null))))
                 .then(Commands.literal("objective")
                         .then(Commands.argument(objectiveArg, ResourceKeyArgument.key(WotrRegistries.Keys.OBJECTIVES))
                                 .executes(ctx -> configObjective(ctx,
@@ -56,7 +57,8 @@ public class RiftKeyCommands extends BaseCommand {
                         .then(Commands.literal("random").executes(ctx -> configObjective(ctx, null))))
                 .then(Commands.literal("seed")
                         .then(Commands.argument(seedArg, LongArgumentType.longArg())
-                                .executes(ctx -> configSeed(ctx, LongArgumentType.getLong(ctx, seedArg)))));
+                                .executes(ctx -> configSeed(ctx, LongArgumentType.getLong(ctx, seedArg))))
+                        .then(Commands.literal("random").executes(ctx -> configSeed(ctx, null))));
     }
 
     private int configTier(CommandContext<CommandSourceStack> context, int tier) {
@@ -84,7 +86,7 @@ public class RiftKeyCommands extends BaseCommand {
         context.getSource()
                 .sendSuccess(
                         () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
-                                theme.getRegisteredName()),
+                                theme != null ? theme.getRegisteredName() : "random"),
                         true);
         return 1;
     }
@@ -102,19 +104,25 @@ public class RiftKeyCommands extends BaseCommand {
         context.getSource()
                 .sendSuccess(() -> Component.translatable(
                         WanderersOfTheRift.translationId("command", "rift_key.set_objective"),
-                        objective.getRegisteredName()), true);
+                        (objective != null ? objective.getRegisteredName() : "random")), true);
         return 1;
     }
 
-    private int configSeed(CommandContext<CommandSourceStack> context, long seed) {
+    private int configSeed(CommandContext<CommandSourceStack> context, Long seed) {
         ItemStack key = getRiftKey(context);
         if (key.isEmpty()) {
             return 0;
         }
-        // todo
+        if (seed == null) {
+            key.remove(WotrDataComponentType.RiftConfig.RIFT_SEED);
+        } else {
+            key.set(WotrDataComponentType.RiftConfig.RIFT_SEED, seed);
+        }
         context.getSource()
-                .sendSuccess(() -> Component
-                        .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_seed"), seed), true);
+                .sendSuccess(
+                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_seed"),
+                                (seed != null ? seed : "random")),
+                        true);
         return 1;
     }
 

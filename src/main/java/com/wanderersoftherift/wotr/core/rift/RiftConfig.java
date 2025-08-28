@@ -24,18 +24,21 @@ import java.util.Map;
  */
 
 public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType> objective,
-        RiftGenerationConfig riftGen,
+        RiftGenerationConfig riftGen, long seed,
         Map<Holder<MapCodec<? extends RiftConfigCustomData>>, RiftConfigCustomData> customData) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder
-            .create(instance -> instance.group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
-                    RiftTheme.CODEC.fieldOf("theme").forGetter(RiftConfig::theme),
-                    ObjectiveType.CODEC.fieldOf("objective").forGetter(RiftConfig::objective),
-                    RiftGenerationConfig.CODEC.optionalFieldOf("rift_gen", RiftGenerationConfig.EMPTY)
-                            .forGetter(RiftConfig::riftGen),
-                    RiftConfigCustomData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", new HashMap<>())
-                            .forGetter(RiftConfig::customData)
-            ).apply(instance, RiftConfig::new));
+            .create(instance -> instance
+                    .group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
+                            RiftTheme.CODEC.fieldOf("theme").forGetter(RiftConfig::theme),
+                            ObjectiveType.CODEC.fieldOf("objective").forGetter(RiftConfig::objective),
+                            RiftGenerationConfig.CODEC.optionalFieldOf("rift_gen", RiftGenerationConfig.EMPTY)
+                                    .forGetter(RiftConfig::riftGen),
+                            Codec.LONG.fieldOf("seed").forGetter(RiftConfig::seed),
+                            RiftConfigCustomData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", new HashMap<>())
+                                    .forGetter(RiftConfig::customData)
+                    )
+                    .apply(instance, RiftConfig::new));
 
     // spotless:off
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftConfig> STREAM_CODEC = StreamCodec.composite(
@@ -43,24 +46,29 @@ public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType
                 ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES), RiftConfig::theme,
                 ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES), RiftConfig::objective,
                 RiftGenerationConfig.STREAM_CODEC, RiftConfig::riftGen,
+                ByteBufCodecs.LONG, RiftConfig::seed,
                 RiftConfigCustomData.DISPATCHED_MAP_STREAM_CODEC, RiftConfig::customData,
             RiftConfig::new);
     // spotless:on
 
     public RiftConfig withRiftGenerationConfig(RiftGenerationConfig riftGen) {
-        return new RiftConfig(tier, theme, objective, riftGen, customData);
+        return new RiftConfig(tier, theme, objective, riftGen, seed, customData);
     }
 
     public RiftConfig withObjective(Holder<ObjectiveType> objective) {
-        return new RiftConfig(tier, theme, objective, riftGen, customData);
+        return new RiftConfig(tier, theme, objective, riftGen, seed, customData);
     }
 
     public RiftConfig withTheme(Holder<RiftTheme> theme) {
-        return new RiftConfig(tier, theme, objective, riftGen, customData);
+        return new RiftConfig(tier, theme, objective, riftGen, seed, customData);
     }
 
     public RiftConfig withTier(int tier) {
-        return new RiftConfig(tier, theme, objective, riftGen, customData);
+        return new RiftConfig(tier, theme, objective, riftGen, seed, customData);
+    }
+
+    public RiftConfig withSeed(int seed) {
+        return new RiftConfig(tier, theme, objective, riftGen, seed, customData);
     }
 
     public <T extends RiftConfigCustomData> T getCustomData(Holder<MapCodec<T>> key) {

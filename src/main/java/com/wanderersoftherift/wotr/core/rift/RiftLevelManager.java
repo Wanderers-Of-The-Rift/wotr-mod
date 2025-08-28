@@ -48,7 +48,6 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -394,7 +393,7 @@ public final class RiftLevelManager {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        var seed = config.riftGen().seed().orElseGet(() -> new Random().nextLong());
+        var seed = config.seed();
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
                 new DerivedLevelData(worldData, worldData.overworldData()),
