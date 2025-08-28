@@ -8,34 +8,22 @@ import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
-import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
-import com.wanderersoftherift.wotr.serialization.VoidCodec;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
-import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class AbilityTracker {
-    public static final IAttachmentSerializer<Tag, AbilityTracker> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
-            VoidCodec.INSTANCE, AbilityTracker::new, (unused) -> null);
-
     private final Multimap<Holder<TrackedAbilityTrigger.TriggerType<?>>, TrackedAbility> abilities = ArrayListMultimap
             .create();
     private final IAttachmentHolder holder;
 
     public AbilityTracker(IAttachmentHolder holder) {
-        this(holder, null);
-    }
-
-    public AbilityTracker(IAttachmentHolder holder, @Nullable Void data) {
         this.holder = holder;
     }
 
@@ -45,10 +33,6 @@ public class AbilityTracker {
 
     public static Optional<? extends AbilityTracker> forEntityNullable(Entity entity) {
         return entity.getExistingData(WotrAttachments.ABILITY_TRACKER.get());
-    }
-
-    public static IAttachmentSerializer<Tag, AbilityTracker> getSerializer() {
-        return SERIALIZER;
     }
 
     private Level getLevel() {

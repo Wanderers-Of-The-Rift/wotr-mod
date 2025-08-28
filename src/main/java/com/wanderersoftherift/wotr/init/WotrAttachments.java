@@ -88,11 +88,7 @@ public class WotrAttachments {
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
 
     public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
-            "ability_tracker",
-            () -> AttachmentType.builder(AbilityTracker::new)
-                    .serialize(AbilityTracker.getSerializer())
-                    .copyOnDeath()
-                    .build());
+            "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).copyOnDeath().build());
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());
