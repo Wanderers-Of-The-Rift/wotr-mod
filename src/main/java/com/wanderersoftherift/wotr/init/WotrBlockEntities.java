@@ -1,12 +1,9 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
-import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
-import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
-import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
-import com.wanderersoftherift.wotr.block.blockentity.RuneAnvilBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.*;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -40,4 +37,5 @@ public class WotrBlockEntities {
             .register("ability_bench_block_entity",
                     // The block entity type.
                     () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
+
 }
