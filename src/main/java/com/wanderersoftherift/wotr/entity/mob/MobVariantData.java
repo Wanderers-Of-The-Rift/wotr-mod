@@ -14,9 +14,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import java.util.Map;
 import java.util.Optional;
 
-public record VariantData(Map<String, Double> attributes) {
-    public static final Codec<VariantData> CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE)
-            .xmap(VariantData::new, VariantData::attributes);
+public record MobVariantData(Map<String, Double> attributes) {
+    public static final Codec<MobVariantData> CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE)
+            .xmap(MobVariantData::new, MobVariantData::attributes);
 
     // Applies attributes to a LivingEntity, first spawn sets health to max health
     public void applyTo(LivingEntity entity, boolean isInitialSpawn) {

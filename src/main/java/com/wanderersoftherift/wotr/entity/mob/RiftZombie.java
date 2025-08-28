@@ -29,20 +29,17 @@ public class RiftZombie extends Zombie {
         return this.entityData.get(DATA_VARIANT);
     }
 
-    // Set Attributes from VariantData on spawn(+sets hp to max) / load
+    // Set Attributes from MobVariantData on spawn(+sets hp to max) / load
     private void applyVariantStats(boolean isInitialSpawn) {
+        // TODO: Mix this into Mob so its not defined for each type of mob.
         RegistryAccess access = this.level().registryAccess();
-        Optional<Registry<VariantData>> registryOpt = access.lookup(WotrRegistries.Keys.MOB_VARIANTS);
-        if (registryOpt.isPresent()) {
-            Registry<VariantData> registry = registryOpt.get();
-            ResourceLocation variantId = WanderersOfTheRift.id(getVariant());
-
-            Optional<Holder.Reference<VariantData>> holder = registry.get(variantId);
-            if (holder.isPresent()) {
-                VariantData data = holder.get().value();
-                data.applyTo(this, isInitialSpawn);
-                initialSpawn = false;
-            }
+        Registry<MobVariantData> registry = access.lookupOrThrow(WotrRegistries.Keys.MOB_VARIANTS);
+        ResourceLocation variantId = WanderersOfTheRift.id(getVariant());
+        Optional<Holder.Reference<MobVariantData>> holder = registry.get(variantId);
+        if (holder.isPresent()) {
+            MobVariantData data = holder.get().value();
+            data.applyTo(this, isInitialSpawn);
+            initialSpawn = false;
         }
     }
 
