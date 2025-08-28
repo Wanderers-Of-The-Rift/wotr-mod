@@ -3,14 +3,18 @@ package com.wanderersoftherift.wotr.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.npc.QuestGiverInteract;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -27,6 +31,14 @@ public class DebugCommands extends BaseCommand {
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
+        builder.then(Commands.literal("makeQuestGiver")
+                .then(Commands.argument("mob", EntityArgument.entity())
+                        .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob")))));
+    }
+
+    private int makeQuestGiver(CommandContext<CommandSourceStack> context, Entity mob) {
+        mob.setData(WotrAttachments.MOB_INTERACT, QuestGiverInteract.INSTANCE);
+        return 1;
     }
 
     private int devWorld(CommandContext<CommandSourceStack> stack) {
