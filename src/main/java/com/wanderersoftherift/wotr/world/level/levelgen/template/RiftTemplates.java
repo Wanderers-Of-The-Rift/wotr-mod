@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.mixinextension.TemplateIdLookup;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.payload.BasicPayload;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.payload.LazyPayload;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -59,11 +61,14 @@ public class RiftTemplates {
 
     public static List<RiftGeneratable> all(MinecraftServer server, ResourceLocation pool) {
         var registryAccess = server.registryAccess();
-        var manager = server.getStructureManager();
-        var startPool = registryAccess.lookupOrThrow(Registries.TEMPLATE_POOL)
-                .get(pool)
-                .map(it -> it.value().getShuffledTemplates(RandomSource.create(0)))
+        var startPool = registryAccess.lookupOrThrow(Registries.TEMPLATE_POOL).get(pool);
+        return startPool.map(structureTemplatePoolReference -> all(server, structureTemplatePoolReference))
                 .orElse(Collections.emptyList());
+    }
+
+    public static List<RiftGeneratable> all(MinecraftServer server, Holder<StructureTemplatePool> pool) {
+        var manager = server.getStructureManager();
+        var startPool = pool.value().getShuffledTemplates(RandomSource.create(0));
         return startPool.stream().flatMap(it -> fromPoolElement((SinglePoolElement) it, manager).stream()).toList();
     }
 

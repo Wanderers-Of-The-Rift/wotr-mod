@@ -2,10 +2,13 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,6 +30,8 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
                             .fieldOf("jigsaw_processors")
                             .forGetter(RiftGenerationConfig::jigsawProcessors)
             ).apply(instance, RiftGenerationConfig::new));
+    public static final Codec<Holder<RiftGenerationConfig>> HOLDER_CODEC = LaxRegistryCodec
+            .refOrDirect(WotrRegistries.Keys.GENERATOR_PRESETS, CODEC);
 
     // spotless:off
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftGenerationConfig> STREAM_CODEC = StreamCodec.composite(

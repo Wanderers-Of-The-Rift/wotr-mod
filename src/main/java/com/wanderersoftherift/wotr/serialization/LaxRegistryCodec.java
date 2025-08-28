@@ -51,7 +51,7 @@ public class LaxRegistryCodec<E> implements Codec<Holder<E>> {
                     () -> "Holder is null for " + this.registryKey + " so cannot be serialized");
         }
         if (holder instanceof Holder.Direct<E>) {
-            registryCodec.encode(holder, (DynamicOps<T>) ((AccessorDelegatingOps) ops).getDelegate(), value);
+            return registryCodec.encode(holder, (DynamicOps<T>) ((AccessorDelegatingOps) ops).getDelegate(), value);
         }
 
         return holder.unwrap()

@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -29,6 +30,9 @@ public class RiftKeyCommands extends BaseCommand {
             id -> Component.translatableEscape("commands." + WanderersOfTheRift.MODID + ".invalid_theme", id));
     private static final DynamicCommandExceptionType ERROR_INVALID_OBJECTIVE = new DynamicCommandExceptionType(
             id -> Component.translatableEscape("commands." + WanderersOfTheRift.MODID + ".invalid_objective", id));
+    private static final DynamicCommandExceptionType ERROR_INVALID_GENERATOR_PRESET = new DynamicCommandExceptionType(
+            id -> Component.translatableEscape("commands." + WanderersOfTheRift.MODID + ".invalid_generator_preset",
+                    id));
 
     public RiftKeyCommands() {
         super("riftKey", Commands.LEVEL_GAMEMASTERS);
@@ -40,6 +44,7 @@ public class RiftKeyCommands extends BaseCommand {
         String tierArg = "tier";
         String objectiveArg = "objective";
         String seedArg = "seed";
+        String generatorArg = "generator";
         builder.then(Commands.literal("tier")
                 .then(Commands.argument(tierArg, IntegerArgumentType.integer(0))
                         .executes(ctx -> configTier(ctx, IntegerArgumentType.getInteger(ctx, tierArg)))))
@@ -58,7 +63,31 @@ public class RiftKeyCommands extends BaseCommand {
                 .then(Commands.literal("seed")
                         .then(Commands.argument(seedArg, LongArgumentType.longArg())
                                 .executes(ctx -> configSeed(ctx, LongArgumentType.getLong(ctx, seedArg))))
-                        .then(Commands.literal("random").executes(ctx -> configSeed(ctx, null))));
+                        .then(Commands.literal("random").executes(ctx -> configSeed(ctx, null))))
+                .then(Commands.literal("generator")
+                        .then(Commands
+                                .argument(generatorArg, ResourceKeyArgument.key(WotrRegistries.Keys.GENERATOR_PRESETS))
+                                .executes(ctx -> configGeneratorPreset(ctx,
+                                        ResourceKeyArgument.resolveKey(ctx, generatorArg,
+                                                WotrRegistries.Keys.GENERATOR_PRESETS,
+                                                ERROR_INVALID_GENERATOR_PRESET)))));
+    }
+
+    private int configGeneratorPreset(
+            CommandContext<CommandSourceStack> context,
+            Holder.Reference<RiftGenerationConfig> riftGenerationConfigReference) {
+        ItemStack key = getRiftKey(context);
+        if (key.isEmpty()) {
+            return 0;
+        }
+        key.set(WotrDataComponentType.RiftConfig.GENERATOR_PRESET, riftGenerationConfigReference);
+
+        context.getSource()
+                .sendSuccess(
+                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
+                                riftGenerationConfigReference.getRegisteredName()),
+                        true);
+        return 1;
     }
 
     private int configTier(CommandContext<CommandSourceStack> context, int tier) {

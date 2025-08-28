@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
@@ -57,6 +58,10 @@ public class WotrDataComponentType {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> RIFT_SEED = register(
                 "rift_config/seed", Codec.LONG, ByteBufCodecs.LONG);
 
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<RiftGenerationConfig>>> GENERATOR_PRESET = register(
+                "rift_config/generator_preset", RiftGenerationConfig.HOLDER_CODEC,
+                ByteBufCodecs.fromCodecWithRegistries(RiftGenerationConfig.HOLDER_CODEC)
+        );
     }
 
     static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(

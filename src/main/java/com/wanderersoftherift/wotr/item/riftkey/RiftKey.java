@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -78,6 +79,16 @@ public class RiftKey extends Item {
             Item.@NotNull TooltipContext context,
             @NotNull List<Component> components,
             @NotNull TooltipFlag flag) {
+        if (stack.has(WotrDataComponentType.RiftConfig.GENERATOR_PRESET)) {
+            var preset = stack.get(WotrDataComponentType.RiftConfig.GENERATOR_PRESET);
+            var presetString = preset.unwrapKey()
+                    .map(it -> Component.literal(it.location().toString()).withStyle())
+                    .orElse(Component.literal("Custom")
+                            .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(true)));
+            components.add(Component
+                    .translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_generator_preset", presetString)
+                    .withColor(ChatFormatting.GRAY.getColor()));
+        }
         if (stack.has(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER)) {
             int tier = stack.getOrDefault(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER, 0);
             components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)

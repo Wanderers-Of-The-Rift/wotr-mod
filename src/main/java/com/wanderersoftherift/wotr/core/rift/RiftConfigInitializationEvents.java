@@ -9,6 +9,8 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -39,12 +41,15 @@ public class RiftConfigInitializationEvents {
 
         var layout = riftGenConfig.layout();
         if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
+            var access = event.getFirstPlayer().server.registryAccess();
             riftGenConfig = riftGenConfig
                     .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
                             .add(
                                     // For placing special rooms:
                                     new PredefinedRoomLayer.Factory(
-                                            new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
+                                            new RoomRandomizerImpl.Factory(
+                                                    access.holderOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL,
+                                                            WanderersOfTheRift.id("rift/room_portal"))),
                                                     RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
                                             new Vec3i(-1, -1, 2))
                             )

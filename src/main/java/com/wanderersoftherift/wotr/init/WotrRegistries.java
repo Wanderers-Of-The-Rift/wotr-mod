@@ -16,6 +16,7 @@ import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigCustomData;
+import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -179,6 +180,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));
         public static final ResourceKey<Registry<MapCodec<? extends ThemeProcessor.ThemeSource>>> THEME_SOURCE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_theme_source"));
+        public static final ResourceKey<Registry<RiftGenerationConfig>> GENERATOR_PRESETS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_generator_preset"));
 
         private Keys() {
         }
@@ -230,5 +233,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
     }
 }

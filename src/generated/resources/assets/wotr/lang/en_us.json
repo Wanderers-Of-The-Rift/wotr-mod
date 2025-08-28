@@ -573,6 +573,7 @@
   "tooltip.wotr.essence_value": "Essence: %s %s",
   "tooltip.wotr.implicit": "Implicit: ",
   "tooltip.wotr.mana_bar": "Mana: %s/%s",
+  "tooltip.wotr.rift_key_generator_preset": "Generator Preset: %s",
   "tooltip.wotr.rift_key_objective": "Objective: %s",
   "tooltip.wotr.rift_key_seed": "Seed: %s",
   "tooltip.wotr.rift_key_theme": "Theme: %s",

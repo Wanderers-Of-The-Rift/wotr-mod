@@ -256,6 +256,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.reduced_motion",
                 "Disables or slows down UI animations, camera shake, or screen effects");
 
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_generator_preset", "Generator Preset: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
