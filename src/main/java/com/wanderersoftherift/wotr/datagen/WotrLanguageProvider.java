@@ -80,9 +80,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.SKILL_THREAD, "Skill Thread");
         addItem(WotrItems.CURRENCY_BAG, "Currency Bag");
 
+        addItem(WotrItems.NOIR_HELMET, "Fedora");
+
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
+        addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
