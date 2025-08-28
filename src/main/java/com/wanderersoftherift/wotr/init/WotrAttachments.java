@@ -13,6 +13,7 @@ import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.entity.portal.RiftEntranceAttachment;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.world.item.ItemStack;
@@ -117,4 +118,10 @@ public class WotrAttachments {
                     "mana_entity_registry",
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
             );
+    public static final Supplier<AttachmentType<RiftEntranceAttachment>> RIFT_ENTRANCE = ATTACHMENT_TYPES.register(
+            "rift_entrance",
+            () -> AttachmentType.builder(() -> new RiftEntranceAttachment())
+                    .serialize(RiftEntranceAttachment.CODEC)
+                    .build()
+    );;
 }

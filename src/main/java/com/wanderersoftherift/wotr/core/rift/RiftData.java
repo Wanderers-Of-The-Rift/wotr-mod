@@ -21,11 +21,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
 
@@ -38,7 +40,7 @@ public class RiftData extends SavedData {
             UUIDUtil.STRING_CODEC.listOf().fieldOf("Players").forGetter(RiftData::getPlayerList),
             UUIDUtil.STRING_CODEC.listOf().fieldOf("BannedPlayers").forGetter(RiftData::getBannedPlayerList),
             OngoingObjective.DIRECT_CODEC.optionalFieldOf("Objective").forGetter(RiftData::getObjective),
-            RiftConfig.CODEC.fieldOf("Config").forGetter(RiftData::getConfig)
+            RiftConfig.CODEC.optionalFieldOf("Config").forGetter(RiftData::getOptionalConfig)
     ).apply(instance, RiftData::new));
 
     private ResourceKey<Level> portalDimension;
@@ -49,27 +51,25 @@ public class RiftData extends SavedData {
     private RiftConfig config;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players,
-            List<UUID> bannedPlayers, Optional<OngoingObjective> objective, RiftConfig config) {
+            List<UUID> bannedPlayers, Optional<OngoingObjective> objective, Optional<RiftConfig> config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new HashSet<>(Objects.requireNonNull(players));
         this.bannedPlayers = new HashSet<>(Objects.requireNonNull(bannedPlayers));
         this.objective = objective;
-        this.config = config;
+        this.config = config.orElse(null);
     }
 
     public static RiftData get(ServerLevel level) {
         return level.getDataStorage()
                 .computeIfAbsent(factory(level.getServer().overworld().dimension(),
-                        level.getServer().overworld().getSharedSpawnPos(), new RiftConfig(0)), "rift_data");
+                        level.getServer().overworld().getSharedSpawnPos()), "rift_data");
     }
 
-    private static SavedData.Factory<RiftData> factory(
-            ResourceKey<Level> portalDimension,
-            BlockPos portalPos,
-            RiftConfig config) {
+    private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         return new SavedData.Factory<>(
-                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(), config),
+                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(),
+                        Optional.empty()),
                 RiftData::load);
     }
 
@@ -127,8 +127,12 @@ public class RiftData extends SavedData {
         this.setDirty();
     }
 
-    public RiftConfig getConfig() {
+    @Nullable public RiftConfig getConfig() {
         return config;
+    }
+
+    public Optional<RiftConfig> getOptionalConfig() {
+        return Optional.ofNullable(getConfig());
     }
 
     public void setConfig(RiftConfig config) {
@@ -136,8 +140,12 @@ public class RiftData extends SavedData {
         this.setDirty();
     }
 
-    public int getTier() {
-        return config.tier();
+    public OptionalInt getTier() {
+        if (config == null) {
+            return OptionalInt.empty();
+        } else {
+            return OptionalInt.of(config.tier());
+        }
     }
 
     public boolean containsPlayer(Player player) {
@@ -157,7 +165,11 @@ public class RiftData extends SavedData {
     }
 
     public Optional<Holder<RiftTheme>> getTheme() {
-        return config.theme();
+        if (config == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(config.theme());
+        }
     }
 
     public void setObjective(Optional<OngoingObjective> objective) {

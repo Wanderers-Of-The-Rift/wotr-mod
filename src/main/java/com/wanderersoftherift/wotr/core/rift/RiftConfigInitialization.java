@@ -2,10 +2,12 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.CorridorBlender;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
@@ -33,28 +35,50 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 final class RiftConfigInitialization {
 
-    static RiftConfig initializeConfig(RiftConfig baseConfig, MinecraftServer server) {
+    static RiftConfig initializeConfig(ItemStack item, MinecraftServer server) {
         var random = RandomSource.create();
-        var seed = baseConfig.riftGen().seed().orElseGet(random::nextLong);
-        var riftTheme = baseConfig.theme().orElse(getRandomTheme(server, seed));
+        var seedOptional = item.get(WotrDataComponentType.RiftConfig.RIFT_SEED);
+        var themeOptional = item.get(WotrDataComponentType.RiftConfig.RIFT_THEME);
+        var tierOptional = item.get(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER);
+        var objectiveOptional = item.get(WotrDataComponentType.RiftConfig.RIFT_OBJECTIVE);
+        long seed;
+        if (seedOptional == null) {
+            seed = random.nextLong();
+        } else {
+            seed = seedOptional;
+        }
+        var theme = themeOptional == null ? getRandomTheme(server, seed) : themeOptional;
+        var tier = tierOptional == null ? 0 : tierOptional;
+        var objective = objectiveOptional == null ? defaultObjective(server, seed) : objectiveOptional;
 
-        return baseConfig.withRiftGenerationConfig(
-                new RiftGenerationConfig(
-                        Optional.of(baseConfig.riftGen().layout().orElse(defaultLayout())),
-                        Optional.of(baseConfig.riftGen().roomGenerator().orElse(defaultRoomGenerator())),
-                        Optional.of(baseConfig.riftGen().postProcessingSteps().orElse(defaultPostProcessingSteps())),
-                        Optional.of(baseConfig.riftGen().jigsawProcessors().orElse(initializeJigsawProcessors())),
-                        Optional.of(seed)
-                )
-        ).withThemeIfAbsent(riftTheme);
+        return new RiftConfig(
+                tier, theme, objective, riftGen(seed, item, server), new HashMap<>()
+        );
+    }
+
+    private static RiftGenerationConfig riftGen(long seed, ItemStack item, MinecraftServer server) {
+        /* todo rift-gen (presets?), remove optionals */
+        return new RiftGenerationConfig(
+                Optional.of(defaultLayout()), Optional.of(defaultRoomGenerator()),
+                Optional.of(defaultPostProcessingSteps()), Optional.of(initializeJigsawProcessors()), Optional.of(seed)
+        );
+    }
+
+    private static Holder<ObjectiveType> defaultObjective(MinecraftServer server, long seed) {
+        return server.registryAccess()
+                .lookupOrThrow(WotrRegistries.Keys.OBJECTIVES)
+                .getRandomElementOf(WotrTags.Objectives.RANDOM_SELECTABLE, RandomSource.create(seed + 668_453_148))
+                .orElseThrow(() -> new IllegalStateException("No objectives available"));
     }
 
     private static List<RiftPostProcessingStep> defaultPostProcessingSteps() {

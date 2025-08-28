@@ -50,6 +50,7 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftPostProcessingSteps;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftRoomGeneratorFactories;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
+import com.wanderersoftherift.wotr.init.worldgen.WotrThemeSources;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
@@ -103,6 +104,7 @@ public class WanderersOfTheRift {
         WotrOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrProcessors.PROCESSORS.register(modEventBus);
 
+        WotrThemeSources.THEME_SOURCES.register(modEventBus);
         WotrRiftLayoutLayers.LAYOUT_LAYERS.register(modEventBus);
         WotrRiftLayouts.LAYOUTS.register(modEventBus);
         WotrRiftShapes.RIFT_SHAPES.register(modEventBus);

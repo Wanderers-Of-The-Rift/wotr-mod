@@ -17,6 +17,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomSequences;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -63,6 +65,10 @@ public final class RiftLevelManager {
      * @param id
      * @return Whether a level with the given id exists
      */
+    public static boolean levelExists(ResourceKey<Level> id) {
+        return levelExists(id.location());
+    }
+
     public static boolean levelExists(ResourceLocation id) {
         return ServerLifecycleHooks.getCurrentServer()
                 .forgeGetWorldMap()
@@ -185,8 +191,8 @@ public final class RiftLevelManager {
     public static ServerLevel getOrCreateRiftLevel(
             ResourceLocation id,
             ResourceKey<Level> portalDimension,
-            BlockPos portalPos,
-            RiftConfig config,
+            Vec3i portalPos,
+            ItemStack keyItem,
             ServerPlayer firstPlayer) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var overworld = server.overworld();
@@ -201,7 +207,7 @@ public final class RiftLevelManager {
             return null;
         }
 
-        config = RiftConfigInitialization.initializeConfig(config, server);
+        var config = RiftConfigInitialization.initializeConfig(keyItem, server);
         var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
         var loadedRiftHeight = finalConfig.riftGen()
                 .layout()
@@ -373,7 +379,7 @@ public final class RiftLevelManager {
             ResourceLocation id,
             LevelStem stem,
             ResourceKey<Level> portalDimension,
-            BlockPos portalPos,
+            Vec3i portalPos,
             RiftConfig config) {
         AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
         var chunkProgressListener = server.getProgressListenerFactory().create(0);
@@ -397,10 +403,10 @@ public final class RiftLevelManager {
                 RandomSequences.factory(seed).constructor().get());
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
-        riftData.setPortalPos(portalPos);
+        riftData.setPortalPos(new BlockPos(portalPos));
         riftData.setConfig(config);
 
-        riftData.setObjective(config.objective().map(objectiveType -> objectiveType.value().generate(riftLevel)));
+        riftData.setObjective(config.objective().value().generate(riftLevel));
 
         return riftLevel;
     }

@@ -33,7 +33,7 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
             ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror) {
-        var themeProcessor = new ThemeProcessor(ThemePieceType.ROOM);
+        var themeProcessor = new ThemeProcessor(ThemePieceType.ROOM, ThemeProcessor.ThemeSource.RiftData.INSTANCE);
         var offset = new BlockPos(destination.space.origin().multiply(16)).offset(placementShift);
         var mutablePosition = new BlockPos.MutableBlockPos();
         var xLastChunkPosition = 0;

@@ -482,6 +482,8 @@
   "modifier.wotr.thorns_damage": "Thorns Damage",
   "objective.wotr.kill.description": "Defeat %s monsters",
   "objective.wotr.kill.name": "Kill mobs",
+  "objective.wotr.nothing.description": "Do nothing",
+  "objective.wotr.nothing.name": "Nothing",
   "objective.wotr.stealth.description": "Defeat monsters stealthily",
   "objective.wotr.stealth.name": "Stealth",
   "quest.wotr.complete_rift.description": "Prove your mettle.",

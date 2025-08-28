@@ -7,7 +7,7 @@
     }
   ],
   "output": {
-    "type": "wotr:rift_objective",
+    "type": "wotr:rift_config/objective",
     "value": "wotr:stealth"
   },
   "priority": 1

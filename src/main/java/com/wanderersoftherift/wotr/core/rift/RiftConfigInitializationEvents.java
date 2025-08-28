@@ -24,11 +24,8 @@ public class RiftConfigInitializationEvents {
         var riftGenConfig = config.riftGen();
 
         // get objective:
-        var objectiveOptional = config.objective();
-        if (objectiveOptional.isEmpty()) {
-            return;
-        }
-        var objective = objectiveOptional.get().value();
+        var objectiveHolder = config.objective();
+        var objective = objectiveHolder.value();
 
         // get opening player:
         var player = event.getFirstPlayer();

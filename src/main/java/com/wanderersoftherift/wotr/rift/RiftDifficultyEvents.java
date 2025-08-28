@@ -30,8 +30,9 @@ public class RiftDifficultyEvents {
     }
 
     private static void applyDifficultyToEntity(LivingEntity livingEntity, ServerLevel serverLevel) {
-        int tier = RiftData.get(serverLevel).getTier();
-        if (livingEntity instanceof Mob mob) {
+        var optionalTier = RiftData.get(serverLevel).getTier();
+        if (livingEntity instanceof Mob mob && optionalTier.isPresent()) {
+            var tier = optionalTier.getAsInt();
             updateAttribute(mob, Attributes.ATTACK_DAMAGE, getDamageMultiplier(tier));
             updateAttribute(mob, Attributes.MAX_HEALTH, getHealthMultiplier(tier));
             updateAttribute(mob, Attributes.MOVEMENT_SPEED, getSpeedMultiplier(tier));
