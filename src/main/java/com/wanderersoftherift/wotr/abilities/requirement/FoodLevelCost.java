@@ -22,7 +22,7 @@ public record FoodLevelCost(int amount, boolean consume) implements AbilityRequi
     @Override
     public boolean check(AbilityContext context) {
         if (context.caster() instanceof Player player) {
-            return player.getFoodData().getFoodLevel() >= amount;
+            return player.getFoodData().getFoodLevel() + player.getFoodData().getSaturationLevel() >= amount;
         }
         return false;
     }
