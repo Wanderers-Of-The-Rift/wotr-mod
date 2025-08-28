@@ -21,6 +21,7 @@ import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
+import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
@@ -91,6 +92,8 @@ public class WotrRegistries {
     public static final Registry<DualCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
             .sync(true)
             .create();
+    public static final Registry<MapCodec<? extends MobInteraction>> MOB_INTERACTIONS = new RegistryBuilder<>(
+            Keys.MOB_INTERACTIONS).create();
     public static final Registry<MapCodec<? extends RiftLayout.Factory>> LAYOUT_TYPES = new RegistryBuilder<>(
             Keys.LAYOUT_TYPES).create();
     public static final Registry<MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory>> LAYOUT_LAYER_TYPES = new RegistryBuilder<>(
@@ -175,6 +178,7 @@ public class WotrRegistries {
         public static final ResourceKey<Registry<TrackedAbilityTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
 
+        // Quests
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("quest"));
         public static final ResourceKey<Registry<MapCodec<? extends GoalProvider>>> GOAL_PROVIDER_TYPES = ResourceKey
@@ -214,6 +218,10 @@ public class WotrRegistries {
         public static final ResourceKey<Registry<DualCodec<? extends ModifierSource>>> MODIFIER_SOURCES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("modifier_source"));
 
+        // Mobs
+        public static final ResourceKey<Registry<MapCodec<? extends MobInteraction>>> MOB_INTERACTIONS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
+
         private Keys() {
         }
     }
@@ -236,6 +244,7 @@ public class WotrRegistries {
         event.register(GOAL_TYPES);
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
+        event.register(MOB_INTERACTIONS);
         event.register(EDIT_TYPES);
         event.register(TRACKED_ABILITY_TRIGGERS);
         event.register(ABILITY_SOURCES);
