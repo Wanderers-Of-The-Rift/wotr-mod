@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 final class RiftConfigInitialization {
 
@@ -62,8 +61,7 @@ final class RiftConfigInitialization {
     private static RiftGenerationConfig riftGen(long seed, ItemStack item, MinecraftServer server) {
         /* todo rift-gen (presets?), remove optionals */
         return new RiftGenerationConfig(
-                Optional.of(defaultLayout()), Optional.of(defaultRoomGenerator()),
-                Optional.of(defaultPostProcessingSteps()), Optional.of(initializeJigsawProcessors())
+                defaultLayout(), defaultRoomGenerator(), defaultPostProcessingSteps(), initializeJigsawProcessors()
         );
     }
 

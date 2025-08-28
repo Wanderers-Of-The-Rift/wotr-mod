@@ -28,17 +28,14 @@ public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType
         Map<Holder<MapCodec<? extends RiftConfigCustomData>>, RiftConfigCustomData> customData) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder
-            .create(instance -> instance
-                    .group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
-                            RiftTheme.CODEC.fieldOf("theme").forGetter(RiftConfig::theme),
-                            ObjectiveType.CODEC.fieldOf("objective").forGetter(RiftConfig::objective),
-                            RiftGenerationConfig.CODEC.optionalFieldOf("rift_gen", RiftGenerationConfig.EMPTY)
-                                    .forGetter(RiftConfig::riftGen),
-                            Codec.LONG.fieldOf("seed").forGetter(RiftConfig::seed),
-                            RiftConfigCustomData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", new HashMap<>())
-                                    .forGetter(RiftConfig::customData)
-                    )
-                    .apply(instance, RiftConfig::new));
+            .create(instance -> instance.group(Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
+                    RiftTheme.CODEC.fieldOf("theme").forGetter(RiftConfig::theme),
+                    ObjectiveType.CODEC.fieldOf("objective").forGetter(RiftConfig::objective),
+                    RiftGenerationConfig.CODEC.fieldOf("rift_gen").forGetter(RiftConfig::riftGen),
+                    Codec.LONG.fieldOf("seed").forGetter(RiftConfig::seed),
+                    RiftConfigCustomData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", new HashMap<>())
+                            .forGetter(RiftConfig::customData)
+            ).apply(instance, RiftConfig::new));
 
     // spotless:off
     public static final StreamCodec<RegistryFriendlyByteBuf, RiftConfig> STREAM_CODEC = StreamCodec.composite(

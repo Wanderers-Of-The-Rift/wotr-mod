@@ -15,7 +15,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -58,8 +57,7 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
 
         @Override
         public RiftRoomGenerator create(RiftConfig config) {
-            return new CoreRiftRoomGenerator(
-                    ImmutableList.copyOf(config.riftGen().jigsawProcessors().orElse(Collections.emptyList())));
+            return new CoreRiftRoomGenerator(ImmutableList.copyOf(config.riftGen().jigsawProcessors()));
         }
 
         @Override

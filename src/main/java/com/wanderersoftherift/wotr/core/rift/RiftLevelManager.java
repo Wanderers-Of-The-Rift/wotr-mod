@@ -207,14 +207,8 @@ public final class RiftLevelManager {
 
         var config = RiftConfigInitialization.initializeConfig(keyItem, server);
         var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
-        var loadedRiftHeight = finalConfig.riftGen()
-                .layout()
-                .map(fac -> fac.riftShape(finalConfig).levelCount() + FastRiftGenerator.MARGIN_LAYERS);
-        if (loadedRiftHeight.isEmpty()) {
-            WanderersOfTheRift.LOGGER.error("missing values in RiftConfig");
-            return null;
-        }
-        int requestedRiftHeightChunks = loadedRiftHeight.get();
+        var requestedRiftHeightChunks = finalConfig.riftGen().layout().riftShape(finalConfig).levelCount()
+                + FastRiftGenerator.MARGIN_LAYERS;
         var riftDimensionType = getRiftDimensionTypeForHeight(requestedRiftHeightChunks);
         int actualRiftHeight = riftDimensionType.getKey();
 

@@ -11,7 +11,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.Roo
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.Collections;
 import java.util.HashMap;
 
 // @EventBusSubscriber
@@ -34,11 +33,11 @@ public class RiftConfigInitializationEvents {
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/5"),
                         WanderersOfTheRift.id("rift/new_pool"), 1))
-                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
 
-        var layout = riftGenConfig.layout().get();
+        var layout = riftGenConfig.layout();
         if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
             riftGenConfig = riftGenConfig
                     .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
@@ -70,7 +69,7 @@ public class RiftConfigInitializationEvents {
         }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsawsBulk(replacementMap))
-                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
         event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
@@ -93,7 +92,7 @@ public class RiftConfigInitializationEvents {
         }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsawsBulk(replacementMap))
-                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
         event.setConfig(config.withRiftGenerationConfig(riftGenConfig));

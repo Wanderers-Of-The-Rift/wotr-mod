@@ -37,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -86,7 +85,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                 config.seed() + SEED_ADJUSTMENT_ROOM_GENERATOR);
-        this.roomGenerator = riftGenerationConfig.roomGenerator().get().create(config);
+        this.roomGenerator = riftGenerationConfig.roomGenerator().create(config);
     }
 
     @Override
@@ -108,7 +107,7 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, getRiftGenerationConfig().layout().get().createLayout(server, config));
+            layout.compareAndSet(null, getRiftGenerationConfig().layout().createLayout(server, config));
         }
         return layout.get();
     }
@@ -120,7 +119,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         var stepsOptional = getRiftGenerationConfig().postProcessingSteps();
-        for (var step : stepsOptional.orElse(Collections.emptyList())) {
+        for (var step : stepsOptional) {
             step.runPostProcessing(this, chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
                     this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
         }
