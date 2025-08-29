@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.mob.RiftSkeleton;
 import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
@@ -27,5 +28,8 @@ public class WotrEntities {
     // WotR Mobs
     public static final DeferredHolder<EntityType<?>, EntityType<RiftZombie>> RIFT_ZOMBIE = ENTITIES.registerEntityType(
             "rift_zombie", RiftZombie::new, MobCategory.MONSTER, builder -> builder.sized(0.6F, 1.95F));
+    public static final DeferredHolder<EntityType<?>, EntityType<RiftSkeleton>> RIFT_SKELETON = ENTITIES
+            .registerEntityType(
+                    "rift_skeleton", RiftSkeleton::new, MobCategory.MONSTER, builder -> builder.sized(0.6F, 1.99F));
 
 }
