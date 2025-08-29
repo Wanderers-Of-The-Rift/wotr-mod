@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.commands;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,15 +12,25 @@ import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.util.ListEdit;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+
+import java.util.List;
 
 /**
  * Commands relating to configuring a rift key for testing
@@ -33,6 +44,8 @@ public class RiftKeyCommands extends BaseCommand {
     private static final DynamicCommandExceptionType ERROR_INVALID_GENERATOR_PRESET = new DynamicCommandExceptionType(
             id -> Component.translatableEscape("commands." + WanderersOfTheRift.MODID + ".invalid_generator_preset",
                     id));
+    private static final DynamicCommandExceptionType ERROR_INVALID_TEMPLATE_POOL = new DynamicCommandExceptionType(
+            id -> Component.translatableEscape("commands." + WanderersOfTheRift.MODID + ".invalid_template_pool", id));
 
     public RiftKeyCommands() {
         super("riftKey", Commands.LEVEL_GAMEMASTERS);
@@ -44,7 +57,6 @@ public class RiftKeyCommands extends BaseCommand {
         String tierArg = "tier";
         String objectiveArg = "objective";
         String seedArg = "seed";
-        String generatorArg = "generator";
         builder.then(Commands.literal("tier")
                 .then(Commands.argument(tierArg, IntegerArgumentType.integer(0))
                         .executes(ctx -> configTier(ctx, IntegerArgumentType.getInteger(ctx, tierArg)))))
@@ -64,13 +76,55 @@ public class RiftKeyCommands extends BaseCommand {
                         .then(Commands.argument(seedArg, LongArgumentType.longArg())
                                 .executes(ctx -> configSeed(ctx, LongArgumentType.getLong(ctx, seedArg))))
                         .then(Commands.literal("random").executes(ctx -> configSeed(ctx, null))))
-                .then(Commands.literal("generator")
+                .then(generatorCommands());
+    }
+
+    private LiteralArgumentBuilder generatorCommands() {
+        String generatorArg = "generator";
+        String templatePool = "pool";
+        String position = "position";
+        return Commands.literal("generator")
+                .then(Commands.literal("setPreset")
                         .then(Commands
                                 .argument(generatorArg, ResourceKeyArgument.key(WotrRegistries.Keys.GENERATOR_PRESETS))
                                 .executes(ctx -> configGeneratorPreset(ctx,
                                         ResourceKeyArgument.resolveKey(ctx, generatorArg,
                                                 WotrRegistries.Keys.GENERATOR_PRESETS,
-                                                ERROR_INVALID_GENERATOR_PRESET)))));
+                                                ERROR_INVALID_GENERATOR_PRESET)))))
+                .then(Commands.literal("layout")
+                        .then(Commands.literal("addRoom")
+                                .then(Commands.argument(templatePool, ResourceKeyArgument.key(Registries.TEMPLATE_POOL))
+                                        .then(Commands.argument(position, BlockPosArgument.blockPos())
+                                                .executes(ctx -> configAddRoom(ctx,
+                                                        ResourceKeyArgument.resolveKey(ctx, templatePool,
+                                                                Registries.TEMPLATE_POOL, ERROR_INVALID_TEMPLATE_POOL),
+                                                        BlockPosArgument.getBlockPos(ctx, position)))))));
+    }
+
+    private int configAddRoom(
+            CommandContext<CommandSourceStack> context,
+            Holder.Reference<StructureTemplatePool> structureTemplatePoolReference,
+            BlockPos blockPos) {
+        ItemStack key = getRiftKey(context);
+        if (key.isEmpty()) {
+            return 0;
+        }
+        var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
+        var oldEdits = key.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        if (oldEdits != null) {
+            edits.addAll(oldEdits);
+        }
+        edits.add(new ListEdit.Append(List.of(
+                new PredefinedRoomLayer.Factory(new RoomRandomizerImpl.Factory(structureTemplatePoolReference,
+                        RoomRandomizerImpl.MULTI_SIZE_SPACE_HOLDER_FACTORY), blockPos)
+        )));
+        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, edits.build());
+
+        context.getSource()
+                .sendSuccess(
+                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.add_room")),
+                        true);
+        return 1;
     }
 
     private int configGeneratorPreset(
