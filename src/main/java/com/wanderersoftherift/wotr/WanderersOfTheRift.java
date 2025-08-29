@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
 import com.wanderersoftherift.wotr.init.WotrContainerTypes;
 import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrEditTypes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
@@ -139,6 +140,9 @@ public class WanderersOfTheRift {
         WotrRecipeCategories.RECIPE_BOOK_CATEGORIES.register(modEventBus);
         WotrSlotDisplayTypes.SLOT_DISPLAY_TYPES.register(modEventBus);
         WotrRecipeDisplayTypes.RECIPE_DISPLAY_TYPES.register(modEventBus);
+
+        // Utilities
+        WotrEditTypes.EDIT_TYPES.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);

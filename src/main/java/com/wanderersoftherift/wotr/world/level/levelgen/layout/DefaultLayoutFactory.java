@@ -22,7 +22,7 @@ public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> l
 
     @Override
     public LayeredRiftLayout.Factory withLayers(List<LayeredRiftLayout.LayoutLayer.Factory> layers) {
-        return new DefaultLayoutFactory(layers());
+        return new DefaultLayoutFactory(layers);
     }
 
     @Override

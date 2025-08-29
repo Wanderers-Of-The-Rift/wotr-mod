@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import net.minecraft.core.Holder;
@@ -60,7 +61,14 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             preset = registries.holderOrThrow(DEFAULT_PRESET_KEY);
         }
         var config = preset.value();
-        // todo overrides
+        var layerEdits = itemStack.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        if (layerEdits != null && config.layout() instanceof LayeredRiftLayout.Factory layered) {
+            var layers = layered.layers();
+            for (var edit : layerEdits) {
+                layers = edit.apply(layers);
+            }
+            config = config.withLayout(layered.withLayers(layers));
+        }
         return config;
     }
 

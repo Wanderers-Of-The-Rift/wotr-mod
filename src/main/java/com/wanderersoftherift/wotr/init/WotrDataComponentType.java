@@ -11,6 +11,8 @@ import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.util.ListEdit;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
@@ -23,6 +25,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class WotrDataComponentType {
@@ -61,6 +64,12 @@ public class WotrDataComponentType {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<RiftGenerationConfig>>> GENERATOR_PRESET = register(
                 "rift_config/generator_preset", RiftGenerationConfig.HOLDER_CODEC,
                 ByteBufCodecs.fromCodecWithRegistries(RiftGenerationConfig.HOLDER_CODEC)
+        );
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>>> LAYOUT_LAYER_EDIT = register(
+                "rift_config/layout_layers_edits",
+                ListEdit.editCodec(LayeredRiftLayout.LayoutLayer.Factory.CODEC).listOf(),
+                ByteBufCodecs.fromCodecWithRegistries(ListEdit.editCodec(LayeredRiftLayout.LayoutLayer.Factory.CODEC))
+                        .apply(ByteBufCodecs.list())
         );
     }
 

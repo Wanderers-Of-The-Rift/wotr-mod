@@ -26,6 +26,7 @@ import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
+import com.wanderersoftherift.wotr.util.ListEdit;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
@@ -102,6 +103,8 @@ public class WotrRegistries {
             Keys.RIFT_POST_STEPS).create();
     public static final Registry<MapCodec<? extends ThemeProcessor.ThemeSource>> THEME_SOURCE_TYPE = new RegistryBuilder<>(
             Keys.THEME_SOURCE_TYPES).create();
+    public static final Registry<ListEdit.EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
+            Keys.EDIT_TYPES).create();
 
     public static final class Keys {
 
@@ -182,6 +185,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_theme_source"));
         public static final ResourceKey<Registry<RiftGenerationConfig>> GENERATOR_PRESETS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_generator_preset"));
+        public static final ResourceKey<Registry<ListEdit.EditType<?>>> EDIT_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("list_edits"));
 
         private Keys() {
         }
@@ -204,6 +209,7 @@ public class WotrRegistries {
         event.register(GOAL_TYPES);
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
+        event.register(EDIT_TYPES);
 
         // worldgen registries
         event.register(THEME_SOURCE_TYPE);
