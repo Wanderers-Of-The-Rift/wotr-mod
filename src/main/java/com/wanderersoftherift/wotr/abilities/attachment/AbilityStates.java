@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
-import com.wanderersoftherift.wotr.abilities.AbilitySource;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.nbt.Tag;

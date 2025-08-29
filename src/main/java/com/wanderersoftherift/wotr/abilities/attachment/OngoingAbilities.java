@@ -5,7 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.AbilitySource;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
+import com.wanderersoftherift.wotr.abilities.sources.MainAbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
@@ -48,7 +49,7 @@ public class OngoingAbilities {
         return SERIALIZER;
     }
 
-    public boolean activate(AbilitySource.MainAbilitySource source) {
+    public boolean activate(MainAbilitySource source) {
         if (!(holder instanceof LivingEntity entity)) {
             return false;
         }
