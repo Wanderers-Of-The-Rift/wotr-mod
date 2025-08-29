@@ -58,4 +58,9 @@ public record ModifierAbilitySource(ModifierSource base, int effectIndex) implem
         }
         return ItemStack.EMPTY;
     }
+
+    @Override
+    public String getSerializedName() {
+        return "modifier_ability_" + base.getSerializedName() + "_" + effectIndex;
+    }
 }

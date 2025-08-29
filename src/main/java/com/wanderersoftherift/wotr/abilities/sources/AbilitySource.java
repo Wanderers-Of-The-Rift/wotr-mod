@@ -11,13 +11,14 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public interface AbilitySource {
+public interface AbilitySource extends StringRepresentable {
 
     Codec<AbilitySource> DIRECT_CODEC = WotrRegistries.ABILITY_SOURCES.byNameCodec()
             .dispatch(AbilitySource::getType, DualCodec::codec);

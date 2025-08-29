@@ -32,7 +32,7 @@ public record GearImplicitModifierSource(WotrEquipmentSlot slot, int index)
 
     @Override
     public String getSerializedName() {
-        return "implicits_" + slot.getSerializedName();
+        return "implicits_" + slot.getSerializedName() + "_" + index;
     }
 
     @Override

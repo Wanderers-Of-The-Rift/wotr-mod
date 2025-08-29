@@ -31,7 +31,7 @@ public record AbilityUpgradeModifierSource(AbilitySource ability, int selection)
 
     @Override
     public @NotNull String getSerializedName() {
-        return "ability_upgrade_" + selection;
+        return "ability_upgrade_" + ability.getSerializedName() + "_" + selection;
     }
 
     @Override

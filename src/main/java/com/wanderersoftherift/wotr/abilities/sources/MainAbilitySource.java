@@ -49,4 +49,9 @@ public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource
     public Holder<Ability> getMainAbility(Entity entity) {
         return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
     }
+
+    @Override
+    public String getSerializedName() {
+        return "slot_ability_" + slot.getSerializedName();
+    }
 }
