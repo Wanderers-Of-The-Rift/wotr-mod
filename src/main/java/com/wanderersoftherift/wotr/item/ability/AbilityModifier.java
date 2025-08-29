@@ -56,10 +56,10 @@ public final class AbilityModifier extends AbstractModifierEffect {
     @Override
     public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
         var text = Component.translatable(
-                WanderersOfTheRift.translationId("ability", providedAbility().getKey().location()))
-                .append(" when ")
-                .append(Component
-                        .translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location())));
+                WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
+                        WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
+                Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
+        );
 
         return new ImageComponent(stack, text,
                 WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));

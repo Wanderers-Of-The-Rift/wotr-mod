@@ -434,6 +434,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("modifier_effect.wotr.ability", "Cast %s when %s");
     }
 
     private void addRunegems() {
