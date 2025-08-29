@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -28,13 +28,13 @@ public record UseAbilityPayload(int slot) implements CustomPacketPayload {
         if (!(context.player() instanceof ServerPlayer player) || player.isSpectator() || player.isDeadOrDying()) {
             return;
         }
-        AbilityEquipmentSlot abilitySlot = AbilityEquipmentSlot.forSlot(slot);
-        if (abilitySlot == null) {
+        var abilitySource = AbilitySource.sourceForSlot(slot);
+        if (abilitySource == null) {
             return;
         }
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         abilitySlots.setSelectedSlot(slot());
 
-        player.getData(WotrAttachments.ONGOING_ABILITIES).activate(abilitySlot);
+        player.getData(WotrAttachments.ONGOING_ABILITIES).activate(abilitySource);
     }
 }

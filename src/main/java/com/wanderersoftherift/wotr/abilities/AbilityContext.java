@@ -1,11 +1,11 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ExceptionlessAutoClosable;
@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,11 +28,12 @@ import java.util.UUID;
  * @param ability     The ability itself
  * @param caster      The caster of the ability
  * @param abilityItem The item holding the ability (and any upgrades)
- * @param slot        The equipment slot the ability item is in, if any
+ * @param source      The source the ability was provided by
  * @param level       The level the ability is present in
+ * @param upgrades
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, WotrEquipmentSlot slot, Level level) {
+        ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades) {
 
     /**
      * @return The current game time
@@ -44,13 +46,17 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * Enables all modifiers that impact the ability
      */
     public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
-        AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
-        if (pool != null) {
-            pool.forEachSelected((selection, upgrade) -> {
-                ModifierSource source = new AbilityUpgradeModifierSource(selection);
-                upgrade.modifierEffects().forEach(effect -> effect.enableModifier(0, caster, source));
-            });
+        if (upgrades == null || upgrades.isEmpty()) {
+            return ExceptionlessAutoClosable.NOOP;
         }
+        upgrades.forEachSelected((selection, upgrade) -> {
+            ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
+            List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
+            for (int i = 0; i < modifierEffects.size(); i++) {
+                AbstractModifierEffect effect = modifierEffects.get(i);
+                effect.enableModifier(0, caster, source, i);
+            }
+        });
         return this::disableUpgradeModifiers;
     }
 
@@ -79,23 +85,25 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * Applies the cooldown for the current ability
      */
     public void applyCooldown() {
-        if (slot() != null) {
-            caster().getData(WotrAttachments.ABILITY_COOLDOWNS)
-                    .setCooldown(slot(),
-                            (int) getAbilityAttribute(WotrAttributes.COOLDOWN, ability().value().getBaseCooldown()));
-        }
+        caster().getData(WotrAttachments.ABILITY_COOLDOWNS)
+                .setCooldown(source(),
+                        (int) getAbilityAttribute(WotrAttributes.COOLDOWN, ability().value().getBaseCooldown()));
     }
 
     /**
      * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
      */
     private void disableUpgradeModifiers() {
-        AbilityUpgradePool pool = abilityItem.get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
-        if (pool != null) {
-            pool.forEachSelected((selection, upgrade) -> {
-                ModifierSource source = new AbilityUpgradeModifierSource(selection);
-                upgrade.modifierEffects().forEach(effect -> effect.disableModifier(0, caster, source));
-            });
+        if (upgrades == null || upgrades.isEmpty()) {
+            return;
         }
+        upgrades.forEachSelected((selection, upgrade) -> {
+            ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
+            List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
+            for (int i = 0; i < modifierEffects.size(); i++) {
+                AbstractModifierEffect effect = modifierEffects.get(i);
+                effect.disableModifier(0, caster, source, i);
+            }
+        });
     }
 }

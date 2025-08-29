@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
+import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
@@ -23,6 +25,7 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
@@ -99,6 +102,12 @@ public class WotrRegistries {
             Keys.RIFT_CORRIDOR_VALIDATORS).create();
     public static final Registry<MapCodec<? extends RiftPostProcessingStep>> RIFT_POST_STEPS = new RegistryBuilder<>(
             Keys.RIFT_POST_STEPS).create();
+    public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+            Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
+    public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
+            Keys.ABILITY_SOURCES).sync(true).create();
+    public static final Registry<DualCodec<? extends ModifierSource>> MODIFIER_SOURCES = new RegistryBuilder<>(
+            Keys.MODIFIER_SOURCES).sync(true).create();
 
     public static final class Keys {
 
@@ -148,6 +157,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
+        public static final ResourceKey<Registry<TrackedAbilityTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
 
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("quest"));
@@ -177,6 +188,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));;
         public static final ResourceKey<Registry<MapCodec<? extends RiftPostProcessingStep>>> RIFT_POST_STEPS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));;
+        public static final ResourceKey<Registry<DualCodec<? extends AbilitySource>>> ABILITY_SOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("ability_source"));
+        public static final ResourceKey<Registry<DualCodec<? extends ModifierSource>>> MODIFIER_SOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("modifier_source"));
 
         private Keys() {
         }
@@ -199,6 +214,9 @@ public class WotrRegistries {
         event.register(GOAL_TYPES);
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
+        event.register(TRACKED_ABILITY_TRIGGERS);
+        event.register(ABILITY_SOURCES);
+        event.register(MODIFIER_SOURCES);
 
         // worldgen registries
         event.register(LAYOUT_TYPES);

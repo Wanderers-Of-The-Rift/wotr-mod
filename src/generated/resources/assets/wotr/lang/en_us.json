@@ -482,6 +482,7 @@
   "modifier.wotr.sweeping_attack_damage": "Sweeping Attack Damage",
   "modifier.wotr.thorns_chance": "Thorns Chance",
   "modifier.wotr.thorns_damage": "Thorns Damage",
+  "modifier_effect.wotr.ability": "Cast %s when %s",
   "objective.wotr.kill.description": "Defeat %s monsters",
   "objective.wotr.kill.name": "Kill mobs",
   "objective.wotr.stealth.description": "Defeat monsters stealthily",
@@ -581,5 +582,8 @@
   "tooltip.wotr.runegem.shape": "Shape: %s",
   "tooltip.wotr.show_extra_info": "Hold [%s] for additional information",
   "tooltip.wotr.socket": "Sockets: ",
+  "trigger.wotr.deal_damage": "Deal Damage",
+  "trigger.wotr.take_damage": "Take Damage",
+  "trigger.wotr.tick": "Tick",
   "wotr.rift.create.failed": "Failed to create rift"
 }

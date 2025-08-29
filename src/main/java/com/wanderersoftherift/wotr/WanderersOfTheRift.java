@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
+import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
@@ -19,6 +20,7 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.init.WotrMobEffects;
 import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
+import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
@@ -26,6 +28,7 @@ import com.wanderersoftherift.wotr.init.WotrSoundEvents;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
+import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
 import com.wanderersoftherift.wotr.init.client.WotrEmblemProviders;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
@@ -116,13 +119,16 @@ public class WanderersOfTheRift {
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
         WotrEffects.EFFECTS.register(modEventBus);
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
+        WotrAbilitySourceTypes.ABILITY_SOURCE.register(modEventBus);
 
         WotrGoalTypes.GOAL_PROVIDER_TYPES.register(modEventBus);
         WotrGoalTypes.GOAL_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_PROVIDER_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_TYPES.register(modEventBus);
+        WotrTrackedAbilityTriggers.TRIGGERS.register(modEventBus);
 
         // Gear
+        WotrModifierSourceTypes.MODIFIER_SOURCE.register(modEventBus);
         WotrEquipmentSlotTypes.EQUIPMENT_SLOTS.register(modEventBus);
         WotrModifierEffectTypes.MODIFIER_EFFECT_TYPES.register(modEventBus);
         WotrObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);

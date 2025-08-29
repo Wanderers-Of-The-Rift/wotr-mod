@@ -231,6 +231,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+        add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
+        add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
+        add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -434,6 +437,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("modifier_effect.wotr.ability", "Cast %s when %s");
     }
 
     private void addRunegems() {
