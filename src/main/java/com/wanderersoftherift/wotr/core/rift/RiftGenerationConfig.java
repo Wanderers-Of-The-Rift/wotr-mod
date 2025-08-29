@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
@@ -9,14 +11,18 @@ import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcess
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
 public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.Factory roomGenerator,
-        List<RiftPostProcessingStep> postProcessingSteps, List<JigsawListProcessor> jigsawProcessors) {
+        List<RiftPostProcessingStep> postProcessingSteps, List<JigsawListProcessor> jigsawProcessors)
+        implements RiftConfigData {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
@@ -41,6 +47,22 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
                 ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()), RiftGenerationConfig::jigsawProcessors,
             RiftGenerationConfig::new);
     // spotless:on
+
+    public static final RiftConfigData.RiftConfigDataType<RiftGenerationConfig> TYPE = RiftConfigData.RiftConfigDataType
+            .create(CODEC, RiftGenerationConfig::initialize);
+
+    private static final ResourceKey<RiftGenerationConfig> DEFAULT_PRESET_KEY = ResourceKey
+            .create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("default"));
+
+    public static RiftGenerationConfig initialize(ItemStack itemStack, Long aLong, RegistryAccess registries) {
+        var preset = itemStack.get(WotrDataComponentType.RiftConfig.GENERATOR_PRESET);
+        if (preset == null) {
+            preset = registries.holderOrThrow(DEFAULT_PRESET_KEY);
+        }
+        var config = preset.value();
+        // todo overrides
+        return config;
+    }
 
     public RiftGenerationConfig withSeed(long seed) {
         return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors);

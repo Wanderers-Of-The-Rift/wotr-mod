@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
@@ -102,7 +103,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     }
 
     public RiftGenerationConfig getRiftGenerationConfig() {
-        return getRiftConfig().riftGen();
+        return getRiftConfig().getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
     }
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {

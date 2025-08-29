@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.entity.portal;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.RiftConfigInitialization;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
@@ -75,8 +76,8 @@ public final class RiftEntranceAttachment {
         var plDir = player.getDirection().getOpposite();
 
         ServerLevel lvl = RiftLevelManager.getOrCreateRiftLevel(riftId.location(), level.dimension(),
-                currentPosition.offset(plDir.getStepX() * 3, plDir.getStepY() * 3, plDir.getStepZ() * 3), keyItem(),
-                player);
+                currentPosition.offset(plDir.getStepX() * 3, plDir.getStepY() * 3, plDir.getStepZ() * 3),
+                RiftConfigInitialization.initializeConfig(keyItem, level.registryAccess()), player);
         if (lvl == null) {
             player.displayClientMessage(Component.translatable(WanderersOfTheRift.MODID + ".rift.create.failed"), true);
             return;

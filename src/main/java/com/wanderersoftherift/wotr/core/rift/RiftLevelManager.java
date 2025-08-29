@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
@@ -24,7 +25,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomSequences;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -190,7 +190,7 @@ public final class RiftLevelManager {
             ResourceLocation id,
             ResourceKey<Level> portalDimension,
             Vec3i portalPos,
-            ItemStack keyItem,
+            RiftConfig config,
             ServerPlayer firstPlayer) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var overworld = server.overworld();
@@ -205,10 +205,11 @@ public final class RiftLevelManager {
             return null;
         }
 
-        var config = RiftConfigInitialization.initializeConfig(keyItem, server);
         var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
-        var requestedRiftHeightChunks = finalConfig.riftGen().layout().riftShape(finalConfig).levelCount()
-                + FastRiftGenerator.MARGIN_LAYERS;
+        var requestedRiftHeightChunks = finalConfig.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG)
+                .layout()
+                .riftShape(finalConfig)
+                .levelCount() + FastRiftGenerator.MARGIN_LAYERS;
         var riftDimensionType = getRiftDimensionTypeForHeight(requestedRiftHeightChunks);
         int actualRiftHeight = riftDimensionType.getKey();
 

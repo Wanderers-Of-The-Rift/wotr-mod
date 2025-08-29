@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsawsBulk;
@@ -22,7 +23,7 @@ public class RiftConfigInitializationEvents {
     // @SubscribeEvent
     private static void example(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
-        var riftGenConfig = config.riftGen();
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
 
         // get objective:
         var objectiveHolder = config.objective();
@@ -56,13 +57,13 @@ public class RiftConfigInitializationEvents {
                             .addAll(layeredLayout.layers())
                             .build()));
         }
-        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 
     // @SubscribeEvent(priority = EventPriority.LOW)
     private static void appendDefaultAnomalies(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
-        var riftGenConfig = config.riftGen();
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
         var chance = 0.15f;
         var replacementMap = new HashMap<ResourceLocation, ReplaceJigsawsBulk.Replacement>();
         for (var variant : POI_VARIANTS) {
@@ -77,13 +78,13 @@ public class RiftConfigInitializationEvents {
                 .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
-        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 
     // @SubscribeEvent
     private static void appendRandomSizeReduction(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
-        var riftGenConfig = config.riftGen();
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
         var chance = 0.25f;
 
         var replacementMap = new HashMap<ResourceLocation, ReplaceJigsawsBulk.Replacement>();
@@ -100,6 +101,6 @@ public class RiftConfigInitializationEvents {
                 .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
-        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 }
