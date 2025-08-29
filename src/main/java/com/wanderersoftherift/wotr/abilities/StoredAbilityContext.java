@@ -11,21 +11,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
  * A serializable form of an {@link AbilityContext} - this largely deals with the caster being stored as a UUID and
  * needing to be looked up in the level
  */
-public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId,
-        Optional<ItemStack> abilityItem, AbilitySource source) {
+public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId, ItemStack abilityItem,
+        AbilitySource source) {
 
     public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("instance_id").forGetter(x -> x.instanceId),
             Ability.CODEC.fieldOf("ability").forGetter(x -> x.ability),
             UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
-            ItemStack.OPTIONAL_CODEC.optionalFieldOf("ability_item").forGetter(x -> x.abilityItem),
+            ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
             AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(x -> x.source)
     ).apply(instance, StoredAbilityContext::new));
 

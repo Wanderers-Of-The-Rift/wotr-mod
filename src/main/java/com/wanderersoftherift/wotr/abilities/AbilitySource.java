@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
@@ -41,6 +42,8 @@ public interface AbilitySource {
 
     Holder<Ability> getAbility(Entity entity);
 
+    AbilityUpgradePool upgrades(Entity entity);
+
     record ModifierAbilitySource(ModifierSource base, int effectIndex) implements AbilitySource {
 
         public static final DualCodec<ModifierAbilitySource> TYPE = new DualCodec<>(
@@ -62,6 +65,11 @@ public interface AbilitySource {
         }
 
         @Override
+        public AbilityUpgradePool upgrades(Entity entity) {
+            return AbilityUpgradePool.EMPTY; // todo how do we handle upgrades for these abilities
+        }
+
+        @Override
         public DualCodec<? extends AbilitySource> getType() {
             return TYPE;
         }
@@ -71,7 +79,7 @@ public interface AbilitySource {
             if (base instanceof ModifierSource.ItemModifierSource itemModifierSource) {
                 return itemModifierSource.getItem(entity);
             }
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -97,6 +105,11 @@ public interface AbilitySource {
         @Override
         public Holder<Ability> getAbility(Entity entity) {
             return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
+        }
+
+        @Override
+        public AbilityUpgradePool upgrades(Entity entity) {
+            return slot.getContent(entity).get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
         }
 
         public Holder<Ability> getMainAbility(Entity entity) {

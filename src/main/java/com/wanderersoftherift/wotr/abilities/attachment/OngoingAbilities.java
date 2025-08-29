@@ -76,8 +76,8 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
-        AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity,
-                Optional.ofNullable(abilityItem), source, entity.level());
+        AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
+                entity.level());
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
@@ -98,8 +98,7 @@ public class OngoingAbilities {
                 .findFirst();
         boolean existing = existingId.isPresent();
         UUID id = existingId.orElseGet(UUID::randomUUID);
-        AbilityContext context = new AbilityContext(id, ability, entity, Optional.ofNullable(abilityItem), source,
-                entity.level());
+        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level());
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
@@ -144,22 +143,21 @@ public class OngoingAbilities {
                 UUIDUtil.CODEC.fieldOf("id").forGetter(ActiveAbility::id),
                 Ability.CODEC.fieldOf("ability").forGetter(ActiveAbility::ability),
                 AbilitySource.DIRECT_CODEC.fieldOf("item_slot").forGetter(ActiveAbility::source),
-                ItemStack.OPTIONAL_CODEC.optionalFieldOf("ability_item").forGetter(ActiveAbility::abilityItem),
+                ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(ActiveAbility::abilityItem),
                 Codec.LONG.fieldOf("age").forGetter(ActiveAbility::age)
         ).apply(instance, ActiveAbility::new));
 
         private final UUID id;
         private final Holder<Ability> ability;
         private final AbilitySource source;
-        private final Optional<ItemStack> abilityItem;
+        private final ItemStack abilityItem;
         private long age;
 
         private ActiveAbility(AbilityContext context) {
             this(context.instanceId(), context.ability(), context.source(), context.abilityItem(), 0);
         }
 
-        private ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, Optional<ItemStack> abilityItem,
-                long age) {
+        private ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age) {
             this.id = id;
             this.ability = ability;
             this.source = source;
@@ -183,7 +181,7 @@ public class OngoingAbilities {
             return source;
         }
 
-        public Optional<ItemStack> abilityItem() {
+        public ItemStack abilityItem() {
             return abilityItem;
         }
 
