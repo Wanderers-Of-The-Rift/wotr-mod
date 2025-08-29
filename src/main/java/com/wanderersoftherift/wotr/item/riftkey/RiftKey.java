@@ -6,13 +6,16 @@ import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrSoundEvents;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -73,6 +76,20 @@ public class RiftKey extends Item {
         return InteractionResult.PASS;
     }
 
+    private static Component textComponent(
+            LayeredRiftLayout.LayoutLayer.Factory factory,
+            HolderGetter.Provider registries) {
+        var factoryHolder = WotrRegistries.LAYOUT_LAYER_TYPES.wrapAsHolder(factory.codec());
+        var key = factoryHolder.unwrapKey().get().location().toLanguageKey("layout_layer");
+        var room = factory.roomRandomizerFactory();
+        if (room != null) {
+            var roomKey = Component.translatable(
+                    room.pool().unwrapKey().get().location().toLanguageKey("template_pool").replace("/", "."));
+            return Component.translatable(key, roomKey);
+        }
+        return Component.translatable(key);
+    }
+
     @Override
     public void appendHoverText(
             ItemStack stack,
@@ -94,7 +111,8 @@ public class RiftKey extends Item {
             components.add(Component.literal("Layout edits: ").withColor(ChatFormatting.GRAY.getColor()));
             for (var edit : edits) {
                 components.add(Component.literal(" - ")
-                        .append(edit.textComponent())
+                        .append(edit.textComponent((LayeredRiftLayout.LayoutLayer.Factory fac) -> textComponent(fac,
+                                context.registries())))
                         .withColor(ChatFormatting.GRAY.getColor()));
             }
         }

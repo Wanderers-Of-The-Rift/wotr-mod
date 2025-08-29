@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import com.wanderersoftherift.wotr.util.ListEdit;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -441,6 +442,14 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(ListEdit.Clear.TYPE.translationKey(), "Remove all");
         add(ListEdit.Drop.TYPE.translationKey(), "Remove %s from start");
         add(ListEdit.DropLast.TYPE.translationKey(), "Remove %s");
+        add(WotrRiftLayoutLayers.PREDEFINED_LAYER.getKey().location().toLanguageKey("layout_layer"), "%s Room");
+        add(WotrRiftLayoutLayers.RING_LAYER.getKey().location().toLanguageKey("layout_layer"), "Ring of %s Rooms");
+        add(WotrRiftLayoutLayers.BOXED_LAYER.getKey().location().toLanguageKey("layout_layer"), "Room group");
+        add(WotrRiftLayoutLayers.CHAOS_LAYER.getKey().location().toLanguageKey("layout_layer"), "%s Rooms");
+        add("template_pool.wotr.rift.room_portal", "Portal");
+        add("template_pool.wotr.rift.room_stable", "Stable");
+        add("template_pool.wotr.rift.room_unstable", "Unstable");
+        add("template_pool.wotr.rift.room_chaos", "Chaos");
     }
 
     private void addRunegems() {

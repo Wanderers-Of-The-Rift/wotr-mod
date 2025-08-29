@@ -21,7 +21,7 @@ public interface ListEdit<T> {
 
     ListEdit.EditType<T> type();
 
-    Component textComponent();
+    Component textComponent(Function<T, Component> converter);
 
     public record EditType<T>(Function<Codec<T>, MapCodec<? extends ListEdit<T>>> codecSupplier,
             String translationKey) {
@@ -57,12 +57,12 @@ public interface ListEdit<T> {
         }
 
         @Override
-        public Component textComponent() {
+        public Component textComponent(Function<T, Component> converter) {
             var values = Component.empty();
             List<T> ts = this.values;
             for (int i = 0; true; i++) {
                 var value = ts.get(i);
-                values = values.append(value.toString());
+                values = values.append(converter.apply(value));
                 if (i < ts.size()) {
                     break;
                 }
@@ -93,12 +93,12 @@ public interface ListEdit<T> {
         }
 
         @Override
-        public Component textComponent() {
+        public Component textComponent(Function<T, Component> converter) {
             var values = Component.empty();
             List<T> ts = this.values;
             for (int i = 0; true; i++) {
                 var value = ts.get(i);
-                values = values.append(value.toString());
+                values = values.append(converter.apply(value));
                 if (i < ts.size()) {
                     break;
                 }
@@ -129,7 +129,7 @@ public interface ListEdit<T> {
         }
 
         @Override
-        public Component textComponent() {
+        public Component textComponent(Function<T, Component> converter) {
             return Component.translatable(TYPE.translationKey);
         }
     }
@@ -154,7 +154,7 @@ public interface ListEdit<T> {
         }
 
         @Override
-        public Component textComponent() {
+        public Component textComponent(Function<T, Component> converter) {
             return Component.translatable(TYPE.translationKey, n);
         }
     }
@@ -180,7 +180,7 @@ public interface ListEdit<T> {
         }
 
         @Override
-        public Component textComponent() {
+        public Component textComponent(Function<T, Component> converter) {
             return Component.translatable(TYPE.translationKey, n);
         }
     }

@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 
@@ -30,6 +31,10 @@ public interface LayeredRiftLayout extends RiftLayout {
             LayoutLayer createLayer(MinecraftServer server, RiftConfig riftConfig);
 
             MapCodec<? extends Factory> codec();
+
+            default RoomRandomizer.Factory roomRandomizerFactory() {
+                return null;
+            }
         }
     }
 
