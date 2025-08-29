@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
+import com.wanderersoftherift.wotr.util.ListEdit;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -434,6 +435,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+
+        add(ListEdit.Append.TYPE.translationKey(), "Add %s");
+        add(ListEdit.Prepend.TYPE.translationKey(), "Add %s at start");
+        add(ListEdit.Clear.TYPE.translationKey(), "Remove all");
+        add(ListEdit.Drop.TYPE.translationKey(), "Remove %s from start");
+        add(ListEdit.DropLast.TYPE.translationKey(), "Remove %s");
     }
 
     private void addRunegems() {

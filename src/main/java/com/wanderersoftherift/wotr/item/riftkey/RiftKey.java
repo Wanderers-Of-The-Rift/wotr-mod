@@ -89,6 +89,16 @@ public class RiftKey extends Item {
                     .translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_generator_preset", presetString)
                     .withColor(ChatFormatting.GRAY.getColor()));
         }
+        var edits = stack.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        if (edits != null && !edits.isEmpty()) {
+            components.add(Component.literal("Layout edits: ").withColor(ChatFormatting.GRAY.getColor()));
+            for (var edit : edits) {
+                components.add(Component.literal(" - ")
+                        .append(edit.textComponent())
+                        .withColor(ChatFormatting.GRAY.getColor()));
+            }
+        }
+
         if (stack.has(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER)) {
             int tier = stack.getOrDefault(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER, 0);
             components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
