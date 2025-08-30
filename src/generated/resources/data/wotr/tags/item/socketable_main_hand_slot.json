@@ -31,6 +31,8 @@
     "minecraft:netherite_shovel",
     "minecraft:netherite_sword",
     "minecraft:bow",
-    "minecraft:crossbow"
+    "minecraft:crossbow",
+    "minecraft:mace",
+    "minecraft:trident"
   ]
 }
