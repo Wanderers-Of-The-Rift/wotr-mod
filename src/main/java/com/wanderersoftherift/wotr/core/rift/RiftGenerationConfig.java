@@ -24,7 +24,7 @@ import java.util.List;
 
 public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.Factory roomGenerator,
         List<RiftPostProcessingStep> postProcessingSteps, List<JigsawListProcessor> jigsawProcessors,
-        SerializableRiftGeneratable emptyChunkGeneratable) implements RiftConfigData {
+        SerializableRiftGeneratable emptyChunkGeneratable) {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
@@ -53,8 +53,8 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             RiftGenerationConfig::new);
     // spotless:on
 
-    public static final RiftConfigData.RiftConfigDataType<RiftGenerationConfig> TYPE = RiftConfigData.RiftConfigDataType
-            .create(CODEC, RiftGenerationConfig::initialize);
+    public static final RiftConfigDataType<RiftGenerationConfig> TYPE = RiftConfigDataType.create(CODEC,
+            RiftGenerationConfig::initialize);
 
     private static final ResourceKey<RiftGenerationConfig> DEFAULT_PRESET_KEY = ResourceKey
             .create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("default"));

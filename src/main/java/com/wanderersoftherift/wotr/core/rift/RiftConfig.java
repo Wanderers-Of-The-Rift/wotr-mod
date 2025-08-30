@@ -24,14 +24,14 @@ import java.util.Map;
  */
 
 public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType> objective, long seed,
-        Map<Holder<RiftConfigData.RiftConfigDataType<?>>, RiftConfigData> customData) {
+        Map<Holder<RiftConfigDataType<?>>, Object> customData) {
 
     public static final Codec<RiftConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("tier").forGetter(RiftConfig::tier),
             RiftTheme.CODEC.fieldOf("theme").forGetter(RiftConfig::theme),
             ObjectiveType.CODEC.fieldOf("objective").forGetter(RiftConfig::objective),
             Codec.LONG.fieldOf("seed").forGetter(RiftConfig::seed),
-            RiftConfigData.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", ImmutableMap.of())
+            RiftConfigDataType.DISPATCHED_MAP_CODEC.optionalFieldOf("custom_data", ImmutableMap.of())
                     .forGetter(RiftConfig::customData)
     ).apply(instance, RiftConfig::new));
 
@@ -41,7 +41,7 @@ public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType
                 ByteBufCodecs.holderRegistry(WotrRegistries.Keys.RIFT_THEMES), RiftConfig::theme,
                 ByteBufCodecs.holderRegistry(WotrRegistries.Keys.OBJECTIVES), RiftConfig::objective,
                 ByteBufCodecs.LONG, RiftConfig::seed,
-                RiftConfigData.DISPATCHED_MAP_STREAM_CODEC, RiftConfig::customData,
+                RiftConfigDataType.DISPATCHED_MAP_STREAM_CODEC, RiftConfig::customData,
             RiftConfig::new);
     // spotless:on
 
@@ -61,18 +61,17 @@ public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType
         return new RiftConfig(tier, theme, objective, seed, customData);
     }
 
-    public <T extends RiftConfigData> RiftConfig withCustomData(
-            DeferredHolder<RiftConfigData.RiftConfigDataType<?>, RiftConfigData.RiftConfigDataType<T>> typeHolder,
+    public <T> RiftConfig withCustomData(
+            DeferredHolder<RiftConfigDataType<?>, RiftConfigDataType<T>> typeHolder,
             T newValue) {
-        var newDataMap = ImmutableMap.<Holder<RiftConfigData.RiftConfigDataType<?>>, RiftConfigData>builder();
+        var newDataMap = ImmutableMap.<Holder<RiftConfigDataType<?>>, Object>builder();
         newDataMap.putAll(customData);
         newDataMap.put(typeHolder.getDelegate(), newValue);
 
         return new RiftConfig(tier, theme, objective, seed, newDataMap.build());
     }
 
-    public <T extends RiftConfigData> T getCustomData(
-            DeferredHolder<RiftConfigData.RiftConfigDataType<?>, RiftConfigData.RiftConfigDataType<T>> typeHolder) {
+    public <T> T getCustomData(DeferredHolder<RiftConfigDataType<?>, RiftConfigDataType<T>> typeHolder) {
         return (T) customData.get(typeHolder.getDelegate());
     }
 }

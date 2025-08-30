@@ -28,7 +28,7 @@ public final class RiftConfigInitialization {
         var theme = Objects.requireNonNullElseGet(themeOptional, () -> getRandomTheme(registries, seed));
         var tier = Objects.requireNonNullElse(tierOptional, 0);
 
-        var dataMap = ImmutableMap.<Holder<RiftConfigData.RiftConfigDataType<?>>, RiftConfigData>builder();
+        var dataMap = ImmutableMap.<Holder<RiftConfigDataType<?>>, Object>builder();
         var dataTypeRegistry = registries.lookupOrThrow(WotrRegistries.Keys.RIFT_CONFIG_DATA_TYPES);
         dataTypeRegistry.forEach(type -> {
             var value = type.initialize(item, seed, registries);

@@ -15,7 +15,7 @@ import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
-import com.wanderersoftherift.wotr.core.rift.RiftConfigData;
+import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
@@ -95,7 +95,7 @@ public class WotrRegistries {
             Keys.JIGSAW_LIST_PROCESSOR_TYPES).create();
     public static final Registry<MapCodec<? extends SerializableRiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
             Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
-    public static final Registry<RiftConfigData.RiftConfigDataType<?>> RIFT_CONFIG_DATA_TYPES = new RegistryBuilder<>(
+    public static final Registry<RiftConfigDataType<?>> RIFT_CONFIG_DATA_TYPES = new RegistryBuilder<>(
             Keys.RIFT_CONFIG_DATA_TYPES).create();
     public static final Registry<MapCodec<? extends CorridorValidator>> RIFT_CORRIDOR_VALIDATORS = new RegistryBuilder<>(
             Keys.RIFT_CORRIDOR_VALIDATORS).create();
@@ -175,7 +175,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/jigsaw_list_processor"));
         public static final ResourceKey<Registry<MapCodec<? extends SerializableRiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));
-        public static final ResourceKey<Registry<RiftConfigData.RiftConfigDataType<?>>> RIFT_CONFIG_DATA_TYPES = ResourceKey
+        public static final ResourceKey<Registry<RiftConfigDataType<?>>> RIFT_CONFIG_DATA_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));
         public static final ResourceKey<Registry<MapCodec<? extends CorridorValidator>>> RIFT_CORRIDOR_VALIDATORS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));
