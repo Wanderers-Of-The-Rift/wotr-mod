@@ -40,4 +40,5 @@ public class WotrBlockEntities {
             .register("ability_bench_block_entity",
                     // The block entity type.
                     () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
+
 }
