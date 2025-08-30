@@ -54,6 +54,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
+import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
@@ -480,6 +482,24 @@ public class SpawnPieceCommand {
             throw ERROR_TEMPLATE_INVALID.create(template);
         }
 
+        structurePieceList = structurePieceList.stream()
+                .map(
+                        it -> {
+                            if (it instanceof PoolElementStructurePiece pe) {
+
+                                var newElement = mapElementTheme(pe.getElement(), theme);
+
+                                return new PoolElementStructurePiece(
+                                        structuretemplatemanager, newElement, pe.getPosition(),
+                                        pe.getGroundLevelDelta(), pe.getRotation(), pe.getBoundingBox(),
+                                        pe.liquidSettings
+                                );
+                            }
+                            return it;
+                        }
+                )
+                .toList();
+
         // Correct location for rotation
         BoundingBox boundingBox = structurePieceList.getFirst().getBoundingBox();
         Vec3i offset = new Vec3i(boundingBox.minX() < pos.getX() ? boundingBox.getXSpan() - 1 : 0, 0,
@@ -500,6 +520,24 @@ public class SpawnPieceCommand {
                         Component.translationArg(template), pos.getX(), pos.getY(), pos.getZ()), true);
         return 0;
 
+    }
+
+    private static StructurePoolElement mapElementTheme(StructurePoolElement element, Holder<RiftTheme> theme) {
+        return switch (element) {
+            case ListPoolElement le -> new ListPoolElement(
+                    le.elements.stream().map(it -> mapElementTheme(it, theme)).toList(), le.getProjection());
+            case SinglePoolElement se -> new SinglePoolElement(se.template,
+                    new Holder.Direct<>(new StructureProcessorList(se.processors.value()
+                            .list()
+                            .stream()
+                            .map(processor -> processor instanceof ThemeProcessor tp
+                                    ? new ThemeProcessor(tp.getThemePieceType(),
+                                            new ThemeProcessor.ThemeSource.Fixed(theme))
+                                    : processor)
+                            .toList())),
+                    se.getProjection(), se.overrideLiquidSettings);
+            default -> element;
+        };
     }
 
     public static int placeTemplate(
