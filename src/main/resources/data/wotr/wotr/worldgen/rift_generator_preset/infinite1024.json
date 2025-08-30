@@ -75,7 +75,7 @@
     ],
     "jigsaw_processors": [
         {
-            "type": "wotr:filter",
+            "type": "wotr:filter_remove",
             "namespace": "wotr",
             "path_pattern": "rift/ring_"
         },
