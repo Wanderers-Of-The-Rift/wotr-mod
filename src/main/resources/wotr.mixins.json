@@ -23,6 +23,7 @@
         "MixinJigsawReplacementProcessor",
         "MixinLavaFluid",
         "MixinLivingEntity",
+        "MixinMob",
         "MixinOctahedralGroup",
         "MixinProtoChunk",
         "MixinRegionFileVersion",
