@@ -1,8 +1,12 @@
 {
   "type": "wotr:standard",
   "icon" : "minecraft:textures/item/iron_pickaxe.png",
-  "cooldown": 1,
-  "strength": "wotr:large_boost_strength",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 1
+    }
+  ],
   "effects": [
     {
       "type": "wotr:damage",

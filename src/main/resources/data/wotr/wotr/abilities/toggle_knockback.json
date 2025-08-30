@@ -1,7 +1,17 @@
 {
   "type": "wotr:toggle",
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
-  "cooldown": 10,
+  "on_deactivation_costs": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 10
+    }
+  ],
+  "ongoing_requirements": [
+    {
+      "type": "wotr:mana"
+    }
+  ],
   "activation_effects": [
     {
       "type": "wotr:attach",
@@ -40,7 +50,7 @@
       ]
     }
   ],
-  "deactivation_effects": [
+  "on_deactivation_effects": [
     {
       "type": "wotr:detach_own",
       "targeting": {

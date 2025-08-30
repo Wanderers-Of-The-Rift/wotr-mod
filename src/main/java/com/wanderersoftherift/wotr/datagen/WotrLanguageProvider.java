@@ -82,9 +82,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.SKILL_THREAD, "Skill Thread");
         addItem(WotrItems.CURRENCY_BAG, "Currency Bag");
 
+        addItem(WotrItems.NOIR_HELMET, "Fedora");
+
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
+        addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
@@ -217,6 +220,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
+        add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
+        add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
+        add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
@@ -230,6 +236,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+        add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
+        add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
+        add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -399,6 +408,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "max_mana"), "Max Mana");
         add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
+        add(WanderersOfTheRift.translationId("attribute", "strength"), "Strength");
+        add(WanderersOfTheRift.translationId("attribute", "dexterity"), "Dexterity");
+        add(WanderersOfTheRift.translationId("attribute", "constitution"), "Constitution");
+        add(WanderersOfTheRift.translationId("attribute", "intelligence"), "Intelligence");
+        add(WanderersOfTheRift.translationId("attribute", "wisdom"), "Wisdom");
+        add(WanderersOfTheRift.translationId("attribute", "charisma"), "Charisma");
+
         addRunegems();
         addModifiers();
 
@@ -436,6 +452,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("modifier_effect.wotr.ability", "Cast %s when %s");
 
         add(ListEdit.Append.TYPE.translationKey(), "Add %s");
         add(ListEdit.Prepend.TYPE.translationKey(), "Add %s at start");

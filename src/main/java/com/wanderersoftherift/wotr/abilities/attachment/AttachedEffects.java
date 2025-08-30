@@ -111,6 +111,14 @@ public class AttachedEffects {
         });
     }
 
+    public List<ModifierInstance> getModifiers(UUID id) {
+        return this.effects.stream()
+                .filter(it -> it.id.equals(id))
+                .map(it -> it.attachEffect.getModifiers())
+                .findAny()
+                .orElse(Collections.emptyList());
+    }
+
     /**
      * @return if there are no attached effects
      */

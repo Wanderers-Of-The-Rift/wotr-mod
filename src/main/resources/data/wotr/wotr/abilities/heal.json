@@ -1,6 +1,5 @@
 {
   "type": "wotr:standard",
-  "cooldown": 200,
   "effects": [
     {
       "type": "wotr:heal",
@@ -24,5 +23,14 @@
     }
   ],
   "icon": "minecraft:textures/mob_effect/regeneration.png",
-  "mana_cost": 10
+  "requirements": [
+    {
+      "type": "wotr:mana",
+      "amount": 10
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 200
+    }
+  ]
 }

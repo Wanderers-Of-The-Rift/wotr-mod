@@ -1,0 +1,48 @@
+{
+  "loot_tables_to_eject": [
+    {
+      "data": "wotr:chests/rift_spawner/default",
+      "weight": 10
+    }
+  ],
+  "simultaneous_mobs": 3.0,
+  "simultaneous_mobs_added_per_player": 0.5,
+  "spawn_potentials": [
+    {
+      "data": {
+        "entity": {
+          "id": "wotr:rift_zombie",
+          "variant": "cave_zombie",
+          "HandItems": [
+            {
+              "id": "minecraft:iron_pickaxe",
+              "count": 1
+            },
+            {
+              "id": "minecraft:lantern",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "weight": 3
+    },
+    {
+      "data": {
+        "entity": {
+          "id": "wotr:rift_zombie",
+          "variant": "cave_zombie",
+          "HandItems": [
+            {
+              "id": "minecraft:iron_pickaxe",
+              "count": 1
+            },
+            {}
+          ]
+        }
+      },
+      "weight": 5
+    }
+  ],
+  "ticks_between_spawn": 20
+}

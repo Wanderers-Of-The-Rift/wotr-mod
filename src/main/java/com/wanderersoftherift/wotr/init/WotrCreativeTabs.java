@@ -82,6 +82,7 @@ public class WotrCreativeTabs {
                     .icon(() -> WotrBlocks.PROCESSOR_BLOCK_3.getBlock().get().asItem().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.BUILDER_GLASSES);
+                        output.accept(WotrItems.NOIR_HELMET);
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
@@ -101,7 +102,7 @@ public class WotrCreativeTabs {
             HolderLookup.RegistryLookup<Currency> currencies) {
         currencies.listElements().forEach(currency -> {
             ItemStack item = WotrItems.CURRENCY_BAG.toStack();
-            ResourceLocation id = ResourceLocation.parse(currency.getRegisteredName());
+            ResourceLocation id = currency.getKey().location();
             item.set(WotrDataComponentType.CURRENCY_PROVIDER, new CurrencyProvider(currency, 100));
             item.set(DataComponents.ITEM_NAME,
                     Component.translatable(WanderersOfTheRift.translationId("currency", id)));

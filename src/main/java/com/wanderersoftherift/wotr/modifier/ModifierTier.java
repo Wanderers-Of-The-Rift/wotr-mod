@@ -36,14 +36,16 @@ public class ModifierTier {
     }
 
     public void enableModifier(float roll, Entity entity, ModifierSource source) {
-        for (AbstractModifierEffect effect : modifierEffects) {
-            effect.enableModifier(roll, entity, source);
+        for (int i = 0; i < modifierEffects.size(); i++) {
+            AbstractModifierEffect effect = modifierEffects.get(i);
+            effect.enableModifier(roll, entity, source, i);
         }
     }
 
     public void disableModifier(float roll, Entity entity, ModifierSource source) {
-        for (AbstractModifierEffect effect : modifierEffects) {
-            effect.disableModifier(roll, entity, source);
+        for (int i = 0; i < modifierEffects.size(); i++) {
+            AbstractModifierEffect effect = modifierEffects.get(i);
+            effect.disableModifier(roll, entity, source, i);
         }
     }
 

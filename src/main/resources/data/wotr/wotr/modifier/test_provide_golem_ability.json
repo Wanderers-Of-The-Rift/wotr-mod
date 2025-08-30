@@ -1,0 +1,17 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        {
+            "tier": 1,
+            "modifiers": [
+                {
+                    "type": "wotr:ability",
+                    "provided_ability": "wotr:test_summon_iron_golem",
+                    "trigger": "wotr:take_damage"
+                }
+            ]
+        }
+    ]
+}

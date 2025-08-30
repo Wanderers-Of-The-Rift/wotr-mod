@@ -38,7 +38,7 @@ public class AbilityEvents {
                 .info("Server loaded pack exists: " + event.getServer().registryAccess().lookup(ABILITIES).isPresent());
         if (event.getServer().registryAccess().lookup(ABILITIES).isPresent()) {
             event.getServer().registryAccess().lookup(ABILITIES).get().asHolderIdMap().forEach((ability) -> {
-                WanderersOfTheRift.LOGGER.info(ability.getRegisteredName());
+                WanderersOfTheRift.LOGGER.info(" - {}", ability.getKey());
             });
         }
     }

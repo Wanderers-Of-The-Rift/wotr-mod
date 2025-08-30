@@ -12,6 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -31,18 +32,17 @@ public abstract class Ability {
     private final ResourceLocation icon;
     private final Optional<ResourceLocation> smallIcon;
 
-    private final int baseCooldown;
-    private final int baseManaCost;
+    private final List<AbilityRequirement> activationRequirements;
 
-    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int baseManaCost) {
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
+            List<AbilityRequirement> activationRequirements) {
         this.icon = icon;
         this.smallIcon = smallIcon;
-        this.baseCooldown = baseCooldown;
-        this.baseManaCost = baseManaCost;
+        this.activationRequirements = activationRequirements;
     }
 
     public static Component getDisplayName(Holder<Ability> ability) {
-        return Component.translatable(ResourceLocation.parse(ability.getRegisteredName()).toLanguageKey("ability"));
+        return Component.translatable(ability.getKey().location().toLanguageKey("ability"));
     }
 
     public abstract MapCodec<? extends Ability> getCodec();
@@ -96,20 +96,16 @@ public abstract class Ability {
         return true;
     }
 
-    ///  Cooldown
-
-    public int getBaseCooldown() {
-        return baseCooldown;
-    }
-
     ///  Costs
 
-    public int getBaseManaCost() {
-        return baseManaCost;
+    public List<AbilityRequirement> getActivationRequirements() {
+        return activationRequirements;
     }
 
     ///  Upgrade support
 
-    public abstract boolean isRelevantModifier(AbstractModifierEffect modifierEffect);
+    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
+        return activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
+    }
 
 }

@@ -3,8 +3,11 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
+import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
@@ -17,12 +20,15 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
+import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
@@ -50,6 +56,8 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class WotrRegistries {
 
+    public static final Registry<MapCodec<? extends AbilityRequirement>> ABILITY_REQUIREMENT_TYPES = new RegistryBuilder<>(
+            Keys.ABILITY_REQUIREMENT_TYPES).create();
     public static final Registry<MapCodec<? extends Ability>> ABILITY_TYPES = new RegistryBuilder<>(
             Keys.ABILITY_TYPES).create();
     public static final Registry<MapCodec<? extends AbilityEffect>> EFFECTS = new RegistryBuilder<>(
@@ -105,11 +113,19 @@ public class WotrRegistries {
             Keys.THEME_SOURCE_TYPES).create();
     public static final Registry<ListEdit.EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
+    public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+            Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
+    public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
+            Keys.ABILITY_SOURCES).sync(true).create();
+    public static final Registry<DualCodec<? extends ModifierSource>> MODIFIER_SOURCES = new RegistryBuilder<>(
+            Keys.MODIFIER_SOURCES).sync(true).create();
 
     public static final class Keys {
 
         public static final ResourceKey<Registry<Ability>> ABILITIES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("abilities"));
+        public static final ResourceKey<Registry<MapCodec<? extends AbilityRequirement>>> ABILITY_REQUIREMENT_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("ability_requirement_type"));
         public static final ResourceKey<Registry<MapCodec<? extends Ability>>> ABILITY_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_types"));
         public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADES = ResourceKey
@@ -144,14 +160,20 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ongoing_objective_type"));
         public static final ResourceKey<Registry<MapCodec<? extends OutputBlockState>>> OUTPUT_BLOCKSTATE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("output_blockstate_type"));
+        public static final ResourceKey<Registry<PrimaryStatistic>> PRIMARY_STATISTICS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("primary_statistic"));
         public static final ResourceKey<Registry<RiftTheme>> RIFT_THEMES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
         public static final ResourceKey<Registry<MapCodec<? extends AbilityTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_targeting"));
+        public static final ResourceKey<Registry<MobVariantData>> MOB_VARIANTS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
         public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
+        public static final ResourceKey<Registry<TrackedAbilityTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
 
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("quest"));
@@ -187,6 +209,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_generator_preset"));
         public static final ResourceKey<Registry<ListEdit.EditType<?>>> EDIT_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("list_edits"));
+        public static final ResourceKey<Registry<DualCodec<? extends AbilitySource>>> ABILITY_SOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("ability_source"));
+        public static final ResourceKey<Registry<DualCodec<? extends ModifierSource>>> MODIFIER_SOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("modifier_source"));
 
         private Keys() {
         }
@@ -199,6 +225,7 @@ public class WotrRegistries {
         event.register(OUTPUT_BLOCKSTATE_TYPES);
         event.register(OBJECTIVE_TYPES);
         event.register(ONGOING_OBJECTIVE_TYPES);
+        event.register(ABILITY_REQUIREMENT_TYPES);
         event.register(ABILITY_TYPES);
         event.register(EFFECTS);
         event.register(EFFECT_TARGETING_TYPES);
@@ -210,6 +237,9 @@ public class WotrRegistries {
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
         event.register(EDIT_TYPES);
+        event.register(TRACKED_ABILITY_TRIGGERS);
+        event.register(ABILITY_SOURCES);
+        event.register(MODIFIER_SOURCES);
 
         // worldgen registries
         event.register(THEME_SOURCE_TYPE);
@@ -236,9 +266,11 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.DIRECT_CODEC, EffectMarker.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITIES, Ability.DIRECT_CODEC, Ability.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.MOB_VARIANTS, MobVariantData.CODEC, MobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
     }
 }

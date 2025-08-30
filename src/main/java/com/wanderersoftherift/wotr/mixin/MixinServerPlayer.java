@@ -22,4 +22,5 @@ public class MixinServerPlayer {
         ServerPlayer player = (ServerPlayer) (Object) this;
         ModifierHelper.disableModifier(player);
     }
+
 }

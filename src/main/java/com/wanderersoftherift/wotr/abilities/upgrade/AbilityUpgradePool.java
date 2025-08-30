@@ -63,6 +63,7 @@ public class AbilityUpgradePool {
      */
     public static final IntList COST_PER_LEVEL = new IntArrayList(
             new int[] { 0, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28 });
+    public static final AbilityUpgradePool EMPTY = new AbilityUpgradePool(List.of(), IntList.of());
 
     protected final List<List<Holder<AbilityUpgrade>>> choices;
     protected final IntList selectedUpgrades;
@@ -177,6 +178,10 @@ public class AbilityUpgradePool {
     @Override
     public int hashCode() {
         return Objects.hash(choices, selectedUpgrades);
+    }
+
+    public boolean isEmpty() {
+        return this == EMPTY || selectedUpgrades.isEmpty();
     }
 
     /**

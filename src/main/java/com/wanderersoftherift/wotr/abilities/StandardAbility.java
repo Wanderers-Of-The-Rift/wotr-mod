@@ -3,16 +3,11 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
-import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,8 +20,9 @@ public class StandardAbility extends Ability {
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(StandardAbility::getSmallIcon),
-                    Codec.INT.fieldOf("cooldown").forGetter(Ability::getBaseCooldown),
-                    Codec.INT.optionalFieldOf("mana_cost", 0).forGetter(StandardAbility::getBaseManaCost),
+                    AbilityRequirement.CODEC.listOf()
+                            .optionalFieldOf("requirements", List.of())
+                            .forGetter(Ability::getActivationRequirements),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("effects", Collections.emptyList())
                             .forGetter(StandardAbility::getEffects)
@@ -34,9 +30,9 @@ public class StandardAbility extends Ability {
 
     private final List<AbilityEffect> effects;
 
-    public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int baseCooldown, int manaCost,
-            List<AbilityEffect> effects) {
-        super(icon, smallIcon, baseCooldown, manaCost);
+    public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
+            List<AbilityRequirement> activationRequirements, List<AbilityEffect> effects) {
+        super(icon, smallIcon, activationRequirements);
         this.effects = new ArrayList<>(effects);
     }
 
@@ -47,27 +43,17 @@ public class StandardAbility extends Ability {
 
     @Override
     public boolean canActivate(AbilityContext context) {
-        if (context.slot() != null
-                && context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.slot())) {
+        if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         }
-        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-        ManaData manaData = context.caster().getData(WotrAttachments.MANA);
-        if (manaCost > 0 && manaData.getAmount() < manaCost) {
-            return false;
-        }
-        return true;
+        return getActivationRequirements().stream().allMatch(x -> x.check(context));
     }
 
     @Override
     public boolean activate(AbilityContext context) {
         LivingEntity caster = context.caster();
-        float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, getBaseManaCost());
-        ManaData manaData = context.caster().getData(WotrAttachments.MANA);
-        manaData.useAmount(manaCost);
+        getActivationRequirements().forEach(x -> x.pay(context));
         this.getEffects().forEach(effect -> effect.apply(caster, List.of(), context));
-
-        context.applyCooldown();
         return true;
     }
 
@@ -76,20 +62,6 @@ public class StandardAbility extends Ability {
     }
 
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        if (modifierEffect instanceof AttributeModifierEffect attributeModifierEffect) {
-            Holder<Attribute> attribute = attributeModifierEffect.getAttribute();
-            if (WotrAttributes.COOLDOWN.equals(attribute) && getBaseCooldown() > 0) {
-                return true;
-            }
-            if (WotrAttributes.MANA_COST.equals(attribute) && getBaseManaCost() > 0) {
-                return true;
-            }
-        }
-        for (AbilityEffect effect : effects) {
-            if (effect.isRelevant(modifierEffect)) {
-                return true;
-            }
-        }
-        return false;
+        return effects.stream().anyMatch(x -> x.isRelevant(modifierEffect)) || super.isRelevantModifier(modifierEffect);
     }
 }

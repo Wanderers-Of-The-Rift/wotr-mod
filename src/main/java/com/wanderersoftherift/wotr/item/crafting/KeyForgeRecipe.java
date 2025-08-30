@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Recipe for the Key Forge.
@@ -296,8 +297,7 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
         @Override
         public void save(@NotNull RecipeOutput recipeOutput) {
             if (result instanceof Holder<?> holder) {
-                this.save(recipeOutput,
-                        ResourceKey.create(Registries.RECIPE, ResourceLocation.parse(holder.getRegisteredName())));
+                this.save(recipeOutput, ResourceKey.create(Registries.RECIPE, holder.getKey().location()));
                 return;
             }
             throw new IllegalStateException("Id needs to be explicitly provided");
@@ -306,8 +306,7 @@ public final class KeyForgeRecipe implements Recipe<EssenceRecipeInput> {
         @Override
         public void save(@NotNull RecipeOutput recipeOutput, @NotNull String id) {
             ResourceLocation explicitId = ResourceLocation.parse(id);
-            if (result instanceof Holder<?> holder
-                    && ResourceLocation.parse(holder.getRegisteredName()).equals(explicitId)) {
+            if (result instanceof Holder<?> holder && Objects.equals(holder.getKey().location(), explicitId)) {
                 throw new IllegalStateException(
                         "Recipe " + id + " should remove its 'save' argument as it is equal to default one");
             }
