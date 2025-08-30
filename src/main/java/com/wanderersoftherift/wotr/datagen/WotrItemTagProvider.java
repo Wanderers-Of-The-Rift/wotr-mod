@@ -41,7 +41,8 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.IRON_CHESTPLATE)
                 .add(Items.GOLDEN_CHESTPLATE)
                 .add(Items.DIAMOND_CHESTPLATE)
-                .add(Items.NETHERITE_CHESTPLATE);
+                .add(Items.NETHERITE_CHESTPLATE)
+                .add(Items.ELYTRA);
         tag(WotrTags.Items.SOCKETABLE_LEGGINGS_SLOT)
                 .add(Items.LEATHER_LEGGINGS)
                 .add(Items.CHAINMAIL_LEGGINGS)
@@ -89,6 +90,8 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.NETHERITE_HOE)
                 .add(Items.NETHERITE_SHOVEL)
                 .add(Items.NETHERITE_SWORD)
+                .add(Items.TRIDENT)
+                .add(Items.MACE)
                 .add(Items.BOW)
                 .add(Items.CROSSBOW);
 
