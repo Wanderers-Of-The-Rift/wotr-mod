@@ -19,12 +19,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class OngoingAbilities {
 
@@ -95,6 +97,7 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
+        interruptChannelledAbilties();
         Optional<UUID> existingId = activeAbilities.stream()
                 .filter(x -> x.matches(ability, source))
                 .map(ActiveAbility::id)
@@ -140,21 +143,26 @@ public class OngoingAbilities {
         return activeAbilities.isEmpty();
     }
 
-    public void slotChanged(WotrEquipmentSlot slot, ItemStack from, ItemStack to) {
+    public void slotChanged(@NotNull WotrEquipmentSlot slot, ItemStack from, ItemStack to) {
+        deactivateIf(x -> slot.equals(x.source.getLinkedSlot()));
+    }
+
+    public void interruptChannelledAbilties() {
+        deactivateIf(x -> x.ability.value().isChannelled());
+    }
+
+    private void deactivateIf(Predicate<ActiveAbility> predicate) {
         if (!(holder instanceof LivingEntity attachedTo)) {
             return;
         }
-        List<ActiveAbility> activeFromSlot = activeAbilities.stream()
-                .filter(x -> x.source instanceof MainAbilitySource mainSource && slot.equals(mainSource.slot())
-                )
-                .toList();
-        activeFromSlot.forEach(instance -> {
+        List<ActiveAbility> channelled = activeAbilities.stream().filter(predicate).toList();
+        channelled.forEach(instance -> {
             AbilityContext abilityContext = instance.generateContext(attachedTo);
             try (var ignored = abilityContext.enableTemporaryUpgradeModifiers()) {
                 instance.ability.value().deactivate(abilityContext);
             }
         });
-        activeAbilities.removeAll(activeFromSlot);
+        activeAbilities.removeAll(channelled);
     }
 
     private static final class ActiveAbility {

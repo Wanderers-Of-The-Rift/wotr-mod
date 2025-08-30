@@ -25,6 +25,7 @@ public class PersistentAbility extends Ability {
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(PersistentAbility::getSmallIcon),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(PersistentAbility::getWarmupTime),
                     Codec.BOOL.optionalFieldOf("toggleable", true).forGetter(PersistentAbility::isToggleable),
+                    Codec.BOOL.optionalFieldOf("channelled", false).forGetter(PersistentAbility::isChannelled),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
                             .forGetter(Ability::getActivationRequirements),
@@ -44,18 +45,20 @@ public class PersistentAbility extends Ability {
 
     private final int warmupTime;
     private final boolean toggleable;
+    private final boolean channelled;
     private final List<AbilityRequirement> ongoingRequirements;
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
     private final List<AbilityRequirement> onDeactivationCosts;
 
     public PersistentAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int warmupTime,
-            boolean toggleable, List<AbilityRequirement> activationRequirements,
+            boolean toggleable, boolean channelled, List<AbilityRequirement> activationRequirements,
             List<AbilityRequirement> ongoingRequirements, List<AbilityRequirement> onDeactivationCosts,
             List<AbilityEffect> activationEffects, List<AbilityEffect> deactivationEffects) {
         super(icon, smallIcon, activationRequirements);
         this.warmupTime = warmupTime;
         this.toggleable = toggleable;
+        this.channelled = channelled;
         this.ongoingRequirements = ongoingRequirements;
         this.onDeactivationCosts = onDeactivationCosts;
         this.activationEffects = activationEffects;
@@ -129,6 +132,11 @@ public class PersistentAbility extends Ability {
 
     public boolean isToggleable() {
         return toggleable;
+    }
+
+    @Override
+    public boolean isChannelled() {
+        return channelled;
     }
 
     public List<AbilityRequirement> getOngoingRequirements() {

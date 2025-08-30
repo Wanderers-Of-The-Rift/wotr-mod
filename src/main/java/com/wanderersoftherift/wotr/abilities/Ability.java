@@ -111,4 +111,10 @@ public abstract class Ability {
         return activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
     }
 
+    /**
+     * @return Is this ability interrupted by other actions
+     */
+    public boolean isChannelled() {
+        return false;
+    }
 }
