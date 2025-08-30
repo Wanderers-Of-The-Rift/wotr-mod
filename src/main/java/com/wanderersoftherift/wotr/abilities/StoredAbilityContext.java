@@ -28,7 +28,7 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
             UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
             ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
             AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(x -> x.source),
-            AbilityUpgradePool.CODEC.fieldOf("slot").forGetter(x -> x.upgrades)
+            AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(x -> x.upgrades)
     ).apply(instance, StoredAbilityContext::new));
 
     public StoredAbilityContext(AbilityContext context) {
