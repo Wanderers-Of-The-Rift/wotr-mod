@@ -91,6 +91,12 @@ public class PersistentAbility extends Ability {
     }
 
     @Override
+    public void deactivate(AbilityContext context) {
+        AbilityStates states = context.caster().getData(WotrAttachments.ABILITY_STATES);
+        deactivate(context, states);
+    }
+
+    @Override
     public void clientActivate(AbilityContext context) {
         context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.source(), true);
     }

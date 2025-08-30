@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.modifier.source;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
