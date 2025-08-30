@@ -37,6 +37,11 @@ public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource
     }
 
     @Override
+    public @Nullable WotrEquipmentSlot getLinkedSlot() {
+        return slot;
+    }
+
+    @Override
     public Holder<Ability> getAbility(Entity entity) {
         return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
     }

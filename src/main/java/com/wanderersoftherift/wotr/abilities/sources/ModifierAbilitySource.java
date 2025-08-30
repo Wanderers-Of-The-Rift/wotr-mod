@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
@@ -13,6 +14,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -60,7 +62,15 @@ public record ModifierAbilitySource(ModifierSource base, int effectIndex) implem
     }
 
     @Override
-    public String getSerializedName() {
+    public @Nullable WotrEquipmentSlot getLinkedSlot() {
+        if (base instanceof ModifierSource.SlotModifierSource slotSource) {
+            return slotSource.slot();
+        }
+        return null;
+    }
+
+    @Override
+    public @NotNull String getSerializedName() {
         return "modifier_ability_" + base.getSerializedName() + "_" + effectIndex;
     }
 }

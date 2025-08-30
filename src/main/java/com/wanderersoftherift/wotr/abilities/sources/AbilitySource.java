@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
@@ -39,6 +40,8 @@ public interface AbilitySource extends StringRepresentable {
     @Nullable ItemStack getItem(LivingEntity entity);
 
     Holder<Ability> getAbility(Entity entity);
+
+    @Nullable WotrEquipmentSlot getLinkedSlot();
 
     AbilityUpgradePool upgrades(Entity entity);
 
