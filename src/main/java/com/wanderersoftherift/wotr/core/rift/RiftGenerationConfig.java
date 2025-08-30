@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcess
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -22,8 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.Factory roomGenerator,
-        List<RiftPostProcessingStep> postProcessingSteps, List<JigsawListProcessor> jigsawProcessors)
-        implements RiftConfigData {
+        List<RiftPostProcessingStep> postProcessingSteps, List<JigsawListProcessor> jigsawProcessors,
+        SerializableRiftGeneratable emptyChunkGeneratable) implements RiftConfigData {
 
     public static final Codec<RiftGenerationConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
@@ -35,7 +36,9 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
                             .forGetter(RiftGenerationConfig::postProcessingSteps),
                     JigsawListProcessor.CODEC.listOf()
                             .fieldOf("jigsaw_processors")
-                            .forGetter(RiftGenerationConfig::jigsawProcessors)
+                            .forGetter(RiftGenerationConfig::jigsawProcessors),
+                    SerializableRiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("empty_chunk_generatable")
+                            .forGetter(RiftGenerationConfig::emptyChunkGeneratable)
             ).apply(instance, RiftGenerationConfig::new));
     public static final Codec<Holder<RiftGenerationConfig>> HOLDER_CODEC = LaxRegistryCodec
             .refOrDirect(WotrRegistries.Keys.GENERATOR_PRESETS, CODEC);
@@ -46,6 +49,7 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
                 ByteBufCodecs.fromCodec(RiftRoomGenerator.Factory.CODEC), RiftGenerationConfig::roomGenerator,
                 ByteBufCodecs.fromCodec(RiftPostProcessingStep.CODEC).apply(ByteBufCodecs.list()), RiftGenerationConfig::postProcessingSteps,
                 ByteBufCodecs.fromCodec(JigsawListProcessor.CODEC).apply(ByteBufCodecs.list()), RiftGenerationConfig::jigsawProcessors,
+                ByteBufCodecs.fromCodec(SerializableRiftGeneratable.BUILTIN_GENERATABLE_CODEC), RiftGenerationConfig::emptyChunkGeneratable,
             RiftGenerationConfig::new);
     // spotless:on
 
@@ -72,24 +76,27 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
         return config;
     }
 
-    public RiftGenerationConfig withSeed(long seed) {
-        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors);
-    }
-
     public RiftGenerationConfig withLayout(RiftLayout.Factory layout) {
-        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors);
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors,
+                emptyChunkGeneratable);
     }
 
     public RiftGenerationConfig withRoomGenerator(RiftRoomGenerator.Factory roomGenerator) {
-        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors);
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors,
+                emptyChunkGeneratable);
     }
 
     public RiftGenerationConfig withJigsawProcessors(List<JigsawListProcessor> processors) {
-        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, processors);
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, processors, emptyChunkGeneratable);
     }
 
     public RiftGenerationConfig withPostProcessingSteps(List<RiftPostProcessingStep> steps) {
-        return new RiftGenerationConfig(layout, roomGenerator, steps, jigsawProcessors);
+        return new RiftGenerationConfig(layout, roomGenerator, steps, jigsawProcessors, emptyChunkGeneratable);
+    }
+
+    public RiftGenerationConfig withEmptyChunkGeneratable(SerializableRiftGeneratable emptyChunkGeneratable) {
+        return new RiftGenerationConfig(layout, roomGenerator, postProcessingSteps, jigsawProcessors,
+                emptyChunkGeneratable);
     }
 
 }

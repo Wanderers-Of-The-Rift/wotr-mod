@@ -55,8 +55,6 @@ public class FastRiftGenerator extends ChunkGenerator {
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layerCount),
             Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
-            SerializableRiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("filler")
-                    .forGetter(FastRiftGenerator::getFiller),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
 
@@ -74,13 +72,12 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final PositionalRandomFactory roomGeneratorRNG;
     private final SerializableRiftGeneratable filler;
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
-            SerializableRiftGeneratable filler, RiftConfig config) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks, RiftConfig config) {
         super(biomeSource);
         this.layerCount = layerCount;
         this.dimensionHeightBlocks = dimensionHeightBlocks;
         this.config = config;
-        this.filler = filler;
+        this.filler = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG).emptyChunkGeneratable();
 
         var riftGenerationConfig = this.getRiftGenerationConfig();
 
@@ -96,10 +93,6 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftConfig getRiftConfig() {
         return config;
-    }
-
-    private SerializableRiftGeneratable getFiller() {
-        return filler;
     }
 
     public RiftGenerationConfig getRiftGenerationConfig() {

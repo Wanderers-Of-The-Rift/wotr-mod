@@ -78,5 +78,9 @@
         {
             "type": "wotr:shuffle"
         }
-    ]
+    ],
+    "empty_chunk_generatable": {
+        "type": "wotr:single_block_chunk",
+        "block": "minecraft:bedrock"
+    }
 }
