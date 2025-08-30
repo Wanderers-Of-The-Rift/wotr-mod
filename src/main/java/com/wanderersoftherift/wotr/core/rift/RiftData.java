@@ -34,12 +34,12 @@ import java.util.UUID;
 @MethodsReturnNonnullByDefault
 public class RiftData extends SavedData {
     public static final MapCodec<RiftData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceKey.codec(Registries.DIMENSION).fieldOf("PortalDimension").forGetter(RiftData::getPortalDimension),
-            BlockPos.CODEC.fieldOf("PortalPos").forGetter(RiftData::getPortalPos),
-            UUIDUtil.STRING_CODEC.listOf().fieldOf("Players").forGetter(RiftData::getPlayerList),
-            UUIDUtil.STRING_CODEC.listOf().fieldOf("BannedPlayers").forGetter(RiftData::getBannedPlayerList),
-            OngoingObjective.DIRECT_CODEC.optionalFieldOf("Objective").forGetter(RiftData::getObjective),
-            RiftConfig.CODEC.optionalFieldOf("Config").forGetter(RiftData::getOptionalConfig)
+            ResourceKey.codec(Registries.DIMENSION).fieldOf("portal_dimension").forGetter(RiftData::getPortalDimension),
+            BlockPos.CODEC.fieldOf("portal_pos").forGetter(RiftData::getPortalPos),
+            UUIDUtil.STRING_CODEC.listOf().fieldOf("players").forGetter(RiftData::getPlayerList),
+            UUIDUtil.STRING_CODEC.listOf().fieldOf("banned_players").forGetter(RiftData::getBannedPlayerList),
+            OngoingObjective.DIRECT_CODEC.optionalFieldOf("objective").forGetter(RiftData::getObjective),
+            RiftConfig.CODEC.optionalFieldOf("config").forGetter(RiftData::getOptionalConfig)
     ).apply(instance, RiftData::new));
 
     private ResourceKey<Level> portalDimension;
