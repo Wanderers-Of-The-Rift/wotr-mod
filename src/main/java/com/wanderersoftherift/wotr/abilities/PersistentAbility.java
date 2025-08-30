@@ -15,44 +15,47 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * An ability that can be toggled on and off
+ * An ability that persist until some condition fails to be met or is deactivated
  */
-public class ToggleAbility extends Ability {
+public class PersistentAbility extends Ability {
 
-    public static final MapCodec<ToggleAbility> CODEC = RecordCodecBuilder.mapCodec(
+    public static final MapCodec<PersistentAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    ResourceLocation.CODEC.fieldOf("icon").forGetter(ToggleAbility::getIcon),
-                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(ToggleAbility::getSmallIcon),
-                    Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(ToggleAbility::getWarmupTime),
+                    ResourceLocation.CODEC.fieldOf("icon").forGetter(PersistentAbility::getIcon),
+                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(PersistentAbility::getSmallIcon),
+                    Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(PersistentAbility::getWarmupTime),
+                    Codec.BOOL.optionalFieldOf("toggleable", true).forGetter(PersistentAbility::isToggleable),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
                             .forGetter(Ability::getActivationRequirements),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("ongoing_requirements", List.of())
-                            .forGetter(ToggleAbility::getOngoingRequirements),
+                            .forGetter(PersistentAbility::getOngoingRequirements),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("on_deactivation_costs", List.of())
-                            .forGetter(ToggleAbility::getOnDeactivationCosts),
+                            .forGetter(PersistentAbility::getOnDeactivationCosts),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("activation_effects", Collections.emptyList())
-                            .forGetter(ToggleAbility::getActivationEffects),
+                            .forGetter(PersistentAbility::getActivationEffects),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("on_deactivation_effects", Collections.emptyList())
-                            .forGetter(ToggleAbility::getDeactivationEffects)
-            ).apply(instance, ToggleAbility::new));
+                            .forGetter(PersistentAbility::getDeactivationEffects)
+            ).apply(instance, PersistentAbility::new));
 
     private final int warmupTime;
+    private final boolean toggleable;
     private final List<AbilityRequirement> ongoingRequirements;
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
     private final List<AbilityRequirement> onDeactivationCosts;
 
-    public ToggleAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int warmupTime,
-            List<AbilityRequirement> activationRequirements, List<AbilityRequirement> ongoingRequirements,
-            List<AbilityRequirement> onDeactivationCosts, List<AbilityEffect> activationEffects,
-            List<AbilityEffect> deactivationEffects) {
+    public PersistentAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int warmupTime,
+            boolean toggleable, List<AbilityRequirement> activationRequirements,
+            List<AbilityRequirement> ongoingRequirements, List<AbilityRequirement> onDeactivationCosts,
+            List<AbilityEffect> activationEffects, List<AbilityEffect> deactivationEffects) {
         super(icon, smallIcon, activationRequirements);
         this.warmupTime = warmupTime;
+        this.toggleable = toggleable;
         this.ongoingRequirements = ongoingRequirements;
         this.onDeactivationCosts = onDeactivationCosts;
         this.activationEffects = activationEffects;
@@ -62,8 +65,7 @@ public class ToggleAbility extends Ability {
     @Override
     public boolean canActivate(AbilityContext context) {
         if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.source())) {
-            // Can always deactivate
-            return true;
+            return toggleable;
         } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         } else {
@@ -74,17 +76,18 @@ public class ToggleAbility extends Ability {
     @Override
     public boolean activate(AbilityContext context) {
         AbilityStates states = context.caster().getData(WotrAttachments.ABILITY_STATES);
-        if (states.isActive(context.source())) {
-            deactivate(context, states);
-            return true;
-        } else {
+        if (!states.isActive(context.source())) {
             states.setActive(context.source(), true);
             getActivationRequirements().forEach(x -> x.pay(context));
             if (warmupTime == 0) {
                 return tick(context, 0);
             }
             return false;
+        } else if (toggleable) {
+            deactivate(context, states);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -116,6 +119,10 @@ public class ToggleAbility extends Ability {
                 || deactivationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
                 || onDeactivationCosts.stream().anyMatch(x -> x.isRelevant(modifierEffect))
                 || super.isRelevantModifier(modifierEffect);
+    }
+
+    public boolean isToggleable() {
+        return toggleable;
     }
 
     public List<AbilityRequirement> getOngoingRequirements() {

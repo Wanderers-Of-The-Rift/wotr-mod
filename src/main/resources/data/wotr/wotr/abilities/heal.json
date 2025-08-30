@@ -1,5 +1,5 @@
 {
-  "type": "wotr:standard",
+  "type": "wotr:instant",
   "effects": [
     {
       "type": "wotr:heal",

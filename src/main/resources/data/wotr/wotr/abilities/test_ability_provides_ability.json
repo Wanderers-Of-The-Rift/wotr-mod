@@ -1,5 +1,5 @@
 {
-  "type": "wotr:toggle",
+  "type": "wotr:persistent",
   "cooldown": 200,
   "activation_effects": [
     {
