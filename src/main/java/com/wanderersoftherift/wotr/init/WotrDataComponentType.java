@@ -11,7 +11,7 @@ import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
-import com.wanderersoftherift.wotr.util.ListEdit;
+import com.wanderersoftherift.wotr.util.listedit.ListEdit;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;

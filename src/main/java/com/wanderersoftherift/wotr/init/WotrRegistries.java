@@ -32,7 +32,7 @@ import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
-import com.wanderersoftherift.wotr.util.ListEdit;
+import com.wanderersoftherift.wotr.util.listedit.EditType;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
@@ -111,7 +111,7 @@ public class WotrRegistries {
             Keys.RIFT_POST_STEPS).create();
     public static final Registry<MapCodec<? extends ThemeSource>> THEME_SOURCE_TYPE = new RegistryBuilder<>(
             Keys.THEME_SOURCE_TYPES).create();
-    public static final Registry<ListEdit.EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
+    public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
     public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
             Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
@@ -207,7 +207,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_theme_source"));
         public static final ResourceKey<Registry<RiftGenerationConfig>> GENERATOR_PRESETS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_generator_preset"));
-        public static final ResourceKey<Registry<ListEdit.EditType<?>>> EDIT_TYPES = ResourceKey
+        public static final ResourceKey<Registry<EditType<?>>> EDIT_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("list_edits"));
         public static final ResourceKey<Registry<DualCodec<? extends AbilitySource>>> ABILITY_SOURCES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_source"));

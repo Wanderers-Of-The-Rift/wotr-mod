@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record ThemeSourceFromRiftData() implements ThemeSource {
-    public static final com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeSourceFromRiftData INSTANCE = new com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeSourceFromRiftData();
-    public static final MapCodec<com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeSourceFromRiftData> CODEC = MapCodec
-            .unit(INSTANCE);
+    public static final ThemeSourceFromRiftData INSTANCE = new ThemeSourceFromRiftData();
+    public static final MapCodec<ThemeSourceFromRiftData> CODEC = MapCodec.unit(INSTANCE);
 
     public List<StructureProcessor> getThemeProcessors(
             ServerLevel world,

@@ -17,7 +17,12 @@ import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
-import com.wanderersoftherift.wotr.util.ListEdit;
+import com.wanderersoftherift.wotr.util.listedit.Append;
+import com.wanderersoftherift.wotr.util.listedit.Clear;
+import com.wanderersoftherift.wotr.util.listedit.Drop;
+import com.wanderersoftherift.wotr.util.listedit.DropLast;
+import com.wanderersoftherift.wotr.util.listedit.ListEdit;
+import com.wanderersoftherift.wotr.util.listedit.Prepend;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.ChaosLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
@@ -235,9 +240,9 @@ public class RiftKeyCommands extends BaseCommand {
             edits.addAll(oldEdits);
         }
         if (start) {
-            edits.add(new ListEdit.Prepend(List.of(layer)));
+            edits.add(new Prepend(List.of(layer)));
         } else {
-            edits.add(new ListEdit.Append(List.of(layer)));
+            edits.add(new Append(List.of(layer)));
         }
         key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits.build());
 
@@ -360,7 +365,7 @@ public class RiftKeyCommands extends BaseCommand {
         if (oldEdits != null) {
             edits.addAll(oldEdits);
         }
-        edits.add(new ListEdit.Clear());
+        edits.add(new Clear());
 
         key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits.build());
 
@@ -383,9 +388,9 @@ public class RiftKeyCommands extends BaseCommand {
             edits.addAll(oldEdits);
         }
         if (start) {
-            edits.add(new ListEdit.Drop(n));
+            edits.add(new Drop(n));
         } else {
-            edits.add(new ListEdit.DropLast(n));
+            edits.add(new DropLast(n));
         }
 
         key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits.build());
