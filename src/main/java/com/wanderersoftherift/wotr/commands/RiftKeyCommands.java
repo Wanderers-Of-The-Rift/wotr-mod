@@ -230,7 +230,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
-        var oldEdits = key.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        var oldEdits = key.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
         if (oldEdits != null) {
             edits.addAll(oldEdits);
         }
@@ -239,7 +239,7 @@ public class RiftKeyCommands extends BaseCommand {
         } else {
             edits.add(new ListEdit.Append(List.of(layer)));
         }
-        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, edits.build());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits.build());
 
         context.getSource()
                 .sendSuccess(
@@ -253,9 +253,9 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        var oldEdits = key.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        var oldEdits = key.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
         var edits = oldEdits.subList(0, oldEdits.size() - 1);
-        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, edits);
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits);
 
         context.getSource()
                 .sendSuccess(
@@ -269,7 +269,7 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, List.of());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, List.of());
 
         context.getSource()
                 .sendSuccess(
@@ -284,9 +284,9 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
 
-        key.set(WotrDataComponentType.RiftConfig.GENERATOR_PRESET,
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET,
                 new Holder.Direct<>(RiftGenerationConfig.initialize(key, 0L, context.getSource().registryAccess())));
-        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, List.of());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, List.of());
 
         context.getSource()
                 .sendSuccess(
@@ -301,7 +301,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
 
-        var preset = key.get(WotrDataComponentType.RiftConfig.GENERATOR_PRESET);
+        var preset = key.get(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET);
         if (preset.unwrapKey().isPresent()) {
             return 0;
         }
@@ -354,13 +354,13 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
-        var oldEdits = key.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        var oldEdits = key.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
         if (oldEdits != null) {
             edits.addAll(oldEdits);
         }
         edits.add(new ListEdit.Clear());
 
-        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, edits.build());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits.build());
 
         context.getSource()
                 .sendSuccess(
@@ -376,7 +376,7 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
-        var oldEdits = key.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        var oldEdits = key.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
         if (oldEdits != null) {
             edits.addAll(oldEdits);
         }
@@ -386,7 +386,7 @@ public class RiftKeyCommands extends BaseCommand {
             edits.add(new ListEdit.DropLast(n));
         }
 
-        key.set(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT, edits.build());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, edits.build());
 
         context.getSource()
                 .sendSuccess(
@@ -402,7 +402,7 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        key.set(WotrDataComponentType.RiftConfig.GENERATOR_PRESET, riftGenerationConfigReference);
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET, riftGenerationConfigReference);
 
         context.getSource()
                 .sendSuccess(
@@ -417,7 +417,7 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        key.set(WotrDataComponentType.RiftConfig.ITEM_RIFT_TIER, tier);
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER, tier);
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_tier"), tier), true);
@@ -430,9 +430,9 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         if (theme == null) {
-            key.remove(WotrDataComponentType.RiftConfig.RIFT_THEME);
+            key.remove(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_THEME);
         } else {
-            key.set(WotrDataComponentType.RiftConfig.RIFT_THEME, theme);
+            key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_THEME, theme);
         }
         context.getSource()
                 .sendSuccess(
@@ -448,9 +448,9 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         if (objective == null) {
-            key.remove(WotrDataComponentType.RiftConfig.RIFT_OBJECTIVE);
+            key.remove(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_OBJECTIVE);
         } else {
-            key.set(WotrDataComponentType.RiftConfig.RIFT_OBJECTIVE, objective);
+            key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_OBJECTIVE, objective);
         }
         context.getSource()
                 .sendSuccess(() -> Component.translatable(
@@ -465,9 +465,9 @@ public class RiftKeyCommands extends BaseCommand {
             return 0;
         }
         if (seed == null) {
-            key.remove(WotrDataComponentType.RiftConfig.RIFT_SEED);
+            key.remove(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_SEED);
         } else {
-            key.set(WotrDataComponentType.RiftConfig.RIFT_SEED, seed);
+            key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_SEED, seed);
         }
         context.getSource()
                 .sendSuccess(

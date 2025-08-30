@@ -60,12 +60,12 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             .create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("default"));
 
     public static RiftGenerationConfig initialize(ItemStack itemStack, Long unused, RegistryAccess registries) {
-        var preset = itemStack.get(WotrDataComponentType.RiftConfig.GENERATOR_PRESET);
+        var preset = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET);
         if (preset == null) {
             preset = registries.holderOrThrow(DEFAULT_PRESET_KEY);
         }
         var config = preset.value();
-        var layerEdits = itemStack.get(WotrDataComponentType.RiftConfig.LAYOUT_LAYER_EDIT);
+        var layerEdits = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
         if (layerEdits != null && config.layout() instanceof LayeredRiftLayout.Factory layered) {
             var layers = layered.layers();
             for (var edit : layerEdits) {
