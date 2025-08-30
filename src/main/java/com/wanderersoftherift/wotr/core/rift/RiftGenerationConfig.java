@@ -55,7 +55,7 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
     private static final ResourceKey<RiftGenerationConfig> DEFAULT_PRESET_KEY = ResourceKey
             .create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("default"));
 
-    public static RiftGenerationConfig initialize(ItemStack itemStack, Long aLong, RegistryAccess registries) {
+    public static RiftGenerationConfig initialize(ItemStack itemStack, Long unused, RegistryAccess registries) {
         var preset = itemStack.get(WotrDataComponentType.RiftConfig.GENERATOR_PRESET);
         if (preset == null) {
             preset = registries.holderOrThrow(DEFAULT_PRESET_KEY);

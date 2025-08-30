@@ -145,7 +145,7 @@ public interface ListEdit<T> {
 
         @Override
         public List<T> apply(List<T> original) {
-            return original.subList(n, original.size() - 1);
+            return original.subList(n, original.size());
         }
 
         @Override
@@ -171,7 +171,7 @@ public interface ListEdit<T> {
 
         @Override
         public List<T> apply(List<T> original) {
-            return original.subList(0, original.size() - 1 - n);
+            return original.subList(0, original.size() - n);
         }
 
         @Override
