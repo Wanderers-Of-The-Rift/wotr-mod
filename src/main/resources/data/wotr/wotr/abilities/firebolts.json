@@ -6,6 +6,9 @@
     {
       "type": "wotr:mana",
       "amount": 10
+    },
+    {
+      "type": "wotr:no_move"
     }
   ],
   "on_deactivation_costs": [
@@ -18,6 +21,9 @@
     {
       "type": "wotr:own_attached_effect",
       "id": "main"
+    },
+    {
+      "type": "wotr:no_move"
     }
   ],
   "activation_effects": [

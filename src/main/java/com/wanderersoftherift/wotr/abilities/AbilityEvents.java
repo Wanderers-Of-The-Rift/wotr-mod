@@ -1,7 +1,8 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.ModifierHelper;
@@ -50,6 +51,13 @@ public class AbilityEvents {
             tickActiveAbilities(level);
             tickMana(level);
         }
+    }
+
+    @SubscribeEvent
+    public static void onSlotChanged(WotrEquipmentSlotEvent.Changed changed) {
+        changed.getEntity().getExistingData(WotrAttachments.ONGOING_ABILITIES).ifPresent(data -> {
+            data.slotChanged(changed.getSlot(), changed.getFrom(), changed.getTo());
+        });
     }
 
     @SubscribeEvent

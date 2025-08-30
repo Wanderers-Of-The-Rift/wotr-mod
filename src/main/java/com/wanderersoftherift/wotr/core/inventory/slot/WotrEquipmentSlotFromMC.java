@@ -1,8 +1,9 @@
-package com.wanderersoftherift.wotr.modifier;
+package com.wanderersoftherift.wotr.core.inventory.slot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;

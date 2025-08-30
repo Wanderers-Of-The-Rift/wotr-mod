@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.abilities.requirement.CooldownCost;
 import com.wanderersoftherift.wotr.abilities.requirement.FoodLevelCost;
 import com.wanderersoftherift.wotr.abilities.requirement.LifeCost;
 import com.wanderersoftherift.wotr.abilities.requirement.ManaCost;
+import com.wanderersoftherift.wotr.abilities.requirement.NoMoveRequirement;
 import com.wanderersoftherift.wotr.abilities.requirement.OwnAttachedEffectRequirement;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,5 +37,8 @@ public class WotrAbilityRequirementTypes {
 
     public static final Supplier<MapCodec<? extends AbilityRequirement>> OWN_ATTACHED_EFFECT = ABILITY_REQUIREMENT_TYPES
             .register("own_attached_effect", () -> OwnAttachedEffectRequirement.CODEC);
+
+    public static final Supplier<MapCodec<? extends AbilityRequirement>> NO_MOVE = ABILITY_REQUIREMENT_TYPES
+            .register("no_move", () -> NoMoveRequirement.CODEC);
 
 }

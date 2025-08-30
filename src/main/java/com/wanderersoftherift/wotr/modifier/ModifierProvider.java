@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.modifier;
 
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
