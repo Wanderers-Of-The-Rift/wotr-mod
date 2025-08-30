@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.init.ability;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.StandardAbility;
-import com.wanderersoftherift.wotr.abilities.ToggleAbility;
+import com.wanderersoftherift.wotr.abilities.InstantAbility;
+import com.wanderersoftherift.wotr.abilities.PersistentAbility;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -18,10 +18,10 @@ public class WotrAbilityTypes {
     /*
      * This is where we register the different "types" of abilities that can be created and configured using datapacks
      */
-    public static final Supplier<MapCodec<? extends Ability>> STANDARD = ABILITY_TYPES.register("standard",
-            () -> StandardAbility.CODEC);
+    public static final Supplier<MapCodec<? extends Ability>> INSTANT = ABILITY_TYPES.register("instant",
+            () -> InstantAbility.CODEC);
 
-    public static final Supplier<MapCodec<? extends Ability>> TOGGLE = ABILITY_TYPES.register("toggle",
-            () -> ToggleAbility.CODEC);
+    public static final Supplier<MapCodec<? extends Ability>> PERSISTENT = ABILITY_TYPES.register("persistent",
+            () -> PersistentAbility.CODEC);
 
 }
