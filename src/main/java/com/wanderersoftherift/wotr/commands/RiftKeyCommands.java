@@ -287,6 +287,8 @@ public class RiftKeyCommands extends BaseCommand {
         key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET,
                 new Holder.Direct<>(RiftGenerationConfig.initialize(key, 0L, context.getSource().registryAccess())));
         key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT, List.of());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.POST_STEPS_EDIT, List.of());
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.JIGSAW_PROCESSORS_EDIT, List.of());
 
         context.getSource()
                 .sendSuccess(

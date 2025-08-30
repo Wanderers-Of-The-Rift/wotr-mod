@@ -73,6 +73,22 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             }
             config = config.withLayout(layered.withLayers(layers));
         }
+        var jigsawEdits = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.JIGSAW_PROCESSORS_EDIT);
+        if (jigsawEdits != null) {
+            var jigsaws = config.jigsawProcessors();
+            for (var edit : jigsawEdits) {
+                jigsaws = edit.apply(jigsaws);
+            }
+            config = config.withJigsawProcessors(jigsaws);
+        }
+        var postStepsEdits = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.POST_STEPS_EDIT);
+        if (postStepsEdits != null) {
+            var postSteps = config.postProcessingSteps();
+            for (var edit : postStepsEdits) {
+                postSteps = edit.apply(postSteps);
+            }
+            config = config.withPostProcessingSteps(postSteps);
+        }
         return config;
     }
 

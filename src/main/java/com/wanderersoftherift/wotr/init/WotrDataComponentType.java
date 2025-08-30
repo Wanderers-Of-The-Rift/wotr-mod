@@ -12,6 +12,8 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.util.ListEdit;
+import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
@@ -69,6 +71,16 @@ public class WotrDataComponentType {
                 "rift_config/layout_layers_edits",
                 ListEdit.editCodec(LayeredRiftLayout.LayoutLayer.Factory.CODEC).listOf(),
                 ByteBufCodecs.fromCodecWithRegistries(ListEdit.editCodec(LayeredRiftLayout.LayoutLayer.Factory.CODEC))
+                        .apply(ByteBufCodecs.list())
+        );
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ListEdit<RiftPostProcessingStep>>>> POST_STEPS_EDIT = register(
+                "rift_config/post_steps_edits", ListEdit.editCodec(RiftPostProcessingStep.CODEC).listOf(),
+                ByteBufCodecs.fromCodecWithRegistries(ListEdit.editCodec(RiftPostProcessingStep.CODEC))
+                        .apply(ByteBufCodecs.list())
+        );
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ListEdit<JigsawListProcessor>>>> JIGSAW_PROCESSORS_EDIT = register(
+                "rift_config/jigsaw_processors_edits", ListEdit.editCodec(JigsawListProcessor.CODEC).listOf(),
+                ByteBufCodecs.fromCodecWithRegistries(ListEdit.editCodec(JigsawListProcessor.CODEC))
                         .apply(ByteBufCodecs.list())
         );
     }

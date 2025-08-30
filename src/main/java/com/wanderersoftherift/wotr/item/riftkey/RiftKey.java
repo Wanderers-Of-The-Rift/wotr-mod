@@ -116,6 +116,11 @@ public class RiftKey extends Item {
                         .withColor(ChatFormatting.GRAY.getColor()));
             }
         }
+        var jigsawEdits = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.JIGSAW_PROCESSORS_EDIT);
+        var postEdits = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.POST_STEPS_EDIT);
+        if ((jigsawEdits != null && !jigsawEdits.isEmpty()) || (postEdits != null && !postEdits.isEmpty())) {
+            components.add(Component.literal("Other generator edits").withColor(ChatFormatting.GRAY.getColor()));
+        }
 
         if (stack.has(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER)) {
             int tier = stack.getOrDefault(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER, 0);
