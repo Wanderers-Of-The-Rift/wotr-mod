@@ -5,7 +5,13 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
+import com.wanderersoftherift.wotr.util.listedit.Append;
+import com.wanderersoftherift.wotr.util.listedit.Clear;
+import com.wanderersoftherift.wotr.util.listedit.Drop;
+import com.wanderersoftherift.wotr.util.listedit.DropLast;
+import com.wanderersoftherift.wotr.util.listedit.Prepend;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -265,6 +271,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.reduced_motion",
                 "Disables or slows down UI animations, camera shake, or screen effects");
 
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_generator_preset", "Generator Preset: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
@@ -358,8 +365,10 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
+        add(WanderersOfTheRift.translationId("objective", "nothing.name"), "Nothing");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");
         add(WanderersOfTheRift.translationId("objective", "stealth.description"), "Defeat monsters stealthily");
+        add(WanderersOfTheRift.translationId("objective", "nothing.description"), "Do nothing");
         add(WanderersOfTheRift.translationId("gui", "objective_status.complete"), "Objective Complete");
 
         add(WanderersOfTheRift.translationId("button", "reset"), "Reset");
@@ -448,6 +457,20 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
         add("modifier_effect.wotr.ability", "Cast %s when %s");
+
+        add(Append.TYPE.translationKey(), "Add %s");
+        add(Prepend.TYPE.translationKey(), "Add %s at start");
+        add(Clear.TYPE.translationKey(), "Remove all");
+        add(Drop.TYPE.translationKey(), "Remove %s from start");
+        add(DropLast.TYPE.translationKey(), "Remove %s");
+        add(WotrRiftLayoutLayers.PREDEFINED_LAYER.getKey().location().toLanguageKey("layout_layer"), "%s Room");
+        add(WotrRiftLayoutLayers.RING_LAYER.getKey().location().toLanguageKey("layout_layer"), "Ring of %s Rooms");
+        add(WotrRiftLayoutLayers.BOXED_LAYER.getKey().location().toLanguageKey("layout_layer"), "Room group");
+        add(WotrRiftLayoutLayers.CHAOS_LAYER.getKey().location().toLanguageKey("layout_layer"), "%s Rooms");
+        add("template_pool.wotr.rift.room_portal", "Portal");
+        add("template_pool.wotr.rift.room_stable", "Stable");
+        add("template_pool.wotr.rift.room_unstable", "Unstable");
+        add("template_pool.wotr.rift.room_chaos", "Chaos");
     }
 
     private void addRunegems() {

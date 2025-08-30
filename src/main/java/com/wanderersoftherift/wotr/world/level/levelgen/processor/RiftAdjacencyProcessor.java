@@ -115,7 +115,7 @@ public interface RiftAdjacencyProcessor<T> {
             BlockState newState,
             StructureTemplate.StructureBlockInfo oldInfo,
             StructurePlaceSettings settings) {
-        if (oldInfo == null) {
+        if (oldInfo == null || newState == null) {
             return null;
         }
         return new StructureTemplate.StructureBlockInfo(oldInfo.pos(),

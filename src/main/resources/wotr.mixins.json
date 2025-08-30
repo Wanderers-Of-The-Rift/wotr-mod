@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_8",
     "refmap": "wotr.refmap.json",
     "mixins": [
+        "AccessorDelegatingOps",
         "AccessorMappedRegistry",
         "AccessorMinecraftServer",
         "AccessorPalettedContainer",

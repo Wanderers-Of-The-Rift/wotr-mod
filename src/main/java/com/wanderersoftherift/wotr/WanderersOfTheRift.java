@@ -13,6 +13,7 @@ import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
 import com.wanderersoftherift.wotr.init.WotrContainerTypes;
 import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrEditTypes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
@@ -49,11 +50,13 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrJigsawListProcessors;
 import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftBuiltinGeneratables;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftPostProcessingSteps;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftRoomGeneratorFactories;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
+import com.wanderersoftherift.wotr.init.worldgen.WotrThemeSources;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
@@ -107,6 +110,7 @@ public class WanderersOfTheRift {
         WotrOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrProcessors.PROCESSORS.register(modEventBus);
 
+        WotrThemeSources.THEME_SOURCES.register(modEventBus);
         WotrRiftLayoutLayers.LAYOUT_LAYERS.register(modEventBus);
         WotrRiftLayouts.LAYOUTS.register(modEventBus);
         WotrRiftShapes.RIFT_SHAPES.register(modEventBus);
@@ -115,6 +119,7 @@ public class WanderersOfTheRift {
         WotrJigsawListProcessors.JIGSAW_LIST_PROCESSORS.register(modEventBus);
         WotrCorridorValidators.CORRIDOR_VALIDATORS.register(modEventBus);
         WotrRiftPostProcessingSteps.RIFT_POST_STEPS.register(modEventBus);
+        WotrRiftConfigDataTypes.RIFT_CONFIG_DATA_TYPES.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
@@ -143,6 +148,9 @@ public class WanderersOfTheRift {
         WotrRecipeCategories.RECIPE_BOOK_CATEGORIES.register(modEventBus);
         WotrSlotDisplayTypes.SLOT_DISPLAY_TYPES.register(modEventBus);
         WotrRecipeDisplayTypes.RECIPE_DISPLAY_TYPES.register(modEventBus);
+
+        // Utilities
+        WotrEditTypes.EDIT_TYPES.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);

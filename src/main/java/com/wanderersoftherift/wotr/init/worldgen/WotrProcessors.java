@@ -6,9 +6,9 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.GradientReplac
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.MushroomProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftChestProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.RiftMobSpawnerProcessor;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.VineProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.WeightedReplaceProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeProcessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.neoforged.neoforge.registries.DeferredRegister;

@@ -7,7 +7,7 @@
     }
   ],
   "output": {
-    "type": "wotr:rift_theme",
+    "type": "wotr:rift_config/theme",
     "value": "wotr:mushroom"
   },
   "priority": 10

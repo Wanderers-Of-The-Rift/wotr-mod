@@ -3,7 +3,8 @@ package com.wanderersoftherift.wotr.world.level.levelgen.roomgen;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -58,8 +58,8 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
 
         @Override
         public RiftRoomGenerator create(RiftConfig config) {
-            return new CoreRiftRoomGenerator(
-                    ImmutableList.copyOf(config.riftGen().jigsawProcessors().orElse(Collections.emptyList())));
+            return new CoreRiftRoomGenerator(ImmutableList
+                    .copyOf(config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG).jigsawProcessors()));
         }
 
         @Override

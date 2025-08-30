@@ -3,18 +3,21 @@ package com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.JigsawBlock;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
@@ -36,12 +39,13 @@ public class RoomRandomizerImpl implements RoomRandomizer {
     public static final RiftSpaceHolderFactory MULTI_SIZE_SPACE_HOLDER_FACTORY = MultiSizeRiftSpaceRandomList::new;
     public static final RiftSpaceHolderFactory SINGLE_SIZE_SPACE_HOLDER_FACTORY = MonoSizeRiftSpaceRandomList::new;
     @SuppressWarnings("StaticVariableName")
-    static Pair<PhantomReference<MinecraftServer>, Map<ResourceLocation, RiftSpaceHolder>> POOL_CACHE;
+    static Pair<PhantomReference<MinecraftServer>, Map<Holder<StructureTemplatePool>, RiftSpaceHolder>> POOL_CACHE;
     private final MinecraftServer server;
-    private final ResourceLocation pool;
+    private final Holder<StructureTemplatePool> pool;
     private final RiftSpaceHolderFactory factory;
 
-    public RoomRandomizerImpl(MinecraftServer server, ResourceLocation pool, RiftSpaceHolderFactory factory) {
+    public RoomRandomizerImpl(MinecraftServer server, Holder<StructureTemplatePool> pool,
+            RiftSpaceHolderFactory factory) {
         this.server = server;
         this.pool = pool;
         this.factory = factory;
@@ -57,7 +61,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         if (lastCache != null && lastCache.getA().refersTo(server)) {
             return lastCache.getB().computeIfAbsent(pool, (arg) -> createSpaceHolder());
         }
-        var map = new ConcurrentHashMap<ResourceLocation, RiftSpaceHolder>();
+        var map = new ConcurrentHashMap<Holder<StructureTemplatePool>, RiftSpaceHolder>();
         map.computeIfAbsent(pool, (arg) -> createSpaceHolder());
         POOL_CACHE = new Pair<>(new PhantomReference<>(server, null), map);
         return map.get(pool);
@@ -116,11 +120,11 @@ public class RoomRandomizerImpl implements RoomRandomizer {
         }
     }
 
-    public record Factory(ResourceLocation pool, RiftSpaceHolderFactory spaceHolderFactory)
+    public record Factory(Holder<StructureTemplatePool> pool, RiftSpaceHolderFactory spaceHolderFactory)
             implements RoomRandomizer.Factory {
 
         public static final MapCodec<Factory> CODEC = RecordCodecBuilder.mapCodec(it -> it.group(
-                ResourceLocation.CODEC.fieldOf("template_pool").forGetter(Factory::pool),
+                LaxRegistryCodec.ref(Registries.TEMPLATE_POOL).fieldOf("template_pool").forGetter(Factory::pool),
                 Codec.BOOL.fieldOf("is_single_size")
                         .forGetter(
                                 it2 -> it2.spaceHolderFactory == RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY))

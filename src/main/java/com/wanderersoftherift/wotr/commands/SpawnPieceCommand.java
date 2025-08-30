@@ -9,10 +9,9 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.FixedThemeSource;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.ResourceLocationException;
@@ -56,6 +55,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
+import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
@@ -450,65 +451,93 @@ public class SpawnPieceCommand {
         ServerLevel serverlevel = cs.getSource().getLevel();
         StructureTemplateManager structuretemplatemanager = serverlevel.getStructureManager();
 
-        RiftData riftData = RiftData.get(serverlevel);
-        var originalConfig = riftData.getConfig();
-        riftData.setConfig(new RiftConfig(0, theme));
-        try {
-            Optional<StructureTemplate> optionalTemplate = structuretemplatemanager.get(template);
-            if (optionalTemplate.isEmpty()) {
-                throw ERROR_TEMPLATE_INVALID.create(template);
-            }
-            StructureTemplate structuretemplate = optionalTemplate.get();
-            checkLoaded(serverlevel, new ChunkPos(pos), new ChunkPos(pos.offset(structuretemplate.getSize())));
-
-            Holder<StructureProcessorList> structureProcessorList = Holder.direct(
-                    new StructureProcessorList(Collections.singletonList(new ThemeProcessor(ThemePieceType.ROOM))));
-            Registry<StructureTemplatePool> poolRegistry = serverlevel.registryAccess()
-                    .lookupOrThrow(Registries.TEMPLATE_POOL);
-            StructureTemplatePool pool = new StructureTemplatePool(poolRegistry.get(EMPTY_TEMPLATE).get(),
-                    Collections.singletonList(
-                            new Pair<>(StructurePoolElement.single(template.toString(), structureProcessorList)
-                                    .apply(StructureTemplatePool.Projection.RIGID), 1)));
-            Structure.GenerationContext context = new Structure.GenerationContext(serverlevel.registryAccess(),
-                    serverlevel.getChunkSource().getGenerator(),
-                    serverlevel.getChunkSource().getGenerator().getBiomeSource(),
-                    serverlevel.getChunkSource().randomState(), serverlevel.getStructureManager(), seed,
-                    new ChunkPos(pos), serverlevel, (biomeHolder -> true));
-
-            Optional<Structure.GenerationStub> pieceGenerator = JigsawPlacement.addPieces(context, Holder.direct(pool),
-                    Optional.empty(), 1, pos, false, Optional.empty(), 80, PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
-                    LiquidSettings.IGNORE_WATERLOGGING);
-
-            List<StructurePiece> structurePieceList = pieceGenerator.get().getPiecesBuilder().build().pieces();
-
-            if (structurePieceList.isEmpty()) {
-                throw ERROR_TEMPLATE_INVALID.create(template);
-            }
-
-            // Correct location for rotation
-            BoundingBox boundingBox = structurePieceList.getFirst().getBoundingBox();
-            Vec3i offset = new Vec3i(boundingBox.minX() < pos.getX() ? boundingBox.getXSpan() - 1 : 0, 0,
-                    boundingBox.minZ() < pos.getZ() ? boundingBox.getZSpan() - 1 : 0);
-
-            structurePieceList.forEach(piece -> {
-                if (!includeTerminators && piece instanceof PoolElementStructurePiece poolPiece
-                        && poolPiece.getElement().toString().contains("terminator")) {
-                    return;
-                }
-                piece.move(offset.getX(), 0, offset.getZ());
-                piece.postProcess(serverlevel, serverlevel.structureManager(),
-                        serverlevel.getChunkSource().getGenerator(), new WorldgenRandom(new LegacyRandomSource(seed)),
-                        BoundingBox.infinite(), new ChunkPos(pos), pos);
-            });
-
-            cs.getSource()
-                    .sendSuccess(() -> Component.translatable("commands.place.template.success",
-                            Component.translationArg(template), pos.getX(), pos.getY(), pos.getZ()), true);
-            return 0;
-
-        } finally {
-            riftData.setConfig(originalConfig);
+        Optional<StructureTemplate> optionalTemplate = structuretemplatemanager.get(template);
+        if (optionalTemplate.isEmpty()) {
+            throw ERROR_TEMPLATE_INVALID.create(template);
         }
+        StructureTemplate structuretemplate = optionalTemplate.get();
+        checkLoaded(serverlevel, new ChunkPos(pos), new ChunkPos(pos.offset(structuretemplate.getSize())));
+
+        Holder<StructureProcessorList> structureProcessorList = Holder.direct(
+                new StructureProcessorList(Collections.singletonList(
+                        new ThemeProcessor(ThemePieceType.ROOM, new FixedThemeSource(theme)))));
+        Registry<StructureTemplatePool> poolRegistry = serverlevel.registryAccess()
+                .lookupOrThrow(Registries.TEMPLATE_POOL);
+        StructureTemplatePool pool = new StructureTemplatePool(poolRegistry.get(EMPTY_TEMPLATE).get(),
+                Collections.singletonList(
+                        new Pair<>(StructurePoolElement.single(template.toString(), structureProcessorList)
+                                .apply(StructureTemplatePool.Projection.RIGID), 1)));
+        Structure.GenerationContext context = new Structure.GenerationContext(serverlevel.registryAccess(),
+                serverlevel.getChunkSource().getGenerator(),
+                serverlevel.getChunkSource().getGenerator().getBiomeSource(),
+                serverlevel.getChunkSource().randomState(), serverlevel.getStructureManager(), seed, new ChunkPos(pos),
+                serverlevel, (biomeHolder -> true));
+
+        Optional<Structure.GenerationStub> pieceGenerator = JigsawPlacement.addPieces(context, Holder.direct(pool),
+                Optional.empty(), 1, pos, false, Optional.empty(), 80, PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
+                LiquidSettings.IGNORE_WATERLOGGING);
+
+        List<StructurePiece> structurePieceList = pieceGenerator.get().getPiecesBuilder().build().pieces();
+
+        if (structurePieceList.isEmpty()) {
+            throw ERROR_TEMPLATE_INVALID.create(template);
+        }
+
+        structurePieceList = structurePieceList.stream()
+                .map(
+                        it -> {
+                            if (it instanceof PoolElementStructurePiece pe) {
+
+                                var newElement = mapElementTheme(pe.getElement(), theme);
+
+                                return new PoolElementStructurePiece(
+                                        structuretemplatemanager, newElement, pe.getPosition(),
+                                        pe.getGroundLevelDelta(), pe.getRotation(), pe.getBoundingBox(),
+                                        pe.liquidSettings
+                                );
+                            }
+                            return it;
+                        }
+                )
+                .toList();
+
+        // Correct location for rotation
+        BoundingBox boundingBox = structurePieceList.getFirst().getBoundingBox();
+        Vec3i offset = new Vec3i(boundingBox.minX() < pos.getX() ? boundingBox.getXSpan() - 1 : 0, 0,
+                boundingBox.minZ() < pos.getZ() ? boundingBox.getZSpan() - 1 : 0);
+
+        structurePieceList.forEach(piece -> {
+            if (!includeTerminators && piece instanceof PoolElementStructurePiece poolPiece
+                    && poolPiece.getElement().toString().contains("terminator")) {
+                return;
+            }
+            piece.move(offset.getX(), 0, offset.getZ());
+            piece.postProcess(serverlevel, serverlevel.structureManager(), serverlevel.getChunkSource().getGenerator(),
+                    new WorldgenRandom(new LegacyRandomSource(seed)), BoundingBox.infinite(), new ChunkPos(pos), pos);
+        });
+
+        cs.getSource()
+                .sendSuccess(() -> Component.translatable("commands.place.template.success",
+                        Component.translationArg(template), pos.getX(), pos.getY(), pos.getZ()), true);
+        return 0;
+
+    }
+
+    private static StructurePoolElement mapElementTheme(StructurePoolElement element, Holder<RiftTheme> theme) {
+        return switch (element) {
+            case ListPoolElement le -> new ListPoolElement(
+                    le.elements.stream().map(it -> mapElementTheme(it, theme)).toList(), le.getProjection());
+            case SinglePoolElement se -> new SinglePoolElement(se.template,
+                    new Holder.Direct<>(new StructureProcessorList(se.processors.value()
+                            .list()
+                            .stream()
+                            .map(processor -> processor instanceof ThemeProcessor tp
+                                    ? new ThemeProcessor(tp.getThemePieceType(), new FixedThemeSource(theme))
+                                    : processor)
+                            .toList())),
+                    se.getProjection(), se.overrideLiquidSettings);
+            default -> element;
+        };
     }
 
     public static int placeTemplate(

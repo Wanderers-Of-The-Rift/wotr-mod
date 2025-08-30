@@ -22,8 +22,8 @@ public class WotrJigsawListProcessors {
     public static final Supplier<MapCodec<ReplaceJigsaws>> REPLACE_JIGSAWS = JIGSAW_LIST_PROCESSORS.register("replace",
             () -> ReplaceJigsaws.CODEC);
 
-    public static final Supplier<MapCodec<FilterJigsaws>> FILTER_JIGSAWS = JIGSAW_LIST_PROCESSORS.register("filter",
-            () -> FilterJigsaws.CODEC);
+    public static final Supplier<MapCodec<FilterJigsaws>> FILTER_REMOVE_JIGSAWS = JIGSAW_LIST_PROCESSORS
+            .register("filter_remove", () -> FilterJigsaws.CODEC);
     public static final Supplier<MapCodec<ReplaceJigsawsBulk>> FILTER_JIGSAWS_BOLK = JIGSAW_LIST_PROCESSORS
             .register("replace_bulk", () -> ReplaceJigsawsBulk.CODEC);
 

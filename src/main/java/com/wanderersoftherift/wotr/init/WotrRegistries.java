@@ -18,11 +18,12 @@ import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
+import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
+import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfigCustomData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
@@ -31,6 +32,7 @@ import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
+import com.wanderersoftherift.wotr.util.listedit.EditType;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
@@ -38,6 +40,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
@@ -100,12 +103,16 @@ public class WotrRegistries {
             Keys.JIGSAW_LIST_PROCESSOR_TYPES).create();
     public static final Registry<MapCodec<? extends SerializableRiftGeneratable>> RIFT_BUILTIN_GENERATABLE_TYPES = new RegistryBuilder<>(
             Keys.RIFT_BUILTIN_GENERATABLE_TYPES).create();
-    public static final Registry<MapCodec<? extends RiftConfigCustomData>> RIFT_CONFIG_CUSTOM_DATA_TYPES = new RegistryBuilder<>(
-            Keys.RIFT_CONFIG_CUSTOM_DATA_TYPES).create();
+    public static final Registry<RiftConfigDataType<?>> RIFT_CONFIG_DATA_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_CONFIG_DATA_TYPES).create();
     public static final Registry<MapCodec<? extends CorridorValidator>> RIFT_CORRIDOR_VALIDATORS = new RegistryBuilder<>(
             Keys.RIFT_CORRIDOR_VALIDATORS).create();
     public static final Registry<MapCodec<? extends RiftPostProcessingStep>> RIFT_POST_STEPS = new RegistryBuilder<>(
             Keys.RIFT_POST_STEPS).create();
+    public static final Registry<MapCodec<? extends ThemeSource>> THEME_SOURCE_TYPE = new RegistryBuilder<>(
+            Keys.THEME_SOURCE_TYPES).create();
+    public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
+            Keys.EDIT_TYPES).create();
     public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
             Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
     public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
@@ -189,13 +196,19 @@ public class WotrRegistries {
         public static final ResourceKey<Registry<MapCodec<? extends JigsawListProcessor>>> JIGSAW_LIST_PROCESSOR_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/jigsaw_list_processor"));
         public static final ResourceKey<Registry<MapCodec<? extends SerializableRiftGeneratable>>> RIFT_BUILTIN_GENERATABLE_TYPES = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));;
-        public static final ResourceKey<Registry<MapCodec<? extends RiftConfigCustomData>>> RIFT_CONFIG_CUSTOM_DATA_TYPES = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));;
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_builtin_generatable"));
+        public static final ResourceKey<Registry<RiftConfigDataType<?>>> RIFT_CONFIG_DATA_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_config_custom_data"));
         public static final ResourceKey<Registry<MapCodec<? extends CorridorValidator>>> RIFT_CORRIDOR_VALIDATORS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));;
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftPostProcessingStep>>> RIFT_POST_STEPS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));;
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));
+        public static final ResourceKey<Registry<MapCodec<? extends ThemeSource>>> THEME_SOURCE_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_theme_source"));
+        public static final ResourceKey<Registry<RiftGenerationConfig>> GENERATOR_PRESETS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_generator_preset"));
+        public static final ResourceKey<Registry<EditType<?>>> EDIT_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("list_edits"));
         public static final ResourceKey<Registry<DualCodec<? extends AbilitySource>>> ABILITY_SOURCES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_source"));
         public static final ResourceKey<Registry<DualCodec<? extends ModifierSource>>> MODIFIER_SOURCES = ResourceKey
@@ -223,18 +236,20 @@ public class WotrRegistries {
         event.register(GOAL_TYPES);
         event.register(REWARD_PROVIDER_TYPES);
         event.register(REWARD_TYPES);
+        event.register(EDIT_TYPES);
         event.register(TRACKED_ABILITY_TRIGGERS);
         event.register(ABILITY_SOURCES);
         event.register(MODIFIER_SOURCES);
 
         // worldgen registries
+        event.register(THEME_SOURCE_TYPE);
         event.register(LAYOUT_TYPES);
         event.register(LAYOUT_LAYER_TYPES);
         event.register(RIFT_SHAPE_TYPES);
         event.register(RIFT_ROOM_GENERATOR_FACTORY_TYPES);
         event.register(JIGSAW_LIST_PROCESSOR_TYPES);
         event.register(RIFT_BUILTIN_GENERATABLE_TYPES);
-        event.register(RIFT_CONFIG_CUSTOM_DATA_TYPES);
+        event.register(RIFT_CONFIG_DATA_TYPES);
         event.register(RIFT_CORRIDOR_VALIDATORS);
         event.register(RIFT_POST_STEPS);
     }
@@ -256,5 +271,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
     }
 }
