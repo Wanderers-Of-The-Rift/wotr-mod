@@ -10,7 +10,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.FixedThemeSource;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.ResourceLocationException;
@@ -459,7 +460,7 @@ public class SpawnPieceCommand {
 
         Holder<StructureProcessorList> structureProcessorList = Holder.direct(
                 new StructureProcessorList(Collections.singletonList(
-                        new ThemeProcessor(ThemePieceType.ROOM, new ThemeProcessor.ThemeSource.Fixed(theme)))));
+                        new ThemeProcessor(ThemePieceType.ROOM, new FixedThemeSource(theme)))));
         Registry<StructureTemplatePool> poolRegistry = serverlevel.registryAccess()
                 .lookupOrThrow(Registries.TEMPLATE_POOL);
         StructureTemplatePool pool = new StructureTemplatePool(poolRegistry.get(EMPTY_TEMPLATE).get(),
@@ -531,8 +532,7 @@ public class SpawnPieceCommand {
                             .list()
                             .stream()
                             .map(processor -> processor instanceof ThemeProcessor tp
-                                    ? new ThemeProcessor(tp.getThemePieceType(),
-                                            new ThemeProcessor.ThemeSource.Fixed(theme))
+                                    ? new ThemeProcessor(tp.getThemePieceType(), new FixedThemeSource(theme))
                                     : processor)
                             .toList())),
                     se.getProjection(), se.overrideLiquidSettings);

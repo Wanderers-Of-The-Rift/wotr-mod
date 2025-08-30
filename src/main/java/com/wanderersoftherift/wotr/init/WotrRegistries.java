@@ -32,9 +32,9 @@ import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcess
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.ThemeProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.input.InputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.CorridorValidator;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
@@ -101,7 +101,7 @@ public class WotrRegistries {
             Keys.RIFT_CORRIDOR_VALIDATORS).create();
     public static final Registry<MapCodec<? extends RiftPostProcessingStep>> RIFT_POST_STEPS = new RegistryBuilder<>(
             Keys.RIFT_POST_STEPS).create();
-    public static final Registry<MapCodec<? extends ThemeProcessor.ThemeSource>> THEME_SOURCE_TYPE = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends ThemeSource>> THEME_SOURCE_TYPE = new RegistryBuilder<>(
             Keys.THEME_SOURCE_TYPES).create();
     public static final Registry<ListEdit.EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
@@ -181,7 +181,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_corridor_validator"));
         public static final ResourceKey<Registry<MapCodec<? extends RiftPostProcessingStep>>> RIFT_POST_STEPS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_post_steps"));
-        public static final ResourceKey<Registry<MapCodec<? extends ThemeProcessor.ThemeSource>>> THEME_SOURCE_TYPES = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends ThemeSource>>> THEME_SOURCE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_theme_source"));
         public static final ResourceKey<Registry<RiftGenerationConfig>> GENERATOR_PRESETS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/rift_generator_preset"));
