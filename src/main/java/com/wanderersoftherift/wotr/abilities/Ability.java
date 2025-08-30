@@ -88,12 +88,15 @@ public abstract class Ability {
     /**
      * Ticks the ability while it is active
      * 
-     * @param contest
+     * @param context
      * @param age
      * @return Whether the ability is finished
      */
-    public boolean tick(AbilityContext contest, long age) {
+    public boolean tick(AbilityContext context, long age) {
         return true;
+    }
+
+    public void deactivate(AbilityContext context) {
     }
 
     ///  Costs
