@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.abilities.sources;
 
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.codec.StreamCodec;
@@ -34,6 +34,11 @@ public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource
     @Override
     public @Nullable ItemStack getItem(LivingEntity entity) {
         return slot.getContent(entity);
+    }
+
+    @Override
+    public @Nullable WotrEquipmentSlot getLinkedSlot() {
+        return slot;
     }
 
     @Override

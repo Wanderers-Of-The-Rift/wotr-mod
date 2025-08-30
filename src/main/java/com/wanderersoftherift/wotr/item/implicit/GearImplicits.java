@@ -2,9 +2,9 @@ package com.wanderersoftherift.wotr.item.implicit;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.ModifierProvider;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.GearImplicitModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.world.entity.LivingEntity;

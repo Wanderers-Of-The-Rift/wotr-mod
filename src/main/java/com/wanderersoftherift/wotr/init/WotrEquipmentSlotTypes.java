@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlotFromMC;
+import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotFromMC;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

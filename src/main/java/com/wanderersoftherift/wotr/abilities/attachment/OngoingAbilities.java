@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.MainAbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
@@ -18,12 +19,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class OngoingAbilities {
 
@@ -94,6 +97,7 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
+        interruptChannelledAbilties();
         Optional<UUID> existingId = activeAbilities.stream()
                 .filter(x -> x.matches(ability, source))
                 .map(ActiveAbility::id)
@@ -122,8 +126,7 @@ public class OngoingAbilities {
         }
         for (ActiveAbility instance : ImmutableList.copyOf(activeAbilities)) {
             instance.age++;
-            AbilityContext context = new AbilityContext(instance.id, instance.ability, attachedTo, instance.abilityItem,
-                    instance.source, attachedTo.level(), instance.upgrades);
+            AbilityContext context = instance.generateContext(attachedTo);
             try (var ignore = context.enableTemporaryUpgradeModifiers()) {
                 if (instance.ability.value().tick(context, instance.age)) {
                     activeAbilities.remove(instance);
@@ -138,6 +141,28 @@ public class OngoingAbilities {
 
     public boolean isEmpty() {
         return activeAbilities.isEmpty();
+    }
+
+    public void slotChanged(@NotNull WotrEquipmentSlot slot, ItemStack from, ItemStack to) {
+        deactivateIf(x -> slot.equals(x.source.getLinkedSlot()));
+    }
+
+    public void interruptChannelledAbilties() {
+        deactivateIf(x -> x.ability.value().isChannelled());
+    }
+
+    private void deactivateIf(Predicate<ActiveAbility> predicate) {
+        if (!(holder instanceof LivingEntity attachedTo)) {
+            return;
+        }
+        List<ActiveAbility> channelled = activeAbilities.stream().filter(predicate).toList();
+        channelled.forEach(instance -> {
+            AbilityContext abilityContext = instance.generateContext(attachedTo);
+            try (var ignored = abilityContext.enableTemporaryUpgradeModifiers()) {
+                instance.ability.value().deactivate(abilityContext);
+            }
+        });
+        activeAbilities.removeAll(channelled);
     }
 
     private static final class ActiveAbility {
@@ -158,12 +183,12 @@ public class OngoingAbilities {
         private final AbilityUpgradePool upgrades;
         private long age;
 
-        private ActiveAbility(AbilityContext context) {
+        ActiveAbility(AbilityContext context) {
             this(context.instanceId(), context.ability(), context.source(), context.abilityItem(), 0,
                     context.upgrades());
         }
 
-        private ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
+        ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
                 AbilityUpgradePool upgrades) {
             this.id = id;
             this.ability = ability;
@@ -173,31 +198,35 @@ public class OngoingAbilities {
             this.upgrades = upgrades;
         }
 
-        public boolean matches(Holder<Ability> ability, AbilitySource source) {
+        boolean matches(Holder<Ability> ability, AbilitySource source) {
             return this.ability.equals(ability) && Objects.equals(source, this.source);
         }
 
-        public UUID id() {
+        AbilityContext generateContext(LivingEntity owner) {
+            return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), upgrades);
+        }
+
+        UUID id() {
             return id;
         }
 
-        public Holder<Ability> ability() {
+        Holder<Ability> ability() {
             return ability;
         }
 
-        public AbilitySource source() {
+        AbilitySource source() {
             return source;
         }
 
-        public ItemStack abilityItem() {
+        ItemStack abilityItem() {
             return abilityItem;
         }
 
-        public long age() {
+        long age() {
             return age;
         }
 
-        public AbilityUpgradePool upgrades() {
+        AbilityUpgradePool upgrades() {
             return upgrades;
         }
     }
