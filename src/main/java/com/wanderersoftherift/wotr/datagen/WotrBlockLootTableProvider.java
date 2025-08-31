@@ -42,40 +42,6 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(WotrBlocks.QUEST_HUB.get());
         add(WotrBlocks.RIFT_MOB_SPAWNER.get(), noDrop());
 
-        addRiftConditionalDrop(WotrBlocks.NOGRAVGRAVEL.get(), Blocks.GRAVEL.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVSAND.get(), Blocks.SAND.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVREDSAND.get(), Blocks.RED_SAND.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(), Blocks.WHITE_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(), Blocks.ORANGE_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(), Blocks.MAGENTA_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(),
-                Blocks.LIGHT_BLUE_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(), Blocks.YELLOW_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get(), Blocks.LIME_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get(), Blocks.PINK_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get(), Blocks.GRAY_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(),
-                Blocks.LIGHT_GRAY_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get(), Blocks.CYAN_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(), Blocks.PURPLE_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get(), Blocks.BLUE_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(), Blocks.BROWN_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(), Blocks.GREEN_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get(), Blocks.RED_CONCRETE_POWDER.asItem());
-        addRiftConditionalDrop(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(), Blocks.BLACK_CONCRETE_POWDER.asItem());
-
-    }
-
-    private void addRiftConditionalDrop(Block block, Item riftDrop) {
-        this.add(block, LootTable.lootTable()
-                .withPool(LootPool.lootPool()
-                        .add(AlternativesEntry.alternatives(
-                                LootItem.lootTableItem(riftDrop)
-                                        .when(RiftLevelCheck.riftTier().min(1).max(Integer.MAX_VALUE)),
-                                LootItem.lootTableItem(block)
-                        ))
-                )
-        );
     }
 
     @Override
