@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.util.listedit;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -31,16 +32,9 @@ public record Append<T>(List<T> values) implements ListEdit<T> {
 
     @Override
     public Component textComponent(Function<T, Component> converter) {
-        var values = Component.empty();
-        List<T> ts = this.values;
-        for (int i = 0; true; i++) {
-            var value = ts.get(i);
-            values = values.append(converter.apply(value));
-            if (i < ts.size()) {
-                break;
-            }
-            values = values.append(", ");
-        }
-        return Component.translatable(TYPE.translationKey(), values);
+        var jointValues = this.values.stream()
+                .map(converter)
+                .reduce((a, b) -> ComponentUtil.mutable(a).append(", ").append(b));
+        return Component.translatable(TYPE.translationKey(), jointValues.orElse(Component.empty()));
     }
 }

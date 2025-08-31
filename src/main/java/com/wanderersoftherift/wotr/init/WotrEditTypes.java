@@ -24,6 +24,6 @@ public class WotrEditTypes {
 
     public static final DeferredHolder<EditType<?>, EditType<?>> DROP = EDIT_TYPES.register("drop", () -> Drop.TYPE);
 
-    public static final DeferredHolder<EditType<?>, EditType<?>> DROP_LAST = EDIT_TYPES.register("drop_lase",
+    public static final DeferredHolder<EditType<?>, EditType<?>> DROP_LAST = EDIT_TYPES.register("drop_last",
             () -> DropLast.TYPE);
 }

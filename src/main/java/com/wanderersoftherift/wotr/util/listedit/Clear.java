@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.function.Function;
 
 public record Clear<T>() implements ListEdit<T> {
-    public static final Clear<?> INSTANCE = new Clear<>();
-    public static final MapCodec<Clear<?>> CODEC = MapCodec.unit(INSTANCE);
-
     public static final EditType<?> TYPE = EditType.create(Clear::createCodec, "edits", "clear");
+    private static final Clear<?> INSTANCE = new Clear<>();
+    private static final MapCodec<Clear<?>> CODEC = MapCodec.unit(INSTANCE);
 
     public static <T> MapCodec<? extends ListEdit<T>> createCodec(Codec<T> element) {
         return (MapCodec<? extends ListEdit<T>>) (Object) CODEC;
+    }
+
+    public static <T> Clear<T> instance() {
+        return (Clear<T>) INSTANCE;
     }
 
     @Override
