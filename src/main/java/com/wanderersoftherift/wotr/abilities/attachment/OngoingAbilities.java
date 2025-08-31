@@ -58,7 +58,7 @@ public class OngoingAbilities {
             return false;
         }
         ItemStack abilityItem = source.getItem(entity);
-        Holder<Ability> ability = source.getMainAbility(entity);
+        Holder<Ability> ability = source.getAbility(entity);
         if (ability == null) {
             return false;
         }
@@ -97,7 +97,7 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
-        interruptChannelledAbilties();
+        interruptChannelledAbilities();
         Optional<UUID> existingId = activeAbilities.stream()
                 .filter(x -> x.matches(ability, source))
                 .map(ActiveAbility::id)
@@ -147,7 +147,7 @@ public class OngoingAbilities {
         deactivateIf(x -> slot.equals(x.source.getLinkedSlot()));
     }
 
-    public void interruptChannelledAbilties() {
+    public void interruptChannelledAbilities() {
         deactivateIf(x -> x.ability.value().isChannelled());
     }
 

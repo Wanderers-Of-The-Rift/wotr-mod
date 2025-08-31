@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +32,7 @@ import java.util.UUID;
  * @param upgrades
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades) {
+        ItemStack abilityItem, AbilitySource source, Level level, @Nullable AbilityUpgradePool upgrades) {
 
     /**
      * @return The current game time
