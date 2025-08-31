@@ -29,7 +29,7 @@ public class ThemeProcessor extends StructureProcessor
         implements RiftTemplateProcessor, RiftFinalProcessor, RiftAdjacencyProcessor<ThemeAdjacencyData> {
     public static final MapCodec<ThemeProcessor> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             ThemePieceType.CODEC.fieldOf("piece_type").forGetter(ThemeProcessor::getThemePieceType),
-            ThemeSource.CODEC.optionalFieldOf("theme_source", ThemeSourceFromRiftData.INSTANCE)
+            ThemeSource.CODEC.optionalFieldOf("theme_source", LevelThemeSource.INSTANCE)
                     .forGetter(ThemeProcessor::getThemeSource)
     ).apply(builder, ThemeProcessor::new));
 

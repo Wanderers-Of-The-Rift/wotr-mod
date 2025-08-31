@@ -5,8 +5,8 @@ import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.LevelThemeSource;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeProcessor;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.theme.ThemeSourceFromRiftData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -34,7 +34,7 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
             ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror) {
-        var themeProcessor = new ThemeProcessor(ThemePieceType.ROOM, ThemeSourceFromRiftData.INSTANCE);
+        var themeProcessor = new ThemeProcessor(ThemePieceType.ROOM, LevelThemeSource.INSTANCE);
         var offset = new BlockPos(destination.space.origin().multiply(16)).offset(placementShift);
         var mutablePosition = new BlockPos.MutableBlockPos();
         var xLastChunkPosition = 0;
