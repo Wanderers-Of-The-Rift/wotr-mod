@@ -96,8 +96,8 @@ public class RiftKey extends Item {
             Item.@NotNull TooltipContext context,
             @NotNull List<Component> components,
             @NotNull TooltipFlag flag) {
-        if (stack.has(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET)) {
-            var preset = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET);
+        if (stack.has(WotrDataComponentType.RiftConfigComponents.GENERATOR_PRESET)) {
+            var preset = stack.get(WotrDataComponentType.RiftConfigComponents.GENERATOR_PRESET);
             var presetString = preset.unwrapKey()
                     .map(it -> Component.literal(it.location().toString()).withStyle())
                     .orElse(Component.literal("Custom")
@@ -106,7 +106,7 @@ public class RiftKey extends Item {
                     .translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_generator_preset", presetString)
                     .withColor(ChatFormatting.GRAY.getColor()));
         }
-        var edits = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
+        var edits = stack.get(WotrDataComponentType.RiftConfigComponents.LAYOUT_LAYER_EDIT);
         if (edits != null && !edits.isEmpty()) {
             components.add(Component.literal("Layout edits: ").withColor(ChatFormatting.GRAY.getColor()));
             for (var edit : edits) {
@@ -116,19 +116,19 @@ public class RiftKey extends Item {
                         .withColor(ChatFormatting.GRAY.getColor()));
             }
         }
-        var jigsawEdits = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.JIGSAW_PROCESSORS_EDIT);
-        var postEdits = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.POST_STEPS_EDIT);
+        var jigsawEdits = stack.get(WotrDataComponentType.RiftConfigComponents.JIGSAW_PROCESSORS_EDIT);
+        var postEdits = stack.get(WotrDataComponentType.RiftConfigComponents.POST_STEPS_EDIT);
         if ((jigsawEdits != null && !jigsawEdits.isEmpty()) || (postEdits != null && !postEdits.isEmpty())) {
             components.add(Component.literal("Other generator edits").withColor(ChatFormatting.GRAY.getColor()));
         }
 
-        if (stack.has(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER)) {
-            int tier = stack.getOrDefault(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER, 0);
+        if (stack.has(WotrDataComponentType.RiftConfigComponents.RIFT_TIER)) {
+            int tier = stack.getOrDefault(WotrDataComponentType.RiftConfigComponents.RIFT_TIER, 0);
             components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
                     .withColor(ChatFormatting.GRAY.getColor()));
         }
 
-        Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_THEME);
+        Holder<RiftTheme> riftTheme = stack.get(WotrDataComponentType.RiftConfigComponents.RIFT_THEME);
         if (riftTheme != null) {
             ResourceLocation themeId = riftTheme.getKey().location();
             Component themeName = Component
@@ -136,8 +136,7 @@ public class RiftKey extends Item {
             components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", themeName)
                     .withColor(ChatFormatting.GRAY.getColor()));
         }
-        Holder<ObjectiveType> objective = stack
-                .get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_OBJECTIVE);
+        Holder<ObjectiveType> objective = stack.get(WotrDataComponentType.RiftConfigComponents.RIFT_OBJECTIVE);
         if (objective != null) {
             ResourceLocation objectiveLoc = objective.getKey().location();
             Component objectiveName = Component
@@ -146,7 +145,7 @@ public class RiftKey extends Item {
                     Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", objectiveName)
                             .withColor(ChatFormatting.GRAY.getColor()));
         }
-        var seed = stack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_SEED);
+        var seed = stack.get(WotrDataComponentType.RiftConfigComponents.RIFT_SEED);
         if (seed != null) {
             components.add(Component.translatable(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), seed)
                     .withColor(ChatFormatting.GRAY.getColor()));

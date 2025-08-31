@@ -60,12 +60,12 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             .create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("default"));
 
     public static RiftGenerationConfig initialize(ItemStack itemStack, Long unused, RegistryAccess registries) {
-        var preset = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.GENERATOR_PRESET);
+        var preset = itemStack.get(WotrDataComponentType.RiftConfigComponents.GENERATOR_PRESET);
         if (preset == null) {
             preset = registries.holderOrThrow(DEFAULT_PRESET_KEY);
         }
         var config = preset.value();
-        var layerEdits = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.LAYOUT_LAYER_EDIT);
+        var layerEdits = itemStack.get(WotrDataComponentType.RiftConfigComponents.LAYOUT_LAYER_EDIT);
         if (layerEdits != null && config.layout() instanceof LayeredRiftLayout.Factory layered) {
             var layers = layered.layers();
             for (var edit : layerEdits) {
@@ -73,7 +73,7 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             }
             config = config.withLayout(layered.withLayers(layers));
         }
-        var jigsawEdits = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.JIGSAW_PROCESSORS_EDIT);
+        var jigsawEdits = itemStack.get(WotrDataComponentType.RiftConfigComponents.JIGSAW_PROCESSORS_EDIT);
         if (jigsawEdits != null) {
             var jigsaws = config.jigsawProcessors();
             for (var edit : jigsawEdits) {
@@ -81,7 +81,7 @@ public record RiftGenerationConfig(RiftLayout.Factory layout, RiftRoomGenerator.
             }
             config = config.withJigsawProcessors(jigsaws);
         }
-        var postStepsEdits = itemStack.get(WotrDataComponentType.RiftConfigWotrDataComponentType.POST_STEPS_EDIT);
+        var postStepsEdits = itemStack.get(WotrDataComponentType.RiftConfigComponents.POST_STEPS_EDIT);
         if (postStepsEdits != null) {
             var postSteps = config.postProcessingSteps();
             for (var edit : postStepsEdits) {
