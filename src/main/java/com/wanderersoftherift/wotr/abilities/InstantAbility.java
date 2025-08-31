@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,7 +10,6 @@ import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,18 +22,20 @@ public class InstantAbility extends Ability {
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(InstantAbility::getSmallIcon),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
-                            .forGetter(Ability::getActivationRequirements),
+                            .forGetter(InstantAbility::getActivationRequirements),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("effects", Collections.emptyList())
                             .forGetter(InstantAbility::getEffects)
             ).apply(instance, InstantAbility::new));
 
+    private final List<AbilityRequirement> activationRequirements;
     private final List<AbilityEffect> effects;
 
     public InstantAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
             List<AbilityRequirement> activationRequirements, List<AbilityEffect> effects) {
-        super(icon, smallIcon, activationRequirements);
-        this.effects = new ArrayList<>(effects);
+        super(icon, smallIcon);
+        this.effects = ImmutableList.copyOf(effects);
+        this.activationRequirements = ImmutableList.copyOf(activationRequirements);
     }
 
     @Override
@@ -61,7 +63,12 @@ public class InstantAbility extends Ability {
         return effects;
     }
 
+    public List<AbilityRequirement> getActivationRequirements() {
+        return activationRequirements;
+    }
+
     public boolean isRelevantModifier(ModifierEffect modifierEffect) {
-        return effects.stream().anyMatch(x -> x.isRelevant(modifierEffect)) || super.isRelevantModifier(modifierEffect);
+        return effects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
+                || activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
     }
 }
