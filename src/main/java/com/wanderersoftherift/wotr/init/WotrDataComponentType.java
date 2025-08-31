@@ -56,7 +56,7 @@ public class WotrDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(
             "gear_rift_tier", Codec.INT, ByteBufCodecs.INT);
 
-    public static class RiftConfigComponents {
+    public static class RiftKeyData {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_TIER = register(
                 "rift_config/tier", Codec.INT, ByteBufCodecs.INT);
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<RiftTheme>>> RIFT_THEME = register(
@@ -101,6 +101,6 @@ public class WotrDataComponentType {
     }
 
     static {
-        var unused = RiftConfigComponents.RIFT_TIER; // invokes <cinit>
+        var unused = RiftKeyData.RIFT_TIER; // invokes <cinit>
     }
 }
