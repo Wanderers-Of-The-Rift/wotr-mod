@@ -2,14 +2,11 @@
   "type": "wotr:persistent",
   "icon": "minecraft:textures/item/fire_charge.png",
   "can_deactivate": false,
-  "channelled": true,
+  "channelled": false,
   "requirements": [
     {
       "type": "wotr:mana",
       "amount": 10
-    },
-    {
-      "type": "wotr:no_move"
     }
   ],
   "on_deactivation_costs": [

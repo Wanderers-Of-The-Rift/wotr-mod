@@ -130,4 +130,14 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
             }
         }
     }
+
+    /**
+     * @param newAbility
+     * @param newSource
+     * @return A new context for a new ability and source, carrying across all other values
+     */
+    public AbilityContext forSubAbility(Holder<Ability> newAbility, AbilitySource newSource) {
+        return new AbilityContext(instanceId, newAbility, caster, abilityItem, newSource, level, upgrades, enhancements,
+                conditions);
+    }
 }

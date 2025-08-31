@@ -2,17 +2,20 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
+import com.wanderersoftherift.wotr.util.LongRange;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -32,13 +35,9 @@ public abstract class Ability {
     private final ResourceLocation icon;
     private final Optional<ResourceLocation> smallIcon;
 
-    private final List<AbilityRequirement> activationRequirements;
-
-    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
-            List<AbilityRequirement> activationRequirements) {
+    public Ability(ResourceLocation icon, Optional<ResourceLocation> smallIcon) {
         this.icon = icon;
         this.smallIcon = smallIcon;
-        this.activationRequirements = activationRequirements;
     }
 
     public static Component getDisplayName(Holder<Ability> ability) {
@@ -53,6 +52,10 @@ public abstract class Ability {
      */
     public ResourceLocation getIcon() {
         return icon;
+    }
+
+    public ResourceLocation getIcon(LivingEntity entity, AbilitySource source) {
+        return getIcon();
     }
 
     /**
@@ -99,22 +102,22 @@ public abstract class Ability {
     public void deactivate(AbilityContext context) {
     }
 
-    ///  Costs
-
-    public List<AbilityRequirement> getActivationRequirements() {
-        return activationRequirements;
-    }
-
     ///  Upgrade support
 
-    public boolean isRelevantModifier(ModifierEffect modifierEffect) {
-        return activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
-    }
+    public abstract boolean isRelevantModifier(ModifierEffect modifierEffect);
 
     /**
      * @return Is this ability interrupted by other actions
      */
     public boolean isChannelled() {
         return false;
+    }
+
+    public LongRange getCooldown(LivingEntity entity, AbilitySource abilitySource) {
+        return entity.getData(WotrAttachments.ABILITY_COOLDOWNS).getCooldown(abilitySource);
+    }
+
+    public boolean isActive(LivingEntity entity, AbilitySource abilitySource) {
+        return entity.getData(WotrAttachments.ABILITY_STATES).isActive(abilitySource);
     }
 }
