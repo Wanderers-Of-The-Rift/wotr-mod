@@ -126,7 +126,7 @@ public class OngoingAbilities {
         }
         for (ActiveAbility instance : ImmutableList.copyOf(activeAbilities)) {
             instance.age++;
-            AbilityContext context = instance.generateContext(attachedTo);
+            AbilityContext context = instance.createContext(attachedTo);
             try (var ignore = context.enableTemporaryUpgradeModifiers()) {
                 if (instance.ability.value().tick(context, instance.age)) {
                     activeAbilities.remove(instance);
@@ -157,7 +157,7 @@ public class OngoingAbilities {
         }
         List<ActiveAbility> channelled = activeAbilities.stream().filter(predicate).toList();
         channelled.forEach(instance -> {
-            AbilityContext abilityContext = instance.generateContext(attachedTo);
+            AbilityContext abilityContext = instance.createContext(attachedTo);
             try (var ignored = abilityContext.enableTemporaryUpgradeModifiers()) {
                 instance.ability.value().deactivate(abilityContext);
             }
@@ -202,7 +202,7 @@ public class OngoingAbilities {
             return this.ability.equals(ability) && Objects.equals(source, this.source);
         }
 
-        AbilityContext generateContext(LivingEntity owner) {
+        AbilityContext createContext(LivingEntity owner) {
             return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), upgrades);
         }
 
