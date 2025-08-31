@@ -24,7 +24,7 @@ public class PersistentAbility extends Ability {
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(PersistentAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(PersistentAbility::getSmallIcon),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(PersistentAbility::getWarmupTime),
-                    Codec.BOOL.optionalFieldOf("toggleable", true).forGetter(PersistentAbility::isToggleable),
+                    Codec.BOOL.optionalFieldOf("can_deactivate", true).forGetter(PersistentAbility::canDeactivate),
                     Codec.BOOL.optionalFieldOf("channelled", false).forGetter(PersistentAbility::isChannelled),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
@@ -44,7 +44,7 @@ public class PersistentAbility extends Ability {
             ).apply(instance, PersistentAbility::new));
 
     private final int warmupTime;
-    private final boolean toggleable;
+    private final boolean canDeactivate;
     private final boolean channelled;
     private final List<AbilityRequirement> ongoingRequirements;
     private final List<AbilityEffect> activationEffects;
@@ -52,12 +52,12 @@ public class PersistentAbility extends Ability {
     private final List<AbilityRequirement> onDeactivationCosts;
 
     public PersistentAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int warmupTime,
-            boolean toggleable, boolean channelled, List<AbilityRequirement> activationRequirements,
+            boolean canDeactivate, boolean channelled, List<AbilityRequirement> activationRequirements,
             List<AbilityRequirement> ongoingRequirements, List<AbilityRequirement> onDeactivationCosts,
             List<AbilityEffect> activationEffects, List<AbilityEffect> deactivationEffects) {
         super(icon, smallIcon, activationRequirements);
         this.warmupTime = warmupTime;
-        this.toggleable = toggleable;
+        this.canDeactivate = canDeactivate;
         this.channelled = channelled;
         this.ongoingRequirements = ongoingRequirements;
         this.onDeactivationCosts = onDeactivationCosts;
@@ -68,7 +68,7 @@ public class PersistentAbility extends Ability {
     @Override
     public boolean canActivate(AbilityContext context) {
         if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.source())) {
-            return toggleable;
+            return canDeactivate;
         } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         } else {
@@ -86,7 +86,7 @@ public class PersistentAbility extends Ability {
                 return tick(context, 0);
             }
             return false;
-        } else if (toggleable) {
+        } else if (canDeactivate) {
             deactivate(context, states);
             return true;
         }
@@ -130,8 +130,8 @@ public class PersistentAbility extends Ability {
                 || super.isRelevantModifier(modifierEffect);
     }
 
-    public boolean isToggleable() {
-        return toggleable;
+    public boolean canDeactivate() {
+        return canDeactivate;
     }
 
     @Override

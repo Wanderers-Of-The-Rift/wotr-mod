@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -20,7 +21,7 @@ import java.util.UUID;
  * needing to be looked up in the level
  */
 public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId, ItemStack abilityItem,
-        AbilitySource source, AbilityUpgradePool upgrades) {
+        AbilitySource source, Optional<AbilityUpgradePool> upgrades) {
 
     public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("instance_id").forGetter(x -> x.instanceId),
@@ -28,16 +29,16 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
             UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
             ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
             AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(x -> x.source),
-            AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(x -> x.upgrades)
+            AbilityUpgradePool.CODEC.optionalFieldOf("upgrades").forGetter(x -> x.upgrades)
     ).apply(instance, StoredAbilityContext::new));
 
     public StoredAbilityContext(AbilityContext context) {
         this(context.instanceId(), context.ability(), context.caster().getUUID(), context.abilityItem(),
-                context.source(), context.upgrades());
+                context.source(), Optional.ofNullable(context.upgrades()));
     }
 
     public AbilityContext toContext(LivingEntity caster, Level level) {
-        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, upgrades);
+        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, upgrades.orElse(null));
     }
 
     public LivingEntity getCaster(MinecraftServer server) {

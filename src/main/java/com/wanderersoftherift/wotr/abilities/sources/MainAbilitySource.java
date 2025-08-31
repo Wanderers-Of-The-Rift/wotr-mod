@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.codec.StreamCodec;
@@ -43,16 +44,16 @@ public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource
 
     @Override
     public Holder<Ability> getAbility(Entity entity) {
-        return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
+        ActivatableAbility mainAbility = slot.getContent(entity).get(WotrDataComponentType.ABILITY);
+        if (mainAbility != null) {
+            return mainAbility.ability();
+        }
+        return null;
     }
 
     @Override
     public AbilityUpgradePool upgrades(Entity entity) {
         return slot.getContent(entity).get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
-    }
-
-    public Holder<Ability> getMainAbility(Entity entity) {
-        return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
     }
 
     @Override
