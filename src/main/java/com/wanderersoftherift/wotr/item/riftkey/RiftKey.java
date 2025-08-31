@@ -158,13 +158,14 @@ public class RiftKey extends Item {
     }
 
     private void spawnRift(Level level, Vec3 pos, Direction dir, ItemStack riftKey) {
-        RiftPortalEntranceEntity rift = new RiftPortalEntranceEntity(WotrEntities.RIFT_ENTRANCE.get(), level);
-        rift.setPos(pos);
-        rift.setYRot(dir.toYRot());
-        rift.setBillboard(dir.getAxis().isVertical());
-        rift.setKeyItem(riftKey);
-        level.addFreshEntity(rift);
-        rift.playSound(WotrSoundEvents.RIFT_OPEN.value());
+        RiftPortalEntranceEntity portalEntranceEntity = new RiftPortalEntranceEntity(WotrEntities.RIFT_ENTRANCE.get(),
+                level);
+        portalEntranceEntity.setPos(pos);
+        portalEntranceEntity.setYRot(dir.toYRot());
+        portalEntranceEntity.setBillboard(dir.getAxis().isVertical());
+        portalEntranceEntity.setKeyItem(riftKey);
+        level.addFreshEntity(portalEntranceEntity);
+        portalEntranceEntity.playSound(WotrSoundEvents.RIFT_OPEN.value());
     }
 
 }

@@ -17,7 +17,7 @@ import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
-import com.wanderersoftherift.wotr.entity.portal.RiftEntranceAttachment;
+import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
@@ -46,11 +46,8 @@ public class WotrAttachments {
                     .serialize(MutableListCodec.of(RiftEntryState.CODEC))
                     .copyOnDeath()
                     .build());
-    public static final Supplier<AttachmentType<RiftEntranceAttachment>> RIFT_ENTRANCE = ATTACHMENT_TYPES.register(
-            "rift_entrance",
-            () -> AttachmentType.builder(() -> new RiftEntranceAttachment())
-                    .serialize(RiftEntranceAttachment.CODEC)
-                    .build()
+    public static final Supplier<AttachmentType<RiftEntrance>> RIFT_ENTRANCE = ATTACHMENT_TYPES.register(
+            "rift_entrance", () -> AttachmentType.builder(RiftEntrance::create).serialize(RiftEntrance.CODEC).build()
     );
 
     /// Rift

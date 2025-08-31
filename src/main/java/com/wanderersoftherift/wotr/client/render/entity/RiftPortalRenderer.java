@@ -126,9 +126,9 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
         state.facingDir = entity.getDirection();
         state.billboard = entity.isBillboard();
 
-        if (entity instanceof RiftPortalEntranceEntity entrance) {
+        if (entity instanceof RiftPortalEntranceEntity portalEntranceEntity) {
             state.banned = Minecraft.getInstance().player.getData(WotrAttachments.BANNED_RIFTS)
-                    .isBannedFrom(entrance.getRiftDimensionId().location());
+                    .isBannedFrom(portalEntranceEntity.entrance().target().location());
         }
     }
 

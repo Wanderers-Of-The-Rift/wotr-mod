@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -15,4 +16,6 @@ public class WotrEntityDataSerializers {
     public static final Supplier<EntityDataSerializer<SimpleProjectileConfig.SimpleProjectileConfigRenderConfig>> SIMPLE_PROJECTILE_RENDER_CONFIG = ENTITY_DATA_SERIALIZERS
             .register("simple_projectile_render_config", () -> EntityDataSerializer
                     .forValueType(SimpleProjectileConfig.SimpleProjectileConfigRenderConfig.STREAM_CODEC));
+    public static final Supplier<EntityDataSerializer<RiftEntrance>> RIFT_ENTRANCE = ENTITY_DATA_SERIALIZERS
+            .register("rift_entrance", () -> EntityDataSerializer.forValueType(RiftEntrance.STREAM_CODEC));
 }
