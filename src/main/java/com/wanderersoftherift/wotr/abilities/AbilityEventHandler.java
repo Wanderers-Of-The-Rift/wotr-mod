@@ -67,14 +67,14 @@ public class AbilityEventHandler {
     public static void onItemUsed(LivingEntityUseItemEvent event) {
         event.getEntity()
                 .getExistingData(WotrAttachments.ONGOING_ABILITIES)
-                .ifPresent(OngoingAbilities::interruptChannelledAbilties);
+                .ifPresent(OngoingAbilities::interruptChannelledAbilities);
     }
 
     @SubscribeEvent
     public static void onWeaponUsed(AttackEntityEvent event) {
         event.getEntity()
                 .getExistingData(WotrAttachments.ONGOING_ABILITIES)
-                .ifPresent(OngoingAbilities::interruptChannelledAbilties);
+                .ifPresent(OngoingAbilities::interruptChannelledAbilities);
     }
 
     @SubscribeEvent

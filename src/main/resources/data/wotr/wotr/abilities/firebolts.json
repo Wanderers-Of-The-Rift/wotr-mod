@@ -1,7 +1,7 @@
 {
   "type": "wotr:persistent",
   "icon": "minecraft:textures/item/fire_charge.png",
-  "toggleable": false,
+  "can_deactivate": false,
   "channelled": true,
   "requirements": [
     {
