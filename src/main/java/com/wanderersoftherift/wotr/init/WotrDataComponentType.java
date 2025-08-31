@@ -53,8 +53,11 @@ public class WotrDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CurrencyProvider>> CURRENCY_PROVIDER = register(
             "currency_provider", CurrencyProvider.CODEC, CurrencyProvider.STREAM_CODEC);
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(
+            "gear_rift_tier", Codec.INT, ByteBufCodecs.INT);
+
     public static class RiftConfigWotrDataComponentType {
-        public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ITEM_RIFT_TIER = register(
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_TIER = register(
                 "rift_config/tier", Codec.INT, ByteBufCodecs.INT);
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<RiftTheme>>> RIFT_THEME = register(
                 "rift_config/theme", RiftTheme.CODEC, RiftTheme.STREAM_CODEC);
@@ -98,6 +101,6 @@ public class WotrDataComponentType {
     }
 
     static {
-        var unused = RiftConfigWotrDataComponentType.ITEM_RIFT_TIER; // invokes <cinit>
+        var unused = RiftConfigWotrDataComponentType.RIFT_TIER; // invokes <cinit>
     }
 }

@@ -178,7 +178,7 @@ public class KeyForgeMenu extends AbstractContainerMenu {
 
         if (tier > 0) {
             ItemStack output = WotrItems.RIFT_KEY.toStack();
-            output.set(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER, tier);
+            output.set(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER, tier);
             output = applyKeyforgeRecipes(output, input);
             resultContainer.setItem(0, output);
         }

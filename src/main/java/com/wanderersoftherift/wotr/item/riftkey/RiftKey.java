@@ -122,8 +122,8 @@ public class RiftKey extends Item {
             components.add(Component.literal("Other generator edits").withColor(ChatFormatting.GRAY.getColor()));
         }
 
-        if (stack.has(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER)) {
-            int tier = stack.getOrDefault(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER, 0);
+        if (stack.has(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER)) {
+            int tier = stack.getOrDefault(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER, 0);
             components.add(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", tier)
                     .withColor(ChatFormatting.GRAY.getColor()));
         }

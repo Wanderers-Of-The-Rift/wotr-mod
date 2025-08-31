@@ -21,7 +21,7 @@ public final class RiftConfigInitialization {
         var random = RandomSource.create();
         var seedOptional = item.get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_SEED);
         var themeOptional = item.get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_THEME);
-        var tierOptional = item.get(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER);
+        var tierOptional = item.get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER);
         var objectiveOptional = item.get(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_OBJECTIVE);
         long seed = Objects.requireNonNullElseGet(seedOptional, random::nextLong);
         var objective = Objects.requireNonNullElseGet(objectiveOptional, () -> defaultObjective(registries, seed));

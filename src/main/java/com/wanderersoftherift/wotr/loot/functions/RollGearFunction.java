@@ -67,7 +67,7 @@ public class RollGearFunction extends LootItemConditionalFunction {
         }
         int tier = LootUtil.getRiftTierFromContext(lootContext);
         if (tier > 0) {
-            itemStack.set(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER, tier);
+            itemStack.set(WotrDataComponentType.GEAR_RIFT_TIER, tier);
         }
         return itemStack;
     }

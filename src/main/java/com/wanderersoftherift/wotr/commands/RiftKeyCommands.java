@@ -426,7 +426,7 @@ public class RiftKeyCommands extends BaseCommand {
         if (key.isEmpty()) {
             return 0;
         }
-        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.ITEM_RIFT_TIER, tier);
+        key.set(WotrDataComponentType.RiftConfigWotrDataComponentType.RIFT_TIER, tier);
         context.getSource()
                 .sendSuccess(() -> Component
                         .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_tier"), tier), true);
