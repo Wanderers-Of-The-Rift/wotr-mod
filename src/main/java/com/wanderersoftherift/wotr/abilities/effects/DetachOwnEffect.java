@@ -42,10 +42,11 @@ public class DetachOwnEffect extends AbilityEffect {
         for (Entity target : targets) {
             applyParticlesToTarget(target);
             AttachedEffects attachedEffects = target.getData(WotrAttachments.ATTACHED_EFFECTS);
-            id.ifPresentOrElse(
-                    (identifier) -> attachedEffects.detach(context.instanceId(), effect -> effect.getId().equals(id)),
-                    () -> attachedEffects.detach(context.instanceId())
-            );
+            if (id.isPresent()) {
+                attachedEffects.detach(context.instanceId(), effect -> effect.getId().equals(id));
+            } else {
+                attachedEffects.detach(context.instanceId());
+            }
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 
