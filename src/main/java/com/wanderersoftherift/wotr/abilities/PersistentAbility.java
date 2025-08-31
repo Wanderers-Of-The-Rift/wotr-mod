@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -28,7 +29,7 @@ public class PersistentAbility extends Ability {
                     Codec.BOOL.optionalFieldOf("channelled", false).forGetter(PersistentAbility::isChannelled),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
-                            .forGetter(Ability::getActivationRequirements),
+                            .forGetter(PersistentAbility::getActivationRequirements),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("ongoing_requirements", List.of())
                             .forGetter(PersistentAbility::getOngoingRequirements),
@@ -43,9 +44,12 @@ public class PersistentAbility extends Ability {
                             .forGetter(PersistentAbility::getDeactivationEffects)
             ).apply(instance, PersistentAbility::new));
 
+    private static final int ACTIVE = 1;
+
     private final int warmupTime;
     private final boolean canDeactivate;
     private final boolean channelled;
+    private final List<AbilityRequirement> activationRequirements;
     private final List<AbilityRequirement> ongoingRequirements;
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
@@ -55,14 +59,15 @@ public class PersistentAbility extends Ability {
             boolean canDeactivate, boolean channelled, List<AbilityRequirement> activationRequirements,
             List<AbilityRequirement> ongoingRequirements, List<AbilityRequirement> onDeactivationCosts,
             List<AbilityEffect> activationEffects, List<AbilityEffect> deactivationEffects) {
-        super(icon, smallIcon, activationRequirements);
+        super(icon, smallIcon);
         this.warmupTime = warmupTime;
         this.canDeactivate = canDeactivate;
         this.channelled = channelled;
-        this.ongoingRequirements = ongoingRequirements;
-        this.onDeactivationCosts = onDeactivationCosts;
-        this.activationEffects = activationEffects;
-        this.deactivationEffects = deactivationEffects;
+        this.activationRequirements = ImmutableList.copyOf(activationRequirements);
+        this.ongoingRequirements = ImmutableList.copyOf(ongoingRequirements);
+        this.onDeactivationCosts = ImmutableList.copyOf(onDeactivationCosts);
+        this.activationEffects = ImmutableList.copyOf(activationEffects);
+        this.deactivationEffects = ImmutableList.copyOf(deactivationEffects);
     }
 
     @Override
@@ -80,7 +85,7 @@ public class PersistentAbility extends Ability {
     public boolean activate(AbilityContext context) {
         AbilityStates states = context.caster().getData(WotrAttachments.ABILITY_STATES);
         if (!states.isActive(context.source())) {
-            states.setActive(context.source(), true);
+            states.setState(context.source(), ACTIVE);
             getActivationRequirements().forEach(x -> x.pay(context));
             if (warmupTime == 0) {
                 return tick(context, 0);
@@ -101,7 +106,7 @@ public class PersistentAbility extends Ability {
 
     @Override
     public void clientActivate(AbilityContext context) {
-        context.caster().getData(WotrAttachments.ABILITY_STATES).setActive(context.source(), true);
+        context.caster().getData(WotrAttachments.ABILITY_STATES).setState(context.source(), ACTIVE);
     }
 
     @Override
@@ -119,7 +124,7 @@ public class PersistentAbility extends Ability {
     private void deactivate(AbilityContext context, AbilityStates states) {
         deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
         onDeactivationCosts.forEach(cost -> cost.pay(context));
-        states.setActive(context.source(), false);
+        states.setState(context.source(), 0);
     }
 
     @Override
@@ -127,7 +132,7 @@ public class PersistentAbility extends Ability {
         return activationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
                 || deactivationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
                 || onDeactivationCosts.stream().anyMatch(x -> x.isRelevant(modifierEffect))
-                || super.isRelevantModifier(modifierEffect);
+                || activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
     }
 
     public boolean canDeactivate() {
@@ -137,6 +142,10 @@ public class PersistentAbility extends Ability {
     @Override
     public boolean isChannelled() {
         return channelled;
+    }
+
+    public List<AbilityRequirement> getActivationRequirements() {
+        return activationRequirements;
     }
 
     public List<AbilityRequirement> getOngoingRequirements() {

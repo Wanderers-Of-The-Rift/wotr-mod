@@ -1,0 +1,15 @@
+{
+  "type": "wotr:chain",
+  "icon": "minecraft:textures/mob_effect/speed.png",
+  "abilities": [
+    {
+      "ability": "wotr:dash"
+    },
+    {
+      "ability": "wotr:firebolts"
+    },
+    {
+      "ability": "wotr:heal"
+    }
+  ]
+}
