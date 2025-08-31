@@ -1,18 +1,11 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.init.WotrBlocks;
-import com.wanderersoftherift.wotr.loot.predicates.RiftLevelCheck;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
