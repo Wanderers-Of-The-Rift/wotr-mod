@@ -28,7 +28,6 @@
         "MixinOctahedralGroup",
         "MixinProtoChunk",
         "MixinRegionFileVersion",
-        "MixinServerPlayer",
         "MixinSetItemDamageFunction",
         "MixinStairBlock",
         "MixinStructureTemplate",
