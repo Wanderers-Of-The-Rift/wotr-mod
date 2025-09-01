@@ -39,6 +39,13 @@ repositories {
             includeGroup("dev.architectury")
         }
     }
+
+    maven {
+        url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
+        content {
+            includeGroup "com.klikli_dev"
+        }
+    }
 }
 
 base {
@@ -144,6 +151,7 @@ dependencies {
 
     implementation "maven.modrinth:sophisticated-core:${sophisticated_core_version}"
     implementation "maven.modrinth:sophisticated-backpacks:${sophisticated_backpacks_version}"
+    implementation ("com.klikli_dev:modonomicon-${minecraft_version}-neoforge:${modonomicon_version}"){transitive=false}
 
     runtimeOnly "curse.maven:sodium-394468:${sodium_version}"
     runtimeOnly "curse.maven:spark-361579:${spark_version}"
