@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.ModifierHelper;
+import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -27,7 +27,7 @@ import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
 public class AbilityEventHandler {
 
     @SubscribeEvent
-    public static void collectAbilitySlots(ModifierHelper.CollectEquipmentSlotsEvent event) {
+    public static void collectAbilitySlots(CollectEquipmentSlotsEvent event) {
         if (event.getEntity() instanceof IAttachmentHolder holder) {
             var slotCount = holder.getData(WotrAttachments.ABILITY_SLOTS).getSlots();
             for (int i = 0; i < slotCount && i < AbilityEquipmentSlot.SLOTS.size(); i++) {
