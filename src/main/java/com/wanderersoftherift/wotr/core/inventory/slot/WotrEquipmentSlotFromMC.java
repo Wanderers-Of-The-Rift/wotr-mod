@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.core.inventory.slot;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.modifier.ModifierHelper;
+import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -91,7 +91,7 @@ public record WotrEquipmentSlotFromMC(EquipmentSlot minecraftSlot, TagKey<Item> 
     public static class Register {
 
         @SubscribeEvent
-        private static void collectMinecraftSlots(ModifierHelper.CollectEquipmentSlotsEvent event) {
+        private static void collectMinecraftSlots(CollectEquipmentSlotsEvent event) {
             if (event.getEntity() instanceof LivingEntity) {
                 if (event.getEntity() instanceof Animal) {
                     SLOTS.stream()
