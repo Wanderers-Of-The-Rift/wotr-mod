@@ -18,26 +18,29 @@ public class RiftMobEntry extends EntryProvider {
 
     @Override
     protected void generatePages() {
-        this.page("entity", () -> BookTextPageModel.create()
-                .withTitle(this.context().pageTitle())
-                .withText(this.context().pageText())
+        this.page("entity",
+                () -> BookTextPageModel.create()
+                        .withTitle(this.context().pageTitle())
+                        .withText(this.context().pageText())
         );
         this.pageTitle("Mobs!");
         this.pageText("""
                 You will come across various enemy mobs throughout the rift. Be prepared to defend yourself!
                 """);
 
-        this.page("entity1", () -> BookEntityPageModel.create()
-                .withEntityName(this.context().pageTitle())
-                .withEntityId("minecraft:zombie")
-                .withScale(0.5f)
+        this.page("entity1",
+                () -> BookEntityPageModel.create()
+                        .withEntityName(this.context().pageTitle())
+                        .withEntityId("minecraft:zombie")
+                        .withScale(0.5f)
         );
         this.pageTitle("Mob Variants");
 
-        this.page("entity2", () -> BookEntityPageModel.create()
-                .withText(this.context().pageText())
-                .withEntityId("minecraft:spider")
-                .withScale(1f)
+        this.page("entity2",
+                () -> BookEntityPageModel.create()
+                        .withText(this.context().pageText())
+                        .withEntityId("minecraft:spider")
+                        .withScale(1f)
         );
         this.pageText("A sample entity page with automatic title.");
     }
@@ -67,4 +70,3 @@ public class RiftMobEntry extends EntryProvider {
         return ID;
     }
 }
-

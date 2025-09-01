@@ -21,14 +21,14 @@ public class RiftCategory extends CategoryProvider {
         // The entry map allows to define where entries are in relation to each other.
         // It is recommended to use a single character per entry
         // (if you think you are running out of characters .. any unicode character works.)
-        //spotless:off
+        // spotless:off
         return new String[] {
                 "_________________",
                 "_____l___________",
                 "_________________",
                 "_____m___________",
                 "_________________"};
-        //spotless:on
+        // spotless:on
     }
 
     @Override

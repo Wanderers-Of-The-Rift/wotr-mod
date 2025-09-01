@@ -22,7 +22,7 @@ public class IntroCategory extends CategoryProvider {
         // The entry map allows to define where entries are in relation to each other.
         // It is recommended to use a single character per entry
         // (if you think you are running out of characters .. any unicode character works.)
-        //spotless:off
+        // spotless:off
         return new String[] {
                 "_____________________",
                 "_____w_r___s_________",
@@ -32,7 +32,7 @@ public class IntroCategory extends CategoryProvider {
                 "_____________________",
                 "_____________________",
                 "_____________________" };
-        //spotless:on
+        // spotless:on
     }
 
     @Override

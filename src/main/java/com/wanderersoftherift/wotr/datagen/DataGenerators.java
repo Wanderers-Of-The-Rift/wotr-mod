@@ -75,14 +75,13 @@ public class DataGenerators {
         event.createProvider(WotrLanguageProvider::new);
         var enUsCache = new LanguageProviderCache("en_us");
         DataGenerator generator = event.getGenerator();
-        generator.addProvider(true, NeoBookProvider.of(event,
-                        new WotrBook(Modonomicon.MOD_ID, enUsCache))
-        );
+        generator.addProvider(true, NeoBookProvider.of(event, new WotrBook(Modonomicon.MOD_ID, enUsCache)));
         generator.addProvider(true, new EnUsProvider(generator.getPackOutput(), enUsCache));
         generator.addProvider(true, new ModonomiconModelProvider(generator.getPackOutput()));
 
         var blockTagsProvider = new BlockTagsProvider(generator.getPackOutput(), event.getLookupProvider());
-        generator.addProvider(true,blockTagsProvider);
-        generator.addProvider(true, new ItemTagsProvider(generator.getPackOutput(), event.getLookupProvider(), blockTagsProvider.contentsGetter()));
+        generator.addProvider(true, blockTagsProvider);
+        generator.addProvider(true, new ItemTagsProvider(generator.getPackOutput(), event.getLookupProvider(),
+                blockTagsProvider.contentsGetter()));
     }
 }

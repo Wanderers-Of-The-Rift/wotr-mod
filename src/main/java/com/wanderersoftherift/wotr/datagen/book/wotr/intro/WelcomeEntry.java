@@ -18,9 +18,10 @@ public class WelcomeEntry extends EntryProvider {
 
     @Override
     protected void generatePages() {
-        this.page("intro", () -> BookTextPageModel.create()
-                .withTitle(this.context().pageTitle())
-                .withText(this.context().pageText())
+        this.page("intro",
+                () -> BookTextPageModel.create()
+                        .withTitle(this.context().pageTitle())
+                        .withText(this.context().pageText())
         );
         this.pageTitle("Welcome to WotR!");
         this.pageText("""

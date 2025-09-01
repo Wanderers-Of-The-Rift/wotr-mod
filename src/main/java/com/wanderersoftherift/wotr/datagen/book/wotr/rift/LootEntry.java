@@ -19,10 +19,11 @@ public class LootEntry extends EntryProvider {
 
     @Override
     protected void generatePages() {
-        this.page("intro", () -> BookSpotlightPageModel.create()
-                .withTitle(this.context().pageTitle())
-                .withText(this.context().pageText())
-                .withItem(Items.CHEST)
+        this.page("intro",
+                () -> BookSpotlightPageModel.create()
+                        .withTitle(this.context().pageTitle())
+                        .withText(this.context().pageText())
+                        .withItem(Items.CHEST)
         );
         this.pageTitle("Loot!");
         this.pageText("""
@@ -32,29 +33,33 @@ public class LootEntry extends EntryProvider {
                 """
         );
 
-        this.page("loot1", () -> BookSpotlightPageModel.create()
-                .withTitle(this.context().pageTitle())
-                .withText(this.context().pageText())
-                .withItem(Ingredient.of(WotrItems.RAW_RUNEGEM_GEODE))
+        this.page("loot1",
+                () -> BookSpotlightPageModel.create()
+                        .withTitle(this.context().pageTitle())
+                        .withText(this.context().pageText())
+                        .withItem(Ingredient.of(WotrItems.RAW_RUNEGEM_GEODE))
         );
         this.pageTitle("Runegem Geodes");
-        this.pageText("Runegem geodes can be cracked open by using them to reveal one of several types of runegem inside. Include link");
+        this.pageText(
+                "Runegem geodes can be cracked open by using them to reveal one of several types of runegem inside. Include link");
 
-        this.page("loot2", () -> BookSpotlightPageModel.create()
-                .withText(this.context().pageText())
-                .withItem(WotrItems.SKILL_THREAD)
+        this.page("loot2",
+                () -> BookSpotlightPageModel.create()
+                        .withText(this.context().pageText())
+                        .withItem(WotrItems.SKILL_THREAD)
         );
-        this.pageText("{0} can be used to improve your abilities. Include link",
-                this.itemLink(WotrItems.SKILL_THREAD)
+        this.pageText("{0} can be used to improve your abilities. Include link", this.itemLink(WotrItems.SKILL_THREAD)
         );
 
-        this.page("loot3", () -> BookSpotlightPageModel.create()
-                .withTitle(this.context().pageTitle())
-                .withText(this.context().pageText())
-                .withItem(Items.DIAMOND_SWORD)
+        this.page("loot3",
+                () -> BookSpotlightPageModel.create()
+                        .withTitle(this.context().pageTitle())
+                        .withText(this.context().pageText())
+                        .withItem(Items.DIAMOND_SWORD)
         );
         this.pageTitle("Gear");
-        this.pageText("Gear can be found in chests, with each gear piece having both additional implicit attributes and a number of sockets that can be filled to improve the gear. Include link");
+        this.pageText(
+                "Gear can be found in chests, with each gear piece having both additional implicit attributes and a number of sockets that can be filled to improve the gear. Include link");
     }
 
     @Override
