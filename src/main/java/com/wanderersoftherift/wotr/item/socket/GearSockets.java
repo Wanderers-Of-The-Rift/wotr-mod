@@ -68,9 +68,9 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
 
     @Override
     public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
-        List<GearSocket> socketsed = sockets();
-        for (int i = 0; i < socketsed.size(); i++) {
-            GearSocket socket = socketsed.get(i);
+        List<GearSocket> sockets = sockets();
+        for (int i = 0; i < sockets.size(); i++) {
+            GearSocket socket = sockets.get(i);
             if (socket.isEmpty()) {
                 continue;
             }

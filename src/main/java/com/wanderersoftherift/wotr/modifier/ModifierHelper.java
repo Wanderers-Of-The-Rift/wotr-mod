@@ -13,47 +13,69 @@ import java.util.List;
 
 public class ModifierHelper {
 
-    public static void runIterationOnItem(
+    public static void enableAllEquipment(LivingEntity entity) {
+        visitEquipmentModifierProviders(entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                .enableModifier(roll, entity, source, tier));
+    }
+
+    public static void enableItem(LivingEntity entity, EquipmentSlot slot) {
+        enableItem(entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
+    }
+
+    public static void enableItem(LivingEntity entity, WotrEquipmentSlot slot) {
+        enableItem(entity, slot, slot.getContent(entity));
+    }
+
+    public static void enableItem(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
+        enableItem(entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot), stack);
+    }
+
+    public static void enableItem(LivingEntity entity, WotrEquipmentSlot slot, ItemStack stack) {
+        if (slot.canAccept(stack)) {
+            visitItemModifierProviders(stack, slot, entity,
+                    (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                            .enableModifier(roll, entity, source, tier));
+        }
+    }
+
+    public static void disableAllEquipment(LivingEntity entity) {
+        visitEquipmentModifierProviders(entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                .disableModifier(roll, entity, source, tier));
+    }
+
+    public static void disableItem(LivingEntity entity, EquipmentSlot slot) {
+        disableItem(entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
+    }
+
+    public static void disableItem(LivingEntity entity, WotrEquipmentSlot slot) {
+        disableItem(entity, slot, slot.getContent(entity));
+    }
+
+    public static void disableItem(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
+        disableItem(entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot), stack);
+    }
+
+    public static void disableItem(LivingEntity entity, WotrEquipmentSlot slot, ItemStack stack) {
+        if (slot.canAccept(stack)) {
+            visitItemModifierProviders(stack, slot, entity,
+                    (modifierHolder, tier, roll, source) -> modifierHolder.value()
+                            .disableModifier(roll, entity, source, tier));
+        }
+    }
+
+    private static void visitEquipmentModifierProviders(LivingEntity entity, ModifierProvider.Action action) {
+        var slots = NeoForge.EVENT_BUS.post(new CollectEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
+        for (var slot : slots) {
+            visitItemModifierProviders(slot.getContent(entity), slot, entity, action);
+        }
+    }
+
+    private static void visitItemModifierProviders(
             ItemStack stack,
             WotrEquipmentSlot slot,
             LivingEntity entity,
             ModifierProvider.Action action) {
         stack.getAllOfType(ModifierProvider.class).forEach(x -> x.forEachModifier(stack, slot, entity, action));
-    }
-
-    public static void runIterationOnEquipment(LivingEntity entity, ModifierProvider.Action action) {
-        var slots = NeoForge.EVENT_BUS.post(new CollectEquipmentSlotsEvent(new ArrayList<>(), entity)).getSlots();
-        for (var wotrSlot : slots) {
-            runIterationOnItem(wotrSlot.getContent(entity), wotrSlot, entity, action);
-        }
-    }
-
-    public static void enableModifier(LivingEntity entity) {
-        runIterationOnEquipment(entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
-                .enableModifier(roll, entity, source, tier));
-    }
-
-    public static void enableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        enableModifier(stack, entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
-    }
-
-    public static void enableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
-        runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
-                .enableModifier(roll, entity, source, tier));
-    }
-
-    public static void disableModifier(LivingEntity entity) {
-        runIterationOnEquipment(entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
-                .disableModifier(roll, entity, source, tier));
-    }
-
-    public static void disableModifier(ItemStack stack, LivingEntity entity, EquipmentSlot slot) {
-        disableModifier(stack, entity, WotrEquipmentSlotFromMC.fromVanillaSlot(slot));
-    }
-
-    public static void disableModifier(ItemStack stack, LivingEntity entity, WotrEquipmentSlot slot) {
-        runIterationOnItem(stack, slot, entity, (modifierHolder, tier, roll, source) -> modifierHolder.value()
-                .disableModifier(roll, entity, source, tier));
     }
 
     public static class CollectEquipmentSlotsEvent extends Event {
