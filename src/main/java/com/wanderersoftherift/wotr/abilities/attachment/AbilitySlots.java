@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.init.WotrTags;
-import com.wanderersoftherift.wotr.modifier.ModifierHelper;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.Tag;
@@ -169,8 +168,6 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     private void onSlotChanged(int slot, ItemStack original, ItemStack newStack) {
         if (holder instanceof LivingEntity livingEntity) {
-            ModifierHelper.disableModifier(original, livingEntity, AbilityEquipmentSlot.forSlot(slot));
-            ModifierHelper.enableModifier(newStack, livingEntity, AbilityEquipmentSlot.forSlot(slot));
             NeoForge.EVENT_BUS.post(new WotrEquipmentSlotEvent.Changed(livingEntity, AbilityEquipmentSlot.forSlot(slot),
                     original, newStack));
         }
