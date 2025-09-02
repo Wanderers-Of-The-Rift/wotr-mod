@@ -28,16 +28,18 @@ import java.util.UUID;
  * @param abilityItem The item holding the ability (and any upgrades)
  * @param source      The source the ability was provided by
  * @param level       The level the ability is present in
+ * @param age         How long the ability has been active
  * @param upgrades
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, AbilitySource source, Level level, @NotNull List<Holder<AbilityUpgrade>> upgrades) {
+        ItemStack abilityItem, AbilitySource source, Level level, long age,
+        @NotNull List<Holder<AbilityUpgrade>> upgrades) {
 
     /**
      * @return The current game time
      */
-    public long gameTime() {
-        return level().getGameTime();
+    public long age() {
+        return age;
     }
 
     /**
@@ -101,6 +103,6 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * @return A new context for a new ability and source, carrying across all other values
      */
     public AbilityContext forSubAbility(Holder<Ability> newAbility, AbilitySource newSource) {
-        return new AbilityContext(instanceId, newAbility, caster, abilityItem, newSource, level, upgrades);
+        return new AbilityContext(instanceId, newAbility, caster, abilityItem, newSource, level, 0, upgrades);
     }
 }

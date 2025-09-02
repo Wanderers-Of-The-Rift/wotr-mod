@@ -18,12 +18,12 @@ import java.util.Optional;
 /**
  * An ability that persist until some condition fails to be met or is deactivated
  */
-public class PersistentAbility extends Ability {
+public class PersistentAbility implements Ability {
 
     public static final MapCodec<PersistentAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(PersistentAbility::getIcon),
-                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(PersistentAbility::getSmallIcon),
+                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(x -> x.smallIcon),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(PersistentAbility::getWarmupTime),
                     Codec.BOOL.optionalFieldOf("can_deactivate", true).forGetter(PersistentAbility::canDeactivate),
                     Codec.BOOL.optionalFieldOf("channelled", false).forGetter(PersistentAbility::isChannelled),
@@ -46,6 +46,8 @@ public class PersistentAbility extends Ability {
 
     private static final int ACTIVE = 1;
 
+    private final ResourceLocation icon;
+    private final Optional<ResourceLocation> smallIcon;
     private final int warmupTime;
     private final boolean canDeactivate;
     private final boolean channelled;
@@ -59,7 +61,8 @@ public class PersistentAbility extends Ability {
             boolean canDeactivate, boolean channelled, List<AbilityRequirement> activationRequirements,
             List<AbilityRequirement> ongoingRequirements, List<AbilityRequirement> onDeactivationCosts,
             List<AbilityEffect> activationEffects, List<AbilityEffect> deactivationEffects) {
-        super(icon, smallIcon);
+        this.icon = icon;
+        this.smallIcon = smallIcon;
         this.warmupTime = warmupTime;
         this.canDeactivate = canDeactivate;
         this.channelled = channelled;
@@ -68,6 +71,16 @@ public class PersistentAbility extends Ability {
         this.onDeactivationCosts = ImmutableList.copyOf(onDeactivationCosts);
         this.activationEffects = ImmutableList.copyOf(activationEffects);
         this.deactivationEffects = ImmutableList.copyOf(deactivationEffects);
+    }
+
+    @Override
+    public ResourceLocation getIcon() {
+        return icon;
+    }
+
+    @Override
+    public ResourceLocation getEmblem() {
+        return smallIcon.orElse(icon);
     }
 
     @Override
@@ -88,7 +101,7 @@ public class PersistentAbility extends Ability {
             states.setState(context.source(), ACTIVE);
             getActivationRequirements().forEach(x -> x.pay(context));
             if (warmupTime == 0) {
-                return tick(context, 0);
+                return tick(context);
             }
             return false;
         } else if (canDeactivate) {
@@ -110,8 +123,8 @@ public class PersistentAbility extends Ability {
     }
 
     @Override
-    public boolean tick(AbilityContext context, long age) {
-        if ((age - warmupTime) == 0) {
+    public boolean tick(AbilityContext context) {
+        if ((context.age() - warmupTime) == 0) {
             activationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
         }
         if (!ongoingRequirements.isEmpty() && ongoingRequirements.stream().anyMatch(x -> !x.check(context))) {

@@ -82,7 +82,7 @@ public class OngoingAbilities {
             ItemStack abilityItem,
             AbilitySource source) {
         AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
-                entity.level(), source.upgrades(entity));
+                entity.level(), 0, source.upgrades(entity));
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
@@ -98,14 +98,15 @@ public class OngoingAbilities {
             ItemStack abilityItem,
             AbilitySource source) {
         interruptChannelledAbilities();
-        Optional<UUID> existingId = activeAbilities.stream()
+        Optional<ActiveAbility> activeAbility = activeAbilities.stream()
                 .filter(x -> x.matches(ability, source))
-                .map(ActiveAbility::id)
                 .findFirst();
-        boolean existing = existingId.isPresent();
-        UUID id = existingId.orElseGet(UUID::randomUUID);
+        boolean existing = activeAbility.isPresent();
+        UUID id = activeAbility.map(x -> x.id).orElseGet(UUID::randomUUID);
         var upgrades = source.upgrades(entity);
-        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), upgrades);
+        long age = activeAbility.map(x -> x.age).orElse(0L);
+        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), age,
+                upgrades);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
@@ -128,7 +129,7 @@ public class OngoingAbilities {
             instance.age++;
             AbilityContext context = instance.createContext(attachedTo);
             try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-                if (instance.ability.value().tick(context, instance.age)) {
+                if (instance.ability.value().tick(context)) {
                     activeAbilities.remove(instance);
                 }
             }
@@ -205,7 +206,7 @@ public class OngoingAbilities {
         }
 
         AbilityContext createContext(LivingEntity owner) {
-            return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), upgrades);
+            return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), age, upgrades);
         }
 
         UUID id() {

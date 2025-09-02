@@ -37,8 +37,8 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
                 context.source(), context.upgrades());
     }
 
-    public AbilityContext toContext(LivingEntity caster, Level level) {
-        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, upgrades);
+    public AbilityContext toContext(LivingEntity caster, Level level, long age) {
+        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, age, upgrades);
     }
 
     public LivingEntity getCaster(MinecraftServer server) {
