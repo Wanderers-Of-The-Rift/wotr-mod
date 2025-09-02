@@ -19,9 +19,6 @@
     {
       "type": "wotr:own_attached_effect",
       "id": "main"
-    },
-    {
-      "type": "wotr:no_move"
     }
   ],
   "activation_effects": [

@@ -132,9 +132,10 @@ public final class AbilityBar implements ConfigurableLayer {
                 ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
                 ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
                 if (abilityComponent != null) {
+                    var abilitySource = AbilitySource.sourceForSlot(slot);
                     graphics.renderComponentTooltip(Minecraft.getInstance().font,
-                            List.of(Ability.getDisplayName(abilityComponent.ability())), mouseScreenPos.x,
-                            mouseScreenPos.y + 8);
+                            List.of(Ability.getDisplayName(abilityComponent.ability(), player, abilitySource)),
+                            mouseScreenPos.x, mouseScreenPos.y + 8);
                 }
             });
         }

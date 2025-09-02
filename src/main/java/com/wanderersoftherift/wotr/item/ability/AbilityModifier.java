@@ -67,7 +67,7 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
         );
 
         return new ImageComponent(stack, text.withStyle(style),
-                providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon()));
+                providedAbility.value().getEmblem());
     }
 
     private String getTierInfoString(int tier) {
