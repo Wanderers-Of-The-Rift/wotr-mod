@@ -14,12 +14,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class InstantAbility extends Ability {
+public class InstantAbility implements Ability {
 
     public static final MapCodec<InstantAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(InstantAbility::getIcon),
-                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(InstantAbility::getSmallIcon),
+                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(x -> x.smallIcon),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
                             .forGetter(InstantAbility::getActivationRequirements),
@@ -28,12 +28,15 @@ public class InstantAbility extends Ability {
                             .forGetter(InstantAbility::getEffects)
             ).apply(instance, InstantAbility::new));
 
+    private final ResourceLocation icon;
+    private final Optional<ResourceLocation> smallIcon;
     private final List<AbilityRequirement> activationRequirements;
     private final List<AbilityEffect> effects;
 
     public InstantAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
             List<AbilityRequirement> activationRequirements, List<AbilityEffect> effects) {
-        super(icon, smallIcon);
+        this.icon = icon;
+        this.smallIcon = smallIcon;
         this.effects = ImmutableList.copyOf(effects);
         this.activationRequirements = ImmutableList.copyOf(activationRequirements);
     }
@@ -41,6 +44,16 @@ public class InstantAbility extends Ability {
     @Override
     public MapCodec<? extends Ability> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public ResourceLocation getIcon() {
+        return icon;
+    }
+
+    @Override
+    public ResourceLocation getEmblem() {
+        return smallIcon.orElse(icon);
     }
 
     @Override

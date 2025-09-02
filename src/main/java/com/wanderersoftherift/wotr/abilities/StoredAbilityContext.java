@@ -44,8 +44,8 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
                 context.source(), context.upgrades(), context.enhancements(), List.copyOf(context.conditions()));
     }
 
-    public AbilityContext toContext(LivingEntity caster, Level level) {
-        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, upgrades, enhancements,
+    public AbilityContext toContext(LivingEntity caster, Level level, long age) {
+        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, age, upgrades, enhancements,
                 new HashSet<>(conditions));
     }
 
