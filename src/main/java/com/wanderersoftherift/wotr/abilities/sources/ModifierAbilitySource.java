@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities.sources;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public record ModifierAbilitySource(ModifierSource base, int effectIndex) implements AbilitySource {
 
@@ -44,8 +45,8 @@ public record ModifierAbilitySource(ModifierSource base, int effectIndex) implem
     }
 
     @Override
-    public AbilityUpgradePool upgrades(Entity entity) {
-        return AbilityUpgradePool.EMPTY; // todo how do we handle upgrades for these abilities
+    public @NotNull List<Holder<AbilityUpgrade>> upgrades(Entity entity) {
+        return List.of(); // todo how do we handle upgrades for these abilities
     }
 
     @Override
