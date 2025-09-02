@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.abilities.upgrade;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
@@ -110,13 +111,13 @@ public class AbilityUpgradePool {
      * @param choice
      * @return The selected upgrade for the given choice, if any
      */
-    public Optional<AbilityUpgrade> getSelectedUpgrade(int choice) {
+    public Optional<Holder<AbilityUpgrade>> getSelectedUpgrade(int choice) {
         if (choice >= selectedUpgrades.size()) {
             return Optional.empty();
         }
         int index = selectedUpgrades.getInt(choice);
         if (index >= 0 && index < choices.get(choice).size()) {
-            return Optional.of(choices.get(choice).get(index).value());
+            return Optional.of(choices.get(choice).get(index));
         }
         return Optional.empty();
     }
@@ -124,12 +125,12 @@ public class AbilityUpgradePool {
     /**
      * @return A map of all selected ability upgrades, and the number of times they have been selected
      */
-    public Object2IntMap<AbilityUpgrade> getAllSelected() {
-        Object2IntArrayMap<AbilityUpgrade> result = new Object2IntArrayMap<>();
+    public List<Holder<AbilityUpgrade>> getAllSelected() {
+        ImmutableList.Builder<Holder<AbilityUpgrade>> builder = ImmutableList.builder();
         for (int i = 0; i < getChoiceCount(); i++) {
-            getSelectedUpgrade(i).ifPresent(upgrade -> result.merge(upgrade, 1, Integer::sum));
+            getSelectedUpgrade(i).ifPresent(builder::add);
         }
-        return result;
+        return builder.build();
     }
 
     /**
@@ -137,7 +138,7 @@ public class AbilityUpgradePool {
      *
      * @param consumer A consumer that will be supplied with the index of each choice, and the selected upgrade if.
      */
-    public void forEachSelected(BiConsumer<Integer, AbilityUpgrade> consumer) {
+    public void forEachSelected(BiConsumer<Integer, Holder<AbilityUpgrade>> consumer) {
         for (int i = 0; i < getChoiceCount(); i++) {
             final int choice = i;
             getSelectedUpgrade(i).ifPresent(x -> consumer.accept(choice, x));

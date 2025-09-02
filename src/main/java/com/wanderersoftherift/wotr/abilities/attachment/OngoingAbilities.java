@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.MainAbilitySource;
-import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -173,14 +173,16 @@ public class OngoingAbilities {
                 AbilitySource.DIRECT_CODEC.fieldOf("item_slot").forGetter(ActiveAbility::source),
                 ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(ActiveAbility::abilityItem),
                 Codec.LONG.fieldOf("age").forGetter(ActiveAbility::age),
-                AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(ActiveAbility::upgrades)
+                AbilityUpgrade.REGISTRY_CODEC.listOf()
+                        .optionalFieldOf("upgrades", List.of())
+                        .forGetter(ActiveAbility::upgrades)
         ).apply(instance, ActiveAbility::new));
 
         private final UUID id;
         private final Holder<Ability> ability;
         private final AbilitySource source;
         private final ItemStack abilityItem;
-        private final AbilityUpgradePool upgrades;
+        private final List<Holder<AbilityUpgrade>> upgrades;
         private long age;
 
         ActiveAbility(AbilityContext context) {
@@ -189,7 +191,7 @@ public class OngoingAbilities {
         }
 
         ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
-                AbilityUpgradePool upgrades) {
+                List<Holder<AbilityUpgrade>> upgrades) {
             this.id = id;
             this.ability = ability;
             this.source = source;
@@ -226,7 +228,7 @@ public class OngoingAbilities {
             return age;
         }
 
-        AbilityUpgradePool upgrades() {
+        List<Holder<AbilityUpgrade>> upgrades() {
             return upgrades;
         }
     }
