@@ -1,39 +1,46 @@
 package com.wanderersoftherift.wotr.client.render.entity.mob;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.RiftSkeleton;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.AbstractSkeletonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.SkeletonRenderer;
-import net.minecraft.client.renderer.entity.state.SkeletonRenderState;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.monster.Skeleton;
 
-public class RiftSkeletonRenderer extends SkeletonRenderer {
+import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.MOB_VARIANTS;
+
+public class RiftSkeletonRenderer extends AbstractSkeletonRenderer<RiftSkeleton, RiftSkeletonRenderState> {
     // Makes render for RiftZombie from variant png
 
     public RiftSkeletonRenderer(EntityRendererProvider.Context context) {
-        super(context);
+        super(context, ModelLayers.SKELETON, ModelLayers.SKELETON_INNER_ARMOR, ModelLayers.SKELETON_OUTER_ARMOR);
     }
 
     @Override
-    public SkeletonRenderState createRenderState() {
+    public RiftSkeletonRenderState createRenderState() {
         return new RiftSkeletonRenderState();
     }
 
     @Override
-    public void extractRenderState(Skeleton entity, SkeletonRenderState state, float partialTick) {
-        super.extractRenderState(entity, state, partialTick);
-        if (entity instanceof RiftSkeleton riftSkeleton && state instanceof RiftSkeletonRenderState riftState) {
-            riftState.variant = riftSkeleton.getVariant();
-        }
+    public void extractRenderState(RiftSkeleton riftSkeleton, RiftSkeletonRenderState riftState, float partialTick) {
+        super.extractRenderState(riftSkeleton, riftState, partialTick);
+        riftState.variant = riftSkeleton.getVariant();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SkeletonRenderState state) {
-        String variant = "default_skeleton";
-        if (state instanceof RiftSkeletonRenderState riftState) {
-            variant = riftState.variant != null ? riftState.variant : "default_skeleton";
+    public ResourceLocation getTextureLocation(RiftSkeletonRenderState riftSkeletonRenderState) {
+        ResourceLocation variantId;
+        if (riftSkeletonRenderState.variant != null) {
+            variantId = riftSkeletonRenderState.variant;
+        } else {
+            variantId = WanderersOfTheRift.id("default_skeleton");
         }
-        return WanderersOfTheRift.id("textures/entity/mob/" + variant + ".png");
+
+        Registry<MobVariantData> registry = Minecraft.getInstance().level.registryAccess().lookupOrThrow(MOB_VARIANTS);
+
+        return MobVariantData.getTextureForVariant(variantId, registry, "skeleton");
     }
 }
