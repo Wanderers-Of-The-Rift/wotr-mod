@@ -2,11 +2,11 @@ package com.wanderersoftherift.wotr.item.socket;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.ModifierProvider;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.GearSocketModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
@@ -68,9 +68,9 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
 
     @Override
     public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
-        List<GearSocket> socketsed = sockets();
-        for (int i = 0; i < socketsed.size(); i++) {
-            GearSocket socket = socketsed.get(i);
+        List<GearSocket> sockets = sockets();
+        for (int i = 0; i < sockets.size(); i++) {
+            GearSocket socket = sockets.get(i);
             if (socket.isEmpty()) {
                 continue;
             }

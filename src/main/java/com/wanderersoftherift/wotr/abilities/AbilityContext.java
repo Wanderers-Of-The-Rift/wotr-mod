@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
-import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -28,33 +28,36 @@ import java.util.UUID;
  * @param abilityItem The item holding the ability (and any upgrades)
  * @param source      The source the ability was provided by
  * @param level       The level the ability is present in
+ * @param age         How long the ability has been active
  * @param upgrades
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades) {
+        ItemStack abilityItem, AbilitySource source, Level level, long age,
+        @NotNull List<Holder<AbilityUpgrade>> upgrades) {
 
     /**
      * @return The current game time
      */
-    public long gameTime() {
-        return level().getGameTime();
+    public long age() {
+        return age;
     }
 
     /**
      * Enables all modifiers that impact the ability
      */
     public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
-        if (upgrades == null || upgrades.isEmpty()) {
+        if (upgrades.isEmpty()) {
             return ExceptionlessAutoClosable.NOOP;
         }
-        upgrades.forEachSelected((selection, upgrade) -> {
-            ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
+        for (int index = 0; index < upgrades.size(); index++) {
+            ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
+            AbilityUpgrade upgrade = upgrades.get(index).value();
             List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
             for (int i = 0; i < modifierEffects.size(); i++) {
                 AbstractModifierEffect effect = modifierEffects.get(i);
                 effect.enableModifier(0, caster, source, i);
             }
-        });
+        }
         return this::disableUpgradeModifiers;
     }
 
@@ -83,16 +86,23 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
      */
     private void disableUpgradeModifiers() {
-        if (upgrades == null || upgrades.isEmpty()) {
-            return;
-        }
-        upgrades.forEachSelected((selection, upgrade) -> {
-            ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
+        for (int index = 0; index < upgrades.size(); index++) {
+            ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
+            AbilityUpgrade upgrade = upgrades.get(index).value();
             List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
             for (int i = 0; i < modifierEffects.size(); i++) {
                 AbstractModifierEffect effect = modifierEffects.get(i);
                 effect.disableModifier(0, caster, source, i);
             }
-        });
+        }
+    }
+
+    /**
+     * @param newAbility
+     * @param newSource
+     * @return A new context for a new ability and source, carrying across all other values
+     */
+    public AbilityContext forSubAbility(Holder<Ability> newAbility, AbilitySource newSource) {
+        return new AbilityContext(instanceId, newAbility, caster, abilityItem, newSource, level, 0, upgrades);
     }
 }

@@ -1,5 +1,5 @@
 {
-    "type": "wotr:standard",
+    "type": "wotr:instant",
     "icon" : "minecraft:textures/item/bone.png",
     "cooldown": 40,
     "effects": [

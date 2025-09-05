@@ -1,29 +1,30 @@
 {
   "type": "wotr:persistent",
-  "cooldown": 200,
+  "icon": "minecraft:textures/mob_effect/mining_fatigue.png",
+  "toggleable": true,
   "activation_effects": [
     {
       "type": "wotr:attach",
+      "id": "wotr:strength_effect",
       "targeting": {
         "type": "wotr:self"
       },
       "modifiers": [
         {
-          "modifier": "wotr:test_provide_golem_ability",
+          "modifier": "wotr:ability/damage_up",
           "tier": 1,
-          "roll": 0
+          "roll": 5
         }
       ]
     }
   ],
-  "deactivation_effects": [
+  "on_deactivation_effects": [
     {
       "type": "wotr:detach_own",
+      "id": "wotr:strength_effect",
       "targeting": {
         "type": "wotr:self"
       }
     }
-  ],
-  "icon": "minecraft:textures/mob_effect/speed.png",
-  "mana_cost": 10
+  ]
 }

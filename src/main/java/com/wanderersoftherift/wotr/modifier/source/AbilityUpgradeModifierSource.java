@@ -36,6 +36,6 @@ public record AbilityUpgradeModifierSource(AbilitySource ability, int selection)
 
     @Override
     public List<AbstractModifierEffect> getModifierEffects(Entity entity) {
-        return ability.upgrades(entity).getSelectedUpgrade(selection).get().modifierEffects();
+        return ability.upgrades(entity).get(selection).value().modifierEffects();
     }
 }

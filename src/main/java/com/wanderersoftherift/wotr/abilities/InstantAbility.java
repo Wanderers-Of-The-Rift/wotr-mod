@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,36 +10,50 @@ import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class StandardAbility extends Ability {
+public class InstantAbility implements Ability {
 
-    public static final MapCodec<StandardAbility> CODEC = RecordCodecBuilder.mapCodec(
+    public static final MapCodec<InstantAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    ResourceLocation.CODEC.fieldOf("icon").forGetter(StandardAbility::getIcon),
-                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(StandardAbility::getSmallIcon),
+                    ResourceLocation.CODEC.fieldOf("icon").forGetter(InstantAbility::getIcon),
+                    ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(x -> x.smallIcon),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
-                            .forGetter(Ability::getActivationRequirements),
+                            .forGetter(InstantAbility::getActivationRequirements),
                     Codec.list(AbilityEffect.DIRECT_CODEC)
                             .optionalFieldOf("effects", Collections.emptyList())
-                            .forGetter(StandardAbility::getEffects)
-            ).apply(instance, StandardAbility::new));
+                            .forGetter(InstantAbility::getEffects)
+            ).apply(instance, InstantAbility::new));
 
+    private final ResourceLocation icon;
+    private final Optional<ResourceLocation> smallIcon;
+    private final List<AbilityRequirement> activationRequirements;
     private final List<AbilityEffect> effects;
 
-    public StandardAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
+    public InstantAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
             List<AbilityRequirement> activationRequirements, List<AbilityEffect> effects) {
-        super(icon, smallIcon, activationRequirements);
-        this.effects = new ArrayList<>(effects);
+        this.icon = icon;
+        this.smallIcon = smallIcon;
+        this.effects = ImmutableList.copyOf(effects);
+        this.activationRequirements = ImmutableList.copyOf(activationRequirements);
     }
 
     @Override
     public MapCodec<? extends Ability> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public ResourceLocation getIcon() {
+        return icon;
+    }
+
+    @Override
+    public ResourceLocation getEmblem() {
+        return smallIcon.orElse(icon);
     }
 
     @Override
@@ -61,7 +76,12 @@ public class StandardAbility extends Ability {
         return effects;
     }
 
+    public List<AbilityRequirement> getActivationRequirements() {
+        return activationRequirements;
+    }
+
     public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
-        return effects.stream().anyMatch(x -> x.isRelevant(modifierEffect)) || super.isRelevantModifier(modifierEffect);
+        return effects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
+                || activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
     }
 }

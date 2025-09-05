@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -12,11 +14,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Tracks the state of the abilities for each equipment slot, and replicates to holder clients
@@ -28,7 +27,7 @@ public class AbilityStates {
 
     private final IAttachmentHolder holder;
 
-    private final Set<AbilitySource> activeSources = new LinkedHashSet<>();
+    private final Object2IntMap<AbilitySource> states = new Object2IntArrayMap<>();
 
     public AbilityStates(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -36,16 +35,17 @@ public class AbilityStates {
 
     private AbilityStates(@NotNull IAttachmentHolder holder, @Nullable Data data) {
         this.holder = holder;
+        states.defaultReturnValue(0);
         if (data != null) {
-            this.activeSources.addAll(data.activeSources);
+            this.states.putAll(data.activeSources);
         }
     }
 
     /**
      * @return A collection of all active slots
      */
-    public Collection<AbilitySource> getActiveSources() {
-        return Collections.unmodifiableSet(activeSources);
+    public Map<AbilitySource, Integer> getStates() {
+        return Collections.unmodifiableMap(states);
     }
 
     /**
@@ -54,12 +54,12 @@ public class AbilityStates {
      * @param source
      * @param value
      */
-    public void setActive(AbilitySource source, boolean value) {
+    public void setState(AbilitySource source, int value) {
         boolean changed;
-        if (value) {
-            changed = activeSources.add(source);
+        if (value != 0) {
+            changed = states.put(source, value) != value;
         } else {
-            changed = activeSources.remove(source);
+            changed = states.removeInt(source) != 0;
         }
         if (changed && holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new UpdateSlotAbilityStatePayload(source, value));
@@ -71,7 +71,17 @@ public class AbilityStates {
      * @return Whether the slot has an active ability
      */
     public boolean isActive(AbilitySource source) {
-        return activeSources.contains(source);
+        return states.getInt(source) != 0;
+    }
+
+    /**
+     * Get the state of a given ability source
+     * 
+     * @param source
+     * @return The state of the ability linked to the given source
+     */
+    public int getState(AbilitySource source) {
+        return states.getInt(source);
     }
 
     /**
@@ -79,9 +89,9 @@ public class AbilityStates {
      * 
      * @param activeSources
      */
-    public void clearAndSetActive(List<AbilitySource> activeSources) {
-        this.activeSources.clear();
-        this.activeSources.addAll(activeSources);
+    public void clearAndSetActive(Map<AbilitySource, Integer> activeSources) {
+        this.states.clear();
+        this.states.putAll(activeSources);
     }
 
     /// Serialization
@@ -91,11 +101,11 @@ public class AbilityStates {
     }
 
     private Data data() {
-        return new Data(List.copyOf(activeSources));
+        return new Data(Map.copyOf(states));
     }
 
-    private record Data(List<AbilitySource> activeSources) {
-        private static final Codec<Data> CODEC = AbilitySource.DIRECT_CODEC.listOf()
+    private record Data(Map<AbilitySource, Integer> activeSources) {
+        private static final Codec<Data> CODEC = Codec.unboundedMap(AbilitySource.DIRECT_CODEC, Codec.INT)
                 .xmap(Data::new, Data::activeSources);
     }
 
