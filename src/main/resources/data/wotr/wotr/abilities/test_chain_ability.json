@@ -1,15 +1,13 @@
 {
   "type": "wotr:chain",
-  "icon": "minecraft:textures/mob_effect/speed.png",
+  "icon": "minecraft:textures/mob_effect/strength.png",
   "abilities": [
     {
-      "ability": "wotr:dash"
+      "ability": "wotr:strength"
     },
     {
-      "ability": "wotr:firebolts"
-    },
-    {
-      "ability": "wotr:heal"
+      "ability": "wotr:weak_strength",
+      "auto_activate": true
     }
   ]
 }

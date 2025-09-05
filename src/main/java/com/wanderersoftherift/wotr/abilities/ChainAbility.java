@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityStates;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.ChainAbilitySource;
@@ -74,19 +73,47 @@ public class ChainAbility implements Ability {
 
     @Override
     public boolean activate(AbilityContext context) {
-        context.caster().getData(WotrAttachments.CHAIN_ABILITY_STATES).setActivated(context.source());
-        int index = currentIndex(context.caster(), context.source());
+        return progressChain(context, currentIndex(context.caster(), context.source()));
+    }
+
+    private boolean progressChain(AbilityContext context, int index) {
+        boolean childComplete = activateChild(context, index);
+        while (childComplete && ++index < abilities.size() && abilities.get(index).autoActivate) {
+            childComplete = activateChild(context, index);
+        }
+        if (childComplete && index >= abilities.size()) {
+            deactivate(context);
+            return true;
+        }
+        updateState(context, index, !childComplete);
+        return false;
+    }
+
+    private void updateState(AbilityContext context, int index, boolean active) {
+        context.caster().getData(WotrAttachments.ABILITY_STATES).setState(context.source(), index);
+        if (active) {
+            context.caster().getData(WotrAttachments.CHAIN_ABILITY_STATES).setActivated(context.source());
+        } else {
+            context.caster()
+                    .getData(WotrAttachments.CHAIN_ABILITY_STATES)
+                    .setResetAge(context.source(), context.age() + abilities.get(index).ticksToReset);
+        }
+    }
+
+    /**
+     * @param context
+     * @param index
+     * @return whether the child ability has completed
+     */
+    private boolean activateChild(AbilityContext context, int index) {
         ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
         Holder<Ability> childAbility = abilities.get(index).ability();
         if (context.caster()
                 .getData(WotrAttachments.ONGOING_ABILITIES)
                 .activate(childSource, context.abilityItem(), childAbility)) {
-            boolean childFinished = !childAbility.value().isActive(context.caster(), childSource);
-            if (childFinished) {
-                return incrementChain(context, index);
-            }
+            return !childAbility.value().isActive(context.caster(), childSource);
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -96,7 +123,16 @@ public class ChainAbility implements Ability {
         if (chainStates.hasBeenActivated(context.source())) {
             ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
             if (!context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(childSource)) {
-                return incrementChain(context, index);
+                index++;
+                if (index >= abilities.size()) {
+                    deactivate(context);
+                    return true;
+                }
+                if (abilities.get(index).autoActivate) {
+                    return progressChain(context, index);
+                } else {
+                    updateState(context, index, false);
+                }
             }
         } else if (context.age() >= chainStates.resetTime(context.source())) {
             deactivate(context);
@@ -109,18 +145,6 @@ public class ChainAbility implements Ability {
     public void deactivate(AbilityContext context) {
         context.caster().getData(WotrAttachments.ABILITY_STATES).setState(context.source(), 0);
         context.caster().getData(WotrAttachments.CHAIN_ABILITY_STATES).clear(context.source());
-    }
-
-    private boolean incrementChain(AbilityContext context, int index) {
-        AbilityStates states = context.caster().getData(WotrAttachments.ABILITY_STATES);
-        int newIndex = (index + 1) % abilities.size();
-        states.setState(context.source(), newIndex);
-        if (newIndex != 0) {
-            context.caster()
-                    .getData(WotrAttachments.CHAIN_ABILITY_STATES)
-                    .setResetAge(context.source(), context.age() + abilities.get(newIndex).ticksToReset);
-        }
-        return newIndex == 0;
     }
 
     public boolean isActive(LivingEntity entity, AbilitySource source) {
