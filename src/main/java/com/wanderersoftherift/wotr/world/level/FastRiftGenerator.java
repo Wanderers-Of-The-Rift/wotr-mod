@@ -3,8 +3,9 @@ package com.wanderersoftherift.wotr.world.level;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
-import com.wanderersoftherift.wotr.item.riftkey.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
@@ -37,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -55,8 +55,6 @@ public class FastRiftGenerator extends ChunkGenerator {
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layerCount),
             Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
-            SerializableRiftGeneratable.BUILTIN_GENERATABLE_CODEC.fieldOf("filler")
-                    .forGetter(FastRiftGenerator::getFiller),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
     ).apply(instance, FastRiftGenerator::new));
 
@@ -74,19 +72,18 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final PositionalRandomFactory roomGeneratorRNG;
     private final SerializableRiftGeneratable filler;
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks,
-            SerializableRiftGeneratable filler, RiftConfig config) {
+    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks, RiftConfig config) {
         super(biomeSource);
         this.layerCount = layerCount;
         this.dimensionHeightBlocks = dimensionHeightBlocks;
         this.config = config;
-        this.filler = filler;
+        this.filler = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG).emptyChunkGeneratable();
 
         var riftGenerationConfig = this.getRiftGenerationConfig();
 
         this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                riftGenerationConfig.seed().orElse(0L) + SEED_ADJUSTMENT_ROOM_GENERATOR);
-        this.roomGenerator = riftGenerationConfig.roomGenerator().get().create(config);
+                config.seed() + SEED_ADJUSTMENT_ROOM_GENERATOR);
+        this.roomGenerator = riftGenerationConfig.roomGenerator().create(config);
     }
 
     @Override
@@ -98,17 +95,13 @@ public class FastRiftGenerator extends ChunkGenerator {
         return config;
     }
 
-    private SerializableRiftGeneratable getFiller() {
-        return filler;
-    }
-
     public RiftGenerationConfig getRiftGenerationConfig() {
-        return getRiftConfig().riftGen();
+        return getRiftConfig().getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
     }
 
     public RiftLayout getOrCreateLayout(MinecraftServer server) {
         if (layout.get() == null) {
-            layout.compareAndSet(null, getRiftGenerationConfig().layout().get().createLayout(server, config));
+            layout.compareAndSet(null, getRiftGenerationConfig().layout().createLayout(server, config));
         }
         return layout.get();
     }
@@ -120,11 +113,9 @@ public class FastRiftGenerator extends ChunkGenerator {
     @Override
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         var stepsOptional = getRiftGenerationConfig().postProcessingSteps();
-        for (var step : stepsOptional.orElse(Collections.emptyList())) {
-            step.runPostProcessing(this, chunk,
-                    RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                            this.getRiftGenerationConfig().seed().orElse(0L) + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
-                    level);
+        for (var step : stepsOptional) {
+            step.runPostProcessing(this, chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+                    this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
         }
         super.applyBiomeDecoration(level, chunk, structureManager);
     }

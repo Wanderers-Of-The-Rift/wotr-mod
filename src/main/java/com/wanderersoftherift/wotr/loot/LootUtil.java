@@ -15,7 +15,8 @@ public class LootUtil {
             if (!RiftLevelManager.isRift(serverlevel)) {
                 return 0;
             }
-            riftTier = RiftData.get(serverlevel).getTier();
+            var optionalTier = RiftData.get(serverlevel).getTier();
+            riftTier = optionalTier.orElse(0);
         }
         return riftTier;
     }

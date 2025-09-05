@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsawsBulk;
@@ -9,9 +10,10 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.LayeredRiftLayout
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.layers.PredefinedRoomLayer;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.Collections;
 import java.util.HashMap;
 
 // @EventBusSubscriber
@@ -21,14 +23,11 @@ public class RiftConfigInitializationEvents {
     // @SubscribeEvent
     private static void example(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
-        var riftGenConfig = config.riftGen();
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
 
         // get objective:
-        var objectiveOptional = config.objective();
-        if (objectiveOptional.isEmpty()) {
-            return;
-        }
-        var objective = objectiveOptional.get().value();
+        var objectiveHolder = config.objective();
+        var objective = objectiveHolder.value();
 
         // get opening player:
         var player = event.getFirstPlayer();
@@ -37,31 +36,34 @@ public class RiftConfigInitializationEvents {
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsaws(WanderersOfTheRift.id("rift/poi/free/5"),
                         WanderersOfTheRift.id("rift/new_pool"), 1))
-                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
 
-        var layout = riftGenConfig.layout().get();
+        var layout = riftGenConfig.layout();
         if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
+            var access = event.getFirstPlayer().server.registryAccess();
             riftGenConfig = riftGenConfig
                     .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
                             .add(
                                     // For placing special rooms:
                                     new PredefinedRoomLayer.Factory(
-                                            new RoomRandomizerImpl.Factory(WanderersOfTheRift.id("rift/room_portal"),
+                                            new RoomRandomizerImpl.Factory(
+                                                    access.holderOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL,
+                                                            WanderersOfTheRift.id("rift/room_portal"))),
                                                     RoomRandomizerImpl.SINGLE_SIZE_SPACE_HOLDER_FACTORY),
                                             new Vec3i(-1, -1, 2))
                             )
                             .addAll(layeredLayout.layers())
                             .build()));
         }
-        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 
     // @SubscribeEvent(priority = EventPriority.LOW)
     private static void appendDefaultAnomalies(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
-        var riftGenConfig = config.riftGen();
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
         var chance = 0.15f;
         var replacementMap = new HashMap<ResourceLocation, ReplaceJigsawsBulk.Replacement>();
         for (var variant : POI_VARIANTS) {
@@ -73,16 +75,16 @@ public class RiftConfigInitializationEvents {
         }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsawsBulk(replacementMap))
-                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
-        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 
     // @SubscribeEvent
     private static void appendRandomSizeReduction(RiftEvent.Created.Pre event) {
         var config = event.getConfig();
-        var riftGenConfig = config.riftGen();
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
         var chance = 0.25f;
 
         var replacementMap = new HashMap<ResourceLocation, ReplaceJigsawsBulk.Replacement>();
@@ -96,9 +98,9 @@ public class RiftConfigInitializationEvents {
         }
         var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
                 .add(new ReplaceJigsawsBulk(replacementMap))
-                .addAll(riftGenConfig.jigsawProcessors().orElse(Collections.emptyList()))
+                .addAll(riftGenConfig.jigsawProcessors())
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
-        event.setConfig(config.withRiftGenerationConfig(riftGenConfig));
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 }

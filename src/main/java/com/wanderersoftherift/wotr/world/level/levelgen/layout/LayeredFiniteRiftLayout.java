@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
@@ -177,7 +177,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
 
         @Override
         public RiftLayout createLayout(MinecraftServer server, RiftConfig riftConfig) {
-            return new LayeredFiniteRiftLayout(riftShape, this.seed.orElse(riftConfig.riftGen().seed().get()),
+            return new LayeredFiniteRiftLayout(riftShape, this.seed.orElse(riftConfig.seed()),
                     layers.stream().map(it -> it.createLayer(server, riftConfig)).toList());
         }
 

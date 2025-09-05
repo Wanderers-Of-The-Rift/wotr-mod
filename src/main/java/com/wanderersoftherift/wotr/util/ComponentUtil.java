@@ -11,6 +11,13 @@ import java.util.List;
 
 public class ComponentUtil {
 
+    public static MutableComponent mutable(Component component) {
+        if (component instanceof MutableComponent mutableComponent) {
+            return mutableComponent;
+        }
+        return component.copy();
+    }
+
     /**
      * @param components
      * @return A single component combining the provided components, separated by newlines

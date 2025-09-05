@@ -1,0 +1,52 @@
+{
+    "layout": {
+        "type": "wotr:default_layout",
+        "layers": []
+    },
+    "room_generator": {
+        "type": "wotr:cached",
+        "base": {
+            "type": "wotr:layer_generatable",
+            "layered_generatable": {
+                "type": "wotr:perimeter",
+                "perimeter_block": "minecraft:bedrock"
+            },
+            "base": {
+                "type": "wotr:core"
+            }
+        }
+    },
+    "post_processing_steps": [
+        {
+            "type": "wotr:corridor_blender",
+            "validator": {
+                "type": "wotr:or",
+                "values": [
+                    {
+                        "type": "wotr:by_generator_layout"
+                    },
+                    {
+                        "type": "wotr:opposite",
+                        "base": {
+                            "type": "wotr:by_generator_layout"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "jigsaw_processors": [
+        {
+            "type": "wotr:filter_remove",
+            "namespace": "wotr",
+            "path_pattern": "rift/ring_"
+        },
+        {
+            "type": "wotr:shuffle"
+        }
+    ],
+    "empty_chunk_generatable": {
+        "type": "wotr:single_block_chunk",
+        "block": "minecraft:bedrock"
+    }
+}

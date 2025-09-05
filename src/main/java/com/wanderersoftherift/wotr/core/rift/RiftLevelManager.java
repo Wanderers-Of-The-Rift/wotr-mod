@@ -5,18 +5,18 @@ import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalExitEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorMappedRegistry;
 import com.wanderersoftherift.wotr.mixin.AccessorMinecraftServer;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
-import com.wanderersoftherift.wotr.world.level.levelgen.template.SingleBlockChunkGeneratable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +27,6 @@ import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -47,7 +46,6 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -63,6 +61,10 @@ public final class RiftLevelManager {
      * @param id
      * @return Whether a level with the given id exists
      */
+    public static boolean levelExists(ResourceKey<Level> id) {
+        return levelExists(id.location());
+    }
+
     public static boolean levelExists(ResourceLocation id) {
         return ServerLifecycleHooks.getCurrentServer()
                 .forgeGetWorldMap()
@@ -185,7 +187,7 @@ public final class RiftLevelManager {
     public static ServerLevel getOrCreateRiftLevel(
             ResourceLocation id,
             ResourceKey<Level> portalDimension,
-            BlockPos portalPos,
+            Vec3i portalPos,
             RiftConfig config,
             ServerPlayer firstPlayer) {
         var server = ServerLifecycleHooks.getCurrentServer();
@@ -201,16 +203,11 @@ public final class RiftLevelManager {
             return null;
         }
 
-        config = RiftConfigInitialization.initializeConfig(config, server);
         var finalConfig = NeoForge.EVENT_BUS.post(new RiftEvent.Created.Pre(config, firstPlayer)).getConfig();
-        var loadedRiftHeight = finalConfig.riftGen()
+        var requestedRiftHeightChunks = finalConfig.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG)
                 .layout()
-                .map(fac -> fac.riftShape(finalConfig).levelCount() + FastRiftGenerator.MARGIN_LAYERS);
-        if (loadedRiftHeight.isEmpty()) {
-            WanderersOfTheRift.LOGGER.error("missing values in RiftConfig");
-            return null;
-        }
-        int requestedRiftHeightChunks = loadedRiftHeight.get();
+                .riftShape(finalConfig)
+                .levelCount() + FastRiftGenerator.MARGIN_LAYERS;
         var riftDimensionType = getRiftDimensionTypeForHeight(requestedRiftHeightChunks);
         int actualRiftHeight = riftDimensionType.getKey();
 
@@ -365,15 +362,14 @@ public final class RiftLevelManager {
         if (voidBiome == null) {
             return null;
         }
-        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount, dimensionHeightBlocks,
-                new SingleBlockChunkGeneratable(Blocks.BEDROCK.defaultBlockState()), config);
+        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount, dimensionHeightBlocks, config);
     }
 
     private static ServerLevel createRift(
             ResourceLocation id,
             LevelStem stem,
             ResourceKey<Level> portalDimension,
-            BlockPos portalPos,
+            Vec3i portalPos,
             RiftConfig config) {
         AccessorMinecraftServer server = (AccessorMinecraftServer) ServerLifecycleHooks.getCurrentServer();
         var chunkProgressListener = server.getProgressListenerFactory().create(0);
@@ -389,7 +385,7 @@ public final class RiftLevelManager {
             portalPos = ServerLifecycleHooks.getCurrentServer().overworld().getSharedSpawnPos();
         }
 
-        var seed = config.riftGen().seed().orElseGet(() -> new Random().nextLong());
+        var seed = config.seed();
 
         var riftLevel = new ServerLevel(ServerLifecycleHooks.getCurrentServer(), executor, storageSource,
                 new DerivedLevelData(worldData, worldData.overworldData()),
@@ -397,10 +393,10 @@ public final class RiftLevelManager {
                 RandomSequences.factory(seed).constructor().get());
         var riftData = RiftData.get(riftLevel);
         riftData.setPortalDimension(portalDimension);
-        riftData.setPortalPos(portalPos);
+        riftData.setPortalPos(new BlockPos(portalPos));
         riftData.setConfig(config);
 
-        riftData.setObjective(config.objective().map(objectiveType -> objectiveType.value().generate(riftLevel)));
+        riftData.setObjective(config.objective().value().generate(riftLevel));
 
         return riftLevel;
     }

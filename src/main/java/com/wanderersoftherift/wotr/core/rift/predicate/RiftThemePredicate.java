@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.core.rift.predicate;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -20,7 +20,7 @@ public record RiftThemePredicate(Holder<RiftTheme> theme) implements RiftConfigP
 
     @Override
     public boolean match(RiftConfig config) {
-        return config.theme().map(actual -> actual.equals(theme)).orElse(false);
+        return config.theme().equals(theme);
     }
 
     @Override

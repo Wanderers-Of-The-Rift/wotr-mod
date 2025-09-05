@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.core.rift.predicate;
 
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import net.minecraft.network.chat.MutableComponent;
 
 /**
