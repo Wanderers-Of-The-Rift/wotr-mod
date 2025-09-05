@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.entity.mob;
 
 import com.mojang.serialization.Codec;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,6 +18,18 @@ import java.util.Optional;
 public record MobVariantData(Map<String, Double> attributes) {
     public static final Codec<MobVariantData> CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE)
             .xmap(MobVariantData::new, MobVariantData::attributes);
+
+    public static ResourceLocation getTextureForVariant(
+            ResourceLocation variantId,
+            Registry<MobVariantData> registry,
+            String mobType) {
+        ResourceLocation prefixedVariantId = WanderersOfTheRift.id(mobType + "/" + variantId.getPath());
+        Optional<Holder.Reference<MobVariantData>> holder = registry.get(prefixedVariantId);
+        if (holder.isPresent()) {
+            return WanderersOfTheRift.id("textures/entity/mob_variant/" + mobType + "/" + variantId.getPath() + ".png");
+        }
+        return WanderersOfTheRift.id("textures/entity/mob_variant/" + mobType + "/default_" + mobType + ".png");
+    }
 
     // Applies attributes to a LivingEntity, first spawn sets health to max health
     public void applyTo(LivingEntity entity, boolean isInitialSpawn) {

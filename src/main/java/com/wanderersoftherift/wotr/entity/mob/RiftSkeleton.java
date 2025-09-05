@@ -11,17 +11,17 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public class RiftZombie extends Zombie {
-    private static final EntityDataAccessor<String> DATA_VARIANT = SynchedEntityData.defineId(RiftZombie.class,
+public class RiftSkeleton extends Skeleton {
+    private static final EntityDataAccessor<String> DATA_VARIANT = SynchedEntityData.defineId(RiftSkeleton.class,
             EntityDataSerializers.STRING);
     private boolean initialSpawn = true; // To set initial health to max_health on first spawn
 
-    public RiftZombie(EntityType<? extends RiftZombie> type, Level level) {
+    public RiftSkeleton(EntityType<? extends RiftSkeleton> type, Level level) {
         super(type, level);
     }
 
@@ -34,7 +34,7 @@ public class RiftZombie extends Zombie {
     }
 
     public String getMobType() {
-        return "zombie";
+        return "skeleton";
     }
 
     // Set Attributes from MobVariantData on spawn(+sets hp to max) / load
@@ -54,7 +54,7 @@ public class RiftZombie extends Zombie {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_VARIANT, "default_zombie");
+        builder.define(DATA_VARIANT, "default_skeleton");
     }
 
     @Override
