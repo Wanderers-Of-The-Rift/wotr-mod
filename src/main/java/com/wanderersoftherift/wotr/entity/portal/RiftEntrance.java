@@ -58,6 +58,14 @@ public record RiftEntrance(ItemStack keyItem, ResourceKey<Level> target, boolean
         tag.put("entrance_data", encodedResult.getOrThrow());
     }
 
+    /**
+     * Teleports player to the rift
+     * 
+     * @param player          player to teleport
+     * @param level           portal dimension, could also be player dimension if portal dimension cannot be determined
+     * @param currentPosition portal position, could also be player position if portal position cannot be determined
+     * @return a new value for {@link #generated}
+     */
     public boolean teleportPlayer(ServerPlayer player, ServerLevel level, Vec3i currentPosition) {
         var riftId = target();
         var plDir = player.getDirection().getOpposite();
