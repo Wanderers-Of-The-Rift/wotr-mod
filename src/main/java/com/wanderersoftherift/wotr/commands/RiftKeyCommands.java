@@ -50,6 +50,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Commands relating to configuring a rift key for testing
@@ -230,81 +231,59 @@ public class RiftKeyCommands extends BaseCommand {
             CommandContext<CommandSourceStack> context,
             LayeredRiftLayout.LayoutLayer.Factory layer,
             boolean start) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
-        var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
-        if (oldEdits != null) {
-            edits.addAll(oldEdits);
-        }
-        if (start) {
-            edits.add(new Prepend<>(List.of(layer)));
-        } else {
-            edits.add(new Append<>(List.of(layer)));
-        }
-        key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits.build());
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.add_layer")),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
+            var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
+            if (oldEdits != null) {
+                edits.addAll(oldEdits);
+            }
+            if (start) {
+                edits.add(new Prepend<>(List.of(layer)));
+            } else {
+                edits.add(new Append<>(List.of(layer)));
+            }
+            key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits.build());
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.add_layer"));
+        });
     }
 
     private int configLayerUndo(CommandContext<CommandSourceStack> context) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
-        if (oldEdits != null) {
-            var edits = oldEdits.subList(0, oldEdits.size() - 1);
-            key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits);
-        }
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.undo")),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
+            if (oldEdits != null) {
+                var edits = oldEdits.subList(0, oldEdits.size() - 1);
+                key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits);
+            }
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.undo"));
+        });
     }
 
     private int configLayerClearEdits(CommandContext<CommandSourceStack> context) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, List.of());
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.clear")),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, List.of());
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.clear"));
+        });
     }
 
     private int configBakeGenerator(CommandContext<CommandSourceStack> context) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-
-        key.set(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET,
-                new Holder.Direct<>(RiftGenerationConfig.initialize(key, 0L, context.getSource().registryAccess())));
-        key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, List.of());
-        key.set(WotrDataComponentType.RiftKeyData.POST_STEPS_EDIT, List.of());
-        key.set(WotrDataComponentType.RiftKeyData.JIGSAW_PROCESSORS_EDIT, List.of());
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.bake")),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            key.set(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET, new Holder.Direct<>(
+                    RiftGenerationConfig.initialize(key, 0L, context.getSource().registryAccess())));
+            key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, List.of());
+            key.set(WotrDataComponentType.RiftKeyData.POST_STEPS_EDIT, List.of());
+            key.set(WotrDataComponentType.RiftKeyData.JIGSAW_PROCESSORS_EDIT, List.of());
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.bake"));
+        });
     }
 
     private int configExportGenerator(CommandContext<CommandSourceStack> context, ResourceLocation path) {
+        if (path.getPath().contains(".") || path.getNamespace().contains(".")) { // dots forbidden due to security
+                                                                                 // concerns
+            context.getSource()
+                    .sendFailure(Component.translatable(
+                            WanderersOfTheRift.translationId("command", "rift_key.export.output_contains_dot")));
+            return 0;
+        }
         ItemStack key = getRiftKey(context);
         if (key.isEmpty()) {
             return 0;
@@ -312,6 +291,9 @@ public class RiftKeyCommands extends BaseCommand {
 
         var preset = key.get(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET);
         if (preset == null || preset.unwrapKey().isPresent()) {
+            context.getSource()
+                    .sendFailure(Component
+                            .translatable(WanderersOfTheRift.translationId("command", "rift_key.export.not_custom")));
             return 0;
         }
 
@@ -320,21 +302,22 @@ public class RiftKeyCommands extends BaseCommand {
         var resourcePath = FileUtil.createPathToResource(
                 generated.resolve(path.getNamespace()).resolve(registry.getNamespace()).resolve(registry.getPath()),
                 path.getPath(), ".json");
-        var resourceParent = resourcePath.getParent();
-
-        if (resourceParent == null) {
-            return 0;
-        }
         try {
-            Files.createDirectories(Files.exists(resourceParent) ? resourceParent.toRealPath() : resourceParent);
+            var resourceParent = resourcePath.getParent();
+            if (resourceParent != null && !Files.exists(resourceParent)) {
+                Files.createDirectories(Files.exists(resourceParent) ? resourceParent.toRealPath() : resourceParent);
+            }
         } catch (IOException var13) {
-            // WanderersOfTheRift.LOGGER.error("Failed to create parent directory: {}", resourceParent);
+            WanderersOfTheRift.LOGGER.error("Failed to create parent directory for exporting preset", var13);
             return 0;
         }
 
         var jsonResult = RiftGenerationConfig.CODEC.encodeStart(
                 context.getSource().registryAccess().createSerializationContext(JsonOps.INSTANCE), preset.value());
         if (!jsonResult.isSuccess()) {
+            context.getSource()
+                    .sendFailure(Component.translatable(
+                            WanderersOfTheRift.translationId("command", "rift_key.export.encode_failed")));
             return 0;
         }
         var json = jsonResult.getOrThrow();
@@ -353,152 +336,139 @@ public class RiftKeyCommands extends BaseCommand {
 
             return 1;
         } catch (Throwable var12) {
+            WanderersOfTheRift.LOGGER.error("Failed to write encoded preset to file", var12);
             return 0;
         }
     }
 
     private int configLayerRemoveAll(CommandContext<CommandSourceStack> context) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
-        var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
-        if (oldEdits != null) {
-            edits.addAll(oldEdits);
-        }
-        edits.add(Clear.instance());
+        return applyToRiftKey(context, key -> {
+            var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
+            var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
+            if (oldEdits != null) {
+                edits.addAll(oldEdits);
+            }
+            edits.add(Clear.instance());
 
-        key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits.build());
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component
-                                .translatable(WanderersOfTheRift.translationId("command", "rift_key.remove_all")),
-                        true);
-        return 1;
+            key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits.build());
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.remove_all"));
+        });
     }
 
     private int configLayerRemoveSome(CommandContext<CommandSourceStack> context, int n, boolean start) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
-        var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
-        if (oldEdits != null) {
-            edits.addAll(oldEdits);
-        }
-        if (start) {
-            edits.add(new Drop<>(n));
-        } else {
-            edits.add(new DropLast<>(n));
-        }
+        return applyToRiftKey(context, key -> {
+            var edits = ImmutableList.<ListEdit<LayeredRiftLayout.LayoutLayer.Factory>>builder();
+            var oldEdits = key.get(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT);
+            if (oldEdits != null) {
+                edits.addAll(oldEdits);
+            }
+            if (start) {
+                edits.add(new Drop<>(n));
+            } else {
+                edits.add(new DropLast<>(n));
+            }
 
-        key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits.build());
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.remove")),
-                        true);
-        return 1;
+            key.set(WotrDataComponentType.RiftKeyData.LAYOUT_LAYER_EDIT, edits.build());
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.remove"));
+        });
     }
 
     private int configGeneratorPreset(
             CommandContext<CommandSourceStack> context,
             Holder.Reference<RiftGenerationConfig> riftGenerationConfigReference) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        key.set(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET, riftGenerationConfigReference);
-
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
-                                riftGenerationConfigReference.getRegisteredName()),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            key.set(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET, riftGenerationConfigReference);
+            return Component.translatable(
+                    WanderersOfTheRift.translationId("command", "rift_key.set_preset"),
+                    riftGenerationConfigReference.getRegisteredName()
+            );
+        });
     }
 
     private int configTier(CommandContext<CommandSourceStack> context, int tier) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        key.set(WotrDataComponentType.RiftKeyData.RIFT_TIER, tier);
-        context.getSource()
-                .sendSuccess(() -> Component
-                        .translatable(WanderersOfTheRift.translationId("command", "rift_key.set_tier"), tier), true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            key.set(WotrDataComponentType.RiftKeyData.RIFT_TIER, tier);
+            return Component.translatable(
+                    WanderersOfTheRift.translationId("command", "rift_key.set_tier"), tier
+            );
+        });
     }
 
     private int configTheme(CommandContext<CommandSourceStack> context, Holder<RiftTheme> theme) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        if (theme == null) {
-            key.remove(WotrDataComponentType.RiftKeyData.RIFT_THEME);
-        } else {
-            key.set(WotrDataComponentType.RiftKeyData.RIFT_THEME, theme);
-        }
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
-                                theme != null ? theme.getRegisteredName() : "random"),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            if (theme == null) {
+                key.remove(WotrDataComponentType.RiftKeyData.RIFT_THEME);
+            } else {
+                key.set(WotrDataComponentType.RiftKeyData.RIFT_THEME, theme);
+            }
+            return Component.translatable(
+                    WanderersOfTheRift.translationId("command", "rift_key.set_theme"),
+                    theme != null ? theme.getRegisteredName() : "random"
+            );
+        });
     }
 
     private int configObjective(CommandContext<CommandSourceStack> context, Holder<ObjectiveType> objective) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        if (objective == null) {
-            key.remove(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE);
-        } else {
-            key.set(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE, objective);
-        }
-        context.getSource()
-                .sendSuccess(() -> Component.translatable(
-                        WanderersOfTheRift.translationId("command", "rift_key.set_objective"),
-                        (objective != null ? objective.getRegisteredName() : "random")), true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            if (objective == null) {
+                key.remove(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE);
+            } else {
+                key.set(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE, objective);
+            }
+            return Component.translatable(
+                    WanderersOfTheRift.translationId("command", "rift_key.set_objective"),
+                    (objective != null ? objective.getRegisteredName() : "random")
+            );
+        });
     }
 
     private int configSeed(CommandContext<CommandSourceStack> context, Long seed) {
-        ItemStack key = getRiftKey(context);
-        if (key.isEmpty()) {
-            return 0;
-        }
-        if (seed == null) {
-            key.remove(WotrDataComponentType.RiftKeyData.RIFT_SEED);
-        } else {
-            key.set(WotrDataComponentType.RiftKeyData.RIFT_SEED, seed);
-        }
-        context.getSource()
-                .sendSuccess(
-                        () -> Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.set_seed"),
-                                (seed != null ? seed : "random")),
-                        true);
-        return 1;
+        return applyToRiftKey(context, key -> {
+            if (seed == null) {
+                key.remove(WotrDataComponentType.RiftKeyData.RIFT_SEED);
+            } else {
+                key.set(WotrDataComponentType.RiftKeyData.RIFT_SEED, seed);
+            }
+            return Component.translatable(
+                    WanderersOfTheRift.translationId("command", "rift_key.set_seed"), (seed != null ? seed : "random")
+            );
+        });
     }
 
     private static ItemStack getRiftKey(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
-        if (player != null) {
-            ItemStack heldItem = player.getMainHandItem();
-
-            if (heldItem.getItem() == WotrItems.RIFT_KEY.asItem()) {
-                return heldItem;
-            }
-            context.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));
-        } else {
+        if (player == null) {
             context.getSource().sendFailure(Component.translatable("command.wotr.invalid_player"));
+            return ItemStack.EMPTY;
         }
-        return ItemStack.EMPTY;
+        ItemStack heldItem = player.getMainHandItem();
+
+        if (heldItem.getItem() != WotrItems.RIFT_KEY.asItem()) {
+            context.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));
+            return ItemStack.EMPTY;
+        }
+        return heldItem;
+    }
+
+    private static int applyToRiftKey(
+            CommandContext<CommandSourceStack> context,
+            Function<ItemStack, Component> function) {
+
+        ServerPlayer player = context.getSource().getPlayer();
+        if (player == null) {
+            context.getSource().sendFailure(Component.translatable("command.wotr.invalid_player"));
+            return 0;
+        }
+        ItemStack heldItem = player.getMainHandItem();
+
+        if (heldItem.getItem() != WotrItems.RIFT_KEY.asItem()) {
+            context.getSource().sendFailure(Component.translatable("command.wotr.rift_key.invalid_item"));
+            return 0;
+        }
+        var message = function.apply(heldItem);
+
+        context.getSource().sendSuccess(() -> message, true);
+        return 1;
     }
 
 }
