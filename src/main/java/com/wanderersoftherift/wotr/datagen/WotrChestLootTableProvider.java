@@ -276,36 +276,6 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(GearSocketsFunction.setGearSockets(6, 6)))
-
-                                // Mace! Andydirks attempt at adding a weapon to the socket system
-
-                                .add(LootItem.lootTableItem(Items.MACE)
-                                        .when(riftTier(4, 5))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(4, 5)))
-                                .add(LootItem.lootTableItem(Items.MACE)
-                                        .when(riftTier().min(6))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
-                                .add(LootItem.lootTableItem(Items.MACE)
-                                        .when(riftTier().min(7))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
-
-                                // Tridents! Andydirks attempt at adding a weapon to the socket system
-
-                                .add(LootItem.lootTableItem(Items.TRIDENT)
-                                        .when(riftTier(4, 5))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(4, 5)))
-                                .add(LootItem.lootTableItem(Items.TRIDENT)
-                                        .when(riftTier().min(6))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
-                                .add(LootItem.lootTableItem(Items.TRIDENT)
-                                        .when(riftTier().min(7))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
                         ));
 
     }
@@ -406,6 +376,36 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(6, 6,
                                                 WotrTags.Items.GOLD_TYPE_WEAPON.location().getPath())))
+
+                                // Mace! Andydirks attempt at adding a weapon to the socket system
+
+                                .add(LootItem.lootTableItem(Items.MACE)
+                                        .when(riftTier(4, 5))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(4, 5)))
+                                .add(LootItem.lootTableItem(Items.MACE)
+                                        .when(riftTier().min(6))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
+                                .add(LootItem.lootTableItem(Items.MACE)
+                                        .when(riftTier().min(7))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
+
+                                // Tridents! Andydirks attempt at adding a weapon to the socket system
+
+                                .add(LootItem.lootTableItem(Items.TRIDENT)
+                                        .when(riftTier(4, 5))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(4, 5)))
+                                .add(LootItem.lootTableItem(Items.TRIDENT)
+                                        .when(riftTier().min(6))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
+                                .add(LootItem.lootTableItem(Items.TRIDENT)
+                                        .when(riftTier().min(7))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
                         ));
 
     }
