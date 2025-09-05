@@ -1,5 +1,5 @@
 {
-  "type": "wotr:standard",
+  "type": "wotr:instant",
   "requirements": [
     {
       "type": "wotr:mana",

@@ -1,0 +1,20 @@
+{
+  "style": {
+    "color": "#aa1111"
+  },
+  "tiers": [
+    {
+      "tier": 1,
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "id": "wotr:attack_up",
+          "attribute": "minecraft:attack_damage",
+          "min_roll": 0,
+          "max_roll": 1,
+          "operation": "add_value"
+        }
+      ]
+    }
+  ]
+}

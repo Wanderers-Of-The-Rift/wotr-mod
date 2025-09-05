@@ -1,0 +1,93 @@
+{
+  "type": "wotr:persistent",
+  "icon": "minecraft:textures/item/fire_charge.png",
+  "can_deactivate": false,
+  "channelled": true,
+  "requirements": [
+    {
+      "type": "wotr:mana",
+      "amount": 10
+    },
+    {
+      "type": "wotr:no_move"
+    }
+  ],
+  "on_deactivation_costs": [
+    {
+      "type" : "wotr:cooldown",
+      "ticks": 200
+    }
+  ],
+  "ongoing_requirements" : [
+    {
+      "type": "wotr:own_attached_effect",
+      "id": "main"
+    },
+    {
+      "type": "wotr:no_move"
+    }
+  ],
+  "activation_effects": [
+    {
+      "type": "wotr:attach",
+      "id": "main",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "trigger": {
+        "frequency": 10
+      },
+      "continue": {
+        "max_trigger_count": 3
+      },
+      "effects": [
+        {
+          "type": "wotr:simple_projectile",
+          "config": {
+            "gravity_affected": false,
+            "render": {
+              "animations": "wotr:animations/ability/fireball.animations.json",
+              "model": "wotr:geo/ability/fireball.geo.json",
+              "texture": "wotr:textures/ability/fireball.png"
+            },
+            "sound": {
+              "collision": "minecraft:entity.generic.explode"
+            },
+            "velocity": 1.6
+          },
+          "effects": [
+            {
+              "type": "wotr:damage",
+              "amount": 10.0,
+              "damage_type": "wotr:fire",
+              "targeting": {
+                "type": "wotr:area",
+                "range": 12.0,
+                "target": {
+                  "sentiment": "not_friend"
+                }
+              }
+            }
+          ],
+          "particles": {
+            "target_block": {
+              "type": "minecraft:explosion"
+            }
+          },
+          "targeting": {
+            "type": "wotr:self"
+          }
+        }
+      ]
+    }
+  ],
+  "on_deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "id": "main",
+      "targeting": {
+        "type": "wotr:self"
+      }
+    }
+  ]
+}
