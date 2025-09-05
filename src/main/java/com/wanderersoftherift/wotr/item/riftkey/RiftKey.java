@@ -76,7 +76,7 @@ public class RiftKey extends Item {
         return InteractionResult.PASS;
     }
 
-    private static Component textComponent(
+    public static Component textComponent(
             LayeredRiftLayout.LayoutLayer.Factory factory,
             HolderGetter.Provider registries) {
         var factoryHolder = WotrRegistries.LAYOUT_LAYER_TYPES.wrapAsHolder(factory.codec());
