@@ -1,15 +1,20 @@
 package com.wanderersoftherift.wotr.commands;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.entity.npc.QuestGiverInteract;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceOrTagArgument;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -20,6 +25,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class DebugCommands extends BaseCommand {
 
@@ -31,13 +37,46 @@ public class DebugCommands extends BaseCommand {
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
-        builder.then(Commands.literal("makeQuestGiver")
-                .then(Commands.argument("mob", EntityArgument.entity())
-                        .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob")))));
+        builder.then(
+                Commands.literal("makeQuestGiver")
+                        .then(Commands.argument("mob", EntityArgument.entity())
+                                .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob")))
+                                .then(Commands
+                                        .argument("selection",
+                                                ResourceOrTagArgument.resourceOrTag(context,
+                                                        WotrRegistries.Keys.QUESTS))
+                                        .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob"),
+                                                ResourceOrTagArgument.getResourceOrTag(ctx, "selection",
+                                                        WotrRegistries.Keys.QUESTS),
+                                                5))
+                                        .then(
+                                                Commands.argument("count", IntegerArgumentType.integer(1))
+                                                        .executes(ctx -> makeQuestGiver(ctx,
+                                                                EntityArgument.getEntity(ctx, "mob"),
+                                                                ResourceOrTagArgument.getResourceOrTag(ctx, "selection",
+                                                                        WotrRegistries.Keys.QUESTS),
+                                                                IntegerArgumentType.getInteger(ctx, "count")))
+                                        ))));
     }
 
     private int makeQuestGiver(CommandContext<CommandSourceStack> context, Entity mob) {
-        mob.setData(WotrAttachments.MOB_INTERACT, QuestGiverInteract.INSTANCE);
+        mob.setData(WotrAttachments.MOB_INTERACT, new QuestGiverInteract(Optional.empty(), 5));
+        return 1;
+    }
+
+    private int makeQuestGiver(
+            CommandContext<CommandSourceStack> context,
+            Entity mob,
+            ResourceOrTagArgument.Result<Quest> quests,
+            int count) {
+        quests.unwrap()
+                .ifLeft(questReference -> mob.setData(WotrAttachments.MOB_INTERACT,
+                        new QuestGiverInteract(Optional.of(HolderSet.direct(questReference)), count))
+                )
+                .ifRight(
+                        holders -> mob.setData(WotrAttachments.MOB_INTERACT,
+                                new QuestGiverInteract(Optional.of(holders), count))
+                );
         return 1;
     }
 

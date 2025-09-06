@@ -1,0 +1,18 @@
+{
+  "goals": [
+    {
+      "type": "wotr:give_item",
+      "item" : "#c:foods/raw_fish",
+      "count": 1
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 1,
+        "id": "minecraft:gold_ingot"
+      }
+    }
+  ]
+}

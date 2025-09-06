@@ -6,8 +6,10 @@ import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
+import com.wanderersoftherift.wotr.util.HolderSetUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -29,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public final class QuestMenuHelper {
 
-    private static final int QUEST_SELECTION_SIZE = 5;
+    private static final int DEFAULT_SELECTION_SIZE = 5;
 
     private QuestMenuHelper() {
     }
@@ -43,7 +45,9 @@ public final class QuestMenuHelper {
      * @param block
      */
     public static void openQuestMenu(ServerPlayer player, Component title, BlockPos pos, Block block) {
-        openQuestMenu(player, title, ValidatingLevelAccess.create(player.serverLevel(), pos, block));
+        openQuestMenu(player, title, ValidatingLevelAccess.create(player.serverLevel(), pos, block),
+                HolderSetUtil.registryToHolderSet(player.level().registryAccess(), WotrRegistries.Keys.QUESTS),
+                DEFAULT_SELECTION_SIZE);
     }
 
     /**
@@ -52,14 +56,20 @@ public final class QuestMenuHelper {
      * @param player
      * @param questGiver
      */
-    public static void openQuestMenu(ServerPlayer player, Mob questGiver) {
-        openQuestMenu(player, questGiver.getDisplayName(), ValidatingLevelAccess.create(questGiver));
+    public static void openQuestMenu(ServerPlayer player, Mob questGiver, HolderSet<Quest> choices, int choiceCount) {
+        openQuestMenu(player, questGiver.getDisplayName(), ValidatingLevelAccess.create(questGiver), choices,
+                choiceCount);
     }
 
-    private static void openQuestMenu(ServerPlayer player, Component title, ValidatingLevelAccess access) {
+    private static void openQuestMenu(
+            ServerPlayer player,
+            Component title,
+            ValidatingLevelAccess access,
+            HolderSet<Quest> choices,
+            int choiceCount) {
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
-            List<QuestState> availableQuests = getAvailableQuests(player.level(), player);
+            List<QuestState> availableQuests = getAvailableQuests(player.level(), player, choices, choiceCount);
 
             player.openMenu(
                     new SimpleMenuProvider(
@@ -78,29 +88,36 @@ public final class QuestMenuHelper {
         }
     }
 
-    private static @NotNull List<QuestState> getAvailableQuests(Level level, ServerPlayer serverPlayer) {
+    private static @NotNull List<QuestState> getAvailableQuests(
+            Level level,
+            ServerPlayer serverPlayer,
+            HolderSet<Quest> choices,
+            int choiceCount) {
         List<QuestState> availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
         if (serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS).isEmpty()) {
-            availableQuests = generateNewQuestList(level, serverPlayer);
+            availableQuests = generateNewQuestList(level, serverPlayer, choices, choiceCount);
             serverPlayer.setData(WotrAttachments.AVAILABLE_QUESTS, availableQuests);
         }
         return availableQuests;
     }
 
-    private static @NotNull List<QuestState> generateNewQuestList(Level level, ServerPlayer serverPlayer) {
+    private static @NotNull List<QuestState> generateNewQuestList(
+            Level level,
+            ServerPlayer serverPlayer,
+            HolderSet<Quest> choices,
+            int choiceCount) {
         LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
-        Registry<Quest> questRegistry = level.registryAccess().lookupOrThrow(WotrRegistries.Keys.QUESTS);
-        List<Quest> quests = questRegistry.stream().collect(Collectors.toList());
+        List<Holder<Quest>> quests = choices.stream().collect(Collectors.toList());
         List<QuestState> generatedQuests = new ArrayList<>();
-        for (int i = 0; i < QUEST_SELECTION_SIZE && !quests.isEmpty(); i++) {
+        for (int i = 0; i < choiceCount && !quests.isEmpty(); i++) {
             int index = level.random.nextInt(quests.size());
-            Quest quest = quests.get(index);
+            Holder<Quest> quest = quests.get(index);
             if (index < quests.size() - 1) {
                 quest = quests.set(index, quests.getLast());
             }
             quests.removeLast();
-            generatedQuests.add(new QuestState(questRegistry.wrapAsHolder(quest), quest.generateGoals(params),
-                    quest.generateRewards(params)));
+            generatedQuests.add(
+                    new QuestState(quest, quest.value().generateGoals(params), quest.value().generateRewards(params)));
         }
         return generatedQuests;
     }

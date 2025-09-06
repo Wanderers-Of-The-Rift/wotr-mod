@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.HolderSetCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -28,6 +30,8 @@ public record Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, L
     ).apply(instance, Quest::new));
 
     public static final Codec<Holder<Quest>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.QUESTS);
+    public static final Codec<HolderSet<Quest>> SET_CODEC = HolderSetCodec.create(WotrRegistries.Keys.QUESTS, CODEC,
+            false);
 
     public List<Goal> generateGoals(LootParams params) {
         return goals.stream().flatMap(x -> x.generateGoal(params).stream()).toList();
