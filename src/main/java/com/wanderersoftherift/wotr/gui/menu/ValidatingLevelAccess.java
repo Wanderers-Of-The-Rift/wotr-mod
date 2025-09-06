@@ -61,7 +61,7 @@ public interface ValidatingLevelAccess extends ContainerLevelAccess {
 
             @Override
             public boolean isValid(Player player) {
-                return evaluate((l, pos) -> !entity.isRemoved() && player.distanceTo(entity) < 5.0, true);
+                return evaluate((l, pos) -> !entity.isRemoved() && player.canInteractWithEntity(entity, 5.0), true);
             }
         };
     }
