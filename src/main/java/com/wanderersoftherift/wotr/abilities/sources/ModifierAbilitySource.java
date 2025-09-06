@@ -35,7 +35,8 @@ public record ModifierAbilitySource(ModifierSource base, int effectIndex) implem
 
     @Override
     public Holder<Ability> getAbility(Entity entity) {
-        if (base.getModifierEffects(entity).get(effectIndex) instanceof AbilityModifier ability) {
+        var baseEffects = base.getModifierEffects(entity);
+        if (baseEffects.size() > effectIndex && baseEffects.get(effectIndex) instanceof AbilityModifier ability) {
             return ability.providedAbility();
         }
         return null;

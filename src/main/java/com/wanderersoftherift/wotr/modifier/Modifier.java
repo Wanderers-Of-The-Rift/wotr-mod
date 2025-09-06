@@ -69,4 +69,8 @@ public class Modifier {
                         stack, roll, instance
                 );
     }
+
+    public ModifierTier getModifierTier(int tier) {
+        return modifierTiers.get(tier); // why is modifierTiers not just a list??
+    }
 }

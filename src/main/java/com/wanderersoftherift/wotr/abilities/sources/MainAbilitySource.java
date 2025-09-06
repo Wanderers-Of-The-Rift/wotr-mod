@@ -47,7 +47,11 @@ public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource
     }
 
     public Holder<Ability> getMainAbility(Entity entity) {
-        return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
+        var abi = slot.getContent(entity).get(WotrDataComponentType.ABILITY);
+        if (abi == null) {
+            return null;
+        }
+        return abi.ability();
     }
 
     @Override

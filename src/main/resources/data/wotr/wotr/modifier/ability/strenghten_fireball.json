@@ -1,0 +1,18 @@
+{
+    "style": {
+        "color": "#cc8811"
+    },
+    "tiers": [
+        {
+            "tier": 1,
+            "modifiers": [
+                {
+                    "type": "wotr:ability_enhancement",
+                    "ability": "wotr:fireball",
+                    "modifier": "wotr:ability_damage_flat",
+                    "tier": 1
+                }
+            ]
+        }
+    ]
+}

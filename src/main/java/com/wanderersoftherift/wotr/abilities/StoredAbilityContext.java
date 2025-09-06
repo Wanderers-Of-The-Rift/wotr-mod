@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import net.minecraft.core.Holder;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,7 +22,7 @@ import java.util.UUID;
  * needing to be looked up in the level
  */
 public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId, ItemStack abilityItem,
-        AbilitySource source, AbilityUpgradePool upgrades) {
+        AbilitySource source, AbilityUpgradePool upgrades, List<AbilityEnhancements.EnhancingModifier> enhancements) {
 
     public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("instance_id").forGetter(x -> x.instanceId),
@@ -28,16 +30,19 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
             UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
             ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
             AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(x -> x.source),
-            AbilityUpgradePool.CODEC.fieldOf("slot").forGetter(x -> x.upgrades)
+            AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(x -> x.upgrades),
+            AbilityEnhancements.EnhancingModifier.CODEC.listOf()
+                    .fieldOf("enhancements")
+                    .forGetter(StoredAbilityContext::enhancements)
     ).apply(instance, StoredAbilityContext::new));
 
     public StoredAbilityContext(AbilityContext context) {
         this(context.instanceId(), context.ability(), context.caster().getUUID(), context.abilityItem(),
-                context.source(), context.upgrades());
+                context.source(), context.upgrades(), context.enhancements());
     }
 
     public AbilityContext toContext(LivingEntity caster, Level level) {
-        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, upgrades);
+        return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, upgrades, enhancements);
     }
 
     public LivingEntity getCaster(MinecraftServer server) {

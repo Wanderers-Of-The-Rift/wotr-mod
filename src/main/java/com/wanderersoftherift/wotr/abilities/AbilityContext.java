@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
+import com.wanderersoftherift.wotr.abilities.sources.AbilityEnhancementModifierSource;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
@@ -16,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +34,8 @@ import java.util.UUID;
  * @param upgrades
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades) {
+        ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades,
+        @Nonnull List<AbilityEnhancements.EnhancingModifier> enhancements) {
 
     /**
      * @return The current game time
@@ -44,8 +48,18 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      * Enables all modifiers that impact the ability
      */
     public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
+        enhancements.forEach(enhancement -> {
+            enhancement.modifier()
+                    .value()
+                    .enableModifier((float) enhancement.roll(), caster, new AbilityEnhancementModifierSource(
+                            enhancement.originalSource(), enhancement.originalIndex()), enhancement.tier());
+        });
         if (upgrades == null || upgrades.isEmpty()) {
-            return ExceptionlessAutoClosable.NOOP;
+            if (enhancements.isEmpty()) {
+                return ExceptionlessAutoClosable.NOOP;
+            } else {
+                return this::disableEnhancements;
+            }
         }
         upgrades.forEachSelected((selection, upgrade) -> {
             ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
@@ -80,9 +94,22 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     }
 
     /**
+     * Disables all modifiers from {@link #enhancements()}
+     */
+    private void disableEnhancements() {
+        enhancements.forEach(enhancement -> {
+            enhancement.modifier()
+                    .value()
+                    .disableModifier((float) enhancement.roll(), caster, new AbilityEnhancementModifierSource(
+                            enhancement.originalSource(), enhancement.originalIndex()), enhancement.tier());
+        });
+    }
+
+    /**
      * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
      */
     private void disableUpgradeModifiers() {
+        disableEnhancements();
         if (upgrades == null || upgrades.isEmpty()) {
             return;
         }

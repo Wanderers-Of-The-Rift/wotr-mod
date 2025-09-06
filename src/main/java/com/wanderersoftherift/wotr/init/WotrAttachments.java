@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
@@ -94,6 +95,11 @@ public class WotrAttachments {
 
     public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
             "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());
+    public static final Supplier<AttachmentType<AbilityEnhancements>> ADDITIONAL_ABILITY_UPGRADES = ATTACHMENT_TYPES
+            .register(
+                    "ability_enhancements", () -> AttachmentType.builder(AbilityEnhancements::new).build()
+            );
+
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());

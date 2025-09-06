@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.EnhanceAbilityModifierEffect;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -19,4 +20,7 @@ public class WotrModifierEffectTypes {
             .register("attribute", () -> AttributeModifierEffect.MODIFIER_CODEC);
     public static final Supplier<MapCodec<? extends AbstractModifierEffect>> ABILITY_MODIFIER = MODIFIER_EFFECT_TYPES
             .register("ability", () -> AbilityModifier.CODEC);
+
+    public static final Supplier<MapCodec<? extends AbstractModifierEffect>> ABILITY_UPGRADE_MODIFIER = MODIFIER_EFFECT_TYPES
+            .register("ability_enhancement", () -> EnhanceAbilityModifierEffect.MODIFIER_CODEC);
 }

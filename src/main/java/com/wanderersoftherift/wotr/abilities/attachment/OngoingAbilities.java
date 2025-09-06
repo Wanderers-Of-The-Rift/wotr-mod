@@ -78,8 +78,9 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
+        var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
-                entity.level(), source.upgrades(entity));
+                entity.level(), source.upgrades(entity), enhancements);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
@@ -101,7 +102,9 @@ public class OngoingAbilities {
         boolean existing = existingId.isPresent();
         UUID id = existingId.orElseGet(UUID::randomUUID);
         var upgrades = source.upgrades(entity);
-        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), upgrades);
+        var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
+        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), upgrades,
+                enhancements);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
@@ -123,7 +126,7 @@ public class OngoingAbilities {
         for (ActiveAbility instance : ImmutableList.copyOf(activeAbilities)) {
             instance.age++;
             AbilityContext context = new AbilityContext(instance.id, instance.ability, attachedTo, instance.abilityItem,
-                    instance.source, attachedTo.level(), instance.upgrades);
+                    instance.source, attachedTo.level(), instance.upgrades, instance.enhancements);
             try (var ignore = context.enableTemporaryUpgradeModifiers()) {
                 if (instance.ability.value().tick(context, instance.age)) {
                     activeAbilities.remove(instance);
@@ -148,7 +151,10 @@ public class OngoingAbilities {
                 AbilitySource.DIRECT_CODEC.fieldOf("item_slot").forGetter(ActiveAbility::source),
                 ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(ActiveAbility::abilityItem),
                 Codec.LONG.fieldOf("age").forGetter(ActiveAbility::age),
-                AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(ActiveAbility::upgrades)
+                AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(ActiveAbility::upgrades),
+                AbilityEnhancements.EnhancingModifier.CODEC.listOf()
+                        .fieldOf("enhancements")
+                        .forGetter(ActiveAbility::enhancements)
         ).apply(instance, ActiveAbility::new));
 
         private final UUID id;
@@ -156,21 +162,23 @@ public class OngoingAbilities {
         private final AbilitySource source;
         private final ItemStack abilityItem;
         private final AbilityUpgradePool upgrades;
+        private final List<AbilityEnhancements.EnhancingModifier> enhancements;
         private long age;
 
         private ActiveAbility(AbilityContext context) {
             this(context.instanceId(), context.ability(), context.source(), context.abilityItem(), 0,
-                    context.upgrades());
+                    context.upgrades(), context.enhancements());
         }
 
         private ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
-                AbilityUpgradePool upgrades) {
+                AbilityUpgradePool upgrades, List<AbilityEnhancements.EnhancingModifier> enhancements) {
             this.id = id;
             this.ability = ability;
             this.source = source;
             this.abilityItem = abilityItem;
             this.age = age;
             this.upgrades = upgrades;
+            this.enhancements = enhancements;
         }
 
         public boolean matches(Holder<Ability> ability, AbilitySource source) {
@@ -199,6 +207,10 @@ public class OngoingAbilities {
 
         public AbilityUpgradePool upgrades() {
             return upgrades;
+        }
+
+        public List<AbilityEnhancements.EnhancingModifier> enhancements() {
+            return enhancements;
         }
     }
 
