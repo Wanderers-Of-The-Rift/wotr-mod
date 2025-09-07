@@ -168,9 +168,6 @@ dependencies {
     runtimeOnly "curse.maven:cryonic-config-1208896:${cryonic_config_version}"
     runtimeOnly "curse.maven:puzzles-lib-495476:${puzzles_lib_version}"
 
-    // Local MOTR dependency (since it’s not published yet)
-    runtimeOnly files("libs/motr-0.0.2.jar")
-
     /*Rest:
     runtimeOnly "curse.maven:balm-531761:${balm_version}"
     runtimeOnly "curse.maven:collective-342584:${collective_version}"
