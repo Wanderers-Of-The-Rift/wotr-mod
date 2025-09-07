@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import net.minecraft.core.Holder;
@@ -22,7 +21,7 @@ import java.util.UUID;
  * needing to be looked up in the level
  */
 public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId, ItemStack abilityItem,
-        AbilitySource source, AbilityUpgradePool upgrades, List<AbilityEnhancements.EnhancingModifier> enhancements) {
+        AbilitySource source, AbilityUpgradePool upgrades, List<EnhancingModifierInstance> enhancements) {
 
     public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("instance_id").forGetter(x -> x.instanceId),
@@ -31,7 +30,7 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
             ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
             AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(x -> x.source),
             AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(x -> x.upgrades),
-            AbilityEnhancements.EnhancingModifier.CODEC.listOf()
+            EnhancingModifierInstance.CODEC.listOf()
                     .fieldOf("enhancements")
                     .forGetter(StoredAbilityContext::enhancements)
     ).apply(instance, StoredAbilityContext::new));

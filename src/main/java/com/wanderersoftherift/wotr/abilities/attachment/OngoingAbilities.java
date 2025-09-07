@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
+import com.wanderersoftherift.wotr.abilities.EnhancingModifierInstance;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.MainAbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
@@ -152,9 +153,7 @@ public class OngoingAbilities {
                 ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(ActiveAbility::abilityItem),
                 Codec.LONG.fieldOf("age").forGetter(ActiveAbility::age),
                 AbilityUpgradePool.CODEC.fieldOf("upgrades").forGetter(ActiveAbility::upgrades),
-                AbilityEnhancements.EnhancingModifier.CODEC.listOf()
-                        .fieldOf("enhancements")
-                        .forGetter(ActiveAbility::enhancements)
+                EnhancingModifierInstance.CODEC.listOf().fieldOf("enhancements").forGetter(ActiveAbility::enhancements)
         ).apply(instance, ActiveAbility::new));
 
         private final UUID id;
@@ -162,7 +161,7 @@ public class OngoingAbilities {
         private final AbilitySource source;
         private final ItemStack abilityItem;
         private final AbilityUpgradePool upgrades;
-        private final List<AbilityEnhancements.EnhancingModifier> enhancements;
+        private final List<EnhancingModifierInstance> enhancements;
         private long age;
 
         private ActiveAbility(AbilityContext context) {
@@ -171,7 +170,7 @@ public class OngoingAbilities {
         }
 
         private ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
-                AbilityUpgradePool upgrades, List<AbilityEnhancements.EnhancingModifier> enhancements) {
+                AbilityUpgradePool upgrades, List<EnhancingModifierInstance> enhancements) {
             this.id = id;
             this.ability = ability;
             this.source = source;
@@ -209,7 +208,7 @@ public class OngoingAbilities {
             return upgrades;
         }
 
-        public List<AbilityEnhancements.EnhancingModifier> enhancements() {
+        public List<EnhancingModifierInstance> enhancements() {
             return enhancements;
         }
     }

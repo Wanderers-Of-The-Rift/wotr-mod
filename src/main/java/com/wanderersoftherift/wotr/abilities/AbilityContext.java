@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.abilities.sources.AbilityEnhancementModifierSource;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
@@ -35,7 +34,7 @@ import java.util.UUID;
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
         ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades,
-        @Nonnull List<AbilityEnhancements.EnhancingModifier> enhancements) {
+        @Nonnull List<EnhancingModifierInstance> enhancements) {
 
     /**
      * @return The current game time
@@ -50,9 +49,10 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
         enhancements.forEach(enhancement -> {
             enhancement.modifier()
+                    .modifier()
                     .value()
-                    .enableModifier((float) enhancement.roll(), caster, new AbilityEnhancementModifierSource(
-                            enhancement.originalSource(), enhancement.originalIndex()), enhancement.tier());
+                    .enableModifier((float) enhancement.modifier().roll(), caster, new AbilityEnhancementModifierSource(
+                            enhancement.originalSource(), enhancement.originalIndex()), enhancement.modifier().tier());
         });
         if (upgrades == null || upgrades.isEmpty()) {
             if (enhancements.isEmpty()) {
@@ -99,9 +99,12 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     private void disableEnhancements() {
         enhancements.forEach(enhancement -> {
             enhancement.modifier()
+                    .modifier()
                     .value()
-                    .disableModifier((float) enhancement.roll(), caster, new AbilityEnhancementModifierSource(
-                            enhancement.originalSource(), enhancement.originalIndex()), enhancement.tier());
+                    .disableModifier((float) enhancement.modifier().roll(), caster,
+                            new AbilityEnhancementModifierSource(
+                                    enhancement.originalSource(), enhancement.originalIndex()),
+                            enhancement.modifier().tier());
         });
     }
 
