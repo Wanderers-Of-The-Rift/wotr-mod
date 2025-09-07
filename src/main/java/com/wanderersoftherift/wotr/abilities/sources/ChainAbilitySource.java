@@ -43,8 +43,8 @@ public record ChainAbilitySource(AbilitySource parent, int index) implements Abi
 
     @Override
     public Holder<Ability> getAbility(Entity entity) {
-        if (parent.getAbility(entity) instanceof ChainAbility chainAbility) {
-            return chainAbility.getAbilities().get(index).ability();
+        if (parent.getAbility(entity).value() instanceof ChainAbility chainAbility) {
+            return chainAbility.abilities().get(index).ability();
         }
         WanderersOfTheRift.LOGGER.warn("Incorrect parent ability type: {}", getSerializedName());
         return null;

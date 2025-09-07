@@ -17,30 +17,18 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class ChainAbility implements Ability {
+public record ChainAbility(List<AbilityElement> abilities) implements Ability {
 
     public static final MapCodec<ChainAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     AbilityElement.CODEC.listOf(1, Integer.MAX_VALUE)
                             .fieldOf("abilities")
-                            .forGetter(ChainAbility::getAbilities)
+                            .forGetter(ChainAbility::abilities)
             ).apply(instance, ChainAbility::new));
-
-    private final List<AbilityElement> abilities;
-
-    public ChainAbility(List<AbilityElement> abilities) {
-        this.abilities = abilities;
-    }
 
     @Override
     public MapCodec<? extends Ability> getCodec() {
         return CODEC;
-    }
-
-    @Override
-    public Component getDisplayName(ResourceLocation abilityId) {
-        Holder<Ability> firstAbility = abilities.getFirst().ability;
-        return firstAbility.value().getDisplayName(firstAbility.getKey().location());
     }
 
     @Override
@@ -164,10 +152,6 @@ public class ChainAbility implements Ability {
                 .map(AbilityElement::ability)
                 .map(Holder::value)
                 .anyMatch(x -> x.isRelevantModifier(modifierEffect));
-    }
-
-    public List<AbilityElement> getAbilities() {
-        return abilities;
     }
 
     public int currentIndex(LivingEntity owner, AbilitySource source) {
