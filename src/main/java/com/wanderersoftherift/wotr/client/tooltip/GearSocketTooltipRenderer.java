@@ -10,7 +10,6 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.socket.GearSocket;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
-import com.wanderersoftherift.wotr.modifier.ModifierTier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
@@ -78,19 +77,16 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         int used = (int) cmp.gearSocket().stream().filter(s -> s.runegem().isPresent()).count();
 
         int maxWidth = font.width(getSocketDesc().getString() + "[" + used + "/" + cmp.gearSocket().size() + "]");
-        maxWidth = Math
-                .max(maxWidth,
-                        font.width(Component
-                                .translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
-                                        WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())
-                                .getString()));
+        maxWidth = Math.max(maxWidth,
+                font.width(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
+                        WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName())));
 
         for (GearSocket socket : cmp.gearSocket()) {
-            List<ModifierTier> tiers = getModifierTiers(socket);
-            if (socket.modifier().isPresent() && socket.runegem().isPresent() && tiers != null) {
+            var modifier = socket.modifier();
+            if (modifier.isPresent() && socket.runegem().isPresent()) {
                 int tier = socket.modifier().get().tier();
-                ModifierTier modifier = tiers.get(tier - 1);
-                for (AbstractModifierEffect effect : getModifierEffects(modifier)) {
+                var modifierTier = socket.modifier().get().modifier().value().getModifierTier(tier - 1);
+                for (AbstractModifierEffect effect : modifierTier) {
                     var tooltips = getTooltipsForEffect(effect, isShiftDown, socket.modifier().get());
                     for (var tooltip : tooltips) {
                         String text = getEffectText(tooltip);
@@ -155,8 +151,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         for (GearSocket socket : sorted) {
             int tier = socket.modifier().get().tier();
-            ModifierTier modifier = getModifierTiers(socket).get(tier - 1);
-            List<AbstractModifierEffect> effects = getModifierEffects(modifier);
+            List<AbstractModifierEffect> effects = getModifierTiers(socket).get(tier - 1);
 
             for (int i = 0; i < effects.size(); i++) {
                 AbstractModifierEffect effect = effects.get(i);
@@ -263,12 +258,13 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         gui.fill(x + 21, y - 2, x + width - 9, y - 1, 0x4019191a);
     }
 
-    private static List<AbstractModifierEffect> getModifierEffects(ModifierTier tier) {
-        return tier.getModifierEffects();
-    }
+    private static List<List<AbstractModifierEffect>> getModifierTiers(GearSocket socket) {
+        var modifier = socket.modifier();
+        if (modifier.isEmpty()) {
+            return null;
+        }
 
-    private static List<ModifierTier> getModifierTiers(GearSocket socket) {
-        return socket.modifier().map(inst -> inst.modifier().value().getModifierTierList()).orElse(null);
+        return modifier.get().modifier().value().getModifierTierList();
     }
 
     private static List<GearSocket> getSortedSockets(List<GearSocket> sockets) {
@@ -284,13 +280,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
     }
 
     private static int getModifierEffectsCount(GearSocket socket) {
-        return Optional.ofNullable(getModifierTiers(socket)).map(tiers -> {
-            int tier = socket.modifier().map(ModifierInstance::tier).orElse(0);
-            if (tier > 0 && tier <= tiers.size()) {
-                return tiers.get(tier - 1).getModifierEffects().size();
-            }
+        var socketModifier = socket.modifier();
+        if (socketModifier.isEmpty()) {
             return 1;
-        }).orElse(1);
+        }
+        return socketModifier.get().modifier().value().getModifierTier(socketModifier.get().tier()).size();
     }
 
     private static String formatRoll(double value) {
@@ -307,8 +301,8 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
     private static String getTierInfoString(AbstractModifierEffect effect, int tier) {
         if (effect instanceof AttributeModifierEffect attr) {
-            return " (T" + tier + " : " + formatRoll(attr.getMinimumRoll()) + " - " + formatRoll(attr.getMaximumRoll())
-                    + ")";
+            return " (T%d : %s - %s)".formatted(tier, formatRoll(attr.getMinimumRoll()),
+                    formatRoll(attr.getMaximumRoll()));
         }
         return " (T " + tier + ")";
     }

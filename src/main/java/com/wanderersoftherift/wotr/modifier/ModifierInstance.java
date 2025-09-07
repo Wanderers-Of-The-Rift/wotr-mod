@@ -35,11 +35,6 @@ public record ModifierInstance(Holder<Modifier> modifier, int tier, float roll) 
     }
 
     public List<AbstractModifierEffect> effects() {
-        return modifier.value()
-                .getModifierTierList()
-                .stream()
-                .filter(it -> it.getTier() == tier)
-                .flatMap(it -> it.getModifierEffects().stream())
-                .toList();
+        return modifier.value().getModifierTier(tier);
     }
 }

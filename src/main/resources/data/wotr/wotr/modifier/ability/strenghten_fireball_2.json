@@ -3,16 +3,13 @@
         "color": "#cc8811"
     },
     "tiers": [
-        {
-            "tier": 1,
-            "modifiers": [
-                {
-                    "type": "wotr:ability_enhancement",
-                    "ability": "#wotr:fireball_and_icicles",
-                    "modifier": "wotr:ability_damage_flat",
-                    "tier": 1
-                }
-            ]
-        }
+        [
+            {
+                "type": "wotr:ability_enhancement",
+                "ability": "#wotr:fireball_and_icicles",
+                "modifier": "wotr:ability_damage_flat",
+                "tier": 1
+            }
+        ]
     ]
 }

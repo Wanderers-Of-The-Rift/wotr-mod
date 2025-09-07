@@ -3,57 +3,45 @@
     "color": "#8B4513"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor",
-          "max_roll": 6.5,
-          "min_roll": 2.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor",
-          "max_roll": 11.0,
-          "min_roll": 6.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor",
-          "max_roll": 15.5,
-          "min_roll": 11.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor",
-          "max_roll": 20.0,
-          "min_roll": 15.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 4
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor",
+        "max_roll": 6.5,
+        "min_roll": 2.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor",
+        "max_roll": 11.0,
+        "min_roll": 6.5,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor",
+        "max_roll": 15.5,
+        "min_roll": 11.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor",
+        "max_roll": 20.0,
+        "min_roll": 15.5,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

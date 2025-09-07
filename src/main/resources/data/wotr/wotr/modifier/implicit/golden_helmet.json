@@ -2,10 +2,7 @@
   "style": {
     "color": "#00FA9A"
   },
-  "tiers": [
-    {
-      "tier": 1,
-      "modifiers": [
+  "tiers": [[
         {
           "type": "wotr:attribute",
           "id": "wotr:golden_helmet",
@@ -15,6 +12,5 @@
           "operation": "add_multiplied_base"
         }
       ]
-    }
   ]
 }

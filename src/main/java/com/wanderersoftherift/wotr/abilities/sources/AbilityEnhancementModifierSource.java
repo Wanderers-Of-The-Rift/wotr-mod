@@ -36,7 +36,7 @@ public record AbilityEnhancementModifierSource(ModifierSource baseSource, int ef
         if (baseEffect instanceof EnhanceAbilityModifierEffect enhancing) {
             var tier = enhancing.modifier().value().getModifierTier(enhancing.tier());
             if (tier != null) {
-                return tier.getModifierEffects();
+                return tier;
             }
         }
         return Collections.emptyList();

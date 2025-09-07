@@ -3,31 +3,25 @@
     "color": "#DAA520"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:projectile_pierce",
-          "id": "wotr:projectile_pierce",
-          "max_roll": 0.05999999865889549,
-          "min_roll": 0.009999999776482582,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:projectile_pierce",
-          "id": "wotr:projectile_pierce",
-          "max_roll": 0.10000000149011612,
-          "min_roll": 0.05999999865889549,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 2
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:projectile_pierce",
+        "id": "wotr:projectile_pierce",
+        "max_roll": 0.05999999865889549,
+        "min_roll": 0.009999999776482582,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:projectile_pierce",
+        "id": "wotr:projectile_pierce",
+        "max_roll": 0.10000000149011612,
+        "min_roll": 0.05999999865889549,
+        "operation": "add_multiplied_base"
+      }
+    ]
   ]
 }

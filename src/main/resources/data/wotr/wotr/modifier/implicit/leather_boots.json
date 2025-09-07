@@ -2,10 +2,7 @@
   "style": {
     "color": "#00BFFF"
   },
-  "tiers": [
-    {
-      "tier": 1,
-      "modifiers": [
+  "tiers": [[
         {
           "type": "wotr:attribute",
           "id": "wotr:leather_boots",
@@ -23,6 +20,5 @@
           "operation": "add_multiplied_base"
         }
       ]
-    }
   ]
 }

@@ -2,10 +2,7 @@
   "style": {
     "color": "#4169E1"
   },
-  "tiers": [
-    {
-      "tier": 1,
-      "modifiers": [
+  "tiers": [[
         {
           "type": "wotr:attribute",
           "id": "wotr:diamond_chestplate",
@@ -15,6 +12,5 @@
           "operation": "add_multiplied_base"
         }
       ]
-    }
   ]
 }

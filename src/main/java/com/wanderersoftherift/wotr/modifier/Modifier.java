@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.modifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -15,13 +16,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            ModifierTier.CODEC.listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList),
+            AbstractModifierEffect.DIRECT_CODEC.listOf()
+                    .listOf()
+                    .fieldOf("tiers")
+                    .forGetter(Modifier::getModifierTierList),
             Style.Serializer.CODEC.optionalFieldOf("style", Style.EMPTY.withColor(ChatFormatting.GRAY))
                     .forGetter(Modifier::getStyle))
             .apply(inst, Modifier::new)
@@ -30,16 +33,16 @@ public class Modifier {
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MODIFIERS);
 
-    private final Map<Integer, ModifierTier> modifierTiers;
+    private final List<List<AbstractModifierEffect>> modifierTiers;
     private final Style style;
 
-    public Modifier(List<ModifierTier> modifierTiers, Style style) {
-        this.modifierTiers = modifierTiers.stream().collect(Collectors.toMap(ModifierTier::getTier, tier -> tier));
+    public Modifier(List<List<AbstractModifierEffect>> modifierTiers, Style style) {
+        this.modifierTiers = modifierTiers;
         this.style = style;
     }
 
-    public List<ModifierTier> getModifierTierList() {
-        return modifierTiers.values().stream().toList();
+    public List<List<AbstractModifierEffect>> getModifierTierList() {
+        return modifierTiers;
     }
 
     public Style getStyle() {
@@ -47,30 +50,43 @@ public class Modifier {
     }
 
     public void enableModifier(float roll, Entity entity, ModifierSource source, int tier) {
-        if (!modifierTiers.containsKey(tier)) {
+        if (tier <= 0 || tier > modifierTiers.size()) {
             return;
         }
-        modifierTiers.get(tier).enableModifier(roll, entity, source);
+        List<AbstractModifierEffect> tierEffects = modifierTiers.get(tier - 1);
+        for (int i = 0; i < tierEffects.size(); i++) {
+            AbstractModifierEffect it = tierEffects.get(i);
+            it.enableModifier(roll, entity, source, i);
+        }
     }
 
     public void disableModifier(float roll, Entity entity, ModifierSource source, int tier) {
-        if (!modifierTiers.containsKey(tier)) {
+        if (tier <= 0 || tier > modifierTiers.size()) {
             return;
         }
-        modifierTiers.get(tier).disableModifier(roll, entity, source);
+        List<AbstractModifierEffect> tierEffects = modifierTiers.get(tier - 1);
+        for (int i = 0; i < tierEffects.size(); i++) {
+            AbstractModifierEffect it = tierEffects.get(i);
+            it.disableModifier(roll, entity, source, i);
+        }
     }
 
     public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
-        if (!modifierTiers.containsKey(instance.tier())) {
-            return List.of();
+        if (instance.tier() <= 0 || instance.tier() > modifierTiers.size()) {
+            return Collections.emptyList();
         }
-        return modifierTiers.get(instance.tier())
-                .getTooltipComponent(
-                        stack, roll, instance
-                );
+        return modifierTiers.get(instance.tier() - 1)
+                .stream()
+                .flatMap(it -> it.getTooltipComponent(
+                        stack, roll, instance.modifier().value().getStyle()
+                ).stream())
+                .toList();
     }
 
-    public ModifierTier getModifierTier(int tier) {
-        return modifierTiers.get(tier); // why is modifierTiers not just a list??
+    public List<AbstractModifierEffect> getModifierTier(int tier) {
+        if (tier <= 0 || tier > modifierTiers.size()) {
+            return null;
+        }
+        return modifierTiers.get(tier - 1); // why is modifierTiers not just a list??
     }
 }

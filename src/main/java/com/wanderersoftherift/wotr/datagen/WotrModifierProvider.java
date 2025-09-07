@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.Modifier;
-import com.wanderersoftherift.wotr.modifier.ModifierTier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.util.ColorUtil;
@@ -328,11 +327,11 @@ public class WotrModifierProvider {
         );
     }
 
-    private static List<ModifierTier> generateEqualRollSpread(
+    private static List<List<AbstractModifierEffect>> generateEqualRollSpread(
             int tiers,
             List<ToBeTieredModifierEffect> toBeTieredModifierEffectList,
             List<AbstractModifierEffect> untieredModifiers) {
-        List<ModifierTier> modifierTiers = new ArrayList<>();
+        List<List<AbstractModifierEffect>> modifierTiers = new ArrayList<>();
         for (int i = 0; i < tiers; i++) {
             List<AbstractModifierEffect> modifierEffects = new ArrayList<>();
             for (ToBeTieredModifierEffect toBeTieredModifierEffect : toBeTieredModifierEffectList) {
@@ -340,12 +339,12 @@ public class WotrModifierProvider {
                 modifierEffects.add(modifierEffectTier);
                 modifierEffects.addAll(untieredModifiers);
             }
-            modifierTiers.add(new ModifierTier(i + 1, modifierEffects));
+            modifierTiers.add(modifierEffects);
         }
         return modifierTiers;
     }
 
-    private static List<ModifierTier> generateEqualRollSpread(
+    private static List<List<AbstractModifierEffect>> generateEqualRollSpread(
             int tiers,
             List<ToBeTieredModifierEffect> toBeTieredModifierEffectList) {
         return generateEqualRollSpread(tiers, toBeTieredModifierEffectList, List.of());
