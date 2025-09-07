@@ -95,10 +95,9 @@ public class WotrAttachments {
 
     public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
             "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());
-    public static final Supplier<AttachmentType<AbilityEnhancements>> ADDITIONAL_ABILITY_UPGRADES = ATTACHMENT_TYPES
-            .register(
-                    "ability_enhancements", () -> AttachmentType.builder(AbilityEnhancements::new).build()
-            );
+    public static final Supplier<AttachmentType<AbilityEnhancements>> ABILITY_ENHANCEMENTS = ATTACHMENT_TYPES.register(
+            "ability_enhancements", () -> AttachmentType.builder(AbilityEnhancements::new).build()
+    );
 
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",

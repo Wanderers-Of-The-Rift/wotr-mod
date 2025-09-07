@@ -21,7 +21,7 @@ public class AbilityEnhancements {
     private final Map<Holder<Ability>, LinkedHashMap<AbilityEnhancementKey, AbilityEnhancementValue>> effects = new HashMap<>();
 
     public static AbilityEnhancements forEntity(IAttachmentHolder entity) {
-        return entity.getData(WotrAttachments.ADDITIONAL_ABILITY_UPGRADES);
+        return entity.getData(WotrAttachments.ABILITY_ENHANCEMENTS);
     }
 
     public List<EnhancingModifier> modifiers(Holder<Ability> ability) {
