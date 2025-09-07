@@ -6,9 +6,9 @@ import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
+import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.gui.menu.slot.UUIDDataSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.item.handler.QuestItemStackHandler;
 import com.wanderersoftherift.wotr.network.quest.QuestRewardsPayload;
@@ -52,18 +52,18 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
             .tryMoveToPlayer()
             .build();
 
-    private final ContainerLevelAccess access;
+    private final ValidatingLevelAccess access;
     private final ItemStackHandler handInItems;
     private final ActiveQuests quests;
 
     private final UUIDDataSlot selectedQuest = new UUIDDataSlot();
 
     public QuestCompletionMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL,
+        this(containerId, playerInventory, ValidatingLevelAccess.NULL,
                 Minecraft.getInstance().player.getData(WotrAttachments.ACTIVE_QUESTS), null);
     }
 
-    public QuestCompletionMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
+    public QuestCompletionMenu(int containerId, Inventory playerInventory, ValidatingLevelAccess access,
             ActiveQuests activeQuests, UUID selected) {
         super(WotrMenuTypes.QUEST_COMPLETION_MENU.get(), containerId);
 
@@ -89,7 +89,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(this.access, player, WotrBlocks.QUEST_HUB.get());
+        return access.isValid(player);
     }
 
     public Optional<QuestState> getQuestState() {

@@ -1,17 +1,21 @@
 package com.wanderersoftherift.wotr.abilities.sources;
 
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource {
 
@@ -37,25 +41,28 @@ public record MainAbilitySource(WotrEquipmentSlot slot) implements AbilitySource
     }
 
     @Override
+    public @Nullable WotrEquipmentSlot getLinkedSlot() {
+        return slot;
+    }
+
+    @Override
     public Holder<Ability> getAbility(Entity entity) {
-        return slot.getContent(entity).get(WotrDataComponentType.ABILITY).ability();
-    }
-
-    @Override
-    public AbilityUpgradePool upgrades(Entity entity) {
-        return slot.getContent(entity).get(WotrDataComponentType.ABILITY_UPGRADE_POOL);
-    }
-
-    public Holder<Ability> getMainAbility(Entity entity) {
-        var abi = slot.getContent(entity).get(WotrDataComponentType.ABILITY);
-        if (abi == null) {
-            return null;
+        ActivatableAbility mainAbility = slot.getContent(entity).get(WotrDataComponentType.ABILITY);
+        if (mainAbility != null) {
+            return mainAbility.ability();
         }
-        return abi.ability();
+        return null;
     }
 
     @Override
-    public String getSerializedName() {
+    public @NotNull List<Holder<AbilityUpgrade>> upgrades(Entity entity) {
+        return slot.getContent(entity)
+                .getOrDefault(WotrDataComponentType.ABILITY_UPGRADE_POOL, AbilityUpgradePool.EMPTY)
+                .getAllSelected();
+    }
+
+    @Override
+    public @NotNull String getSerializedName() {
         return "slot_ability_" + slot.getSerializedName();
     }
 }

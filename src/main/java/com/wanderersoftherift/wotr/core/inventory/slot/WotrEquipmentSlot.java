@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.modifier;
+package com.wanderersoftherift.wotr.core.inventory.slot;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;

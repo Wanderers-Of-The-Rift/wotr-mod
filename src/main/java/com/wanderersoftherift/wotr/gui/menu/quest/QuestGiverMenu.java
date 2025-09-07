@@ -2,14 +2,13 @@ package com.wanderersoftherift.wotr.gui.menu.quest;
 
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,15 +20,15 @@ import java.util.List;
  * menu.
  */
 public class QuestGiverMenu extends AbstractContainerMenu {
-    private final ContainerLevelAccess access;
+    private final ValidatingLevelAccess access;
     private final List<QuestState> availableQuests;
     private boolean availableQuestsDirty = false;
 
     public QuestGiverMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, new ArrayList<>());
+        this(containerId, playerInventory, ValidatingLevelAccess.NULL, new ArrayList<>());
     }
 
-    public QuestGiverMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access,
+    public QuestGiverMenu(int containerId, Inventory playerInventory, ValidatingLevelAccess access,
             List<QuestState> availableQuests) {
         super(WotrMenuTypes.QUEST_GIVER_MENU.get(), containerId);
 
@@ -48,7 +47,7 @@ public class QuestGiverMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(this.access, player, WotrBlocks.QUEST_HUB.get());
+        return access.isValid(player);
     }
 
     public void acceptQuest(ServerPlayer player, int index) {

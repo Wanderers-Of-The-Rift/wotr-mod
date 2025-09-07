@@ -519,6 +519,8 @@
   "objective.wotr.nothing.name": "Nothing",
   "objective.wotr.stealth.description": "Defeat monsters stealthily",
   "objective.wotr.stealth.name": "Stealth",
+  "quest.wotr.bring_fish.description": "I'm starving. Could you purlease bring me a fish?",
+  "quest.wotr.bring_fish.title": "Fish of the day",
   "quest.wotr.complete_rift.description": "Prove your mettle.",
   "quest.wotr.complete_rift.title": "Complete Rifts",
   "quest.wotr.fetch_quest.description": "Bring me what I need and I'll make it worth your while.",

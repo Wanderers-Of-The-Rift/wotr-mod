@@ -20,6 +20,7 @@ import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.init.WotrMobEffects;
+import com.wanderersoftherift.wotr.init.WotrMobInteractions;
 import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
 import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
@@ -133,6 +134,8 @@ public class WanderersOfTheRift {
         WotrRewardTypes.REWARD_PROVIDER_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_TYPES.register(modEventBus);
         WotrTrackedAbilityTriggers.TRIGGERS.register(modEventBus);
+
+        WotrMobInteractions.MOB_INTERACTIONS.register(modEventBus);
 
         // Gear
         WotrModifierSourceTypes.MODIFIER_SOURCE.register(modEventBus);

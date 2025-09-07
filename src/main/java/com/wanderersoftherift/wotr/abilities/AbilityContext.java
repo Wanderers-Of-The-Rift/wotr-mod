@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.sources.AbilityEnhancementModifierSource;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
-import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -33,7 +33,7 @@ import java.util.UUID;
  * @param upgrades
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
-        ItemStack abilityItem, AbilitySource source, Level level, AbilityUpgradePool upgrades,
+        ItemStack abilityItem, AbilitySource source, Level level, @NotNull List<Holder<AbilityUpgrade>> upgrades,
         @Nonnull List<EnhancingModifierInstance> enhancements) {
 
     /**
@@ -54,21 +54,22 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
                     .enableModifier((float) enhancement.modifier().roll(), caster, new AbilityEnhancementModifierSource(
                             enhancement.originalSource(), enhancement.originalIndex()), enhancement.modifier().tier());
         });
-        if (upgrades == null || upgrades.isEmpty()) {
+        if (upgrades.isEmpty()) {
             if (enhancements.isEmpty()) {
                 return ExceptionlessAutoClosable.NOOP;
             } else {
                 return this::disableEnhancements;
             }
         }
-        upgrades.forEachSelected((selection, upgrade) -> {
-            ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
+        for (int index = 0; index < upgrades.size(); index++) {
+            ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
+            AbilityUpgrade upgrade = upgrades.get(index).value();
             List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
             for (int i = 0; i < modifierEffects.size(); i++) {
                 AbstractModifierEffect effect = modifierEffects.get(i);
                 effect.enableModifier(0, caster, source, i);
             }
-        });
+        }
         return this::disableUpgradeModifiers;
     }
 
@@ -113,16 +114,14 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      */
     private void disableUpgradeModifiers() {
         disableEnhancements();
-        if (upgrades == null || upgrades.isEmpty()) {
-            return;
-        }
-        upgrades.forEachSelected((selection, upgrade) -> {
-            ModifierSource source = new AbilityUpgradeModifierSource(source(), selection);
+        for (int index = 0; index < upgrades.size(); index++) {
+            ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
+            AbilityUpgrade upgrade = upgrades.get(index).value();
             List<AbstractModifierEffect> modifierEffects = upgrade.modifierEffects();
             for (int i = 0; i < modifierEffects.size(); i++) {
                 AbstractModifierEffect effect = modifierEffects.get(i);
                 effect.disableModifier(0, caster, source, i);
             }
-        });
+        }
     }
 }

@@ -1,5 +1,5 @@
 {
-  "type": "wotr:toggle",
+  "type": "wotr:persistent",
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
   "on_deactivation_costs": [
     {

@@ -2,8 +2,9 @@ package com.wanderersoftherift.wotr.abilities.sources;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
-import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
+import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
@@ -15,8 +16,10 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public interface AbilitySource extends StringRepresentable {
 
@@ -40,6 +43,8 @@ public interface AbilitySource extends StringRepresentable {
 
     Holder<Ability> getAbility(Entity entity);
 
-    AbilityUpgradePool upgrades(Entity entity);
+    @Nullable WotrEquipmentSlot getLinkedSlot();
+
+    @NotNull List<Holder<AbilityUpgrade>> upgrades(Entity entity);
 
 }

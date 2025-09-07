@@ -3,10 +3,12 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
+import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
@@ -17,10 +19,18 @@ import java.util.Optional;
  */
 public class DetachOwnEffect extends AbilityEffect {
     public static final MapCodec<DetachOwnEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbilityEffect.commonFields(instance).apply(instance, DetachOwnEffect::new));
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
+                    .and(
+                            ResourceLocation.CODEC.optionalFieldOf("id").forGetter(DetachOwnEffect::getId)
+                    )
+                    .apply(instance, DetachOwnEffect::new));
 
-    public DetachOwnEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles) {
+    private final Optional<ResourceLocation> id;
+
+    public DetachOwnEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
+            Optional<ResourceLocation> id) {
         super(targeting, effects, particles);
+        this.id = id;
     }
 
     @Override
@@ -31,13 +41,22 @@ public class DetachOwnEffect extends AbilityEffect {
 
         for (Entity target : targets) {
             applyParticlesToTarget(target);
-            target.getData(WotrAttachments.ATTACHED_EFFECTS).detach(context.instanceId());
+            AttachedEffects attachedEffects = target.getData(WotrAttachments.ATTACHED_EFFECTS);
+            if (id.isPresent()) {
+                attachedEffects.detach(context.instanceId(), effect -> effect.getId().equals(id));
+            } else {
+                attachedEffects.detach(context.instanceId());
+            }
             super.apply(target, getTargeting().getBlocks(user), context);
         }
 
         if (targets.isEmpty()) {
             super.apply(null, getTargeting().getBlocks(user), context);
         }
+    }
+
+    public Optional<ResourceLocation> getId() {
+        return id;
     }
 
     @Override
