@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -13,7 +14,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collections;
@@ -71,7 +71,7 @@ public class Modifier {
         }
     }
 
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
+    public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
         if (instance.tier() <= 0 || instance.tier() > modifierTiers.size()) {
             return Collections.emptyList();
         }
@@ -79,6 +79,18 @@ public class Modifier {
                 .stream()
                 .flatMap(it -> it.getTooltipComponent(
                         stack, roll, instance.modifier().value().getStyle()
+                ).stream())
+                .toList();
+    }
+
+    public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
+        if (instance.tier() <= 0 || instance.tier() > modifierTiers.size()) {
+            return Collections.emptyList();
+        }
+        return modifierTiers.get(instance.tier() - 1)
+                .stream()
+                .flatMap(it -> it.getAdvancedTooltipComponent(
+                        stack, roll, instance.modifier().value().getStyle(), instance.tier()
                 ).stream())
                 .toList();
     }

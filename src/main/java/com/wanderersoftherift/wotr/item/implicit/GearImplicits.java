@@ -1,18 +1,14 @@
 package com.wanderersoftherift.wotr.item.implicit;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.client.tooltip.GearImplicitRenderer;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.ModifierProvider;
 import com.wanderersoftherift.wotr.modifier.source.GearImplicitModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -52,15 +48,6 @@ public interface GearImplicits extends ModifierProvider {
     }
 
     default Collection<Either<FormattedText, TooltipComponent>> tooltips(ItemStack stack) {
-        var result = ImmutableList.<Either<FormattedText, TooltipComponent>>builder();
-
-        result.add(Either.left(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".implicit")
-                .withStyle(ChatFormatting.GRAY)));
-
-        for (ModifierInstance modifierInstance : modifierInstances(stack, Minecraft.getInstance().level)) {
-            List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack);
-            result.addAll(tooltipComponents.stream().map(Either::<FormattedText, TooltipComponent>right).toList());
-        }
-        return result.build();
+        return List.of(Either.right(new GearImplicitRenderer.GearImplicitsComponent(this)));
     }
 }

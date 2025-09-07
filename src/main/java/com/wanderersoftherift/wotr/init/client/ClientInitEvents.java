@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapData;
 import com.wanderersoftherift.wotr.client.map.MapRoom;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
+import com.wanderersoftherift.wotr.client.tooltip.GearImplicitRenderer;
 import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.client.tooltip.ImageTooltipRenderer;
@@ -68,6 +69,7 @@ public final class ClientInitEvents {
     public static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(ImageComponent.class, ImageTooltipRenderer::new);
         event.register(GearSocketTooltipRenderer.GearSocketComponent.class, GearSocketTooltipRenderer::new);
+        event.register(GearImplicitRenderer.GearImplicitsComponent.class, GearImplicitRenderer::new);
     }
 
     @SubscribeEvent

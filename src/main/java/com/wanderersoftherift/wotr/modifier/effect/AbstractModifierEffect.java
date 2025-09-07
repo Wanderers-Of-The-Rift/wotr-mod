@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.modifier.effect;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -10,7 +11,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -34,7 +34,11 @@ public abstract class AbstractModifierEffect {
 
     public abstract void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex);
 
-    public abstract List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style);
+    public abstract List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style);
 
-    public abstract List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style);
+    public abstract List<ImageComponent> getAdvancedTooltipComponent(
+            ItemStack stack,
+            float roll,
+            Style style,
+            int tier);
 }

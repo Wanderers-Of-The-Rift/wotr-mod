@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.modifier.effect;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -17,7 +18,6 @@ import net.minecraft.core.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -59,31 +59,44 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style) {
-        return getTooltipComponent(stack, roll, style); // todo
+    public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
+        var abilityTextComponent = abilities.stream()
+                .map(Holder::unwrapKey)
+                .filter(Optional::isPresent)
+                .map(it -> WanderersOfTheRift.translationId("ability", it.get().location()))
+                .map(Component::translatable)
+                .reduce((a, b) -> a.append(", ").append(b));
+        var result = ImmutableList.<ImageComponent>builder();
+        result.add(new ImageComponent(stack,
+                Component.literal("for ")
+                        .append(abilityTextComponent
+                                .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
+                        .append(Component.literal(": [")),
+                null));
+        result.addAll(modifier.value()
+                .getAdvancedTooltipComponent(stack, roll, new ModifierInstance(modifier, this.tier, roll)));
+        result.add(new ImageComponent(stack, Component.literal("] (T" + tier + ")"), null));
+        return result.build();
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
-        var baseComponent = modifier.value()
-                .getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll))
-                .getFirst(); // any other ideas?
-        if (baseComponent instanceof ImageComponent image) {
-            var abilityTextComponent = abilities.stream()
-                    .map(Holder::unwrapKey)
-                    .filter(Optional::isPresent)
-                    .map(it -> WanderersOfTheRift.translationId("ability", it.get().location()))
-                    .map(Component::translatable)
-                    .reduce((a, b) -> a.append(", ").append(b));
-            return List.of(new ImageComponent(image.stack(),
-                    Component.literal("for ")
-                            .append(abilityTextComponent
-                                    .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
-                            .append(Component.literal(": "))
-                            .append(image.base()),
-                    image.asset()));
-        }
-        return List.of(baseComponent);
+    public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+        var abilityTextComponent = abilities.stream()
+                .map(Holder::unwrapKey)
+                .filter(Optional::isPresent)
+                .map(it -> WanderersOfTheRift.translationId("ability", it.get().location()))
+                .map(Component::translatable)
+                .reduce((a, b) -> a.append(", ").append(b));
+        var result = ImmutableList.<ImageComponent>builder();
+        result.add(new ImageComponent(stack,
+                Component.literal("for ")
+                        .append(abilityTextComponent
+                                .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
+                        .append(Component.literal(": [")),
+                null));
+        result.addAll(modifier.value().getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll)));
+        result.add(new ImageComponent(stack, Component.literal("]"), null));
+        return result.build();
     }
 
     public HolderSet<Ability> abilities() {

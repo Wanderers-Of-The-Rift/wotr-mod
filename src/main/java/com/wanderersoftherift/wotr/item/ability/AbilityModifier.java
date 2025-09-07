@@ -11,11 +11,12 @@ import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -55,12 +56,18 @@ public final class AbilityModifier extends AbstractModifierEffect {
     }
 
     @Override
-    public List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style) {
-        return getTooltipComponent(stack, roll, style); // todo
+    public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
+        var base = getTooltipComponent(stack, roll, style);
+        return base.stream()
+                .map(
+                        it -> new ImageComponent(it.stack(),
+                                ComponentUtil.mutable(it.base()).append(getTierInfoString(tier)), it.asset())
+                )
+                .toList();
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+    public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
         var text = Component.translatable(
                 WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
                         WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
@@ -101,4 +108,11 @@ public final class AbilityModifier extends AbstractModifierEffect {
         return "AbilityModifier[" + "providedAbility=" + providedAbility + ", " + "trigger=" + trigger + ']';
     }
 
+    private String getTierInfoString(int tier) {
+        return " (T%d)".formatted(tier);
+    }
+
+    private Component getTierInfo(int tier) {
+        return Component.literal(getTierInfoString(tier)).withStyle(ChatFormatting.DARK_GRAY);
+    }
 }

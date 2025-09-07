@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import org.lwjgl.opengl.GL45;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,7 +17,9 @@ public class TextureUtils {
      *
      * @param resource the {@link ResourceLocation} to read
      * @return The Image width as an int
+     * @deprecated use getTextureWidthGL instead
      */
+    @Deprecated
     public static int getTextureWidth(ResourceLocation resource) {
         try {
             Optional<Resource> mcResource = Minecraft.getInstance().getResourceManager().getResource(resource);
@@ -37,7 +40,9 @@ public class TextureUtils {
      *
      * @param resource the {@link ResourceLocation} to read
      * @return The Image height as an int
+     * @deprecated use getTextureHeightGL instead
      */
+    @Deprecated
     public static int getTextureHeight(ResourceLocation resource) {
         try {
             Optional<Resource> mcResource = Minecraft.getInstance().getResourceManager().getResource(resource);
@@ -52,4 +57,18 @@ public class TextureUtils {
         }
         return -1; // Return -1 if the texture can't be loaded
     }
+
+    /*
+     * same but using OpenGL instead of loading decoding the entire image from scratch
+     */
+    public static int getTextureWidthGL(ResourceLocation resource) {
+        var id = Minecraft.getInstance().getTextureManager().getTexture(resource).getId();
+        return GL45.glGetTextureLevelParameteri(id, 0, GL45.GL_TEXTURE_WIDTH);
+    }
+
+    public static int getTextureHeightGL(ResourceLocation resource) {
+        var id = Minecraft.getInstance().getTextureManager().getTexture(resource).getId();
+        return GL45.glGetTextureLevelParameteri(id, 0, GL45.GL_TEXTURE_HEIGHT);
+    }
+
 }

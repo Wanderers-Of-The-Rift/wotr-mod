@@ -2,13 +2,13 @@ package com.wanderersoftherift.wotr.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public record ModifierInstance(Holder<Modifier> modifier, int tier, float roll) 
         return new ModifierInstance(modifier, tier, random.nextFloat());
     }
 
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack) {
+    public List<ImageComponent> getTooltipComponent(ItemStack stack) {
         return modifier.value().getTooltipComponent(stack, roll, this);
     }
 

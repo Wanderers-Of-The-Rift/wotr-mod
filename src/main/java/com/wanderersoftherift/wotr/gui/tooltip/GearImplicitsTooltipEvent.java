@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.gui.tooltip;
 
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
@@ -43,7 +44,7 @@ public class GearImplicitsTooltipEvent {
 
         List<TooltipComponent> toAdd = new ArrayList<>();
         for (ModifierInstance modifierInstance : modifierInstances) {
-            List<TooltipComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack);
+            List<ImageComponent> tooltipComponents = modifierInstance.getTooltipComponent(stack);
             toAdd.addAll(tooltipComponents);
         }
 

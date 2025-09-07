@@ -8,6 +8,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,10 +20,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Locale;
 
 public class AttributeModifierEffect extends AbstractModifierEffect {
     public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
@@ -106,19 +108,25 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style) {
-        return getTooltipComponent(stack, roll, style); // todo
+    public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
+        var base = switch (this.getOperation()) {
+            case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
+            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
+        };
+        base = new ImageComponent(base.stack(), ComponentUtil.mutable(base.base()).append(getTierInfoString(tier)),
+                base.asset());
+        return List.of(base);
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+    public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
         return List.of(switch (this.getOperation()) {
             case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
             case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
         });
     }
 
-    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, Style style) {
+    private ImageComponent getAddTooltipComponent(ItemStack stack, float roll, Style style) {
         double calculatedRoll = calculateModifier(roll);
         float roundedValue = (float) (Math.ceil(calculatedRoll * 100) / 100);
         String sign;
@@ -136,7 +144,7 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
-    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, Style style) {
+    private ImageComponent getMultiplyTooltipComponent(ItemStack stack, float roll, Style style) {
         double calculatedRoll = calculateModifier(roll);
         int roundedValue = (int) Math.ceil(calculatedRoll * 100);
         String sign;
@@ -154,4 +162,17 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
         }
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
+
+    private static String formatRoll(double value) {
+        return String.format(Locale.ROOT, "%.2f", value);
+    }
+
+    private String getTierInfoString(int tier) {
+        return " (T%d : %s - %s)".formatted(tier, formatRoll(getMinimumRoll()), formatRoll(getMaximumRoll()));
+    }
+
+    private Component getTierInfo(int tier) {
+        return Component.literal(getTierInfoString(tier)).withStyle(ChatFormatting.DARK_GRAY);
+    }
+
 }
