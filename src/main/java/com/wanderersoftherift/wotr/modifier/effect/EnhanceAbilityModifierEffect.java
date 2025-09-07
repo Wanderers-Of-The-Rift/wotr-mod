@@ -71,11 +71,11 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
                 Component.literal("for ")
                         .append(abilityTextComponent
                                 .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
-                        .append(Component.literal(": [")),
+                        .append(Component.literal(": [").withStyle(style)),
                 null));
         result.addAll(modifier.value()
                 .getAdvancedTooltipComponent(stack, roll, new ModifierInstance(modifier, this.tier, roll)));
-        result.add(new ImageComponent(stack, Component.literal("] (T" + tier + ")"), null));
+        result.add(new ImageComponent(stack, Component.literal("] (T" + tier + ")").withStyle(style), null));
         return result.build();
     }
 
@@ -92,10 +92,11 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
                 Component.literal("for ")
                         .append(abilityTextComponent
                                 .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
-                        .append(Component.literal(": [")),
+                        .append(Component.literal(": ["))
+                        .withStyle(style),
                 null));
         result.addAll(modifier.value().getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll)));
-        result.add(new ImageComponent(stack, Component.literal("]"), null));
+        result.add(new ImageComponent(stack, Component.literal("]").withStyle(style), null));
         return result.build();
     }
 

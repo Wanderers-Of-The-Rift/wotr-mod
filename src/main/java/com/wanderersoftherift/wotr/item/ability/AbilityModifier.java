@@ -74,8 +74,8 @@ public final class AbilityModifier extends AbstractModifierEffect {
                 Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
         );
 
-        return List.of(new ImageComponent(stack, text,
-                WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png")));
+        return List.of(new ImageComponent(stack, text.withStyle(style),
+                providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon())));
     }
 
     public Holder<Ability> providedAbility() {
