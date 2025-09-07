@@ -41,17 +41,22 @@ public class AbilityEnhancements {
             int effectIndex,
             EnhanceAbilityModifierEffect enhancement,
             double roll) {
-        effects.computeIfAbsent(enhancement.ability(), (unused) -> new LinkedHashMap<>())
-                .put(
-                        new AbilityEnhancementKey(source, effectIndex), new AbilityEnhancementValue(enhancement, roll)
-                );
+        enhancement.abilities().forEach(ability -> {
+            effects.computeIfAbsent(ability, (unused) -> new LinkedHashMap<>())
+                    .put(
+                            new AbilityEnhancementKey(source, effectIndex),
+                            new AbilityEnhancementValue(enhancement, roll)
+                    );
+        });
     }
 
     public void removeEnhancement(ModifierSource source, int effectIndex, EnhanceAbilityModifierEffect enhancement) {
-        var submap = effects.get(enhancement.ability());
-        if (submap != null) {
-            submap.remove(new AbilityEnhancementKey(source, effectIndex));
-        }
+        enhancement.abilities().forEach(ability -> {
+            var submap = effects.get(ability);
+            if (submap != null) {
+                submap.remove(new AbilityEnhancementKey(source, effectIndex));
+            }
+        });
     }
 
     public record AbilityEnhancementValue(EnhanceAbilityModifierEffect modifier, double roll) {

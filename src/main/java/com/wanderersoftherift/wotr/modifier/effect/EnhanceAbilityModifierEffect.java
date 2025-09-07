@@ -7,30 +7,37 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Optional;
+
 public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
     public static final MapCodec<EnhanceAbilityModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
-                    Ability.CODEC.fieldOf("ability").forGetter(EnhanceAbilityModifierEffect::ability),
+                    RegistryCodecs.homogeneousList(WotrRegistries.Keys.ABILITIES)
+                            .fieldOf("ability")
+                            .forGetter(EnhanceAbilityModifierEffect::abilities),
                     Modifier.CODEC.fieldOf("modifier").forGetter(EnhanceAbilityModifierEffect::modifier),
                     Codec.INT.fieldOf("tier").forGetter(EnhanceAbilityModifierEffect::tier)
             ).apply(instance, EnhanceAbilityModifierEffect::new));
 
-    private final Holder<Ability> ability;
+    private final HolderSet<Ability> abilities;
     private final Holder<Modifier> modifier;
     private final int tier;
 
-    public EnhanceAbilityModifierEffect(Holder<Ability> ability, Holder<Modifier> modifier, int tier) {
-        this.ability = ability;
+    public EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<Modifier> modifier, int tier) {
+        this.abilities = abilities;
         this.modifier = modifier;
         this.tier = tier;
     }
@@ -56,11 +63,16 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
                 .getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll))
                 .getFirst(); // any other ideas?
         if (baseComponent instanceof ImageComponent image) {
-            var abilityTextComponent = Component
-                    .translatable(WanderersOfTheRift.translationId("ability", ability.unwrapKey().get().location()));
+            var abilityTextComponent = abilities.stream()
+                    .map(Holder::unwrapKey)
+                    .filter(Optional::isPresent)
+                    .map(it -> WanderersOfTheRift.translationId("ability", it.get().location()))
+                    .map(Component::translatable)
+                    .reduce((a, b) -> a.append(", ").append(b));
             return new ImageComponent(image.stack(),
                     Component.literal("for ")
-                            .append(abilityTextComponent)
+                            .append(abilityTextComponent
+                                    .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
                             .append(Component.literal(": "))
                             .append(image.base()),
                     image.asset());
@@ -68,8 +80,8 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
         return baseComponent;
     }
 
-    public Holder<Ability> ability() {
-        return ability;
+    public HolderSet<Ability> abilities() {
+        return abilities;
     }
 
     public Holder<Modifier> modifier() {
