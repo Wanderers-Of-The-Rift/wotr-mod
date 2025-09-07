@@ -52,7 +52,7 @@ public class ModifierTier {
     public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, ModifierInstance instance) {
         List<TooltipComponent> tooltipComponents = new ArrayList<>();
         for (AbstractModifierEffect effect : modifierEffects) {
-            tooltipComponents.add(effect.getTooltipComponent(stack, roll, instance.modifier().value().getStyle()));
+            tooltipComponents.addAll(effect.getTooltipComponent(stack, roll, instance.modifier().value().getStyle()));
         }
         return tooltipComponents;
     }

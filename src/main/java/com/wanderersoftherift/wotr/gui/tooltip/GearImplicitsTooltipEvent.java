@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
+import com.wanderersoftherift.wotr.modifier.ModifierProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,8 @@ import java.util.List;
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class GearImplicitsTooltipEvent {
 
-    @SubscribeEvent
+    @Deprecated
+    // @SubscribeEvent
     public static void on(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
@@ -48,5 +50,17 @@ public class GearImplicitsTooltipEvent {
         for (int i = 0; i < toAdd.size(); i++) {
             list.add(i + 2, Either.right(toAdd.get(i)));
         }
+    }
+
+    @SubscribeEvent
+    public static void onAll(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> list = event.getTooltipElements();
+        ItemStack stack = event.getItemStack();
+
+        var modifierProviders = stack.getAllOfType(ModifierProvider.class);
+
+        modifierProviders.forEach(it -> {
+            list.addAll(1, it.tooltips(stack));
+        });
     }
 }

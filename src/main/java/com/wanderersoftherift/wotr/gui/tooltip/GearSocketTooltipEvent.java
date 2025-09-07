@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.gui.tooltip;
 
 import com.mojang.datafixers.util.Either;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
@@ -11,16 +10,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+@Deprecated
+//@EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class GearSocketTooltipEvent {
     private static final Map<RunegemShape, ChatFormatting> colorMap = Map.of(RunegemShape.CIRCLE, ChatFormatting.BLUE,
             RunegemShape.SQUARE, ChatFormatting.YELLOW, RunegemShape.TRIANGLE, ChatFormatting.GREEN,

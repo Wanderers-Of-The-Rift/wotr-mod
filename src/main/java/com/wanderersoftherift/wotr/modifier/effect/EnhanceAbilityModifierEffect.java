@@ -20,6 +20,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
 import java.util.Optional;
 
 public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
@@ -58,7 +59,12 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
+    public List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style) {
+        return getTooltipComponent(stack, roll, style); // todo
+    }
+
+    @Override
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
         var baseComponent = modifier.value()
                 .getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll))
                 .getFirst(); // any other ideas?
@@ -69,15 +75,15 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
                     .map(it -> WanderersOfTheRift.translationId("ability", it.get().location()))
                     .map(Component::translatable)
                     .reduce((a, b) -> a.append(", ").append(b));
-            return new ImageComponent(image.stack(),
+            return List.of(new ImageComponent(image.stack(),
                     Component.literal("for ")
                             .append(abilityTextComponent
                                     .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
                             .append(Component.literal(": "))
                             .append(image.base()),
-                    image.asset());
+                    image.asset()));
         }
-        return baseComponent;
+        return List.of(baseComponent);
     }
 
     public HolderSet<Ability> abilities() {

@@ -91,8 +91,11 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 int tier = socket.modifier().get().tier();
                 ModifierTier modifier = tiers.get(tier - 1);
                 for (AbstractModifierEffect effect : getModifierEffects(modifier)) {
-                    String text = getEffectText(effect, tier, isShiftDown, socket.modifier().get().modifier().value());
-                    maxWidth = Math.max(maxWidth, font.width("> " + text) + 30);
+                    var tooltips = getTooltipsForEffect(effect, isShiftDown, socket.modifier().get());
+                    for (var tooltip : tooltips) {
+                        String text = getEffectText(tooltip);
+                        maxWidth = Math.max(maxWidth, font.width("> " + text) + 30);
+                    }
                 }
             } else {
                 maxWidth = Math.max(maxWidth, font.width("> "
@@ -101,6 +104,18 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
             }
         }
         return maxWidth;
+    }
+
+    private List<TooltipComponent> getTooltipsForEffect(
+            AbstractModifierEffect effect,
+            boolean isKeyDown,
+            ModifierInstance modifier) {
+        if (isKeyDown) {
+            return effect.getTooltipComponent(ItemStack.EMPTY, modifier.roll(), modifier.modifier().value().getStyle());
+        } else {
+            return effect.getAdvancedTooltipComponent(ItemStack.EMPTY, modifier.roll(),
+                    modifier.modifier().value().getStyle());
+        }
     }
 
     @Override
@@ -113,7 +128,7 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
 
         boolean isKeyDown = isKeyDown();
 
-        if (!isKeyDown()) {
+        if (!isKeyDown) {
             pFont.drawInBatch(
                     Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
                             WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()),
@@ -151,20 +166,16 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
                 MutableComponent component = Component.literal("");
                 Modifier mod = socket.modifier().get().modifier().value();
 
-                var tooltip = effect.getTooltipComponent(ItemStack.EMPTY, socket.modifier().get().roll(), mod.getStyle()
-                );
-                if (tooltip instanceof ImageComponent img) {
-                    if (tier == getModifierTiers(socket).size()) {
-                        component.append(ComponentUtil.wavingComponent(img.base(), mod.getStyle().getColor().getValue(),
-                                0.125f, 0.5f));
-                    } else {
-                        component.append(
-                                img.base().copy().withStyle(mod.getStyle()));
+                var tooltips = getTooltipsForEffect(effect, isKeyDown, socket.modifier().get());
+                for (var tooltip : tooltips) {
+                    if (tooltip instanceof ImageComponent img) {
+                        if (tier == getModifierTiers(socket).size()) {
+                            component.append(ComponentUtil.wavingComponent(img.base(),
+                                    mod.getStyle().getColor().getValue(), 0.125f, 0.5f));
+                        } else {
+                            component.append(img.base().copy().withStyle(mod.getStyle()));
+                        }
                     }
-
-                }
-                if (isKeyDown) {
-                    component.append(getTierInfo(effect, tier));
                 }
 
                 pFont.drawInBatch(component, pX + 30, pY - 1, ChatFormatting.GREEN.getColor(), true, pMatrix4f,
@@ -286,23 +297,12 @@ public class GearSocketTooltipRenderer implements ClientTooltipComponent {
         return String.format(Locale.ROOT, "%.2f", value);
     }
 
-    private static String getEffectText(
-            AbstractModifierEffect effect,
-            int tier,
-            boolean isShiftDown,
-            Modifier modifier) {
-        String base;
-        if (effect.getTooltipComponent(ItemStack.EMPTY, 0.0F, modifier.getStyle()) instanceof ImageComponent img) {
-            base = img.base().getString();
+    private static String getEffectText(TooltipComponent tooltip) {
+        if (tooltip instanceof ImageComponent img) {
+            return img.base().getString();
         } else {
-            base = "";
+            return "";
         }
-
-        if (!isShiftDown) {
-            return base;
-        }
-
-        return base + getTierInfoString(effect, tier);
     }
 
     private static String getTierInfoString(AbstractModifierEffect effect, int tier) {

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
 import java.util.Objects;
 
 public final class AbilityModifier extends AbstractModifierEffect {
@@ -54,15 +55,20 @@ public final class AbilityModifier extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
+    public List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style) {
+        return getTooltipComponent(stack, roll, style); // todo
+    }
+
+    @Override
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
         var text = Component.translatable(
                 WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
                         WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
                 Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
         );
 
-        return new ImageComponent(stack, text,
-                WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
+        return List.of(new ImageComponent(stack, text,
+                WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png")));
     }
 
     public Holder<Ability> providedAbility() {

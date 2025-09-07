@@ -21,6 +21,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
+
 public class AttributeModifierEffect extends AbstractModifierEffect {
     public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance
@@ -104,11 +106,16 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
-        return switch (this.getOperation()) {
+    public List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style) {
+        return getTooltipComponent(stack, roll, style); // todo
+    }
+
+    @Override
+    public List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+        return List.of(switch (this.getOperation()) {
             case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
             case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
-        };
+        });
     }
 
     private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, Style style) {

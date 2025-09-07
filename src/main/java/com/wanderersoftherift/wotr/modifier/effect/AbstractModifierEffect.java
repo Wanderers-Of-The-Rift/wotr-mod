@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.MODIFIER_EFFECTS;
@@ -33,5 +34,7 @@ public abstract class AbstractModifierEffect {
 
     public abstract void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex);
 
-    public abstract TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style);
+    public abstract List<TooltipComponent> getTooltipComponent(ItemStack stack, float roll, Style style);
+
+    public abstract List<TooltipComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style);
 }
