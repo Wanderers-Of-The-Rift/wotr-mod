@@ -2,15 +2,16 @@
   "style": {
     "color": "#00BFFF"
   },
-  "tiers": [[
-        {
-          "type": "wotr:attribute",
-          "id": "wotr:leather_leggings",
-          "attribute": "wotr:projectile_count",
-          "min_roll": 1,
-          "max_roll": 1,
-          "operation": "add_value"
-        }
-      ]
+  "tiers": [
+    [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:leather_leggings",
+        "attribute": "wotr:projectile_count",
+        "min_roll": 1,
+        "max_roll": 1,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

@@ -2,15 +2,16 @@
   "style": {
     "color": "#4169E1"
   },
-  "tiers": [[
-        {
-          "type": "wotr:attribute",
-          "id": "wotr:diamond_helmet",
-          "attribute": "wotr:max_mana",
-          "min_roll": 0.01,
-          "max_roll": 0.05,
-          "operation": "add_multiplied_base"
-        }
-      ]
+  "tiers": [
+    [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:diamond_helmet",
+        "attribute": "wotr:max_mana",
+        "min_roll": 0.01,
+        "max_roll": 0.05,
+        "operation": "add_multiplied_base"
+      }
+    ]
   ]
 }
