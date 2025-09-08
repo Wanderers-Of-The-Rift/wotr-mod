@@ -101,7 +101,7 @@ public class RiftKeyCommands extends BaseCommand {
                 .then(generatorCommands());
     }
 
-    private LiteralArgumentBuilder generatorCommands() {
+    private LiteralArgumentBuilder<CommandSourceStack> generatorCommands() {
         String generatorArg = "generator";
         String templatePool = "pool";
         String position = "position";

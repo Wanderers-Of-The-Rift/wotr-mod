@@ -36,7 +36,7 @@ public class DebugCommands extends BaseCommand {
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
-        builder.then(Commands.literal("getItemStackComponents").executes(this::getItemStackComponents));
+        builder.then(Commands.literal("listItemStackComponents").executes(this::listItemStackComponents));
         builder.then(
                 Commands.literal("makeQuestGiver")
                         .then(Commands.argument("mob", EntityArgument.entity())
@@ -100,7 +100,7 @@ public class DebugCommands extends BaseCommand {
         return 1;
     }
 
-    private int getItemStackComponents(CommandContext<CommandSourceStack> stack) {
+    private int listItemStackComponents(CommandContext<CommandSourceStack> stack) {
         ServerPlayer player = stack.getSource().getPlayer();
 
         if (player != null) {
