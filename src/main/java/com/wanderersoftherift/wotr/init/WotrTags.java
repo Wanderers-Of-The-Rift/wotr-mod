@@ -47,7 +47,6 @@ public class WotrTags {
         public static final TagKey<Item> GOLD_TYPE_WEAPON = createTag("weapon_type.gold_type_weapon");
         public static final TagKey<Item> ABILITY_SLOT_ACCEPTED = createTag("ability_slot_accepted");
 
-
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(WanderersOfTheRift.id(name));
         }
