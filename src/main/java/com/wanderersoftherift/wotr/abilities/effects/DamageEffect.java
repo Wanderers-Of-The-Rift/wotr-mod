@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
@@ -19,7 +18,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public class DamageEffect extends AbilityEffect {
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder
@@ -31,9 +29,9 @@ public class DamageEffect extends AbilityEffect {
     private float damageAmount = 0;
     private final Holder<DamageType> damageTypeKey;
 
-    public DamageEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            float amount, Holder<DamageType> damageTypeKey) {
-        super(targeting, effects, particles);
+    public DamageEffect(AbilityTargeting targeting, List<AbilityEffect> effects, float amount,
+            Holder<DamageType> damageTypeKey) {
+        super(targeting, effects);
         this.damageAmount = amount;
         this.damageTypeKey = damageTypeKey;
     }
@@ -59,14 +57,11 @@ public class DamageEffect extends AbilityEffect {
                 .lookupOrThrow(Registries.DAMAGE_TYPE)
                 .getOrThrow(this.damageTypeKey.getKey()), null, context.caster(), null);
 
-        applyParticlesToUser(user);
-
         // for now its ABILITY_DAMAGE but needs to be considered how multiple types are going to be implemented ie AP or
         // AD
         float finalDamage = context.getAbilityAttribute(WotrAttributes.ABILITY_DAMAGE, damageAmount);
 
         for (Entity target : targets) {
-            applyParticlesToTarget(target);
             if (target instanceof LivingEntity livingTarget) {
                 livingTarget.hurtServer((ServerLevel) target.level(), damageSource, finalDamage);
             }

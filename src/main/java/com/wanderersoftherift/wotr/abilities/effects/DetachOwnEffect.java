@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.core.BlockPos;
@@ -27,9 +26,8 @@ public class DetachOwnEffect extends AbilityEffect {
 
     private final Optional<ResourceLocation> id;
 
-    public DetachOwnEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            Optional<ResourceLocation> id) {
-        super(targeting, effects, particles);
+    public DetachOwnEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ResourceLocation> id) {
+        super(targeting, effects);
         this.id = id;
     }
 
@@ -37,10 +35,7 @@ public class DetachOwnEffect extends AbilityEffect {
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
 
-        applyParticlesToUser(user);
-
         for (Entity target : targets) {
-            applyParticlesToTarget(target);
             AttachedEffects attachedEffects = target.getData(WotrAttachments.ATTACHED_EFFECTS);
             if (id.isPresent()) {
                 attachedEffects.detach(context.instanceId(), effect -> effect.getId().equals(id));

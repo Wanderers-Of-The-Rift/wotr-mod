@@ -4,14 +4,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.effects.util.TeleportInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TeleportEffect extends AbilityEffect {
     public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder
@@ -24,9 +22,8 @@ public class TeleportEffect extends AbilityEffect {
     // TODO look into handling different types of teleports and better handle relative motion
     // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
-    public TeleportEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            TeleportInfo teleInfo) {
-        super(targeting, effects, particles);
+    public TeleportEffect(AbilityTargeting targeting, List<AbilityEffect> effects, TeleportInfo teleInfo) {
+        super(targeting, effects);
         this.teleInfo = teleInfo;
     }
 
@@ -42,9 +39,7 @@ public class TeleportEffect extends AbilityEffect {
     @Override
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-        applyParticlesToUser(user);
         for (Entity target : targets) {
-            applyParticlesToTarget(target);
 
             switch (teleInfo.getTarget()) {
                 case USER -> {

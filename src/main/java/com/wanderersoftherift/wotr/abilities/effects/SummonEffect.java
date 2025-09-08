@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,7 +15,6 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SummonEffect extends AbilityEffect {
     public static final MapCodec<SummonEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
@@ -32,9 +30,9 @@ public class SummonEffect extends AbilityEffect {
     // TODO look into handling different types of teleports and better handle relative motion
     // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
-    public SummonEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            ResourceLocation entityType, int amount) {
-        super(targeting, effects, particles);
+    public SummonEffect(AbilityTargeting targeting, List<AbilityEffect> effects, ResourceLocation entityType,
+            int amount) {
+        super(targeting, effects);
         this.entityType = entityType;
         this.summonAmount = amount;
     }
@@ -55,7 +53,6 @@ public class SummonEffect extends AbilityEffect {
     @Override
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-        applyParticlesToUser(user);
 
         // No entity was selected as the summon position
         if (targets.isEmpty()) {
@@ -74,7 +71,6 @@ public class SummonEffect extends AbilityEffect {
                             EntitySpawnReason.MOB_SUMMONED, true, true);
                     if (summon != null) {
                         context.level().addFreshEntity(summon);
-                        applyParticlesToTarget(summon);
                         super.apply(summon, getTargeting().getBlocks(user), context);
                     }
                 }
@@ -89,7 +85,6 @@ public class SummonEffect extends AbilityEffect {
                             EntitySpawnReason.MOB_SUMMONED, false, false);
                     if (summon != null) {
                         context.level().addFreshEntity(summon);
-                        applyParticlesToTarget(summon);
                         super.apply(summon, getTargeting().getBlocks(user), context);
                     }
                 }

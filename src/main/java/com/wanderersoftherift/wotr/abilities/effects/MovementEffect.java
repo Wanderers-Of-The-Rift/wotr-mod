@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MovementEffect extends AbilityEffect {
     public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder
@@ -28,9 +26,9 @@ public class MovementEffect extends AbilityEffect {
     private final Vec3 velocity;
     private final RelativeFrame relativeFrame;
 
-    public MovementEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            Vec3 velocity, RelativeFrame relativeFrame) {
-        super(targeting, effects, particles);
+    public MovementEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Vec3 velocity,
+            RelativeFrame relativeFrame) {
+        super(targeting, effects);
         this.velocity = velocity;
         this.relativeFrame = relativeFrame;
     }
@@ -44,10 +42,7 @@ public class MovementEffect extends AbilityEffect {
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
 
-        applyParticlesToUser(user);
-
         for (Entity target : targets) {
-            applyParticlesToTarget(target);
             // TODO look into implementing scaling still
 
             // TODO look into relative vs directional
