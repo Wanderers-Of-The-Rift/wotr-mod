@@ -17,10 +17,10 @@ public class ManaCommands extends BaseCommand {
 
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
-        builder.then(Commands.literal("refill").executes(this::refillmana));
+        builder.then(Commands.literal("refill").executes(this::refillMana));
     }
 
-    private int refillmana(CommandContext<CommandSourceStack> stack) {
+    private int refillMana(CommandContext<CommandSourceStack> stack) {
         ManaData data = stack.getSource().getPlayer().getData(WotrAttachments.MANA);
         data.setAmount(data.maxAmount());
         return Command.SINGLE_SUCCESS;

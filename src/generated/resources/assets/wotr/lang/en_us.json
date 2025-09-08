@@ -294,6 +294,7 @@
   "command.wotr.invalid_template_pool": "Invalid template pool '%s'",
   "command.wotr.invalid_theme": "Invalid theme '%s'",
   "command.wotr.make_ability_item.success": "Applied ability components",
+  "command.wotr.place.processor.invalid": "Invalid processor %s",
   "command.wotr.rift_key.generator.bake": "Custom preset created",
   "command.wotr.rift_key.generator.export": "Rift generator preset saved to %s",
   "command.wotr.rift_key.generator.export.encode_failed": "Could not encode preset",

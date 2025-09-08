@@ -10,16 +10,16 @@ import net.minecraft.commands.Commands;
 public class BugReportCommand extends BaseCommand {
 
     public BugReportCommand() {
-        super("report-bug", Commands.LEVEL_ALL);
+        super("reportBug", Commands.LEVEL_ALL);
     }
 
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
-        builder.then(Commands.literal("reportBug")).executes(this::openBugReportLink);
+        builder.executes(this::openBugReportLink);
     }
 
     public int openBugReportLink(CommandContext<CommandSourceStack> cmd) {
         Util.getPlatform().openUri("https://github.com/Dimension-Delvers/submit-feedback/issues");
-        return 0;
+        return 1;
     }
 }
