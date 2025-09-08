@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,7 +15,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ProjectileEffect extends AbilityEffect {
     public static final MapCodec<ProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
@@ -35,9 +33,9 @@ public class ProjectileEffect extends AbilityEffect {
      * effects attached to it
      */
 
-    public ProjectileEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            ResourceLocation entityType, Vec3 velocity) {
-        super(targeting, effects, particles);
+    public ProjectileEffect(AbilityTargeting targeting, List<AbilityEffect> effects, ResourceLocation entityType,
+            Vec3 velocity) {
+        super(targeting, effects);
         this.entityType = entityType;
         this.velocity = velocity;
     }
@@ -58,7 +56,6 @@ public class ProjectileEffect extends AbilityEffect {
     @Override
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-        applyParticlesToUser(user);
         if (!targets.isEmpty()) {
             Entity random = targets.get(context.caster().getRandom().nextIntBetweenInclusive(0, targets.size() - 1));
             if (BuiltInRegistries.ENTITY_TYPE.get(this.entityType).isPresent()) {
@@ -79,7 +76,6 @@ public class ProjectileEffect extends AbilityEffect {
                     }
 
                     context.level().addFreshEntity(summon);
-                    applyParticlesToTarget(summon);
                     super.apply(summon, getTargeting().getBlocks(user), context);
                 }
             }
