@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ExceptionlessAutoClosable;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -34,7 +36,7 @@ import java.util.UUID;
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
         ItemStack abilityItem, AbilitySource source, Level level, @NotNull List<Holder<AbilityUpgrade>> upgrades,
-        @Nonnull List<EnhancingModifierInstance> enhancements) {
+        @Nonnull List<EnhancingModifierInstance> enhancements, Set<ResourceLocation> conditions) {
 
     /**
      * @return The current game time

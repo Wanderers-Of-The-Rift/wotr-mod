@@ -15,6 +15,7 @@ import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCod
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +24,8 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -84,7 +87,7 @@ public class OngoingAbilities {
             AbilitySource source) {
         var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
-                entity.level(), source.upgrades(entity), enhancements);
+                entity.level(), source.upgrades(entity), enhancements, Collections.emptySet() /* todo */);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
@@ -109,7 +112,7 @@ public class OngoingAbilities {
         var upgrades = source.upgrades(entity);
         var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), upgrades,
-                enhancements);
+                enhancements, Collections.emptySet() /* todo */);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
@@ -180,7 +183,8 @@ public class OngoingAbilities {
                 AbilityUpgrade.REGISTRY_CODEC.listOf()
                         .optionalFieldOf("upgrades", List.of())
                         .forGetter(ActiveAbility::upgrades),
-                EnhancingModifierInstance.CODEC.listOf().fieldOf("enhancements").forGetter(ActiveAbility::enhancements)
+                EnhancingModifierInstance.CODEC.listOf().fieldOf("enhancements").forGetter(ActiveAbility::enhancements),
+                ResourceLocation.CODEC.listOf().fieldOf("conditions").forGetter(ActiveAbility::conditions)
         ).apply(instance, ActiveAbility::new));
 
         private final UUID id;
@@ -189,15 +193,17 @@ public class OngoingAbilities {
         private final ItemStack abilityItem;
         private final List<Holder<AbilityUpgrade>> upgrades;
         private final List<EnhancingModifierInstance> enhancements;
+        private final List<ResourceLocation> conditions;
         private long age;
 
         ActiveAbility(AbilityContext context) {
             this(context.instanceId(), context.ability(), context.source(), context.abilityItem(), 0,
-                    context.upgrades(), context.enhancements());
+                    context.upgrades(), context.enhancements(), List.copyOf(context.conditions()));
         }
 
         ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
-                List<Holder<AbilityUpgrade>> upgrades, List<EnhancingModifierInstance> enhancements) {
+                List<Holder<AbilityUpgrade>> upgrades, List<EnhancingModifierInstance> enhancements,
+                List<ResourceLocation> conditions) {
             this.id = id;
             this.ability = ability;
             this.source = source;
@@ -205,6 +211,7 @@ public class OngoingAbilities {
             this.age = age;
             this.upgrades = upgrades;
             this.enhancements = enhancements;
+            this.conditions = conditions;
         }
 
         boolean matches(Holder<Ability> ability, AbilitySource source) {
@@ -212,7 +219,8 @@ public class OngoingAbilities {
         }
 
         AbilityContext createContext(LivingEntity owner) {
-            return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), upgrades, enhancements);
+            return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), upgrades, enhancements,
+                    new HashSet<>(conditions));
         }
 
         UUID id() {
@@ -229,6 +237,10 @@ public class OngoingAbilities {
 
         ItemStack abilityItem() {
             return abilityItem;
+        }
+
+        List<ResourceLocation> conditions() {
+            return conditions;
         }
 
         long age() {
