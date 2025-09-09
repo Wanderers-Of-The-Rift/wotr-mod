@@ -87,6 +87,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.CURRENCY_BAG, "Currency Bag");
 
         addItem(WotrItems.NOIR_HELMET, "Fedora");
+        addItem(WotrItems.COLOR_HELMET, "Clown");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
