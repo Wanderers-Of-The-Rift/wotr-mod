@@ -9,7 +9,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.ChatFormatting;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Objects;
 
-public final class AbilityModifier extends AbstractModifierEffect {
+public final class AbilityModifier implements ModifierEffect {
 
     public static final MapCodec<AbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
@@ -41,7 +41,7 @@ public final class AbilityModifier extends AbstractModifierEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractModifierEffect> getCodec() {
+    public MapCodec<? extends ModifierEffect> getCodec() {
         return CODEC;
     }
 

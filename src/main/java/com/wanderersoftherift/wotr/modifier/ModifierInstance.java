@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.modifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -34,7 +34,7 @@ public record ModifierInstance(Holder<Modifier> modifier, int tier, float roll) 
         return modifier.value().getTooltipComponent(stack, roll, this);
     }
 
-    public List<AbstractModifierEffect> effects() {
+    public List<ModifierEffect> effects() {
         return modifier.value().getModifierTier(tier);
     }
 }

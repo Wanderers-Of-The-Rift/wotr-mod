@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.abilities.sources;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.EnhanceAbilityModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -31,7 +31,7 @@ public record AbilityEnhancementModifierSource(ModifierSource baseSource, int ef
     }
 
     @Override
-    public List<AbstractModifierEffect> getModifierEffects(Entity entity) {
+    public List<ModifierEffect> getModifierEffects(Entity entity) {
         var baseEffect = baseSource.getModifierEffects(entity).get(effectIndex);
         if (baseEffect instanceof EnhanceAbilityModifierEffect enhancing) {
             var tier = enhancing.modifier().value().getModifierTier(enhancing.tier());

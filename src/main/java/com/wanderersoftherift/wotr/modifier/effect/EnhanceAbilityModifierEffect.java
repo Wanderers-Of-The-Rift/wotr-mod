@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Optional;
 
-public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
+public class EnhanceAbilityModifierEffect implements ModifierEffect {
     public static final MapCodec<EnhanceAbilityModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     RegistryCodecs.homogeneousList(WotrRegistries.Keys.ABILITIES)
@@ -44,7 +44,7 @@ public class EnhanceAbilityModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractModifierEffect> getCodec() {
+    public MapCodec<? extends ModifierEffect> getCodec() {
         return MODIFIER_CODEC;
     }
 

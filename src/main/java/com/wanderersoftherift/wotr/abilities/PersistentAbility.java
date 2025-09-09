@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class PersistentAbility extends Ability {
     }
 
     @Override
-    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevantModifier(ModifierEffect modifierEffect) {
         return activationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
                 || deactivationEffects.stream().anyMatch(x -> x.isRelevant(modifierEffect))
                 || onDeactivationCosts.stream().anyMatch(x -> x.isRelevant(modifierEffect))

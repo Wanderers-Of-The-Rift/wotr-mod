@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 
 import java.util.function.Function;
 
@@ -31,7 +31,7 @@ public interface AbilityRequirement {
         return false;
     }
 
-    default boolean isRelevant(AbstractModifierEffect modifierEffect) {
+    default boolean isRelevant(ModifierEffect modifierEffect) {
         return false;
     }
 }

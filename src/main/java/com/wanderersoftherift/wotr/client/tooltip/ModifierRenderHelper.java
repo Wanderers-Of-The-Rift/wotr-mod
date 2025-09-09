@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.client.tooltip;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -24,7 +24,7 @@ public class ModifierRenderHelper {
 
         int tier = modifierInstance.tier();
         var modifierTier = modifierInstance.modifier().value().getModifierTier(tier);
-        for (AbstractModifierEffect effect : modifierTier) {
+        for (ModifierEffect effect : modifierTier) {
             var tooltips = getTooltipsForEffect(effect, isShiftDown, modifierInstance);
             for (var tooltip : tooltips) {
                 String text = getEffectText(tooltip);
@@ -35,7 +35,7 @@ public class ModifierRenderHelper {
     }
 
     public static List<ImageComponent> getTooltipsForEffect(
-            AbstractModifierEffect effect,
+            ModifierEffect effect,
             boolean isKeyDown,
             ModifierInstance modifier) {
         if (!isKeyDown) {

@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -61,7 +61,7 @@ public class InstantAbility extends Ability {
         return effects;
     }
 
-    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevantModifier(ModifierEffect modifierEffect) {
         return effects.stream().anyMatch(x -> x.isRelevant(modifierEffect)) || super.isRelevantModifier(modifierEffect);
     }
 }

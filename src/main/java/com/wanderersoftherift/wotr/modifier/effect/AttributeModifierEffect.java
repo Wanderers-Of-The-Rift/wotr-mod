@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Locale;
 
-public class AttributeModifierEffect extends AbstractModifierEffect {
+public class AttributeModifierEffect implements ModifierEffect {
     public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance
                     .group(ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifierEffect::getId),
@@ -52,7 +52,7 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractModifierEffect> getCodec() {
+    public MapCodec<? extends ModifierEffect> getCodec() {
         return MODIFIER_CODEC;
     }
 

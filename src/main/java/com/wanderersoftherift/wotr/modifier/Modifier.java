@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -21,10 +21,7 @@ import java.util.List;
 
 public class Modifier {
     public static final Codec<Modifier> DIRECT_CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            AbstractModifierEffect.DIRECT_CODEC.listOf()
-                    .listOf()
-                    .fieldOf("tiers")
-                    .forGetter(Modifier::getModifierTierList),
+            ModifierEffect.DIRECT_CODEC.listOf().listOf().fieldOf("tiers").forGetter(Modifier::getModifierTierList),
             Style.Serializer.CODEC.optionalFieldOf("style", Style.EMPTY.withColor(ChatFormatting.GRAY))
                     .forGetter(Modifier::getStyle))
             .apply(inst, Modifier::new)
@@ -33,15 +30,15 @@ public class Modifier {
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Modifier>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MODIFIERS);
 
-    private final List<List<AbstractModifierEffect>> modifierTiers;
+    private final List<List<ModifierEffect>> modifierTiers;
     private final Style style;
 
-    public Modifier(List<List<AbstractModifierEffect>> modifierTiers, Style style) {
+    public Modifier(List<List<ModifierEffect>> modifierTiers, Style style) {
         this.modifierTiers = modifierTiers;
         this.style = style;
     }
 
-    public List<List<AbstractModifierEffect>> getModifierTierList() {
+    public List<List<ModifierEffect>> getModifierTierList() {
         return modifierTiers;
     }
 
@@ -53,9 +50,9 @@ public class Modifier {
         if (tier <= 0 || tier > modifierTiers.size()) {
             return;
         }
-        List<AbstractModifierEffect> tierEffects = modifierTiers.get(tier - 1);
+        List<ModifierEffect> tierEffects = modifierTiers.get(tier - 1);
         for (int i = 0; i < tierEffects.size(); i++) {
-            AbstractModifierEffect it = tierEffects.get(i);
+            ModifierEffect it = tierEffects.get(i);
             it.enableModifier(roll, entity, source, i);
         }
     }
@@ -64,9 +61,9 @@ public class Modifier {
         if (tier <= 0 || tier > modifierTiers.size()) {
             return;
         }
-        List<AbstractModifierEffect> tierEffects = modifierTiers.get(tier - 1);
+        List<ModifierEffect> tierEffects = modifierTiers.get(tier - 1);
         for (int i = 0; i < tierEffects.size(); i++) {
-            AbstractModifierEffect it = tierEffects.get(i);
+            ModifierEffect it = tierEffects.get(i);
             it.disableModifier(roll, entity, source, i);
         }
     }
@@ -95,7 +92,7 @@ public class Modifier {
                 .toList();
     }
 
-    public List<AbstractModifierEffect> getModifierTier(int tier) {
+    public List<ModifierEffect> getModifierTier(int tier) {
         if (tier <= 0 || tier > modifierTiers.size()) {
             return null;
         }

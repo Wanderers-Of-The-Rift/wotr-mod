@@ -28,7 +28,7 @@ import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
@@ -67,7 +67,7 @@ public class WotrRegistries {
             Keys.EQUIPMENT_SLOTS).sync(true).create();
     public static final Registry<MapCodec<? extends InputBlockState>> INPUT_BLOCKSTATE_TYPES = new RegistryBuilder<>(
             Keys.INPUT_BLOCKSTATE_TYPES).create();
-    public static final Registry<MapCodec<? extends AbstractModifierEffect>> MODIFIER_TYPES = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends ModifierEffect>> MODIFIER_TYPES = new RegistryBuilder<>(
             Keys.MODIFIER_EFFECT_TYPES).create();
     public static final Registry<MapCodec<? extends ObjectiveType>> OBJECTIVE_TYPES = new RegistryBuilder<>(
             Keys.OBJECTIVE_TYPES).create();
@@ -153,9 +153,9 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("effects"));
         public static final ResourceKey<Registry<MapCodec<? extends InputBlockState>>> INPUT_BLOCKSTATE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("input_blockstate_type"));
-        public static final ResourceKey<Registry<MapCodec<? extends AbstractModifierEffect>>> MODIFIER_EFFECT_TYPES = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends ModifierEffect>>> MODIFIER_EFFECT_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("modifier_effect_type"));
-        public static final ResourceKey<Registry<AbstractModifierEffect>> MODIFIER_EFFECTS = ResourceKey
+        public static final ResourceKey<Registry<ModifierEffect>> MODIFIER_EFFECTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("modifier_effect"));
         public static final ResourceKey<Registry<MapCodec<? extends ObjectiveType>>> OBJECTIVE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("objective_type"));
@@ -265,8 +265,7 @@ public class WotrRegistries {
 
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(Keys.MODIFIER_EFFECTS, AbstractModifierEffect.DIRECT_CODEC,
-                AbstractModifierEffect.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.MODIFIER_EFFECTS, ModifierEffect.DIRECT_CODEC, ModifierEffect.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MODIFIERS, Modifier.DIRECT_CODEC, Modifier.DIRECT_CODEC);
         event.dataPackRegistry(Keys.RIFT_THEMES, RiftTheme.DIRECT_CODEC, RiftTheme.DIRECT_SYNC_CODEC);
         event.dataPackRegistry(Keys.RUNEGEM_DATA, RunegemData.CODEC, RunegemData.CODEC);

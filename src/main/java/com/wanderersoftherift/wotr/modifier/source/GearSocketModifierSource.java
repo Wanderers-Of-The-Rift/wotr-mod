@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -37,7 +37,7 @@ public record GearSocketModifierSource(WotrEquipmentSlot slot, int socket)
     }
 
     @Override
-    public List<AbstractModifierEffect> getModifierEffects(Entity entity) {
+    public List<ModifierEffect> getModifierEffects(Entity entity) {
         return getItem(entity).get(WotrDataComponentType.GEAR_SOCKETS)
                 .sockets()
                 .get(socket)

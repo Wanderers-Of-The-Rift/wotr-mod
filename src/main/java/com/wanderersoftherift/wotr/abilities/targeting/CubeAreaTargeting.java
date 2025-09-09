@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetPredicate;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
@@ -130,7 +130,7 @@ public class CubeAreaTargeting extends AbilityTargeting {
     }
 
     @Override
-    public boolean isRelevant(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevant(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
                 && WotrAttributes.ABILITY_AOE.equals(attributeModifierEffect.getAttribute());
     }

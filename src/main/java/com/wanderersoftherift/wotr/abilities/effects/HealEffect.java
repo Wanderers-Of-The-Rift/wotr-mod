@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
@@ -68,7 +68,7 @@ public class HealEffect extends AbilityEffect {
     }
 
     @Override
-    protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
+    protected boolean isRelevantToThis(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
                 && WotrAttributes.HEAL_POWER.equals(attributeModifierEffect.getAttribute());
     }
