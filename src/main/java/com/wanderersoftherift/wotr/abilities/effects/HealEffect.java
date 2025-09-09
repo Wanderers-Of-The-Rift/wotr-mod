@@ -70,6 +70,6 @@ public class HealEffect extends AbilityEffect {
     @Override
     protected boolean isRelevantToThis(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.HEAL_POWER.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.HEAL_POWER.equals(attributeModifierEffect.attribute());
     }
 }

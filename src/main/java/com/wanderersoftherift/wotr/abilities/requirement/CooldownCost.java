@@ -35,6 +35,6 @@ public record CooldownCost(int ticks) implements AbilityRequirement {
     @Override
     public boolean isRelevant(ModifierEffect modifierEffect) {
         return ticks > 0 && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.attribute());
     }
 }

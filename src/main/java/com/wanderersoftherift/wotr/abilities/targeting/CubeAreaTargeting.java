@@ -132,6 +132,6 @@ public class CubeAreaTargeting extends AbilityTargeting {
     @Override
     public boolean isRelevant(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.ABILITY_AOE.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.ABILITY_AOE.equals(attributeModifierEffect.attribute());
     }
 }

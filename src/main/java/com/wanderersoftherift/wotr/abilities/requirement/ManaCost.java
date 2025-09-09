@@ -39,6 +39,6 @@ public record ManaCost(float amount, boolean consume) implements AbilityRequirem
     @Override
     public boolean isRelevant(ModifierEffect modifierEffect) {
         return consume && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.MANA_COST.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.MANA_COST.equals(attributeModifierEffect.attribute());
     }
 }

@@ -25,55 +25,22 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Locale;
 
-public class AttributeModifierEffect implements ModifierEffect {
+public record AttributeModifierEffect(ResourceLocation id, Holder<Attribute> attribute, double minRoll, double maxRoll,
+        AttributeModifier.Operation operation) implements ModifierEffect {
+
     public static final MapCodec<AttributeModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance
-                    .group(ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifierEffect::getId),
-                            Attribute.CODEC.fieldOf("attribute").forGetter(AttributeModifierEffect::getAttribute),
-                            Codec.DOUBLE.fieldOf("min_roll").forGetter(AttributeModifierEffect::getMinimumRoll),
-                            Codec.DOUBLE.fieldOf("max_roll").forGetter(AttributeModifierEffect::getMaximumRoll),
+                    .group(ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifierEffect::id),
+                            Attribute.CODEC.fieldOf("attribute").forGetter(AttributeModifierEffect::attribute),
+                            Codec.DOUBLE.fieldOf("min_roll").forGetter(AttributeModifierEffect::minRoll),
+                            Codec.DOUBLE.fieldOf("max_roll").forGetter(AttributeModifierEffect::maxRoll),
                             AttributeModifier.Operation.CODEC.fieldOf("operation")
-                                    .forGetter(AttributeModifierEffect::getOperation))
+                                    .forGetter(AttributeModifierEffect::operation))
                     .apply(instance, AttributeModifierEffect::new));
-
-    private final ResourceLocation id;
-    private final Holder<Attribute> attribute;
-    private final double minRoll;
-    private final double maxRoll;
-    private final AttributeModifier.Operation operation;
-
-    public AttributeModifierEffect(ResourceLocation id, Holder<Attribute> attribute, double minRoll, double maxRoll,
-            AttributeModifier.Operation operation) {
-        this.id = id;
-        this.attribute = attribute;
-        this.minRoll = minRoll;
-        this.maxRoll = maxRoll;
-        this.operation = operation;
-    }
 
     @Override
     public MapCodec<? extends ModifierEffect> getCodec() {
         return MODIFIER_CODEC;
-    }
-
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    public Holder<Attribute> getAttribute() {
-        return attribute;
-    }
-
-    public double getMinimumRoll() {
-        return minRoll;
-    }
-
-    public double getMaximumRoll() {
-        return maxRoll;
-    }
-
-    public AttributeModifier.Operation getOperation() {
-        return this.operation;
     }
 
     private ResourceLocation idForSlot(StringRepresentable source) {
@@ -81,7 +48,7 @@ public class AttributeModifierEffect implements ModifierEffect {
     }
 
     public AttributeModifier getModifier(double roll, StringRepresentable source) {
-        return new AttributeModifier(this.idForSlot(source), calculateModifier(roll), this.getOperation());
+        return new AttributeModifier(this.idForSlot(source), calculateModifier(roll), this.operation());
     }
 
     public double calculateModifier(double roll) {
@@ -109,7 +76,7 @@ public class AttributeModifierEffect implements ModifierEffect {
 
     @Override
     public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
-        var base = switch (this.getOperation()) {
+        var base = switch (this.operation()) {
             case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
             case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
         };
@@ -120,7 +87,7 @@ public class AttributeModifierEffect implements ModifierEffect {
 
     @Override
     public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
-        return List.of(switch (this.getOperation()) {
+        return List.of(switch (this.operation()) {
             case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
             case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
         });
@@ -168,7 +135,7 @@ public class AttributeModifierEffect implements ModifierEffect {
     }
 
     private String getTierInfoString(int tier) {
-        return " (T%d : %s - %s)".formatted(tier, formatRoll(getMinimumRoll()), formatRoll(getMaximumRoll()));
+        return " (T%d : %s - %s)".formatted(tier, formatRoll(this.minRoll()), formatRoll(this.maxRoll()));
     }
 
     private Component getTierInfo(int tier) {

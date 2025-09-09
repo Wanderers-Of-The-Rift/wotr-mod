@@ -23,7 +23,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Optional;
 
-public class EnhanceAbilityModifierEffect implements ModifierEffect {
+public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<Modifier> modifier, int tier)
+        implements ModifierEffect {
+
     public static final MapCodec<EnhanceAbilityModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     RegistryCodecs.homogeneousList(WotrRegistries.Keys.ABILITIES)
@@ -32,16 +34,6 @@ public class EnhanceAbilityModifierEffect implements ModifierEffect {
                     Modifier.CODEC.fieldOf("modifier").forGetter(EnhanceAbilityModifierEffect::modifier),
                     Codec.INT.fieldOf("tier").forGetter(EnhanceAbilityModifierEffect::tier)
             ).apply(instance, EnhanceAbilityModifierEffect::new));
-
-    private final HolderSet<Ability> abilities;
-    private final Holder<Modifier> modifier;
-    private final int tier;
-
-    public EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<Modifier> modifier, int tier) {
-        this.abilities = abilities;
-        this.modifier = modifier;
-        this.tier = tier;
-    }
 
     @Override
     public MapCodec<? extends ModifierEffect> getCodec() {
@@ -98,17 +90,5 @@ public class EnhanceAbilityModifierEffect implements ModifierEffect {
         result.addAll(modifier.value().getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll)));
         result.add(new ImageComponent(stack, Component.literal("]").withStyle(style), null));
         return result.build();
-    }
-
-    public HolderSet<Ability> abilities() {
-        return abilities;
-    }
-
-    public Holder<Modifier> modifier() {
-        return modifier;
-    }
-
-    public int tier() {
-        return tier;
     }
 }

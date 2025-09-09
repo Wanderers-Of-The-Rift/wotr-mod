@@ -82,6 +82,6 @@ public class DamageEffect extends AbilityEffect {
     @Override
     public boolean isRelevantToThis(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.ABILITY_DAMAGE.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.ABILITY_DAMAGE.equals(attributeModifierEffect.attribute());
     }
 }

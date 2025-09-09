@@ -116,7 +116,7 @@ public class SimpleProjectileEffect extends AbilityEffect {
     @Override
     protected boolean isRelevantToThis(ModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
-            Holder<Attribute> attribute = attributeModifier.getAttribute();
+            Holder<Attribute> attribute = attributeModifier.attribute();
             return WotrAttributes.PROJECTILE_SPREAD.equals(attribute)
                     || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
                     || WotrAttributes.PROJECTILE_SPEED.equals(attribute);

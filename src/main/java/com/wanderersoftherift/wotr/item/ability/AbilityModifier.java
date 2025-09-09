@@ -20,9 +20,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class AbilityModifier implements ModifierEffect {
+public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.TriggerType<?>> trigger)
+        implements ModifierEffect {
 
     public static final MapCodec<AbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
@@ -31,14 +31,6 @@ public final class AbilityModifier implements ModifierEffect {
                                     .fieldOf("trigger")
                                     .forGetter(AbilityModifier::trigger)
                     ).apply(instance, AbilityModifier::new));
-
-    private final Holder<Ability> providedAbility;
-    private final Holder<TrackedAbilityTrigger.TriggerType<?>> trigger;
-
-    public AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.TriggerType<?>> trigger) {
-        this.providedAbility = providedAbility;
-        this.trigger = trigger;
-    }
 
     @Override
     public MapCodec<? extends ModifierEffect> getCodec() {
@@ -76,36 +68,6 @@ public final class AbilityModifier implements ModifierEffect {
 
         return List.of(new ImageComponent(stack, text.withStyle(style),
                 providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon())));
-    }
-
-    public Holder<Ability> providedAbility() {
-        return providedAbility;
-    }
-
-    public Holder<TrackedAbilityTrigger.TriggerType<?>> trigger() {
-        return trigger;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        var that = (AbilityModifier) obj;
-        return Objects.equals(this.providedAbility, that.providedAbility) && Objects.equals(this.trigger, that.trigger);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(providedAbility, trigger);
-    }
-
-    @Override
-    public String toString() {
-        return "AbilityModifier[" + "providedAbility=" + providedAbility + ", " + "trigger=" + trigger + ']';
     }
 
     private String getTierInfoString(int tier) {
