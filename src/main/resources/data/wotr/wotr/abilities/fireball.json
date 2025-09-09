@@ -21,7 +21,7 @@
               "targeting": {
                   "type": "wotr:self"
               },
-              "missing": [
+              "present": [
                   {
                       "type": "wotr:status",
                       "status_effect": {

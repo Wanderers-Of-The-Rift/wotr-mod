@@ -24,7 +24,6 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -85,9 +84,10 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
+        var conditions = AbilityConditions.forEntity(entity).condition(ability);
         var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
-                entity.level(), source.upgrades(entity), enhancements, Collections.emptySet() /* todo */);
+                entity.level(), source.upgrades(entity), enhancements, conditions);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
@@ -110,9 +110,10 @@ public class OngoingAbilities {
         boolean existing = existingId.isPresent();
         UUID id = existingId.orElseGet(UUID::randomUUID);
         var upgrades = source.upgrades(entity);
+        var conditions = AbilityConditions.forEntity(entity).condition(ability);
         var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), upgrades,
-                enhancements, Collections.emptySet() /* todo */);
+                enhancements, conditions);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             if (!ability.value().canActivate(context)) {
                 return false;
