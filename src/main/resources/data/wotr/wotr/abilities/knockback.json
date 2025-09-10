@@ -3,7 +3,7 @@
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
   "effects": [
     {
-      "type": "wotr:movement",
+      "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:area",
         "range": 10,
@@ -12,8 +12,13 @@
           "sentiment": "foe"
         }
       },
-      "velocity": [0, 0, -5],
-      "relativeFrame": "source_from_target"
+      "effects": [
+        {
+          "type": "wotr:movement",
+          "velocity": [0, 0, -5],
+          "relative_frame": "source_from_target"
+        }
+      ]
     }
   ]
 }

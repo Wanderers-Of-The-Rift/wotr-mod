@@ -1,21 +1,17 @@
 package com.wanderersoftherift.wotr.abilities.effects;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.List;
+public final class BreakBlockEffect implements AbilityEffect {
 
-public class BreakBlockEffect extends AbilityEffect {
+    public static final BreakBlockEffect INSTANCE = new BreakBlockEffect();
+    public static final MapCodec<BreakBlockEffect> CODEC = MapCodec.unit(INSTANCE);
 
-    public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbilityEffect.commonFields(instance).apply(instance, BreakBlockEffect::new));
-
-    public BreakBlockEffect(AbilityTargeting targeting, List<AbilityEffect> effects) {
-        super(targeting, effects);
+    private BreakBlockEffect() {
     }
 
     @Override
@@ -24,21 +20,13 @@ public class BreakBlockEffect extends AbilityEffect {
     }
 
     @Override
-    public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
-        List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-
-        List<BlockPos> areaBlocks = getTargeting().getBlocksInArea(user, blocks, context);
-
-        for (BlockPos pos : areaBlocks) {
-            // TODO: Make fortune work maybe? (Apply tool enchants etc)
-            if (context.level().getBlockState(pos).canEntityDestroy(context.level(), pos, context.caster())
-                    && context.level().getBlockState(pos).getBlock().defaultDestroyTime() > -1) {
+    public void apply(AbilityContext context, TargetInfo targetInfo) {
+        targetInfo.targetBlocks().map(BlockHitResult::getBlockPos).forEach(pos -> {
+            BlockState blockState = context.level().getBlockState(pos);
+            if (blockState.canEntityDestroy(context.level(), pos, context.caster())
+                    && blockState.getBlock().defaultDestroyTime() > -1) {
                 context.level().destroyBlock(pos, true, context.caster());
             }
-        }
-
-        if (targets.isEmpty()) {
-            super.apply(null, getTargeting().getBlocks(user), context);
-        }
+        });
     }
 }

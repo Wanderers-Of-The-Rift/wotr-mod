@@ -4,34 +4,28 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.EntityHitResult;
 
-import java.util.List;
-
-public class DamageEffect extends AbilityEffect {
-    public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbilityEffect.commonFields(instance)
-                    .and(instance.group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),
-                            DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::getDamageTypeKey)))
-                    .apply(instance, DamageEffect::new));
+public class DamageEffect implements AbilityEffect {
+    public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+            .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),
+                    DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::getDamageTypeKey))
+            .apply(instance, DamageEffect::new));
 
     private float damageAmount = 0;
     private final Holder<DamageType> damageTypeKey;
 
-    public DamageEffect(AbilityTargeting targeting, List<AbilityEffect> effects, float amount,
-            Holder<DamageType> damageTypeKey) {
-        super(targeting, effects);
+    public DamageEffect(float amount, Holder<DamageType> damageTypeKey) {
         this.damageAmount = amount;
         this.damageTypeKey = damageTypeKey;
     }
@@ -50,8 +44,7 @@ public class DamageEffect extends AbilityEffect {
     }
 
     @Override
-    public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
-        List<Entity> targets = getTargeting().getTargets(user, blocks, context);
+    public void apply(AbilityContext context, TargetInfo targetInfo) {
         DamageSource damageSource = new DamageSource(context.level()
                 .registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE)
@@ -61,21 +54,17 @@ public class DamageEffect extends AbilityEffect {
         // AD
         float finalDamage = context.getAbilityAttribute(WotrAttributes.ABILITY_DAMAGE, damageAmount);
 
-        for (Entity target : targets) {
-            if (target instanceof LivingEntity livingTarget) {
-                livingTarget.hurtServer((ServerLevel) target.level(), damageSource, finalDamage);
-            }
-            // Then apply children affects to targets
-            super.apply(target, getTargeting().getBlocks(user), context);
-        }
-
-        if (targets.isEmpty()) {
-            super.apply(null, getTargeting().getBlocks(user), context);
-        }
+        targetInfo.targetEntities()
+                .map(EntityHitResult::getEntity)
+                .filter(LivingEntity.class::isInstance)
+                .map(LivingEntity.class::cast)
+                .forEach(target -> {
+                    target.hurtServer((ServerLevel) target.level(), damageSource, finalDamage);
+                });
     }
 
     @Override
-    public boolean isRelevantToThis(ModifierEffect modifierEffect) {
+    public boolean isRelevant(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
                 && WotrAttributes.ABILITY_DAMAGE.equals(attributeModifierEffect.attribute());
     }
