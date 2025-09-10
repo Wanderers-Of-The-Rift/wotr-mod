@@ -6,13 +6,16 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.p3pp3rf1y.sophisticatedcore.util.WorldHelper;
 
 import java.util.Set;
 
@@ -83,5 +86,14 @@ public class RiftEvents {
         var position = deathRiftEntryState.previousPosition();
         player.teleportTo(newRift, position.x(), position.y(), position.z(), Set.of(), player.getYRot(),
                 player.getXRot(), false);
+    }
+
+    @SubscribeEvent
+    public static void onEntityLootDrop(LivingDropsEvent event) {
+        if (RiftLevelManager.isRift(event.getEntity().level())) {
+            if (!(event.getEntity() instanceof Player)) {
+                event.setCanceled(true);
+            }
+        }
     }
 }
