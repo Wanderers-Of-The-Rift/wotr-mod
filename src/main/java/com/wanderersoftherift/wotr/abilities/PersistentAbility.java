@@ -6,11 +6,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -133,7 +133,7 @@ public class PersistentAbility implements Ability {
     @Override
     public boolean tick(AbilityContext context) {
         if ((context.age() - warmupTime) == 0) {
-            activationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
+            activationEffects.forEach(effect -> effect.apply(context, new TargetInfo(context.caster())));
         }
         if (!ongoingRequirements.isEmpty() && ongoingRequirements.stream().anyMatch(x -> !x.check(context))) {
             deactivate(context, context.caster().getData(WotrAttachments.ABILITY_STATES));
@@ -143,7 +143,7 @@ public class PersistentAbility implements Ability {
     }
 
     private void deactivate(AbilityContext context, AbilityStates states) {
-        deactivationEffects.forEach(effect -> effect.apply(context.caster(), new ArrayList<>(), context));
+        deactivationEffects.forEach(effect -> effect.apply(context, new TargetInfo(context.caster())));
         onDeactivationCosts.forEach(cost -> cost.pay(context));
         states.setState(context.source(), 0);
     }
