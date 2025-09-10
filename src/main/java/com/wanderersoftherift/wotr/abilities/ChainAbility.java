@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
-import java.util.function.BiFunction;
 
 public record ChainAbility(List<AbilityElement> abilities) implements Ability {
 
@@ -33,8 +32,10 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
 
     @Override
     public Component getDisplayName(ResourceLocation abilityId, LivingEntity entity, AbilitySource source) {
-        return queryCurrentChild(entity, source, (ability, childSource) -> ability.value()
-                .getDisplayName(ability.getKey().location(), entity, childSource));
+        int index = currentIndex(entity, source);
+        ChainAbilitySource subSource = new ChainAbilitySource(source, index);
+        Holder<Ability> subAbility = abilities.get(index).ability();
+        return subAbility.value().getDisplayName(subAbility.getKey().location(), entity, subSource);
     }
 
     @Override
@@ -44,8 +45,10 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
 
     @Override
     public ResourceLocation getIcon(LivingEntity entity, AbilitySource source) {
-        return queryCurrentChild(entity, source,
-                (ability, childSource) -> ability.value().getIcon(entity, childSource));
+        int index = currentIndex(entity, source);
+        ChainAbilitySource subSource = new ChainAbilitySource(source, index);
+        Holder<Ability> subAbility = abilities.get(index).ability();
+        return subAbility.value().getIcon(entity, subSource);
     }
 
     @Override
@@ -55,8 +58,10 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
 
     @Override
     public boolean canActivate(AbilityContext context) {
-        return queryCurrentChild(context.caster(), context.source(),
-                (child, childSource) -> child.value().canActivate(context.forSubAbility(child, childSource)));
+        int index = currentIndex(context.caster(), context.source());
+        ChainAbilitySource subSource = new ChainAbilitySource(context.source(), index);
+        Holder<Ability> subAbility = abilities.get(index).ability();
+        return subAbility.value().canActivate(context.forSubAbility(subAbility, subSource));
     }
 
     @Override
@@ -156,16 +161,6 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
 
     public int currentIndex(LivingEntity owner, AbilitySource source) {
         return owner.getData(WotrAttachments.ABILITY_STATES).getState(source);
-    }
-
-    private <T> T queryCurrentChild(
-            LivingEntity entity,
-            AbilitySource source,
-            BiFunction<Holder<Ability>, ChainAbilitySource, T> function) {
-        int index = currentIndex(entity, source);
-        ChainAbilitySource childSource = new ChainAbilitySource(source, index);
-        Holder<Ability> childAbility = abilities.get(index).ability();
-        return function.apply(childAbility, childSource);
     }
 
     public record AbilityElement(Holder<Ability> ability, int ticksToReset, boolean autoActivate) {
