@@ -10,6 +10,9 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,25 @@ public abstract class AbilityTargeting {
     }
 
     public abstract MapCodec<? extends AbilityTargeting> getCodec();
+
+    public List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
+        List<TargetInfo> results = new ArrayList<>();
+
+        for (HitResult source : origin.targets()) {
+            List<HitResult> hits = new ArrayList<>();
+            if (source instanceof EntityHitResult entityHit) {
+                hits.addAll(getTargetsFromEntity(entityHit.getEntity(), context).stream()
+                        .map(x -> new EntityHitResult(x, x.position()))
+                        .toList());
+            } else if (source instanceof BlockHitResult blockHit) {
+                hits.addAll(getTargetsFromBlocks(List.of(blockHit.getBlockPos()), context).stream()
+                        .map(x -> new EntityHitResult(x, x.position()))
+                        .toList());
+            }
+            results.add(new TargetInfo(source, hits));
+        }
+        return results;
+    }
 
     /**
      * @param currentEntity This is the entity which is using the effect, this can be any entity down a chain based on

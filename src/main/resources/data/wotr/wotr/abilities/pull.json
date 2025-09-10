@@ -9,14 +9,19 @@
   ],
   "effects": [
     {
-      "type": "wotr:movement",
+      "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:area",
         "range": 20,
         "include_self": false
       },
-      "velocity": [0, 0, 5],
-      "relativeFrame": "source_from_target"
+      "effects": [
+        {
+          "type": "wotr:movement",
+          "velocity": [0, 0, 5],
+          "relativeFrame": "source_from_target"
+        }
+      ]
     }
   ]
 }

@@ -3,41 +3,38 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import net.minecraft.core.BlockPos;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
-public class ConditionalEffect extends AbilityEffect {
-    public static final MapCodec<ConditionalEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
-            .commonFields(instance)
-            .and(
-                    instance.group(
-                            AbilityEffect.DIRECT_CODEC.listOf()
-                                    .optionalFieldOf("present", Collections.emptyList())
-                                    .forGetter(ConditionalEffect::effectsTrue),
-                            AbilityEffect.DIRECT_CODEC.listOf()
-                                    .optionalFieldOf("missing", Collections.emptyList())
-                                    .forGetter(ConditionalEffect::effectsFalse),
-                            ResourceLocation.CODEC.fieldOf("condition_name").forGetter(ConditionalEffect::condition)
-                    )
-            )
-            .apply(instance, ConditionalEffect::new));
+public class ConditionalEffect implements AbilityEffect {
+    public static final MapCodec<ConditionalEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            AbilityEffect.DIRECT_CODEC.listOf()
+                    .optionalFieldOf("always", Collections.emptyList())
+                    .forGetter(ConditionalEffect::effectsAlways),
+            AbilityEffect.DIRECT_CODEC.listOf()
+                    .optionalFieldOf("present", Collections.emptyList())
+                    .forGetter(ConditionalEffect::effectsTrue),
+            AbilityEffect.DIRECT_CODEC.listOf()
+                    .optionalFieldOf("missing", Collections.emptyList())
+                    .forGetter(ConditionalEffect::effectsFalse),
+            ResourceLocation.CODEC.fieldOf("condition_name").forGetter(ConditionalEffect::condition)
+    ).apply(instance, ConditionalEffect::new));
 
+    private final List<AbilityEffect> effectsAlways;
     private final List<AbilityEffect> effectsTrue;
-
     private final List<AbilityEffect> effectsFalse;
     private final ResourceLocation condition;
 
-    public ConditionalEffect(AbilityTargeting targeting, List<AbilityEffect> effects, List<AbilityEffect> effectsTrue,
+    public ConditionalEffect(List<AbilityEffect> effectsAlways, List<AbilityEffect> effectsTrue,
             List<AbilityEffect> effectsFalse, ResourceLocation condition) {
-        super(targeting, effects);
-
+        this.effectsAlways = effectsAlways;
         this.effectsTrue = effectsTrue;
         this.effectsFalse = effectsFalse;
         this.condition = condition;
@@ -51,6 +48,10 @@ public class ConditionalEffect extends AbilityEffect {
         return effectsFalse;
     }
 
+    private List<AbilityEffect> effectsAlways() {
+        return effectsAlways;
+    }
+
     private ResourceLocation condition() {
         return condition;
     }
@@ -61,14 +62,23 @@ public class ConditionalEffect extends AbilityEffect {
     }
 
     @Override
-    public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
-        super.apply(user, blocks, context);
+    public void apply(AbilityContext context, TargetInfo targetInfo) {
+        for (AbilityEffect effect : effectsAlways) {
+            effect.apply(context, targetInfo);
+        }
 
         var condition = context.getOrDefault(WotrDataComponentType.AbilityContextData.CONDITIONS, Set.of())
                 .contains(condition());
 
         for (AbilityEffect effect : (condition ? effectsTrue() : effectsFalse())) {
-            effect.apply(user, blocks, context);
+            effect.apply(context, targetInfo);
         }
+    }
+
+    @Override
+    public boolean isRelevant(ModifierEffect modifierEffect) {
+        Predicate<AbilityEffect> relevanceCheck = (effect) -> effect.isRelevant(modifierEffect);
+        return effectsAlways.stream().anyMatch(relevanceCheck) || effectsTrue.stream().anyMatch(relevanceCheck)
+                || effectsFalse.stream().anyMatch(relevanceCheck);
     }
 }
