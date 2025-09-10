@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -49,7 +50,8 @@ public interface MobVariantInterface {
 
     // Default implementation for saving variant data
     default void saveVariantData(CompoundTag tag) {
-        new LaxRegistryCodec<>(WotrRegistries.Keys.MOB_VARIANTS)
+        new LaxRegistryCodec<>(WotrRegistries.Keys.MOB_VARIANTS,
+                RegistryFixedCodec.create(WotrRegistries.Keys.MOB_VARIANTS))
                 .encode(getVariant(), level().registryAccess().createSerializationContext(NbtOps.INSTANCE),
                         NbtOps.INSTANCE.empty())
                 .ifSuccess(encodedTag -> tag.put("variant", encodedTag));
@@ -61,7 +63,8 @@ public interface MobVariantInterface {
             if (tag.get("variant") instanceof StringTag) {
                 handleStringVariant(tag);
             }
-            new LaxRegistryCodec<>(WotrRegistries.Keys.MOB_VARIANTS)
+            new LaxRegistryCodec<>(WotrRegistries.Keys.MOB_VARIANTS,
+                    RegistryFixedCodec.create(WotrRegistries.Keys.MOB_VARIANTS))
                     .decode(level().registryAccess().createSerializationContext(NbtOps.INSTANCE), tag.get("variant"))
                     .ifSuccess(pair -> {
                         setVariant(pair.getFirst());

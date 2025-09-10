@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -20,9 +21,9 @@ import java.util.Map;
 
 public record MobVariantData(Map<Holder<Attribute>, Double> attributes, ResourceLocation texture) {
     public static final Codec<MobVariantData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.unboundedMap(new LaxRegistryCodec<>(Registries.ATTRIBUTE), Codec.DOUBLE)
-                    .fieldOf("stats")
-                    .forGetter(MobVariantData::attributes),
+            Codec.unboundedMap(
+                    new LaxRegistryCodec<>(Registries.ATTRIBUTE, RegistryFixedCodec.create(Registries.ATTRIBUTE)),
+                    Codec.DOUBLE).fieldOf("stats").forGetter(MobVariantData::attributes),
             ResourceLocation.CODEC.fieldOf("texture").forGetter(MobVariantData::texture)
     ).apply(instance, MobVariantData::new)
     );
