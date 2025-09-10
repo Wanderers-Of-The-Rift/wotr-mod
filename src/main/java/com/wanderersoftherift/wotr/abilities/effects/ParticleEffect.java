@@ -45,11 +45,11 @@ public class ParticleEffect extends AbilityEffect {
         }
 
         for (BlockPos block : blocks) {
-            applyParticlesToPos(serverLevel, block.getCenter(), particle);
+            spawnParticles(serverLevel, block.getCenter(), particle);
         }
 
         for (Entity target : targets) {
-            applyParticlesToPos(serverLevel, target.position(), particle);
+            spawnParticles(serverLevel, target.position(), particle);
 
             // Then apply children effects to targets
             super.apply(target, getTargeting().getBlocks(user), context);
@@ -60,7 +60,7 @@ public class ParticleEffect extends AbilityEffect {
         }
     }
 
-    public void applyParticlesToPos(ServerLevel level, Vec3 position, ParticleOptions particleOptions) {
+    private void spawnParticles(ServerLevel level, Vec3 position, ParticleOptions particleOptions) {
         level.sendParticles(particleOptions, false, true, position.x, position.y + 1.5, position.z, 10, Math.random(),
                 Math.random(), Math.random(), 2);
     }
