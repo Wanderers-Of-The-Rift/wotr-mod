@@ -1,5 +1,8 @@
 {
-  "minecraft:max_health": 20.0,
-  "minecraft:attack_damage": 2.5,
-  "minecraft:movement_speed": 0.25
+  "stats": {
+    "minecraft:max_health": 20.0,
+    "minecraft:attack_damage": 2.5,
+    "minecraft:movement_speed": 0.25
+  },
+  "texture": "wotr:textures/entity/mob_variant/skeleton/desert_skeleton.png"
 }

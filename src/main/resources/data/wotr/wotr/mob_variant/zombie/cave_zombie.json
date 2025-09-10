@@ -1,5 +1,8 @@
 {
-  "minecraft:max_health": 20.0,
-  "minecraft:attack_damage": 2.25,
-  "minecraft:movement_speed": 0.2
+  "stats": {
+    "minecraft:max_health": 20.0,
+    "minecraft:attack_damage": 2.25,
+    "minecraft:movement_speed": 0.2
+  },
+  "texture": "wotr:textures/entity/mob_variant/zombie/cave_zombie.png"
 }

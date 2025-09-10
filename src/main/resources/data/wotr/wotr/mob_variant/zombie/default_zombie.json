@@ -1,14 +1,17 @@
 {
-  "minecraft:max_health": 20.0,
-  "minecraft:attack_damage": 3.0,
-  "minecraft:movement_speed": 0.23,
-  "minecraft:follow_range": 35.0,
-  "minecraft:knockback_resistance": 0.0,
-  "minecraft:zombie.spawn_reinforcements": 0.0,
-  "minecraft:scale": 1.0,
-  "minecraft:attack_knockback": 0.0,
-  "minecraft:armor": 0.0,
-  "minecraft:armor_toughness": 0.0,
-  "minecraft:luck": 0.0,
-  "minecraft:generic.jump_strength": 0.42
+  "stats": {
+    "minecraft:max_health": 20.0,
+    "minecraft:attack_damage": 3.0,
+    "minecraft:movement_speed": 0.23,
+    "minecraft:follow_range": 35.0,
+    "minecraft:knockback_resistance": 0.0,
+    "minecraft:spawn_reinforcements": 0.0,
+    "minecraft:scale": 1.0,
+    "minecraft:attack_knockback": 0.0,
+    "minecraft:armor": 0.0,
+    "minecraft:armor_toughness": 0.0,
+    "minecraft:luck": 0.0,
+    "minecraft:jump_strength": 0.42
+  },
+  "texture": "wotr:textures/entity/mob_variant/zombie/default_zombie.png"
 }

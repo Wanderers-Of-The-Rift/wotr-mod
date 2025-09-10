@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
 import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import net.minecraft.core.Holder;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -18,4 +20,6 @@ public class WotrEntityDataSerializers {
                     .forValueType(SimpleProjectileConfig.SimpleProjectileConfigRenderConfig.STREAM_CODEC));
     public static final Supplier<EntityDataSerializer<RiftConfig>> RIFT_CONFIG_SERIALIZER = ENTITY_DATA_SERIALIZERS
             .register("rift_config", () -> EntityDataSerializer.forValueType(RiftConfig.STREAM_CODEC));
+    public static final Supplier<EntityDataSerializer<Holder<MobVariantData>>> MOB_VARIANT_HOLDER = ENTITY_DATA_SERIALIZERS
+            .register("mob_variant_holder", () -> EntityDataSerializer.forValueType(MobVariantData.STREAM_CODEC));
 }
