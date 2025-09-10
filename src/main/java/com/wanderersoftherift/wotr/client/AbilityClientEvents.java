@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
@@ -86,7 +86,7 @@ public final class AbilityClientEvents {
     }
 
     private static void useAbilitySlot(int slot, Player player) {
-        if (player.getData(WotrAttachments.ONGOING_ABILITIES).activate(AbilityEquipmentSlot.forSlot(slot))) {
+        if (player.getData(WotrAttachments.ONGOING_ABILITIES).activate(AbilitySource.sourceForSlot(slot))) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }
     }

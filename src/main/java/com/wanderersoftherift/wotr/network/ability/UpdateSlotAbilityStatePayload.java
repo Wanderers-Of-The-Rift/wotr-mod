@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,16 +14,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Updates the ability state of a single equipment slot
  * 
- * @param slot   The slot
+ * @param source Source of the ability
  * @param active Whether it is active or not
  */
-public record UpdateSlotAbilityStatePayload(WotrEquipmentSlot slot, boolean active) implements CustomPacketPayload {
+public record UpdateSlotAbilityStatePayload(AbilitySource source, boolean active) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<UpdateSlotAbilityStatePayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "slot_ability_state_update"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, UpdateSlotAbilityStatePayload> STREAM_CODEC = StreamCodec
             .composite(
-                    WotrEquipmentSlot.STREAM_CODEC, UpdateSlotAbilityStatePayload::slot, ByteBufCodecs.BOOL,
+                    AbilitySource.STREAM_CODEC, UpdateSlotAbilityStatePayload::source, ByteBufCodecs.BOOL,
                     UpdateSlotAbilityStatePayload::active, UpdateSlotAbilityStatePayload::new);
 
     @Override
@@ -32,6 +32,6 @@ public record UpdateSlotAbilityStatePayload(WotrEquipmentSlot slot, boolean acti
     }
 
     public void handleOnClient(final IPayloadContext context) {
-        context.player().getData(WotrAttachments.ABILITY_STATES.get()).setActive(slot, active);
+        context.player().getData(WotrAttachments.ABILITY_STATES.get()).setActive(source, active);
     }
 }

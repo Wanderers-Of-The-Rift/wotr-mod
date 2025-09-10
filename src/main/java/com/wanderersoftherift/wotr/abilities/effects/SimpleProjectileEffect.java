@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
@@ -21,7 +20,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SimpleProjectileEffect extends AbilityEffect {
     public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder
@@ -32,8 +30,8 @@ public class SimpleProjectileEffect extends AbilityEffect {
     private SimpleProjectileConfig config;
 
     public SimpleProjectileEffect(AbilityTargeting targeting, List<AbilityEffect> effects,
-            Optional<ParticleInfo> particles, SimpleProjectileConfig config) {
-        super(targeting, effects, particles);
+            SimpleProjectileConfig config) {
+        super(targeting, effects);
         this.config = config;
     }
 
@@ -51,7 +49,6 @@ public class SimpleProjectileEffect extends AbilityEffect {
         List<BlockPos> targets = getTargeting().getBlocks(source);
         List<Entity> targetEntities = getTargeting().getTargets(source, blocks, context);
 
-        applyParticlesToUser(source);
         if (!targetEntities.isEmpty()) {
 
             // NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it
@@ -107,8 +104,6 @@ public class SimpleProjectileEffect extends AbilityEffect {
 
     public void applyDelayed(Level level, Entity target, List<BlockPos> blocks, AbilityContext context) {
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-            applyParticlesToTarget(target);
-            applyParticlesToTargetBlocks(level, blocks);
             super.apply(target, blocks, context);
         }
     }

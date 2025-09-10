@@ -1,8 +1,12 @@
 {
-  "type": "wotr:standard",
+  "type": "wotr:instant",
   "icon" : "minecraft:textures/item/iron_pickaxe.png",
-  "cooldown": 1,
-  "strength": "wotr:large_boost_strength",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 1
+    }
+  ],
   "effects": [
     {
       "type": "wotr:damage",
@@ -11,10 +15,25 @@
       "targeting": {
         "type": "wotr:self"
       },
-      "effects": [],
-      "particles": {
-        "user": "minecraft:bubble",
-        "target": "minecraft:explosion"
+      "effects": [
+        {
+          "type": "wotr:particle",
+          "targeting": {
+            "type": "wotr:self"
+          },
+          "particle": {
+            "type": "minecraft:explosion"
+          }
+        }
+      ]
+    },
+    {
+      "type": "wotr:particle",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "particle": {
+        "type": "minecraft:bubble"
       }
     }
   ]

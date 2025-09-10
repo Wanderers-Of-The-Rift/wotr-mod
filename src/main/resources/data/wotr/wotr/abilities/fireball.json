@@ -1,6 +1,5 @@
 {
-  "type": "wotr:standard",
-  "cooldown": 60,
+  "type": "wotr:instant",
   "effects": [
     {
       "type": "wotr:simple_projectile",
@@ -28,18 +27,40 @@
               "sentiment": "not_friend"
             }
           }
+        },
+        {
+          "type": "wotr:particle",
+          "targeting": {
+            "type": "wotr:self"
+          },
+          "particle": {
+            "type": "minecraft:explosion"
+          }
         }
       ],
-      "particles": {
-        "target_block": {
-          "type": "minecraft:explosion"
-        }
-      },
       "targeting": {
         "type": "wotr:self"
+      }
+    },
+    {
+      "type": "wotr:particle",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "particle": {
+        "type": "minecraft:bubble"
       }
     }
   ],
   "icon": "minecraft:textures/item/fire_charge.png",
-  "mana_cost": 10
+  "requirements": [
+    {
+      "type": "wotr:food_level",
+      "amount": 2
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 30
+    }
+  ]
 }

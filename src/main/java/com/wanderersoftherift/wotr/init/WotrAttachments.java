@@ -4,15 +4,23 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
+import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
+import com.wanderersoftherift.wotr.entity.npc.NoInteract;
+import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
+import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
+import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.world.item.ItemStack;
@@ -40,6 +48,9 @@ public class WotrAttachments {
                     .serialize(MutableListCodec.of(RiftEntryState.CODEC))
                     .copyOnDeath()
                     .build());
+    public static final Supplier<AttachmentType<RiftEntrance>> RIFT_ENTRANCE = ATTACHMENT_TYPES.register(
+            "rift_entrance", () -> AttachmentType.builder(RiftEntrance::create).serialize(RiftEntrance.CODEC).build()
+    );
 
     /// Rift
     public static final Supplier<AttachmentType<RiftEntryState>> DEATH_RIFT_ENTRY_STATE = ATTACHMENT_TYPES.register(
@@ -83,6 +94,8 @@ public class WotrAttachments {
             "ability_states",
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
 
+    public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
+            "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());
@@ -96,6 +109,21 @@ public class WotrAttachments {
             "active_quests",
             () -> AttachmentType.builder(ActiveQuests::new)
                     .serialize(ActiveQuests.getSerializer())
+                    .copyOnDeath()
+                    .build());
+
+    public static final Supplier<AttachmentType<MobInteraction>> MOB_INTERACT = ATTACHMENT_TYPES.register(
+            "mob_interact",
+            () -> AttachmentType.<MobInteraction>builder(() -> NoInteract.INSTANCE)
+                    .serialize(MobInteraction.DIRECT_CODEC)
+                    .build()
+    );
+
+    /// Player progression
+    public static final Supplier<AttachmentType<PrimaryStatistics>> PRIMARY_STATISTICS = ATTACHMENT_TYPES.register(
+            "primary_statistics",
+            () -> AttachmentType.builder(PrimaryStatistics::new)
+                    .serialize(PrimaryStatistics.getSerializer())
                     .copyOnDeath()
                     .build());
 
@@ -116,5 +144,12 @@ public class WotrAttachments {
             .register(
                     "mana_entity_registry",
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
+            );
+
+    public static final Supplier<AttachmentType<TriggerRegistry<TickTrigger>>> TICK_TRIGGER_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "tick_trigger_registry",
+                    () -> AttachmentType.builder(() -> new TriggerRegistry<>(WotrTrackedAbilityTriggers.TICK_TRIGGER))
+                            .build()
             );
 }

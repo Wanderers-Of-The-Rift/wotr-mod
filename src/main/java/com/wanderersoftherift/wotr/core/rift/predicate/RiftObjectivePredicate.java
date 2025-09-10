@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.core.rift.predicate;
 
 import com.mojang.serialization.Codec;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -19,12 +19,12 @@ public record RiftObjectivePredicate(Holder<ObjectiveType> objective) implements
 
     @Override
     public boolean match(RiftConfig config) {
-        return config.objective().map(actual -> actual.equals(objective)).orElse(false);
+        return config.objective().equals(objective);
     }
 
     @Override
     public MutableComponent displayText() {
-        ResourceLocation id = ResourceLocation.parse(objective.getRegisteredName());
+        ResourceLocation id = objective.getKey().location();
         return Component.translatable(id.toLanguageKey("objective", "name"));
     }
 }

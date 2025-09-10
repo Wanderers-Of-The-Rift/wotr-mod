@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.item.riftkey.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
@@ -10,6 +10,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
+import java.util.Optional;
 
 public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> layers)
         implements LayeredRiftLayout.Factory {
@@ -21,7 +22,7 @@ public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> l
 
     @Override
     public LayeredRiftLayout.Factory withLayers(List<LayeredRiftLayout.LayoutLayer.Factory> layers) {
-        return new DefaultLayoutFactory(layers());
+        return new DefaultLayoutFactory(layers);
     }
 
     @Override
@@ -34,9 +35,9 @@ public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> l
         var shape = riftShape(riftConfig);
         RiftLayout.Factory factory;
         if (shape instanceof BoxedRiftShape boxedRiftShape) {
-            factory = new LayeredFiniteRiftLayout.Factory(boxedRiftShape, riftConfig.riftGen().seed(), layers);
+            factory = new LayeredFiniteRiftLayout.Factory(boxedRiftShape, Optional.of(riftConfig.seed()), layers);
         } else {
-            factory = new LayeredInfiniteRiftLayout.Factory(shape, riftConfig.riftGen().seed(), layers);
+            factory = new LayeredInfiniteRiftLayout.Factory(shape, Optional.of(riftConfig.seed()), layers);
         }
         return factory.createLayout(server, riftConfig);
     }

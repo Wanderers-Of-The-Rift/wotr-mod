@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.nbt.Tag;
@@ -28,7 +28,7 @@ public class AbilityStates {
 
     private final IAttachmentHolder holder;
 
-    private final Set<WotrEquipmentSlot> activeSlots = new LinkedHashSet<>();
+    private final Set<AbilitySource> activeSources = new LinkedHashSet<>();
 
     public AbilityStates(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -37,51 +37,51 @@ public class AbilityStates {
     private AbilityStates(@NotNull IAttachmentHolder holder, @Nullable Data data) {
         this.holder = holder;
         if (data != null) {
-            this.activeSlots.addAll(data.activeSlots);
+            this.activeSources.addAll(data.activeSources);
         }
     }
 
     /**
      * @return A collection of all active slots
      */
-    public Collection<WotrEquipmentSlot> getActiveSlots() {
-        return Collections.unmodifiableSet(activeSlots);
+    public Collection<AbilitySource> getActiveSources() {
+        return Collections.unmodifiableSet(activeSources);
     }
 
     /**
      * Sets the active state of the given slot
      * 
-     * @param slot
+     * @param source
      * @param value
      */
-    public void setActive(WotrEquipmentSlot slot, boolean value) {
+    public void setActive(AbilitySource source, boolean value) {
         boolean changed;
         if (value) {
-            changed = activeSlots.add(slot);
+            changed = activeSources.add(source);
         } else {
-            changed = activeSlots.remove(slot);
+            changed = activeSources.remove(source);
         }
         if (changed && holder instanceof ServerPlayer player) {
-            PacketDistributor.sendToPlayer(player, new UpdateSlotAbilityStatePayload(slot, value));
+            PacketDistributor.sendToPlayer(player, new UpdateSlotAbilityStatePayload(source, value));
         }
     }
 
     /**
-     * @param slot
+     * @param source
      * @return Whether the slot has an active ability
      */
-    public boolean isActive(WotrEquipmentSlot slot) {
-        return activeSlots.contains(slot);
+    public boolean isActive(AbilitySource source) {
+        return activeSources.contains(source);
     }
 
     /**
      * Clears existing state and sets all the provided slots as active
      * 
-     * @param activeSlots
+     * @param activeSources
      */
-    public void clearAndSetActive(List<WotrEquipmentSlot> activeSlots) {
-        this.activeSlots.clear();
-        this.activeSlots.addAll(activeSlots);
+    public void clearAndSetActive(List<AbilitySource> activeSources) {
+        this.activeSources.clear();
+        this.activeSources.addAll(activeSources);
     }
 
     /// Serialization
@@ -91,12 +91,12 @@ public class AbilityStates {
     }
 
     private Data data() {
-        return new Data(List.copyOf(activeSlots));
+        return new Data(List.copyOf(activeSources));
     }
 
-    private record Data(List<WotrEquipmentSlot> activeSlots) {
-        private static final Codec<Data> CODEC = WotrEquipmentSlot.DIRECT_CODEC.listOf()
-                .xmap(Data::new, Data::activeSlots);
+    private record Data(List<AbilitySource> activeSources) {
+        private static final Codec<Data> CODEC = AbilitySource.DIRECT_CODEC.listOf()
+                .xmap(Data::new, Data::activeSources);
     }
 
 }

@@ -7,7 +7,6 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.ContinueEffectPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TriggerPredicate;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -15,6 +14,7 @@ import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 import java.util.List;
@@ -28,6 +28,7 @@ public class AttachEffect extends AbilityEffect {
     public static final MapCodec<AttachEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(instance.group(
+                            ResourceLocation.CODEC.optionalFieldOf("id").forGetter(AttachEffect::getId),
                             TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate())
                                     .forGetter(AttachEffect::getTriggerPredicate),
                             ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
@@ -40,21 +41,23 @@ public class AttachEffect extends AbilityEffect {
                                     .forGetter(AttachEffect::getModifiers)))
                     .apply(instance, AttachEffect::new));
 
+    private final Optional<ResourceLocation> id;
     private final TriggerPredicate triggerPredicate;
     private final ContinueEffectPredicate continuePredicate;
     private final Holder<EffectMarker> display;
     private final List<ModifierInstance> modifiers;
 
-    public AttachEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
+    public AttachEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ResourceLocation> id,
             TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate,
             Optional<Holder<EffectMarker>> display, List<ModifierInstance> modifiers) {
-        this(targeting, effects, particles, triggerPredicate, continuePredicate, display.orElse(null), modifiers);
+        this(targeting, effects, id, triggerPredicate, continuePredicate, display.orElse(null), modifiers);
     }
 
-    public AttachEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
+    public AttachEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ResourceLocation> id,
             TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate, Holder<EffectMarker> display,
             List<ModifierInstance> modifiers) {
-        super(targeting, effects, particles);
+        super(targeting, effects);
+        this.id = id;
         this.triggerPredicate = triggerPredicate;
         this.continuePredicate = continuePredicate;
         this.display = display;
@@ -65,10 +68,7 @@ public class AttachEffect extends AbilityEffect {
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
 
-        applyParticlesToUser(user);
-
         for (Entity target : targets) {
-            applyParticlesToTarget(target);
             target.getData(WotrAttachments.ATTACHED_EFFECTS).attach(this, context);
         }
     }
@@ -76,6 +76,10 @@ public class AttachEffect extends AbilityEffect {
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
+    }
+
+    public Optional<ResourceLocation> getId() {
+        return id;
     }
 
     public TriggerPredicate getTriggerPredicate() {

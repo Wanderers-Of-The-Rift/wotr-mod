@@ -2,9 +2,9 @@ package com.wanderersoftherift.wotr.item.implicit;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.ModifierProvider;
-import com.wanderersoftherift.wotr.modifier.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.modifier.source.GearImplicitModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,8 +35,9 @@ public interface GearImplicits extends ModifierProvider {
     @Override
     default void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
         List<ModifierInstance> modifierInstances = modifierInstances(stack, entity.level());
-        for (ModifierInstance modifier : modifierInstances) {
-            ModifierSource source = new GearImplicitModifierSource(this, slot, entity);
+        for (int i = 0; i < modifierInstances.size(); i++) {
+            ModifierInstance modifier = modifierInstances.get(i);
+            ModifierSource source = new GearImplicitModifierSource(slot, i);
             action.accept(modifier.modifier(), modifier.tier(), modifier.roll(), source);
         }
     }

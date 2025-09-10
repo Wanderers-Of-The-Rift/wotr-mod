@@ -208,7 +208,7 @@ public class WotrRuneGemDataProvider {
                                 ))
                 ), RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("critical_raw"), new RunegemData(
-                getTranslatableName("defense_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                getTranslatableName("critical_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
                                 new TieredModifier(1, getModifier(lookup, "critical_chance")),
                                 new TieredModifier(1, getModifier(lookup, "critical_avoidance"))

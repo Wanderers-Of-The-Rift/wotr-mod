@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
+import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
@@ -12,20 +13,25 @@ import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
 import com.wanderersoftherift.wotr.init.WotrContainerTypes;
 import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.init.WotrEditTypes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.init.WotrMobEffects;
+import com.wanderersoftherift.wotr.init.WotrMobInteractions;
 import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
+import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
 import com.wanderersoftherift.wotr.init.WotrSoundEvents;
+import com.wanderersoftherift.wotr.init.ability.WotrAbilityRequirementTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
 import com.wanderersoftherift.wotr.init.ability.WotrTargetingTypes;
+import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.init.client.WotrConfigurableLayers;
 import com.wanderersoftherift.wotr.init.client.WotrEmblemProviders;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemConditionTypes;
@@ -45,11 +51,13 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrJigsawListProcessors;
 import com.wanderersoftherift.wotr.init.worldgen.WotrOutputBlockStateTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftBuiltinGeneratables;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayouts;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftPostProcessingSteps;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftRoomGeneratorFactories;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftShapes;
+import com.wanderersoftherift.wotr.init.worldgen.WotrThemeSources;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
@@ -103,6 +111,7 @@ public class WanderersOfTheRift {
         WotrOutputBlockStateTypes.OUTPUT_BLOCKSTATE_TYPES.register(modEventBus);
         WotrProcessors.PROCESSORS.register(modEventBus);
 
+        WotrThemeSources.THEME_SOURCES.register(modEventBus);
         WotrRiftLayoutLayers.LAYOUT_LAYERS.register(modEventBus);
         WotrRiftLayouts.LAYOUTS.register(modEventBus);
         WotrRiftShapes.RIFT_SHAPES.register(modEventBus);
@@ -111,18 +120,25 @@ public class WanderersOfTheRift {
         WotrJigsawListProcessors.JIGSAW_LIST_PROCESSORS.register(modEventBus);
         WotrCorridorValidators.CORRIDOR_VALIDATORS.register(modEventBus);
         WotrRiftPostProcessingSteps.RIFT_POST_STEPS.register(modEventBus);
+        WotrRiftConfigDataTypes.RIFT_CONFIG_DATA_TYPES.register(modEventBus);
 
         // Abilities
         WotrAbilityTypes.ABILITY_TYPES.register(modEventBus);
+        WotrAbilityRequirementTypes.ABILITY_REQUIREMENT_TYPES.register(modEventBus);
         WotrEffects.EFFECTS.register(modEventBus);
         WotrTargetingTypes.TARGETING_TYPES.register(modEventBus);
+        WotrAbilitySourceTypes.ABILITY_SOURCE.register(modEventBus);
 
         WotrGoalTypes.GOAL_PROVIDER_TYPES.register(modEventBus);
         WotrGoalTypes.GOAL_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_PROVIDER_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_TYPES.register(modEventBus);
+        WotrTrackedAbilityTriggers.TRIGGERS.register(modEventBus);
+
+        WotrMobInteractions.MOB_INTERACTIONS.register(modEventBus);
 
         // Gear
+        WotrModifierSourceTypes.MODIFIER_SOURCE.register(modEventBus);
         WotrEquipmentSlotTypes.EQUIPMENT_SLOTS.register(modEventBus);
         WotrModifierEffectTypes.MODIFIER_EFFECT_TYPES.register(modEventBus);
         WotrObjectiveTypes.OBJECTIVE_TYPES.register(modEventBus);
@@ -135,6 +151,9 @@ public class WanderersOfTheRift {
         WotrRecipeCategories.RECIPE_BOOK_CATEGORIES.register(modEventBus);
         WotrSlotDisplayTypes.SLOT_DISPLAY_TYPES.register(modEventBus);
         WotrRecipeDisplayTypes.RECIPE_DISPLAY_TYPES.register(modEventBus);
+
+        // Utilities
+        WotrEditTypes.EDIT_TYPES.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);

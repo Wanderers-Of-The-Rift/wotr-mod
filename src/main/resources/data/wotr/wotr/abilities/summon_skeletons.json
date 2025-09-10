@@ -1,7 +1,12 @@
 {
-  "type": "wotr:standard",
+  "type": "wotr:instant",
   "icon" : "minecraft:textures/item/bone.png",
-  "cooldown": 40,
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ],
   "effects": [
     {
       "type": "wotr:target",
@@ -29,14 +34,28 @@
                 1,
                 0
               ]
+            },
+            {
+              "type": "wotr:particle",
+              "targeting": {
+                "type": "wotr:self"
+              },
+              "particle": {
+                "type": "minecraft:explosion"
+              }
             }
-          ],
-          "particles": {
-            "user": "minecraft:bubble",
-            "target": "minecraft:explosion"
-          }
+          ]
         }
       ]
+    },
+    {
+      "type": "wotr:particle",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "particle": {
+        "type": "minecraft:bubble"
+      }
     }
   ]
 }

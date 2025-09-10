@@ -90,12 +90,42 @@ public class AttachedEffects {
     }
 
     /**
+     * @param instanceId The ability instance to check for attachments from
+     * @return Whether there are any attach effects from the given ability
+     */
+    public boolean has(UUID instanceId) {
+        return effects.stream().anyMatch(x -> x.context.instanceId().equals(instanceId));
+    }
+
+    /**
+     *
+     * @param instanceId The ability instance to check for attachments from
+     * @param predicate  A predicate the AttachEffect must meet
+     * @return Whether there are any attach effects from the given ability and matching the AttachEffect predicate
+     */
+    public boolean has(UUID instanceId, Predicate<AttachEffect> predicate) {
+        return effects.stream()
+                .anyMatch(x -> x.context.instanceId().equals(instanceId) && predicate.test(x.attachEffect));
+    }
+
+    /**
      * Detaches all effects linked to an ability
      * 
      * @param instanceId The id of the ability instance
      */
     public void detach(UUID instanceId) {
         detachEffectsIf(effect -> effect.context.instanceId().equals(instanceId));
+    }
+
+    /**
+     * Detaches all effects linked to an ability that meet a predicate
+     *
+     * @param instanceId The id of the ability instance
+     * @param predicate  A check for valid attach effects to remove
+     */
+    public void detach(UUID instanceId, Predicate<AttachEffect> predicate) {
+        detachEffectsIf(
+                effect -> effect.context.instanceId().equals(instanceId) && predicate.test(effect.attachEffect));
     }
 
     private void detachEffectsIf(Predicate<AttachedEffect> predicate) {
@@ -109,6 +139,14 @@ public class AttachedEffects {
             }
             return false;
         });
+    }
+
+    public List<ModifierInstance> getModifiers(UUID id) {
+        return this.effects.stream()
+                .filter(it -> it.id.equals(id))
+                .map(it -> it.attachEffect.getModifiers())
+                .findAny()
+                .orElse(Collections.emptyList());
     }
 
     /**

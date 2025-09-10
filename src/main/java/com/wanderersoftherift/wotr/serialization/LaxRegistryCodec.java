@@ -4,9 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.wanderersoftherift.wotr.mixin.AccessorDelegatingOps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
@@ -22,21 +24,34 @@ import java.util.Optional;
  */
 public class LaxRegistryCodec<E> implements Codec<Holder<E>> {
     private final ResourceKey<? extends Registry<E>> registryKey;
-    private final RegistryFixedCodec<E> registryCodec;
+    private final Codec<Holder<E>> registryCodec;
 
-    public LaxRegistryCodec(ResourceKey<? extends Registry<E>> registryKey) {
+    public LaxRegistryCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<Holder<E>> baseCodec) {
         this.registryKey = registryKey;
-        this.registryCodec = RegistryFixedCodec.create(registryKey);
+        this.registryCodec = baseCodec;
+    }
+
+    public static <E> LaxRegistryCodec<E> refOrDirect(
+            ResourceKey<? extends Registry<E>> registryKey,
+            Codec<E> directCodec) {
+        return new LaxRegistryCodec<>(registryKey, RegistryFileCodec.create(registryKey, directCodec));
+    }
+
+    public static <E> LaxRegistryCodec<E> ref(ResourceKey<? extends Registry<E>> registryKey) {
+        return new LaxRegistryCodec<>(registryKey, RegistryFixedCodec.create(registryKey));
     }
 
     public static <T> LaxRegistryCodec<T> create(ResourceKey<? extends Registry<T>> registryKey) {
-        return new LaxRegistryCodec<>(registryKey);
+        return ref(registryKey);
     }
 
     public <T> DataResult<T> encode(Holder<E> holder, DynamicOps<T> ops, T value) {
         if (holder == null) {
             return DataResult.error(
                     () -> "Holder is null for " + this.registryKey + " so cannot be serialized");
+        }
+        if (holder instanceof Holder.Direct<E>) {
+            return registryCodec.encode(holder, (DynamicOps<T>) ((AccessorDelegatingOps) ops).getDelegate(), value);
         }
 
         return holder.unwrap()
@@ -49,9 +64,12 @@ public class LaxRegistryCodec<E> implements Codec<Holder<E>> {
         if (ops instanceof RegistryOps<?> registryops) {
             Optional<HolderGetter<E>> optional = registryops.getter(this.registryKey);
             if (optional.isEmpty()) {
-                return ResourceLocation.CODEC.decode(ops, value)
-                        .flatMap(pair -> DataResult
-                                .success(Pair.of(DeferredHolder.create(registryKey, pair.getFirst()), null)));
+                var resourceLocation = ResourceLocation.CODEC.decode(ops, value);
+                if (resourceLocation.error().isPresent()) {
+                    return registryCodec.decode((DynamicOps<T>) ((AccessorDelegatingOps) ops).getDelegate(), value);
+                }
+                return resourceLocation.flatMap(
+                        pair -> DataResult.success(Pair.of(DeferredHolder.create(registryKey, pair.getFirst()), null)));
             }
         }
 
