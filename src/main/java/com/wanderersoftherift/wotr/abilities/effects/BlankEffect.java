@@ -10,8 +10,6 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 
 public class BlankEffect extends AbilityEffect {
-
-    // TODO setup healing amount as part of the codec
     public static final MapCodec<BlankEffect> CODEC = RecordCodecBuilder
             .mapCodec(instance -> AbilityEffect.commonFields(instance).apply(instance, BlankEffect::new));
 
