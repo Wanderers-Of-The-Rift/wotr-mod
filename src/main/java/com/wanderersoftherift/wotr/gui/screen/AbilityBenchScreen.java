@@ -6,8 +6,8 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.gui.menu.AbilityBenchMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
-import com.wanderersoftherift.wotr.network.LevelUpAbilityPayload;
-import com.wanderersoftherift.wotr.network.SelectAbilityUpgradePayload;
+import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
+import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -131,9 +131,8 @@ public class AbilityBenchScreen extends AbstractContainerScreen<AbilityBenchMenu
             }
 
             if (needsUnlock && !hasUnlock) {
-                upgradeChoices.children()
-                        .add(new LockedBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, font,
-                                menu));
+                upgradeChoices.addChild(
+                        new LockedBar(0, 0, SELECTION_AREA_WIDTH - ScrollContainerWidget.SCROLLBAR_SPACE, font, menu));
             } else if (hasUnlock && !needsUnlock) {
                 upgradeChoices.children().removeLast();
             }

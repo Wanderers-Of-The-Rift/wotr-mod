@@ -1,0 +1,22 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:thorns_chance",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:thorns_damage",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.thorns_raw"
+  },
+  "shape": "diamond",
+  "tier": "raw"
+}

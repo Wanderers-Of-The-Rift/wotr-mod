@@ -1,4 +1,7 @@
 {
+  "style": {
+    "color": "#7f8c8b"
+  },
   "tiers": [
     {
       "tier": 1,

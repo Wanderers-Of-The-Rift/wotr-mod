@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class VoxelShapeUtils {
-    protected static final Direction[] HORIZONTAL_DIRECTIONS = { Direction.NORTH, Direction.SOUTH, Direction.WEST,
-            Direction.EAST };
-    private static final Direction[] DIRECTIONS = Direction.values();
 
     /**
      * Rotates an {@link AABB} to a given direction
@@ -201,12 +198,7 @@ public class VoxelShapeUtils {
      * @param invert       If true, reverses the rotation direction by using the opposite side.
      */
     public static void setShape(VoxelShape shape, VoxelShape[] dest, boolean verticalAxis, boolean invert) {
-        Direction[] dirs;
-        if (verticalAxis) {
-            dirs = DIRECTIONS;
-        } else {
-            dirs = HORIZONTAL_DIRECTIONS;
-        }
+        var dirs = verticalAxis ? EnumEntries.DIRECTIONS : EnumEntries.DIRECTIONS_HORIZONTAL;
         for (Direction side : dirs) {
             dest[verticalAxis ? side.ordinal() : side.ordinal() - 2] = verticalAxis
                     ? VoxelShapeUtils.rotate(shape, invert ? side.getOpposite() : side)

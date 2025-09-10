@@ -1,0 +1,61 @@
+{
+  "type": "wotr:persistent",
+  "icon": "minecraft:textures/mob_effect/wind_charged.png",
+  "on_deactivation_costs": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 10
+    }
+  ],
+  "ongoing_requirements": [
+    {
+      "type": "wotr:mana"
+    }
+  ],
+  "activation_effects": [
+    {
+      "type": "wotr:attach",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "modifiers": [
+        {
+          "modifier": "wotr:ability/mana_degen",
+          "tier": 1,
+          "roll": 0.25
+        }
+      ],
+      "trigger": {
+        "frequency": 20,
+        "initial_delay": 0
+      },
+      "effects": [
+        {
+          "type": "wotr:movement",
+          "targeting": {
+            "type": "wotr:area",
+            "range": 10,
+            "include_self": false,
+            "target": {
+              "sentiment": "any"
+            }
+          },
+          "velocity": [
+            0,
+            0,
+            -1
+          ],
+          "relativeFrame": "source_from_target"
+        }
+      ]
+    }
+  ],
+  "on_deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "targeting": {
+        "type": "wotr:self"
+      }
+    }
+  ]
+}

@@ -2,15 +2,18 @@ package com.wanderersoftherift.wotr.gui.layer;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.abilities.attachment.PlayerCooldownData;
+import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
@@ -21,8 +24,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
@@ -30,8 +35,6 @@ import org.joml.Vector2ic;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.wanderersoftherift.wotr.init.WotrAttachments.ABILITY_COOLDOWNS;
 
 /**
  * Bar displaying a players selected abilities and their state.
@@ -89,12 +92,12 @@ public final class AbilityBar implements ConfigurableLayer {
                 || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
         }
+        long gameTime = Minecraft.getInstance().level.getGameTime();
         LocalPlayer player = Minecraft.getInstance().player;
         AbilitySlots abilitySlots = player.getData(WotrAttachments.ABILITY_SLOTS);
         if (abilitySlots.getSlots() == 0) {
             return;
         }
-        PlayerCooldownData cooldowns = player.getData(ABILITY_COOLDOWNS);
 
         Orientation orientation = getOrientation();
         Vector2i pos = getConfig().getPosition(orientation.getWidth(abilitySlots.getSlots()),
@@ -102,10 +105,20 @@ public final class AbilityBar implements ConfigurableLayer {
         orientation.renderBackground(graphics, pos, abilitySlots.getSlots());
         Vector2ic slotOffset = orientation.getSlotOffset();
 
+        AbilityCooldowns cooldowns = player.getData(WotrAttachments.ABILITY_COOLDOWNS);
+
         for (int i = 0; i < abilitySlots.getSlots(); i++) {
+            ItemStack abilityItem = abilitySlots.getStackInSlot(i);
+            ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+            if (abilityComponent == null) {
+                continue;
+            }
+            var abilitySource = AbilitySource.sourceForSlot(i);
+            float cooldown = 1f - cooldowns.getCooldown(abilitySource)
+                    .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
+            boolean isActive = player.getData(WotrAttachments.ABILITY_STATES).isActive(abilitySource);
             renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
-                    abilitySlots.getAbilityInSlot(i), cooldowns.getLastCooldownValue(i),
-                    cooldowns.getCooldownRemaining(i));
+                    abilityComponent.ability(), isActive, cooldown);
         }
         renderSelected(graphics, pos.x + abilitySlots.getSelectedSlot() * slotOffset.x(),
                 pos.y + abilitySlots.getSelectedSlot() * slotOffset.y());
@@ -117,10 +130,12 @@ public final class AbilityBar implements ConfigurableLayer {
         if (Minecraft.getInstance().screen instanceof ChatScreen) {
             Vector2i mouseScreenPos = GuiUtil.getMouseScreenPosition();
             orientation.getSlotAt(pos, abilitySlots.getSlots(), mouseScreenPos.x, mouseScreenPos.y).ifPresent(slot -> {
-                AbstractAbility ability = abilitySlots.getAbilityInSlot(slot);
-                if (ability != null) {
-                    graphics.renderComponentTooltip(Minecraft.getInstance().font, List.of(ability.getDisplayName()),
-                            mouseScreenPos.x, mouseScreenPos.y + 8);
+                ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
+                ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
+                if (abilityComponent != null) {
+                    graphics.renderComponentTooltip(Minecraft.getInstance().font,
+                            List.of(Ability.getDisplayName(abilityComponent.ability())), mouseScreenPos.x,
+                            mouseScreenPos.y + 8);
                 }
             });
         }
@@ -138,17 +153,19 @@ public final class AbilityBar implements ConfigurableLayer {
             GuiGraphics graphics,
             int xOffset,
             int yOffset,
-            AbstractAbility ability,
-            int lastCooldownValue,
-            int cooldownRemaining) {
+            Holder<Ability> ability,
+            boolean isActive,
+            float cooldownFraction) {
         if (ability != null) {
-            graphics.blit(RenderType::guiTextured, ability.getIcon(), xOffset, yOffset, 0, 0, ICON_SIZE, ICON_SIZE,
-                    ICON_SIZE, ICON_SIZE);
+            graphics.blit(RenderType::guiTextured, ability.value().getIcon(), xOffset, yOffset, 0, 0, ICON_SIZE,
+                    ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
 
-        if (cooldownRemaining > 0 && lastCooldownValue > 0) {
-            int overlayHeight = Math.clamp((int) (Math.ceil((float) ICON_SIZE * cooldownRemaining / lastCooldownValue)),
-                    1, ICON_SIZE);
+        if (isActive) {
+            graphics.fill(xOffset, yOffset, xOffset + ICON_SIZE, yOffset + ICON_SIZE,
+                    0xAA000000 | ChatFormatting.GREEN.getColor());
+        } else if (cooldownFraction > 0) {
+            int overlayHeight = Math.clamp((int) (Math.ceil((float) ICON_SIZE * cooldownFraction)), 1, ICON_SIZE);
             graphics.blit(RenderType::guiTextured, COOLDOWN_OVERLAY, xOffset, yOffset + ICON_SIZE - overlayHeight, 0, 0,
                     ICON_SIZE, overlayHeight, ICON_SIZE, ICON_SIZE);
         }

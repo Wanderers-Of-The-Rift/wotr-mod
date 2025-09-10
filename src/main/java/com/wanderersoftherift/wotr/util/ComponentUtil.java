@@ -4,10 +4,37 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 public class ComponentUtil {
+
+    public static MutableComponent mutable(Component component) {
+        if (component instanceof MutableComponent mutableComponent) {
+            return mutableComponent;
+        }
+        return component.copy();
+    }
+
+    /**
+     * @param components
+     * @return A single component combining the provided components, separated by newlines
+     */
+    public static MutableComponent joinWithNewLines(@NotNull Collection<Component> components) {
+        MutableComponent result = Component.empty();
+        boolean first = true;
+        for (Component component : components) {
+            if (!first) {
+                result = result.append("\n");
+            }
+            result = result.append(component);
+            first = false;
+        }
+        return result;
+    }
+
     public static MutableComponent blendComponent(Component baseComponent, float interval, List<String> hexStrings) {
         GradientMixer colorBlender = new GradientMixer(1.0F);
 
@@ -24,21 +51,16 @@ public class ComponentUtil {
     /**
      *
      * @param base      base Component
-     * @param baseColor base color to be used
+     * @param color     color to be used
      * @param frequency how fast the wave moves across the text
      * @param amplitude how much brighter it gets at peak
-     * @return
+     * @return a MutableComponent that brightens/darkens its color as time progresses
      */
-    public static MutableComponent wavingComponent(
-            Component base,
-            TextColor baseColor,
-            float frequency,
-            float amplitude) {
+    public static MutableComponent wavingComponent(Component base, int color, float frequency, float amplitude) {
         String text = base.getString();
         MutableComponent result = Component.empty();
 
         float time = (float) Minecraft.getInstance().level.getGameTime();
-        int baseRGB = baseColor.getValue();
 
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
@@ -47,7 +69,7 @@ public class ComponentUtil {
             float wave = (float) Math.sin((time - i) * frequency) * amplitude + 1f;
 
             result.append(Component.literal(String.valueOf(c))
-                    .withStyle(base.getStyle().withColor(ColorUtil.brightenColor(baseRGB, wave))));
+                    .withStyle(base.getStyle().withColor(ColorUtil.brightenColor(color, wave))));
         }
 
         return result;

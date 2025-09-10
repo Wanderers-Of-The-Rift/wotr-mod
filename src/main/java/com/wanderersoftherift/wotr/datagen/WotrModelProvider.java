@@ -4,7 +4,9 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
-import com.wanderersoftherift.wotr.client.render.item.ability.AbilitySpecialRenderer;
+import com.wanderersoftherift.wotr.client.render.item.emblem.AbilityEmblemProvider;
+import com.wanderersoftherift.wotr.client.render.item.emblem.CurrencyEmblemProvider;
+import com.wanderersoftherift.wotr.client.render.item.emblem.EmblemSpecialRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrItems;
@@ -59,6 +61,7 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialBlock(WotrBlocks.DITTO_BLOCK.get(),
                 TexturedModel.CUBE.updateTemplate(template -> template.extend().renderType("cutout").build()));
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
+        blockModels.createTrivialCube(WotrBlocks.QUEST_HUB.get());
 
         createBlockStatesForTrapBlock(WotrBlocks.MOB_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);
@@ -96,81 +99,12 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
                 .with(createFacingDispatchFromUpModel()));
 
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAVEL.get(), TexturedModel.CUBE.updateTexture(
-                mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/gravel"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVSAND.get(), TexturedModel.CUBE.updateTexture(
-                mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/sand"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVREDSAND.get(), TexturedModel.CUBE.updateTexture(
-                mapping -> mapping.put(TextureSlot.ALL, ResourceLocation.withDefaultNamespace("block/red_sand"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/white_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/orange_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/magenta_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/light_blue_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/yellow_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIMECONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/lime_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVPINKCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/pink_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/gray_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/light_gray_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVCYANCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/cyan_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/purple_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBLUECONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/blue_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/brown_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVGREENCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/green_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/red_concrete_powder"))));
-
-        blockModels.createTrivialBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER.get(),
-                TexturedModel.CUBE.updateTexture(mapping -> mapping.put(TextureSlot.ALL,
-                        ResourceLocation.withDefaultNamespace("block/black_concrete_powder"))));
-
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
+
+        // Armor
+        itemModels.itemModelOutput.accept(WotrItems.NOIR_HELMET.get(),
+                ItemModelUtils.plainModel(WanderersOfTheRift.id("item/noir_helmet")));
 
         itemModels.generateFlatItem(WotrItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.RAW_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
@@ -184,11 +118,18 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.generateFlatItem(WotrItems.POLISHED_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.FRAMED_RUNEGEM_MONSTER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.BASE_ABILITY_HOLDER.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(WotrItems.BASE_CURRENCY_BAG.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.SKILL_THREAD.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.itemModelOutput.accept(WotrItems.ABILITY_HOLDER.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_ability_holder"),
-                        new AbilitySpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER)));
+                        new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER, new AbilityEmblemProvider(),
+                                0.5f, 0f, 0f, 0f)));
+
+        itemModels.itemModelOutput.accept(WotrItems.CURRENCY_BAG.get(),
+                new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_currency_bag"),
+                        new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_CURRENCY_BAG, new CurrencyEmblemProvider(),
+                                0.5f, 0.0f, -0.125f, -0.045f)));
 
         this.generateRunegemItem(WotrItems.RUNEGEM.get(), itemModels);
 

@@ -1,0 +1,51 @@
+{
+  "goals": [
+    {
+      "type": "wotr:pool",
+      "entries": [
+        {
+          "type" : "wotr:give_item",
+          "item" : "wotr:skill_thread",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 5,
+            "max": 8
+          }
+        },
+        {
+          "type" : "wotr:give_item",
+          "item" : "minecraft:gold_ingot",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 24,
+            "max": 32
+          }
+        },
+        {
+          "type" : "wotr:give_item",
+          "item" : "minecraft:iron_ingot",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 32,
+            "max": 48
+          }
+        },
+        {
+          "type" : "wotr:give_item",
+          "item" : "minecraft:copper_ingot",
+          "count" : {
+            "type": "minecraft:uniform",
+            "min": 48,
+            "max": 64
+          }
+        }
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:chests/wooden"
+    }
+  ]
+}

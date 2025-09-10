@@ -5,11 +5,35 @@
       "required": false
     },
     {
+      "id": "wotr:buzzy_bees",
+      "required": false
+    },
+    {
+      "id": "wotr:desert",
+      "required": false
+    },
+    {
       "id": "wotr:forest",
       "required": false
     },
     {
+      "id": "wotr:mesa",
+      "required": false
+    },
+    {
       "id": "wotr:mushroom",
+      "required": false
+    },
+    {
+      "id": "wotr:nether",
+      "required": false
+    },
+    {
+      "id": "wotr:noir",
+      "required": false
+    },
+    {
+      "id": "wotr:swamp",
       "required": false
     }
   ]

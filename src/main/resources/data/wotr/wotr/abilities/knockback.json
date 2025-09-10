@@ -1,13 +1,11 @@
 {
-  "type": "wotr:standard_ability",
-  "ability_name": "wotr:knockback",
+  "type": "wotr:instant",
   "icon": "minecraft:textures/mob_effect/wind_charged.png",
-  "cooldown": 10,
   "effects": [
     {
-      "type": "wotr:movement_effect",
+      "type": "wotr:movement",
       "targeting": {
-        "type": "wotr:area_targeting",
+        "type": "wotr:area",
         "range": 10,
         "include_self": false,
         "target": {

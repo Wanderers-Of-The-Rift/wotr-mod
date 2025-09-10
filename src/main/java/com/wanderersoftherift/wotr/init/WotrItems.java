@@ -1,10 +1,11 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.item.AbilityHolder;
 import com.wanderersoftherift.wotr.item.BuilderGlasses;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
+import com.wanderersoftherift.wotr.item.WotrArmor;
+import com.wanderersoftherift.wotr.item.ability.AbilityHolder;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -16,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemUseAnimation;
@@ -51,6 +53,21 @@ public class WotrItems {
                             .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("rift_key")))
                             .stacksTo(1)));
 
+    public static final DeferredItem<Item> BASE_CURRENCY_BAG = ITEMS.register("base_currency_bag",
+            registryName -> new Item(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("base_currency_bag")))));
+
+    public static final DeferredItem<Item> CURRENCY_BAG = ITEMS.register("currency_bag",
+            registryName -> new Item(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("currency_bag")))
+                    .component(DataComponents.CONSUMABLE,
+                            Consumable.builder()
+                                    .consumeSeconds(0.1F)
+                                    .animation(ItemUseAnimation.DRINK)
+                                    .sound(SoundEvents.GENERIC_DRINK)
+                                    .hasConsumeParticles(false)
+                                    .build())));
+
     public static final DeferredItem<Item> RAW_RUNEGEM_GEODE = registerLootBox(
             RunegemTier.RAW.getName() + "_runegem_geode");
     public static final DeferredItem<Item> SHAPED_RUNEGEM_GEODE = registerLootBox(
@@ -82,6 +99,10 @@ public class WotrItems {
     public static final DeferredItem<Item> SKILL_THREAD = ITEMS.register("skill_thread",
             registryName -> new SkillThread(new Item.Properties().stacksTo(64)
                     .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id("skill_thread")))));
+
+    // Armor
+    public static final DeferredItem<Item> NOIR_HELMET = ITEMS.register("noir_helmet",
+            () -> new WotrArmor(EquipmentSlot.HEAD, "noir_helmet", 165));
 
     private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
         return ITEMS.register(idString, registryName -> new Item(new Item.Properties()

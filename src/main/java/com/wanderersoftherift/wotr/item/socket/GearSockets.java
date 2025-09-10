@@ -2,8 +2,16 @@ package com.wanderersoftherift.wotr.item.socket;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import com.wanderersoftherift.wotr.modifier.Modifier;
+import com.wanderersoftherift.wotr.modifier.ModifierInstance;
+import com.wanderersoftherift.wotr.modifier.ModifierProvider;
+import com.wanderersoftherift.wotr.modifier.source.GearSocketModifierSource;
+import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -12,7 +20,7 @@ import java.util.List;
 
 import static com.wanderersoftherift.wotr.init.WotrTags.Items.SOCKETABLE;
 
-public record GearSockets(List<GearSocket> sockets) {
+public record GearSockets(List<GearSocket> sockets) implements ModifierProvider {
     public static final Codec<GearSockets> CODEC = RecordCodecBuilder
             .create(inst -> inst.group(GearSocket.CODEC.listOf().fieldOf("sockets").forGetter(GearSockets::sockets))
                     .apply(inst, GearSockets::new));
@@ -56,5 +64,23 @@ public record GearSockets(List<GearSocket> sockets) {
         }
         GearSockets sockets = GearSockets.randomSockets(minSockets, maxSockets, level.random);
         itemStack.set(WotrDataComponentType.GEAR_SOCKETS, sockets);
+    }
+
+    @Override
+    public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
+        List<GearSocket> sockets = sockets();
+        for (int i = 0; i < sockets.size(); i++) {
+            GearSocket socket = sockets.get(i);
+            if (socket.isEmpty()) {
+                continue;
+            }
+            ModifierInstance modifierInstance = socket.modifier().get();
+            Holder<Modifier> modifier = modifierInstance.modifier();
+            if (modifier != null) {
+                ModifierSource source = new GearSocketModifierSource(slot, i);
+                action.accept(modifier, modifierInstance.tier(), modifierInstance.roll(), source);
+            }
+        }
+
     }
 }

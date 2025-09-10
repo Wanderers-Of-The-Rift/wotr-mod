@@ -3,8 +3,7 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
@@ -21,24 +20,23 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.Optional;
 
-public class SimpleProjectileEffect extends AbstractEffect {
+public class SimpleProjectileEffect extends AbilityEffect {
     public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::getConfig))
                     .apply(instance, SimpleProjectileEffect::new));
 
     private SimpleProjectileConfig config;
 
-    public SimpleProjectileEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
-            Optional<ParticleInfo> particles, SimpleProjectileConfig config) {
-        super(targeting, effects, particles);
+    public SimpleProjectileEffect(AbilityTargeting targeting, List<AbilityEffect> effects,
+            SimpleProjectileConfig config) {
+        super(targeting, effects);
         this.config = config;
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 
@@ -51,7 +49,6 @@ public class SimpleProjectileEffect extends AbstractEffect {
         List<BlockPos> targets = getTargeting().getBlocks(source);
         List<Entity> targetEntities = getTargeting().getTargets(source, blocks, context);
 
-        applyParticlesToUser(source);
         if (!targetEntities.isEmpty()) {
 
             // NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it
@@ -106,13 +103,8 @@ public class SimpleProjectileEffect extends AbstractEffect {
     }
 
     public void applyDelayed(Level level, Entity target, List<BlockPos> blocks, AbilityContext context) {
-        context.enableModifiers();
-        try {
-            applyParticlesToTarget(target);
-            applyParticlesToTargetBlocks(level, blocks);
+        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
             super.apply(target, blocks, context);
-        } finally {
-            context.disableModifiers();
         }
     }
 

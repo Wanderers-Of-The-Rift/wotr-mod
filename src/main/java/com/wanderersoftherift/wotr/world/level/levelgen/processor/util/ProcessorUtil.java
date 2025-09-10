@@ -4,17 +4,21 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.wanderersoftherift.wotr.mixin.InvokerBlockBehaviour;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +26,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -56,6 +61,19 @@ public class ProcessorUtil {
 
     private static final HashMap<Long, RandomSource> RANDOM_SEED_CACHE = new HashMap<>();
 
+    private static long getRiftSeed(LevelAccessor level) {
+
+        var riftSeed = 0L;
+        if (((ServerChunkCache) level.getChunkSource()).getGenerator() instanceof FastRiftGenerator riftGenerator) {
+            riftSeed = riftGenerator.getRiftConfig().seed();
+        }
+        return riftSeed;
+    }
+
+    public static PositionalRandomFactory getRiftRandomFactory(LevelAccessor level, long salt) {
+        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(6), getRiftSeed(level) + salt);
+    }
+
     public static RandomSource getRandom(
             StructureRandomType type,
             BlockPos blockPos,
@@ -63,9 +81,8 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
-        RandomSource randomSource = RandomSource
-                .create(getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
-        randomSource.consumeCount(3);
+        RandomSource randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+                getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
         return randomSource;
     }
 
@@ -76,11 +93,12 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
+        var riftSeed = getRiftSeed((LevelAccessor) world);
         return switch (type) {
-            case BLOCK -> getRandomSeed(blockPos, processorSeed);
-            case PIECE -> getRandomSeed(piecePos, processorSeed);
-            case STRUCTURE -> getRandomSeed(structurePos, processorSeed);
-            case WORLD -> ((WorldGenLevel) world).getSeed() + processorSeed;
+            case BLOCK -> getRandomSeed(blockPos, processorSeed) + riftSeed;
+            case PIECE -> getRandomSeed(piecePos, processorSeed) + riftSeed;
+            case STRUCTURE -> getRandomSeed(structurePos, processorSeed) + riftSeed;
+            case WORLD -> ((WorldGenLevel) world).getSeed() + processorSeed + riftSeed;
         };
     }
 
@@ -182,12 +200,32 @@ public class ProcessorUtil {
         }
     }
 
-    private static boolean isFaceFullFast(BlockState state, BlockPos pos, Direction direction) {
+    public static boolean isFaceFullFast(BlockState state, BlockPos pos, Direction direction) {
         if (state.isAir() || state.getBlock() instanceof LiquidBlock) {
             return false;
         }
         VoxelShape overallShape = ((InvokerBlockBehaviour) state.getBlock()).invokeGetShape(state, null, pos,
                 CollisionContext.empty());
+        if (overallShape == Shapes.block()) {
+            return true;
+        }
+        if (overallShape == Shapes.empty()) {
+            return false;
+        }
+        return Block.isFaceFull(overallShape, direction);
+    }
+
+    public static VoxelShape shapeForFaceFullCheck(BlockState state, BlockPos pos) {
+        if (state.isAir() || state.getBlock() instanceof LiquidBlock) {
+            return null;
+        }
+        return ((InvokerBlockBehaviour) state.getBlock()).invokeGetShape(state, null, pos, CollisionContext.empty());
+    }
+
+    public static boolean isFaceFullFast(VoxelShape overallShape, Direction direction) {
+        if (overallShape == null) {
+            return false;
+        }
         if (overallShape == Shapes.block()) {
             return true;
         }
@@ -209,28 +247,40 @@ public class ProcessorUtil {
     public static StructureTemplate.StructureBlockInfo getBlockInfo(
             List<StructureTemplate.StructureBlockInfo> mapByPos,
             BlockPos pos) {
-        BlockPos firstPos = mapByPos.getFirst().pos();
-        BlockPos lastPos = mapByPos.getLast().pos();
-        if (!isPosBetween(pos, firstPos, lastPos)) {
-            return null;
-        }
-        int width = lastPos.getX() + 1 - firstPos.getX();
-        int height = lastPos.getY() + 1 - firstPos.getY();
-        int index = (pos.getX() - firstPos.getX()) + (pos.getY() - firstPos.getY()) * width
-                + (pos.getZ() - firstPos.getZ()) * width * height;
-        if (index < 0 || index >= mapByPos.size()) {
+        int index = getBlockIndex(mapByPos, pos);
+        if (index < 0) {
             return null;
         }
         return mapByPos.get(index);
     }
 
+    public static int getBlockIndex(List<StructureTemplate.StructureBlockInfo> mapByPos, BlockPos pos) {
+        BlockPos firstPos = mapByPos.getFirst().pos();
+        BlockPos lastPos = mapByPos.getLast().pos();
+        if (!isPosBetween(pos, firstPos, lastPos)) {
+            return -1;
+        }
+        int width = lastPos.getX() + 1 - firstPos.getX();
+        int depth = lastPos.getZ() + 1 - firstPos.getZ();
+        int index = (pos.getX() - firstPos.getX()) + (pos.getZ() - firstPos.getZ()) * width
+                + (pos.getY() - firstPos.getY()) * width * depth;
+        if (index < 0 || index >= mapByPos.size()) {
+            return -1;
+        }
+        return index;
+    }
+
     private static boolean isPosBetween(BlockPos pos, BlockPos firstPos, BlockPos lastPos) {
-        return pos.getX() > firstPos.getX() && pos.getX() < lastPos.getX() && pos.getY() > firstPos.getY()
-                && pos.getY() < lastPos.getY() && pos.getZ() > firstPos.getZ() && pos.getZ() < lastPos.getZ();
+        return pos.getX() >= firstPos.getX() && pos.getX() <= lastPos.getX() && pos.getY() >= firstPos.getY()
+                && pos.getY() <= lastPos.getY() && pos.getZ() >= firstPos.getZ() && pos.getZ() < lastPos.getZ();
     }
 
     public static BlockState copyState(BlockState fromState, BlockState toState) {
-        for (Property<?> property : fromState.getProperties()) {
+        var values = fromState.getBlock().defaultBlockState().getValues();
+        if (values.isEmpty()) {
+            return toState;
+        }
+        for (var property : values.keySet()) {
             toState = updateProperty(fromState, toState, property);
         }
         return toState;

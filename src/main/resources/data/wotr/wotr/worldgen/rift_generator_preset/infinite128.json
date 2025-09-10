@@ -1,0 +1,90 @@
+{
+    "layout": {
+        "type": "wotr:infinite_layered_layout",
+        "layers": [
+            {
+                "type": "wotr:predefined_room_layer",
+                "room_randomizer": {
+                    "template_pool": "wotr:rift/room_portal",
+                    "is_single_size": true
+                },
+                "room_x": -1,
+                "room_y": -1,
+                "room_z": -1
+            },
+            {
+                "type": "wotr:ring_layer",
+                "room_randomizer": {
+                    "template_pool": "wotr:rift/room_stable",
+                    "is_single_size": true
+                },
+                "radius": 5
+            },
+            {
+                "type": "wotr:ring_layer",
+                "room_randomizer": {
+                    "template_pool": "wotr:rift/room_unstable",
+                    "is_single_size": true
+                },
+                "radius": 10
+            },
+            {
+                "type": "wotr:chaos_layer",
+                "room_randomizer": {
+                    "template_pool": "wotr:rift/room_chaos",
+                    "is_single_size": false
+                }
+            }
+        ],
+        "shape": {
+            "type": "wotr:unlimited_shape",
+            "level_count": 6
+        }
+    },
+    "room_generator": {
+        "type": "wotr:cached",
+        "base": {
+            "type": "wotr:layer_generatable",
+            "layered_generatable": {
+                "type": "wotr:perimeter",
+                "perimeter_block": "minecraft:bedrock"
+            },
+            "base": {
+                "type": "wotr:core"
+            }
+        }
+    },
+    "post_processing_steps": [
+        {
+            "type": "wotr:corridor_blender",
+            "validator": {
+                "type": "wotr:or",
+                "values": [
+                    {
+                        "type": "wotr:by_generator_layout"
+                    },
+                    {
+                        "type": "wotr:opposite",
+                        "base": {
+                            "type": "wotr:by_generator_layout"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "jigsaw_processors": [
+        {
+            "type": "wotr:filter_remove",
+            "namespace": "wotr",
+            "path_pattern": "rift/ring_"
+        },
+        {
+            "type": "wotr:shuffle"
+        }
+    ],
+    "empty_chunk_generatable": {
+        "type": "wotr:single_block_chunk",
+        "block": "minecraft:bedrock"
+    }
+}

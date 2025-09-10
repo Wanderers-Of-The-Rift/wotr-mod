@@ -1,0 +1,29 @@
+{
+  "type": "wotr:persistent",
+  "cooldown": 200,
+  "activation_effects": [
+    {
+      "type": "wotr:attach",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "modifiers": [
+        {
+          "modifier": "wotr:test_provide_golem_ability",
+          "tier": 1,
+          "roll": 0
+        }
+      ]
+    }
+  ],
+  "deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "targeting": {
+        "type": "wotr:self"
+      }
+    }
+  ],
+  "icon": "minecraft:textures/mob_effect/speed.png",
+  "mana_cost": 10
+}

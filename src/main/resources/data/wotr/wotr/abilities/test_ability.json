@@ -1,21 +1,39 @@
 {
-  "type": "wotr:standard_ability",
-  "ability_name": "wotr:test_ability",
+  "type": "wotr:instant",
   "icon" : "minecraft:textures/item/iron_pickaxe.png",
-  "cooldown": 1,
-  "strength": "wotr:large_boost_strength",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 1
+    }
+  ],
   "effects": [
     {
-      "type": "wotr:damage_effect",
+      "type": "wotr:damage",
       "amount": 1,
       "damage_type": "wotr:fire",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
-      "effects": [],
-      "particles": {
-        "user": "minecraft:bubble",
-        "target": "minecraft:explosion"
+      "effects": [
+        {
+          "type": "wotr:particle",
+          "targeting": {
+            "type": "wotr:self"
+          },
+          "particle": {
+            "type": "minecraft:explosion"
+          }
+        }
+      ]
+    },
+    {
+      "type": "wotr:particle",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "particle": {
+        "type": "minecraft:bubble"
       }
     }
   ]

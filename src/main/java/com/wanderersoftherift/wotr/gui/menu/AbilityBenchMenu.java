@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -40,11 +41,24 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
     private static final int PLAYER_INVENTORY_SLOTS = 3 * 9;
     private static final int PLAYER_SLOTS = PLAYER_INVENTORY_SLOTS + 9;
 
+    private static final QuickMover MOVER = QuickMover.create()
+            .forPlayerSlots(INPUT_SLOTS)
+            .tryMoveTo(0, INPUT_SLOTS)
+            .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .forSlot(0)
+            .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .tryMoveToPlayer()
+            .forSlot(1)
+            .tryMoveToPlayer()
+            .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
+            .tryMoveTo(0)
+            .tryMoveToPlayer()
+            .build();;
+
     private final ContainerLevelAccess access;
     private final SimpleContainer inputContainer;
     private final IItemHandler upgradeMatStorage;
     private final DataSlot canLevel;
-    private final QuickMover mover;
 
     public AbilityBenchMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory,
@@ -67,20 +81,6 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
         canLevel = DataSlot.standalone();
         addDataSlot(canLevel);
-
-        mover = QuickMover.create(this)
-                .forPlayerSlots(INPUT_SLOTS)
-                .tryMoveTo(0, INPUT_SLOTS)
-                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .forSlot(0)
-                .tryMoveTo(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .tryMoveToPlayer()
-                .forSlot(1)
-                .tryMoveToPlayer()
-                .forSlots(INPUT_SLOTS + QuickMover.PLAYER_SLOTS, AbilitySlots.ABILITY_BAR_SIZE)
-                .tryMoveTo(0)
-                .tryMoveToPlayer()
-                .build();
     }
 
     protected void addPlayerAbilitySlots(IItemHandler abilitySlots, int x, int y) {
@@ -99,11 +99,11 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
             ItemStack item = container.getItem(0);
 
             if (!item.isEmpty() && !item.has(WotrDataComponentType.ABILITY_UPGRADE_POOL)) {
-                Holder<AbstractAbility> ability = item.get(WotrDataComponentType.ABILITY);
+                ActivatableAbility abilityComponent = item.get(WotrDataComponentType.ABILITY);
                 RegistryAccess registryAccess = level.registryAccess();
 
                 AbilityUpgradePool upgradePool = new AbilityUpgradePool.Mutable()
-                        .generateChoices(registryAccess, ability.value(), 3, level.random,
+                        .generateChoices(registryAccess, abilityComponent.ability().value(), 3, level.random,
                                 AbilityUpgradePool.SELECTION_PER_LEVEL)
                         .toImmutable();
                 item.set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool);
@@ -113,7 +113,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
                 canLevel.set(0);
             } else {
                 AbilityUpgradePool upgradePool = getUpgradePool();
-                Holder<AbstractAbility> ability = getAbility();
+                Holder<Ability> ability = getAbility();
                 if (upgradePool.canLevelUp(level.registryAccess(), ability.value())) {
                     canLevel.set(1);
                 } else {
@@ -141,9 +141,9 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
     /**
      * @return The ability on the ability item, or null
      */
-    public @Nullable Holder<AbstractAbility> getAbility() {
+    public @Nullable Holder<Ability> getAbility() {
         ItemStack item = getAbilityItem();
-        return item.get(WotrDataComponentType.ABILITY);
+        return item.get(WotrDataComponentType.ABILITY).ability();
     }
 
     /**
@@ -271,7 +271,7 @@ public class AbilityBenchMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return mover.quickMove(player, index);
+        return MOVER.quickMove(this, player, index);
     }
 
     @Override

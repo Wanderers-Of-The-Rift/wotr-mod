@@ -1,12 +1,20 @@
 {
-  "type": "wotr:standard_ability",
-  "ability_name": "wotr:dash",
-  "cooldown": 200,
+  "type": "wotr:instant",
+  "requirements": [
+    {
+      "type": "wotr:mana",
+      "amount": 10
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 200
+    }
+  ],
   "effects": [
     {
-      "type": "wotr:movement_effect",
+      "type": "wotr:movement",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
       "velocity": [
         0.0,
@@ -15,9 +23,9 @@
       ]
     },
     {
-      "type": "wotr:movement_effect",
+      "type": "wotr:movement",
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       },
       "velocity": [
         0.0,
@@ -27,15 +35,14 @@
       "relativeFrame": "absolute"
     },
     {
-      "type": "wotr:sound_effect",
+      "type": "wotr:sound",
       "sound": {
         "sound_id": "minecraft:entity.breeze.charge"
       },
       "targeting": {
-        "type": "wotr:self_targeting"
+        "type": "wotr:self"
       }
     }
   ],
-  "icon": "minecraft:textures/mob_effect/speed.png",
-  "mana_cost": 10
+  "icon": "minecraft:textures/mob_effect/speed.png"
 }

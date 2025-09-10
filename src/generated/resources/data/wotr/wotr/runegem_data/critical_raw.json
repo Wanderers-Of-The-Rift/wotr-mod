@@ -1,0 +1,22 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:critical_chance",
+          "tier": 1
+        },
+        {
+          "modifier": "wotr:critical_avoidance",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.defense_raw"
+  },
+  "shape": "diamond",
+  "tier": "raw"
+}

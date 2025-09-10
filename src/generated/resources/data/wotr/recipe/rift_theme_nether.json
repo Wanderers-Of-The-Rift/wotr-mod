@@ -2,12 +2,12 @@
   "type": "wotr:key_forge_recipe",
   "essence_reqs": [
     {
-      "essenceType": "wotr:nether",
-      "minPercent": 50.0
+      "essence_type": "wotr:nether",
+      "min_percent": 50.0
     }
   ],
   "output": {
-    "type": "wotr:rift_theme",
+    "type": "wotr:rift_config/theme",
     "value": "wotr:nether"
   },
   "priority": 10

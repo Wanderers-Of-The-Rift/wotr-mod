@@ -3,28 +3,25 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbstractTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
-import java.util.Optional;
 
-public class ApplyStatusEffect extends AbstractEffect {
+public class ApplyStatusEffect extends AbilityEffect {
 
     public static final MapCodec<ApplyStatusEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbstractEffect.commonFields(instance)
+            .mapCodec(instance -> AbilityEffect.commonFields(instance)
                     .and(MobEffectInstance.CODEC.fieldOf("status_effect").forGetter(ApplyStatusEffect::getStatusEffect))
                     .apply(instance, ApplyStatusEffect::new));
 
     private MobEffectInstance statusEffect;
 
-    public ApplyStatusEffect(AbstractTargeting targeting, List<AbstractEffect> effects,
-            Optional<ParticleInfo> particles, MobEffectInstance status) {
-        super(targeting, effects, particles);
+    public ApplyStatusEffect(AbilityTargeting targeting, List<AbilityEffect> effects, MobEffectInstance status) {
+        super(targeting, effects);
         this.statusEffect = status;
     }
 
@@ -33,17 +30,15 @@ public class ApplyStatusEffect extends AbstractEffect {
     }
 
     @Override
-    public MapCodec<? extends AbstractEffect> getCodec() {
+    public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 
     @Override
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-        applyParticlesToUser(user);
 
         for (Entity target : targets) {
-            applyParticlesToTarget(target);
             if (target instanceof LivingEntity livingTarget) {
                 // TODO look into creating our own mob effect wrapper that can also call an effect list
                 livingTarget.addEffect(new MobEffectInstance(getStatusEffect()));

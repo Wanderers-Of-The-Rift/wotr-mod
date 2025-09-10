@@ -1,0 +1,145 @@
+{
+  "values": {
+    "wotr:strength": {
+      "base_modifier_id": "wotr:strength",
+      "configuration": [
+        {
+          "from_level": 1,
+          "range": 20,
+          "modifiers_per_level": [
+            {
+              "attribute": "minecraft:attack_damage",
+              "value": 0.1,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "minecraft:knockback_resistance",
+              "value": 0.05,
+              "operation": "add_value"
+            }
+          ]
+        }
+      ]
+    },
+    "wotr:dexterity": {
+      "base_modifier_id": "wotr:dexterity",
+      "configuration": [
+        {
+          "from_level": 1,
+          "range": 20,
+          "modifiers_per_level": [
+            {
+              "attribute": "minecraft:movement_speed",
+              "value": 0.1,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "minecraft:attack_speed",
+              "value": 0.05,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:ranged_attack_damage",
+              "value": 0.3,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:critical_bonus",
+              "value": 0.1,
+              "operation": "add_value"
+            }
+          ]
+        }
+      ]
+    },
+    "wotr:constitution": {
+      "base_modifier_id": "wotr:constitution",
+      "configuration": [
+        {
+          "from_level": 1,
+          "range": 20,
+          "modifiers_per_level": [
+            {
+              "attribute": "minecraft:max_health",
+              "value": 6,
+              "operation": "add_value"
+            }
+          ]
+        }
+      ]
+    },
+    "wotr:intelligence": {
+      "base_modifier_id": "wotr:intelligence",
+      "configuration": [
+        {
+          "from_level": 1,
+          "range": 20,
+          "modifiers_per_level": [
+            {
+              "attribute": "wotr:max_mana",
+              "value": 10,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:mana_regen_rate",
+              "value": 1,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:ability_raw_damage",
+              "value": 2,
+              "operation": "add_value"
+            }
+          ]
+        }
+      ]
+    },
+    "wotr:wisdom": {
+      "base_modifier_id": "wotr:wisdom",
+      "configuration": [
+        {
+          "from_level": 1,
+          "range": 20,
+          "modifiers_per_level": [
+            {
+              "attribute": "wotr:max_mana",
+              "value": 6,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:mana_regen_rate",
+              "value": 3,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:ability_cooldown",
+              "value": -0.03,
+              "operation": "add_multiplied_base"
+            }
+          ]
+        }
+      ]
+    },
+    "wotr:charisma": {
+      "base_modifier_id": "wotr:charisma",
+      "configuration": [
+        {
+          "from_level": 1,
+          "range": 20,
+          "modifiers_per_level": [
+            {
+              "attribute": "minecraft:luck",
+              "value": 2,
+              "operation": "add_value"
+            },
+            {
+              "attribute": "wotr:critical_chance",
+              "value": 0.025,
+              "operation": "add_value"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

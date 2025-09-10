@@ -5,7 +5,13 @@ import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
+import com.wanderersoftherift.wotr.util.listedit.Append;
+import com.wanderersoftherift.wotr.util.listedit.Clear;
+import com.wanderersoftherift.wotr.util.listedit.Drop;
+import com.wanderersoftherift.wotr.util.listedit.DropLast;
+import com.wanderersoftherift.wotr.util.listedit.Prepend;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -33,6 +39,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK, "Rune Anvil");
         addBlock(WotrBlocks.RIFT_CHEST, "Rift Chest");
         addBlock(WotrBlocks.RIFT_SPAWNER, "Rift Spawner");
+        addBlock(WotrBlocks.QUEST_HUB, "Quest Hub");
         addBlock(WotrBlocks.KEY_FORGE, "Key Forge");
         addBlock(WotrBlocks.DITTO_BLOCK, "Ditto Block");
         addBlock(WotrBlocks.SPRING_BLOCK, "Spring Block");
@@ -41,25 +48,6 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
-        addBlock(WotrBlocks.NOGRAVGRAVEL, "No Gravity Gravel");
-        addBlock(WotrBlocks.NOGRAVSAND, "No Gravity Sand");
-        addBlock(WotrBlocks.NOGRAVREDSAND, "No Gravity Red Sand");
-        addBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER, "No Gravity White Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER, "No Gravity Orange Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER, "No Gravity Magenta Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER, "No Gravity Light Blue Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER, "No Gravity Yellow Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIMECONCRETEPOWDER, "No Gravity Lime Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVPINKCONCRETEPOWDER, "No Gravity Pink Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER, "No Gravity Gray Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER, "No Gravity Light Gray Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVCYANCONCRETEPOWDER, "No Gravity Cyan Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER, "No Gravity Purple Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBLUECONCRETEPOWDER, "No Gravity Blue Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER, "No Gravity Brown Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVGREENCONCRETEPOWDER, "No Gravity Green Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER, "No Gravity Red Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER, "No Gravity Black Concrete Powder");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
@@ -77,10 +65,14 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.FRAMED_RUNEGEM_MONSTER, "Monster Runegem (Framed)");
         addItem(WotrItems.ABILITY_HOLDER, "Empty Ability");
         addItem(WotrItems.SKILL_THREAD, "Skill Thread");
+        addItem(WotrItems.CURRENCY_BAG, "Currency Bag");
+
+        addItem(WotrItems.NOIR_HELMET, "Fedora");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
+        addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
@@ -115,13 +107,17 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         addTheme("buzzy_bees", "Buzzy Bees");
         addTheme("cave", "Cave");
+        addTheme("color", "Color");
+        addTheme("deepfrost", "Deepfrost");
+        addTheme("desert", "Desert");
         addTheme("forest", "Forest");
-        addTheme("processor", "Processor");
+        addTheme("jungle", "Jungle");
+        addTheme("meadow", "Meadow");
+        addTheme("mesa", "Mesa");
         addTheme("mushroom", "Mushroom");
         addTheme("nether", "Nether");
         addTheme("noir", "Noir");
-        addTheme("mesa", "Mesa");
-        addTheme("desert", "Desert");
+        addTheme("processor", "Processor");
         addTheme("swamp", "Swamp");
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
@@ -158,10 +154,31 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("container." + WanderersOfTheRift.MODID + ".rift_chest", "Rift Chest");
         add("container." + WanderersOfTheRift.MODID + ".key_forge", "Key Forge");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench", "Ability Bench");
+        add(WanderersOfTheRift.translationId("container", "trading"), "%s Trader");
+        add(WanderersOfTheRift.translationId("container", "quest.selection"), "Select Quest");
+        add(WanderersOfTheRift.translationId("container", "quest.complete"), "Complete");
+        add(WanderersOfTheRift.translationId("container", "quest.handin"), "Hand In");
+        add(WanderersOfTheRift.translationId("container", "quest.goals"), "Goal");
+        add(WanderersOfTheRift.translationId("container", "quest.rewards"), "Reward");
+        add(WanderersOfTheRift.translationId("container", "quest.abandon"), "Abandon");
+        add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
+        add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
+        add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
         add(WanderersOfTheRift.translationId("container", "rift_complete"), "Rift Overview");
+        add(WanderersOfTheRift.translationId("container", "rift_complete.reward"), "Rewards");
+
+        add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
+        add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
+        add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
+
+        add(WanderersOfTheRift.translationId("container", "wallet"), "Wallet");
 
         add(WanderersOfTheRift.translationId("stat", "result"), "Result: ");
         add(WanderersOfTheRift.translationId("stat", "result.success"), "Success");
@@ -181,18 +198,37 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".get_item_stack_components.success",
                 "Item Components available for '%1$s'");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.set_tier", "Rift key tier set to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.set_preset", "Rift key preset set to %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.set_theme", "Rift key theme set to %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.set_objective", "Rift key objective set to %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.set_seed", "Rift key seed set to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.layout_layers.add", "Added Layout Edit: %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.layout_layers.undo", "Undid Layout Edit: %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.layout_layers.clear", "Undid all edits");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.generator.bake", "Custom preset created");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.generator.export", "Rift generator preset saved to %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.generator.export.output_contains_dot",
+                "output path must not contain dots");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.generator.export.not_custom",
+                "Preset must be custom to be exportable, did you forget to run `/wotr riftKey generator bake`?`");
+        add("command." + WanderersOfTheRift.MODID + ".rift_key.generator.export.encode_failed",
+                "Could not encode preset");
         add("command." + WanderersOfTheRift.MODID + ".invalid_theme", "Invalid theme '%s'");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_objective", "Invalid objective '%s'");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_generator_preset", "Invalid generator preset '%s'");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_template_pool", "Invalid template pool '%s'");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
+        add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
+        add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
+        add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
+        add(WanderersOfTheRift.translationId("command", "place.processor.invalid"), "Invalid processor %s");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
-        add("ability." + WanderersOfTheRift.MODID + ".fireball_ability", "Fireball");
-        add("ability." + WanderersOfTheRift.MODID + ".icicles_ability", "Icicles");
+        add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
+        add("ability." + WanderersOfTheRift.MODID + ".icicles", "Icicles");
         add("ability." + WanderersOfTheRift.MODID + ".mega_boost", "Mega Boost");
         add("ability." + WanderersOfTheRift.MODID + ".dash", "Dash");
         add("ability." + WanderersOfTheRift.MODID + ".summon_skeletons", "Summon Skeletons");
@@ -201,6 +237,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+        add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
+        add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
+        add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -229,6 +268,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("accessibility." + WanderersOfTheRift.MODID + ".screen.tooltip.reduced_motion",
                 "Disables or slows down UI animations, camera shake, or screen effects");
 
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_generator_preset", "Generator Preset: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
@@ -242,6 +282,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
+        add(WanderersOfTheRift.translationId("tooltip", "currency_bag"), "Gain %s when consumed");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -283,7 +324,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("ability_upgrade", "healing_power.description"),
                 "Heals an additional heart");
 
-        add(WotrKeyMappings.ABILITY_CATEGORY, "Abilities");
+        add(WotrKeyMappings.ABILITY_CATEGORY, "Wanderers of the Rift: Abilities");
+        add(WotrKeyMappings.MENU_CATEGORY, "Wanderers of the Rift: Menus");
         add(WotrKeyMappings.MISC_CATEGORY, "Wanderers of the Rift: Misc");
         add(WotrKeyMappings.ABILITY_1_KEY.getName(), "Use Ability 1");
         add(WotrKeyMappings.ABILITY_2_KEY.getName(), "Use Ability 2");
@@ -297,8 +339,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WotrKeyMappings.PREV_ABILITY_KEY.getName(), "Select Previous Ability");
         add(WotrKeyMappings.NEXT_ABILITY_KEY.getName(), "Select Next Ability");
         add(WotrKeyMappings.USE_ABILITY_KEY.getName(), "Use Selected Ability");
+        add(WotrKeyMappings.ACTIVATE_ABILITY_SCROLL.getName(), "Activate Ability Bar Scroll");
         add(WotrKeyMappings.SHOW_TOOLTIP_INFO.getName(), "Show Additional Tooltip Info");
         add(WotrKeyMappings.JIGSAW_NAME_TOGGLE_KEY.getName(), "Show Jigsaw Block Info");
+        add(WotrKeyMappings.GUILD_MENU_KEY.getName(), "Open Guild Menu");
+        add(WotrKeyMappings.QUEST_MENU_KEY.getName(), "Open Quest Menu");
+        add(WotrKeyMappings.WALLET_MENU_KEY.getName(), "Open Wallet Menu");
 
         add(WanderersOfTheRift.translationId("keybinds", "l_alt"), "LAlt");
         add(WanderersOfTheRift.translationId("keybinds", "r_alt"), "RAlt");
@@ -316,8 +362,10 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
+        add(WanderersOfTheRift.translationId("objective", "nothing.name"), "Nothing");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");
         add(WanderersOfTheRift.translationId("objective", "stealth.description"), "Defeat monsters stealthily");
+        add(WanderersOfTheRift.translationId("objective", "nothing.description"), "Do nothing");
         add(WanderersOfTheRift.translationId("gui", "objective_status.complete"), "Objective Complete");
 
         add(WanderersOfTheRift.translationId("button", "reset"), "Reset");
@@ -347,7 +395,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "ability.raw_damage"), "Ability Damage");
         add(WanderersOfTheRift.translationId("attribute", "ability.cooldown"), "Ability Cooldown");
         add(WanderersOfTheRift.translationId("attribute", "ability.heal_amount"), "Ability Heal Amount");
+        add(WanderersOfTheRift.translationId("attribute", "critical_chance"), "Critical Chance");
+        add(WanderersOfTheRift.translationId("attribute", "critical_avoidance"), "Critical Avoidance");
+        add(WanderersOfTheRift.translationId("attribute", "critical_bonus"), "Critical Bonus");
         add(WanderersOfTheRift.translationId("attribute", "ability.mana_cost"), "Mana Cost");
+        add(WanderersOfTheRift.translationId("attribute", "thorns_chance"), "Thorns Chance");
+        add(WanderersOfTheRift.translationId("attribute", "thorns_damage"), "Thorns Damage");
+        add(WanderersOfTheRift.translationId("attribute", "life_leech"), "Life Leech");
         add(WanderersOfTheRift.translationId("attribute", "projectile_spread"), "Ability Projectile Spread");
         add(WanderersOfTheRift.translationId("attribute", "projectile_count"), "Ability Projectile Count");
         add(WanderersOfTheRift.translationId("attribute", "projectile_speed"), "Ability Projectile Speed");
@@ -355,10 +409,68 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("attribute", "max_mana"), "Max Mana");
         add(WanderersOfTheRift.translationId("attribute", "mana_regen_rate"), "Mana Regeneration");
         add(WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), "Mana Degeneration");
+        add(WanderersOfTheRift.translationId("attribute", "strength"), "Strength");
+        add(WanderersOfTheRift.translationId("attribute", "dexterity"), "Dexterity");
+        add(WanderersOfTheRift.translationId("attribute", "constitution"), "Constitution");
+        add(WanderersOfTheRift.translationId("attribute", "intelligence"), "Intelligence");
+        add(WanderersOfTheRift.translationId("attribute", "wisdom"), "Wisdom");
+        add(WanderersOfTheRift.translationId("attribute", "charisma"), "Charisma");
+
         addRunegems();
         addModifiers();
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
+        add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
+
+        add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
+        add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
+
+        add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
+        add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");
+        add(WanderersOfTheRift.translationId("guild", "stick"), "Figures of the Stick");
+        add(WanderersOfTheRift.translationId("guild", "stick.rank.0"), "Twigling");
+        add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
+        add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
+
+        add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
+        add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
+        add(WanderersOfTheRift.translationId("goal", "rift.complete"), "Complete");
+        add(WanderersOfTheRift.translationId("goal", "rift.tier"), "tier %s");
+        add(WanderersOfTheRift.translationId("goal", "any"), "any");
+
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest.title"), "Fetch Quest");
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest.description"),
+                "Bring me what I need and I'll make it worth your while.");
+        add(WanderersOfTheRift.translationId("quest", "skillthread.title"), "Deliver Skill Thread");
+        add(WanderersOfTheRift.translationId("quest", "skillthread.description"),
+                "I've heard there is a strange thread that can be found in the rifts that holds the key to unlocking the full potential of abilities. Could you bring me a sample?");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron.title"), "Sample the Wares");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron.description"),
+                "Psst. You look like a discerning customer? I've got some powerful shiny baubles if you can bring me some precious metals!");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons.title"), "Defeat Skeletons");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons.description"), "Bones scare me! Save me!");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift.title"), "Complete Rifts");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
+        add(WanderersOfTheRift.translationId("quest", "bring_fish.title"), "Fish of the day");
+        add(WanderersOfTheRift.translationId("quest", "bring_fish.description"),
+                "I'm starving. Could you purlease bring me a fish?");
+
+        add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("modifier_effect.wotr.ability", "Cast %s when %s");
+
+        add(Append.TYPE.translationKey(), "Add %s");
+        add(Prepend.TYPE.translationKey(), "Add %s at start");
+        add(Clear.TYPE.translationKey(), "Remove all");
+        add(Drop.TYPE.translationKey(), "Remove %s from start");
+        add(DropLast.TYPE.translationKey(), "Remove %s");
+        add(WotrRiftLayoutLayers.PREDEFINED_LAYER.getKey().location().toLanguageKey("layout_layer"), "%s Room");
+        add(WotrRiftLayoutLayers.RING_LAYER.getKey().location().toLanguageKey("layout_layer"), "Ring of %s Rooms");
+        add(WotrRiftLayoutLayers.BOXED_LAYER.getKey().location().toLanguageKey("layout_layer"), "Room group");
+        add(WotrRiftLayoutLayers.CHAOS_LAYER.getKey().location().toLanguageKey("layout_layer"), "%s Rooms");
+        add("template_pool.wotr.rift.room_portal", "Portal");
+        add("template_pool.wotr.rift.room_stable", "Stable");
+        add("template_pool.wotr.rift.room_unstable", "Unstable");
+        add("template_pool.wotr.rift.room_chaos", "Chaos");
     }
 
     private void addRunegems() {

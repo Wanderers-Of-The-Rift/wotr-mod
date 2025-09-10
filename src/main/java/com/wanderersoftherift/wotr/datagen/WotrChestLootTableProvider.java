@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.AbstractAbility;
+import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
@@ -133,7 +133,7 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
     }
 
     private void generateAbilityLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        HolderLookup.RegistryLookup<AbstractAbility> reg = registries.lookupOrThrow(WotrRegistries.Keys.ABILITIES);
+        HolderLookup.RegistryLookup<Ability> reg = registries.lookupOrThrow(WotrRegistries.Keys.ABILITIES);
         consumer.accept(getResourceKey("rift/ability"), LootTable.lootTable()
                 .withPool(
                         LootPool.lootPool()
@@ -177,90 +177,90 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                // rogue type gear
+                                // leather type gear
                                 .add(LootItem.lootTableItem(Items.LEATHER_HELMET)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                3, 4, WotrTags.Items.ROGUE_TYPE_GEAR.location().getPath())))
+                                                3, 4, WotrTags.Items.LEATHER_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.LEATHER_HELMET)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                4, 5, WotrTags.Items.ROGUE_TYPE_GEAR.location().getPath())))
+                                                4, 5, WotrTags.Items.LEATHER_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.LEATHER_HELMET)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                5, 6, WotrTags.Items.ROGUE_TYPE_GEAR.location().getPath())))
+                                                5, 6, WotrTags.Items.LEATHER_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.LEATHER_HELMET)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                6, 6, WotrTags.Items.ROGUE_TYPE_GEAR.location().getPath())))
-                                // tank type gear
+                                                6, 6, WotrTags.Items.LEATHER_TYPE_GEAR.location().getPath())))
+                                // iron type gear
                                 .add(LootItem.lootTableItem(Items.IRON_HELMET)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                3, 4, WotrTags.Items.TANK_TYPE_GEAR.location().getPath())))
+                                                3, 4, WotrTags.Items.IRON_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_HELMET)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                4, 5, WotrTags.Items.TANK_TYPE_GEAR.location().getPath())))
+                                                4, 5, WotrTags.Items.IRON_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_HELMET)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                5, 6, WotrTags.Items.TANK_TYPE_GEAR.location().getPath())))
+                                                5, 6, WotrTags.Items.IRON_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_HELMET)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                6, 6, WotrTags.Items.TANK_TYPE_GEAR.location().getPath())))
-                                // barbarian type gear
+                                                6, 6, WotrTags.Items.IRON_TYPE_GEAR.location().getPath())))
+                                // diamond type gear
                                 .add(LootItem.lootTableItem(Items.DIAMOND_HELMET)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                3, 4, WotrTags.Items.BARBARIAN_TYPE_GEAR.location().getPath())))
+                                                3, 4, WotrTags.Items.DIAMOND_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_HELMET)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                4, 5, WotrTags.Items.BARBARIAN_TYPE_GEAR.location().getPath())))
+                                                4, 5, WotrTags.Items.DIAMOND_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_HELMET)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                5, 6, WotrTags.Items.BARBARIAN_TYPE_GEAR.location().getPath())))
+                                                5, 6, WotrTags.Items.DIAMOND_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_HELMET)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                6, 6, WotrTags.Items.BARBARIAN_TYPE_GEAR.location().getPath())))
-                                // wizard type gear
+                                                6, 6, WotrTags.Items.DIAMOND_TYPE_GEAR.location().getPath())))
+                                // gold type gear
                                 .add(LootItem.lootTableItem(Items.GOLDEN_HELMET)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                3, 4, WotrTags.Items.WIZARD_TYPE_GEAR.location().getPath())))
+                                                3, 4, WotrTags.Items.GOLD_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_HELMET)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                4, 5, WotrTags.Items.WIZARD_TYPE_GEAR.location().getPath())))
+                                                4, 5, WotrTags.Items.GOLD_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_HELMET)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                5, 6, WotrTags.Items.WIZARD_TYPE_GEAR.location().getPath())))
+                                                5, 6, WotrTags.Items.GOLD_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_HELMET)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(
-                                                6, 6, WotrTags.Items.WIZARD_TYPE_GEAR.location().getPath())))
+                                                6, 6, WotrTags.Items.GOLD_TYPE_GEAR.location().getPath())))
 
                                 // Elytra for fun at this point probably don't need implicits on elytra, so only rolling
                                 // sockets
@@ -277,6 +277,35 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(20)
                                         .apply(GearSocketsFunction.setGearSockets(6, 6)))
 
+                                // Mace! Andydirks attempt at adding a weapon to the socket system
+
+                                .add(LootItem.lootTableItem(Items.MACE)
+                                        .when(riftTier(4, 5))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(4, 5)))
+                                .add(LootItem.lootTableItem(Items.MACE)
+                                        .when(riftTier().min(6))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
+                                .add(LootItem.lootTableItem(Items.MACE)
+                                        .when(riftTier().min(7))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
+
+                                // Tridents! Andydirks attempt at adding a weapon to the socket system
+
+                                .add(LootItem.lootTableItem(Items.TRIDENT)
+                                        .when(riftTier(4, 5))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(4, 5)))
+                                .add(LootItem.lootTableItem(Items.TRIDENT)
+                                        .when(riftTier().min(6))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
+                                .add(LootItem.lootTableItem(Items.TRIDENT)
+                                        .when(riftTier().min(7))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
                         ));
 
     }
@@ -293,90 +322,90 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                // rogue type weapons
+                                // range type weapons
                                 .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(3, 4,
-                                                WotrTags.Items.ROGUE_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(4, 5,
-                                                WotrTags.Items.ROGUE_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(5, 6,
-                                                WotrTags.Items.ROGUE_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(6, 6,
-                                                WotrTags.Items.ROGUE_TYPE_WEAPON.location().getPath())))
-                                // Tank type weapons
+                                                WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
+                                // Iron type weapons
                                 .add(LootItem.lootTableItem(Items.IRON_SWORD)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(3, 4,
-                                                WotrTags.Items.TANK_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.IRON_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_SWORD)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(4, 5,
-                                                WotrTags.Items.TANK_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.IRON_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_SWORD)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(5, 6,
-                                                WotrTags.Items.TANK_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.IRON_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_SWORD)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(6, 6,
-                                                WotrTags.Items.TANK_TYPE_WEAPON.location().getPath())))
-                                // Barbarian type weapons
+                                                WotrTags.Items.IRON_TYPE_WEAPON.location().getPath())))
+                                // Diamond type weapons
                                 .add(LootItem.lootTableItem(Items.DIAMOND_SWORD)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(3, 4,
-                                                WotrTags.Items.BARBARIAN_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.DIAMOND_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_SWORD)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(4, 5,
-                                                WotrTags.Items.BARBARIAN_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.DIAMOND_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_SWORD)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(5, 6,
-                                                WotrTags.Items.BARBARIAN_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.DIAMOND_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_SWORD)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(6, 6,
-                                                WotrTags.Items.BARBARIAN_TYPE_WEAPON.location().getPath())))
-                                // Wizard type weapons
+                                                WotrTags.Items.DIAMOND_TYPE_WEAPON.location().getPath())))
+                                // Gold type weapons
                                 .add(LootItem.lootTableItem(Items.GOLDEN_SWORD)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(3, 4,
-                                                WotrTags.Items.WIZARD_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.GOLD_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_SWORD)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(4, 5,
-                                                WotrTags.Items.WIZARD_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.GOLD_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_SWORD)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(5, 6,
-                                                WotrTags.Items.WIZARD_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.GOLD_TYPE_WEAPON.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_SWORD)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(6, 6,
-                                                WotrTags.Items.WIZARD_TYPE_WEAPON.location().getPath())))
+                                                WotrTags.Items.GOLD_TYPE_WEAPON.location().getPath())))
                         ));
 
     }

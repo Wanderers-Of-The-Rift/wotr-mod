@@ -8,10 +8,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -85,22 +85,17 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public void enableModifier(double roll, Entity entity, ModifierSource source) {
+    public void enableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
         if (entity instanceof LivingEntity livingentity) {
             livingentity.getAttributes().addTransientAttributeModifiers(this.makeAttributeMap(roll, source));
         }
     }
 
     @Override
-    public void disableModifier(double roll, Entity entity, ModifierSource source) {
+    public void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
         if (entity instanceof LivingEntity livingentity) {
             livingentity.getAttributes().removeAttributeModifiers(this.makeAttributeMap(roll, source));
         }
-    }
-
-    @Override
-    public void applyModifier() {
-        // NOOP
     }
 
     private Multimap<Holder<Attribute>, AttributeModifier> makeAttributeMap(double roll, ModifierSource source) {
@@ -109,14 +104,14 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
+    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
         return switch (this.getOperation()) {
-            case ADD_VALUE -> getAddTooltipComponent(stack, roll, chatFormatting);
-            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, chatFormatting);
+            case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
+            case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
         };
     }
 
-    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
+    private TooltipComponent getAddTooltipComponent(ItemStack stack, float roll, Style style) {
         double calculatedRoll = calculateModifier(roll);
         float roundedValue = (float) (Math.ceil(calculatedRoll * 100) / 100);
         String sign;
@@ -126,14 +121,15 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
             sign = "negative";
         }
 
-        MutableComponent cmp = Component
-                .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign, roundedValue,
-                        Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(chatFormatting);
+        MutableComponent cmp = Component.translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.add." + sign,
+                roundedValue, Component.translatable(attribute.value().getDescriptionId()));
+        if (style != null) {
+            cmp = cmp.withStyle(style);
+        }
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
-    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, ChatFormatting chatFormatting) {
+    private TooltipComponent getMultiplyTooltipComponent(ItemStack stack, float roll, Style style) {
         double calculatedRoll = calculateModifier(roll);
         int roundedValue = (int) Math.ceil(calculatedRoll * 100);
         String sign;
@@ -143,10 +139,12 @@ public class AttributeModifierEffect extends AbstractModifierEffect {
             sign = "negative";
         }
 
-        MutableComponent cmp = Component
-                .translatable("modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
-                        Component.translatable(attribute.value().getDescriptionId()))
-                .withStyle(chatFormatting);
+        MutableComponent cmp = Component.translatable(
+                "modifier." + WanderersOfTheRift.MODID + ".attribute.multiply." + sign, roundedValue,
+                Component.translatable(attribute.value().getDescriptionId()));
+        if (style != null) {
+            cmp = cmp.withStyle(style);
+        }
         return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 }
