@@ -13,9 +13,6 @@
   "effects": [
     {
       "type": "wotr:movement",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "velocity": [
         0.0,
         0.0,
@@ -24,23 +21,17 @@
     },
     {
       "type": "wotr:movement",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "velocity": [
         0.0,
         0.4,
         0.0
       ],
-      "relativeFrame": "absolute"
+      "relative_frame": "absolute"
     },
     {
       "type": "wotr:sound",
       "sound": {
         "sound_id": "minecraft:entity.breeze.charge"
-      },
-      "targeting": {
-        "type": "wotr:self"
       }
     }
   ],

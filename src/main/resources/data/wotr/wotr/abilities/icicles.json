@@ -20,20 +20,22 @@
       },
       "effects": [
         {
-          "type": "wotr:damage",
-          "amount": 2.0,
-          "damage_type": "wotr:ice",
+          "type": "wotr:targeting",
           "targeting": {
             "type": "wotr:self",
             "target": {
               "sentiment": "not_friend"
             }
-          }
+          },
+          "effects": [
+            {
+              "type": "wotr:damage",
+              "amount": 2.0,
+              "damage_type": "wotr:ice"
+            }
+          ]
         }
-      ],
-      "targeting": {
-        "type": "wotr:self"
-      }
+      ]
     }
   ],
   "icon": "wotr:textures/ability/icon/icicle.png",

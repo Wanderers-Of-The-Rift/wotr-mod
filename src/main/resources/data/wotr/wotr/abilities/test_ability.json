@@ -11,21 +11,7 @@
     {
       "type": "wotr:damage",
       "amount": 1,
-      "damage_type": "wotr:fire",
-      "targeting": {
-        "type": "wotr:self"
-      },
-      "effects": [
-        {
-          "type": "wotr:particle",
-          "targeting": {
-            "type": "wotr:self"
-          },
-          "particle": {
-            "type": "minecraft:explosion"
-          }
-        }
-      ]
+      "damage_type": "wotr:fire"
     },
     {
       "type": "wotr:particle",
