@@ -48,25 +48,6 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
-        addBlock(WotrBlocks.NOGRAVGRAVEL, "No Gravity Gravel");
-        addBlock(WotrBlocks.NOGRAVSAND, "No Gravity Sand");
-        addBlock(WotrBlocks.NOGRAVREDSAND, "No Gravity Red Sand");
-        addBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER, "No Gravity White Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER, "No Gravity Orange Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER, "No Gravity Magenta Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER, "No Gravity Light Blue Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER, "No Gravity Yellow Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIMECONCRETEPOWDER, "No Gravity Lime Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVPINKCONCRETEPOWDER, "No Gravity Pink Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER, "No Gravity Gray Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER, "No Gravity Light Gray Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVCYANCONCRETEPOWDER, "No Gravity Cyan Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER, "No Gravity Purple Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBLUECONCRETEPOWDER, "No Gravity Blue Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER, "No Gravity Brown Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVGREENCONCRETEPOWDER, "No Gravity Green Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER, "No Gravity Red Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER, "No Gravity Black Concrete Powder");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
