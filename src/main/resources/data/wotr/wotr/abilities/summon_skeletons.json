@@ -9,40 +9,39 @@
   ],
   "effects": [
     {
-      "type": "wotr:target",
+      "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:raycast",
         "range": 200
       },
       "effects": [
         {
-          "type": "wotr:summon",
+          "type": "wotr:targeting",
           "targeting": {
             "type": "wotr:area",
             "range": 25
           },
-          "entity_type": "minecraft:skeleton",
-          "amount": 3,
           "effects": [
             {
-              "type": "wotr:movement",
-              "targeting": {
-                "type": "wotr:self"
-              },
-              "velocity": [
-                0,
-                1,
-                0
+              "type": "wotr:summon",
+              "entity_type": "minecraft:skeleton",
+              "amount": 3,
+              "effects": [
+                {
+                  "type": "wotr:movement",
+                  "velocity": [
+                    0,
+                    1,
+                    0
+                  ]
+                },
+                {
+                  "type": "wotr:particle",
+                   "particle": {
+                    "type": "minecraft:explosion"
+                  }
+                }
               ]
-            },
-            {
-              "type": "wotr:particle",
-              "targeting": {
-                "type": "wotr:self"
-              },
-              "particle": {
-                "type": "minecraft:explosion"
-              }
             }
           ]
         }
@@ -50,9 +49,6 @@
     },
     {
       "type": "wotr:particle",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "particle": {
         "type": "minecraft:bubble"
       }

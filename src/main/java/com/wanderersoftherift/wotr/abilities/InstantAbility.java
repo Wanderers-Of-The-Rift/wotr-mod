@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +54,7 @@ public class InstantAbility extends Ability {
     public boolean activate(AbilityContext context) {
         LivingEntity caster = context.caster();
         getActivationRequirements().forEach(x -> x.pay(context));
-        this.getEffects().forEach(effect -> effect.apply(caster, List.of(), context));
+        this.getEffects().forEach(effect -> effect.apply(context, new TargetInfo(caster)));
         return true;
     }
 
