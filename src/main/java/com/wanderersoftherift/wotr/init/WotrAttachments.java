@@ -4,12 +4,12 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityConditions;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityResourceData;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
@@ -87,8 +87,10 @@ public class WotrAttachments {
             () -> AttachmentType.builder(AttachedEffects::new).serialize(AttachedEffects.getSerializer()).build());
     public static final Supplier<AttachmentType<EffectMarkers>> EFFECT_MARKERS = ATTACHMENT_TYPES.register(
             "effect_markers", () -> AttachmentType.builder(EffectMarkers::new).build());
-    public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
-            () -> AttachmentType.builder(ManaData::new).serialize(ManaData.getSerializer()).build());
+    public static final Supplier<AttachmentType<AbilityResourceData>> MANA = ATTACHMENT_TYPES.register("mana",
+            () -> AttachmentType.builder(AbilityResourceData::new)
+                    .serialize(AbilityResourceData.getSerializer())
+                    .build());
     public static final Supplier<AttachmentType<OngoingAbilities>> ONGOING_ABILITIES = ATTACHMENT_TYPES.register(
             "ongoing_abilities",
             () -> AttachmentType.builder(OngoingAbilities::new).serialize(OngoingAbilities.getSerializer()).build());
@@ -150,7 +152,7 @@ public class WotrAttachments {
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
             );
 
-    public static final Supplier<AttachmentType<EntityAttachmentRegistry<ManaData>>> MANA_ENTITY_REGISTRY = ATTACHMENT_TYPES
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<AbilityResourceData>>> MANA_ENTITY_REGISTRY = ATTACHMENT_TYPES
             .register(
                     "mana_entity_registry",
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()

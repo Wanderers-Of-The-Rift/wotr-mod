@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
+import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
 import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
@@ -217,6 +218,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_source"));
         public static final ResourceKey<Registry<DualCodec<? extends ModifierSource>>> MODIFIER_SOURCES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("modifier_source"));
+        public static final ResourceKey<Registry<AbilityResource>> ABILITY_RESOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("ability_resources"));
 
         // Mobs
         public static final ResourceKey<Registry<MapCodec<? extends MobInteraction>>> MOB_INTERACTIONS = ResourceKey
@@ -280,5 +283,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
+        event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
     }
 }

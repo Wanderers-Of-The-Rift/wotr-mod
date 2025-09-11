@@ -5,13 +5,14 @@ import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -79,10 +80,32 @@ public class AbilityEventHandler {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent respawnEvent) {
-        AttributeInstance maxManaAttribute = respawnEvent.getEntity().getAttribute(WotrAttributes.MAX_MANA);
-        if (maxManaAttribute != null) {
-            respawnEvent.getEntity().getData(WotrAttachments.MANA).setAmount((float) maxManaAttribute.getValue());
+        giveInitialAbilityResources(respawnEvent.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onEntitySpawn(FinalizeSpawnEvent spawnEvent) {
+        giveInitialAbilityResources(spawnEvent.getEntity());
+    }
+
+    public static void giveInitialAbilityResources(Entity entity) {
+        var resourceRegistry = entity.registryAccess().lookup(WotrRegistries.Keys.ABILITY_RESOURCES);
+
+        if (!resourceRegistry.isPresent()) {
+            return;
         }
+
+        resourceRegistry.get()
+                .stream()
+                .map(resourceRegistry.get()::wrapAsHolder)
+                .forEach(
+                        resource -> {
+                            var respawnValue = resource.value().respawnValueForEntity(entity);
+                            if (respawnValue > 0) {
+                                entity.getData(WotrAttachments.MANA).setAmount(resource, respawnValue);
+                            }
+                        }
+                );
     }
 
     public static void tickAttachedEffects(ServerLevel level) {

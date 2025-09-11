@@ -9,7 +9,8 @@
   ],
   "ongoing_requirements": [
     {
-      "type": "wotr:mana"
+      "type": "wotr:mana",
+        "resource_type": "wotr:mana"
     }
   ],
   "activation_effects": [
