@@ -101,9 +101,7 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
     private boolean activateChild(AbilityContext context, int index) {
         ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
         Holder<Ability> childAbility = abilities.get(index).ability();
-        if (context.caster()
-                .getData(WotrAttachments.ONGOING_ABILITIES)
-                .activate(childSource, context.abilityItem(), childAbility)) {
+        if (context.caster().getData(WotrAttachments.ONGOING_ABILITIES).activate(childSource, childAbility)) {
             return !childAbility.value().isActive(context.caster(), childSource);
         }
         return true;

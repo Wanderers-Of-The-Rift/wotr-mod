@@ -6,6 +6,9 @@ import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -24,29 +27,37 @@ import java.util.UUID;
  */
 public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUID casterId, ItemStack abilityItem,
         AbilitySource source, List<Holder<AbilityUpgrade>> upgrades, List<EnhancingModifierInstance> enhancements,
-        List<ResourceLocation> conditions) {
+        List<ResourceLocation> conditions, PatchedDataComponentMap components) {
 
     public static final Codec<StoredAbilityContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            UUIDUtil.CODEC.fieldOf("instance_id").forGetter(x -> x.instanceId),
-            Ability.CODEC.fieldOf("ability").forGetter(x -> x.ability),
-            UUIDUtil.CODEC.fieldOf("caster").forGetter(x -> x.casterId),
-            ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(x -> x.abilityItem),
-            AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(x -> x.source),
-            AbilityUpgrade.REGISTRY_CODEC.listOf().optionalFieldOf("upgrades", List.of()).forGetter(x -> x.upgrades),
+            UUIDUtil.CODEC.fieldOf("instance_id").forGetter(StoredAbilityContext::instanceId),
+            Ability.CODEC.fieldOf("ability").forGetter(StoredAbilityContext::ability),
+            UUIDUtil.CODEC.fieldOf("caster").forGetter(StoredAbilityContext::casterId),
+            ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(StoredAbilityContext::abilityItem),
+            AbilitySource.DIRECT_CODEC.fieldOf("slot").forGetter(StoredAbilityContext::source),
+            AbilityUpgrade.REGISTRY_CODEC.listOf()
+                    .optionalFieldOf("upgrades", List.of())
+                    .forGetter(StoredAbilityContext::upgrades),
             EnhancingModifierInstance.CODEC.listOf()
                     .fieldOf("enhancements")
                     .forGetter(StoredAbilityContext::enhancements),
-            ResourceLocation.CODEC.listOf().fieldOf("conditions").forGetter(StoredAbilityContext::conditions)
+            ResourceLocation.CODEC.listOf().fieldOf("conditions").forGetter(StoredAbilityContext::conditions),
+            DataComponentPatch.CODEC
+                    .xmap(patch -> PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, patch),
+                            PatchedDataComponentMap::asPatch)
+                    .optionalFieldOf("components", new PatchedDataComponentMap(DataComponentMap.EMPTY))
+                    .forGetter(StoredAbilityContext::components)
     ).apply(instance, StoredAbilityContext::new));
 
     public StoredAbilityContext(AbilityContext context) {
         this(context.instanceId(), context.ability(), context.caster().getUUID(), context.abilityItem(),
-                context.source(), context.upgrades(), context.enhancements(), List.copyOf(context.conditions()));
+                context.source(), context.upgrades(), context.enhancements(), List.copyOf(context.conditions()),
+                context.dataComponents().copy());
     }
 
     public AbilityContext toContext(LivingEntity caster, Level level, long age) {
         return new AbilityContext(instanceId, ability, caster, abilityItem, source, level, age, upgrades, enhancements,
-                new HashSet<>(conditions));
+                new HashSet<>(conditions), components);
     }
 
     public LivingEntity getCaster(MinecraftServer server) {
