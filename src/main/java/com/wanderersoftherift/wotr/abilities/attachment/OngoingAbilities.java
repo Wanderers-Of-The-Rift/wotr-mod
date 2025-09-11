@@ -5,17 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.EnhancingModifierInstance;
+import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.MainAbilitySource;
-import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +21,6 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -60,36 +56,29 @@ public class OngoingAbilities {
         if (!(holder instanceof LivingEntity entity)) {
             return false;
         }
-        ItemStack abilityItem = source.getItem(entity);
         Holder<Ability> ability = source.getAbility(entity);
         if (ability == null) {
             return false;
         }
-        return activate(source, abilityItem, ability);
+        return activate(source, ability);
     }
 
-    public boolean activate(AbilitySource source, ItemStack abilityItem, Holder<Ability> ability) {
+    public boolean activate(AbilitySource source, Holder<Ability> ability) {
         if (!(holder instanceof LivingEntity entity)) {
             return false;
         }
         if (entity.level().isClientSide()) {
-            return clientsideActivate(entity, ability, abilityItem, source);
+            return clientsideActivate(entity, ability, source);
         } else {
-            return serversideActivate(entity, ability, abilityItem, source);
+            return serversideActivate(entity, ability, source);
         }
     }
 
-    private boolean clientsideActivate(
-            LivingEntity entity,
-            Holder<Ability> ability,
-            ItemStack abilityItem,
-            AbilitySource source) {
-        var conditions = new HashSet<ResourceLocation>();
-        var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
-        AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
-                entity.level(), 0, source.upgrades(entity), enhancements, conditions);
+    private boolean clientsideActivate(LivingEntity entity, Holder<Ability> ability, AbilitySource source) {
+        AbilityContext context = new AbilityContext(ability, entity, source);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-            conditions.addAll(AbilityConditions.forEntity(entity).condition(ability));
+            // TODO: make this a data component
+            context.conditions().addAll(AbilityConditions.forEntity(entity).condition(ability));
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
                 return true;
@@ -98,31 +87,26 @@ public class OngoingAbilities {
         return false;
     }
 
-    private boolean serversideActivate(
-            LivingEntity entity,
-            Holder<Ability> ability,
-            ItemStack abilityItem,
-            AbilitySource source) {
+    private boolean serversideActivate(LivingEntity entity, Holder<Ability> ability, AbilitySource source) {
         interruptChannelledAbilities();
         Optional<ActiveAbility> activeAbility = activeAbilities.stream()
                 .filter(x -> x.matches(ability, source))
                 .findFirst();
         boolean existing = activeAbility.isPresent();
-        UUID id = activeAbility.map(x -> x.id).orElseGet(UUID::randomUUID);
-        var upgrades = source.upgrades(entity);
-        var conditions = new HashSet<ResourceLocation>();
-        var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
-        long age = activeAbility.map(x -> x.age).orElse(0L);
-        AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), age,
-                upgrades, enhancements, conditions);
+        AbilityContext context;
+        if (existing) {
+            context = activeAbility.get().createContext(entity);
+        } else {
+            context = new AbilityContext(ability, entity, source);
+        }
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-            conditions.addAll(AbilityConditions.forEntity(entity).condition(ability));
+            context.conditions().addAll(AbilityConditions.forEntity(entity).condition(ability));
             if (!ability.value().canActivate(context)) {
                 return false;
             }
             boolean finished = ability.value().activate(context);
             if (finished && existing) {
-                activeAbilities.removeIf(x -> x.id.equals(id));
+                activeAbilities.removeIf(x -> x.id().equals(context.instanceId()));
             } else if (!finished && !existing) {
                 activeAbilities.add(new ActiveAbility(context));
             }
@@ -138,7 +122,7 @@ public class OngoingAbilities {
             instance.age++;
             AbilityContext context = instance.createContext(attachedTo);
             try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-                if (instance.ability.value().tick(context)) {
+                if (instance.ability().tick(context)) {
                     activeAbilities.remove(instance);
                 }
             }
@@ -154,11 +138,11 @@ public class OngoingAbilities {
     }
 
     public void slotChanged(@NotNull WotrEquipmentSlot slot, ItemStack from, ItemStack to) {
-        deactivateIf(x -> slot.equals(x.source.getLinkedSlot()));
+        deactivateIf(x -> slot.equals(x.source().getLinkedSlot()));
     }
 
     public void interruptChannelledAbilities() {
-        deactivateIf(x -> x.ability.value().isChannelled());
+        deactivateIf(x -> x.ability().isChannelled());
     }
 
     private void deactivateIf(Predicate<ActiveAbility> predicate) {
@@ -169,7 +153,7 @@ public class OngoingAbilities {
         channelled.forEach(instance -> {
             AbilityContext abilityContext = instance.createContext(attachedTo);
             try (var ignored = abilityContext.enableTemporaryUpgradeModifiers()) {
-                instance.ability.value().deactivate(abilityContext);
+                instance.ability().deactivate(abilityContext);
             }
         });
         activeAbilities.removeAll(channelled);
@@ -178,84 +162,45 @@ public class OngoingAbilities {
     private static final class ActiveAbility {
 
         private static final Codec<ActiveAbility> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                UUIDUtil.CODEC.fieldOf("id").forGetter(ActiveAbility::id),
-                Ability.CODEC.fieldOf("ability").forGetter(ActiveAbility::ability),
-                AbilitySource.DIRECT_CODEC.fieldOf("item_slot").forGetter(ActiveAbility::source),
-                ItemStack.OPTIONAL_CODEC.fieldOf("ability_item").forGetter(ActiveAbility::abilityItem),
-                Codec.LONG.fieldOf("age").forGetter(ActiveAbility::age),
-                AbilityUpgrade.REGISTRY_CODEC.listOf()
-                        .optionalFieldOf("upgrades", List.of())
-                        .forGetter(ActiveAbility::upgrades),
-                EnhancingModifierInstance.CODEC.listOf().fieldOf("enhancements").forGetter(ActiveAbility::enhancements),
-                ResourceLocation.CODEC.listOf().fieldOf("conditions").forGetter(ActiveAbility::conditions)
+                StoredAbilityContext.CODEC.fieldOf("stored_context").forGetter(x -> x.storedContext),
+                Codec.LONG.fieldOf("age").forGetter(ActiveAbility::age)
         ).apply(instance, ActiveAbility::new));
 
-        private final UUID id;
-        private final Holder<Ability> ability;
-        private final AbilitySource source;
-        private final ItemStack abilityItem;
-        private final List<Holder<AbilityUpgrade>> upgrades;
-        private final List<EnhancingModifierInstance> enhancements;
-        private final List<ResourceLocation> conditions;
+        private final StoredAbilityContext storedContext;
         private long age;
 
         ActiveAbility(AbilityContext context) {
-            this(context.instanceId(), context.ability(), context.source(), context.abilityItem(), 0,
-                    context.upgrades(), context.enhancements(), List.copyOf(context.conditions()));
+            this.storedContext = new StoredAbilityContext(context);
+            this.age = context.age();
         }
 
-        ActiveAbility(UUID id, Holder<Ability> ability, AbilitySource source, ItemStack abilityItem, long age,
-                List<Holder<AbilityUpgrade>> upgrades, List<EnhancingModifierInstance> enhancements,
-                List<ResourceLocation> conditions) {
-            this.id = id;
-            this.ability = ability;
-            this.source = source;
-            this.abilityItem = abilityItem;
+        ActiveAbility(StoredAbilityContext context, long age) {
+            this.storedContext = context;
             this.age = age;
-            this.upgrades = upgrades;
-            this.enhancements = enhancements;
-            this.conditions = conditions;
         }
 
         boolean matches(Holder<Ability> ability, AbilitySource source) {
-            return this.ability.equals(ability) && Objects.equals(source, this.source);
+            return this.storedContext.ability().equals(ability) && Objects.equals(source, this.storedContext.source());
         }
 
         AbilityContext createContext(LivingEntity owner) {
-            return new AbilityContext(id, ability, owner, abilityItem, source, owner.level(), age, upgrades,
-                    enhancements, new HashSet<>(conditions));
-        }
-
-        UUID id() {
-            return id;
-        }
-
-        Holder<Ability> ability() {
-            return ability;
-        }
-
-        AbilitySource source() {
-            return source;
-        }
-
-        ItemStack abilityItem() {
-            return abilityItem;
-        }
-
-        List<ResourceLocation> conditions() {
-            return conditions;
+            return storedContext.toContext(owner, owner.level(), age);
         }
 
         long age() {
             return age;
         }
 
-        List<Holder<AbilityUpgrade>> upgrades() {
-            return upgrades;
+        UUID id() {
+            return storedContext.instanceId();
         }
 
-        public List<EnhancingModifierInstance> enhancements() {
-            return enhancements;
+        Ability ability() {
+            return storedContext.ability().value();
+        }
+
+        AbilitySource source() {
+            return storedContext.source();
         }
     }
 

@@ -66,8 +66,7 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
                 Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
         );
 
-        return new ImageComponent(stack, text.withStyle(style),
-                providedAbility.value().getEmblem());
+        return new ImageComponent(stack, text.withStyle(style), providedAbility.value().getEmblem());
     }
 
     private String getTierInfoString(int tier) {
