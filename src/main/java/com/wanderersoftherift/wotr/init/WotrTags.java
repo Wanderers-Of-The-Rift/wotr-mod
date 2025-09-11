@@ -35,9 +35,11 @@ public class WotrTags {
         public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
 
         public static final TagKey<Item> LEATHER_TYPE_GEAR = createTag("gear_type.leather_type_gear");
+        public static final TagKey<Item> CHAINMAIL_TYPE_GEAR = createTag("gear_type.chainmail_type_gear");
         public static final TagKey<Item> IRON_TYPE_GEAR = createTag("gear_type.iron_type_gear");
         public static final TagKey<Item> DIAMOND_TYPE_GEAR = createTag("gear_type.diamond_type_gear");
         public static final TagKey<Item> GOLD_TYPE_GEAR = createTag("gear_type.gold_type_gear");
+        public static final TagKey<Item> NETHERITE_TYPE_GEAR = createTag("gear_type.netherite_type_gear");
 
         public static final TagKey<Item> RANGE_TYPE_WEAPON = createTag("weapon_type.range_type_weapon");
         public static final TagKey<Item> IRON_TYPE_WEAPON = createTag("weapon_type.iron_type_weapon");
