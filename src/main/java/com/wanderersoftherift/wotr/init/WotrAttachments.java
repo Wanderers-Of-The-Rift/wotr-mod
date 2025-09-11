@@ -8,7 +8,6 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
-import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
 import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
@@ -96,10 +95,6 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<AbilityStates>> ABILITY_STATES = ATTACHMENT_TYPES.register(
             "ability_states",
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
-    public static final Supplier<AttachmentType<ChainAbilityStates>> CHAIN_ABILITY_STATES = ATTACHMENT_TYPES.register(
-            "chain_ability_states",
-            () -> AttachmentType.builder(ChainAbilityStates::new).serialize(ChainAbilityStates.CODEC).build()
-    );
 
     public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
             "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());

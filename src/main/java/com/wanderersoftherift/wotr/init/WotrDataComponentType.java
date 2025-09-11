@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityState;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.item.LootBox;
@@ -56,7 +57,16 @@ public class WotrDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(
             "gear_rift_tier", Codec.INT, ByteBufCodecs.INT);
 
-    public static class RiftKeyData {
+    public static final class AbilityContextData {
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChainAbilityState>> CHAIN_ABILITY_STATE = register(
+                "chain_ability_state", ChainAbilityState.CODEC, null
+        );
+
+        private AbilityContextData() {
+        }
+    }
+
+    public static final class RiftKeyData {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_TIER = register(
                 "rift_config/tier", Codec.INT, ByteBufCodecs.INT);
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<RiftTheme>>> RIFT_THEME = register(
@@ -86,6 +96,9 @@ public class WotrDataComponentType {
                 ByteBufCodecs.fromCodecWithRegistries(ListEdit.editCodec(JigsawListProcessor.CODEC))
                         .apply(ByteBufCodecs.list())
         );
+
+        private RiftKeyData() {
+        }
     }
 
     static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(
@@ -102,5 +115,6 @@ public class WotrDataComponentType {
 
     static {
         var unused = RiftKeyData.RIFT_TIER; // invokes <cinit>
+        var unused2 = AbilityContextData.CHAIN_ABILITY_STATE;
     }
 }
