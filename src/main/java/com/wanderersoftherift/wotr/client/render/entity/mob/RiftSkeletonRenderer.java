@@ -2,15 +2,11 @@ package com.wanderersoftherift.wotr.client.render.entity.mob;
 
 import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.RiftSkeleton;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.AbstractSkeletonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-
-import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.MOB_VARIANTS;
 
 public class RiftSkeletonRenderer extends AbstractSkeletonRenderer<RiftSkeleton, RiftSkeletonRenderState> {
 
@@ -32,8 +28,6 @@ public class RiftSkeletonRenderer extends AbstractSkeletonRenderer<RiftSkeleton,
 
     @Override
     public ResourceLocation getTextureLocation(RiftSkeletonRenderState riftSkeletonRenderState) {
-        Registry<RiftMobVariantData> registry = Minecraft.getInstance().level.registryAccess()
-                .lookupOrThrow(MOB_VARIANTS);
-        return RiftMobVariantData.getTextureForVariant(riftSkeletonRenderState.variant, registry);
+        return riftSkeletonRenderState.variant;
     }
 }
