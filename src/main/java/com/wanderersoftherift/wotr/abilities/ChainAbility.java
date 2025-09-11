@@ -3,10 +3,11 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityStates;
+import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityState;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.ChainAbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.util.LongRange;
 import net.minecraft.core.Holder;
@@ -85,11 +86,10 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
     private void updateState(AbilityContext context, int index, boolean active) {
         context.caster().getData(WotrAttachments.ABILITY_STATES).setState(context.source(), index);
         if (active) {
-            context.caster().getData(WotrAttachments.CHAIN_ABILITY_STATES).setActivated(context.source());
+            context.set(WotrDataComponentType.AbilityContextData.CHAIN_ABILITY_STATE, new ChainAbilityState(0, true));
         } else {
-            context.caster()
-                    .getData(WotrAttachments.CHAIN_ABILITY_STATES)
-                    .setResetAge(context.source(), context.age() + abilities.get(index).ticksToReset);
+            context.set(WotrDataComponentType.AbilityContextData.CHAIN_ABILITY_STATE,
+                    new ChainAbilityState(context.age() + abilities.get(index).ticksToReset, false));
         }
     }
 
@@ -110,8 +110,9 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
     @Override
     public boolean tick(AbilityContext context) {
         int index = currentIndex(context.caster(), context.source());
-        ChainAbilityStates chainStates = context.caster().getData(WotrAttachments.CHAIN_ABILITY_STATES);
-        if (chainStates.hasBeenActivated(context.source())) {
+        ChainAbilityState chainState = context
+                .getOrDefault(WotrDataComponentType.AbilityContextData.CHAIN_ABILITY_STATE, ChainAbilityState.DEFAULT);
+        if (chainState.activated()) {
             ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
             if (!context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(childSource)) {
                 index++;
@@ -125,7 +126,7 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
                     updateState(context, index, false);
                 }
             }
-        } else if (context.age() >= chainStates.resetTime(context.source())) {
+        } else if (context.age() >= chainState.resetAge()) {
             deactivate(context);
             return true;
         }
@@ -135,7 +136,6 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
     @Override
     public void deactivate(AbilityContext context) {
         context.caster().getData(WotrAttachments.ABILITY_STATES).setState(context.source(), 0);
-        context.caster().getData(WotrAttachments.CHAIN_ABILITY_STATES).clear(context.source());
     }
 
     public boolean isActive(LivingEntity entity, AbilitySource source) {
