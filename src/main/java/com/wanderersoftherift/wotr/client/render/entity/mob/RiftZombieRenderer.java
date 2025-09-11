@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.client.render.entity.mob;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
+import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ZombieModel;
@@ -35,8 +35,8 @@ public class RiftZombieRenderer
     @Override
     public void extractRenderState(RiftZombie riftZombie, RiftZombieRenderState riftState, float partialTick) {
         super.extractRenderState(riftZombie, riftState, partialTick);
-        Holder<MobVariantData> varientHolder = riftZombie.getVariant();
-        varientHolder.unwrap().left().ifPresent(key -> riftState.variant = key.location());
+        Holder<RiftMobVariantData> varientHolder = riftZombie.getVariant();
+        riftState.variant = varientHolder.value().texture();
     }
 
     @Override
@@ -47,7 +47,8 @@ public class RiftZombieRenderer
         } else {
             variantId = WanderersOfTheRift.id("default_zombie");
         }
-        Registry<MobVariantData> registry = Minecraft.getInstance().level.registryAccess().lookupOrThrow(MOB_VARIANTS);
-        return MobVariantData.getTextureForVariant(variantId, registry);
+        Registry<RiftMobVariantData> registry = Minecraft.getInstance().level.registryAccess()
+                .lookupOrThrow(MOB_VARIANTS);
+        return RiftMobVariantData.getTextureForVariant(variantId, registry);
     }
 }

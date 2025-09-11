@@ -6,10 +6,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID)
-public class MobVariantEventHandler {
+public class RiftMobVariantEventHandler {
     @SubscribeEvent
     public static void onEntityFinalizeSpawn(FinalizeSpawnEvent event) {
-        if (event.getEntity() instanceof MobVariantInterface mob) {
+        if (event.getEntity() instanceof RiftMobVariants mob) {
             mob.applyVariantStats();
         }
     }

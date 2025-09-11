@@ -26,7 +26,7 @@ public class LaxRegistryCodec<E> implements Codec<Holder<E>> {
     private final ResourceKey<? extends Registry<E>> registryKey;
     private final Codec<Holder<E>> registryCodec;
 
-    public LaxRegistryCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<Holder<E>> baseCodec) {
+    private LaxRegistryCodec(ResourceKey<? extends Registry<E>> registryKey, Codec<Holder<E>> baseCodec) {
         this.registryKey = registryKey;
         this.registryCodec = baseCodec;
     }

@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.client.render.entity.mob;
 
-import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
+import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.RiftSkeleton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -26,13 +26,14 @@ public class RiftSkeletonRenderer extends AbstractSkeletonRenderer<RiftSkeleton,
     @Override
     public void extractRenderState(RiftSkeleton riftSkeleton, RiftSkeletonRenderState riftState, float partialTick) {
         super.extractRenderState(riftSkeleton, riftState, partialTick);
-        Holder<MobVariantData> varientHolder = riftSkeleton.getVariant();
-        varientHolder.unwrap().left().ifPresent(key -> riftState.variant = key.location());
+        Holder<RiftMobVariantData> varientHolder = riftSkeleton.getVariant();
+        riftState.variant = varientHolder.value().texture();
     }
 
     @Override
     public ResourceLocation getTextureLocation(RiftSkeletonRenderState riftSkeletonRenderState) {
-        Registry<MobVariantData> registry = Minecraft.getInstance().level.registryAccess().lookupOrThrow(MOB_VARIANTS);
-        return MobVariantData.getTextureForVariant(riftSkeletonRenderState.variant, registry);
+        Registry<RiftMobVariantData> registry = Minecraft.getInstance().level.registryAccess()
+                .lookupOrThrow(MOB_VARIANTS);
+        return RiftMobVariantData.getTextureForVariant(riftSkeletonRenderState.variant, registry);
     }
 }

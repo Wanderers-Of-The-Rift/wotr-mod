@@ -9,19 +9,19 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.level.Level;
 
-public class RiftSkeleton extends Skeleton implements MobVariantInterface {
-    private static final EntityDataAccessor<Holder<MobVariantData>> DATA_VARIANT = SynchedEntityData
+public class RiftSkeleton extends Skeleton implements RiftMobVariants {
+    private static final EntityDataAccessor<Holder<RiftMobVariantData>> DATA_VARIANT = SynchedEntityData
             .defineId(RiftSkeleton.class, WotrEntityDataSerializers.MOB_VARIANT_HOLDER.get());
 
     public RiftSkeleton(EntityType<? extends RiftSkeleton> type, Level level) {
         super(type, level);
     }
 
-    public Holder<MobVariantData> getVariant() {
+    public Holder<RiftMobVariantData> getVariant() {
         return this.entityData.get(DATA_VARIANT);
     }
 
-    public void setVariant(Holder<MobVariantData> variant) {
+    public void setVariant(Holder<RiftMobVariantData> variant) {
         this.entityData.set(DATA_VARIANT, variant);
     }
 

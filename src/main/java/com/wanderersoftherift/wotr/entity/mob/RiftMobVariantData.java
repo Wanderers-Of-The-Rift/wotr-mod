@@ -10,7 +10,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -19,19 +18,25 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.Map;
 
-public record MobVariantData(Map<Holder<Attribute>, Double> attributes, ResourceLocation texture) {
-    public static final Codec<MobVariantData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public record RiftMobVariantData(Map<Holder<Attribute>, Double> attributes, ResourceLocation texture) {
+    public static final Codec<RiftMobVariantData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.unboundedMap(
-                    new LaxRegistryCodec<>(Registries.ATTRIBUTE, RegistryFixedCodec.create(Registries.ATTRIBUTE)),
-                    Codec.DOUBLE).fieldOf("stats").forGetter(MobVariantData::attributes),
-            ResourceLocation.CODEC.fieldOf("texture").forGetter(MobVariantData::texture)
-    ).apply(instance, MobVariantData::new)
+                    LaxRegistryCodec.create(Registries.ATTRIBUTE), Codec.DOUBLE)
+                    .fieldOf("stats")
+                    .forGetter(RiftMobVariantData::attributes),
+            ResourceLocation.CODEC.fieldOf("texture").forGetter(RiftMobVariantData::texture)
+    ).apply(instance, RiftMobVariantData::new)
     );
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<MobVariantData>> STREAM_CODEC = ByteBufCodecs
+    public static final Codec<Holder<RiftMobVariantData>> VARIANT_HOLDER_CODEC = LaxRegistryCodec
+            .create(WotrRegistries.Keys.MOB_VARIANTS);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<RiftMobVariantData>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MOB_VARIANTS);
 
-    public static ResourceLocation getTextureForVariant(ResourceLocation variantId, Registry<MobVariantData> registry) {
+    public static ResourceLocation getTextureForVariant(
+            ResourceLocation variantId,
+            Registry<RiftMobVariantData> registry) {
         return registry.get(variantId).map(ref -> ref.value().texture()).orElse(variantId);
     }
 

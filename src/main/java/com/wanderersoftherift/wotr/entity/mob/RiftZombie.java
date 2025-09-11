@@ -12,19 +12,19 @@ import net.minecraft.world.level.Level;
 // Requires: RiftZombie.java, RiftZombieRenderer.java, RiftZombieRenderState.java
 // Append to: WotrEntityAttributes.java, WotrEntities.java, WotrEntityRenderers.java
 // Uses variant_zombie.json for stats, or default attributes for missing stats.
-public class RiftZombie extends Zombie implements MobVariantInterface {
-    private static final EntityDataAccessor<Holder<MobVariantData>> DATA_VARIANT = SynchedEntityData
+public class RiftZombie extends Zombie implements RiftMobVariants {
+    private static final EntityDataAccessor<Holder<RiftMobVariantData>> DATA_VARIANT = SynchedEntityData
             .defineId(RiftZombie.class, WotrEntityDataSerializers.MOB_VARIANT_HOLDER.get());
 
     public RiftZombie(EntityType<? extends RiftZombie> type, Level level) {
         super(type, level);
     }
 
-    public Holder<MobVariantData> getVariant() {
+    public Holder<RiftMobVariantData> getVariant() {
         return this.entityData.get(DATA_VARIANT);
     }
 
-    public void setVariant(Holder<MobVariantData> variant) {
+    public void setVariant(Holder<RiftMobVariantData> variant) {
         this.entityData.set(DATA_VARIANT, variant);
     }
 
