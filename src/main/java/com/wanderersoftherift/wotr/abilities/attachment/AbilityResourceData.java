@@ -47,7 +47,7 @@ public class AbilityResourceData {
             var rechargeAttribute = resource.value().recharge();
 
             if (amount != max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
-                AbilityTracker.forEntity((Entity) holder)
+                TriggerTracker.forEntity((Entity) holder)
                         .registerTriggerable(rechargeTrigger.get(),
                                 new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
             }
@@ -100,12 +100,12 @@ public class AbilityResourceData {
         var rechargeAttribute = resource.value().recharge();
 
         if (oldAmount != max && amount == max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
-            AbilityTracker.forEntity((Entity) holder)
+            TriggerTracker.forEntity((Entity) holder)
                     .unregisterTriggerable(rechargeTrigger.get(),
                             new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
         }
         if (oldAmount == max && amount != max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
-            AbilityTracker.forEntity((Entity) holder)
+            TriggerTracker.forEntity((Entity) holder)
                     .registerTriggerable(rechargeTrigger.get(),
                             new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
         }

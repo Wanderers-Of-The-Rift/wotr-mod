@@ -3,11 +3,11 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
+import com.wanderersoftherift.wotr.abilities.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
+import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -18,20 +18,19 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class AbilityTracker {
-    private final Multimap<Holder<TrackedAbilityTrigger.TriggerType<?>>, Triggerable> abilities = ArrayListMultimap
-            .create();
+public class TriggerTracker {
+    private final Multimap<Holder<TrackableTrigger.TriggerType<?>>, Triggerable> abilities = ArrayListMultimap.create();
     private final IAttachmentHolder holder;
 
-    public AbilityTracker(IAttachmentHolder holder) {
+    public TriggerTracker(IAttachmentHolder holder) {
         this.holder = holder;
     }
 
-    public static AbilityTracker forEntity(Entity entity) {
+    public static TriggerTracker forEntity(Entity entity) {
         return entity.getData(WotrAttachments.ABILITY_TRACKER.get());
     }
 
-    public static Optional<? extends AbilityTracker> forEntityNullable(Entity entity) {
+    public static Optional<? extends TriggerTracker> forEntityNullable(Entity entity) {
         return entity.getExistingData(WotrAttachments.ABILITY_TRACKER.get());
     }
 
@@ -42,7 +41,7 @@ public class AbilityTracker {
         return null;
     }
 
-    public boolean triggerAbilities(TrackedAbilityTrigger activation) {
+    public boolean trigger(TrackableTrigger activation) {
         if (!(holder instanceof LivingEntity entity)) {
             return false;
         }
@@ -52,27 +51,27 @@ public class AbilityTracker {
                 .wrapAsHolder(activation.type());
         var triggerables = new ArrayList<>(abilities.get(typeHolder));
         for (Triggerable tracked : triggerables) {
-            result |= tracked.trigger(entity);
+            result |= tracked.trigger(entity, activation);
         }
         return result;
     }
 
-    public boolean hasAbilitiesOnTrigger(Holder<TrackedAbilityTrigger.TriggerType<?>> activation) {
+    public boolean hasAbilitiesOnTrigger(Holder<TrackableTrigger.TriggerType<?>> activation) {
         return !abilities.get(activation).isEmpty();
     }
 
-    public void registerAbility(AbilityModifier abilityModifier, AbilitySource source) {
-        registerAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), source);
+    public void registerAbilityTrigger(TriggerableAbilityModifier abilityModifier, AbilitySource source) {
+        registerAbilityTrigger(abilityModifier.trigger(), abilityModifier.providedAbility(), source);
     }
 
-    public void registerAbility(
-            Holder<TrackedAbilityTrigger.TriggerType<?>> trigger,
+    public void registerAbilityTrigger(
+            Holder<TrackableTrigger.TriggerType<?>> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
-        registerTriggerable(trigger, new TrackedAbility(source, abilityHolder));
+        registerTriggerable(trigger, new TriggerableAbility(source, abilityHolder));
     }
 
-    public void registerTriggerable(Holder<TrackedAbilityTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
+    public void registerTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
         abilities.put(trigger, triggerable);
         if (holder instanceof Entity livingEntity && livingEntity.level() instanceof ServerLevel serverLevel) {
             var registryTypeSupplier = trigger.value().registry();
@@ -82,24 +81,24 @@ public class AbilityTracker {
         }
     }
 
-    public void unregisterAbility(AbilityModifier abilityModifier, AbilitySource source) {
-        unregisterAbility(abilityModifier.trigger(), abilityModifier.providedAbility(), source);
+    public void unregisterAbilityTrigger(TriggerableAbilityModifier abilityModifier, AbilitySource source) {
+        unregisterAbilityTrigger(abilityModifier.trigger(), abilityModifier.providedAbility(), source);
     }
 
-    public void unregisterAbility(
-            Holder<TrackedAbilityTrigger.TriggerType<?>> trigger,
+    public void unregisterAbilityTrigger(
+            Holder<TrackableTrigger.TriggerType<?>> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
-        unregisterTriggerable(trigger, new TrackedAbility(source, abilityHolder));
+        unregisterTriggerable(trigger, new TriggerableAbility(source, abilityHolder));
     }
 
-    public void unregisterTriggerable(Holder<TrackedAbilityTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
+    public void unregisterTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
         abilities.get(trigger).removeIf(trackedAbility -> trackedAbility.equals(triggerable));
     }
 
-    record TrackedAbility(AbilitySource source, Holder<Ability> ability) implements Triggerable {
+    record TriggerableAbility(AbilitySource source, Holder<Ability> ability) implements Triggerable {
         @Override
-        public boolean trigger(LivingEntity holder) {
+        public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
             return holder.getData(WotrAttachments.ONGOING_ABILITIES)
                     .activate(source, source.getItem((LivingEntity) holder), ability);
         }
@@ -107,7 +106,7 @@ public class AbilityTracker {
 
     public interface Triggerable {
 
-        boolean trigger(LivingEntity holder);
+        boolean trigger(LivingEntity holder, TrackableTrigger activation);
     }
 
 }

@@ -7,10 +7,10 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityResourceData;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
@@ -98,8 +98,8 @@ public class WotrAttachments {
             "ability_states",
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
 
-    public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
-            "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());
+    public static final Supplier<AttachmentType<? extends TriggerTracker>> TRIGGER_TRACKER = ATTACHMENT_TYPES.register(
+            "trigger_tracker", () -> AttachmentType.builder(TriggerTracker::new).build());
     public static final Supplier<AttachmentType<AbilityEnhancements>> ABILITY_ENHANCEMENTS = ATTACHMENT_TYPES.register(
             "ability_enhancements", () -> AttachmentType.builder(AbilityEnhancements::new).build()
     );

@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
@@ -15,7 +15,7 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import java.util.Optional;
 
 public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Holder<Attribute>> recharge,
-        Optional<Holder<TrackedAbilityTrigger.TriggerType<?>>> rechargeAction) {
+        Optional<Holder<TrackableTrigger.TriggerType<?>>> rechargeAction) {
 
     public static final Codec<Holder<AbilityResource>> HOLDER_CODEC = LaxRegistryCodec
             .create(WotrRegistries.Keys.ABILITY_RESOURCES);
@@ -42,10 +42,10 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
     }
 
     public record AbilityResourceRecharge(Holder<AbilityResource> resource, Holder<Attribute> recharge)
-            implements AbilityTracker.Triggerable {
+            implements TriggerTracker.Triggerable {
 
         @Override
-        public boolean trigger(LivingEntity entity) {
+        public boolean trigger(LivingEntity entity, TrackableTrigger activation) {
             var abilityResources = entity.getData(WotrAttachments.MANA);
             var currentAmount = abilityResources.getAmount(resource);
             var newAmount = Math.min(currentAmount + (float) entity.getAttributeValue(recharge),

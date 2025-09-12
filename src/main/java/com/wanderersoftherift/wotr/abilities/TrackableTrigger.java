@@ -7,11 +7,11 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public interface TrackedAbilityTrigger {
+public interface TrackableTrigger {
 
-    TriggerType type();
+    TriggerType<?> type();
 
-    record TriggerType<T extends TrackedAbilityTrigger>(MapCodec<T> codec,
+    record TriggerType<T extends TrackableTrigger>(MapCodec<T> codec,
             @Nullable Supplier<AttachmentType<TriggerRegistry<T>>> registry) {
     }
 }

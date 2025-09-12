@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
-import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
+import com.wanderersoftherift.wotr.abilities.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
@@ -117,7 +117,7 @@ public class WotrRegistries {
             Keys.THEME_SOURCE_TYPES).create();
     public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
-    public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+    public static final Registry<TrackableTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
             Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
     public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
             Keys.ABILITY_SOURCES).sync(true).create();
@@ -176,8 +176,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
-        public static final ResourceKey<Registry<TrackedAbilityTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
+        public static final ResourceKey<Registry<TrackableTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("trackable_trigger"));
 
         // Quests
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
