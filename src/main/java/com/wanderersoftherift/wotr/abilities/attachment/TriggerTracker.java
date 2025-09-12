@@ -27,11 +27,11 @@ public class TriggerTracker {
     }
 
     public static TriggerTracker forEntity(Entity entity) {
-        return entity.getData(WotrAttachments.ABILITY_TRACKER.get());
+        return entity.getData(WotrAttachments.TRIGGER_TRACKER.get());
     }
 
     public static Optional<? extends TriggerTracker> forEntityNullable(Entity entity) {
-        return entity.getExistingData(WotrAttachments.ABILITY_TRACKER.get());
+        return entity.getExistingData(WotrAttachments.TRIGGER_TRACKER.get());
     }
 
     private Level getLevel() {

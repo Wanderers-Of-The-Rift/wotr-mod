@@ -130,8 +130,6 @@ public class ManaBar implements ConfigurableLayer {
         Vector2i pos = getConfig().getPosition(width, height, guiGraphics.guiWidth(), guiGraphics.guiHeight())
                 .add(offset);
 
-        // todo move with resourceIndex
-
         animCounter += deltaTracker.getGameTimeDeltaPartialTick(true);
         while (animCounter > TICKS_PER_FRAME * NUM_FRAMES) {
             animCounter -= TICKS_PER_FRAME * NUM_FRAMES;

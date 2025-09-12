@@ -20,7 +20,7 @@ public class ManaCommands extends BaseCommand {
 
     private static final DynamicCommandExceptionType ERROR_INVALID_ABILITY_RESOURCE = new DynamicCommandExceptionType(
             id -> Component.translatableEscape("command." + WanderersOfTheRift.MODID + ".invalid_ability_resource",
-                    id)); // todo translation
+                    id));
 
     public ManaCommands() {
         super("mana", Commands.LEVEL_GAMEMASTERS);

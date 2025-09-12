@@ -21,8 +21,8 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record TriggerableAbilityModifier(Holder<Ability> providedAbility, Holder<TrackableTrigger.TriggerType<?>> trigger)
-        implements ModifierEffect {
+public record TriggerableAbilityModifier(Holder<Ability> providedAbility,
+        Holder<TrackableTrigger.TriggerType<?>> trigger) implements ModifierEffect {
 
     public static final MapCodec<TriggerableAbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
@@ -31,7 +31,6 @@ public record TriggerableAbilityModifier(Holder<Ability> providedAbility, Holder
                             .fieldOf("trigger")
                             .forGetter(TriggerableAbilityModifier::trigger)
             ).apply(instance, TriggerableAbilityModifier::new));
-
 
     @Override
     public MapCodec<? extends ModifierEffect> getCodec() {
