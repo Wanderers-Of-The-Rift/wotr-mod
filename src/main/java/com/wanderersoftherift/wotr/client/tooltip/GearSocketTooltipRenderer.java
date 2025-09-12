@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
@@ -102,7 +103,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
                     Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
                             WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()),
                     pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, transform, buffer, Font.DisplayMode.NORMAL, 0,
-                    15_728_880);
+                    LightTexture.FULL_BRIGHT);
             pY += font.lineHeight + 2;
         }
 
@@ -124,7 +125,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
                                         socketComponent.gearSocket().size()))
                                 .withStyle(ChatFormatting.DARK_GRAY)),
                 pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, transform, buffer, Font.DisplayMode.NORMAL, 0,
-                0x00f0_00f0);
+                LightTexture.FULL_BRIGHT);
         pY += 15;
 
         sortSockets(used);
@@ -134,7 +135,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
             int tooltipCount = ModifierRenderHelper.countTooltips(modifierInstance, isKeyDown);
             for (int i = 0; i < tooltipCount; i++) {
                 font.drawInBatch(Component.literal(">"), pX + 20, pY + 12 * i - 1, ChatFormatting.DARK_GRAY.getColor(),
-                        true, transform, buffer, Font.DisplayMode.NORMAL, 0, 0x00f0_00f0);
+                        true, transform, buffer, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
             }
 
             ModifierRenderHelper.renderModifierEffectDescriptions(modifierInstance, isKeyDown, font,
@@ -145,7 +146,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
 
         for (GearSocket ignored : unused) {
             font.drawInBatch(Component.literal(">"), pX + 20, pY - 1, 0x555555, true, transform, buffer,
-                    Font.DisplayMode.NORMAL, 0, 0x00f0_00f0);
+                    Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
             Component display;
             if (isKeyDown) {
                 display = Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".empty_socket")
@@ -154,7 +155,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
                 display = Component.literal("-").withColor(0x19191a);
             }
             font.drawInBatch(display, pX + MODIFIER_DESCRIPTION_HORIZONTAL_OFFSET, pY - 1, 0, true, transform, buffer,
-                    Font.DisplayMode.NORMAL, 0, 0x00f0_00f0);
+                    Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
             pY += SOCKET_LINE_HEIGHT;
         }
     }
