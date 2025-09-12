@@ -84,11 +84,12 @@ public class OngoingAbilities {
             Holder<Ability> ability,
             ItemStack abilityItem,
             AbilitySource source) {
-        var conditions = AbilityConditions.forEntity(entity).condition(ability);
+        var conditions = new HashSet<ResourceLocation>();
         var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(UUID.randomUUID(), ability, entity, abilityItem, source,
                 entity.level(), source.upgrades(entity), enhancements, conditions);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
+            conditions.addAll(AbilityConditions.forEntity(entity).condition(ability));
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
                 return true;
@@ -110,11 +111,12 @@ public class OngoingAbilities {
         boolean existing = existingId.isPresent();
         UUID id = existingId.orElseGet(UUID::randomUUID);
         var upgrades = source.upgrades(entity);
-        var conditions = AbilityConditions.forEntity(entity).condition(ability);
+        var conditions = new HashSet<ResourceLocation>();
         var enhancements = AbilityEnhancements.forEntity(entity).modifiers(ability);
         AbilityContext context = new AbilityContext(id, ability, entity, abilityItem, source, entity.level(), upgrades,
                 enhancements, conditions);
         try (var ignore = context.enableTemporaryUpgradeModifiers()) {
+            conditions.addAll(AbilityConditions.forEntity(entity).condition(ability));
             if (!ability.value().canActivate(context)) {
                 return false;
             }
