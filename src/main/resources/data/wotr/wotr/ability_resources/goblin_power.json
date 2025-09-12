@@ -1,3 +1,6 @@
 {
-    "color": -256
+    "color": -256,
+    "maximum": "wotr:max_goblin",
+    "recharge_amount": "wotr:goblin_regen_rate",
+    "recharge_action": "wotr:loot"
 }

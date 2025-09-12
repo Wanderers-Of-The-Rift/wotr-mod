@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.init.ability;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.DealDamageTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.KillTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.LootTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TakeDamageTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -19,4 +21,8 @@ public class WotrTrackedAbilityTriggers {
             .register("take_damage", () -> TakeDamageTrigger.TRIGGER_TYPE);
     public static final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<DealDamageTrigger>> DEAL_DAMAGE = TRIGGERS
             .register("deal_damage", () -> DealDamageTrigger.TRIGGER_TYPE);
+    public static final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<TakeDamageTrigger>> LOOT = TRIGGERS
+            .register("loot", () -> LootTrigger.TRIGGER_TYPE);
+    public static final DeferredHolder<TrackedAbilityTrigger.TriggerType<?>, TrackedAbilityTrigger.TriggerType<DealDamageTrigger>> KILL = TRIGGERS
+            .register("kill", () -> KillTrigger.TRIGGER_TYPE);
 }

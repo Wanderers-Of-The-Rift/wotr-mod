@@ -11,7 +11,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -40,6 +39,20 @@ public class AbilityResourceData {
     public AbilityResourceData(IAttachmentHolder holder, Map<Holder<AbilityResource>, Float> amounts) {
         this.holder = holder;
         this.amounts.putAll(amounts);
+
+        amounts.forEach((resource, amount) -> {
+
+            var max = resource.value().maxForEntity(holder);
+            var rechargeTrigger = resource.value().rechargeAction();
+            var rechargeAttribute = resource.value().recharge();
+
+            if (amount != max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
+                AbilityTracker.forEntity((Entity) holder)
+                        .registerTriggerable(rechargeTrigger.get(),
+                                new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
+            }
+        });
+
         if (holder instanceof Entity entity) {
             entity.level().getData(WotrAttachments.MANA_ENTITY_REGISTRY).add(entity);
         }
@@ -78,8 +91,24 @@ public class AbilityResourceData {
      * @param value The new value of mana
      */
     public void setAmount(Holder<AbilityResource> resource, float value) {
-        var amount = Math.clamp(value, 0, resource.value().maxForEntity(holder));
+        var max = resource.value().maxForEntity(holder);
+        var amount = Math.clamp(value, 0, max);
+        var oldAmount = this.amounts.getFloat(resource);
         this.amounts.put(resource, amount);
+
+        var rechargeTrigger = resource.value().rechargeAction();
+        var rechargeAttribute = resource.value().recharge();
+
+        if (oldAmount != max && amount == max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
+            AbilityTracker.forEntity((Entity) holder)
+                    .unregisterTriggerable(rechargeTrigger.get(),
+                            new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
+        }
+        if (oldAmount == max && amount != max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
+            AbilityTracker.forEntity((Entity) holder)
+                    .registerTriggerable(rechargeTrigger.get(),
+                            new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
+        }
 
         if (holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new ManaChangePayload(resource, amount));
@@ -89,14 +118,12 @@ public class AbilityResourceData {
 
     // Regenerates and/or degenerates the pool.
     public void tick() {
-        if (!(holder instanceof LivingEntity entity)) {
-            return;
-        }
-
-        amounts.forEach((key, value) -> {
-            amounts.put(key, key.value().tickForEntity(holder, value));
-        });
+        return; // don't
         /*
+         * if (!(holder instanceof LivingEntity entity)) { return; }
+         * 
+         * amounts.forEach((key, value) -> { amounts.put(key, key.value().tickForEntity(holder, value)); });
+         *
          * float delta = 0; AttributeInstance manaRegenAttribute = entity.getAttribute(WotrAttributes.MANA_REGEN_RATE);
          * if (manaRegenAttribute != null) { delta += (float) manaRegenAttribute.getValue(); } AttributeInstance
          * manaDegenAttribute = entity.getAttribute(WotrAttributes.MANA_DEGEN_RATE); if (manaDegenAttribute != null) {

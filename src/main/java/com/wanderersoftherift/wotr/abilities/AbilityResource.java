@@ -2,30 +2,56 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
-public record AbilityResource(int color) {
+import java.util.Optional;
+
+public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Holder<Attribute>> recharge,
+        Optional<Holder<TrackedAbilityTrigger.TriggerType<?>>> rechargeAction) {
+
     public static final Codec<Holder<AbilityResource>> HOLDER_CODEC = LaxRegistryCodec
             .create(WotrRegistries.Keys.ABILITY_RESOURCES);
     public static final Codec<AbilityResource> DIRECT_CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    Codec.INT.fieldOf("color").forGetter(AbilityResource::color)
+                    Codec.INT.fieldOf("color").forGetter(AbilityResource::color),
+                    Attribute.CODEC.fieldOf("maximum").forGetter(AbilityResource::maximum),
+                    Attribute.CODEC.optionalFieldOf("recharge_amount").forGetter(AbilityResource::recharge),
+                    WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
+                            .optionalFieldOf("recharge_action")
+                            .forGetter(AbilityResource::rechargeAction)
             ).apply(instance, AbilityResource::new)
     );
 
     public float maxForEntity(IAttachmentHolder holder) {
-        return 100; // todo
-    }
-
-    public float tickForEntity(IAttachmentHolder holder, float value) {
-        return value; // todo
+        if (holder instanceof LivingEntity e) {
+            return (float) e.getAttributeValue(maximum);
+        }
+        return 0;
     }
 
     public float respawnValueForEntity(Entity entity) {
-        return 100; // todo
+        return maxForEntity(entity);
+    }
+
+    public record AbilityResourceRecharge(Holder<AbilityResource> resource, Holder<Attribute> recharge)
+            implements AbilityTracker.Triggerable {
+
+        @Override
+        public boolean trigger(LivingEntity entity) {
+            var abilityResources = entity.getData(WotrAttachments.MANA);
+            var currentAmount = abilityResources.getAmount(resource);
+            var newAmount = Math.min(currentAmount + (float) entity.getAttributeValue(recharge),
+                    resource.value().maxForEntity(entity));
+            abilityResources.setAmount(resource, newAmount);
+            return newAmount > currentAmount;
+        }
     }
 }

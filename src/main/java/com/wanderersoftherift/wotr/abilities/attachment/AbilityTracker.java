@@ -15,11 +15,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
-import java.util.Objects;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class AbilityTracker {
-    private final Multimap<Holder<TrackedAbilityTrigger.TriggerType<?>>, TrackedAbility> abilities = ArrayListMultimap
+    private final Multimap<Holder<TrackedAbilityTrigger.TriggerType<?>>, Triggerable> abilities = ArrayListMultimap
             .create();
     private final IAttachmentHolder holder;
 
@@ -50,9 +50,9 @@ public class AbilityTracker {
         var typeHolder = getLevel().registryAccess()
                 .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
                 .wrapAsHolder(activation.type());
-        for (var tracked : abilities.get(typeHolder)) {
-            result |= holder.getData(WotrAttachments.ONGOING_ABILITIES)
-                    .activate(tracked.source, tracked.source.getItem(entity), tracked.ability);
+        var triggerables = new ArrayList<>(abilities.get(typeHolder));
+        for (Triggerable tracked : triggerables) {
+            result |= tracked.trigger(entity);
         }
         return result;
     }
@@ -69,7 +69,11 @@ public class AbilityTracker {
             Holder<TrackedAbilityTrigger.TriggerType<?>> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
-        abilities.put(trigger, new TrackedAbility(source, abilityHolder));
+        registerTriggerable(trigger, new TrackedAbility(source, abilityHolder));
+    }
+
+    public void registerTriggerable(Holder<TrackedAbilityTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
+        abilities.put(trigger, triggerable);
         if (holder instanceof Entity livingEntity && livingEntity.level() instanceof ServerLevel serverLevel) {
             var registryTypeSupplier = trigger.value().registry();
             if (registryTypeSupplier != null) {
@@ -86,12 +90,24 @@ public class AbilityTracker {
             Holder<TrackedAbilityTrigger.TriggerType<?>> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
-        abilities.get(trigger)
-                .removeIf(trackedAbility -> Objects.equals(trackedAbility.ability, abilityHolder)
-                        && Objects.equals(source, trackedAbility.source));
+        unregisterTriggerable(trigger, new TrackedAbility(source, abilityHolder));
     }
 
-    record TrackedAbility(AbilitySource source, Holder<Ability> ability) {
+    public void unregisterTriggerable(Holder<TrackedAbilityTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
+        abilities.get(trigger).removeIf(trackedAbility -> trackedAbility.equals(triggerable));
+    }
+
+    record TrackedAbility(AbilitySource source, Holder<Ability> ability) implements Triggerable {
+        @Override
+        public boolean trigger(LivingEntity holder) {
+            return holder.getData(WotrAttachments.ONGOING_ABILITIES)
+                    .activate(source, source.getItem((LivingEntity) holder), ability);
+        }
+    }
+
+    public interface Triggerable {
+
+        boolean trigger(LivingEntity holder);
     }
 
 }

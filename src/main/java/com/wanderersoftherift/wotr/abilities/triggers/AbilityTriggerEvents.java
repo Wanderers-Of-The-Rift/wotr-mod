@@ -2,12 +2,15 @@ package com.wanderersoftherift.wotr.abilities.triggers;
 
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.loot.LootEvent;
 import com.wanderersoftherift.wotr.util.SerializableDamageSource;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
@@ -38,6 +41,26 @@ public class AbilityTriggerEvents {
             AbilityTracker.forEntity(attacker)
                     .triggerAbilities(new DealDamageTrigger(
                             new SerializableDamageSource(event.getSource()), victim.getUUID(), event.getAmount()));
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void killEvent(LivingDeathEvent event) {
+        var victim = event.getEntity();
+        var attacker = event.getSource().getEntity();
+        if (attacker != null) {
+            AbilityTracker.forEntity(attacker)
+                    .triggerAbilities(new KillTrigger(
+                            new SerializableDamageSource(event.getSource()), victim.getUUID()));
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void lootEvent(LootEvent.PlayerOpensChest event) {
+        // todo this currently doesn't trigger properly when breaking chests
+        if (event.getLootContext().hasParameter(LootContextParams.THIS_ENTITY)) {
+            var looter = event.getLootContext().getParameter(LootContextParams.THIS_ENTITY);
+            AbilityTracker.forEntity(looter).triggerAbilities(LootTrigger.INSTANCE);
         }
     }
 }
