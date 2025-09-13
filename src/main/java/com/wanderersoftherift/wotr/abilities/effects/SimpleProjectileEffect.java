@@ -8,8 +8,8 @@ import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -109,9 +109,9 @@ public class SimpleProjectileEffect extends AbilityEffect {
     }
 
     @Override
-    protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
+    protected boolean isRelevantToThis(ModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
-            Holder<Attribute> attribute = attributeModifier.getAttribute();
+            Holder<Attribute> attribute = attributeModifier.attribute();
             return WotrAttributes.PROJECTILE_SPREAD.equals(attribute)
                     || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
                     || WotrAttributes.PROJECTILE_SPEED.equals(attribute);

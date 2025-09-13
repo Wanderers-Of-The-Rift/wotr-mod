@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -75,8 +75,8 @@ public class DamageEffect extends AbilityEffect {
     }
 
     @Override
-    public boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevantToThis(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.ABILITY_DAMAGE.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.ABILITY_DAMAGE.equals(attributeModifierEffect.attribute());
     }
 }

@@ -8,8 +8,8 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 
 public record ManaCost(float amount, boolean consume) implements AbilityRequirement {
     public static final MapCodec<ManaCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -37,8 +37,8 @@ public record ManaCost(float amount, boolean consume) implements AbilityRequirem
     }
 
     @Override
-    public boolean isRelevant(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevant(ModifierEffect modifierEffect) {
         return consume && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.MANA_COST.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.MANA_COST.equals(attributeModifierEffect.attribute());
     }
 }

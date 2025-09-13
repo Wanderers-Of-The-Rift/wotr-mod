@@ -9,18 +9,20 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
+import com.wanderersoftherift.wotr.util.ComponentUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Objects;
+import java.util.List;
 
-public final class AbilityModifier extends AbstractModifierEffect {
+public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.TriggerType<?>> trigger)
+        implements ModifierEffect {
 
     public static final MapCodec<AbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
@@ -30,16 +32,8 @@ public final class AbilityModifier extends AbstractModifierEffect {
                                     .forGetter(AbilityModifier::trigger)
                     ).apply(instance, AbilityModifier::new));
 
-    private final Holder<Ability> providedAbility;
-    private final Holder<TrackedAbilityTrigger.TriggerType<?>> trigger;
-
-    public AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.TriggerType<?>> trigger) {
-        this.providedAbility = providedAbility;
-        this.trigger = trigger;
-    }
-
     @Override
-    public MapCodec<? extends AbstractModifierEffect> getCodec() {
+    public MapCodec<? extends ModifierEffect> getCodec() {
         return CODEC;
     }
 
@@ -54,45 +48,33 @@ public final class AbilityModifier extends AbstractModifierEffect {
     }
 
     @Override
-    public TooltipComponent getTooltipComponent(ItemStack stack, float roll, Style style) {
+    public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
+        var base = getBaseTooltipComponent(stack, roll, style);
+        return List.of(new ImageComponent(base.stack(),
+                ComponentUtil.mutable(base.base()).append(getTierInfoString(tier)), base.asset()));
+    }
+
+    @Override
+    public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+        return List.of(getBaseTooltipComponent(stack, roll, style));
+    }
+
+    public ImageComponent getBaseTooltipComponent(ItemStack stack, float roll, Style style) {
         var text = Component.translatable(
                 WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
                         WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
                 Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
         );
 
-        return new ImageComponent(stack, text,
-                WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
+        return new ImageComponent(stack, text.withStyle(style),
+                providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon()));
     }
 
-    public Holder<Ability> providedAbility() {
-        return providedAbility;
+    private String getTierInfoString(int tier) {
+        return " (T%d)".formatted(tier);
     }
 
-    public Holder<TrackedAbilityTrigger.TriggerType<?>> trigger() {
-        return trigger;
+    private Component getTierInfo(int tier) {
+        return Component.literal(getTierInfoString(tier)).withStyle(ChatFormatting.DARK_GRAY);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        var that = (AbilityModifier) obj;
-        return Objects.equals(this.providedAbility, that.providedAbility) && Objects.equals(this.trigger, that.trigger);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(providedAbility, trigger);
-    }
-
-    @Override
-    public String toString() {
-        return "AbilityModifier[" + "providedAbility=" + providedAbility + ", " + "trigger=" + trigger + ']';
-    }
-
 }

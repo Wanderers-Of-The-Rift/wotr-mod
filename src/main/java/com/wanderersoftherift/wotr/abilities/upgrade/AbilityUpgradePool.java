@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.util.FastUtils;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -293,7 +293,7 @@ public class AbilityUpgradePool {
     }
 
     private static boolean isRelevant(AbilityUpgrade upgrade, Ability ability) {
-        for (AbstractModifierEffect modifierEffect : upgrade.modifierEffects()) {
+        for (ModifierEffect modifierEffect : upgrade.modifierEffects()) {
             if (!ability.isRelevantModifier(modifierEffect)) {
                 return false;
             }

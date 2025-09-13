@@ -3,110 +3,95 @@
     "color": "#8B0000"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_damage",
-          "id": "wotr:attack_heavy",
-          "max_roll": 0.4000000059604645,
-          "min_roll": 0.0,
-          "operation": "add_multiplied_base"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_speed",
-          "id": "wotr:attack_heavy",
-          "max_roll": -0.5,
-          "min_roll": -0.25,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_damage",
-          "id": "wotr:attack_heavy",
-          "max_roll": 0.800000011920929,
-          "min_roll": 0.4000000059604645,
-          "operation": "add_multiplied_base"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_speed",
-          "id": "wotr:attack_heavy",
-          "max_roll": -0.5,
-          "min_roll": -0.25,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_damage",
-          "id": "wotr:attack_heavy",
-          "max_roll": 1.2000000476837158,
-          "min_roll": 0.800000011920929,
-          "operation": "add_multiplied_base"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_speed",
-          "id": "wotr:attack_heavy",
-          "max_roll": -0.5,
-          "min_roll": -0.25,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 3
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_damage",
-          "id": "wotr:attack_heavy",
-          "max_roll": 1.600000023841858,
-          "min_roll": 1.2000000476837158,
-          "operation": "add_multiplied_base"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_speed",
-          "id": "wotr:attack_heavy",
-          "max_roll": -0.5,
-          "min_roll": -0.25,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 4
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_damage",
-          "id": "wotr:attack_heavy",
-          "max_roll": 2.0,
-          "min_roll": 1.600000023841858,
-          "operation": "add_multiplied_base"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_speed",
-          "id": "wotr:attack_heavy",
-          "max_roll": -0.5,
-          "min_roll": -0.25,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 5
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_damage",
+        "id": "wotr:attack_heavy",
+        "max_roll": 0.4000000059604645,
+        "min_roll": 0.0,
+        "operation": "add_multiplied_base"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_speed",
+        "id": "wotr:attack_heavy",
+        "max_roll": -0.5,
+        "min_roll": -0.25,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_damage",
+        "id": "wotr:attack_heavy",
+        "max_roll": 0.800000011920929,
+        "min_roll": 0.4000000059604645,
+        "operation": "add_multiplied_base"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_speed",
+        "id": "wotr:attack_heavy",
+        "max_roll": -0.5,
+        "min_roll": -0.25,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_damage",
+        "id": "wotr:attack_heavy",
+        "max_roll": 1.2000000476837158,
+        "min_roll": 0.800000011920929,
+        "operation": "add_multiplied_base"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_speed",
+        "id": "wotr:attack_heavy",
+        "max_roll": -0.5,
+        "min_roll": -0.25,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_damage",
+        "id": "wotr:attack_heavy",
+        "max_roll": 1.600000023841858,
+        "min_roll": 1.2000000476837158,
+        "operation": "add_multiplied_base"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_speed",
+        "id": "wotr:attack_heavy",
+        "max_roll": -0.5,
+        "min_roll": -0.25,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_damage",
+        "id": "wotr:attack_heavy",
+        "max_roll": 2.0,
+        "min_roll": 1.600000023841858,
+        "operation": "add_multiplied_base"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_speed",
+        "id": "wotr:attack_heavy",
+        "max_roll": -0.5,
+        "min_roll": -0.25,
+        "operation": "add_multiplied_base"
+      }
+    ]
   ]
 }

@@ -15,7 +15,7 @@
     }
   ],
   "name": {
-    "translate": "runegem.wotr.defense_raw"
+    "translate": "runegem.wotr.critical_raw"
   },
   "shape": "diamond",
   "tier": "raw"

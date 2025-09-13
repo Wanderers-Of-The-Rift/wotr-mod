@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -107,7 +107,7 @@ public abstract class Ability {
 
     ///  Upgrade support
 
-    public boolean isRelevantModifier(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevantModifier(ModifierEffect modifierEffect) {
         return activationRequirements.stream().anyMatch(x -> x.isRelevant(modifierEffect));
     }
 

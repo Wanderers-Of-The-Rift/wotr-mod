@@ -1,0 +1,16 @@
+{
+    "style": {
+        "color": "#cc8811"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:ability_enhancement",
+                "ability": [ "wotr:fireball", "wotr:icicles" ],
+                "modifier": "wotr:ability_damage_flat",
+                "tier": 1
+            }
+        ]
+
+    ]
+}

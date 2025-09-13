@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.modifier.source;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -35,7 +35,7 @@ public record AbilityUpgradeModifierSource(AbilitySource ability, int selection)
     }
 
     @Override
-    public List<AbstractModifierEffect> getModifierEffects(Entity entity) {
+    public List<ModifierEffect> getModifierEffects(Entity entity) {
         return ability.upgrades(entity).get(selection).value().modifierEffects();
     }
 }

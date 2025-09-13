@@ -4,9 +4,8 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.Modifier;
-import com.wanderersoftherift.wotr.modifier.ModifierTier;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -328,30 +327,30 @@ public class WotrModifierProvider {
         );
     }
 
-    private static List<ModifierTier> generateEqualRollSpread(
+    private static List<List<ModifierEffect>> generateEqualRollSpread(
             int tiers,
             List<ToBeTieredModifierEffect> toBeTieredModifierEffectList,
-            List<AbstractModifierEffect> untieredModifiers) {
-        List<ModifierTier> modifierTiers = new ArrayList<>();
+            List<ModifierEffect> untieredModifiers) {
+        List<List<ModifierEffect>> modifierTiers = new ArrayList<>();
         for (int i = 0; i < tiers; i++) {
-            List<AbstractModifierEffect> modifierEffects = new ArrayList<>();
+            List<ModifierEffect> modifierEffects = new ArrayList<>();
             for (ToBeTieredModifierEffect toBeTieredModifierEffect : toBeTieredModifierEffectList) {
-                AbstractModifierEffect modifierEffectTier = getTieredModifierEffect(tiers, i, toBeTieredModifierEffect);
+                ModifierEffect modifierEffectTier = getTieredModifierEffect(tiers, i, toBeTieredModifierEffect);
                 modifierEffects.add(modifierEffectTier);
                 modifierEffects.addAll(untieredModifiers);
             }
-            modifierTiers.add(new ModifierTier(i + 1, modifierEffects));
+            modifierTiers.add(modifierEffects);
         }
         return modifierTiers;
     }
 
-    private static List<ModifierTier> generateEqualRollSpread(
+    private static List<List<ModifierEffect>> generateEqualRollSpread(
             int tiers,
             List<ToBeTieredModifierEffect> toBeTieredModifierEffectList) {
         return generateEqualRollSpread(tiers, toBeTieredModifierEffectList, List.of());
     }
 
-    private static AbstractModifierEffect getTieredModifierEffect(
+    private static ModifierEffect getTieredModifierEffect(
             int tiers,
             int tier,
             ToBeTieredModifierEffect toBeTieredModifierEffect) {
@@ -366,7 +365,7 @@ public class WotrModifierProvider {
         return toBeTieredModifierEffect.buildModifierEffect.apply(minRoll, maxRoll);
     }
 
-    private static BiFunction<Float, Float, AbstractModifierEffect> attributeModifierEffectGetter(
+    private static BiFunction<Float, Float, ModifierEffect> attributeModifierEffectGetter(
             ResourceLocation id,
             Holder<Attribute> attribute,
             AttributeModifier.Operation operation) {
@@ -378,7 +377,7 @@ public class WotrModifierProvider {
     }
 
     private record ToBeTieredModifierEffect(float totalMinRoll, float totalMaxRoll,
-            BiFunction<Float, Float, AbstractModifierEffect> buildModifierEffect) {
+            BiFunction<Float, Float, ModifierEffect> buildModifierEffect) {
     }
 
     private static void registerModifier(

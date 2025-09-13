@@ -3,44 +3,35 @@
     "color": "#FF8C00"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_knockback",
-          "id": "wotr:knockback",
-          "max_roll": 2.5,
-          "min_roll": 0.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_knockback",
-          "id": "wotr:knockback",
-          "max_roll": 5.0,
-          "min_roll": 2.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:attack_knockback",
-          "id": "wotr:knockback",
-          "max_roll": 7.5,
-          "min_roll": 5.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_knockback",
+        "id": "wotr:knockback",
+        "max_roll": 2.5,
+        "min_roll": 0.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_knockback",
+        "id": "wotr:knockback",
+        "max_roll": 5.0,
+        "min_roll": 2.5,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:attack_knockback",
+        "id": "wotr:knockback",
+        "max_roll": 7.5,
+        "min_roll": 5.0,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

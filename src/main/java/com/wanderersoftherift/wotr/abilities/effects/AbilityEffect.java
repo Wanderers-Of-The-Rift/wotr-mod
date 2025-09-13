@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
@@ -68,7 +68,7 @@ public abstract class AbilityEffect {
      * @param modifierEffect
      * @return Whether the modifier applies to this effect or its children
      */
-    public final boolean isRelevant(AbstractModifierEffect modifierEffect) {
+    public final boolean isRelevant(ModifierEffect modifierEffect) {
         if (isRelevantToThis(modifierEffect)) {
             return true;
         }
@@ -90,7 +90,7 @@ public abstract class AbilityEffect {
      * @param modifierEffect
      * @return Whether the modifier is relevant to this effect
      */
-    protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
+    protected boolean isRelevantToThis(ModifierEffect modifierEffect) {
         return false;
     };
 }

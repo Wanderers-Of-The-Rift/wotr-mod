@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.modifier.source;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -44,7 +44,7 @@ public record AttachEffectModifierSource(UUID uuid, int index) implements Modifi
     }
 
     @Override
-    public List<AbstractModifierEffect> getModifierEffects(Entity entity) {
+    public List<ModifierEffect> getModifierEffects(Entity entity) {
         return entity.getExistingData(WotrAttachments.ATTACHED_EFFECTS)
                 .map(it -> it.getModifiers(uuid).get(index).effects())
                 .orElse(Collections.emptyList());
