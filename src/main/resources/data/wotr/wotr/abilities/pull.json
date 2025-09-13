@@ -19,7 +19,7 @@
         {
           "type": "wotr:movement",
           "velocity": [0, 0, 5],
-          "relativeFrame": "source_from_target"
+          "relative_frame": "source_from_target"
         }
       ]
     }
