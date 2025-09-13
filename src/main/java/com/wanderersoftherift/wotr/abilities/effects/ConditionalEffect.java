@@ -13,28 +13,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ConditionedEffect extends AbilityEffect {
-    public static final MapCodec<ConditionedEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
+public class ConditionalEffect extends AbilityEffect {
+    public static final MapCodec<ConditionalEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
             .commonFields(instance)
             .and(
                     instance.group(
                             AbilityEffect.DIRECT_CODEC.listOf()
                                     .optionalFieldOf("present", Collections.emptyList())
-                                    .forGetter(ConditionedEffect::effectsTrue),
+                                    .forGetter(ConditionalEffect::effectsTrue),
                             AbilityEffect.DIRECT_CODEC.listOf()
                                     .optionalFieldOf("missing", Collections.emptyList())
-                                    .forGetter(ConditionedEffect::effectsFalse),
-                            ResourceLocation.CODEC.fieldOf("condition_name").forGetter(ConditionedEffect::condition)
+                                    .forGetter(ConditionalEffect::effectsFalse),
+                            ResourceLocation.CODEC.fieldOf("condition_name").forGetter(ConditionalEffect::condition)
                     )
             )
-            .apply(instance, ConditionedEffect::new));
+            .apply(instance, ConditionalEffect::new));
 
     private final List<AbilityEffect> effectsTrue;
 
     private final List<AbilityEffect> effectsFalse;
     private final ResourceLocation condition;
 
-    public ConditionedEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
+    public ConditionalEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
             List<AbilityEffect> effectsTrue, List<AbilityEffect> effectsFalse, ResourceLocation condition) {
         super(targeting, effects, particles);
 

@@ -1,9 +1,11 @@
 package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.effects.ConditionalEffect;
 import com.wanderersoftherift.wotr.abilities.sources.AbilityEnhancementModifierSource;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
+import com.wanderersoftherift.wotr.modifier.effect.EnhanceAbilityModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.AbilityUpgradeModifierSource;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -26,13 +28,15 @@ import java.util.UUID;
 /**
  * The context for processing an ability.
  *
- * @param instanceId  A unique id for this ability activation
- * @param ability     The ability itself
- * @param caster      The caster of the ability
- * @param abilityItem The item holding the ability (and any upgrades)
- * @param source      The source the ability was provided by
- * @param level       The level the ability is present in
+ * @param instanceId   A unique id for this ability activation
+ * @param ability      The ability itself
+ * @param caster       The caster of the ability
+ * @param abilityItem  The item holding the ability (and any upgrades)
+ * @param source       The source the ability was provided by
+ * @param level        The level the ability is present in
  * @param upgrades
+ * @param enhancements Extra modifiers added by {@link EnhanceAbilityModifierEffect}
+ * @param conditions   Conditions added for changing effects of {@link ConditionalEffect}
  */
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
         ItemStack abilityItem, AbilitySource source, Level level, @NotNull List<Holder<AbilityUpgrade>> upgrades,

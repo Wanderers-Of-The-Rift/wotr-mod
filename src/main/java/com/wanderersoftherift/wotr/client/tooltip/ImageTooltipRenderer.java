@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -50,12 +51,12 @@ public class ImageTooltipRenderer implements ClientTooltipComponent {
             Function<Component, Component> textTransform) {
         if (component.asset() == null) {
             pFont.drawInBatch(textTransform.apply(component.base()), pX + 2, pY + 1, 0xAABBCC, true, pMatrix4f,
-                    pBufferSource, Font.DisplayMode.NORMAL, 0, 0x00f0_00f0);
+                    pBufferSource, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
             return;
         }
         var textureWidth = TextureUtils.getTextureWidthGL(component.asset());
         pFont.drawInBatch(textTransform.apply(component.base()), pX + textureWidth + 2, pY + 1, 0xAABBCC, true,
-                pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, 0x00f0_00f0);
+                pMatrix4f, pBufferSource, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
     }
 
     public static int getHeight(ImageComponent component, Font font) {

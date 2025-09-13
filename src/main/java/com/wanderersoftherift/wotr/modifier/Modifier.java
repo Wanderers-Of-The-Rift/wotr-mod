@@ -96,6 +96,6 @@ public class Modifier {
         if (tier <= 0 || tier > modifierTiers.size()) {
             return null;
         }
-        return modifierTiers.get(tier - 1); // why is modifierTiers not just a list??
+        return modifierTiers.get(tier - 1);
     }
 }

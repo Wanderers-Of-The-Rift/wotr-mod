@@ -15,14 +15,15 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record ConditionAbilityModifierEffect(Holder<Ability> ability, ResourceLocation condition)
+public record ProvideAbilityConditionModifierEffect(Holder<Ability> ability, ResourceLocation condition)
         implements ModifierEffect {
 
-    public static final MapCodec<ConditionAbilityModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
+    public static final MapCodec<ProvideAbilityConditionModifierEffect> MODIFIER_CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
-                    Ability.CODEC.fieldOf("ability").forGetter(ConditionAbilityModifierEffect::ability),
-                    ResourceLocation.CODEC.fieldOf("condition").forGetter(ConditionAbilityModifierEffect::condition)
-            ).apply(instance, ConditionAbilityModifierEffect::new));
+                    Ability.CODEC.fieldOf("ability").forGetter(ProvideAbilityConditionModifierEffect::ability),
+                    ResourceLocation.CODEC.fieldOf("condition")
+                            .forGetter(ProvideAbilityConditionModifierEffect::condition)
+            ).apply(instance, ProvideAbilityConditionModifierEffect::new));
 
     @Override
     public MapCodec<? extends ModifierEffect> getCodec() {

@@ -17,7 +17,7 @@
       },
       "effects": [
           {
-              "type": "wotr:conditioned",
+              "type": "wotr:conditional",
               "targeting": {
                   "type": "wotr:self"
               },

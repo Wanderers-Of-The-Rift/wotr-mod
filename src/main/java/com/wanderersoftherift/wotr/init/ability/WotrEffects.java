@@ -7,7 +7,7 @@ import com.wanderersoftherift.wotr.abilities.effects.ApplyStatusEffect;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.BlankEffect;
 import com.wanderersoftherift.wotr.abilities.effects.BreakBlockEffect;
-import com.wanderersoftherift.wotr.abilities.effects.ConditionedEffect;
+import com.wanderersoftherift.wotr.abilities.effects.ConditionalEffect;
 import com.wanderersoftherift.wotr.abilities.effects.DamageEffect;
 import com.wanderersoftherift.wotr.abilities.effects.DetachOwnEffect;
 import com.wanderersoftherift.wotr.abilities.effects.HealEffect;
@@ -56,6 +56,6 @@ public class WotrEffects {
             () -> HealEffect.CODEC);
     public static final Supplier<MapCodec<? extends AbilityEffect>> TARGET = EFFECTS.register("target",
             () -> TargetEffect.CODEC);
-    public static final Supplier<MapCodec<? extends AbilityEffect>> CONDITIONED = EFFECTS.register("conditioned",
-            () -> ConditionedEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> CONDITIONAL = EFFECTS.register("conditional",
+            () -> ConditionalEffect.CODEC);
 }
