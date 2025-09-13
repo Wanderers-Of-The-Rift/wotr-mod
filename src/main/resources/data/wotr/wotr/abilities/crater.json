@@ -13,23 +13,21 @@
         "sound": {
           "collision": "minecraft:entity.generic.explode"
         },
-        "velocity": 1.6
+        "velocity": 1.6,
+        "ground_persist_ticks": 0
       },
       "effects": [
         {
           "type": "wotr:targeting",
           "targeting": {
-            "type": "wotr:area",
+            "type": "wotr:radial",
             "range": 4.0,
-            "entities": {
-              "sentiment": "not_friend"
-            }
+            "blocks": "all",
+            "entities": "none"
           },
           "effects": [
             {
-              "type": "wotr:damage",
-              "amount": 10.0,
-              "damage_type": "wotr:fire"
+              "type": "wotr:break"
             }
           ]
         },
@@ -51,12 +49,8 @@
   "icon": "minecraft:textures/item/fire_charge.png",
   "requirements": [
     {
-      "type": "wotr:food_level",
-      "amount": 2
-    },
-    {
       "type": "wotr:cooldown",
-      "ticks": 30
+      "ticks": 20
     }
   ]
 }

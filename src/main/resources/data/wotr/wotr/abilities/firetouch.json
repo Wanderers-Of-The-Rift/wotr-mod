@@ -34,9 +34,7 @@
                 "type": "wotr:area",
                 "range": 10,
                 "include_self": false,
-                "target": {
-                  "sentiment": "any"
-                }
+                "entities": "all"
               },
               "effects": [
                 {
