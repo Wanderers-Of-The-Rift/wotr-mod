@@ -1,0 +1,56 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+    {
+      "type": "wotr:simple_projectile",
+      "config": {
+        "gravity_affected": false,
+        "render": {
+          "animations": "wotr:animations/ability/fireball.animations.json",
+          "model": "wotr:geo/ability/fireball.geo.json",
+          "texture": "wotr:textures/ability/fireball.png"
+        },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
+        },
+        "velocity": 1.6,
+        "ground_persist_ticks": 0
+      },
+      "effects": [
+        {
+          "type": "wotr:targeting",
+          "targeting": {
+            "type": "wotr:radial",
+            "range": 4.0,
+            "blocks": "all",
+            "entities": "none"
+          },
+          "effects": [
+            {
+              "type": "wotr:break"
+            }
+          ]
+        },
+        {
+          "type": "wotr:particle",
+          "particle": {
+            "type": "minecraft:explosion"
+          }
+        }
+      ]
+    },
+    {
+      "type": "wotr:particle",
+      "particle": {
+        "type": "minecraft:bubble"
+      }
+    }
+  ],
+  "icon": "minecraft:textures/item/fire_charge.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 20
+    }
+  ]
+}

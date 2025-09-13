@@ -6,7 +6,7 @@
       "targeting": {
         "type": "wotr:area",
         "range": 2.0,
-        "target": {
+        "entities": {
           "sentiment": "not_foe"
         }
       },
