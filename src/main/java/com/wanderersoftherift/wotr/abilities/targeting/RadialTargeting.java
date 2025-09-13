@@ -20,23 +20,23 @@ import net.minecraft.world.phys.HitResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CubeAreaTargeting implements AbilityTargeting {
-    public static final MapCodec<CubeAreaTargeting> CODEC = RecordCodecBuilder.mapCodec(
+public class RadialTargeting implements AbilityTargeting {
+    public static final MapCodec<RadialTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.ALL)
-                            .forGetter(CubeAreaTargeting::getEntityPredicate),
+                            .forGetter(RadialTargeting::getEntityPredicate),
                     TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.NONE)
-                            .forGetter(CubeAreaTargeting::getBlockPredicate),
-                    Codec.FLOAT.fieldOf("range").forGetter(CubeAreaTargeting::getRange),
-                    Codec.BOOL.optionalFieldOf("include_self", true).forGetter(CubeAreaTargeting::getIncludeSelf)
-            ).apply(instance, CubeAreaTargeting::new));
+                            .forGetter(RadialTargeting::getBlockPredicate),
+                    Codec.FLOAT.fieldOf("range").forGetter(RadialTargeting::getRange),
+                    Codec.BOOL.optionalFieldOf("include_self", true).forGetter(RadialTargeting::getIncludeSelf)
+            ).apply(instance, RadialTargeting::new));
 
     private final TargetEntityPredicate entityPredicate;
     private final TargetBlockPredicate blockPredicate;
     private final float range;
     private final boolean includeSelf;
 
-    public CubeAreaTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, float range,
+    public RadialTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, float range,
             boolean includeSelf) {
         this.entityPredicate = entities;
         this.blockPredicate = blocks;
@@ -52,6 +52,7 @@ public class CubeAreaTargeting implements AbilityTargeting {
     @Override
     public List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
         float finalRange = getRange(context);
+        float finalRangeSqr = finalRange * finalRange;
 
         List<TargetInfo> result = new ArrayList<>();
         for (HitResult source : origin.targets()) {
@@ -66,7 +67,8 @@ public class CubeAreaTargeting implements AbilityTargeting {
                 }
                 hits.addAll(context.level()
                         .getEntities((Entity) null, aabb,
-                                (target) -> entityPredicate.matches(target, context.caster())
+                                (target) -> target.distanceToSqr(source.getLocation()) < finalRangeSqr
+                                        && entityPredicate.matches(target, context.caster())
                                         && (includeSelf || target != sourceEntity))
                         .stream()
                         .map(entity -> new EntityHitResult(entity, entity.position()))
@@ -74,7 +76,8 @@ public class CubeAreaTargeting implements AbilityTargeting {
             }
             if (blockPredicate != TargetBlockPredicate.NONE) {
                 for (BlockPos pos : BlockPos.betweenClosed(aabb)) {
-                    if (blockPredicate.matches(pos, context.level())) {
+                    if (pos.closerToCenterThan(source.getLocation(), finalRange)
+                            && blockPredicate.matches(pos, context.level())) {
                         // TODO: review isInside
                         hits.add(new BlockHitResult(pos.getCenter(),
                                 Direction.getApproximateNearest(pos.getCenter().subtract(source.getLocation())),
