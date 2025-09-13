@@ -11,22 +11,24 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Replicates the complete ability state of all equipment slots
  * 
- * @param activeSources The list of active slots
+ * @param states The non-zero states
  */
-public record AbilityStateReplicationPayload(List<AbilitySource> activeSources) implements CustomPacketPayload {
+public record AbilityStateReplicationPayload(Map<AbilitySource, Integer> states) implements CustomPacketPayload {
     public static final Type<AbilityStateReplicationPayload> TYPE = new Type<>(
             WanderersOfTheRift.id("ability_state_replication"));
     public static final StreamCodec<RegistryFriendlyByteBuf, AbilityStateReplicationPayload> STREAM_CODEC = StreamCodec
-            .composite(AbilitySource.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                    AbilityStateReplicationPayload::activeSources, AbilityStateReplicationPayload::new);
+            .composite(
+                    ByteBufCodecs.map(LinkedHashMap::new, AbilitySource.STREAM_CODEC, ByteBufCodecs.INT),
+                    AbilityStateReplicationPayload::states, AbilityStateReplicationPayload::new);
 
     public AbilityStateReplicationPayload(AbilityStates abilityState) {
-        this(List.copyOf(abilityState.getActiveSources()));
+        this(Map.copyOf(abilityState.getStates()));
     }
 
     @Override
@@ -35,7 +37,7 @@ public record AbilityStateReplicationPayload(List<AbilitySource> activeSources) 
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().getData(WotrAttachments.ABILITY_STATES).clearAndSetActive(activeSources);
+        context.player().getData(WotrAttachments.ABILITY_STATES).clearAndSetActive(states);
     }
 
 }
