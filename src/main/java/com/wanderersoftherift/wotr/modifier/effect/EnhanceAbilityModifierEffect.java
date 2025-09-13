@@ -52,19 +52,7 @@ public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<
 
     @Override
     public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
-        var abilityTextComponent = abilities.stream()
-                .map(Holder::unwrapKey)
-                .filter(Optional::isPresent)
-                .map(it -> WanderersOfTheRift.translationId("ability", it.get().location()))
-                .map(Component::translatable)
-                .reduce((a, b) -> a.append(", ").append(b));
-        var result = ImmutableList.<ImageComponent>builder();
-        result.add(new ImageComponent(stack,
-                Component.literal("for ")
-                        .append(abilityTextComponent
-                                .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))
-                        .append(Component.literal(": [").withStyle(style)),
-                null));
+        var result = getBaseTooltipComponent(stack, roll, style);
         result.addAll(modifier.value()
                 .getAdvancedTooltipComponent(stack, roll, new ModifierInstance(modifier, this.tier, roll)));
         result.add(new ImageComponent(stack, Component.literal("] (T" + tier + ")").withStyle(style), null));
@@ -73,6 +61,13 @@ public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<
 
     @Override
     public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+        var result = getBaseTooltipComponent(stack, roll, style);
+        result.addAll(modifier.value().getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll)));
+        result.add(new ImageComponent(stack, Component.literal("]").withStyle(style), null));
+        return result.build();
+    }
+
+    public ImmutableList.Builder<ImageComponent> getBaseTooltipComponent(ItemStack stack, float roll, Style style) {
         var abilityTextComponent = abilities.stream()
                 .map(Holder::unwrapKey)
                 .filter(Optional::isPresent)
@@ -87,8 +82,6 @@ public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<
                         .append(Component.literal(": ["))
                         .withStyle(style),
                 null));
-        result.addAll(modifier.value().getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll)));
-        result.add(new ImageComponent(stack, Component.literal("]").withStyle(style), null));
-        return result.build();
+        return result;
     }
 }

@@ -49,25 +49,25 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
 
     @Override
     public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
-        var base = getTooltipComponent(stack, roll, style);
-        return base.stream()
-                .map(
-                        it -> new ImageComponent(it.stack(),
-                                ComponentUtil.mutable(it.base()).append(getTierInfoString(tier)), it.asset())
-                )
-                .toList();
+        var base = getBaseTooltipComponent(stack, roll, style);
+        return List.of(new ImageComponent(base.stack(),
+                ComponentUtil.mutable(base.base()).append(getTierInfoString(tier)), base.asset()));
     }
 
     @Override
     public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
+        return List.of(getBaseTooltipComponent(stack, roll, style));
+    }
+
+    public ImageComponent getBaseTooltipComponent(ItemStack stack, float roll, Style style) {
         var text = Component.translatable(
                 WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
                         WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
                 Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
         );
 
-        return List.of(new ImageComponent(stack, text.withStyle(style),
-                providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon())));
+        return new ImageComponent(stack, text.withStyle(style),
+                providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon()));
     }
 
     private String getTierInfoString(int tier) {

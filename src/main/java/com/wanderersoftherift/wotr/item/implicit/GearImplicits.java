@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public interface GearImplicits extends ModifierProvider {
@@ -48,6 +49,9 @@ public interface GearImplicits extends ModifierProvider {
     }
 
     default Collection<Either<FormattedText, TooltipComponent>> tooltips(ItemStack stack) {
+        if (modifierInstances().isEmpty()) {
+            return Collections.emptyList();
+        }
         return List.of(Either.right(new GearImplicitRenderer.GearImplicitsComponent(this)));
     }
 }

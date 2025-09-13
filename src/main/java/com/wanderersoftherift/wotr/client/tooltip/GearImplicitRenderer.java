@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -41,10 +42,11 @@ public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) im
     @Override
     public void renderText(Font font, int x, int y, Matrix4f matrix, MultiBufferSource.BufferSource bufferSource) {
         var isKeyDown = ModifierRenderHelper.isKeyDown();
-        int x2 = x;
-        int y2 = y;
+        font.drawInBatch("Implicits: ", (float) x, (float) y, ChatFormatting.GRAY.getColor(), true, matrix,
+                bufferSource, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
+        y += 12;
         for (var modifier : implicitsComponent.implicits.modifierInstances()) {
-            ModifierRenderHelper.renderModifierEffectDescriptions(modifier, isKeyDown, font, x2, y2, 12, matrix,
+            ModifierRenderHelper.renderModifierEffectDescriptions(modifier, isKeyDown, font, x, y, 12, matrix,
                     bufferSource);
             y += 12 * ModifierRenderHelper.countTooltips(modifier, isKeyDown);
         }
@@ -53,10 +55,9 @@ public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) im
     @Override
     public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics guiGraphics) {
         var isKeyDown = ModifierRenderHelper.isKeyDown();
-        int x2 = x;
-        int y2 = y;
+        y += 12;
         for (var modifier : implicitsComponent.implicits.modifierInstances()) {
-            ModifierRenderHelper.renderModifierEffectIcons(modifier, isKeyDown, font, x2, y2, 12, guiGraphics);
+            ModifierRenderHelper.renderModifierEffectIcons(modifier, isKeyDown, font, x, y, 12, guiGraphics);
             y += 12 * ModifierRenderHelper.countTooltips(modifier, isKeyDown);
         }
     }
