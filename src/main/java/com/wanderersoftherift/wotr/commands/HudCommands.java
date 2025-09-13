@@ -7,9 +7,11 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.config.preset.HudPreset;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.RegistryAccess;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -27,15 +29,12 @@ public class HudCommands extends BaseCommand {
 
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
-        builder.then(Commands.literal("export_preset").executes(this::exportPrefab));
-    }
-
-    protected boolean isClientSideOnly() {
-        return true;
+        builder.then(Commands.literal("exportPreset").executes(this::exportPrefab));
     }
 
     private int exportPrefab(CommandContext<CommandSourceStack> ctx) {
-        var hudPreset = HudPreset.fromConfig(ctx.getSource().getServer().registryAccess());
+        RegistryAccess registryAccess = Minecraft.getInstance().level.registryAccess();
+        var hudPreset = HudPreset.fromConfig(registryAccess);
 
         DataResult<JsonElement> json = HudPreset.MAP_CODEC.encodeStart(JsonOps.INSTANCE, hudPreset);
         json.ifSuccess(x -> {

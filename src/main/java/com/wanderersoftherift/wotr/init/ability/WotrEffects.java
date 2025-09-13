@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.abilities.effects.DamageEffect;
 import com.wanderersoftherift.wotr.abilities.effects.DetachOwnEffect;
 import com.wanderersoftherift.wotr.abilities.effects.HealEffect;
 import com.wanderersoftherift.wotr.abilities.effects.MovementEffect;
+import com.wanderersoftherift.wotr.abilities.effects.ParticleEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ProjectileEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SoundEffect;
@@ -58,4 +59,6 @@ public class WotrEffects {
             () -> TargetEffect.CODEC);
     public static final Supplier<MapCodec<? extends AbilityEffect>> CONDITIONAL = EFFECTS.register("conditional",
             () -> ConditionalEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> PARTICLE = EFFECTS.register("particle",
+            () -> ParticleEffect.CODEC);
 }

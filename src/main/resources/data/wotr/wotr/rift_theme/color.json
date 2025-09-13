@@ -11,6 +11,10 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "stoneworks"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "motr"
     }
   ],
   "processors": [

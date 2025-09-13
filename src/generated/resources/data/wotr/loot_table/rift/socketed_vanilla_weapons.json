@@ -311,6 +311,116 @@
           ],
           "name": "minecraft:golden_sword",
           "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 4
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 5,
+              "min_sockets": 4
+            }
+          ],
+          "name": "minecraft:mace",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "min_tier": 6
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 5
+            }
+          ],
+          "name": "minecraft:mace",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 6
+            }
+          ],
+          "name": "minecraft:mace",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "max_tier": 5,
+              "min_tier": 4
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 5,
+              "min_sockets": 4
+            }
+          ],
+          "name": "minecraft:trident",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "min_tier": 6
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 5
+            }
+          ],
+          "name": "minecraft:trident",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "wotr:rift_level_check",
+              "min_tier": 7
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:gear_sockets",
+              "max_sockets": 6,
+              "min_sockets": 6
+            }
+          ],
+          "name": "minecraft:trident",
+          "weight": 20
         }
       ],
       "rolls": 1.0

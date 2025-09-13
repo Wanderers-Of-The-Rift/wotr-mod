@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.util.ParticleInfo;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class ConditionalEffect extends AbilityEffect {
     public static final MapCodec<ConditionalEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
@@ -34,9 +32,9 @@ public class ConditionalEffect extends AbilityEffect {
     private final List<AbilityEffect> effectsFalse;
     private final ResourceLocation condition;
 
-    public ConditionalEffect(AbilityTargeting targeting, List<AbilityEffect> effects, Optional<ParticleInfo> particles,
-            List<AbilityEffect> effectsTrue, List<AbilityEffect> effectsFalse, ResourceLocation condition) {
-        super(targeting, effects, particles);
+    public ConditionalEffect(AbilityTargeting targeting, List<AbilityEffect> effects, List<AbilityEffect> effectsTrue,
+            List<AbilityEffect> effectsFalse, ResourceLocation condition) {
+        super(targeting, effects);
 
         this.effectsTrue = effectsTrue;
         this.effectsFalse = effectsFalse;

@@ -51,15 +51,28 @@
               "sentiment": "not_friend"
             }
           }
+        },
+        {
+          "type": "wotr:particle",
+          "targeting": {
+            "type": "wotr:self"
+          },
+          "particle": {
+            "type": "minecraft:explosion"
+          }
         }
       ],
-      "particles": {
-        "target_block": {
-          "type": "minecraft:explosion"
-        }
-      },
       "targeting": {
         "type": "wotr:self"
+      }
+    },
+    {
+      "type": "wotr:particle",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "particle": {
+        "type": "minecraft:bubble"
       }
     }
   ],

@@ -34,14 +34,28 @@
                 1,
                 0
               ]
+            },
+            {
+              "type": "wotr:particle",
+              "targeting": {
+                "type": "wotr:self"
+              },
+              "particle": {
+                "type": "minecraft:explosion"
+              }
             }
-          ],
-          "particles": {
-            "user": "minecraft:bubble",
-            "target": "minecraft:explosion"
-          }
+          ]
         }
       ]
+    },
+    {
+      "type": "wotr:particle",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "particle": {
+        "type": "minecraft:bubble"
+      }
     }
   ]
 }

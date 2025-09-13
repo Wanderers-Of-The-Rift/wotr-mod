@@ -113,6 +113,12 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.LEATHER_LEGGINGS)
                 .add(Items.LEATHER_BOOTS);
 
+        tag(WotrTags.Items.CHAINMAIL_TYPE_GEAR)
+                .add(Items.CHAINMAIL_HELMET)
+                .add(Items.CHAINMAIL_CHESTPLATE)
+                .add(Items.CHAINMAIL_LEGGINGS)
+                .add(Items.CHAINMAIL_BOOTS);
+
         tag(WotrTags.Items.IRON_TYPE_GEAR)
                 .add(Items.IRON_HELMET)
                 .add(Items.IRON_CHESTPLATE)
@@ -130,6 +136,12 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.GOLDEN_CHESTPLATE)
                 .add(Items.GOLDEN_LEGGINGS)
                 .add(Items.GOLDEN_BOOTS);
+
+        tag(WotrTags.Items.NETHERITE_TYPE_GEAR)
+                .add(Items.NETHERITE_HELMET)
+                .add(Items.NETHERITE_CHESTPLATE)
+                .add(Items.NETHERITE_LEGGINGS)
+                .add(Items.NETHERITE_BOOTS);
 
         tag(WotrTags.Items.RANGE_TYPE_WEAPON)
                 .add(Items.CROSSBOW)
