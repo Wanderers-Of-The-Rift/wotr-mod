@@ -74,6 +74,22 @@ public class WotrAttributes {
                     WanderersOfTheRift.translationId("attribute", "mana_degen_rate"), 0, 0, Integer.MAX_VALUE)
                     .setSyncable(true));
 
+    public static final DeferredHolder<Attribute, RangedAttribute> MAX_GOBLIN = registerAttribute("max_goblin",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "max_goblin"), 50,
+                    0, Integer.MAX_VALUE).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> GOBLIN_REGEN_RATE = registerAttribute(
+            "goblin_regen_rate", () -> (RangedAttribute) new RangedAttribute(
+                    WanderersOfTheRift.translationId("attribute", "goblin_regen_rate"), 0.05, 0, Integer.MAX_VALUE)
+                    .setSyncable(true));
+
+    public static final DeferredHolder<Attribute, RangedAttribute> MAX_BLOOD = registerAttribute("max_blood",
+            () -> (RangedAttribute) new RangedAttribute(WanderersOfTheRift.translationId("attribute", "max_blood"), 50,
+                    0, Integer.MAX_VALUE).setSyncable(true));
+    public static final DeferredHolder<Attribute, RangedAttribute> BLOOD_REGEN_RATE = registerAttribute(
+            "blood_regen_rate", () -> (RangedAttribute) new RangedAttribute(
+                    WanderersOfTheRift.translationId("attribute", "blood_regen_rate"), 0.05, 0, Integer.MAX_VALUE)
+                    .setSyncable(true));
+
     /// Combat
 
     public static final DeferredHolder<Attribute, RangedAttribute> RANGED_ATTACK_DAMAGE = registerAttribute(

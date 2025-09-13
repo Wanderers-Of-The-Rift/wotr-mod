@@ -1,8 +1,11 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import io.netty.buffer.ByteBuf;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -15,12 +18,13 @@ import org.jetbrains.annotations.NotNull;
  * 
  * @param newValue The new mana value to set
  */
-public record ManaChangePayload(float newValue) implements CustomPacketPayload {
+public record ManaChangePayload(Holder<AbilityResource> resource, float newValue) implements CustomPacketPayload {
 
     public static final Type<ManaChangePayload> TYPE = new Type<>(WanderersOfTheRift.id("mana_change"));
 
-    public static final StreamCodec<ByteBuf, ManaChangePayload> STREAM_CODEC = StreamCodec
-            .composite(ByteBufCodecs.FLOAT, ManaChangePayload::newValue, ManaChangePayload::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ManaChangePayload> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.ABILITY_RESOURCES), ManaChangePayload::resource,
+            ByteBufCodecs.FLOAT, ManaChangePayload::newValue, ManaChangePayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -28,6 +32,6 @@ public record ManaChangePayload(float newValue) implements CustomPacketPayload {
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().getData(WotrAttachments.MANA).setAmount(newValue);
+        context.player().getData(WotrAttachments.MANA).setAmount(resource, newValue);
     }
 }

@@ -1,13 +1,16 @@
 package com.wanderersoftherift.wotr.abilities.triggers;
 
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.loot.LootEvent;
 import com.wanderersoftherift.wotr.util.SerializableDamageSource;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
@@ -17,8 +20,8 @@ public class AbilityTriggerEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void damageEvent(LivingDamageEvent.Pre event) {
         var victim = event.getEntity();
-        AbilityTracker.forEntity(victim)
-                .triggerAbilities(new TakeDamageTrigger(
+        TriggerTracker.forEntity(victim)
+                .trigger(new TakeDamageTrigger(
                         new SerializableDamageSource(event.getSource()), event.getNewDamage()));
     }
 
@@ -26,7 +29,7 @@ public class AbilityTriggerEvents {
     public static void tickEvent(ServerTickEvent.Pre event) {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             level.getData(WotrAttachments.TICK_TRIGGER_REGISTRY)
-                    .forEach((entity, abilityTracker) -> abilityTracker.triggerAbilities(TickTrigger.INSTANCE));
+                    .forEach((entity, abilityTracker) -> abilityTracker.trigger(TickTrigger.INSTANCE));
         }
     }
 
@@ -35,9 +38,29 @@ public class AbilityTriggerEvents {
         var victim = event.getEntity();
         var attacker = event.getSource().getEntity();
         if (attacker != null) {
-            AbilityTracker.forEntity(attacker)
-                    .triggerAbilities(new DealDamageTrigger(
+            TriggerTracker.forEntity(attacker)
+                    .trigger(new DealDamageTrigger(
                             new SerializableDamageSource(event.getSource()), victim.getUUID(), event.getAmount()));
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void killEvent(LivingDeathEvent event) {
+        var victim = event.getEntity();
+        var attacker = event.getSource().getEntity();
+        if (attacker != null) {
+            TriggerTracker.forEntity(attacker)
+                    .trigger(new KillTrigger(
+                            new SerializableDamageSource(event.getSource()), victim.getUUID()));
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void lootEvent(LootEvent.PlayerOpensChest event) {
+        // todo this currently doesn't trigger properly when breaking chests
+        if (event.getLootContext().hasParameter(LootContextParams.THIS_ENTITY)) {
+            var looter = event.getLootContext().getParameter(LootContextParams.THIS_ENTITY);
+            TriggerTracker.forEntity(looter).trigger(LootTrigger.INSTANCE);
         }
     }
 }

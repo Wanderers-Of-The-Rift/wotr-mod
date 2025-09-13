@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityResourceData;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
@@ -98,8 +98,8 @@ public final class AbilityClientEvents {
             return;
         }
 
-        ManaData manaData = player.getData(WotrAttachments.MANA);
-        manaData.tick();
+        AbilityResourceData abilityResourceData = player.getData(WotrAttachments.MANA);
+        abilityResourceData.tick();
     }
 
 }

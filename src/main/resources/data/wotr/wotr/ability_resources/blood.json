@@ -1,0 +1,6 @@
+{
+    "color": -43691,
+    "maximum": "wotr:max_blood",
+    "recharge_amount": "wotr:blood_regen_rate",
+    "recharge_action": "wotr:kill"
+}

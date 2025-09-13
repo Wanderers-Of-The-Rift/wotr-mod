@@ -26,6 +26,7 @@
   "requirements": [
     {
       "type": "wotr:mana",
+        "resource_type": "wotr:mana",
       "amount": 10
     },
     {

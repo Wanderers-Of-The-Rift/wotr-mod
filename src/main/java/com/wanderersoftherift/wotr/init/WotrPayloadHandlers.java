@@ -172,7 +172,10 @@ public class WotrPayloadHandlers {
     }
 
     private static void replicateMana(ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player, new ManaChangePayload(player.getData(WotrAttachments.MANA).getAmount()));
+        var resourceData = player.getData(WotrAttachments.MANA);
+        resourceData.getAmounts()
+                .forEach((resource, amount) -> PacketDistributor.sendToPlayer(player,
+                        new ManaChangePayload(resource, amount)));
     }
 
     private static void replicateAbilities(ServerPlayer player) {
