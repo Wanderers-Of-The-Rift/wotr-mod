@@ -14,7 +14,9 @@
           "collision": "minecraft:entity.generic.explode"
         },
         "velocity": 1.6,
-        "ground_persist_ticks": 0
+        "ground_persist_ticks": 0,
+        "pierce": 10,
+        "pierce_blocks": true
       },
       "effects": [
         {
@@ -27,7 +29,8 @@
           },
           "effects": [
             {
-              "type": "wotr:break"
+              "type": "wotr:break",
+              "drop_mode": "collate"
             }
           ]
         },
