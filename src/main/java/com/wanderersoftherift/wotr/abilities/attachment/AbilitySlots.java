@@ -191,7 +191,9 @@ public class AbilitySlots implements IItemHandlerModifiable {
 
     private record Data(NonNullList<ItemStack> abilities, int selected) {
         public static final Codec<AbilitySlots.Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                NonNullList.codecOf(ItemStack.OPTIONAL_CODEC).fieldOf("abilities").forGetter(x -> x.abilities),
+                NonNullList.codecOf(Codec.withAlternative(ItemStack.OPTIONAL_CODEC, Codec.unit(ItemStack.EMPTY)))
+                        .fieldOf("abilities")
+                        .forGetter(x -> x.abilities),
                 Codec.INT.fieldOf("selected").forGetter(x -> x.selected)
         ).apply(instance, AbilitySlots.Data::new));
     }

@@ -17,10 +17,11 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-public record ChainAbility(List<AbilityElement> abilities) implements Ability {
+public record ChainAbility(boolean inCreativeMenu, List<AbilityElement> abilities) implements Ability {
 
     public static final MapCodec<ChainAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
+                    Codec.BOOL.optionalFieldOf("in_creative_menu", true).forGetter(ChainAbility::isInCreativeMenu),
                     AbilityElement.CODEC.listOf(1, Integer.MAX_VALUE)
                             .fieldOf("abilities")
                             .forGetter(ChainAbility::abilities)
@@ -42,6 +43,11 @@ public record ChainAbility(List<AbilityElement> abilities) implements Ability {
     @Override
     public ResourceLocation getIcon() {
         return abilities.getFirst().ability.value().getIcon();
+    }
+
+    @Override
+    public boolean isInCreativeMenu() {
+        return inCreativeMenu;
     }
 
     @Override
