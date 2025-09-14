@@ -1,6 +1,7 @@
 {
   "type": "wotr:persistent",
   "icon": "minecraft:textures/mob_effect/strength.png",
+  "in_creative_menu": false,
   "toggleable": true,
   "requirements": [
     {

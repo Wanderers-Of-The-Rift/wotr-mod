@@ -1,6 +1,7 @@
 {
   "type": "wotr:persistent",
   "icon": "minecraft:textures/mob_effect/mining_fatigue.png",
+  "in_creative_menu": false,
   "toggleable": true,
   "activation_effects": [
     {

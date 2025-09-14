@@ -20,6 +20,7 @@ public class InstantAbility implements Ability {
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(InstantAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(x -> x.smallIcon),
+                    Codec.BOOL.optionalFieldOf("in_creative_menu", true).forGetter(InstantAbility::isInCreativeMenu),
                     AbilityRequirement.CODEC.listOf()
                             .optionalFieldOf("requirements", List.of())
                             .forGetter(InstantAbility::getActivationRequirements),
@@ -32,13 +33,15 @@ public class InstantAbility implements Ability {
     private final Optional<ResourceLocation> smallIcon;
     private final List<AbilityRequirement> activationRequirements;
     private final List<AbilityEffect> effects;
+    private final boolean inCreativeMenu;
 
-    public InstantAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon,
+    public InstantAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, boolean inCreativeMenu,
             List<AbilityRequirement> activationRequirements, List<AbilityEffect> effects) {
         this.icon = icon;
         this.smallIcon = smallIcon;
         this.effects = ImmutableList.copyOf(effects);
         this.activationRequirements = ImmutableList.copyOf(activationRequirements);
+        this.inCreativeMenu = inCreativeMenu;
     }
 
     @Override
@@ -54,6 +57,11 @@ public class InstantAbility implements Ability {
     @Override
     public ResourceLocation getEmblem() {
         return smallIcon.orElse(icon);
+    }
+
+    @Override
+    public boolean isInCreativeMenu() {
+        return inCreativeMenu;
     }
 
     @Override

@@ -48,6 +48,8 @@ public interface Ability {
         return getDisplayName(abilityId);
     }
 
+    boolean isInCreativeMenu();
+
     /**
      * @return An icon for displaying the ability in the ability bar. Will also be used for the ability holder if there
      *         is no small icon

@@ -24,6 +24,7 @@ public class PersistentAbility implements Ability {
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("icon").forGetter(PersistentAbility::getIcon),
                     ResourceLocation.CODEC.optionalFieldOf("small_icon").forGetter(x -> x.smallIcon),
+                    Codec.BOOL.optionalFieldOf("in_creative_menu", true).forGetter(PersistentAbility::isInCreativeMenu),
                     Codec.INT.optionalFieldOf("warmup_time", 0).forGetter(PersistentAbility::getWarmupTime),
                     Codec.BOOL.optionalFieldOf("can_deactivate", true).forGetter(PersistentAbility::canDeactivate),
                     Codec.BOOL.optionalFieldOf("channelled", false).forGetter(PersistentAbility::isChannelled),
@@ -56,13 +57,15 @@ public class PersistentAbility implements Ability {
     private final List<AbilityEffect> activationEffects;
     private final List<AbilityEffect> deactivationEffects;
     private final List<AbilityRequirement> onDeactivationCosts;
+    private final boolean inCreativeMenu;
 
-    public PersistentAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, int warmupTime,
-            boolean canDeactivate, boolean channelled, List<AbilityRequirement> activationRequirements,
+    public PersistentAbility(ResourceLocation icon, Optional<ResourceLocation> smallIcon, boolean inCreativeMenu,
+            int warmupTime, boolean canDeactivate, boolean channelled, List<AbilityRequirement> activationRequirements,
             List<AbilityRequirement> ongoingRequirements, List<AbilityRequirement> onDeactivationCosts,
             List<AbilityEffect> activationEffects, List<AbilityEffect> deactivationEffects) {
         this.icon = icon;
         this.smallIcon = smallIcon;
+        this.inCreativeMenu = inCreativeMenu;
         this.warmupTime = warmupTime;
         this.canDeactivate = canDeactivate;
         this.channelled = channelled;
@@ -81,6 +84,11 @@ public class PersistentAbility implements Ability {
     @Override
     public ResourceLocation getEmblem() {
         return smallIcon.orElse(icon);
+    }
+
+    @Override
+    public boolean isInCreativeMenu() {
+        return inCreativeMenu;
     }
 
     @Override
