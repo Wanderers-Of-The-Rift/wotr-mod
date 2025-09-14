@@ -24,11 +24,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class WotrDataComponentType {
@@ -60,6 +62,10 @@ public class WotrDataComponentType {
     public static final class AbilityContextData {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChainAbilityState>> CHAIN_ABILITY_STATE = register(
                 "chain_ability_state", ChainAbilityState.CODEC, null
+        );
+
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<Set<ResourceLocation>>> CONDITIONS = register(
+                "conditions", Codec.list(ResourceLocation.CODEC).xmap(Set::copyOf, List::copyOf), null
         );
 
         private AbilityContextData() {

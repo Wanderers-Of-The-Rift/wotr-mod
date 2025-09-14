@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.sources.MainAbilitySource;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
@@ -26,6 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class OngoingAbilities {
 
@@ -34,6 +36,8 @@ public class OngoingAbilities {
 
     private final IAttachmentHolder holder;
     private final List<ActiveAbility> activeAbilities;
+
+    private AbilityContext activeContext;
 
     public OngoingAbilities(IAttachmentHolder holder) {
         this(holder, new Data(List.of()));
@@ -76,15 +80,13 @@ public class OngoingAbilities {
 
     private boolean clientsideActivate(LivingEntity entity, Holder<Ability> ability, AbilitySource source) {
         AbilityContext context = new AbilityContext(ability, entity, source);
-        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-            // TODO: make this a data component
-            context.conditions().addAll(AbilityConditions.forEntity(entity).condition(ability));
+        return activateContextFor(context, () -> {
             if (ability.value().canActivate(context)) {
                 ability.value().clientActivate(context);
                 return true;
             }
-        }
-        return false;
+            return false;
+        });
     }
 
     private boolean serversideActivate(LivingEntity entity, Holder<Ability> ability, AbilitySource source) {
@@ -99,8 +101,9 @@ public class OngoingAbilities {
         } else {
             context = new AbilityContext(ability, entity, source);
         }
-        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-            context.conditions().addAll(AbilityConditions.forEntity(entity).condition(ability));
+        return activateContextFor(context, () -> {
+            context.set(WotrDataComponentType.AbilityContextData.CONDITIONS,
+                    AbilityConditions.forEntity(entity).condition(ability));
             if (!ability.value().canActivate(context)) {
                 return false;
             }
@@ -110,8 +113,8 @@ public class OngoingAbilities {
             } else if (!finished && !existing) {
                 activeAbilities.add(new ActiveAbility(context));
             }
-        }
-        return true;
+            return true;
+        });
     }
 
     public void tick() {
@@ -121,11 +124,12 @@ public class OngoingAbilities {
         for (ActiveAbility instance : ImmutableList.copyOf(activeAbilities)) {
             instance.age++;
             AbilityContext context = instance.createContext(attachedTo);
-            try (var ignore = context.enableTemporaryUpgradeModifiers()) {
+            activateContextFor(context, () -> {
                 if (instance.ability().tick(context)) {
                     activeAbilities.remove(instance);
                 }
-            }
+                return null;
+            });
         }
     }
 
@@ -157,6 +161,22 @@ public class OngoingAbilities {
             }
         });
         activeAbilities.removeAll(channelled);
+    }
+
+    private <T> T activateContextFor(AbilityContext context, Supplier<T> action) {
+        AbilityContext previousContext = activeContext;
+        if (previousContext != null) {
+            previousContext.disableUpgradeModifiers();
+        }
+        activeContext = context;
+        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
+            return action.get();
+        } finally {
+            if (previousContext != null) {
+                previousContext.enableTemporaryUpgradeModifiers();
+            }
+            activeContext = previousContext;
+        }
     }
 
     private static final class ActiveAbility {
