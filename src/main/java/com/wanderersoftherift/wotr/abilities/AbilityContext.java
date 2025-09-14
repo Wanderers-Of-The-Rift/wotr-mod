@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
-import com.wanderersoftherift.wotr.abilities.effects.ConditionalEffect;
 import com.wanderersoftherift.wotr.abilities.sources.AbilityEnhancementModifierSource;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
@@ -16,7 +15,6 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -28,9 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -45,19 +41,17 @@ import java.util.UUID;
  * @param age            How long the ability has been active
  * @param upgrades
  * @param enhancements   Extra modifiers added by {@link EnhanceAbilityModifierEffect}
- * @param conditions     Conditions added for changing effects of {@link ConditionalEffect}
  * @param dataComponents Data component map for the context
  */
 // TODO: What should we convert to be data components?
 public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull LivingEntity caster,
         ItemStack abilityItem, AbilitySource source, Level level, long age,
         @NotNull List<Holder<AbilityUpgrade>> upgrades, @Nonnull List<EnhancingModifierInstance> enhancements,
-        Set<ResourceLocation> conditions, PatchedDataComponentMap dataComponents)
-        implements MutableDataComponentHolder {
+        PatchedDataComponentMap dataComponents) implements MutableDataComponentHolder {
 
     public AbilityContext(Holder<Ability> ability, LivingEntity caster, AbilitySource source) {
         this(UUID.randomUUID(), ability, caster, source.getItem(caster), source, caster.level(), 0,
-                source.upgrades(caster), AbilityEnhancements.forEntity(caster).modifiers(ability), new HashSet<>(),
+                source.upgrades(caster), AbilityEnhancements.forEntity(caster).modifiers(ability),
                 new PatchedDataComponentMap(DataComponentMap.EMPTY));
     }
 
@@ -137,7 +131,7 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     /**
      * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
      */
-    private void disableUpgradeModifiers() {
+    public void disableUpgradeModifiers() {
         disableEnhancements();
         for (int index = 0; index < upgrades.size(); index++) {
             ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
@@ -157,7 +151,7 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
      */
     public AbilityContext forSubAbility(Holder<Ability> newAbility, AbilitySource newSource) {
         return new AbilityContext(instanceId, newAbility, caster, abilityItem, newSource, level, 0, upgrades,
-                enhancements, conditions, dataComponents.copy());
+                enhancements, dataComponents.copy());
     }
 
     /// Data Component Holder methods
