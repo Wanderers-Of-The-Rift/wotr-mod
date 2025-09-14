@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.abilities.triggers.TriggerPredicate;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
+import com.wanderersoftherift.wotr.network.ability.AbilityTriggerablePayload;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -124,7 +125,7 @@ public class TriggerTracker {
             implements Triggerable {
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
-            if (predicate().type().value() != activation.type()) {
+            if (holder.getServer() == null || predicate().type().value() != activation.type()) {
                 return false;
             }
             return holder.getData(WotrAttachments.ONGOING_ABILITIES)
@@ -134,12 +135,16 @@ public class TriggerTracker {
         // todo https://github.com/Wanderers-Of-The-Rift/wotr-mod/issues/180
         @Override
         public void sendUnregister(ServerPlayer player) {
-
+            if (player.connection != null) {
+                player.connection.send(new AbilityTriggerablePayload(source, ability, predicate, false));
+            }
         }
 
         @Override
         public void sendRegister(ServerPlayer player) {
-
+            if (player.connection != null) {
+                player.connection.send(new AbilityTriggerablePayload(source, ability, predicate, true));
+            }
         }
 
     }
