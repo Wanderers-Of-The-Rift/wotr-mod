@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.abilities.effects.MovementEffect;
 import com.wanderersoftherift.wotr.abilities.effects.NoopEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ParticleEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ProjectileEffect;
+import com.wanderersoftherift.wotr.abilities.effects.SetBlockEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SoundEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SummonEffect;
@@ -61,4 +62,6 @@ public class WotrEffects {
             () -> ConditionalEffect.CODEC);
     public static final Supplier<MapCodec<? extends AbilityEffect>> PARTICLE = EFFECTS.register("particle",
             () -> ParticleEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> SET_BLOCK = EFFECTS.register("set_block",
+            () -> SetBlockEffect.CODEC);
 }

@@ -25,12 +25,15 @@
             "type": "wotr:radial",
             "range": 4.0,
             "blocks": "all",
-            "entities": "none"
+            "entities": "none",
+            "align_to_block": true
           },
           "effects": [
             {
-              "type": "wotr:break",
-              "drop_mode": "collate"
+              "type": "wotr:set_block",
+              "block": {
+                "Name": "minecraft:gold_block"
+              }
             }
           ]
         },
