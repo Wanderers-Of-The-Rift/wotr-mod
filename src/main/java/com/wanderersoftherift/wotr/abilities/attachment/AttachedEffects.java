@@ -236,7 +236,7 @@ public class AttachedEffects {
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, age, caster)) {
                 AbilityContext triggerContext = context.toContext(caster, attachedTo.level(), age);
-                try (var ignore = triggerContext.enableTemporaryUpgradeModifiers()) {
+                try (var ignore = triggerContext.activate()) {
                     attachEffect.getEffects()
                             .forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
                 }
