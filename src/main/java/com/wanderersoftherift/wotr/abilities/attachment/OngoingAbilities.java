@@ -37,7 +37,7 @@ public class OngoingAbilities {
     private final IAttachmentHolder holder;
     private final List<ActiveAbility> activeAbilities;
 
-    private AbilityContext activeContext;
+    private AbilityContext.Activation currentContextActivation;
 
     public OngoingAbilities(IAttachmentHolder holder) {
         this(holder, new Data(List.of()));
@@ -156,7 +156,7 @@ public class OngoingAbilities {
         List<ActiveAbility> channelled = activeAbilities.stream().filter(predicate).toList();
         channelled.forEach(instance -> {
             AbilityContext abilityContext = instance.createContext(attachedTo);
-            try (var ignored = abilityContext.enableTemporaryUpgradeModifiers()) {
+            try (var ignored = abilityContext.activate()) {
                 instance.ability().deactivate(abilityContext);
             }
         });
@@ -164,18 +164,18 @@ public class OngoingAbilities {
     }
 
     private <T> T activateContextFor(AbilityContext context, Supplier<T> action) {
-        AbilityContext previousContext = activeContext;
+        AbilityContext.Activation previousContext = currentContextActivation;
         if (previousContext != null) {
-            previousContext.disableUpgradeModifiers();
+            previousContext.pause();
         }
-        activeContext = context;
-        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
+        try (var activation = context.activate()) {
+            currentContextActivation = activation;
             return action.get();
         } finally {
             if (previousContext != null) {
-                previousContext.enableTemporaryUpgradeModifiers();
+                previousContext.resume();
             }
-            activeContext = previousContext;
+            currentContextActivation = previousContext;
         }
     }
 

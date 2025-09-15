@@ -65,7 +65,11 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     /**
      * Enables all modifiers that impact the ability
      */
-    public ExceptionlessAutoClosable enableTemporaryUpgradeModifiers() {
+    public Activation activate() {
+        return new Activation();
+    }
+
+    private void enableTemporaryUpgradeModifiers() {
         enhancements.forEach(enhancement -> {
             enhancement.modifier()
                     .modifier()
@@ -73,13 +77,6 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
                     .enableModifier(enhancement.modifier().roll(), caster, new AbilityEnhancementModifierSource(
                             enhancement.originalSource(), enhancement.originalIndex()), enhancement.modifier().tier());
         });
-        if (upgrades.isEmpty()) {
-            if (enhancements.isEmpty()) {
-                return ExceptionlessAutoClosable.NOOP;
-            } else {
-                return this::disableEnhancements;
-            }
-        }
         for (int index = 0; index < upgrades.size(); index++) {
             ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
             AbilityUpgrade upgrade = upgrades.get(index).value();
@@ -89,7 +86,6 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
                 effect.enableModifier(0, caster, source, i);
             }
         }
-        return this::disableUpgradeModifiers;
     }
 
     /**
@@ -131,7 +127,7 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     /**
      * Disables all modifiers that were enabled by {@link #enableTemporaryUpgradeModifiers()}
      */
-    public void disableUpgradeModifiers() {
+    private void disableUpgradeModifiers() {
         disableEnhancements();
         for (int index = 0; index < upgrades.size(); index++) {
             ModifierSource source = new AbilityUpgradeModifierSource(source(), index);
@@ -179,5 +175,33 @@ public record AbilityContext(UUID instanceId, Holder<Ability> ability, @NotNull 
     @Override
     public @NotNull DataComponentMap getComponents() {
         return dataComponents;
+    }
+
+    public class Activation implements ExceptionlessAutoClosable {
+        private boolean active = true;
+
+        public Activation() {
+            enableTemporaryUpgradeModifiers();
+        }
+
+        public void pause() {
+            if (active) {
+                disableUpgradeModifiers();
+                active = false;
+            }
+        }
+
+        public void resume() {
+            if (!active) {
+                enableTemporaryUpgradeModifiers();
+            }
+        }
+
+        @Override
+        public void close() {
+            if (active) {
+                disableUpgradeModifiers();
+            }
+        }
     }
 }
