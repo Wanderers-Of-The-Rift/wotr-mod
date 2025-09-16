@@ -137,7 +137,11 @@ public class WotrBlocks {
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
     public static final DeferredBlock<AnomalyBlock> ANOMALY = registerBlock("anomaly_block", () -> new AnomalyBlock(
-            BlockBehaviour.Properties.of().setId(blockId("anomaly_block")).sound(SoundType.STONE).noOcclusion()));;
+            BlockBehaviour.Properties.of()
+                    .setId(blockId("anomaly_block"))
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .strength(-1f, 3_600_000f)));
 
     public static final BlockFamilyHelper PROCESSOR_BLOCK_1 = registerBuildingBlock("processor_block_1",
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_1"))));
