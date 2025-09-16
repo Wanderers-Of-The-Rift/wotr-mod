@@ -56,7 +56,7 @@ public class TriggerTracker {
         return result;
     }
 
-    public boolean hasAbilitiesOnTrigger(Holder<TrackableTrigger.TriggerType<?>> activation) {
+    public boolean hasListenersOnTrigger(Holder<TrackableTrigger.TriggerType<?>> activation) {
         return !abilities.get(activation).isEmpty();
     }
 
@@ -73,11 +73,12 @@ public class TriggerTracker {
 
     public void registerTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
         abilities.put(trigger, triggerable);
-        if (holder instanceof Entity livingEntity && livingEntity.level() instanceof ServerLevel serverLevel) {
-            var registryTypeSupplier = trigger.value().registry();
-            if (registryTypeSupplier != null) {
-                serverLevel.getData(registryTypeSupplier.get()).add(livingEntity);
-            }
+        if (!(holder instanceof Entity livingEntity) || !(livingEntity.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        var registryTypeSupplier = trigger.value().registry();
+        if (registryTypeSupplier != null) {
+            serverLevel.getData(registryTypeSupplier.get()).add(livingEntity);
         }
     }
 
@@ -96,17 +97,16 @@ public class TriggerTracker {
         abilities.get(trigger).removeIf(trackedAbility -> trackedAbility.equals(triggerable));
     }
 
+    public interface Triggerable {
+        boolean trigger(LivingEntity holder, TrackableTrigger activation);
+    }
+
     record TriggerableAbility(AbilitySource source, Holder<Ability> ability) implements Triggerable {
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
-            return holder.getData(WotrAttachments.ONGOING_ABILITIES)
-                    .activate(source, source.getItem((LivingEntity) holder), ability);
+            return holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(source, source.getItem(holder), ability);
         }
-    }
 
-    public interface Triggerable {
-
-        boolean trigger(LivingEntity holder, TrackableTrigger activation);
     }
 
 }

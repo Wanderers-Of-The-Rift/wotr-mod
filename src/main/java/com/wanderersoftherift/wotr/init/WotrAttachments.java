@@ -87,7 +87,8 @@ public class WotrAttachments {
             () -> AttachmentType.builder(AttachedEffects::new).serialize(AttachedEffects.getSerializer()).build());
     public static final Supplier<AttachmentType<EffectMarkers>> EFFECT_MARKERS = ATTACHMENT_TYPES.register(
             "effect_markers", () -> AttachmentType.builder(EffectMarkers::new).build());
-    public static final Supplier<AttachmentType<AbilityResourceData>> MANA = ATTACHMENT_TYPES.register("mana",
+    public static final Supplier<AttachmentType<AbilityResourceData>> ABILITY_RESOURCE_DATA = ATTACHMENT_TYPES.register(
+            "ability_resources",
             () -> AttachmentType.builder(AbilityResourceData::new)
                     .serialize(AbilityResourceData.getSerializer())
                     .build());

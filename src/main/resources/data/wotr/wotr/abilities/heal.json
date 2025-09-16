@@ -25,8 +25,8 @@
   "icon": "minecraft:textures/mob_effect/regeneration.png",
   "requirements": [
     {
-      "type": "wotr:mana",
-        "resource_type": "wotr:mana",
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
       "amount": 10
     },
     {

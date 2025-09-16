@@ -50,7 +50,7 @@ public class TriggerRegistry<T extends TrackableTrigger> {
                 continue;
             }
             var value = tracker.get();
-            if (!value.hasAbilitiesOnTrigger(type.getDelegate())) {
+            if (!value.hasListenersOnTrigger(type.getDelegate())) {
                 iterator.remove();
             } else {
                 consumer.accept(entity, value);

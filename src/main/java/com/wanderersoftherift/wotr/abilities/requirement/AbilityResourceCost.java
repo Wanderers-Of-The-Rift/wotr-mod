@@ -13,13 +13,14 @@ import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.Holder;
 
-public record ManaCost(Holder<AbilityResource> resource, float amount, boolean consume) implements AbilityRequirement {
+public record AbilityResourceCost(Holder<AbilityResource> resource, float amount, boolean consume)
+        implements AbilityRequirement {
 
-    public static final MapCodec<ManaCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            AbilityResource.HOLDER_CODEC.fieldOf("resource_type").forGetter(ManaCost::resource),
-            Codec.FLOAT.optionalFieldOf("amount", Constants.EPSILON).forGetter(ManaCost::amount),
-            Codec.BOOL.optionalFieldOf("consume", true).forGetter(ManaCost::consume)
-    ).apply(instance, ManaCost::new));
+    public static final MapCodec<AbilityResourceCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            AbilityResource.HOLDER_CODEC.fieldOf("resource_type").forGetter(AbilityResourceCost::resource),
+            Codec.FLOAT.optionalFieldOf("amount", Constants.EPSILON).forGetter(AbilityResourceCost::amount),
+            Codec.BOOL.optionalFieldOf("consume", true).forGetter(AbilityResourceCost::consume)
+    ).apply(instance, AbilityResourceCost::new));
 
     @Override
     public MapCodec<? extends AbilityRequirement> getCodec() {
@@ -29,14 +30,14 @@ public record ManaCost(Holder<AbilityResource> resource, float amount, boolean c
     @Override
     public boolean check(AbilityContext context) {
         float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, amount);
-        return context.caster().getData(WotrAttachments.MANA).getAmount(resource) >= manaCost;
+        return context.caster().getData(WotrAttachments.ABILITY_RESOURCE_DATA).getAmount(resource) >= manaCost;
     }
 
     @Override
     public void pay(AbilityContext context) {
         if (consume) {
             float manaCost = context.getAbilityAttribute(WotrAttributes.MANA_COST, amount);
-            context.caster().getData(WotrAttachments.MANA).useAmount(resource, manaCost);
+            context.caster().getData(WotrAttachments.ABILITY_RESOURCE_DATA).useAmount(resource, manaCost);
         }
     }
 

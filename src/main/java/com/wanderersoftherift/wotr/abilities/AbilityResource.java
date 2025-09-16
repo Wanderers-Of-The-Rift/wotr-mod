@@ -46,7 +46,7 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
 
         @Override
         public boolean trigger(LivingEntity entity, TrackableTrigger activation) {
-            var abilityResources = entity.getData(WotrAttachments.MANA);
+            var abilityResources = entity.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
             var currentAmount = abilityResources.getAmount(resource);
             var newAmount = Math.min(currentAmount + (float) entity.getAttributeValue(recharge),
                     resource.value().maxForEntity(entity));

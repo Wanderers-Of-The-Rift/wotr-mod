@@ -18,13 +18,17 @@ import org.jetbrains.annotations.NotNull;
  * 
  * @param newValue The new mana value to set
  */
-public record ManaChangePayload(Holder<AbilityResource> resource, float newValue) implements CustomPacketPayload {
+public record AbilityResourceChangePayload(Holder<AbilityResource> resource, float newValue)
+        implements CustomPacketPayload {
 
-    public static final Type<ManaChangePayload> TYPE = new Type<>(WanderersOfTheRift.id("mana_change"));
+    public static final Type<AbilityResourceChangePayload> TYPE = new Type<>(
+            WanderersOfTheRift.id("ability_resource_change"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ManaChangePayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(WotrRegistries.Keys.ABILITY_RESOURCES), ManaChangePayload::resource,
-            ByteBufCodecs.FLOAT, ManaChangePayload::newValue, ManaChangePayload::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, AbilityResourceChangePayload> STREAM_CODEC = StreamCodec
+            .composite(
+                    ByteBufCodecs.holderRegistry(WotrRegistries.Keys.ABILITY_RESOURCES),
+                    AbilityResourceChangePayload::resource, ByteBufCodecs.FLOAT, AbilityResourceChangePayload::newValue,
+                    AbilityResourceChangePayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -32,6 +36,6 @@ public record ManaChangePayload(Holder<AbilityResource> resource, float newValue
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().getData(WotrAttachments.MANA).setAmount(resource, newValue);
+        context.player().getData(WotrAttachments.ABILITY_RESOURCE_DATA).setAmount(resource, newValue);
     }
 }

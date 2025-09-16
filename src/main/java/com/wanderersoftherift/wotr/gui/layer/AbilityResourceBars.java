@@ -23,14 +23,15 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Vector2i;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Displays the player's mana. The bar extends based on max capacity, has an animation to its fill
  */
-public class ManaBar implements ConfigurableLayer {
+public class AbilityResourceBars implements ConfigurableLayer {
     private static final Component NAME = Component.translatable(WanderersOfTheRift.translationId("hud", "mana_bar"));
     private static final ResourceLocation TEXTURE_H = WanderersOfTheRift.id("textures/gui/hud/mana_bar_h.png");
     private static final int TEXTURE_H_WIDTH = 22;
@@ -59,8 +60,9 @@ public class ManaBar implements ConfigurableLayer {
 
     private float animCounter = 0.f;
 
-    private static Set<Map.Entry<Holder<AbilityResource>, Float>> getAbilityResources() {
-        return Minecraft.getInstance().player.getData(WotrAttachments.MANA).getAmounts().entrySet();
+    private static List<Map.Entry<Holder<AbilityResource>, Float>> getAbilityResources() {
+        return new ArrayList<>(
+                Minecraft.getInstance().player.getData(WotrAttachments.ABILITY_RESOURCE_DATA).getAmounts().entrySet());
     }
 
     @Override
@@ -94,7 +96,10 @@ public class ManaBar implements ConfigurableLayer {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
         var index = 0;
-        for (var resourceEntry : getAbilityResources()) {
+        var resources = getAbilityResources();
+        resources.sort(Comparator.comparing(it -> it.getKey().getKey().toString()));
+
+        for (var resourceEntry : resources) {
             Vector2i offset;
 
             if (getConfig().getOrientation() == UIOrientation.HORIZONTAL) {

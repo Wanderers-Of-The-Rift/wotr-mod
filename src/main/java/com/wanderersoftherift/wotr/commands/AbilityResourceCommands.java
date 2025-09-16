@@ -16,13 +16,13 @@ import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 
-public class ManaCommands extends BaseCommand {
+public class AbilityResourceCommands extends BaseCommand {
 
     private static final DynamicCommandExceptionType ERROR_INVALID_ABILITY_RESOURCE = new DynamicCommandExceptionType(
             id -> Component.translatableEscape("command." + WanderersOfTheRift.MODID + ".invalid_ability_resource",
                     id));
 
-    public ManaCommands() {
+    public AbilityResourceCommands() {
         super("mana", Commands.LEVEL_GAMEMASTERS);
     }
 
@@ -31,21 +31,17 @@ public class ManaCommands extends BaseCommand {
         var resource = "resource";
         builder.then(Commands.literal("refill")
                 .executes(ctx -> refillMana(ctx, null))
-                .then(Commands.argument(resource, ResourceKeyArgument.key(WotrRegistries.Keys.ABILITY_RESOURCES)))
-                .executes(ctx -> refillMana(ctx, ResourceKeyArgument.resolveKey(ctx, resource,
-                        WotrRegistries.Keys.ABILITY_RESOURCES, ERROR_INVALID_ABILITY_RESOURCE))));
+                .then(Commands.argument(resource, ResourceKeyArgument.key(WotrRegistries.Keys.ABILITY_RESOURCES))
+                        .executes(ctx -> refillMana(ctx, ResourceKeyArgument.resolveKey(ctx, resource,
+                                WotrRegistries.Keys.ABILITY_RESOURCES, ERROR_INVALID_ABILITY_RESOURCE)))));
     }
 
     private int refillMana(CommandContext<CommandSourceStack> stack, Holder<AbilityResource> resource) {
-        AbilityResourceData data = stack.getSource().getEntity().getData(WotrAttachments.MANA);
+        AbilityResourceData data = stack.getSource().getEntity().getData(WotrAttachments.ABILITY_RESOURCE_DATA);
         if (resource == null) {
-            data.getAmounts()
-                    .keySet()
-                    .forEach(
-                            it -> {
-                                data.setAmount(it, it.value().maxForEntity(stack.getSource().getEntity()));
-                            }
-                    );
+            data.getAmounts().keySet().forEach(it -> {
+                data.setAmount(it, it.value().maxForEntity(stack.getSource().getEntity()));
+            });
         } else {
             data.setAmount(resource, resource.value().maxForEntity(stack.getSource().getEntity()));
         }

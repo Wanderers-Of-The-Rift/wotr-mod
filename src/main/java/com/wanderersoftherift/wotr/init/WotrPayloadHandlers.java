@@ -5,13 +5,13 @@ import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilityResourceChangePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityStateReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
 import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
-import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
 import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
@@ -74,8 +74,8 @@ public class WotrPayloadHandlers {
                 AbilityCooldownUpdatePayload::handleOnClient);
         registrar.playToClient(AbilityToggleStatePayload.TYPE, AbilityToggleStatePayload.STREAM_CODEC,
                 AbilityToggleStatePayload::handleOnClient);
-        registrar.playToClient(ManaChangePayload.TYPE, ManaChangePayload.STREAM_CODEC,
-                ManaChangePayload::handleOnClient);
+        registrar.playToClient(AbilityResourceChangePayload.TYPE, AbilityResourceChangePayload.STREAM_CODEC,
+                AbilityResourceChangePayload::handleOnClient);
         registrar.playToClient(UpdateSlotAbilityStatePayload.TYPE, UpdateSlotAbilityStatePayload.STREAM_CODEC,
                 UpdateSlotAbilityStatePayload::handleOnClient);
         registrar.playToClient(AbilityStateReplicationPayload.TYPE, AbilityStateReplicationPayload.STREAM_CODEC,
@@ -172,10 +172,10 @@ public class WotrPayloadHandlers {
     }
 
     private static void replicateMana(ServerPlayer player) {
-        var resourceData = player.getData(WotrAttachments.MANA);
+        var resourceData = player.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
         resourceData.getAmounts()
                 .forEach((resource, amount) -> PacketDistributor.sendToPlayer(player,
-                        new ManaChangePayload(resource, amount)));
+                        new AbilityResourceChangePayload(resource, amount)));
     }
 
     private static void replicateAbilities(ServerPlayer player) {

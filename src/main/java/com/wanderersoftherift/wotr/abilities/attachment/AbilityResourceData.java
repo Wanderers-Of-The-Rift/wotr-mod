@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
-import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
+import com.wanderersoftherift.wotr.network.ability.AbilityResourceChangePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import it.unimi.dsi.fastutil.objects.Object2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
@@ -107,7 +107,7 @@ public class AbilityResourceData {
         }
 
         if (holder instanceof ServerPlayer player) {
-            PacketDistributor.sendToPlayer(player, new ManaChangePayload(resource, amount));
+            PacketDistributor.sendToPlayer(player, new AbilityResourceChangePayload(resource, amount));
         }
 
     }
