@@ -152,12 +152,6 @@ public class WotrAttachments {
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
             );
 
-    public static final Supplier<AttachmentType<EntityAttachmentRegistry<AbilityResourceData>>> MANA_ENTITY_REGISTRY = ATTACHMENT_TYPES
-            .register(
-                    "mana_entity_registry",
-                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
-            );
-
     public static final Supplier<AttachmentType<TriggerRegistry<TickTrigger>>> TICK_TRIGGER_REGISTRY = ATTACHMENT_TYPES
             .register(
                     "tick_trigger_registry",

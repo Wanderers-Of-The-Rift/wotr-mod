@@ -53,7 +53,6 @@ public class AbilityEventHandler {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             tickAttachedEffects(level);
             tickActiveAbilities(level);
-            tickMana(level);
         }
     }
 
@@ -126,9 +125,4 @@ public class AbilityEventHandler {
         });
     }
 
-    public static void tickMana(ServerLevel level) {
-        level.getData(WotrAttachments.MANA_ENTITY_REGISTRY).forEach((entity, manaData) -> {
-            manaData.tick();
-        });
-    }
 }

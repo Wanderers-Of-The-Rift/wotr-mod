@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.network.ability.ManaChangePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import it.unimi.dsi.fastutil.objects.Object2FloatLinkedOpenHashMap;
@@ -53,9 +52,6 @@ public class AbilityResourceData {
             }
         });
 
-        if (holder instanceof Entity entity) {
-            entity.level().getData(WotrAttachments.MANA_ENTITY_REGISTRY).add(entity);
-        }
     }
 
     public static IAttachmentSerializer<Tag, AbilityResourceData> getSerializer() {
@@ -116,18 +112,4 @@ public class AbilityResourceData {
 
     }
 
-    // Regenerates and/or degenerates the pool.
-    public void tick() {
-        return; // don't
-        /*
-         * if (!(holder instanceof LivingEntity entity)) { return; }
-         * 
-         * amounts.forEach((key, value) -> { amounts.put(key, key.value().tickForEntity(holder, value)); });
-         *
-         * float delta = 0; AttributeInstance manaRegenAttribute = entity.getAttribute(WotrAttributes.MANA_REGEN_RATE);
-         * if (manaRegenAttribute != null) { delta += (float) manaRegenAttribute.getValue(); } AttributeInstance
-         * manaDegenAttribute = entity.getAttribute(WotrAttributes.MANA_DEGEN_RATE); if (manaDegenAttribute != null) {
-         * delta -= (float) manaDegenAttribute.getValue(); } amount = Math.clamp(amount + delta, 0, maxAmount());
-         */
-    }
 }
