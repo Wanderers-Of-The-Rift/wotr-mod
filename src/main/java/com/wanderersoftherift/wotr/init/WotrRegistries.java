@@ -11,6 +11,8 @@ import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.shape.TargetAreaShape;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
@@ -125,6 +127,8 @@ public class WotrRegistries {
             Keys.MODIFIER_SOURCES).sync(true).create();
     public static final Registry<MapCodec<? extends TargetAreaShape>> TARGET_AREA_SHAPES = new RegistryBuilder<>(
             Keys.TARGET_AREA_SHAPES).create();
+    public static final Registry<AnomalyTask.AnomalyTaskType<?>> ANOMALY_TASK_TYPE = new RegistryBuilder<>(
+            Keys.ANOMALY_TASK_TYPE).sync(true).create();
 
     public static final class Keys {
 
@@ -228,6 +232,12 @@ public class WotrRegistries {
         // Mobs
         public static final ResourceKey<Registry<MapCodec<? extends MobInteraction>>> MOB_INTERACTIONS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
+        public static final ResourceKey<Registry<AnomalyTask<?>>> ANOMALY_TASK = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("anomaly_task"));
+        public static final ResourceKey<Registry<AnomalyTask.AnomalyTaskType<?>>> ANOMALY_TASK_TYPE = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("anomaly_tasks_type"));
+        public static final ResourceKey<Registry<AnomalyReward>> ANOMALY_REWARD = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("anomaly_reward"));
 
         private Keys() {
         }
@@ -269,6 +279,7 @@ public class WotrRegistries {
         event.register(RIFT_CONFIG_DATA_TYPES);
         event.register(RIFT_CORRIDOR_VALIDATORS);
         event.register(RIFT_POST_STEPS);
+        event.register(ANOMALY_TASK_TYPE);
     }
 
     @SubscribeEvent
@@ -288,5 +299,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
+        event.dataPackRegistry(Keys.ANOMALY_TASK, AnomalyTask.DIRECT_CODEC, AnomalyTask.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.ANOMALY_REWARD, AnomalyReward.DIRECT_CODEC, AnomalyReward.DIRECT_CODEC);
     }
 }

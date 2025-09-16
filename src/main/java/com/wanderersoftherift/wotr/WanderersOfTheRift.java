@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
 import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
+import com.wanderersoftherift.wotr.init.WotrAnomalyTaskTypes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
@@ -104,6 +105,8 @@ public class WanderersOfTheRift {
         WotrLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         WotrLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
         WotrLootItemConditionTypes.LOOT_ITEM_CONDITION_TYPES.register(modEventBus);
+
+        WotrAnomalyTaskTypes.ANOMALY_TASK_TYPES.register(modEventBus);
 
         // Attachments and components
         WotrAttachments.ATTACHMENT_TYPES.register(modEventBus);

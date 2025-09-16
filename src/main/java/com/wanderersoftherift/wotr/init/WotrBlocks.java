@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.AbilityBenchBlock;
+import com.wanderersoftherift.wotr.block.AnomalyBlock;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.DittoBlock;
 import com.wanderersoftherift.wotr.block.KeyForgeBlock;
@@ -135,6 +136,8 @@ public class WotrBlocks {
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
+    public static final DeferredBlock<AnomalyBlock> ANOMALY = registerBlock("anomaly_block", () -> new AnomalyBlock(
+            BlockBehaviour.Properties.of().setId(blockId("anomaly_block")).sound(SoundType.STONE).noOcclusion()));;
 
     public static final BlockFamilyHelper PROCESSOR_BLOCK_1 = registerBuildingBlock("processor_block_1",
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_1"))));
