@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
+import com.wanderersoftherift.wotr.entity.player.LivingAttributeChangedEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
@@ -54,6 +55,11 @@ public class AbilityEventHandler {
             tickAttachedEffects(level);
             tickActiveAbilities(level);
         }
+    }
+
+    @SubscribeEvent
+    public static void updateAbilityResourceTriggers(LivingAttributeChangedEvent event) {
+        event.getEntity().getData(WotrAttachments.ABILITY_RESOURCE_DATA).onAttributeChanged(event.getAttribute());
     }
 
     @SubscribeEvent

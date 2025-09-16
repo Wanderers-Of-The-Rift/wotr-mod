@@ -4,17 +4,19 @@ import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.network.ability.AbilityResourceChangePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
-import it.unimi.dsi.fastutil.objects.Object2FloatLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +31,9 @@ public class AbilityResourceData {
             DATA_CODEC, AbilityResourceData::new, AbilityResourceData::getAmounts);
 
     private final IAttachmentHolder holder;
-    private Object2FloatMap<Holder<AbilityResource>> amounts = new Object2FloatLinkedOpenHashMap<>();
+    private Map<Holder<AbilityResource>, AbilityResourceState> amounts = new LinkedHashMap<>();
+    private Map<Holder<Attribute>, AbilityResourceState> degenNotifiers = new LinkedHashMap<>();
+    private Map<Holder<Attribute>, AbilityResourceState> rechargeNotifiers = new LinkedHashMap<>();
 
     public AbilityResourceData(IAttachmentHolder holder) {
         this(holder, Collections.emptyMap());
@@ -37,18 +41,21 @@ public class AbilityResourceData {
 
     public AbilityResourceData(IAttachmentHolder holder, Map<Holder<AbilityResource>, Float> amounts) {
         this.holder = holder;
-        this.amounts.putAll(amounts);
 
         amounts.forEach((resource, amount) -> {
-
-            var max = resource.value().maxForEntity(holder);
-            var rechargeTrigger = resource.value().rechargeAction();
-            var rechargeAttribute = resource.value().recharge();
-
-            if (amount != max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
-                TriggerTracker.forEntity((Entity) holder)
-                        .registerTriggerable(rechargeTrigger.get(),
-                                new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
+            var state = createStateIfAbsent(resource);
+            state.setAmount(amount);
+            if (holder instanceof LivingEntity livingEntity) {
+                var rechargeAttribute = resource.value().recharge();
+                if (rechargeAttribute.isPresent()) {
+                    var rechargeAmount = livingEntity.getAttributeValue(rechargeAttribute.get());
+                    state.setHasNonZeroRecharge(rechargeAmount > -1e-6 && rechargeAmount < 1e-6);
+                }
+                var degenAttribute = resource.value().degen();
+                if (degenAttribute.isPresent()) {
+                    var degenAmount = livingEntity.getAttributeValue(degenAttribute.get());
+                    state.setHasNonZeroDegen(degenAmount > -1e-6 && degenAmount < 1e-6);
+                }
             }
         });
 
@@ -62,11 +69,15 @@ public class AbilityResourceData {
      * @return The amount of mana available
      */
     public float getAmount(Holder<AbilityResource> resource) {
-        return amounts.getFloat(resource);
+        return createStateIfAbsent(resource).value;
     }
 
     public Map<Holder<AbilityResource>, Float> getAmounts() {
-        return amounts;
+        var result = new HashMap<Holder<AbilityResource>, Float>();
+        amounts.forEach(
+                (resource, state) -> result.put(resource, state.value)
+        );
+        return result;
     }
 
     /**
@@ -78,7 +89,8 @@ public class AbilityResourceData {
         if (quantity == 0) {
             return;
         }
-        setAmount(resource, getAmount(resource) - quantity);
+        var state = createStateIfAbsent(resource);
+        state.setAmount(state.value - quantity);
     }
 
     /**
@@ -87,29 +99,103 @@ public class AbilityResourceData {
      * @param value The new value of mana
      */
     public void setAmount(Holder<AbilityResource> resource, float value) {
-        var max = resource.value().maxForEntity(holder);
-        var amount = Math.clamp(value, 0, max);
-        var oldAmount = this.amounts.getFloat(resource);
-        this.amounts.put(resource, amount);
+        var state = createStateIfAbsent(resource);
+        state.setAmount(value);
+    }
 
-        var rechargeTrigger = resource.value().rechargeAction();
-        var rechargeAttribute = resource.value().recharge();
-
-        if (oldAmount != max && amount == max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
-            TriggerTracker.forEntity((Entity) holder)
-                    .unregisterTriggerable(rechargeTrigger.get(),
-                            new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
+    private AbilityResourceState createStateIfAbsent(Holder<AbilityResource> resource) {
+        var state = amounts.get(resource);
+        if (state != null) {
+            return state;
         }
-        if (oldAmount == max && amount != max && rechargeTrigger.isPresent() && rechargeAttribute.isPresent()) {
-            TriggerTracker.forEntity((Entity) holder)
-                    .registerTriggerable(rechargeTrigger.get(),
-                            new AbilityResource.AbilityResourceRecharge(resource, rechargeAttribute.get()));
+        var newState = new AbilityResourceState(resource);
+        amounts.put(resource, newState);
+        resource.value().degen().ifPresent(it -> degenNotifiers.put(it, newState));
+        resource.value().recharge().ifPresent(it -> rechargeNotifiers.put(it, newState));
+        return newState;
+    }
+
+    public void onAttributeChanged(Holder<Attribute> attribute) {
+        var value = ((LivingEntity) holder).getAttributeValue(attribute);
+        var degenState = degenNotifiers.get(attribute);
+        if (degenState != null) {
+            degenState.setHasNonZeroDegen(value < -1e-6 || value > 1e-6);
+        }
+        var rechargeState = rechargeNotifiers.get(attribute);
+        if (rechargeState != null) {
+            rechargeState.setHasNonZeroRecharge(value < -1e-6 || value > 1e-6);
+        }
+    }
+
+    private class AbilityResourceState {
+        private final Holder<AbilityResource> resource;
+        private float value = 0f;
+        private boolean isFull = false;
+        private boolean isEmpty = false;
+        private boolean hasNonZeroRecharge = false;
+        private boolean hasNonZeroDegen = false;
+        private AbilityResource.AbilityResourceRecharge currentRechargeTriggerable = null;
+        private AbilityResource.AbilityResourceRecharge currentDegenTriggerable = null;
+
+        private AbilityResourceState(Holder<AbilityResource> resource) {
+            this.resource = resource;
         }
 
-        if (holder instanceof ServerPlayer player) {
-            PacketDistributor.sendToPlayer(player, new AbilityResourceChangePayload(resource, amount));
+        void setAmount(float newAmount) {
+            if (newAmount > value) {
+                var max = resource.value().maxForEntity(holder);
+                value = Math.min(max, newAmount);
+                isFull = value == max;
+                isEmpty = false;
+            } else {
+                var min = 0f;
+                value = Math.max(min, newAmount);
+                isEmpty = value == min;
+                isFull = false;
+            }
+            updateTriggers();
+
+            if (holder instanceof ServerPlayer player && player.connection != null) {
+                PacketDistributor.sendToPlayer(player, new AbilityResourceChangePayload(resource, newAmount));
+            }
         }
 
+        void setHasNonZeroRecharge(boolean newValue) {
+            hasNonZeroRecharge = newValue;
+            updateTriggers();
+        }
+
+        void setHasNonZeroDegen(boolean newValue) {
+            hasNonZeroDegen = newValue;
+            updateTriggers();
+        }
+
+        private void updateTriggers() {
+            var shouldRecharge = !isFull && hasNonZeroRecharge && resource.value().rechargeAction().isPresent()
+                    && resource.value().recharge().isPresent();
+            var shouldDegen = !isEmpty && hasNonZeroDegen && resource.value().degenAction().isPresent()
+                    && resource.value().degen().isPresent();
+            var triggerTracker = TriggerTracker.forEntity((Entity) holder);
+            if (!shouldRecharge && currentRechargeTriggerable != null) {
+                triggerTracker.unregisterTriggerable(resource.value().rechargeAction().get(),
+                        currentRechargeTriggerable);
+                currentRechargeTriggerable = null;
+            }
+            if (shouldRecharge && currentRechargeTriggerable == null) {
+                currentRechargeTriggerable = new AbilityResource.AbilityResourceRecharge(resource,
+                        resource.value().recharge().get(), false);
+                triggerTracker.registerTriggerable(resource.value().rechargeAction().get(), currentRechargeTriggerable);
+            }
+            if (!shouldDegen && currentDegenTriggerable != null) {
+                triggerTracker.unregisterTriggerable(resource.value().degenAction().get(), currentDegenTriggerable);
+                currentDegenTriggerable = null;
+            }
+            if (shouldDegen && currentDegenTriggerable == null) {
+                currentDegenTriggerable = new AbilityResource.AbilityResourceRecharge(resource,
+                        resource.value().degen().get(), true);
+                triggerTracker.registerTriggerable(resource.value().degenAction().get(), currentDegenTriggerable);
+            }
+        }
     }
 
 }

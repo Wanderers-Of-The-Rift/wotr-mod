@@ -15,7 +15,8 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import java.util.Optional;
 
 public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Holder<Attribute>> recharge,
-        Optional<Holder<TrackableTrigger.TriggerType<?>>> rechargeAction) {
+        Optional<Holder<TrackableTrigger.TriggerType<?>>> rechargeAction, Optional<Holder<Attribute>> degen,
+        Optional<Holder<TrackableTrigger.TriggerType<?>>> degenAction) {
 
     public static final Codec<Holder<AbilityResource>> HOLDER_CODEC = LaxRegistryCodec
             .create(WotrRegistries.Keys.ABILITY_RESOURCES);
@@ -26,7 +27,11 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
                     Attribute.CODEC.optionalFieldOf("recharge_amount").forGetter(AbilityResource::recharge),
                     WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
                             .optionalFieldOf("recharge_action")
-                            .forGetter(AbilityResource::rechargeAction)
+                            .forGetter(AbilityResource::rechargeAction),
+                    Attribute.CODEC.optionalFieldOf("degen_amount").forGetter(AbilityResource::degen),
+                    WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
+                            .optionalFieldOf("degen_action")
+                            .forGetter(AbilityResource::degenAction)
             ).apply(instance, AbilityResource::new)
     );
 
@@ -41,17 +46,21 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
         return maxForEntity(entity);
     }
 
-    public record AbilityResourceRecharge(Holder<AbilityResource> resource, Holder<Attribute> recharge)
-            implements TriggerTracker.Triggerable {
+    public record AbilityResourceRecharge(Holder<AbilityResource> resource, Holder<Attribute> recharge,
+            boolean isNegative) implements TriggerTracker.Triggerable {
 
         @Override
         public boolean trigger(LivingEntity entity, TrackableTrigger activation) {
             var abilityResources = entity.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
-            var currentAmount = abilityResources.getAmount(resource);
-            var newAmount = Math.min(currentAmount + (float) entity.getAttributeValue(recharge),
-                    resource.value().maxForEntity(entity));
-            abilityResources.setAmount(resource, newAmount);
-            return newAmount > currentAmount;
+            var amount = abilityResources.getAmount(resource);
+            var delta = (float) entity.getAttributeValue(recharge);
+            if (isNegative) {
+                amount -= delta;
+            } else {
+                amount += delta;
+            }
+            abilityResources.setAmount(resource, amount);
+            return delta != 0;
         }
     }
 }
