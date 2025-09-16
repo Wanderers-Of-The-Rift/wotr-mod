@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.block.blockentity.anomaly;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -36,16 +37,24 @@ public record BattleTask() implements AnomalyTask<BattleTaskState> {
         var mobs = new ArrayList<Entity>();
         mobs.add(WotrEntities.RIFT_ZOMBIE.get()
                 .spawn(serverLevel, anomalyBlockEntity.getBlockPos().above(), EntitySpawnReason.SPAWNER));
-        var mobUUIDs = new HashSet<>(mobs.stream().filter(Objects::nonNull).map(Entity::getUUID).toList());
+
+        var mobUUIDs = new HashSet<>(mobs.stream().filter(Objects::nonNull).map(it -> {
+            it.setData(WotrAttachments.BATTLE_TASK_MOB, new BattleMobAttachment(anomalyBlockEntity.getBlockPos()));
+            return it;
+        }).map(Entity::getUUID).toList());
 
         anomalyBlockEntity.updateTask(new BattleTaskState(mobUUIDs, Optional.of(player.getUUID())));
-        // todo spawn mobs
         return InteractionResult.SUCCESS;
     }
 
     @Override
     public AnomalyTaskType<BattleTaskState> type() {
         return TYPE;
+    }
+
+    @Override
+    public BattleTaskState createState() {
+        return new BattleTaskState(new HashSet<>(), Optional.empty());
     }
 
     public void handleMobDeath(UUID mob, BattleTaskState state, AnomalyBlockEntity anomalyBlockEntity) {

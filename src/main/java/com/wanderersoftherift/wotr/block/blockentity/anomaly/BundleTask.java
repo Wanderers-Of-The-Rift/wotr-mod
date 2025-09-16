@@ -9,6 +9,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
+import java.util.Map;
+
 public record BundleTask() implements AnomalyTask<BundleTaskState> {
     public static final AnomalyTaskType<BundleTaskState> TYPE = new AnomalyTaskType<>(
             MapCodec.unit(new BundleTask()), BundleTaskState.CODEC
@@ -17,6 +19,11 @@ public record BundleTask() implements AnomalyTask<BundleTaskState> {
     @Override
     public AnomalyTaskType<BundleTaskState> type() {
         return TYPE;
+    }
+
+    @Override
+    public BundleTaskState createState() {
+        return new BundleTaskState(new Object2IntOpenHashMap(Map.of(Items.WHITE_WOOL, 10, Items.GRAY_WOOL, 5)));
     }
 
     public InteractionResult interact(

@@ -25,6 +25,8 @@ public interface AnomalyTask<T> {
 
     AnomalyTaskType<T> type();
 
+    T createState();
+
     record AnomalyTaskType<T>(MapCodec<AnomalyTask<T>> mainCodec, Codec<T> stateCodec) {
     }
 }
