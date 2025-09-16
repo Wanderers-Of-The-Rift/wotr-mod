@@ -62,11 +62,29 @@ public class AnomalyBlockEntity extends BlockEntity {
 
     }
 
+    public void battleMobDeath(LivingEntity entity) {
+        if (state == null) {
+            return;
+        }
+        if (state.task().value() instanceof BattleTask battleTask && state.state().isPresent()
+                && state.state().get() instanceof BattleTaskState battleTaskState) {
+            battleTask.handleMobDeath(entity.getUUID(), battleTaskState, this);
+        }
+
+    }
+
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (state == null) {
             return InteractionResult.PASS;
         }
         return state.handleInteraction(player, hand, this);
+    }
+
+    public void closeAndReward(Player player) {
+        setAnomalyState(null);
+        if (reward != null && reward.isBound()) {
+            reward.value().grantReward(player);
+        }
     }
 
     public <T> void updateTask(T state) {
@@ -84,10 +102,15 @@ public class AnomalyBlockEntity extends BlockEntity {
         }
     }
 
-    public void closeAndReward(Player player) {
-        setAnomalyState(null);
-        if (reward != null && reward.isBound()) {
-            reward.value().grantReward(player);
+    public void setAnomalyReward(Holder<AnomalyReward> reward) {
+        this.reward = reward;
+    }
+
+    public float getScale() {
+        if (state == null) {
+            return COMPLETED_STATE;
+        } else {
+            return INCOMPLETE_STATE;
         }
     }
 
@@ -122,25 +145,6 @@ public class AnomalyBlockEntity extends BlockEntity {
             decode.ifError(it -> WanderersOfTheRift.LOGGER.debug(it.messageSupplier().get()));
         } else {
             setAnomalyState(null);
-        }
-    }
-
-    public void battleMobDeath(LivingEntity entity) {
-        if (state == null) {
-            return;
-        }
-        if (state.task().value() instanceof BattleTask battleTask && state.state().isPresent()
-                && state.state().get() instanceof BattleTaskState battleTaskState) {
-            battleTask.handleMobDeath(entity.getUUID(), battleTaskState, this);
-        }
-
-    }
-
-    public float getScale() {
-        if (state == null) {
-            return COMPLETED_STATE;
-        } else {
-            return INCOMPLETE_STATE;
         }
     }
 
