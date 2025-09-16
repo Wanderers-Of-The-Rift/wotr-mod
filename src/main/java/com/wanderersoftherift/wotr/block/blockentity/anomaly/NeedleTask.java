@@ -18,6 +18,11 @@ public record NeedleTask() implements AnomalyTask<NeedleTaskState> {
         return TYPE;
     }
 
+    @Override
+    public NeedleTaskState createState() {
+        return new NeedleTaskState();
+    }
+
     public InteractionResult interact(
             Player player,
             InteractionHand hand,

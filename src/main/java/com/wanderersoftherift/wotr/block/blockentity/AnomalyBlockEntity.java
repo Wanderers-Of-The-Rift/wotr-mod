@@ -2,8 +2,10 @@ package com.wanderersoftherift.wotr.block.blockentity;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTaskState;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,6 +39,9 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public void scheduledTick(ServerLevel serverLevel, BlockPos pos, BlockState state1) {
+        if (state == null) {
+            return;
+        }
         var taskState = state.state();
         if (taskState.isPresent() && taskState.get() instanceof BattleTaskState battleTask) {
             if (battleTask.isRewarding()) {
@@ -51,14 +57,22 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (state != null) {
-            return state.handleInteraction(player, hand, this);
+        if (state == null) {
+            return InteractionResult.PASS;
         }
-        return InteractionResult.PASS;
+        return state.handleInteraction(player, hand, this);
     }
 
     public <T> void updateTask(T state) {
-        this.state = new AnomalyState<T>((Holder<AnomalyTask<T>>) (Object) this.state.task(), Optional.of(state));
+        this.setAnomalyState(
+                new AnomalyState<T>((Holder<AnomalyTask<T>>) (Object) this.state.task(), Optional.of(state)));
+    }
+
+    public <T> void setAnomalyState(AnomalyState<T> state) {
+        if (state.state().isEmpty()) {
+            state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState()));
+        }
+        this.state = state;
     }
 
     public void closeAndReward(Player player) {
@@ -84,13 +98,29 @@ public class AnomalyBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
+
         var ops = registries.createSerializationContext(NbtOps.INSTANCE);
         if (tag.contains("reward")) {
-            AnomalyReward.HOLDER_CODEC.decode(ops, tag.get("reward")).ifSuccess(value -> reward = value.getFirst());
+            var decode = AnomalyReward.HOLDER_CODEC.decode(ops, tag.get("reward"));
+            decode.ifSuccess(value -> reward = value.getFirst());
+            decode.ifError(it -> WanderersOfTheRift.LOGGER.debug(it.messageSupplier().get()));
         }
         if (tag.contains("task")) {
-            AnomalyState.CODEC.decode(ops, tag.get("task")).ifSuccess(value -> state = value.getFirst());
+            var decode = AnomalyState.CODEC.decode(ops, tag.get("task"));
+            decode.ifSuccess(value -> setAnomalyState(value.getFirst()));
+            decode.ifError(it -> WanderersOfTheRift.LOGGER.debug(it.messageSupplier().get()));
         }
+    }
+
+    public void battleMobDeath(LivingEntity entity) {
+        if (state == null) {
+            return;
+        }
+        if (state.task().value() instanceof BattleTask battleTask && state.state().isPresent()
+                && state.state().get() instanceof BattleTaskState battleTaskState) {
+            battleTask.handleMobDeath(entity.getUUID(), battleTaskState, this);
+        }
+
     }
 
     public record AnomalyState<T>(Holder<AnomalyTask<T>> task, Optional<T> state) {
