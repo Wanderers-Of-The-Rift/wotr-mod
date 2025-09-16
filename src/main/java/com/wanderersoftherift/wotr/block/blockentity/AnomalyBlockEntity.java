@@ -15,6 +15,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,11 +25,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class AnomalyBlockEntity extends BlockEntity {
 
+    private static final float COMPLETED_STATE = 0.1f;
+    private static final float INCOMPLETE_STATE = 1f;
     private Holder<AnomalyReward> reward;
     private AnomalyState<?> state;
 
@@ -69,14 +75,17 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public <T> void setAnomalyState(AnomalyState<T> state) {
-        if (state.state().isEmpty()) {
+        if (state != null && state.state().isEmpty()) {
             state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState()));
         }
         this.state = state;
+        if (level instanceof ServerLevel serverLevel) {
+            serverLevel.players().forEach(player -> player.connection.send(getUpdatePacket()));
+        }
     }
 
     public void closeAndReward(Player player) {
-        state = null;
+        setAnomalyState(null);
         if (reward != null && reward.isBound()) {
             reward.value().grantReward(player);
         }
@@ -104,11 +113,15 @@ public class AnomalyBlockEntity extends BlockEntity {
             var decode = AnomalyReward.HOLDER_CODEC.decode(ops, tag.get("reward"));
             decode.ifSuccess(value -> reward = value.getFirst());
             decode.ifError(it -> WanderersOfTheRift.LOGGER.debug(it.messageSupplier().get()));
+        } else {
+            reward = null;
         }
         if (tag.contains("task")) {
             var decode = AnomalyState.CODEC.decode(ops, tag.get("task"));
             decode.ifSuccess(value -> setAnomalyState(value.getFirst()));
             decode.ifError(it -> WanderersOfTheRift.LOGGER.debug(it.messageSupplier().get()));
+        } else {
+            setAnomalyState(null);
         }
     }
 
@@ -121,6 +134,24 @@ public class AnomalyBlockEntity extends BlockEntity {
             battleTask.handleMobDeath(entity.getUUID(), battleTaskState, this);
         }
 
+    }
+
+    public float getScale() {
+        if (state == null) {
+            return COMPLETED_STATE;
+        } else {
+            return INCOMPLETE_STATE;
+        }
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public record AnomalyState<T>(Holder<AnomalyTask<T>> task, Optional<T> state) {
