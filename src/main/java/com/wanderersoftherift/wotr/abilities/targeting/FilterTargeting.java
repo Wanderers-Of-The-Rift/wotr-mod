@@ -29,8 +29,11 @@ public record FilterTargeting(TargetEntityPredicate entities, TargetBlockPredica
     public List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
         List<HitResult> results = new ArrayList<>();
         results.addAll(
-                origin.targetEntities().filter(x -> entities().matches(x.getEntity(), context.caster())).toList());
-        results.addAll(origin.targetBlocks().filter(x -> blocks.matches(x.getBlockPos(), context.level())).toList());
+                origin.targetEntities()
+                        .filter(x -> entities().matches(x.getEntity(), origin.source(), context))
+                        .toList());
+        results.addAll(
+                origin.targetBlocks().filter(x -> blocks.matches(x.getBlockPos(), origin.source(), context)).toList());
         if (results.isEmpty()) {
             return List.of();
         }

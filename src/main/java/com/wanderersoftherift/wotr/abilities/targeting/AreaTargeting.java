@@ -10,9 +10,8 @@ import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -23,19 +22,17 @@ public abstract class AreaTargeting implements AbilityTargeting {
     private final TargetEntityPredicate entityPredicate;
     private final TargetBlockPredicate blockPredicate;
     private final float range;
-    private final boolean includeSelf;
     private final boolean alignToBlock;
 
-    public AreaTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, float range, boolean includeSelf,
+    public AreaTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, float range,
             boolean alignToBlock) {
         this.entityPredicate = entities;
         this.blockPredicate = blocks;
         this.range = range;
-        this.includeSelf = includeSelf;
         this.alignToBlock = alignToBlock;
     }
 
-    protected static <T extends AreaTargeting> Products.P5<RecordCodecBuilder.Mu<T>, TargetEntityPredicate, TargetBlockPredicate, Float, Boolean, Boolean> commonFields(
+    protected static <T extends AreaTargeting> Products.P4<RecordCodecBuilder.Mu<T>, TargetEntityPredicate, TargetBlockPredicate, Float, Boolean> commonFields(
             RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
                 TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.ALL)
@@ -43,7 +40,6 @@ public abstract class AreaTargeting implements AbilityTargeting {
                 TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.NONE)
                         .forGetter(AreaTargeting::getBlockPredicate),
                 Codec.FLOAT.fieldOf("range").forGetter(AreaTargeting::getBaseRange),
-                Codec.BOOL.optionalFieldOf("include_self", true).forGetter(AreaTargeting::getIncludeSelf),
                 Codec.BOOL.optionalFieldOf("align_to_block", false).forGetter(AreaTargeting::getAlignToBlock)
         );
     }
@@ -56,26 +52,21 @@ public abstract class AreaTargeting implements AbilityTargeting {
 
     @Override
     public final List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
+        if (!(context.level() instanceof ServerLevel level)) {
+            return List.of();
+        }
         float range = getRange(context);
         List<TargetInfo> result = new ArrayList<>();
         for (HitResult source : origin.targets()) {
             AABB aabb = getArea(source, range);
             List<HitResult> hits = new ArrayList<>();
             if (entityPredicate != TargetEntityPredicate.NONE) {
-                Entity sourceEntity;
-                if (source instanceof EntityHitResult sourceEntityHit) {
-                    sourceEntity = sourceEntityHit.getEntity();
-                } else {
-                    sourceEntity = null;
-                }
-                hits.addAll(TargetingUtil.getEntitiesInArea(context.level(), aabb,
-                        (center, pos) -> inArea(center, pos, range),
-                        (target) -> entityPredicate.matches(target, context.caster())
-                                && (includeSelf || target != sourceEntity)));
+                hits.addAll(TargetingUtil.getEntitiesInArea(level, aabb, (center, pos) -> inArea(center, pos, range),
+                        (target) -> entityPredicate.matches(target, source, context)));
             }
             if (blockPredicate != TargetBlockPredicate.NONE) {
                 hits.addAll(TargetingUtil.getBlocksInArea(aabb, (center, pos) -> inArea(center, pos, range),
-                        (pos) -> blockPredicate.matches(pos, context.level())));
+                        (pos) -> blockPredicate.matches(pos, source, context)));
             }
             if (!hits.isEmpty()) {
                 result.add(new TargetInfo(source, hits));
@@ -97,10 +88,6 @@ public abstract class AreaTargeting implements AbilityTargeting {
 
     public TargetBlockPredicate getBlockPredicate() {
         return blockPredicate;
-    }
-
-    public boolean getIncludeSelf() {
-        return includeSelf;
     }
 
     public float getBaseRange() {
