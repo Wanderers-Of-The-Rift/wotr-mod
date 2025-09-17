@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class TriggerTracker {
-    private final Multimap<Holder<TrackableTrigger.TriggerType<?>>, Triggerable> abilities = ArrayListMultimap.create();
+    private final Multimap<Holder<TrackableTrigger.TriggerType<?>>, Triggerable> triggerables = ArrayListMultimap
+            .create();
     private final IAttachmentHolder holder;
 
     public TriggerTracker(IAttachmentHolder holder) {
@@ -49,7 +50,7 @@ public class TriggerTracker {
         var typeHolder = getLevel().registryAccess()
                 .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
                 .wrapAsHolder(activation.type());
-        var triggerables = new ArrayList<>(abilities.get(typeHolder));
+        var triggerables = new ArrayList<>(this.triggerables.get(typeHolder));
         for (Triggerable tracked : triggerables) {
             result |= tracked.trigger(entity, activation);
         }
@@ -57,7 +58,7 @@ public class TriggerTracker {
     }
 
     public boolean hasListenersOnTrigger(Holder<TrackableTrigger.TriggerType<?>> activation) {
-        return !abilities.get(activation).isEmpty();
+        return !triggerables.get(activation).isEmpty();
     }
 
     public void registerAbilityTrigger(TriggerableAbilityModifier abilityModifier, AbilitySource source) {
@@ -65,14 +66,14 @@ public class TriggerTracker {
     }
 
     public void registerAbilityTrigger(
-            Holder<TrackableTrigger.TriggerType<?>> trigger,
+            TrackableTrigger.TriggerPredicate<?> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
-        registerTriggerable(trigger, new TriggerableAbility(source, abilityHolder));
+        registerTriggerable(trigger.type(), new TriggerableAbility(source, abilityHolder, trigger));
     }
 
     public void registerTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
-        abilities.put(trigger, triggerable);
+        triggerables.put(trigger, triggerable);
         if (!(holder instanceof Entity livingEntity) || !(livingEntity.level() instanceof ServerLevel serverLevel)) {
             return;
         }
@@ -87,23 +88,31 @@ public class TriggerTracker {
     }
 
     public void unregisterAbilityTrigger(
-            Holder<TrackableTrigger.TriggerType<?>> trigger,
+            TrackableTrigger.TriggerPredicate<?> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
-        unregisterTriggerable(trigger, new TriggerableAbility(source, abilityHolder));
+        unregisterTriggerable(trigger.type(), new TriggerableAbility(source, abilityHolder, trigger));
     }
 
     public void unregisterTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
-        abilities.get(trigger).removeIf(trackedAbility -> trackedAbility.equals(triggerable));
+        triggerables.get(trigger).removeIf(trackedAbility -> trackedAbility.equals(triggerable));
     }
 
     public interface Triggerable {
+
+        TrackableTrigger.TriggerPredicate<?> predicate();
+
         boolean trigger(LivingEntity holder, TrackableTrigger activation);
     }
 
-    record TriggerableAbility(AbilitySource source, Holder<Ability> ability) implements Triggerable {
+    record TriggerableAbility(AbilitySource source, Holder<Ability> ability,
+            TrackableTrigger.TriggerPredicate<?> predicate) implements Triggerable {
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
+            if (predicate().type().value() != activation.type()
+                    || !((TrackableTrigger.TriggerPredicate<TrackableTrigger>) predicate()).test(activation)) {
+                return false;
+            }
             return holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(source, source.getItem(holder), ability);
         }
 

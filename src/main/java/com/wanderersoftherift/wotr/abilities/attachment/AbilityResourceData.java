@@ -177,23 +177,26 @@ public class AbilityResourceData {
                     && resource.value().degen().isPresent();
             var triggerTracker = TriggerTracker.forEntity((Entity) holder);
             if (!shouldRecharge && currentRechargeTriggerable != null) {
-                triggerTracker.unregisterTriggerable(resource.value().rechargeAction().get(),
+                triggerTracker.unregisterTriggerable(resource.value().rechargeAction().get().type(),
                         currentRechargeTriggerable);
                 currentRechargeTriggerable = null;
             }
             if (shouldRecharge && currentRechargeTriggerable == null) {
+                var predicate = resource.value().rechargeAction().get();
                 currentRechargeTriggerable = new AbilityResource.AbilityResourceRecharge(resource,
-                        resource.value().recharge().get(), false);
-                triggerTracker.registerTriggerable(resource.value().rechargeAction().get(), currentRechargeTriggerable);
+                        resource.value().recharge().get(), false, predicate);
+                triggerTracker.registerTriggerable(predicate.type(), currentRechargeTriggerable);
             }
             if (!shouldDegen && currentDegenTriggerable != null) {
-                triggerTracker.unregisterTriggerable(resource.value().degenAction().get(), currentDegenTriggerable);
+                triggerTracker.unregisterTriggerable(resource.value().degenAction().get().type(),
+                        currentDegenTriggerable);
                 currentDegenTriggerable = null;
             }
             if (shouldDegen && currentDegenTriggerable == null) {
+                var predicate = resource.value().degenAction().get();
                 currentDegenTriggerable = new AbilityResource.AbilityResourceRecharge(resource,
-                        resource.value().degen().get(), true);
-                triggerTracker.registerTriggerable(resource.value().degenAction().get(), currentDegenTriggerable);
+                        resource.value().degen().get(), true, predicate);
+                triggerTracker.registerTriggerable(predicate.type(), currentDegenTriggerable);
             }
         }
     }

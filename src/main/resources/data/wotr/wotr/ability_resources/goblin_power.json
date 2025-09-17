@@ -2,7 +2,11 @@
     "color": -256,
     "maximum": "wotr:max_goblin",
     "recharge_amount": "wotr:goblin_regen_rate",
-    "recharge_action": "wotr:loot",
+    "recharge_action": {
+        "type": "wotr:loot"
+    },
     "degen_amount": "wotr:goblin_degen_rate",
-    "degen_action": "wotr:tick"
+    "degen_action": {
+        "type": "wotr:tick"
+    }
 }

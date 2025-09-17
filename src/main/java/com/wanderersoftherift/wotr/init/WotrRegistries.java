@@ -117,7 +117,7 @@ public class WotrRegistries {
             Keys.THEME_SOURCE_TYPES).create();
     public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
-    public static final Registry<TrackableTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+    public static final Registry<TrackableTrigger.TriggerType<?>> TRACKABLE_TRIGGERS = new RegistryBuilder<>(
             Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
     public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
             Keys.ABILITY_SOURCES).sync(true).create();
@@ -249,7 +249,7 @@ public class WotrRegistries {
         event.register(REWARD_TYPES);
         event.register(MOB_INTERACTIONS);
         event.register(EDIT_TYPES);
-        event.register(TRACKED_ABILITY_TRIGGERS);
+        event.register(TRACKABLE_TRIGGERS);
         event.register(ABILITY_SOURCES);
         event.register(MODIFIER_SOURCES);
 

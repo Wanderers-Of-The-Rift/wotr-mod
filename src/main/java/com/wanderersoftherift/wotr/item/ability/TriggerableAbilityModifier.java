@@ -8,7 +8,6 @@ import com.wanderersoftherift.wotr.abilities.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
@@ -21,14 +20,13 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record TriggerableAbilityModifier(Holder<Ability> providedAbility,
-        Holder<TrackableTrigger.TriggerType<?>> trigger) implements ModifierEffect {
+public record TriggerableAbilityModifier(Holder<Ability> providedAbility, TrackableTrigger.TriggerPredicate<?> trigger)
+        implements ModifierEffect {
 
     public static final MapCodec<TriggerableAbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Ability.CODEC.fieldOf("provided_ability").forGetter(TriggerableAbilityModifier::providedAbility),
-                    WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
-                            .fieldOf("trigger")
+                    TrackableTrigger.TriggerPredicate.CODEC.fieldOf("trigger")
                             .forGetter(TriggerableAbilityModifier::trigger)
             ).apply(instance, TriggerableAbilityModifier::new));
 
@@ -65,7 +63,8 @@ public record TriggerableAbilityModifier(Holder<Ability> providedAbility,
         var text = Component.translatable(
                 WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
                         WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
-                Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
+                Component
+                        .translatable(WanderersOfTheRift.translationId("trigger", trigger().type().getKey().location()))
         );
 
         return new ImageComponent(stack, text.withStyle(style),

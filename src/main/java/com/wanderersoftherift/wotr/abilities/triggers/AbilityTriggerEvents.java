@@ -4,7 +4,9 @@ import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.loot.LootEvent;
 import com.wanderersoftherift.wotr.util.SerializableDamageSource;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -58,9 +60,12 @@ public class AbilityTriggerEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void lootEvent(LootEvent.PlayerOpensChest event) {
         // todo this currently doesn't trigger properly when breaking chests
-        if (event.getLootContext().hasParameter(LootContextParams.THIS_ENTITY)) {
+        if (event.getLootContext().hasParameter(LootContextParams.THIS_ENTITY)
+                && event.getContainer() instanceof BlockEntity entity) {
             var looter = event.getLootContext().getParameter(LootContextParams.THIS_ENTITY);
-            TriggerTracker.forEntity(looter).trigger(LootTrigger.INSTANCE);
+            TriggerTracker.forEntity(looter)
+                    .trigger(new LootTrigger(BuiltInRegistries.BLOCK_ENTITY_TYPE.wrapAsHolder(entity.getType()),
+                            event.getLootTable().getParamSet(), event.getLootTable().getLootTableId()));
         }
     }
 }

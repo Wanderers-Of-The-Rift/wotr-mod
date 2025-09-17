@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.loot;
 
+import net.minecraft.world.Container;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.bus.api.Event;
@@ -23,8 +24,15 @@ public abstract class LootEvent extends Event {
 
     public static class PlayerOpensChest extends LootEvent {
 
-        public PlayerOpensChest(LootTable lootTable, LootContext lootContext) {
+        private final Container container;
+
+        public PlayerOpensChest(LootTable lootTable, LootContext lootContext, Container container) {
             super(lootTable, lootContext);
+            this.container = container;
+        }
+
+        public Container getContainer() {
+            return container;
         }
     }
 }

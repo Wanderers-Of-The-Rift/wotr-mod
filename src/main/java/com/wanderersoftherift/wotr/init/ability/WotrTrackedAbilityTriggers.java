@@ -21,8 +21,8 @@ public class WotrTrackedAbilityTriggers {
             .register("take_damage", () -> TakeDamageTrigger.TRIGGER_TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<DealDamageTrigger>> DEAL_DAMAGE = TRIGGERS
             .register("deal_damage", () -> DealDamageTrigger.TRIGGER_TYPE);
-    public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<TakeDamageTrigger>> LOOT = TRIGGERS
+    public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<LootTrigger>> LOOT = TRIGGERS
             .register("loot", () -> LootTrigger.TRIGGER_TYPE);
-    public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<DealDamageTrigger>> KILL = TRIGGERS
+    public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<KillTrigger>> KILL = TRIGGERS
             .register("kill", () -> KillTrigger.TRIGGER_TYPE);
 }

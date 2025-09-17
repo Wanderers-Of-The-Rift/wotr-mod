@@ -2,7 +2,11 @@
     "color": -7829249,
     "maximum": "wotr:max_mana",
     "recharge_amount": "wotr:mana_regen_rate",
-    "recharge_action": "wotr:tick",
+    "recharge_action": {
+        "type": "wotr:tick"
+    },
     "degen_amount": "wotr:mana_degen_rate",
-    "degen_action": "wotr:tick"
+    "degen_action": {
+        "type": "wotr:tick"
+    }
 }

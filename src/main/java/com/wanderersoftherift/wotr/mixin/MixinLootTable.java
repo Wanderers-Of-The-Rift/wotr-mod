@@ -22,6 +22,6 @@ public class MixinLootTable {
             long seed,
             CallbackInfo ci,
             @Local LootContext context) {
-        NeoForge.EVENT_BUS.post(new LootEvent.PlayerOpensChest((LootTable) (Object) this, context));
+        NeoForge.EVENT_BUS.post(new LootEvent.PlayerOpensChest((LootTable) (Object) this, context, container));
     }
 }

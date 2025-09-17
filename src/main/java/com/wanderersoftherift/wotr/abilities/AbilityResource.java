@@ -15,8 +15,8 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import java.util.Optional;
 
 public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Holder<Attribute>> recharge,
-        Optional<Holder<TrackableTrigger.TriggerType<?>>> rechargeAction, Optional<Holder<Attribute>> degen,
-        Optional<Holder<TrackableTrigger.TriggerType<?>>> degenAction) {
+        Optional<TrackableTrigger.TriggerPredicate<?>> rechargeAction, Optional<Holder<Attribute>> degen,
+        Optional<TrackableTrigger.TriggerPredicate<?>> degenAction) {
 
     public static final Codec<Holder<AbilityResource>> HOLDER_CODEC = LaxRegistryCodec
             .create(WotrRegistries.Keys.ABILITY_RESOURCES);
@@ -25,12 +25,10 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
                     Codec.INT.fieldOf("color").forGetter(AbilityResource::color),
                     Attribute.CODEC.fieldOf("maximum").forGetter(AbilityResource::maximum),
                     Attribute.CODEC.optionalFieldOf("recharge_amount").forGetter(AbilityResource::recharge),
-                    WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
-                            .optionalFieldOf("recharge_action")
+                    TrackableTrigger.TriggerPredicate.CODEC.optionalFieldOf("recharge_action")
                             .forGetter(AbilityResource::rechargeAction),
                     Attribute.CODEC.optionalFieldOf("degen_amount").forGetter(AbilityResource::degen),
-                    WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
-                            .optionalFieldOf("degen_action")
+                    TrackableTrigger.TriggerPredicate.CODEC.optionalFieldOf("degen_action")
                             .forGetter(AbilityResource::degenAction)
             ).apply(instance, AbilityResource::new)
     );
@@ -47,10 +45,14 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
     }
 
     public record AbilityResourceRecharge(Holder<AbilityResource> resource, Holder<Attribute> recharge,
-            boolean isNegative) implements TriggerTracker.Triggerable {
+            boolean isNegative, TrackableTrigger.TriggerPredicate<?> predicate) implements TriggerTracker.Triggerable {
 
         @Override
         public boolean trigger(LivingEntity entity, TrackableTrigger activation) {
+            if (predicate().type().value() != activation.type()
+                    || !((TrackableTrigger.TriggerPredicate<TrackableTrigger>) predicate()).test(activation)) {
+                return false;
+            }
             var abilityResources = entity.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
             var amount = abilityResources.getAmount(resource);
             var delta = (float) entity.getAttributeValue(recharge);
