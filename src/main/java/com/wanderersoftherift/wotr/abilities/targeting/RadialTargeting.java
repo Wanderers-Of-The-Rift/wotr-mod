@@ -14,8 +14,8 @@ public class RadialTargeting extends AreaTargeting {
             instance -> commonFields(instance).apply(instance, RadialTargeting::new));
 
     public RadialTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, float range,
-            boolean includeSelf, boolean alignToBlock) {
-        super(entities, blocks, range, includeSelf, alignToBlock);
+            boolean alignToBlock) {
+        super(entities, blocks, range, alignToBlock);
     }
 
     @Override

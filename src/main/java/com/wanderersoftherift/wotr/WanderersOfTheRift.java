@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
+import com.wanderersoftherift.wotr.init.WotrBlockPredicates;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
 import com.wanderersoftherift.wotr.init.WotrContainerTypes;
@@ -88,6 +89,7 @@ public class WanderersOfTheRift {
         WotrAttributes.WOTR_ATTRIBUTES.register(modEventBus);
         WotrBlocks.BLOCKS.register(modEventBus);
         WotrBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        WotrBlockPredicates.BLOCK_PREDICATES.register(modEventBus);
         WotrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         WotrCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         WotrEntities.ENTITIES.register(modEventBus);

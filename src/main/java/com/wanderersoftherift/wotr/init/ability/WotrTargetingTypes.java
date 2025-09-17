@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.abilities.targeting.CasterTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.CubeAreaTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.FilterTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RadialTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.RandomSubsetTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RaycastTargeting;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -28,5 +29,7 @@ public class WotrTargetingTypes {
             () -> RadialTargeting.CODEC);
     public static final Supplier<MapCodec<CasterTargeting>> CASTER = TARGETING_TYPES.register("caster",
             () -> CasterTargeting.CODEC);
+    public static final Supplier<MapCodec<RandomSubsetTargeting>> RANDOM_SUBSET = TARGETING_TYPES
+            .register("random_subset", () -> RandomSubsetTargeting.CODEC);
 
 }

@@ -7,20 +7,13 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetEntityPredicate;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class RaycastTargeting implements AbilityTargeting {
 
@@ -78,10 +71,10 @@ public class RaycastTargeting implements AbilityTargeting {
             } else {
                 continue;
             }
-            HitResult hit = rayTrace(start, end, 0, 0, context.level(),
-                    e -> entityPredicate.matches(e, context.caster()), entity);
+            HitResult hit = TargetingUtil.rayTrace(start, end, 0, 0, context.level(),
+                    e -> entityPredicate.matches(e, source, context), entity);
             if (hit instanceof BlockHitResult blockHitResult
-                    && !blockPredicate.matches(blockHitResult.getBlockPos(), context.level())) {
+                    && !blockPredicate.matches(blockHitResult.getBlockPos(), source, context)) {
                 continue;
             }
             if (hit.getType() != HitResult.Type.MISS) {
@@ -90,30 +83,5 @@ public class RaycastTargeting implements AbilityTargeting {
         }
 
         return result;
-    }
-
-    private HitResult rayTrace(
-            Vec3 start,
-            Vec3 end,
-            float size,
-            float margin,
-            Level level,
-            Predicate<Entity> filter,
-            @Nullable Entity origin) {
-        HitResult hitresult = level.clipIncludingBorder(new ClipContext(start, end, ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE, CollisionContext.empty()));
-        if (hitresult.getType() != HitResult.Type.MISS) {
-            end = hitresult.getLocation();
-        }
-
-        HitResult entityHitResult = ProjectileUtil.getEntityHitResult(
-                level, origin, start, end, new AABB(start, end).expandTowards(end.subtract(start)).inflate(size),
-                filter, margin
-        );
-        if (entityHitResult != null) {
-            hitresult = entityHitResult;
-        }
-
-        return hitresult;
     }
 }

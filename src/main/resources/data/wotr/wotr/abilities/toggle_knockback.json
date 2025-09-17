@@ -32,9 +32,9 @@
           "targeting": {
             "type": "wotr:area",
             "range": 10,
-            "include_self": false,
             "entities": {
-              "sentiment": "any"
+              "sentiment": "any",
+              "exclude_source": true
             }
           },
           "effects": [

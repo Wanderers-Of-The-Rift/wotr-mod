@@ -1,6 +1,6 @@
 {
   "type": "wotr:instant",
-  "icon" : "minecraft:textures/item/bone.png",
+  "icon": "minecraft:textures/item/bone.png",
   "requirements": [
     {
       "type": "wotr:cooldown",
@@ -19,27 +19,42 @@
           "type": "wotr:targeting",
           "targeting": {
             "type": "wotr:area",
-            "range": 25
+            "range": 5,
+            "entities": "none",
+            "blocks": {
+              "filter": {
+                "type": "all_of",
+                "predicates": [
+                  {
+                    "type": "wotr:surface",
+                    "space": 2
+                  },
+                  {
+                    "type": "solid"
+                  }
+                ]
+              }
+            }
           },
           "effects": [
             {
-              "type": "wotr:summon",
-              "entity_type": "minecraft:skeleton",
-              "amount": 3,
+              "type": "wotr:targeting",
+              "targeting": {
+                "type": "wotr:random_subset",
+                "count": 3
+              },
               "effects": [
                 {
-                  "type": "wotr:movement",
-                  "velocity": [
-                    0,
-                    1,
-                    0
+                  "type": "wotr:summon",
+                  "entity_type": "minecraft:skeleton",
+                  "effects": [
+                    {
+                      "type": "wotr:particle",
+                      "particle": {
+                        "type": "minecraft:explosion"
+                      }
+                    }
                   ]
-                },
-                {
-                  "type": "wotr:particle",
-                   "particle": {
-                    "type": "minecraft:explosion"
-                  }
                 }
               ]
             }

@@ -13,7 +13,9 @@
       "targeting": {
         "type": "wotr:area",
         "range": 20,
-        "include_self": false
+        "entities": {
+          "exclude_source": true
+        }
       },
       "effects": [
         {

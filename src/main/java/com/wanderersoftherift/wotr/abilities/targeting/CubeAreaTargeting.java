@@ -15,8 +15,8 @@ public class CubeAreaTargeting extends AreaTargeting {
             ).apply(instance, CubeAreaTargeting::new));
 
     public CubeAreaTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, float range,
-            boolean includeSelf, boolean alignToBlock) {
-        super(entities, blocks, range, includeSelf, alignToBlock);
+            boolean alignToBlock) {
+        super(entities, blocks, range, alignToBlock);
     }
 
     @Override
