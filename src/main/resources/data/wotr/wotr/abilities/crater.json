@@ -30,9 +30,28 @@
           },
           "effects": [
             {
+              "type": "wotr:break"
+            }
+          ]
+        },
+        {
+          "type": "wotr:targeting",
+          "targeting": {
+            "type": "wotr:radial",
+            "range": 5.0,
+            "blocks": {
+              "filter": {
+                "type": "solid"
+              }
+            },
+            "entities": "none",
+            "align_to_block": true
+          },
+          "effects": [
+            {
               "type": "wotr:set_block",
               "block": {
-                "Name": "minecraft:gold_block"
+                "Name": "minecraft:magma_block"
               }
             }
           ]

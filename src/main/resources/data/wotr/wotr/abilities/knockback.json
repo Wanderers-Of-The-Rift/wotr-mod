@@ -7,9 +7,9 @@
       "targeting": {
         "type": "wotr:area",
         "range": 10,
-        "include_self": false,
         "entities": {
-          "sentiment": "foe"
+          "sentiment": "foe",
+          "exclude_source": true
         }
       },
       "effects": [
