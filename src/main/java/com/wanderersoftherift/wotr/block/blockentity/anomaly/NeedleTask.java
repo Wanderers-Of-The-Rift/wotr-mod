@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.block.blockentity.anomaly;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrItems;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +20,7 @@ public record NeedleTask() implements AnomalyTask<NeedleTaskState> {
     }
 
     @Override
-    public NeedleTaskState createState() {
+    public NeedleTaskState createState(RandomSource randomSource) {
         return new NeedleTaskState();
     }
 

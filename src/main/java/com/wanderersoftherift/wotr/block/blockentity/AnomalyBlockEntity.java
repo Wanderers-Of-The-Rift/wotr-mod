@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTaskState;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -33,6 +34,7 @@ public class AnomalyBlockEntity extends BlockEntity {
 
     private static final float COMPLETED_STATE = 0.1f;
     private static final float INCOMPLETE_STATE = 1f;
+    private long seed = 0L;
     private Holder<AnomalyReward> reward;
     private AnomalyState<?> state;
 
@@ -74,6 +76,9 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public InteractionResult interact(Player player, InteractionHand hand) {
+        if (getLevel() instanceof ClientLevel) {
+            return InteractionResult.SUCCESS;
+        }
         if (state == null) {
             return InteractionResult.PASS;
         }
@@ -94,7 +99,8 @@ public class AnomalyBlockEntity extends BlockEntity {
 
     public <T> void setAnomalyState(AnomalyState<T> state) {
         if (state != null && state.state().isEmpty()) {
-            state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState()));
+            var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0), seed);
+            state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState(rng)));
         }
         this.state = state;
         if (level instanceof ServerLevel serverLevel) {
@@ -156,6 +162,10 @@ public class AnomalyBlockEntity extends BlockEntity {
     @Override
     public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
     }
 
     public record AnomalyState<T>(Holder<AnomalyTask<T>> task, Optional<T> state) {

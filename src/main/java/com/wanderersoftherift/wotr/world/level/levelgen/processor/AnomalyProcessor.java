@@ -1,14 +1,22 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.AnomalyBlock;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
+import com.wanderersoftherift.wotr.util.FastWeightedList;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.util.Ref;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EndRodBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,9 +26,28 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import java.util.Optional;
+
 public class AnomalyProcessor extends StructureProcessor implements RiftTemplateProcessor {
 
-    public static final MapCodec<AnomalyProcessor> CODEC = MapCodec.unit(new AnomalyProcessor());
+    public static final MapCodec<AnomalyProcessor> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    FastWeightedList.codec(AnomalyTask.HOLDER_CODEC)
+                            .fieldOf("tasks")
+                            .forGetter(AnomalyProcessor::getTasks),
+                    FastWeightedList.codec(AnomalyReward.HOLDER_CODEC)
+                            .fieldOf("rewards")
+                            .forGetter(AnomalyProcessor::getRewards)
+            ).apply(instance, AnomalyProcessor::new));
+
+    private final FastWeightedList<Holder<AnomalyTask<?>>> tasks;
+    private final FastWeightedList<Holder<AnomalyReward>> rewards;
+
+    public AnomalyProcessor(FastWeightedList<Holder<AnomalyTask<?>>> tasks,
+            FastWeightedList<Holder<AnomalyReward>> rewards) {
+        this.tasks = tasks;
+        this.rewards = rewards;
+    }
 
     @Override
     public StructureTemplate.StructureBlockInfo process(
@@ -47,11 +74,19 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
         if (currentState.getBlock() != Blocks.END_ROD) {
             return currentState;
         }
+        var position = new BlockPos(x, y, z);
         currentState = WotrBlocks.ANOMALY.get()
                 .defaultBlockState()
                 .setValue(AnomalyBlock.FACING, currentState.getValue(EndRodBlock.FACING));
-        var blockEntity = new AnomalyBlockEntity(new BlockPos(x, y, z), currentState);
-        // todo initialize block entity
+        var blockEntity = new AnomalyBlockEntity(position, currentState);
+        var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+                ProcessorUtil.getRandomSeed(position, ((WorldGenLevel) world).getSeed() + 9996554987L));
+        var task = tasks.random(rng);
+        var reward = rewards.random(rng);
+        blockEntity.setSeed(rng.nextLong());
+        blockEntity.setAnomalyState(
+                new AnomalyBlockEntity.AnomalyState<>((Holder<AnomalyTask<Object>>) (Object) task, Optional.empty()));
+        blockEntity.setAnomalyReward(reward);
         entityRef.setValue(blockEntity);
         return currentState;
     }
@@ -59,5 +94,13 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
     @Override
     protected StructureProcessorType<?> getType() {
         return WotrProcessors.ANOMALY.get();
+    }
+
+    public FastWeightedList<Holder<AnomalyTask<?>>> getTasks() {
+        return tasks;
+    }
+
+    public FastWeightedList<Holder<AnomalyReward>> getRewards() {
+        return rewards;
     }
 }

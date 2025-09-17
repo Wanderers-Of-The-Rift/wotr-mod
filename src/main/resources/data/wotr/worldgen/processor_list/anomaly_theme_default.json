@@ -5,7 +5,14 @@
       "piece_type": "poi"
     },
     {
-     "processor_type": "wotr:anomaly"
+     "processor_type": "wotr:anomaly",
+      "tasks": {
+        "wotr:zombie_horde": 1.0
+      },
+      "rewards": {
+        "wotr:strength10": 10.0,
+        "wotr:empty": 1.0
+      }
     }
   ]
 }

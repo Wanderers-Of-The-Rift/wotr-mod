@@ -1,0 +1,13 @@
+{
+    "type": "wotr:battle",
+    "spawns": {
+        "mobs": {
+            "wotr:rift_zombie": 1.0
+        },
+        "count": {
+            "type": "uniform",
+            "min_inclusive": 5,
+            "max_inclusive": 20
+        }
+    }
+}
