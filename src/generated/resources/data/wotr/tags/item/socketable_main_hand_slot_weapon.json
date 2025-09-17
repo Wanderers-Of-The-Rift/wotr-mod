@@ -7,6 +7,12 @@
     "minecraft:diamond_sword",
     "minecraft:netherite_sword",
     "minecraft:bow",
-    "minecraft:crossbow"
+    "minecraft:crossbow",
+    "minecraft:wooden_axe",
+    "minecraft:stone_axe",
+    "minecraft:iron_axe",
+    "minecraft:golden_axe",
+    "minecraft:diamond_axe",
+    "minecraft:netherite_axe"
   ]
 }
