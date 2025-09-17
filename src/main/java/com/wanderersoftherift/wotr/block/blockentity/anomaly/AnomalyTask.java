@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,8 +26,8 @@ public interface AnomalyTask<T> {
 
     AnomalyTaskType<T> type();
 
-    T createState();
+    T createState(RandomSource rng);
 
-    record AnomalyTaskType<T>(MapCodec<AnomalyTask<T>> mainCodec, Codec<T> stateCodec) {
+    record AnomalyTaskType<T>(MapCodec<? extends AnomalyTask<T>> mainCodec, Codec<T> stateCodec) {
     }
 }

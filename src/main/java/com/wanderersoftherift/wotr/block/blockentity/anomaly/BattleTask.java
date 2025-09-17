@@ -1,14 +1,21 @@
 package com.wanderersoftherift.wotr.block.blockentity.anomaly;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.util.FastWeightedList;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
@@ -17,9 +24,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public record BattleTask() implements AnomalyTask<BattleTaskState> {
+public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskState> {
     public static final AnomalyTaskType<BattleTaskState> TYPE = new AnomalyTaskType<>(
-            MapCodec.unit(new BattleTask()), BattleTaskState.CODEC
+            SpawnData.CODEC.xmap(BattleTask::new, BattleTask::spawnData).fieldOf("spawns"), BattleTaskState.CODEC
     );
 
     public InteractionResult interact(
@@ -33,10 +40,16 @@ public record BattleTask() implements AnomalyTask<BattleTaskState> {
         if (!state.isPreparing()) {
             return InteractionResult.PASS;
         }
+        var randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+                System.currentTimeMillis());
+        var count = spawnData.count.sample(randomSource);
+        var mobs = new ArrayList<Entity>(count);
 
-        var mobs = new ArrayList<Entity>();
-        mobs.add(WotrEntities.RIFT_ZOMBIE.get()
-                .spawn(serverLevel, anomalyBlockEntity.getBlockPos().above(), EntitySpawnReason.SPAWNER));
+        for (int i = 0; i < count; i++) {
+            mobs.add(spawnData.types.random(randomSource)
+                    .value()
+                    .spawn(serverLevel, anomalyBlockEntity.getBlockPos().above(), EntitySpawnReason.SPAWNER));
+        }
 
         var mobUUIDs = new HashSet<>(mobs.stream().filter(Objects::nonNull).map(it -> {
             it.setData(WotrAttachments.BATTLE_TASK_MOB, new BattleMobAttachment(anomalyBlockEntity.getBlockPos()));
@@ -53,7 +66,7 @@ public record BattleTask() implements AnomalyTask<BattleTaskState> {
     }
 
     @Override
-    public BattleTaskState createState() {
+    public BattleTaskState createState(RandomSource randomSource) {
         return new BattleTaskState(new HashSet<>(), Optional.empty());
     }
 
@@ -66,5 +79,15 @@ public record BattleTask() implements AnomalyTask<BattleTaskState> {
             anomalyBlockEntity.getLevel()
                     .scheduleTick(anomalyBlockEntity.getBlockPos(), anomalyBlockEntity.getBlockState().getBlock(), 1);
         }
+    }
+
+    public record SpawnData(FastWeightedList<Holder<EntityType<?>>> types, IntProvider count) {
+        public static final Codec<SpawnData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                FastWeightedList.codec(BuiltInRegistries.ENTITY_TYPE.holderByNameCodec())
+                        .fieldOf("mobs")
+                        .forGetter(SpawnData::types),
+                IntProvider.CODEC.fieldOf("count").forGetter(SpawnData::count)
+        ).apply(instance, SpawnData::new));
+
     }
 }
