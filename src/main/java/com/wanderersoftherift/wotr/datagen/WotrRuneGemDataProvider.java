@@ -38,10 +38,10 @@ public class WotrRuneGemDataProvider {
                 .getOrThrow(WotrTags.Items.SOCKETABLE_LEGGINGS_SLOT);
         HolderSet.Named<Item> bootsTag = context.lookup(Registries.ITEM)
                 .getOrThrow(WotrTags.Items.SOCKETABLE_BOOTS_SLOT);
+        HolderSet.Named<Item> mainHandTag = context.lookup(Registries.ITEM)
+                .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT);
         HolderSet.Named<Item> mainHandWeaponTag = context.lookup(Registries.ITEM)
                 .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_WEAPON);
-        HolderSet.Named<Item> mainHandHybridTag = context.lookup(Registries.ITEM)
-                .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_HYBRID);
         HolderSet.Named<Item> mainHandToolTag = context.lookup(Registries.ITEM)
                 .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_TOOL);
         HolderSet.Named<Item> offHandTag = context.lookup(Registries.ITEM)
@@ -596,7 +596,7 @@ public class WotrRuneGemDataProvider {
         registerRunegem(context, getRunegemResourceKey("hybrid_tool_raw"),
                 new RunegemData(getTranslatableName("hybrid_tool_raw"), RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
-                                mainHandHybridTag, List.of(
+                                mainHandWeaponTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "mining_attack_hybrid"))
                                 ))),
                         RunegemTier.RAW));
