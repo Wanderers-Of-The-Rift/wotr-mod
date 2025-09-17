@@ -597,7 +597,7 @@ public class WotrRuneGemDataProvider {
                 new RunegemData(getTranslatableName("hybrid_tool_raw"), RunegemShape.TRIANGLE,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandHybridTag, List.of(
-                                    new TieredModifier(1, getModifier(lookup, "mining_attack_hybrid"))
+                                        new TieredModifier(1, getModifier(lookup, "mining_attack_hybrid"))
                                 ))),
                         RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("projectile_raw"),
