@@ -1,0 +1,18 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:mining_attack_hybrid",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot_hybrid"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.hybrid_tool_raw"
+  },
+  "shape": "triangle",
+  "tier": "raw"
+}

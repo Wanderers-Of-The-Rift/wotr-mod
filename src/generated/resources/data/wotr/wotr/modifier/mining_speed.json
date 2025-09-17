@@ -1,0 +1,72 @@
+{
+  "style": {
+    "color": "#ADD8E6"
+  },
+  "tiers": [
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:mining_efficiency",
+          "id": "wotr:mining_speed",
+          "max_roll": 1.7999999523162842,
+          "min_roll": 1.0,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 1
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:mining_efficiency",
+          "id": "wotr:mining_speed",
+          "max_roll": 2.5999999046325684,
+          "min_roll": 1.7999999523162842,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 2
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:mining_efficiency",
+          "id": "wotr:mining_speed",
+          "max_roll": 3.4000000953674316,
+          "min_roll": 2.5999999046325684,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 3
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:mining_efficiency",
+          "id": "wotr:mining_speed",
+          "max_roll": 4.199999809265137,
+          "min_roll": 3.4000000953674316,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 4
+    },
+    {
+      "modifiers": [
+        {
+          "type": "wotr:attribute",
+          "attribute": "minecraft:mining_efficiency",
+          "id": "wotr:mining_speed",
+          "max_roll": 5.0,
+          "min_roll": 4.199999809265137,
+          "operation": "add_value"
+        }
+      ],
+      "tier": 5
+    }
+  ]
+}

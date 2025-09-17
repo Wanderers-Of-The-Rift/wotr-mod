@@ -31,7 +31,11 @@ public class WotrTags {
         public static final TagKey<Item> SOCKETABLE_CHESTPLATE_SLOT = createTag("socketable_chestplate_slot");
         public static final TagKey<Item> SOCKETABLE_LEGGINGS_SLOT = createTag("socketable_leggings_slot");
         public static final TagKey<Item> SOCKETABLE_BOOTS_SLOT = createTag("socketable_boots_slot");
-        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT = createTag("socketable_main_hand_slot");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT_WEAPON = createTag(
+                "socketable_main_hand_slot_weapon");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT_TOOL = createTag("socketable_main_hand_slot_tool");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT_HYBRID = createTag(
+                "socketable_main_hand_slot_hybrid");
         public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
 
         public static final TagKey<Item> LEATHER_TYPE_GEAR = createTag("gear_type.leather_type_gear");

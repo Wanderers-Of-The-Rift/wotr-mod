@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -266,6 +267,23 @@ public class WotrModifierProvider {
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("max_mana_percent"),
                                         WotrAttributes.MAX_MANA, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
                 Style.EMPTY.withColor(ColorUtil.BLUE))
+        );
+        registerModifier(context, getResourceKey("mining_speed"), new Modifier(
+                generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(1F, 5F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("mining_speed"),
+                                        Attributes.MINING_EFFICIENCY, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.LIGHT_BLUE))
+        );
+        registerModifier(
+                context, getResourceKey("mining_attack_hybrid"), new Modifier(generateEqualRollSpread(4, List.of(
+                        new ToBeTieredModifierEffect(1F, 5F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("mining_speed"),
+                                        Attributes.MINING_EFFICIENCY, AttributeModifier.Operation.ADD_VALUE)),
+                        new ToBeTieredModifierEffect(2, 8,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("attack_flat"),
+                                        Attributes.ATTACK_DAMAGE, AttributeModifier.Operation.ADD_VALUE)))),
+                        Style.EMPTY.withColor(ColorUtil.LIGHT_BLUE))
         );
         registerModifier(context, getResourceKey("movement_speed"), new Modifier(
                 generateEqualRollSpread(3,

@@ -4,7 +4,9 @@
     "#wotr:socketable_chestplate_slot",
     "#wotr:socketable_leggings_slot",
     "#wotr:socketable_boots_slot",
-    "#wotr:socketable_main_hand_slot",
+    "#wotr:socketable_main_hand_slot_weapon",
+    "#wotr:socketable_main_hand_slot_tool",
+    "#wotr:socketable_main_hand_slot_hybrid",
     "#wotr:socketable_off_hand_slot"
   ]
 }
