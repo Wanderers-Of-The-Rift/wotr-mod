@@ -6,7 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 import java.util.Locale;
@@ -36,17 +38,28 @@ public interface TargetBlockPredicate {
 
     boolean matches(BlockPos target, HitResult source, AbilityContext context);
 
-    record Filtered(BlockPredicate blockPredicate) implements TargetBlockPredicate {
+    record Filtered(BlockPredicate blockPredicate, boolean matchSource) implements TargetBlockPredicate {
 
         public static final Codec<Filtered> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 BlockPredicate.CODEC.optionalFieldOf("filter", BlockPredicate.alwaysTrue())
-                        .forGetter(Filtered::blockPredicate)
+                        .forGetter(Filtered::blockPredicate),
+                Codec.BOOL.optionalFieldOf("match_source", false).forGetter(Filtered::matchSource)
         ).apply(instance, Filtered::new));
 
         @Override
         public boolean matches(BlockPos target, HitResult source, AbilityContext context) {
             if (!(context.level() instanceof ServerLevel level)) {
                 return false;
+            }
+            if (matchSource) {
+                if (source instanceof BlockHitResult blockHit) {
+                    Block sourceBlock = context.level().getBlockState(blockHit.getBlockPos()).getBlock();
+                    if (!context.level().getBlockState(target).is(sourceBlock)) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
             }
             return blockPredicate.test(level, target);
         }

@@ -13,20 +13,16 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import java.util.List;
 import java.util.Set;
 
-public class TargetingEffect implements AbilityEffect {
+public record TargetingEffect(List<AbilityTargeting> targetingSteps, List<AbilityEffect> effects)
+        implements AbilityEffect {
 
     public static final MapCodec<TargetingEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            AbilityTargeting.DIRECT_CODEC.fieldOf("targeting").forGetter(TargetingEffect::getTargeting),
-            Codec.list(AbilityEffect.DIRECT_CODEC).fieldOf("effects").forGetter(TargetingEffect::getEffects)
+            Codec.withAlternative(AbilityTargeting.DIRECT_CODEC.listOf(),
+                    AbilityTargeting.DIRECT_CODEC.xmap(List::of, List::getFirst))
+                    .fieldOf("targeting")
+                    .forGetter(TargetingEffect::targetingSteps),
+            Codec.list(AbilityEffect.DIRECT_CODEC).fieldOf("effects").forGetter(TargetingEffect::effects)
     ).apply(instance, TargetingEffect::new));
-
-    private final AbilityTargeting targeting;
-    private final List<AbilityEffect> effects;
-
-    public TargetingEffect(AbilityTargeting targeting, List<AbilityEffect> effects) {
-        this.targeting = targeting;
-        this.effects = effects;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
@@ -35,7 +31,12 @@ public class TargetingEffect implements AbilityEffect {
 
     @Override
     public void apply(AbilityContext context, TargetInfo targets) {
-        List<TargetInfo> newTargets = targeting.getTargets(context, targets);
+        List<TargetInfo> newTargets = List.of(targets);
+        for (AbilityTargeting targetStep : targetingSteps) {
+            newTargets = newTargets.stream()
+                    .flatMap(targetInfo -> targetStep.getTargets(context, targetInfo).stream())
+                    .toList();
+        }
 
         for (AbilityEffect effect : effects) {
             for (TargetInfo newTarget : newTargets) {
@@ -51,7 +52,7 @@ public class TargetingEffect implements AbilityEffect {
 
     @Override
     public boolean isRelevant(ModifierEffect modifierEffect) {
-        if (getTargeting().isRelevant(modifierEffect)) {
+        if (targetingSteps().stream().anyMatch(step -> step.isRelevant(modifierEffect))) {
             return true;
         }
         for (AbilityEffect child : effects) {
@@ -60,13 +61,5 @@ public class TargetingEffect implements AbilityEffect {
             }
         }
         return false;
-    }
-
-    public AbilityTargeting getTargeting() {
-        return targeting;
-    }
-
-    public List<AbilityEffect> getEffects() {
-        return effects;
     }
 }
