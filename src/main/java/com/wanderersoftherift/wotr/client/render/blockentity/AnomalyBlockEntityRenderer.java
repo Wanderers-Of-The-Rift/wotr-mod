@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -61,7 +62,7 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
                 .setUv((float) u, (float) v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
-                .setNormal(pose, 0.0F, 1.0F, -1.0F);
+                .setNormal(pose, 0.0F, 0.0F, -1.0F);
     }
 
     @Override
@@ -116,21 +117,37 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
 
         poseStack.popPose();
 
-        // # Anomaly Item render # todo
-        /*
-         * List<BlockState> displayBlocks = blockEntity.getDisplayBlocks(); // only render if there are items to display
-         * if (!displayBlocks.isEmpty()) { int woolCount = displayBlocks.size(); float radius = 0.35f; float yOffset =
-         * 0.3f; // Height above anomaly BlockRenderDispatcher blockRenderer =
-         * Minecraft.getInstance().getBlockRenderer(); long time; if (blockEntity.getLevel() != null) { time =
-         * blockEntity.getLevel().getGameTime(); } else { time = 0; } float rotationSpeed = 0.05f; // rotation speed
-         * 
-         * for (int i = 0; i < woolCount; i++) { poseStack.pushPose(); poseStack.translate(0.4, 0.4, 0.4); double angle
-         * = (2 * Math.PI / woolCount) * i + (time * rotationSpeed); float x = Mth.cos((float) angle) * radius; float z
-         * = Mth.sin((float) angle) * radius; poseStack.translate(x, yOffset, z); poseStack.scale(0.2f, 0.2f, 0.2f); //
-         * rendered item scale
-         * 
-         * blockRenderer.renderSingleBlock( displayBlocks.get(i), poseStack, buffer, packedLight,
-         * OverlayTexture.NO_OVERLAY ); poseStack.popPose(); } }
-         */
+        var anomalyState = blockEntity.getAnomalyState();
+        if (anomalyState == null) {
+            return;
+        }
+        var taskDisplay = anomalyState.display();
+        if (taskDisplay == null) {
+            return;
+        }
+
+        int itemCount = taskDisplay.getCount();
+        if (itemCount != 0) {
+            float radius = 0.35f;
+            float yOffset = 0.3f;
+            var blockRenderer = Minecraft.getInstance().getItemRenderer();
+            long time = blockEntity.getLevel().getGameTime();
+            float rotationSpeed = 0.05f;
+
+            taskDisplay.forEachIndexed((i, item) -> {
+
+                poseStack.pushPose();
+                poseStack.translate(0.5, 0.4, 0.5);
+                double angle = (2 * Math.PI / itemCount) * i + (time * rotationSpeed);
+                float x = Mth.cos((float) angle) * radius;
+                float z = Mth.sin((float) angle) * radius;
+                poseStack.translate(x, yOffset, z);
+                poseStack.scale(0.2f, 0.2f, 0.2f);
+
+                blockRenderer.renderStatic(item, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack,
+                        buffer, blockEntity.getLevel(), 0);
+                poseStack.popPose();
+            });
+        }
     }
 }

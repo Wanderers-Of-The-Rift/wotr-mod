@@ -17,17 +17,21 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskState> {
     public static final AnomalyTaskType<BattleTaskState> TYPE = new AnomalyTaskType<>(
             SpawnData.CODEC.xmap(BattleTask::new, BattleTask::spawnData).fieldOf("spawns"), BattleTaskState.CODEC
     );
+    private static final ItemStack ZOMBIE_HEAD = new ItemStack(Items.ZOMBIE_HEAD, 1);
 
     public InteractionResult interact(
             Player player,
@@ -75,6 +79,23 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
         return 0xff_00_00;
     }
 
+    @Override
+    public AnomalyTaskDisplay taskDisplay(BattleTaskState task) {
+        return new AnomalyTaskDisplay() {
+            @Override
+            public int getCount() {
+                return task.mobs().size();
+            }
+
+            @Override
+            public void forEachIndexed(BiConsumer<Integer, ItemStack> func) {
+                for (int i = 0; i < getCount(); i++) {
+                    func.accept(i, ZOMBIE_HEAD);
+                }
+            }
+        };
+    }
+
     public void handleMobDeath(UUID mob, BattleTaskState state, AnomalyBlockEntity anomalyBlockEntity) {
         if (!state.isInProgress()) {
             return;
@@ -84,6 +105,7 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
             anomalyBlockEntity.getLevel()
                     .scheduleTick(anomalyBlockEntity.getBlockPos(), anomalyBlockEntity.getBlockState().getBlock(), 1);
         }
+        anomalyBlockEntity.sendUpdateToPlayers();
     }
 
     public record SpawnData(FastWeightedList<Holder<EntityType<?>>> types, IntProvider count) {
@@ -93,6 +115,5 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
                         .forGetter(SpawnData::types),
                 IntProvider.CODEC.fieldOf("count").forGetter(SpawnData::count)
         ).apply(instance, SpawnData::new));
-
     }
 }

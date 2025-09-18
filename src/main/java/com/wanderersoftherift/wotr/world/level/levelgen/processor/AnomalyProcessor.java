@@ -57,7 +57,7 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
             StructureTemplate.StructureBlockInfo rawBlockInfo,
             StructureTemplate.StructureBlockInfo blockInfo,
             StructurePlaceSettings settings,
-            @javax.annotation.Nullable StructureTemplate template) {
+            StructureTemplate template) {
         return backportProcess(world, piecePos, structurePos, rawBlockInfo, blockInfo, settings, template);
     }
 

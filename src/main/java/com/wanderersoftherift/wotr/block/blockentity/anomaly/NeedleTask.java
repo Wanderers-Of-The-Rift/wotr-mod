@@ -25,6 +25,11 @@ public record NeedleTask() implements AnomalyTask<NeedleTaskState> {
     }
 
     @Override
+    public AnomalyTaskDisplay taskDisplay(NeedleTaskState task) {
+        return null;
+    }
+
+    @Override
     public NeedleTaskState createState(RandomSource randomSource) {
         return new NeedleTaskState();
     }

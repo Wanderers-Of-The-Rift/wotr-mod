@@ -9,18 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-///
-///
-/// | state     | [#mobs]    | [#player] |
-/// |-----------|------------|-----------|
-/// | waiting   | -> empty   | empty     |
-/// | battling  | -> present | present   |
-/// | rewarding | -> empty   | present   |
-/// | illegal   | -> present | empty     |
-///
-/// @param mobs which need to be killed
-/// @param player which activated the anomaly
-///
 public record BattleTaskState(HashSet<UUID> mobs, Optional<UUID> player) {
     public static final Codec<BattleTaskState> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
