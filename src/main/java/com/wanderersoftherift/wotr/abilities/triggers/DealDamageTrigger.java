@@ -18,10 +18,10 @@ public record DealDamageTrigger(SerializableDamageSource source, UUID victim, fl
             Codec.FLOAT.fieldOf("amount").forGetter(DealDamageTrigger::amount)
     ).apply(instance, DealDamageTrigger::new));
 
-    public static final TriggerType TRIGGER_TYPE = new TriggerType(CODEC, null);
+    public static final TriggerType<DealDamageTrigger> TRIGGER_TYPE = new TriggerType<>(CODEC, null);
 
     @Override
-    public TriggerType type() {
+    public TriggerType<DealDamageTrigger> type() {
         return TRIGGER_TYPE;
     }
 }

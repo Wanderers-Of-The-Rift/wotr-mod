@@ -12,10 +12,10 @@ public record TakeDamageTrigger(SerializableDamageSource source, float amount) i
             Codec.FLOAT.fieldOf("amount").forGetter(TakeDamageTrigger::amount)
     ).apply(instance, TakeDamageTrigger::new));
 
-    public static final TriggerType TRIGGER_TYPE = new TriggerType(CODEC, null);
+    public static final TriggerType<TakeDamageTrigger> TRIGGER_TYPE = new TriggerType<>(CODEC, null);
 
     @Override
-    public TriggerType type() {
+    public TriggerType<TakeDamageTrigger> type() {
         return TRIGGER_TYPE;
     }
 

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
@@ -69,13 +70,18 @@ public class OngoingAbilities {
     }
 
     public boolean activate(AbilitySource source, Holder<Ability> ability) {
+        return activate(source, ability, (context) -> {
+        });
+    }
+
+    public boolean activate(AbilitySource source, Holder<Ability> ability, Consumer<AbilityContext> componentProvider) {
         if (!(holder instanceof LivingEntity entity)) {
             return false;
         }
         if (entity.level().isClientSide()) {
             return clientsideActivate(entity, ability, source);
         } else {
-            return serversideActivate(entity, ability, source);
+            return serversideActivate(entity, ability, source, componentProvider);
         }
     }
 
@@ -90,7 +96,11 @@ public class OngoingAbilities {
         });
     }
 
-    private boolean serversideActivate(LivingEntity entity, Holder<Ability> ability, AbilitySource source) {
+    private boolean serversideActivate(
+            LivingEntity entity,
+            Holder<Ability> ability,
+            AbilitySource source,
+            Consumer<AbilityContext> componentProvider) {
         interruptChannelledAbilities();
         Optional<ActiveAbility> activeAbility = activeAbilities.stream()
                 .filter(x -> x.matches(ability, source))
@@ -102,6 +112,7 @@ public class OngoingAbilities {
         } else {
             context = new AbilityContext(ability, entity, source);
         }
+        componentProvider.accept(context);
         return activateContextFor(context, () -> {
             context.set(WotrDataComponentType.AbilityContextData.CONDITIONS,
                     AbilityConditions.forEntity(entity).condition(ability));

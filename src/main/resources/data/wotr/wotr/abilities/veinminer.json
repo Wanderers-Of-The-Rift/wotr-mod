@@ -1,0 +1,23 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+     {
+      "type": "wotr:targeting",
+      "targeting": {
+        "type": "wotr:radial",
+        "range": 4.0,
+        "blocks": {
+          "match_source" : true
+        },
+        "entities": "none",
+        "align_to_block": true
+      },
+      "effects": [
+        {
+          "type": "wotr:break"
+        }
+      ]
+    }
+  ],
+  "icon": "minecraft:textures/item/iron_pickaxe.png"
+}
