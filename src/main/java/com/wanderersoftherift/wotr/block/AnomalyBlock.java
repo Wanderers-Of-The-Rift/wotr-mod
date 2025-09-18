@@ -118,7 +118,7 @@ public class AnomalyBlock extends BaseEntityBlock {
         if (level.isClientSide && blockEntityType == WotrBlockEntities.ANOMALY_BLOCK_ENTITY.get()) {
             return (level1, pos, state1, blockEntity) -> {
                 if (level1 instanceof ClientLevel clientLevel && blockEntity instanceof AnomalyBlockEntity anomaly) {
-                    anomaly.tick(clientLevel, pos, state1);
+                    anomaly.clientTick(clientLevel, pos, state1);
                 }
             };
         }

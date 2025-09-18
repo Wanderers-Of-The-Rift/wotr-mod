@@ -70,6 +70,11 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
         return new BattleTaskState(new HashSet<>(), Optional.empty());
     }
 
+    @Override
+    public int particleColor() {
+        return 0xff_00_00;
+    }
+
     public void handleMobDeath(UUID mob, BattleTaskState state, AnomalyBlockEntity anomalyBlockEntity) {
         if (!state.isInProgress()) {
             return;

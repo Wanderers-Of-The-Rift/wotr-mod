@@ -10,7 +10,7 @@
         "wotr:zombie_horde": 1.0
       },
       "rewards": {
-        "wotr:strength10": 10.0,
+        "wotr:strength5": 10.0,
         "wotr:empty": 1.0
       }
     }

@@ -28,6 +28,8 @@ public interface AnomalyTask<T> {
 
     T createState(RandomSource rng);
 
+    int particleColor();
+
     record AnomalyTaskType<T>(MapCodec<? extends AnomalyTask<T>> mainCodec, Codec<T> stateCodec) {
     }
 }
