@@ -10,6 +10,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.function.BiConsumer;
 
 public interface AnomalyTask<T> {
 
@@ -30,6 +33,14 @@ public interface AnomalyTask<T> {
 
     int particleColor();
 
+    AnomalyTaskDisplay taskDisplay(T task);
+
     record AnomalyTaskType<T>(MapCodec<? extends AnomalyTask<T>> mainCodec, Codec<T> stateCodec) {
+    }
+
+    interface AnomalyTaskDisplay {
+        int getCount();
+
+        void forEachIndexed(BiConsumer<Integer, ItemStack> func);
     }
 }

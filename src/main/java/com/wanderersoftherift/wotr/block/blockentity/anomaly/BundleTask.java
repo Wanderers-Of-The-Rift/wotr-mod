@@ -18,6 +18,7 @@ import net.minecraft.world.item.component.BundleContents;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements AnomalyTask<BundleTaskState> {
     public static final AnomalyTaskType<BundleTaskState> TYPE = new AnomalyTaskType<>(
@@ -41,6 +42,25 @@ public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements Anomal
         var task = new Object2IntOpenHashMap<Item>();
         rolls.forEach((item, count) -> task.put(item.value(), count.sample(rng)));
         return new BundleTaskState(task);
+    }
+
+    @Override
+    public AnomalyTaskDisplay taskDisplay(BundleTaskState task) {
+        return new AnomalyTaskDisplay() {
+            @Override
+            public int getCount() {
+                return task.requirements().size();
+            }
+
+            @Override
+            public void forEachIndexed(BiConsumer<Integer, ItemStack> func) {
+                var i = 0;
+                for (var req : task.requirements().object2IntEntrySet()) {
+                    func.accept(i, new ItemStack(req.getKey(), req.getIntValue()));
+                    i++;
+                }
+            }
+        };
     }
 
     public InteractionResult interact(

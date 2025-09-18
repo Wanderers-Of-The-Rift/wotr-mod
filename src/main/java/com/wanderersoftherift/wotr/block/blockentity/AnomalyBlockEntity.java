@@ -44,7 +44,7 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public void clientTick(ClientLevel clientLevel, BlockPos pos, BlockState state1) {
-        if (state != null) { // Every 4 ticks (5 times per second)
+        if (state != null) {
             double centerX = pos.getX() + 0.5;
             double centerY = pos.getY();
             double centerZ = pos.getZ() + 0.5;
@@ -52,8 +52,8 @@ public class AnomalyBlockEntity extends BlockEntity {
             var count = 6;
             for (int i = 0; i < count; i++) {
                 double angle = (level.getGameTime() - 25.0 * Math.sin(0.03 * level.getGameTime() + 1.2)) * 0.2
-                        + i * Math.PI * 2 / count; // Rotating angle
-                double radius = 0.4 + Math.sin(level.getGameTime() * 0.03) * 0.25; // Varying radius
+                        + i * Math.PI * 2 / count;
+                double radius = 0.4 + Math.sin(level.getGameTime() * 0.03) * 0.25;
 
                 double x = centerX + Math.cos(angle) * radius;
                 double z = centerZ + Math.sin(angle) * radius;
@@ -116,6 +116,7 @@ public class AnomalyBlockEntity extends BlockEntity {
     public <T> void updateTask(T state) {
         this.setAnomalyState(
                 new AnomalyState<T>((Holder<AnomalyTask<T>>) (Object) this.state.task(), Optional.of(state)));
+        sendUpdateToPlayers();
     }
 
     public <T> void setAnomalyState(AnomalyState<T> state) {
@@ -124,6 +125,10 @@ public class AnomalyBlockEntity extends BlockEntity {
             state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState(rng)));
         }
         this.state = state;
+        sendUpdateToPlayers();
+    }
+
+    public void sendUpdateToPlayers() {
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.players().forEach(player -> player.connection.send(getUpdatePacket()));
         }
@@ -189,6 +194,10 @@ public class AnomalyBlockEntity extends BlockEntity {
         this.seed = seed;
     }
 
+    public AnomalyState<?> getAnomalyState() {
+        return state;
+    }
+
     public record AnomalyState<T>(Holder<AnomalyTask<T>> task, Optional<T> state) {
         private static final Codec<AnomalyState<Object>> CODEC = createCodec().xmap(
                 pair -> new AnomalyState<>(pair.getFirst(), pair.getSecond()),
@@ -209,6 +218,13 @@ public class AnomalyBlockEntity extends BlockEntity {
                 InteractionHand hand,
                 AnomalyBlockEntity anomalyBlockEntity) {
             return task().value().interact(player, hand, anomalyBlockEntity, state.orElseThrow());
+        }
+
+        public AnomalyTask.AnomalyTaskDisplay display() {
+            if (state.isEmpty()) {
+                return null;
+            }
+            return task.value().taskDisplay(state.get());
         }
     }
 }
