@@ -20,6 +20,11 @@ public record NeedleTask() implements AnomalyTask<NeedleTaskState> {
     }
 
     @Override
+    public int particleColor() {
+        return 0x00_00_ff;
+    }
+
+    @Override
     public NeedleTaskState createState(RandomSource randomSource) {
         return new NeedleTaskState();
     }

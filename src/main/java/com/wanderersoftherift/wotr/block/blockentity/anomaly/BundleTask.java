@@ -32,6 +32,11 @@ public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements Anomal
     }
 
     @Override
+    public int particleColor() {
+        return 0x00_ff_00;
+    }
+
+    @Override
     public BundleTaskState createState(RandomSource rng) {
         var task = new Object2IntOpenHashMap<Item>();
         rolls.forEach((item, count) -> task.put(item.value(), count.sample(rng)));

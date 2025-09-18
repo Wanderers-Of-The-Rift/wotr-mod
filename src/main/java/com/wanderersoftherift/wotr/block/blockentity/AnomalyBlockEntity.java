@@ -14,6 +14,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
@@ -42,8 +43,28 @@ public class AnomalyBlockEntity extends BlockEntity {
         super(WotrBlockEntities.ANOMALY_BLOCK_ENTITY.get(), pos, state);
     }
 
-    public void tick(ClientLevel clientLevel, BlockPos pos, BlockState state1) {
-        // todo spawn particles
+    public void clientTick(ClientLevel clientLevel, BlockPos pos, BlockState state1) {
+        if (state != null) { // Every 4 ticks (5 times per second)
+            double centerX = pos.getX() + 0.5;
+            double centerY = pos.getY();
+            double centerZ = pos.getZ() + 0.5;
+
+            var count = 6;
+            for (int i = 0; i < count; i++) {
+                double angle = (level.getGameTime() - 25.0 * Math.sin(0.03 * level.getGameTime() + 1.2)) * 0.2
+                        + i * Math.PI * 2 / count; // Rotating angle
+                double radius = 0.4 + Math.sin(level.getGameTime() * 0.03) * 0.25; // Varying radius
+
+                double x = centerX + Math.cos(angle) * radius;
+                double z = centerZ + Math.sin(angle) * radius;
+                double y = centerY + 0.5 + Math.sin(level.getGameTime() * 0.5 + i * Math.PI * 2 / count) * 0.1
+                        * (1 + Math.sin(0.03 * level.getGameTime()));
+
+                var particleColor = state.task.value().particleColor();
+
+                level.addParticle(new DustParticleOptions(particleColor, 0.4f), true, false, x, y, z, 0.0, 0.0, 0.0);
+            }
+        }
     }
 
     public void scheduledTick(ServerLevel serverLevel, BlockPos pos, BlockState state1) {
