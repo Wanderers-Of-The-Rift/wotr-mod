@@ -9,7 +9,11 @@ import java.util.function.Supplier;
 
 public interface TrackedAbilityTrigger {
 
-    TriggerType type();
+    TriggerType<? extends TrackedAbilityTrigger> type();
+
+    default void addComponents(AbilityContext context) {
+
+    }
 
     record TriggerType<T extends TrackedAbilityTrigger>(MapCodec<T> codec,
             @Nullable Supplier<AttachmentType<TriggerRegistry<T>>> registry) {

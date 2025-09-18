@@ -51,7 +51,8 @@ public class AbilityTracker {
                 .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
                 .wrapAsHolder(activation.type());
         for (var tracked : abilities.get(typeHolder)) {
-            result |= holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(tracked.source, tracked.ability);
+            result |= holder.getData(WotrAttachments.ONGOING_ABILITIES)
+                    .activate(tracked.source, tracked.ability, activation::addComponents);
         }
         return result;
     }

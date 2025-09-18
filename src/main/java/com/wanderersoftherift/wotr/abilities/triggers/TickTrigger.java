@@ -9,10 +9,11 @@ public record TickTrigger() implements TrackedAbilityTrigger {
     public static final TickTrigger INSTANCE = new TickTrigger();
     private static final MapCodec<TickTrigger> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.point(INSTANCE));
-    public static final TriggerType TRIGGER_TYPE = new TriggerType(CODEC, WotrAttachments.TICK_TRIGGER_REGISTRY);
+    public static final TriggerType<TickTrigger> TRIGGER_TYPE = new TriggerType<>(CODEC,
+            WotrAttachments.TICK_TRIGGER_REGISTRY);
 
     @Override
-    public TriggerType type() {
+    public TriggerType<TickTrigger> type() {
         return TRIGGER_TYPE;
     }
 }

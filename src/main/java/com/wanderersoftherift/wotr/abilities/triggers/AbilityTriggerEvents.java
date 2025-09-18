@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @EventBusSubscriber
@@ -39,5 +40,13 @@ public class AbilityTriggerEvents {
                     .triggerAbilities(new DealDamageTrigger(
                             new SerializableDamageSource(event.getSource()), victim.getUUID(), event.getAmount()));
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void breakBlockEvent(BlockEvent.BreakEvent event) {
+        if (event.isCanceled()) {
+            return;
+        }
+        AbilityTracker.forEntity(event.getPlayer()).triggerAbilities(new BreakBlockTrigger(event.getPos()));
     }
 }
