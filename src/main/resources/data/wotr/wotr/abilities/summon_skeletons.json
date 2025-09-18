@@ -10,53 +10,45 @@
   "effects": [
     {
       "type": "wotr:targeting",
-      "targeting": {
-        "type": "wotr:raycast",
-        "range": 200
-      },
-      "effects": [
+      "targeting": [
         {
-          "type": "wotr:targeting",
-          "targeting": {
-            "type": "wotr:area",
-            "range": 5,
-            "entities": "none",
-            "blocks": {
-              "filter": {
-                "type": "all_of",
-                "predicates": [
-                  {
-                    "type": "wotr:surface",
-                    "space": 2
-                  },
-                  {
-                    "type": "solid"
-                  }
-                ]
-              }
-            }
-          },
-          "effects": [
-            {
-              "type": "wotr:targeting",
-              "targeting": {
-                "type": "wotr:random_subset",
-                "count": 3
-              },
-              "effects": [
+          "type": "wotr:raycast",
+          "range": 200
+        },
+        {
+          "type": "wotr:area",
+          "range": 5,
+          "entities": "none",
+          "blocks": {
+            "filter": {
+              "type": "all_of",
+              "predicates": [
                 {
-                  "type": "wotr:summon",
-                  "entity_type": "minecraft:skeleton",
-                  "effects": [
-                    {
-                      "type": "wotr:particle",
-                      "particle": {
-                        "type": "minecraft:explosion"
-                      }
-                    }
-                  ]
+                  "type": "wotr:surface",
+                  "space": 2
+                },
+                {
+                  "type": "solid"
                 }
               ]
+            }
+          }
+        },
+        {
+          "type": "wotr:random_subset",
+          "count": 3
+        }
+      ],
+      "effects": [
+        {
+          "type": "wotr:summon",
+          "entity_type": "minecraft:skeleton",
+          "effects": [
+            {
+              "type": "wotr:particle",
+              "particle": {
+                "type": "minecraft:explosion"
+              }
             }
           ]
         }
