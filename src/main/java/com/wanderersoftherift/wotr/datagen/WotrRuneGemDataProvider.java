@@ -40,12 +40,18 @@ public class WotrRuneGemDataProvider {
                 .getOrThrow(WotrTags.Items.SOCKETABLE_BOOTS_SLOT);
         HolderSet.Named<Item> mainHandTag = context.lookup(Registries.ITEM)
                 .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT);
+        HolderSet.Named<Item> mainHandToolTag = context.lookup(Registries.ITEM)
+                .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_TOOL);
+        HolderSet.Named<Item> mainHandHybridTag = context.lookup(Registries.ITEM)
+                .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_HYBRID);
+        HolderSet.Named<Item> mainHandWeaponTag = context.lookup(Registries.ITEM)
+                .getOrThrow(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_WEAPON);
         HolderSet.Named<Item> offHandTag = context.lookup(Registries.ITEM)
                 .getOrThrow(WotrTags.Items.SOCKETABLE_OFF_HAND_SLOT);
         // Replace context.register with a separate method, that creates a temporary static DATA table
         registerRunegem(context, getRunegemResourceKey("attack_raw"), new RunegemData(getTranslatableName("attack_raw"),
                 RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
-                        mainHandTag, List.of(
+                        mainHandWeaponTag, List.of(
                                 new TieredModifier(1, getModifier(lookup, "attack_flat")),
                                 new TieredModifier(1, getModifier(lookup, "attack_heavy"))
                         )), new RunegemData.ModifierGroup(
@@ -76,7 +82,7 @@ public class WotrRuneGemDataProvider {
                 ), RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("attack_cut"), new RunegemData(getTranslatableName("attack_cut"),
                 RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
-                        mainHandTag, List.of(
+                        mainHandWeaponTag, List.of(
                                 new TieredModifier(2, getModifier(lookup, "attack_flat")),
                                 new TieredModifier(2, getModifier(lookup, "attack_heavy"))
                         )), new RunegemData.ModifierGroup(
@@ -107,7 +113,7 @@ public class WotrRuneGemDataProvider {
                 ), RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("attack_shaped"), new RunegemData(
                 getTranslatableName("attack_shaped"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
-                        mainHandTag, List.of(
+                        mainHandWeaponTag, List.of(
                                 new TieredModifier(3, getModifier(lookup, "attack_flat")),
                                 new TieredModifier(3, getModifier(lookup, "attack_heavy")),
                                 new TieredModifier(1, getModifier(lookup, "sweeping_attack_damage"))
@@ -141,7 +147,7 @@ public class WotrRuneGemDataProvider {
                 ), RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("attack_polished"), new RunegemData(
                 getTranslatableName("attack_polished"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
-                        mainHandTag, List.of(
+                        mainHandWeaponTag, List.of(
                                 new TieredModifier(4, getModifier(lookup, "attack_flat")),
                                 new TieredModifier(4, getModifier(lookup, "attack_heavy")),
                                 new TieredModifier(2, getModifier(lookup, "sweeping_attack_damage"))
@@ -175,7 +181,7 @@ public class WotrRuneGemDataProvider {
                 ), RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("attack_framed"), new RunegemData(
                 getTranslatableName("attack_framed"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
-                        mainHandTag, List.of(
+                        mainHandWeaponTag, List.of(
                                 new TieredModifier(5, getModifier(lookup, "attack_flat")),
                                 new TieredModifier(5, getModifier(lookup, "attack_heavy")),
                                 new TieredModifier(3, getModifier(lookup, "sweeping_attack_damage"))
@@ -209,7 +215,7 @@ public class WotrRuneGemDataProvider {
                 ), RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("critical_raw"), new RunegemData(
                 getTranslatableName("critical_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
-                        mainHandTag, List.of(
+                        mainHandWeaponTag, List.of(
                                 new TieredModifier(1, getModifier(lookup, "critical_chance")),
                                 new TieredModifier(1, getModifier(lookup, "critical_avoidance"))
                         ))),
@@ -523,7 +529,7 @@ public class WotrRuneGemDataProvider {
         registerRunegem(context, getRunegemResourceKey("life_leech_raw"),
                 new RunegemData(getTranslatableName("life_leech_raw"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
-                                mainHandTag, List.of(
+                                mainHandWeaponTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "life_leech"))
                                 ))),
                         RunegemTier.RAW));
@@ -582,6 +588,17 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(5, getModifier(lookup, "projectile_spread"))
                                 ))),
                         RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("mining_raw"),
+                new RunegemData(getTranslatableName("mining_raw"), RunegemShape.CIRCLE,
+                        List.of(new RunegemData.ModifierGroup(
+                                mainHandToolTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "mining_speed"))
+                                )), new RunegemData.ModifierGroup(
+                                        mainHandHybridTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "mining_speed")),
+                                                new TieredModifier(1, getModifier(lookup, "attack_flat"))
+                                        ))
+                        ), RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("projectile_raw"),
                 new RunegemData(getTranslatableName("projectile_raw"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
