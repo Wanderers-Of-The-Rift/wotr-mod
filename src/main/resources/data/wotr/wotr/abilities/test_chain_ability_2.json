@@ -1,0 +1,12 @@
+{
+  "type": "wotr:chain",
+  "icon": "minecraft:textures/mob_effect/strength.png",
+  "abilities": [
+    {
+      "ability": "wotr:dash"
+    },
+    {
+      "ability": "wotr:heal"
+    }
+  ]
+}

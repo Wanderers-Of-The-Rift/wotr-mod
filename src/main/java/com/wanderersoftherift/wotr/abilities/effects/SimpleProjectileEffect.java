@@ -17,7 +17,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -102,8 +101,8 @@ public class SimpleProjectileEffect extends AbilityEffect {
         }
     }
 
-    public void applyDelayed(Level level, Entity target, List<BlockPos> blocks, AbilityContext context) {
-        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
+    public void applyDelayed(Entity target, List<BlockPos> blocks, AbilityContext context) {
+        try (var ignore = context.activate()) {
             super.apply(target, blocks, context);
         }
     }

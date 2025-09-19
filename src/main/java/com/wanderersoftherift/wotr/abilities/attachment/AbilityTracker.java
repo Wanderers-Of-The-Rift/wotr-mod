@@ -43,7 +43,7 @@ public class AbilityTracker {
     }
 
     public boolean triggerAbilities(TrackedAbilityTrigger activation) {
-        if (!(holder instanceof LivingEntity entity)) {
+        if (!(holder instanceof LivingEntity)) {
             return false;
         }
         var result = false;
@@ -51,8 +51,7 @@ public class AbilityTracker {
                 .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
                 .wrapAsHolder(activation.type());
         for (var tracked : abilities.get(typeHolder)) {
-            result |= holder.getData(WotrAttachments.ONGOING_ABILITIES)
-                    .activate(tracked.source, tracked.source.getItem(entity), tracked.ability);
+            result |= holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(tracked.source, tracked.ability);
         }
         return result;
     }

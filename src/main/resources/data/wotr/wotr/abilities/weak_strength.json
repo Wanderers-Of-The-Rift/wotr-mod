@@ -1,15 +1,8 @@
 {
   "type": "wotr:persistent",
-  "icon": "minecraft:textures/mob_effect/strength.png",
+  "icon": "minecraft:textures/mob_effect/mining_fatigue.png",
   "in_creative_menu": false,
   "toggleable": true,
-  "requirements": [
-    {
-      "type": "wotr:mana",
-      "amount": 10,
-      "consume": false
-    }
-  ],
   "activation_effects": [
     {
       "type": "wotr:attach",
@@ -21,19 +14,9 @@
         {
           "modifier": "wotr:ability/damage_up",
           "tier": 1,
-          "roll": 100
-        },
-        {
-          "modifier": "wotr:ability/mana_degen",
-          "tier": 1,
-          "roll": 0.5
+          "roll": 5
         }
       ]
-    }
-  ],
-  "ongoing_requirements" : [
-    {
-      "type": "wotr:mana"
     }
   ],
   "on_deactivation_effects": [

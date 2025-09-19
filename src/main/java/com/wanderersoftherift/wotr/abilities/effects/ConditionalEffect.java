@@ -4,12 +4,14 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class ConditionalEffect extends AbilityEffect {
     public static final MapCodec<ConditionalEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> AbilityEffect
@@ -62,7 +64,8 @@ public class ConditionalEffect extends AbilityEffect {
     public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
         super.apply(user, blocks, context);
 
-        var condition = context.conditions().contains(condition());
+        var condition = context.getOrDefault(WotrDataComponentType.AbilityContextData.CONDITIONS, Set.of())
+                .contains(condition());
 
         for (AbilityEffect effect : (condition ? effectsTrue() : effectsFalse())) {
             effect.apply(user, blocks, context);

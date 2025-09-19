@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init.ability;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.abilities.ChainAbility;
 import com.wanderersoftherift.wotr.abilities.InstantAbility;
 import com.wanderersoftherift.wotr.abilities.PersistentAbility;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -23,5 +24,8 @@ public class WotrAbilityTypes {
 
     public static final Supplier<MapCodec<? extends Ability>> PERSISTENT = ABILITY_TYPES.register("persistent",
             () -> PersistentAbility.CODEC);
+
+    public static final Supplier<MapCodec<? extends Ability>> CHAIN = ABILITY_TYPES.register("chain",
+            () -> ChainAbility.CODEC);
 
 }
