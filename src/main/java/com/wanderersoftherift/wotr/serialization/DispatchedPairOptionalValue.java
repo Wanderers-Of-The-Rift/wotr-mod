@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -16,27 +17,27 @@ import java.util.function.Function;
  * @param <K>                Type of the key
  * @param <V>                Type of the value
  */
-public record DispatchedPair<K, V>(Codec<K> keyCodec, String valueField, Function<K, Codec<V>> valueCodecFunction)
-        implements Codec<Pair<K, V>> {
+public record DispatchedPairOptionalValue<K, V>(Codec<K> keyCodec, String valueField,
+        Function<K, Codec<V>> valueCodecFunction) implements Codec<Pair<K, Optional<V>>> {
 
     @Override
-    public <T> DataResult<T> encode(final Pair<K, V> input, final DynamicOps<T> ops, final T rest) {
-        Codec<V> valueCodec = getValueFieldCodec(input.getFirst());
+    public <T> DataResult<T> encode(final Pair<K, Optional<V>> input, final DynamicOps<T> ops, final T rest) {
+        Codec<Optional<V>> valueCodec = getValueFieldCodec(input.getFirst());
         return valueCodec.encode(input.getSecond(), ops, rest).flatMap(f -> keyCodec.encode(input.getFirst(), ops, f));
     }
 
     @Override
-    public <T> DataResult<Pair<Pair<K, V>, T>> decode(final DynamicOps<T> ops, final T input) {
+    public <T> DataResult<Pair<Pair<K, Optional<V>>, T>> decode(final DynamicOps<T> ops, final T input) {
         return keyCodec.decode(ops, input).flatMap(p1 -> {
-            Codec<V> valueCodec = getValueFieldCodec(p1.getFirst());
+            Codec<Optional<V>> valueCodec = getValueFieldCodec(p1.getFirst());
             return valueCodec.decode(ops, p1.getSecond())
                     .map(p2 -> Pair.of(Pair.of(p1.getFirst(), p2.getFirst()), p2.getSecond())
                     );
         });
     }
 
-    private Codec<V> getValueFieldCodec(K key) {
-        return valueCodecFunction.apply(key).fieldOf(valueField).codec();
+    private Codec<Optional<V>> getValueFieldCodec(K key) {
+        return valueCodecFunction.apply(key).optionalFieldOf(valueField).codec();
     }
 
 }

@@ -1,0 +1,20 @@
+{
+    "type": "wotr:bundle",
+    "items": {
+        "white_wool": {
+            "type": "uniform",
+            "min_inclusive": 16,
+            "max_inclusive": 48
+        },
+        "gray_wool": {
+            "type": "uniform",
+            "min_inclusive": 8,
+            "max_inclusive": 16
+        },
+        "black_wool": {
+            "type": "uniform",
+            "min_inclusive": 8,
+            "max_inclusive": 16
+        }
+    }
+}
