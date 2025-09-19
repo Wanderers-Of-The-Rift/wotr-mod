@@ -13,16 +13,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -47,18 +44,16 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
         var randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
                 System.currentTimeMillis());
         var count = spawnData.count.sample(randomSource);
-        var mobs = new ArrayList<Entity>(count);
+        var mobUUIDs = new HashSet<UUID>();
 
         for (int i = 0; i < count; i++) {
-            mobs.add(spawnData.types.random(randomSource)
+            var mob = spawnData.types.random(randomSource)
                     .value()
-                    .spawn(serverLevel, anomalyBlockEntity.getBlockPos().above(), EntitySpawnReason.SPAWNER));
-        }
+                    .spawn(serverLevel, anomalyBlockEntity.getBlockPos().above(), EntitySpawnReason.SPAWNER);
 
-        var mobUUIDs = new HashSet<>(mobs.stream().filter(Objects::nonNull).map(it -> {
-            it.setData(WotrAttachments.BATTLE_TASK_MOB, new BattleMobAttachment(anomalyBlockEntity.getBlockPos()));
-            return it;
-        }).map(Entity::getUUID).toList());
+            mobUUIDs.add(mob.getUUID());
+            mob.setData(WotrAttachments.BATTLE_TASK_MOB, new BattleMobAttachment(anomalyBlockEntity.getBlockPos()));
+        }
 
         anomalyBlockEntity.updateTask(new BattleTaskState(mobUUIDs, Optional.of(player.getUUID())));
         return InteractionResult.SUCCESS;

@@ -100,21 +100,21 @@ public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements Anomal
             if (!bundleContentEntry.isEmpty()) {
                 newContent.add(bundleContentEntry);
             }
+            if (consumed > 0) {
+                resultIfIncomplete = InteractionResult.SUCCESS;
+            }
             if (remaining == consumed) {
                 requirements.removeInt(item);
                 if (requirements.isEmpty()) {
                     entity.closeAndReward(player);
-                    resultIfIncomplete = InteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else if (consumed > 0) {
                 requirements.put(item, remaining - consumed);
-                resultIfIncomplete = InteractionResult.SUCCESS;
             }
         }
-        if (newContent.size() < content.size()) {
-            handItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(newContent));
-        }
         if (resultIfIncomplete != InteractionResult.PASS) {
+            handItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(newContent));
             entity.updateTask(new BundleTaskState(requirements));
         }
 
