@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.init.client.WotrShaders;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.CompiledShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,6 +24,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.util.function.Function;
+
 public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBlockEntity> {
 
     public static final RenderStateShard.ShaderStateShard ANOMALY_SHADER_STATE = new RenderStateShard.ShaderStateShard(
@@ -31,21 +34,29 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
             .id("textures/entity/outer_rift.png");
     private static final ResourceLocation INNER_ANOMALY_LOCATION = WanderersOfTheRift
             .id("textures/entity/inner_rift.png");
-    private static final RenderType RENDER_TYPE = RenderType.create("anomaly", DefaultVertexFormat.NEW_ENTITY,
-            VertexFormat.Mode.QUADS, 1536, true, false,
+    private static final Function<ResourceLocation, RenderType> RENDER_TYPE = Util.memoize(inner -> RenderType.create(
+            "anomaly", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, true, false,
             RenderType.CompositeState.builder()
                     .setShaderState(ANOMALY_SHADER_STATE)
                     .setTextureState(new RenderStateShard.MultiTextureStateShard.Builder()
                             .add(OUTER_ANOMALY_LOCATION, false, false)
-                            .add(INNER_ANOMALY_LOCATION, false, false)
+                            .add(inner, false, false)
                             .build())
                     .setTransparencyState(RenderStateShard.NO_TRANSPARENCY)
                     .setCullState(RenderStateShard.NO_CULL)
                     .setLightmapState(RenderStateShard.NO_LIGHTMAP)
                     .setOverlayState(RenderStateShard.NO_OVERLAY)
-                    .createCompositeState(false));
+                    .createCompositeState(false)));
 
     public AnomalyBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    }
+
+    private static RenderType getRenderType(AnomalyBlockEntity anomalyBlockEntity) {
+        var panoramaTexture = anomalyBlockEntity.getPanorama();
+        if (panoramaTexture == null) {
+            panoramaTexture = INNER_ANOMALY_LOCATION;
+        }
+        return RENDER_TYPE.apply(panoramaTexture);
     }
 
     private static void vertex(
@@ -108,7 +119,7 @@ public class AnomalyBlockEntityRenderer implements BlockEntityRenderer<AnomalyBl
 
         poseStack.mulPose(new Quaternionf().lookAlong(dir, new Vector3f(0, -1, 0)));
         PoseStack.Pose pose = poseStack.last();
-        VertexConsumer vertexConsumer = buffer.getBuffer(RENDER_TYPE);
+        VertexConsumer vertexConsumer = buffer.getBuffer(getRenderType(blockEntity));
 
         vertex(vertexConsumer, pose, packedLight, -0.5f, -0.5f, 0.0f, 0, 1);
         vertex(vertexConsumer, pose, packedLight, 0.5f, -0.5f, 0.0f, 1, 1);
