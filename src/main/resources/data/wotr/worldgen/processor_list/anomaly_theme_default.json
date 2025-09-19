@@ -5,7 +5,8 @@
       "piece_type": "poi"
     },
     {
-     "processor_type": "wotr:anomaly",
+      "processor_type": "wotr:anomaly",
+      "replace_with_anomaly": "minecraft:end_rod",
       "tasks": {
         "wotr:zombie_horde": 3.0,
         "wotr:grayscale_wool": 1.0,
