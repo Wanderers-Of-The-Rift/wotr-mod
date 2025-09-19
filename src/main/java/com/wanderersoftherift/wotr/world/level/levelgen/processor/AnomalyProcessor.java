@@ -14,14 +14,17 @@ import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EndRodBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -40,18 +43,24 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
                             .fieldOf("rewards")
                             .forGetter(AnomalyProcessor::getRewards),
                     ResourceLocation.CODEC.optionalFieldOf("anomaly_panorama_texture")
-                            .forGetter(AnomalyProcessor::getPanorama)
+                            .forGetter(AnomalyProcessor::getPanorama),
+                    RegistryCodecs.homogeneousList(Registries.BLOCK)
+                            .fieldOf("replace_with_anomaly")
+                            .forGetter(AnomalyProcessor::replaced)
             ).apply(instance, AnomalyProcessor::new));
 
     private final Optional<ResourceLocation> panorama;
     private final FastWeightedList<Holder<AnomalyTask<?>>> tasks;
     private final FastWeightedList<Holder<AnomalyReward>> rewards;
+    private final HolderSet<Block> replaced;
 
     public AnomalyProcessor(FastWeightedList<Holder<AnomalyTask<?>>> tasks,
-            FastWeightedList<Holder<AnomalyReward>> rewards, Optional<ResourceLocation> panorama) {
+            FastWeightedList<Holder<AnomalyReward>> rewards, Optional<ResourceLocation> panorama,
+            HolderSet<Block> replaced) {
         this.panorama = panorama;
         this.tasks = tasks;
         this.rewards = rewards;
+        this.replaced = replaced;
     }
 
     @Override
@@ -76,13 +85,16 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
             BlockPos structurePos,
             Ref<BlockEntity> entityRef,
             boolean isVisible) {
-        if (currentState.getBlock() != Blocks.END_ROD) {
+        if (!replaced.contains(currentState.getBlockHolder())) {
             return currentState;
         }
         var position = new BlockPos(x, y, z);
-        currentState = WotrBlocks.ANOMALY.get()
-                .defaultBlockState()
-                .setValue(AnomalyBlock.FACING, currentState.getValue(EndRodBlock.FACING));
+
+        var newState = WotrBlocks.ANOMALY.get().defaultBlockState();
+        if (currentState.hasProperty(BlockStateProperties.FACING)) {
+            newState = newState.setValue(AnomalyBlock.FACING, currentState.getValue(BlockStateProperties.FACING));
+        }
+        currentState = newState;
         var blockEntity = new AnomalyBlockEntity(position, currentState);
         var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
                 ProcessorUtil.getRandomSeed(position, ((WorldGenLevel) world).getSeed() + 9996554987L));
@@ -117,5 +129,9 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
 
     public FastWeightedList<Holder<AnomalyReward>> getRewards() {
         return rewards;
+    }
+
+    public HolderSet<Block> replaced() {
+        return replaced;
     }
 }
