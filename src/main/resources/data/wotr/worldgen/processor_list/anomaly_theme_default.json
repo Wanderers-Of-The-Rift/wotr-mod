@@ -7,11 +7,14 @@
     {
      "processor_type": "wotr:anomaly",
       "tasks": {
-        "wotr:zombie_horde": 1.0
+        "wotr:zombie_horde": 3.0,
+        "wotr:grayscale_wool": 1.0,
+        "wotr:rgb_wool": 1.0,
+        "wotr:slice_anomaly": 1.0
       },
       "rewards": {
         "wotr:strength5": 10.0,
-        "wotr:empty": 1.0
+        "wotr:ender_pearl": 10.0
       }
     }
   ]
