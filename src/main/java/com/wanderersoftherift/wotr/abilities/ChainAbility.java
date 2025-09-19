@@ -132,18 +132,18 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
 
     private boolean updateSubabilityState(AbilityContext context, int index) {
         ChainAbilitySource currentSubabilitySource = new ChainAbilitySource(context.source(), index);
-        if (!context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(currentSubabilitySource)) {
-            index++;
-            if (index >= abilities.size()) {
-                deactivate(context);
-                return true;
-            }
-            if (abilities.get(index).autoActivate) {
-                return progressChain(context, index);
-            } else {
-                updateState(context, index, false);
-            }
+        if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(currentSubabilitySource)) {
+            return false;
         }
+        index++;
+        if (index >= abilities.size()) {
+            deactivate(context);
+            return true;
+        }
+        if (abilities.get(index).autoActivate) {
+            return progressChain(context, index);
+        }
+        updateState(context, index, false);
         return false;
     }
 
