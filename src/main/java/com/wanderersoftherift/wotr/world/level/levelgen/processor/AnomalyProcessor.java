@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -37,14 +38,18 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
                             .forGetter(AnomalyProcessor::getTasks),
                     FastWeightedList.codec(AnomalyReward.HOLDER_CODEC)
                             .fieldOf("rewards")
-                            .forGetter(AnomalyProcessor::getRewards)
+                            .forGetter(AnomalyProcessor::getRewards),
+                    ResourceLocation.CODEC.optionalFieldOf("anomaly_panorama_texture")
+                            .forGetter(AnomalyProcessor::getPanorama)
             ).apply(instance, AnomalyProcessor::new));
 
+    private final Optional<ResourceLocation> panorama;
     private final FastWeightedList<Holder<AnomalyTask<?>>> tasks;
     private final FastWeightedList<Holder<AnomalyReward>> rewards;
 
     public AnomalyProcessor(FastWeightedList<Holder<AnomalyTask<?>>> tasks,
-            FastWeightedList<Holder<AnomalyReward>> rewards) {
+            FastWeightedList<Holder<AnomalyReward>> rewards, Optional<ResourceLocation> panorama) {
+        this.panorama = panorama;
         this.tasks = tasks;
         this.rewards = rewards;
     }
@@ -83,17 +88,27 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
                 ProcessorUtil.getRandomSeed(position, ((WorldGenLevel) world).getSeed() + 9996554987L));
         var task = tasks.random(rng);
         var reward = rewards.random(rng);
+
         blockEntity.setSeed(rng.nextLong());
         blockEntity.setAnomalyState(
                 new AnomalyBlockEntity.AnomalyState<>((Holder<AnomalyTask<Object>>) (Object) task, Optional.empty()));
         blockEntity.setAnomalyReward(reward);
+        if (panorama.isPresent()) {
+            blockEntity.setPanorama(panorama.get());
+        }
+
         entityRef.setValue(blockEntity);
+
         return currentState;
     }
 
     @Override
     protected StructureProcessorType<?> getType() {
         return WotrProcessors.ANOMALY.get();
+    }
+
+    private Optional<ResourceLocation> getPanorama() {
+        return panorama;
     }
 
     public FastWeightedList<Holder<AnomalyTask<?>>> getTasks() {

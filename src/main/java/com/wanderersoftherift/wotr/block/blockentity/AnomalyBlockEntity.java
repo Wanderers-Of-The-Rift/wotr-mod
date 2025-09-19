@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -38,6 +39,7 @@ public class AnomalyBlockEntity extends BlockEntity {
     private long seed = 0L;
     private Holder<AnomalyReward> reward;
     private AnomalyState<?> state;
+    private ResourceLocation panorama;
 
     public AnomalyBlockEntity(BlockPos pos, BlockState state) {
         super(WotrBlockEntities.ANOMALY_BLOCK_ENTITY.get(), pos, state);
@@ -157,6 +159,9 @@ public class AnomalyBlockEntity extends BlockEntity {
             AnomalyState.CODEC.encodeStart(ops, (AnomalyState<Object>) state)
                     .ifSuccess(value -> tag.put("task", value));
         }
+        if (panorama != null) {
+            ResourceLocation.CODEC.encodeStart(ops, panorama).ifSuccess(value -> tag.put("panorama", value));
+        }
     }
 
     @Override
@@ -178,6 +183,13 @@ public class AnomalyBlockEntity extends BlockEntity {
         } else {
             setAnomalyState(null);
         }
+        if (tag.contains("panorama")) {
+            var decode = ResourceLocation.CODEC.decode(ops, tag.get("panorama"));
+            decode.ifSuccess(value -> panorama = value.getFirst());
+            decode.ifError(it -> WanderersOfTheRift.LOGGER.debug(it.messageSupplier().get()));
+        } else {
+            panorama = null;
+        }
     }
 
     @Override
@@ -196,6 +208,14 @@ public class AnomalyBlockEntity extends BlockEntity {
 
     public AnomalyState<?> getAnomalyState() {
         return state;
+    }
+
+    public ResourceLocation getPanorama() {
+        return panorama;
+    }
+
+    public void setPanorama(ResourceLocation resourceLocation) {
+        this.panorama = resourceLocation;
     }
 
     public record AnomalyState<T>(Holder<AnomalyTask<T>> task, Optional<T> state) {
