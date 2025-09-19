@@ -47,6 +47,7 @@ public class AbilityTriggerEvents {
         if (event.isCanceled()) {
             return;
         }
-        AbilityTracker.forEntity(event.getPlayer()).triggerAbilities(new BreakBlockTrigger(event.getPos()));
+        AbilityTracker.forEntity(event.getPlayer())
+                .triggerAbilities(new BreakBlockTrigger(event.getPos(), event.getPlayer().getDirection()));
     }
 }

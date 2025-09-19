@@ -3,15 +3,18 @@
   "effects": [
      {
       "type": "wotr:targeting",
-      "targeting": {
-        "type": "wotr:radial",
-        "range": 4.0,
-        "blocks": {
-          "match_source" : true
+      "targeting": [
+        {
+          "type": "wotr:trigger_target"
         },
-        "entities": "none",
-        "align_to_block": true
-      },
+        {
+          "type": "wotr:connected_block",
+          "blocks": {
+            "match_source" : true
+          },
+          "count": 8
+        }
+      ],
       "effects": [
         {
           "type": "wotr:break"
