@@ -6,6 +6,7 @@
     "wotr:health_raw",
     "wotr:life_leech_raw",
     "wotr:magic_raw",
+    "wotr:mining_raw",
     "wotr:projectile_raw",
     "wotr:speed_raw",
     "wotr:thorns_raw"

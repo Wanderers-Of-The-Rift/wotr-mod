@@ -15,7 +15,7 @@
           "tier": 1
         }
       ],
-      "supported_items": "#wotr:socketable_main_hand_slot"
+      "supported_items": "#wotr:socketable_main_hand_slot_weapon"
     },
     {
       "modifiers": [

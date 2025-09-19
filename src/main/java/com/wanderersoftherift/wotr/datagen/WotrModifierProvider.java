@@ -266,6 +266,13 @@ public class WotrModifierProvider {
                                         WotrAttributes.MAX_MANA, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
                 Style.EMPTY.withColor(ColorUtil.BLUE))
         );
+        registerModifier(context, getResourceKey("mining_speed"), new Modifier(
+                generateEqualRollSpread(5,
+                        List.of(new ToBeTieredModifierEffect(5F, 25F,
+                                attributeModifierEffectGetter(WanderersOfTheRift.id("mining_speed"),
+                                        Attributes.MINING_EFFICIENCY, AttributeModifier.Operation.ADD_VALUE)))),
+                Style.EMPTY.withColor(ColorUtil.LIGHT_BLUE))
+        );
         registerModifier(context, getResourceKey("movement_speed"), new Modifier(
                 generateEqualRollSpread(3,
                         List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
