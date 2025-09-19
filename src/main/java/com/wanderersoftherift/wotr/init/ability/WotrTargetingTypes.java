@@ -4,11 +4,13 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.CasterTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.ConnectedBlockTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.CubeAreaTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.FilterTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RadialTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RandomSubsetTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RaycastTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.TriggerTargetTargeting;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -31,5 +33,9 @@ public class WotrTargetingTypes {
             () -> CasterTargeting.CODEC);
     public static final Supplier<MapCodec<RandomSubsetTargeting>> RANDOM_SUBSET = TARGETING_TYPES
             .register("random_subset", () -> RandomSubsetTargeting.CODEC);
+    public static final Supplier<MapCodec<TriggerTargetTargeting>> TRIGGER_TARGET = TARGETING_TYPES
+            .register("trigger_target", () -> TriggerTargetTargeting.CODEC);
+    public static final Supplier<MapCodec<ConnectedBlockTargeting>> CONNECTED_BLOCK = TARGETING_TYPES
+            .register("connected_block", () -> ConnectedBlockTargeting.CODEC);
 
 }

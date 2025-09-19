@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityState;
+import com.wanderersoftherift.wotr.abilities.attachment.TargetComponent;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.item.LootBox;
@@ -66,6 +67,10 @@ public class WotrDataComponentType {
 
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Set<ResourceLocation>>> CONDITIONS = register(
                 "conditions", Codec.list(ResourceLocation.CODEC).xmap(Set::copyOf, List::copyOf), null
+        );
+
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<TargetComponent>> TRIGGER_TARGET = register(
+                "trigger_target", TargetComponent.CODEC, null
         );
 
         private AbilityContextData() {
