@@ -55,7 +55,7 @@ public class InstantAbility implements Ability {
     }
 
     @Override
-    public ResourceLocation getEmblem() {
+    public ResourceLocation getEmblemIcon() {
         return smallIcon.orElse(icon);
     }
 

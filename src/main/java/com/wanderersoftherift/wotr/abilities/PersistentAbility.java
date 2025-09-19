@@ -82,7 +82,7 @@ public class PersistentAbility implements Ability {
     }
 
     @Override
-    public ResourceLocation getEmblem() {
+    public ResourceLocation getEmblemIcon() {
         return smallIcon.orElse(icon);
     }
 

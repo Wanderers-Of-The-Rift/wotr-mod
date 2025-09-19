@@ -63,7 +63,7 @@ public interface Ability {
     /**
      * @return An icon for displaying in the ability holder.
      */
-    ResourceLocation getEmblem();
+    ResourceLocation getEmblemIcon();
 
     /**
      * @param context
