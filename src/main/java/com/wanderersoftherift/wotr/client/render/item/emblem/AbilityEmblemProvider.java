@@ -19,7 +19,7 @@ public class AbilityEmblemProvider implements EmblemProvider {
     public ResourceLocation getIcon(ItemStack item) {
         ActivatableAbility abilityComponent = item.get(WotrDataComponentType.ABILITY);
         if (abilityComponent != null) {
-            return abilityComponent.ability().value().getEmblem();
+            return abilityComponent.ability().value().getEmblemIcon();
         }
         return null;
     }

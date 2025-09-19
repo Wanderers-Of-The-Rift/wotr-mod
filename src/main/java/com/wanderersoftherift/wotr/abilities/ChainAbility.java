@@ -17,14 +17,12 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-public record ChainAbility(boolean inCreativeMenu, List<AbilityElement> abilities) implements Ability {
+public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implements Ability {
 
     public static final MapCodec<ChainAbility> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.BOOL.optionalFieldOf("in_creative_menu", true).forGetter(ChainAbility::isInCreativeMenu),
-                    AbilityElement.CODEC.listOf(1, Integer.MAX_VALUE)
-                            .fieldOf("abilities")
-                            .forGetter(ChainAbility::abilities)
+                    Entry.CODEC.listOf(1, Integer.MAX_VALUE).fieldOf("abilities").forGetter(ChainAbility::abilities)
             ).apply(instance, ChainAbility::new));
 
     @Override
@@ -59,8 +57,8 @@ public record ChainAbility(boolean inCreativeMenu, List<AbilityElement> abilitie
     }
 
     @Override
-    public ResourceLocation getEmblem() {
-        return abilities.getFirst().ability.value().getEmblem();
+    public ResourceLocation getEmblemIcon() {
+        return abilities.getFirst().ability.value().getEmblemIcon();
     }
 
     @Override
@@ -158,7 +156,7 @@ public record ChainAbility(boolean inCreativeMenu, List<AbilityElement> abilitie
     @Override
     public boolean isRelevantModifier(ModifierEffect modifierEffect) {
         return abilities.stream()
-                .map(AbilityElement::ability)
+                .map(Entry::ability)
                 .map(Holder::value)
                 .anyMatch(x -> x.isRelevantModifier(modifierEffect));
     }
@@ -167,11 +165,11 @@ public record ChainAbility(boolean inCreativeMenu, List<AbilityElement> abilitie
         return owner.getData(WotrAttachments.ABILITY_STATES).getState(source);
     }
 
-    public record AbilityElement(Holder<Ability> ability, int ticksToReset, boolean autoActivate) {
-        public static final Codec<AbilityElement> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Ability.CODEC.fieldOf("ability").forGetter(AbilityElement::ability),
-                Codec.INT.optionalFieldOf("ticks_to_reset", 100).forGetter(AbilityElement::ticksToReset),
-                Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(AbilityElement::autoActivate)
-        ).apply(instance, AbilityElement::new));
+    public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate) {
+        public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Ability.CODEC.fieldOf("ability").forGetter(Entry::ability),
+                Codec.INT.optionalFieldOf("ticks_to_reset", 100).forGetter(Entry::ticksToReset),
+                Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(Entry::autoActivate)
+        ).apply(instance, Entry::new));
     }
 }
