@@ -1,12 +1,20 @@
 {
     "color": -43691,
     "maximum": "wotr:max_blood",
-    "recharge_amount": "wotr:blood_regen_rate",
-    "recharge_action": {
-        "type": "wotr:kill"
-    },
-    "degen_amount": "wotr:blood_degen_rate",
-    "degen_action": {
-        "type": "wotr:tick"
+    "modificators": {
+        "recharge": {
+            "amount": "wotr:blood_regen_rate",
+            "action": {
+                "type": "wotr:kill"
+            },
+            "is_positive": true
+        },
+        "drain": {
+            "amount": "wotr:blood_degen_rate",
+            "action": {
+                "type": "wotr:tick"
+            },
+            "is_positive": false
+        }
     }
 }

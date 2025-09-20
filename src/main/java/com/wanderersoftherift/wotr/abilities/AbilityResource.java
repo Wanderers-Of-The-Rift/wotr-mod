@@ -12,11 +12,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
-import java.util.Optional;
+import java.util.Map;
 
-public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Holder<Attribute>> recharge,
-        Optional<TrackableTrigger.TriggerPredicate<?>> rechargeAction, Optional<Holder<Attribute>> degen,
-        Optional<TrackableTrigger.TriggerPredicate<?>> degenAction) {
+public record AbilityResource(int color, Holder<Attribute> maximum, Map<String, ModificationEvent> events) {
 
     public static final Codec<Holder<AbilityResource>> HOLDER_CODEC = LaxRegistryCodec
             .create(WotrRegistries.Keys.ABILITY_RESOURCES);
@@ -24,12 +22,9 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
             instance -> instance.group(
                     Codec.INT.fieldOf("color").forGetter(AbilityResource::color),
                     Attribute.CODEC.fieldOf("maximum").forGetter(AbilityResource::maximum),
-                    Attribute.CODEC.optionalFieldOf("recharge_amount").forGetter(AbilityResource::recharge),
-                    TrackableTrigger.TriggerPredicate.CODEC.optionalFieldOf("recharge_action")
-                            .forGetter(AbilityResource::rechargeAction),
-                    Attribute.CODEC.optionalFieldOf("degen_amount").forGetter(AbilityResource::degen),
-                    TrackableTrigger.TriggerPredicate.CODEC.optionalFieldOf("degen_action")
-                            .forGetter(AbilityResource::degenAction)
+                    Codec.unboundedMap(Codec.STRING, ModificationEvent.CODEC)
+                            .fieldOf("modificators")
+                            .forGetter(AbilityResource::events)
             ).apply(instance, AbilityResource::new)
     );
 
@@ -44,22 +39,38 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Optional<Hol
         return maxForEntity(entity);
     }
 
-    public record AbilityResourceRecharge(Holder<AbilityResource> resource, Holder<Attribute> recharge,
-            boolean isNegative, TrackableTrigger.TriggerPredicate<?> predicate) implements TriggerTracker.Triggerable {
+    public record ModificationEvent(Holder<Attribute> amount, TrackableTrigger.TriggerPredicate<?> action,
+            boolean isPositive) {
+
+        public static final Codec<ModificationEvent> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        Attribute.CODEC.fieldOf("amount").forGetter(ModificationEvent::amount),
+                        TrackableTrigger.TriggerPredicate.CODEC.fieldOf("action").forGetter(ModificationEvent::action),
+                        Codec.BOOL.fieldOf("is_positive").forGetter(ModificationEvent::isPositive)
+                ).apply(instance, ModificationEvent::new)
+        );
+    }
+
+    public record AbilityResourceRecharge(Holder<AbilityResource> resource, ModificationEvent event)
+            implements TriggerTracker.Triggerable {
+
+        @Override
+        public TrackableTrigger.TriggerPredicate<?> predicate() {
+            return event.action;
+        }
 
         @Override
         public boolean trigger(LivingEntity entity, TrackableTrigger activation) {
-            if (predicate().type().value() != activation.type()
-                    || !((TrackableTrigger.TriggerPredicate<TrackableTrigger>) predicate()).test(activation)) {
+            if (predicate().type().value() != activation.type()) {
                 return false;
             }
             var abilityResources = entity.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
             var amount = abilityResources.getAmount(resource);
-            var delta = (float) entity.getAttributeValue(recharge);
-            if (isNegative) {
-                amount -= delta;
-            } else {
+            var delta = (float) entity.getAttributeValue(event.amount);
+            if (event.isPositive) {
                 amount += delta;
+            } else {
+                amount -= delta;
             }
             abilityResources.setAmount(resource, amount);
             return delta != 0;

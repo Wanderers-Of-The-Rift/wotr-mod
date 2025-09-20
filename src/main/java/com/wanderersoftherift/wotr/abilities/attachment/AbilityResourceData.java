@@ -1,5 +1,8 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.mojang.math.Constants;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
@@ -15,6 +18,7 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,8 +37,8 @@ public class AbilityResourceData {
 
     private final IAttachmentHolder holder;
     private Map<Holder<AbilityResource>, AbilityResourceState> amounts = new LinkedHashMap<>();
-    private Map<Holder<Attribute>, AbilityResourceState> degenWatchers = new LinkedHashMap<>();
-    private Map<Holder<Attribute>, AbilityResourceState> rechargeWatchers = new LinkedHashMap<>();
+    private Multimap<Holder<Attribute>, AbilityResourceState.ModificationEventState> watchers = Multimaps
+            .newMultimap(new LinkedHashMap<>(), ArrayList::new);
 
     public AbilityResourceData(IAttachmentHolder holder) {
         this(holder, Collections.emptyMap());
@@ -47,16 +51,12 @@ public class AbilityResourceData {
             var state = createStateIfAbsent(resource);
             state.setAmount(amount);
             if (holder instanceof LivingEntity livingEntity) {
-                var rechargeAttribute = resource.value().recharge();
-                if (rechargeAttribute.isPresent()) {
-                    var rechargeAmount = livingEntity.getAttributeValue(rechargeAttribute.get());
-                    state.setHasNonZeroRecharge(isNotZero(rechargeAmount));
-                }
-                var degenAttribute = resource.value().degen();
-                if (degenAttribute.isPresent()) {
-                    var degenAmount = livingEntity.getAttributeValue(degenAttribute.get());
-                    state.setHasNonZeroDegen(isNotZero(degenAmount));
-                }
+
+                resource.value().events().forEach((key, event) -> {
+                    var attribute = event.amount();
+                    var deltaAmount = livingEntity.getAttributeValue(attribute);
+                    state.setHasNonZeroDelta(key, isNotZero(deltaAmount));
+                });
             }
         });
 
@@ -114,8 +114,13 @@ public class AbilityResourceData {
         }
         var newState = new AbilityResourceState(resource);
         amounts.put(resource, newState);
-        resource.value().degen().ifPresent(it -> degenWatchers.put(it, newState));
-        resource.value().recharge().ifPresent(it -> rechargeWatchers.put(it, newState));
+        resource.value()
+                .events()
+                .forEach(
+                        (key, event) -> {
+                            watchers.put(event.amount(), newState.eventStateMap.get(key));
+                        }
+                );
         return newState;
     }
 
@@ -126,14 +131,10 @@ public class AbilityResourceData {
      */
     public void onAttributeChanged(Holder<Attribute> attribute) {
         var value = ((LivingEntity) holder).getAttributeValue(attribute);
-        var degenState = degenWatchers.get(attribute);
-        if (degenState != null) {
-            degenState.setHasNonZeroDegen(isNotZero(value));
-        }
-        var rechargeState = rechargeWatchers.get(attribute);
-        if (rechargeState != null) {
-            rechargeState.setHasNonZeroRecharge(isNotZero(value));
-        }
+        var triggerTracker = TriggerTracker.forEntity(((LivingEntity) holder));
+        var eventStates = watchers.get(attribute);
+        var isNonZero = isNotZero(value);
+        eventStates.forEach(eventState -> eventState.setHasNonZeroDelta(triggerTracker, isNonZero));
     }
 
     private static boolean isNotZero(double value) {
@@ -143,73 +144,78 @@ public class AbilityResourceData {
     private class AbilityResourceState {
         private final Holder<AbilityResource> resource;
         private float value = 0f;
-        private boolean isFull = false;
-        private boolean isEmpty = false;
-        private boolean hasNonZeroRecharge = false;
-        private boolean hasNonZeroDegen = false;
-        private AbilityResource.AbilityResourceRecharge currentRechargeTriggerable = null;
-        private AbilityResource.AbilityResourceRecharge currentDegenTriggerable = null;
+        private boolean isNotFull = false;
+        private boolean isNotEmpty = false;
+
+        private final Map<String, ModificationEventState> eventStateMap;
 
         private AbilityResourceState(Holder<AbilityResource> resource) {
             this.resource = resource;
+            var eventStateMapBuilder = ImmutableMap.<String, ModificationEventState>builder();
+            for (var eventEntry : resource.value().events().entrySet()) {
+                eventStateMapBuilder.put(eventEntry.getKey(), new ModificationEventState(eventEntry.getValue()));
+            }
+            eventStateMap = eventStateMapBuilder.build();
         }
 
         void setAmount(float newAmount) {
-            if (newAmount > value) {
-                var max = resource.value().maxForEntity(holder);
-                value = Math.min(max, newAmount);
-                isFull = value == max;
-                isEmpty = false;
-            } else {
-                var min = 0f;
-                value = Math.max(min, newAmount);
-                isEmpty = value == min;
-                isFull = false;
-            }
+            var max = resource.value().maxForEntity(holder);
+            var min = 0f;
+            value = Math.clamp(newAmount, min, max);
+            isNotFull = value != max;
+            isNotEmpty = value != min;
             updateTriggers();
 
             if (holder instanceof ServerPlayer player && player.connection != null) {
-                PacketDistributor.sendToPlayer(player, new AbilityResourceChangePayload(resource, newAmount));
+                PacketDistributor.sendToPlayer(player, new AbilityResourceChangePayload(resource, value));
             }
         }
 
-        void setHasNonZeroRecharge(boolean newValue) {
-            hasNonZeroRecharge = newValue;
-            updateTriggers();
-        }
-
-        void setHasNonZeroDegen(boolean newValue) {
-            hasNonZeroDegen = newValue;
-            updateTriggers();
+        void setHasNonZeroDelta(String eventKey, boolean newValue) {
+            var event = eventStateMap.get(eventKey);
+            event.hasNonZeroDelta = newValue;
+            event.updateTriggers(TriggerTracker.forEntity((Entity) holder));
         }
 
         private void updateTriggers() {
-            var shouldRecharge = !isFull && hasNonZeroRecharge && resource.value().rechargeAction().isPresent()
-                    && resource.value().recharge().isPresent();
-            var shouldDegen = !isEmpty && hasNonZeroDegen && resource.value().degenAction().isPresent()
-                    && resource.value().degen().isPresent();
             var triggerTracker = TriggerTracker.forEntity((Entity) holder);
-            if (!shouldRecharge && currentRechargeTriggerable != null) {
-                triggerTracker.unregisterTriggerable(resource.value().rechargeAction().get().type(),
-                        currentRechargeTriggerable);
-                currentRechargeTriggerable = null;
+            eventStateMap.forEach(
+                    (key, state) -> state.updateTriggers(triggerTracker)
+            );
+        }
+
+        public class ModificationEventState {
+
+            private final AbilityResource.ModificationEvent event;
+            private boolean hasNonZeroDelta = false;
+            private AbilityResource.AbilityResourceRecharge currentTriggerable = null;
+
+            public ModificationEventState(AbilityResource.ModificationEvent event) {
+                this.event = event;
             }
-            if (shouldRecharge && currentRechargeTriggerable == null) {
-                var predicate = resource.value().rechargeAction().get();
-                currentRechargeTriggerable = new AbilityResource.AbilityResourceRecharge(resource,
-                        resource.value().recharge().get(), false, predicate);
-                triggerTracker.registerTriggerable(predicate.type(), currentRechargeTriggerable);
+
+            void setHasNonZeroDelta(TriggerTracker triggerTracker, boolean newValue) {
+                hasNonZeroDelta = newValue;
+                updateTriggers(triggerTracker);
             }
-            if (!shouldDegen && currentDegenTriggerable != null) {
-                triggerTracker.unregisterTriggerable(resource.value().degenAction().get().type(),
-                        currentDegenTriggerable);
-                currentDegenTriggerable = null;
-            }
-            if (shouldDegen && currentDegenTriggerable == null) {
-                var predicate = resource.value().degenAction().get();
-                currentDegenTriggerable = new AbilityResource.AbilityResourceRecharge(resource,
-                        resource.value().degen().get(), true, predicate);
-                triggerTracker.registerTriggerable(predicate.type(), currentDegenTriggerable);
+
+            private void updateTriggers(TriggerTracker triggerTracker) {
+                var isAllowedByCurrentAmount = event.isPositive() ? isNotFull : isNotEmpty;
+
+                var shouldRecharge = isAllowedByCurrentAmount && hasNonZeroDelta;
+                var isRecharging = currentTriggerable != null;
+                if (shouldRecharge == isRecharging) {
+                    return;
+                }
+
+                if (shouldRecharge) {
+                    var predicate = event.action();
+                    currentTriggerable = new AbilityResource.AbilityResourceRecharge(resource, event);
+                    triggerTracker.registerTriggerable(predicate.type(), currentTriggerable);
+                } else {
+                    triggerTracker.unregisterTriggerable(event.action().type(), currentTriggerable);
+                    currentTriggerable = null;
+                }
             }
         }
     }

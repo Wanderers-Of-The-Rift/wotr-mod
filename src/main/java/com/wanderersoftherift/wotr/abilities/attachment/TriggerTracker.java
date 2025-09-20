@@ -17,6 +17,7 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class TriggerTracker {
     private final Multimap<Holder<TrackableTrigger.TriggerType<?>>, Triggerable> triggerables = ArrayListMultimap
@@ -52,7 +53,9 @@ public class TriggerTracker {
                 .wrapAsHolder(activation.type());
         var triggerables = new ArrayList<>(this.triggerables.get(typeHolder));
         for (Triggerable tracked : triggerables) {
-            result |= tracked.trigger(entity, activation);
+            if (((Predicate<TrackableTrigger>) tracked.predicate()).test(activation)) {
+                result |= tracked.trigger(entity, activation);
+            }
         }
         return result;
     }
@@ -109,8 +112,7 @@ public class TriggerTracker {
             TrackableTrigger.TriggerPredicate<?> predicate) implements Triggerable {
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
-            if (predicate().type().value() != activation.type()
-                    || !((TrackableTrigger.TriggerPredicate<TrackableTrigger>) predicate()).test(activation)) {
+            if (predicate().type().value() != activation.type()) {
                 return false;
             }
             return holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(source, source.getItem(holder), ability);
