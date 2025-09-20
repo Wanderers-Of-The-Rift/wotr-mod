@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
+import com.mojang.math.Constants;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.network.ability.AbilityResourceChangePayload;
@@ -20,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Data tracking the state of a player's mana pool
+ * Data tracking the state of a player's ability resources
  */
 public class AbilityResourceData {
 
@@ -32,8 +33,8 @@ public class AbilityResourceData {
 
     private final IAttachmentHolder holder;
     private Map<Holder<AbilityResource>, AbilityResourceState> amounts = new LinkedHashMap<>();
-    private Map<Holder<Attribute>, AbilityResourceState> degenNotifiers = new LinkedHashMap<>();
-    private Map<Holder<Attribute>, AbilityResourceState> rechargeNotifiers = new LinkedHashMap<>();
+    private Map<Holder<Attribute>, AbilityResourceState> degenWatchers = new LinkedHashMap<>();
+    private Map<Holder<Attribute>, AbilityResourceState> rechargeWatchers = new LinkedHashMap<>();
 
     public AbilityResourceData(IAttachmentHolder holder) {
         this(holder, Collections.emptyMap());
@@ -49,12 +50,12 @@ public class AbilityResourceData {
                 var rechargeAttribute = resource.value().recharge();
                 if (rechargeAttribute.isPresent()) {
                     var rechargeAmount = livingEntity.getAttributeValue(rechargeAttribute.get());
-                    state.setHasNonZeroRecharge(rechargeAmount > -1e-6 && rechargeAmount < 1e-6);
+                    state.setHasNonZeroRecharge(isNotZero(rechargeAmount));
                 }
                 var degenAttribute = resource.value().degen();
                 if (degenAttribute.isPresent()) {
                     var degenAmount = livingEntity.getAttributeValue(degenAttribute.get());
-                    state.setHasNonZeroDegen(degenAmount > -1e-6 && degenAmount < 1e-6);
+                    state.setHasNonZeroDegen(isNotZero(degenAmount));
                 }
             }
         });
@@ -66,7 +67,7 @@ public class AbilityResourceData {
     }
 
     /**
-     * @return The amount of mana available
+     * @return The amount of ability resource available
      */
     public float getAmount(Holder<AbilityResource> resource) {
         return createStateIfAbsent(resource).value;
@@ -81,9 +82,11 @@ public class AbilityResourceData {
     }
 
     /**
-     * Consumes an amount of mana (will not consume past 0). This will be replicated to the player if on the server.
+     * Consumes an amount of ability resource (will not consume past 0). This will be replicated to the player if on the
+     * server.
      * 
-     * @param quantity The quantity of mana to consume
+     * @param resource The ability resource to consume
+     * @param quantity The quantity of ability resource to consume
      */
     public void useAmount(Holder<AbilityResource> resource, float quantity) {
         if (quantity == 0) {
@@ -94,9 +97,10 @@ public class AbilityResourceData {
     }
 
     /**
-     * Sets the amount of mana in the pool. This will be replicated to the player if on the server.
+     * Sets the amount of ability resource in the pool. This will be replicated to the player if on the server.
      * 
-     * @param value The new value of mana
+     * @param resource The ability resource to change
+     * @param value    The new value of ability resource
      */
     public void setAmount(Holder<AbilityResource> resource, float value) {
         var state = createStateIfAbsent(resource);
@@ -110,21 +114,30 @@ public class AbilityResourceData {
         }
         var newState = new AbilityResourceState(resource);
         amounts.put(resource, newState);
-        resource.value().degen().ifPresent(it -> degenNotifiers.put(it, newState));
-        resource.value().recharge().ifPresent(it -> rechargeNotifiers.put(it, newState));
+        resource.value().degen().ifPresent(it -> degenWatchers.put(it, newState));
+        resource.value().recharge().ifPresent(it -> rechargeWatchers.put(it, newState));
         return newState;
     }
 
+    /**
+     * Disables/enables triggers for all resources affected by this attribute
+     * 
+     * @param attribute
+     */
     public void onAttributeChanged(Holder<Attribute> attribute) {
         var value = ((LivingEntity) holder).getAttributeValue(attribute);
-        var degenState = degenNotifiers.get(attribute);
+        var degenState = degenWatchers.get(attribute);
         if (degenState != null) {
-            degenState.setHasNonZeroDegen(value < -1e-6 || value > 1e-6);
+            degenState.setHasNonZeroDegen(isNotZero(value));
         }
-        var rechargeState = rechargeNotifiers.get(attribute);
+        var rechargeState = rechargeWatchers.get(attribute);
         if (rechargeState != null) {
-            rechargeState.setHasNonZeroRecharge(value < -1e-6 || value > 1e-6);
+            rechargeState.setHasNonZeroRecharge(isNotZero(value));
         }
+    }
+
+    private static boolean isNotZero(double value) {
+        return value < -Constants.EPSILON || value > Constants.EPSILON;
     }
 
     private class AbilityResourceState {

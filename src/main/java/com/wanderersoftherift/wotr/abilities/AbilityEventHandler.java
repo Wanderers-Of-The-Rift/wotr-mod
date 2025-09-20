@@ -101,8 +101,7 @@ public class AbilityEventHandler {
         }
 
         resourceRegistry.get()
-                .stream()
-                .map(resourceRegistry.get()::wrapAsHolder)
+                .asHolderIdMap()
                 .forEach(
                         resource -> {
                             var respawnValue = resource.value().respawnValueForEntity(entity);
