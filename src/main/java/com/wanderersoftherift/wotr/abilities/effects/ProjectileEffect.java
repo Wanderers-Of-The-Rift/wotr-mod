@@ -64,7 +64,7 @@ public class ProjectileEffect implements AbilityEffect {
         }
         EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(this.entityType).get().value();
 
-        targetInfo.targetEntities().map(EntityHitResult::getEntity).forEach(target -> {
+        targetInfo.targetEntityHitResults().map(EntityHitResult::getEntity).forEach(target -> {
             Entity summon = type.create((ServerLevel) context.level(), null, target.getOnPos(),
                     EntitySpawnReason.MOB_SUMMONED, false, false);
             if (summon != null) {

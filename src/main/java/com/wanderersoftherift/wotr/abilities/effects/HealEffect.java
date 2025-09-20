@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.EntityHitResult;
 
 public class HealEffect implements AbilityEffect {
     public static final MapCodec<HealEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -35,7 +34,6 @@ public class HealEffect implements AbilityEffect {
     public void apply(AbilityContext context, TargetInfo targetInfo) {
         float finalHealAmount = context.getAbilityAttribute(WotrAttributes.HEAL_POWER, healAmount);
         targetInfo.targetEntities()
-                .map(EntityHitResult::getEntity)
                 .filter(LivingEntity.class::isInstance)
                 .map(LivingEntity.class::cast)
                 .forEach(target -> target.heal(finalHealAmount));

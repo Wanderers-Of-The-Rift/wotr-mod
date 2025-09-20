@@ -15,7 +15,6 @@ import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.EntityHitResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +67,6 @@ public class AttachEffect implements AbilityEffect {
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
         targetInfo.targetEntities()
-                .map(EntityHitResult::getEntity)
                 .forEach(target -> target.getData(WotrAttachments.ATTACHED_EFFECTS).attach(this, context));
     }
 

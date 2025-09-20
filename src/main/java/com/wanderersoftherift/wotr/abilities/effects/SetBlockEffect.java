@@ -20,7 +20,7 @@ public record SetBlockEffect(BlockState block) implements AbilityEffect {
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
-        targetInfo.targetBlocks().forEach(blockHit -> {
+        targetInfo.targetBlockHitResults().forEach(blockHit -> {
             context.level().setBlock(blockHit.getBlockPos(), block, Block.UPDATE_ALL);
         });
     }

@@ -41,7 +41,7 @@ public class MovementEffect implements AbilityEffect {
         }
         Entity source = sourceHit.getEntity();
 
-        targetInfo.targetEntities().map(EntityHitResult::getEntity).forEach(target -> {
+        targetInfo.targetEntities().forEach(target -> {
             // TODO look into implementing scaling still
 
             // TODO look into relative vs directional
