@@ -1,0 +1,14 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:ability",
+                "provided_ability": "wotr:veinminer",
+                "trigger": "wotr:break_block"
+            }
+        ]
+    ]
+}

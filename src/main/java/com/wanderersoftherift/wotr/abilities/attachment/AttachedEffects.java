@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.EffectMarkerInstance;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
@@ -235,10 +236,9 @@ public class AttachedEffects {
                 return;
             }
             if (attachEffect.getTriggerPredicate().matches(attachedTo, age, caster)) {
-                AbilityContext triggerContext = context.toContext(caster, attachedTo.level());
-                try (var ignore = triggerContext.enableTemporaryUpgradeModifiers()) {
-                    attachEffect.getEffects()
-                            .forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
+                AbilityContext triggerContext = context.toContext(caster, attachedTo.level(), age);
+                try (var ignore = triggerContext.activate()) {
+                    attachEffect.getEffects().forEach(child -> child.apply(triggerContext, new TargetInfo(attachedTo)));
                 }
                 triggeredTimes++;
             }

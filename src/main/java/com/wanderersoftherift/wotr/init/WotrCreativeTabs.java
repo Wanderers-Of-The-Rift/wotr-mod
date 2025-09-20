@@ -90,7 +90,7 @@ public class WotrCreativeTabs {
     private static void generateAbilityItems(
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<Ability> registry) {
-        registry.listElements().forEach(abilityHolder -> {
+        registry.listElements().filter(x -> x.value().isInCreativeMenu()).forEach(abilityHolder -> {
             ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
             item.set(WotrDataComponentType.ABILITY, new ActivatableAbility(abilityHolder));
             output.accept(item);

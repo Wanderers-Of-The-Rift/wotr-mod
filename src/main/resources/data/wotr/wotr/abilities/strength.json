@@ -1,51 +1,42 @@
 {
   "type": "wotr:persistent",
-  "icon": "minecraft:textures/mob_effect/jump_boost.png",
-  "toggleable": false,
+  "icon": "minecraft:textures/mob_effect/strength.png",
+  "in_creative_menu": false,
+  "toggleable": true,
   "requirements": [
     {
       "type": "wotr:mana",
-      "amount": 10
-    }
-  ],
-  "on_deactivation_costs": [
-    {
-      "type" : "wotr:cooldown",
-      "ticks": 200
+      "amount": 10,
+      "consume": false
     }
   ],
   "activation_effects": [
     {
       "type": "wotr:attach",
       "id": "wotr:strength_effect",
-      "targeting": {
-        "type": "wotr:self"
-      },
-      "continue": {
-        "duration": 100
-      },
       "modifiers": [
         {
           "modifier": "wotr:ability/damage_up",
           "tier": 1,
           "roll": 100
+        },
+        {
+          "modifier": "wotr:ability/mana_degen",
+          "tier": 1,
+          "roll": 0.5
         }
       ]
     }
   ],
   "ongoing_requirements" : [
     {
-      "type": "wotr:own_attached_effect",
-      "id": "wotr:strength_effect"
+      "type": "wotr:mana"
     }
   ],
   "on_deactivation_effects": [
     {
       "type": "wotr:detach_own",
-      "id": "wotr:strength_effect",
-      "targeting": {
-        "type": "wotr:self"
-      }
+      "id": "wotr:strength_effect"
     }
   ]
 }

@@ -7,17 +7,20 @@
       "ticks": 1
     }
   ],
-  "effects":
-  [
+  "effects": [
     {
-      "type": "wotr:projectile",
+      "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:raycast",
         "range": 200
       },
-      "projectile_type": "minecraft:arrow",
-      "velocity": [0,0,0]
+      "effects": [
+        {
+          "type": "wotr:projectile",
+          "projectile_type": "minecraft:arrow",
+          "velocity": [0,0,0]
+        }
+      ]
     }
-
   ]
 }

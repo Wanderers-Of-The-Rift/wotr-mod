@@ -15,16 +15,16 @@ import org.jetbrains.annotations.NotNull;
  * Updates the ability state of a single equipment slot
  * 
  * @param source Source of the ability
- * @param active Whether it is active or not
+ * @param value  The updated state
  */
-public record UpdateSlotAbilityStatePayload(AbilitySource source, boolean active) implements CustomPacketPayload {
+public record UpdateSlotAbilityStatePayload(AbilitySource source, int value) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<UpdateSlotAbilityStatePayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "slot_ability_state_update"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, UpdateSlotAbilityStatePayload> STREAM_CODEC = StreamCodec
             .composite(
-                    AbilitySource.STREAM_CODEC, UpdateSlotAbilityStatePayload::source, ByteBufCodecs.BOOL,
-                    UpdateSlotAbilityStatePayload::active, UpdateSlotAbilityStatePayload::new);
+                    AbilitySource.STREAM_CODEC, UpdateSlotAbilityStatePayload::source, ByteBufCodecs.INT,
+                    UpdateSlotAbilityStatePayload::value, UpdateSlotAbilityStatePayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -32,6 +32,6 @@ public record UpdateSlotAbilityStatePayload(AbilitySource source, boolean active
     }
 
     public void handleOnClient(final IPayloadContext context) {
-        context.player().getData(WotrAttachments.ABILITY_STATES.get()).setActive(source, active);
+        context.player().getData(WotrAttachments.ABILITY_STATES.get()).setState(source, value);
     }
 }
