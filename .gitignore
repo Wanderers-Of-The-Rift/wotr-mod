@@ -104,6 +104,7 @@ $RECYCLE.BIN/
 
 .gradle
 build/
+src/generated
 
 # Ignore Gradle GUI config
 gradle-app.setting

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "wotr:block/processor_block_7_glass"
-  }
-}
