@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public record BreakBlockEffect(DropMode dropMode, ItemStack asTool) implements A
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
         List<ItemStack> drops = new ArrayList<>();
-        targetInfo.targetBlocks().map(BlockHitResult::getBlockPos).forEach(pos -> {
+        targetInfo.targetBlocks().forEach(pos -> {
             BlockState blockState = context.level().getBlockState(pos);
             if (blockState.canEntityDestroy(context.level(), pos, context.caster())
                     && blockState.getBlock().defaultDestroyTime() > -1) {

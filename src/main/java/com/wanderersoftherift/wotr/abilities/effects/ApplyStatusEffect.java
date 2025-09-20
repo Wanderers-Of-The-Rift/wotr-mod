@@ -6,8 +6,10 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.EntityHitResult;
 
+/**
+ * Applies a MobEffect to target entities
+ */
 public class ApplyStatusEffect implements AbilityEffect {
 
     public static final MapCodec<ApplyStatusEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -32,7 +34,6 @@ public class ApplyStatusEffect implements AbilityEffect {
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
         targetInfo.targetEntities()
-                .map(EntityHitResult::getEntity)
                 .filter(LivingEntity.class::isInstance)
                 .map(LivingEntity.class::cast)
                 .forEach(target -> target.addEffect(new MobEffectInstance(getStatusEffect())));

@@ -33,7 +33,7 @@ public record ConnectedBlockTargeting(TargetBlockPredicate blocks, int count) im
     @Override
     public List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
         List<TargetInfo> result = new ArrayList<>();
-        for (BlockHitResult source : origin.targetBlocks().toList()) {
+        for (BlockHitResult source : origin.targetBlockHitResults().toList()) {
             List<HitResult> connected = new ArrayList<>();
             Set<BlockPos> closed = new HashSet<>();
             Deque<BlockPos> open = new ArrayDeque<>();

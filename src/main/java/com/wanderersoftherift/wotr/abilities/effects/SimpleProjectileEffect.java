@@ -57,7 +57,7 @@ public class SimpleProjectileEffect implements AbilityEffect {
         // inline with the other effects
         // Target to me has always been more of a frame of reference for the effect not what the effect actually
         // "targets" but we can change this later if we want to make the change towards it being the actual target.
-        targetInfo.targetEntities().map(EntityHitResult::getEntity).forEach(target -> {
+        targetInfo.targetEntities().forEach(target -> {
             EntityType<?> type = WotrEntities.SIMPLE_EFFECT_PROJECTILE.get();
             int numberOfProjectiles = getNumberOfProjectiles(context);
 
