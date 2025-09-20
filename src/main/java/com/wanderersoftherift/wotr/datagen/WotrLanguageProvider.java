@@ -73,6 +73,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
         addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
+        addEntityType(WotrEntities.RIFT_SKELETON, "Rift Skeleton");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
