@@ -12,14 +12,14 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 public class WotrGuiLayers {
     public static final ResourceLocation ABILITY_BAR = WanderersOfTheRift.id("ability_bar");
     public static final ResourceLocation EFFECT_BAR = WanderersOfTheRift.id("effect_bar");
-    public static final ResourceLocation MANA_BAR = WanderersOfTheRift.id("mana_bar");
+    public static final ResourceLocation ABILITY_RESOURCE_BARS = WanderersOfTheRift.id("ability_resource_bars");
     public static final ResourceLocation OBJECTIVE = WanderersOfTheRift.id("objective");
 
     @SubscribeEvent
     public static void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.HOTBAR, ABILITY_BAR, WotrConfigurableLayers.ABILITY_BAR.get());
-        event.registerAbove(ABILITY_BAR, MANA_BAR, WotrConfigurableLayers.MANA_BAR.get());
-        event.registerAbove(MANA_BAR, EFFECT_BAR, WotrConfigurableLayers.EFFECT_BAR.get());
+        event.registerAbove(ABILITY_BAR, ABILITY_RESOURCE_BARS, WotrConfigurableLayers.ABILITY_RESOURCE_BARS.get());
+        event.registerAbove(ABILITY_RESOURCE_BARS, EFFECT_BAR, WotrConfigurableLayers.EFFECT_BAR.get());
         event.registerAboveAll(OBJECTIVE, WotrConfigurableLayers.OBJECTIVE.get());
     }
 }
