@@ -13,6 +13,7 @@ import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
 import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
 import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
+import com.wanderersoftherift.wotr.network.ability.ResourceRechargeTriggerablePayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
@@ -80,6 +81,8 @@ public class WotrPayloadHandlers {
                 UpdateSlotAbilityStatePayload::handleOnClient);
         registrar.playToClient(AbilityStateReplicationPayload.TYPE, AbilityStateReplicationPayload.STREAM_CODEC,
                 AbilityStateReplicationPayload::handleOnClient);
+        registrar.playToClient(ResourceRechargeTriggerablePayload.TYPE, ResourceRechargeTriggerablePayload.STREAM_CODEC,
+                ResourceRechargeTriggerablePayload::handleOnClient);
 
         // Rift
         registrar.playToClient(BannedFromRiftPayload.TYPE, BannedFromRiftPayload.STREAM_CODEC,

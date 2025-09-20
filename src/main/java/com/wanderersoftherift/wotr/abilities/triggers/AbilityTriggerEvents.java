@@ -23,8 +23,7 @@ public class AbilityTriggerEvents {
     public static void damageEvent(LivingDamageEvent.Pre event) {
         var victim = event.getEntity();
         TriggerTracker.forEntity(victim)
-                .trigger(new TakeDamageTrigger(
-                        new SerializableDamageSource(event.getSource()), event.getNewDamage()));
+                .trigger(new TakeDamageTrigger(new SerializableDamageSource(event.getSource()), event.getNewDamage()));
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -50,10 +49,9 @@ public class AbilityTriggerEvents {
     public static void killEvent(LivingDeathEvent event) {
         var victim = event.getEntity();
         var attacker = event.getSource().getEntity();
-        if (attacker != null) {
+        if (attacker != null && attacker.level() instanceof ServerLevel) {
             TriggerTracker.forEntity(attacker)
-                    .trigger(new KillTrigger(
-                            new SerializableDamageSource(event.getSource()), victim.getUUID()));
+                    .trigger(new KillTrigger(new SerializableDamageSource(event.getSource()), victim.getUUID()));
         }
     }
 

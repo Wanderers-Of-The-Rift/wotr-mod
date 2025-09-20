@@ -106,7 +106,8 @@ public class AbilityEventHandler {
                         resource -> {
                             var respawnValue = resource.value().respawnValueForEntity(entity);
                             if (respawnValue > 0) {
-                                entity.getData(WotrAttachments.ABILITY_RESOURCE_DATA).setAmount(resource, respawnValue);
+                                entity.getData(WotrAttachments.ABILITY_RESOURCE_DATA)
+                                        .setAmount(resource, respawnValue, true);
                             }
                         }
                 );

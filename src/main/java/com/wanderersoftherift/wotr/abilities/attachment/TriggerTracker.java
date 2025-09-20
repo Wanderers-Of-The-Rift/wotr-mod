@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -77,6 +78,9 @@ public class TriggerTracker {
 
     public void registerTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
         triggerables.put(trigger, triggerable);
+        if (holder instanceof ServerPlayer player && triggerable.predicate().canBeHandledByClient()) {
+            triggerable.sendRegister(player);
+        }
         if (!(holder instanceof Entity livingEntity) || !(livingEntity.level() instanceof ServerLevel serverLevel)) {
             return;
         }
@@ -98,6 +102,9 @@ public class TriggerTracker {
     }
 
     public void unregisterTriggerable(Holder<TrackableTrigger.TriggerType<?>> trigger, Triggerable triggerable) {
+        if (holder instanceof ServerPlayer player && triggerable.predicate().canBeHandledByClient()) {
+            triggerable.sendUnregister(player);
+        }
         triggerables.get(trigger).removeIf(trackedAbility -> trackedAbility.equals(triggerable));
     }
 
@@ -106,6 +113,10 @@ public class TriggerTracker {
         TrackableTrigger.TriggerPredicate<?> predicate();
 
         boolean trigger(LivingEntity holder, TrackableTrigger activation);
+
+        void sendUnregister(ServerPlayer player);
+
+        void sendRegister(ServerPlayer player);
     }
 
     record TriggerableAbility(AbilitySource source, Holder<Ability> ability,
@@ -116,6 +127,17 @@ public class TriggerTracker {
                 return false;
             }
             return holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(source, source.getItem(holder), ability);
+        }
+
+        // todo https://github.com/Wanderers-Of-The-Rift/wotr-mod/issues/180
+        @Override
+        public void sendUnregister(ServerPlayer player) {
+
+        }
+
+        @Override
+        public void sendRegister(ServerPlayer player) {
+
         }
 
     }

@@ -27,5 +27,7 @@ public interface TrackableTrigger {
 
         Holder<TriggerType<?>> type();
 
+        boolean canBeHandledByClient();
+
     }
 }

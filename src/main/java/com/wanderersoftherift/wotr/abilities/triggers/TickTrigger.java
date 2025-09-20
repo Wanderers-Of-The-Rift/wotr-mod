@@ -28,6 +28,11 @@ public record TickTrigger() implements TrackableTrigger {
         }
 
         @Override
+        public boolean canBeHandledByClient() {
+            return true;
+        }
+
+        @Override
         public boolean test(TickTrigger trigger) {
             return true;
         }

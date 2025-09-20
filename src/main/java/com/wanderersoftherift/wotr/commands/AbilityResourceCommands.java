@@ -23,7 +23,7 @@ public class AbilityResourceCommands extends BaseCommand {
                     id));
 
     public AbilityResourceCommands() {
-        super("mana", Commands.LEVEL_GAMEMASTERS);
+        super("ability_resources", Commands.LEVEL_GAMEMASTERS);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class AbilityResourceCommands extends BaseCommand {
         AbilityResourceData data = stack.getSource().getEntity().getData(WotrAttachments.ABILITY_RESOURCE_DATA);
         if (resource == null) {
             data.getAmounts().keySet().forEach(it -> {
-                data.setAmount(it, it.value().maxForEntity(stack.getSource().getEntity()));
+                data.setAmount(it, it.value().maxForEntity(stack.getSource().getEntity()), true);
             });
         } else {
-            data.setAmount(resource, resource.value().maxForEntity(stack.getSource().getEntity()));
+            data.setAmount(resource, resource.value().maxForEntity(stack.getSource().getEntity()), true);
         }
         return Command.SINGLE_SUCCESS;
     }

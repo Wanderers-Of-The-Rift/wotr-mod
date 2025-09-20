@@ -33,6 +33,11 @@ public record KillTrigger(SerializableDamageSource source, UUID victim) implemen
         }
 
         @Override
+        public boolean canBeHandledByClient() {
+            return true;
+        }
+
+        @Override
         public boolean test(KillTrigger trigger) {
             return true;
         }

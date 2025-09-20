@@ -52,6 +52,11 @@ public record DealDamageTrigger(SerializableDamageSource source, UUID victim, fl
         }
 
         @Override
+        public boolean canBeHandledByClient() {
+            return min.isEmpty() && max.isEmpty();
+        }
+
+        @Override
         public boolean test(DealDamageTrigger trigger) {
             if (min.isPresent() && trigger.amount < min.get()) {
                 return false;

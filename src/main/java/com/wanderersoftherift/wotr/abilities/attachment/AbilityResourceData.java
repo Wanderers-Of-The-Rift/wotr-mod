@@ -49,7 +49,7 @@ public class AbilityResourceData {
 
         amounts.forEach((resource, amount) -> {
             var state = createStateIfAbsent(resource);
-            state.setAmount(amount);
+            state.setAmount(amount, true);
             if (holder instanceof LivingEntity livingEntity) {
 
                 resource.value().events().forEach((key, event) -> {
@@ -93,18 +93,20 @@ public class AbilityResourceData {
             return;
         }
         var state = createStateIfAbsent(resource);
-        state.setAmount(state.value - quantity);
+        state.setAmount(state.value - quantity, true);
     }
 
     /**
      * Sets the amount of ability resource in the pool. This will be replicated to the player if on the server.
      * 
-     * @param resource The ability resource to change
-     * @param value    The new value of ability resource
+     * @param resource         The ability resource to change
+     * @param value            The new value of ability resource
+     * @param sendClientUpdate whether to notify the client about change in ability resource, check whether holder is
+     *                         ServerPlayer is done automatically
      */
-    public void setAmount(Holder<AbilityResource> resource, float value) {
+    public void setAmount(Holder<AbilityResource> resource, float value, boolean sendClientUpdate) {
         var state = createStateIfAbsent(resource);
-        state.setAmount(value);
+        state.setAmount(value, sendClientUpdate);
     }
 
     private AbilityResourceState createStateIfAbsent(Holder<AbilityResource> resource) {
@@ -158,7 +160,7 @@ public class AbilityResourceData {
             eventStateMap = eventStateMapBuilder.build();
         }
 
-        void setAmount(float newAmount) {
+        void setAmount(float newAmount, boolean sendClientUpdate) {
             var max = resource.value().maxForEntity(holder);
             var min = 0f;
             value = Math.clamp(newAmount, min, max);
@@ -166,7 +168,7 @@ public class AbilityResourceData {
             isNotEmpty = value != min;
             updateTriggers();
 
-            if (holder instanceof ServerPlayer player && player.connection != null) {
+            if (sendClientUpdate && holder instanceof ServerPlayer player && player.connection != null) {
                 PacketDistributor.sendToPlayer(player, new AbilityResourceChangePayload(resource, value));
             }
         }

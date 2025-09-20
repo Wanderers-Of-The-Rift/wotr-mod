@@ -47,6 +47,11 @@ public record TakeDamageTrigger(SerializableDamageSource source, float amount) i
         }
 
         @Override
+        public boolean canBeHandledByClient() {
+            return min.isEmpty() && max.isEmpty();
+        }
+
+        @Override
         public boolean test(TakeDamageTrigger trigger) {
             if (min.isPresent() && trigger.amount < min.get()) {
                 return false;

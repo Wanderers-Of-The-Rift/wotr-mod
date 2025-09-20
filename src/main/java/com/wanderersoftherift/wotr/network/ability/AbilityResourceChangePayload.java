@@ -36,6 +36,6 @@ public record AbilityResourceChangePayload(Holder<AbilityResource> resource, flo
     }
 
     public void handleOnClient(IPayloadContext context) {
-        context.player().getData(WotrAttachments.ABILITY_RESOURCE_DATA).setAmount(resource, newValue);
+        context.player().getData(WotrAttachments.ABILITY_RESOURCE_DATA).setAmount(resource, newValue, false);
     }
 }

@@ -50,6 +50,11 @@ public record LootTrigger(Holder<BlockEntityType<?>> container, ContextKeySet co
         }
 
         @Override
+        public boolean canBeHandledByClient() {
+            return false;
+        }
+
+        @Override
         public boolean test(LootTrigger trigger) {
 
             if (context.isPresent() && !trigger.context.equals(context.get())) {

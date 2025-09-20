@@ -5,8 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.network.ability.ResourceRechargeTriggerablePayload;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -72,8 +74,22 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Map<String, 
             } else {
                 amount -= delta;
             }
-            abilityResources.setAmount(resource, amount);
+            abilityResources.setAmount(resource, amount, !event.action().canBeHandledByClient());
             return delta != 0;
+        }
+
+        @Override
+        public void sendUnregister(ServerPlayer player) {
+            var abilityResources = player.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
+            var amount = abilityResources.getAmount(resource);
+            player.connection.send(new ResourceRechargeTriggerablePayload(resource, event, false, amount));
+        }
+
+        @Override
+        public void sendRegister(ServerPlayer player) {
+            var abilityResources = player.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
+            var amount = abilityResources.getAmount(resource);
+            player.connection.send(new ResourceRechargeTriggerablePayload(resource, event, true, amount));
         }
     }
 }
