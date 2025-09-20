@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.abilities.targeting.ConnectedBlockTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.CubeAreaTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.FilterTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RadialTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.RandomChanceTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RandomSubsetTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RaycastTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.TriggerTargetTargeting;
@@ -37,5 +38,7 @@ public class WotrTargetingTypes {
             .register("trigger_target", () -> TriggerTargetTargeting.CODEC);
     public static final Supplier<MapCodec<ConnectedBlockTargeting>> CONNECTED_BLOCK = TARGETING_TYPES
             .register("connected_block", () -> ConnectedBlockTargeting.CODEC);
+    public static final Supplier<MapCodec<RandomChanceTargeting>> RANDOM_CHANCE = TARGETING_TYPES
+            .register("random_chance", () -> RandomChanceTargeting.CODEC);
 
 }

@@ -21,7 +21,7 @@ import java.util.List;
 public record BreakBlockEffect(DropMode dropMode, ItemStack asTool) implements AbilityEffect {
 
     public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            DropMode.CODEC.optionalFieldOf("drop_mode", DropMode.COLLATE).forGetter(BreakBlockEffect::dropMode),
+            DropMode.CODEC.optionalFieldOf("drops", DropMode.COLLATE).forGetter(BreakBlockEffect::dropMode),
             ItemStack.OPTIONAL_CODEC.optionalFieldOf("as_tool", ItemStack.EMPTY).forGetter(BreakBlockEffect::asTool)
     ).apply(instance, BreakBlockEffect::new));
 

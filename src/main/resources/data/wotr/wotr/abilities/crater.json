@@ -15,7 +15,7 @@
         },
         "velocity": 1.6,
         "ground_persist_ticks": 0,
-        "pierce": 10,
+        "pierce": 5,
         "pierce_blocks": true
       },
       "effects": [
@@ -30,23 +30,30 @@
           },
           "effects": [
             {
-              "type": "wotr:break"
+              "type": "wotr:break",
+              "drops": "none"
             }
           ]
         },
         {
           "type": "wotr:targeting",
-          "targeting": {
-            "type": "wotr:radial",
-            "range": 5.0,
-            "blocks": {
-              "filter": {
-                "type": "solid"
-              }
+          "targeting": [
+            {
+              "type": "wotr:radial",
+              "range": 5.0,
+              "blocks": {
+                "filter": {
+                  "type": "solid"
+                }
+              },
+              "entities": "none",
+              "align_to_block": true
             },
-            "entities": "none",
-            "align_to_block": true
-          },
+            {
+              "type": "wotr:random_chance",
+              "chance": 0.1
+            }
+          ],
           "effects": [
             {
               "type": "wotr:set_block",
