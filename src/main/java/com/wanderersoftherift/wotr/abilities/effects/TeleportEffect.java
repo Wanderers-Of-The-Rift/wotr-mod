@@ -45,7 +45,7 @@ public class TeleportEffect implements AbilityEffect {
                                 randomTarget.getLocation().z + teleInfo.getPosition().z);
             }
             case TARGET -> {
-                targetInfo.targetEntities().map(EntityHitResult::getEntity).forEach(target -> {
+                targetInfo.targetEntities().forEach(target -> {
                     if (teleInfo.isRelative().isEmpty()
                             || (teleInfo.isRelative().isPresent() && teleInfo.isRelative().get())) {
                         target.teleportRelative(teleInfo.getPosition().x, teleInfo.getPosition().y,

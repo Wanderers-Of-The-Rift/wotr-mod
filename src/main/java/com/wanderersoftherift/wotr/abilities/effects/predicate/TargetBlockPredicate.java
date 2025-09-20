@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.abilities.effects.predicate;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,38 +15,45 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.Locale;
 
+/**
+ * Predicate for filtering blocks for ability targeting.
+ * <p>
+ * The predicate can either be ALL (accept everything) NONE (reject everything) or {@link Filter}. The filter predicate
+ * wraps {@link BlockPredicate} (there's a couple of these, this is the one that has level context) while providing
+ * targeting specific options.
+ * </p>
+ */
 public interface TargetBlockPredicate {
     TargetBlockPredicate ALL = (target, source, context) -> true;
     TargetBlockPredicate NONE = (target, source, context) -> false;
 
-    Codec<TargetBlockPredicate> CODEC = Codec.either(Codec.STRING.xmap(val -> switch (val.toLowerCase(Locale.ROOT)) {
-        case "all" -> ALL;
-        case "none" -> NONE;
-        default -> throw new RuntimeException("Unexpected value for predicate: '" + val + "'");
-    }, predicate -> {
-        if (predicate == ALL) {
-            return "all";
-        } else if (predicate == NONE) {
-            return "none";
-        }
-        throw new RuntimeException("Not a constant predicate");
-    }), TargetBlockPredicate.Filtered.CODEC)
+    BiMap<String, TargetBlockPredicate> BUILT_INS = ImmutableBiMap.of("all", ALL, "none", NONE);
+
+    Codec<TargetBlockPredicate> CODEC = Codec
+            .either(Codec.STRING.xmap(val -> BUILT_INS.get(val.toLowerCase(Locale.ROOT)),
+                    val -> BUILT_INS.inverse().get(val)), Filter.CODEC)
             .xmap(either -> either.left().orElseGet(() -> either.right().get()), predicate -> {
-                if (predicate instanceof Filtered filtered) {
-                    return Either.right(filtered);
+                if (predicate instanceof Filter filter) {
+                    return Either.right(filter);
                 }
                 return Either.left(predicate);
             });
 
+    /**
+     * @param target  The target block (position with context.level)
+     * @param source  The source target
+     * @param context The ability context of the test
+     * @return Whether the target block is valid (should be affected by the ability)
+     */
     boolean matches(BlockPos target, HitResult source, AbilityContext context);
 
-    record Filtered(BlockPredicate blockPredicate, boolean matchSource) implements TargetBlockPredicate {
+    record Filter(BlockPredicate blockPredicate, boolean matchSource) implements TargetBlockPredicate {
 
-        public static final Codec<Filtered> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static final Codec<Filter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 BlockPredicate.CODEC.optionalFieldOf("filter", BlockPredicate.alwaysTrue())
-                        .forGetter(Filtered::blockPredicate),
-                Codec.BOOL.optionalFieldOf("match_source", false).forGetter(Filtered::matchSource)
-        ).apply(instance, Filtered::new));
+                        .forGetter(Filter::blockPredicate),
+                Codec.BOOL.optionalFieldOf("match_source", false).forGetter(Filter::matchSource)
+        ).apply(instance, Filter::new));
 
         @Override
         public boolean matches(BlockPos target, HitResult source, AbilityContext context) {

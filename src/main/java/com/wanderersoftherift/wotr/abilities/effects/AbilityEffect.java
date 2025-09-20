@@ -14,12 +14,21 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * An AbilityEffect undertakes an effect as part of the execution of an ability.
+ */
 public interface AbilityEffect {
     Codec<AbilityEffect> DIRECT_CODEC = WotrRegistries.EFFECTS.byNameCodec()
             .dispatch(AbilityEffect::getCodec, Function.identity());
 
     MapCodec<? extends AbilityEffect> getCodec();
 
+    /**
+     * Applies the effect
+     * 
+     * @param context    The context of the ability instance the effect is running as part of
+     * @param targetInfo Details of the targets involved in the step
+     */
     void apply(AbilityContext context, TargetInfo targetInfo);
 
     /**

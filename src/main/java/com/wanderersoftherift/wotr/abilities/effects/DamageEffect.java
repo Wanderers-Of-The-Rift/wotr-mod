@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.EntityHitResult;
 
 public class DamageEffect implements AbilityEffect {
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
@@ -55,7 +54,6 @@ public class DamageEffect implements AbilityEffect {
         float finalDamage = context.getAbilityAttribute(WotrAttributes.ABILITY_DAMAGE, damageAmount);
 
         targetInfo.targetEntities()
-                .map(EntityHitResult::getEntity)
                 .filter(LivingEntity.class::isInstance)
                 .map(LivingEntity.class::cast)
                 .forEach(target -> {
