@@ -11,7 +11,9 @@ import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.util.ItemUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO: trigger item ToolSource
-// TODO: option to count for stat
 public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awardMineStat) implements AbilityEffect {
 
     public static final ToolSource NO_TOOL = (context) -> ItemStack.EMPTY;
@@ -59,39 +60,50 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
         ItemStack tool = asTool.getTool(context);
-        List<ItemStack> drops = new ArrayList<>();
+        List<ItemStack> dropsToCondense = new ArrayList<>();
         targetInfo.targetBlocks().forEach(pos -> {
             BlockState blockState = context.level().getBlockState(pos);
             if (blockState.canEntityDestroy(context.level(), pos, context.caster())
                     && blockState.getBlock().defaultDestroyTime() > -1) {
-                boolean canDrop = dropMode != DropMode.NONE
-                        && (!blockState.requiresCorrectToolForDrops() || tool.isCorrectToolForDrops(blockState));
-                boolean dropFromBreak;
-                if (canDrop && dropMode == DropMode.COLLATE && !blockState.hasBlockEntity()) {
-                    drops.addAll(Block.getDrops(blockState, (ServerLevel) context.level(), pos, null, context.caster(),
-                            tool));
-                    dropFromBreak = false;
-                } else {
-                    dropFromBreak = canDrop;
-                }
-
-                if (dropFromBreak) {
-                    BlockEntity blockEntity;
-                    if (blockState.hasBlockEntity()) {
-                        blockEntity = context.level().getBlockEntity(pos);
-                    } else {
-                        blockEntity = null;
-                    }
-                    Block.dropResources(blockState, context.level(), pos, blockEntity, context.caster(), tool);
-                }
-                // We don't use the dropBlock option of destroyBlock because it doesn't pass the tool on to the
-                // loot table.
-                context.level().destroyBlock(pos, false, context.caster());
+                breakBlock(pos, blockState, tool, dropsToCondense, context);
             }
         });
-        ItemUtil.condense(drops)
+        ItemUtil.condense(dropsToCondense)
                 .forEach(itemStack -> Block.popResource(context.level(),
                         BlockPos.containing(targetInfo.source().getLocation()), itemStack));
+    }
+
+    private void breakBlock(
+            BlockPos pos,
+            BlockState blockState,
+            ItemStack tool,
+            List<ItemStack> drops,
+            AbilityContext context) {
+        boolean canDrop = dropMode != DropMode.NONE
+                && (!blockState.requiresCorrectToolForDrops() || tool.isCorrectToolForDrops(blockState));
+        boolean dropFromBreak;
+        if (canDrop && dropMode == DropMode.COLLATE && !blockState.hasBlockEntity()) {
+            drops.addAll(Block.getDrops(blockState, (ServerLevel) context.level(), pos, null, context.caster(), tool));
+            dropFromBreak = false;
+        } else {
+            dropFromBreak = canDrop;
+        }
+
+        if (dropFromBreak) {
+            BlockEntity blockEntity;
+            if (blockState.hasBlockEntity()) {
+                blockEntity = context.level().getBlockEntity(pos);
+            } else {
+                blockEntity = null;
+            }
+            Block.dropResources(blockState, context.level(), pos, blockEntity, context.caster(), tool);
+        }
+        // We don't use the dropBlock option of destroyBlock because it doesn't pass the tool on to the
+        // loot table.
+        context.level().destroyBlock(pos, false, context.caster());
+        if (awardMineStat && context.caster() instanceof Player player) {
+            player.awardStat(Stats.BLOCK_MINED.get(blockState.getBlock()));
+        }
     }
 
     public enum DropMode implements StringRepresentable {
