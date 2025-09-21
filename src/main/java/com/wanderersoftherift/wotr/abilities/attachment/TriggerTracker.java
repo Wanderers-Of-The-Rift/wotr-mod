@@ -3,8 +3,9 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
+import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.TriggerPredicate;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
@@ -70,7 +71,7 @@ public class TriggerTracker {
     }
 
     public void registerAbilityTrigger(
-            TrackableTrigger.TriggerPredicate<?> trigger,
+            TriggerPredicate<?> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
         registerTriggerable(trigger.type(), new TriggerableAbility(source, abilityHolder, trigger));
@@ -95,7 +96,7 @@ public class TriggerTracker {
     }
 
     public void unregisterAbilityTrigger(
-            TrackableTrigger.TriggerPredicate<?> trigger,
+            TriggerPredicate<?> trigger,
             Holder<Ability> abilityHolder,
             AbilitySource source) {
         unregisterTriggerable(trigger.type(), new TriggerableAbility(source, abilityHolder, trigger));
@@ -110,7 +111,7 @@ public class TriggerTracker {
 
     public interface Triggerable {
 
-        TrackableTrigger.TriggerPredicate<?> predicate();
+        TriggerPredicate<?> predicate();
 
         boolean trigger(LivingEntity holder, TrackableTrigger activation);
 
@@ -119,8 +120,8 @@ public class TriggerTracker {
         void sendRegister(ServerPlayer player);
     }
 
-    record TriggerableAbility(AbilitySource source, Holder<Ability> ability,
-            TrackableTrigger.TriggerPredicate<?> predicate) implements Triggerable {
+    record TriggerableAbility(AbilitySource source, Holder<Ability> ability, TriggerPredicate<?> predicate)
+            implements Triggerable {
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
             if (predicate().type().value() != activation.type()) {

@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.abilities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
+import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.TriggerPredicate;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.ability.ResourceRechargeTriggerablePayload;
@@ -41,13 +43,12 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Map<String, 
         return maxForEntity(entity);
     }
 
-    public record ModificationEvent(Holder<Attribute> amount, TrackableTrigger.TriggerPredicate<?> action,
-            boolean isPositive) {
+    public record ModificationEvent(Holder<Attribute> amount, TriggerPredicate<?> action, boolean isPositive) {
 
         public static final Codec<ModificationEvent> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         Attribute.CODEC.fieldOf("amount").forGetter(ModificationEvent::amount),
-                        TrackableTrigger.TriggerPredicate.CODEC.fieldOf("action").forGetter(ModificationEvent::action),
+                        TriggerPredicate.CODEC.fieldOf("action").forGetter(ModificationEvent::action),
                         Codec.BOOL.fieldOf("is_positive").forGetter(ModificationEvent::isPositive)
                 ).apply(instance, ModificationEvent::new)
         );
@@ -57,7 +58,7 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Map<String, 
             implements TriggerTracker.Triggerable {
 
         @Override
-        public TrackableTrigger.TriggerPredicate<?> predicate() {
+        public TriggerPredicate<?> predicate() {
             return event.action;
         }
 

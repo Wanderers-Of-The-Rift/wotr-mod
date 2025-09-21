@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.abilities.triggers;
 
-import com.wanderersoftherift.wotr.abilities.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.registries.DeferredHolder;

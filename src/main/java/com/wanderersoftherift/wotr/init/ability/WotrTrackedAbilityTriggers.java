@@ -1,12 +1,12 @@
 package com.wanderersoftherift.wotr.init.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.DealDamageTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.KillTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.LootTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TakeDamageTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
