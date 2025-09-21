@@ -17,7 +17,8 @@
       ],
       "effects": [
         {
-          "type": "wotr:break"
+          "type": "wotr:break",
+          "as_tool": "ability_item"
         }
       ]
     }
