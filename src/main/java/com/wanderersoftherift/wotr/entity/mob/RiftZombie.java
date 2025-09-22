@@ -69,4 +69,10 @@ public class RiftZombie extends Zombie {
         }
         applyVariantStats(initialSpawn);
     }
+
+    // todo delete after #344
+    public void setVariant(String variant) {
+        this.entityData.set(DATA_VARIANT, variant);
+        applyVariantStats(initialSpawn);
+    }
 }

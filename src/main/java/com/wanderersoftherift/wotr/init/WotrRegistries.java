@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
@@ -126,6 +127,8 @@ public class WotrRegistries {
             Keys.MODIFIER_SOURCES).sync(true).create();
     public static final Registry<AnomalyTask.AnomalyTaskType<?>> ANOMALY_TASK_TYPE = new RegistryBuilder<>(
             Keys.ANOMALY_TASK_TYPE).sync(true).create();
+    public static final Registry<MapCodec<? extends BattleTask.SpawnFunction>> SPAWN_FUNCTION_TYPES = new RegistryBuilder<>(
+            Keys.SPAWN_FUNCTION_TYPES).sync(true).create();
 
     public static final class Keys {
 
@@ -225,6 +228,8 @@ public class WotrRegistries {
         // Mobs
         public static final ResourceKey<Registry<MapCodec<? extends MobInteraction>>> MOB_INTERACTIONS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
+        public static final ResourceKey<Registry<MapCodec<? extends BattleTask.SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("spawn_function_type"));
         public static final ResourceKey<Registry<AnomalyTask<?>>> ANOMALY_TASK = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("anomaly_task"));
         public static final ResourceKey<Registry<AnomalyTask.AnomalyTaskType<?>>> ANOMALY_TASK_TYPE = ResourceKey
@@ -272,6 +277,7 @@ public class WotrRegistries {
         event.register(RIFT_CORRIDOR_VALIDATORS);
         event.register(RIFT_POST_STEPS);
         event.register(ANOMALY_TASK_TYPE);
+        event.register(SPAWN_FUNCTION_TYPES);
     }
 
     @SubscribeEvent

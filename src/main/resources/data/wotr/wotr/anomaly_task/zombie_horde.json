@@ -1,9 +1,26 @@
 {
     "type": "wotr:battle",
     "spawns": {
-        "mobs": {
-            "wotr:rift_zombie": 1.0
-        },
+        "mobs": [
+            {
+                "weight": 1.0,
+                "value": {
+                    "entity_type": "wotr:rift_zombie",
+                    "spawn_functions": [
+                        {
+                            "type": "wotr:apply_mob_variant",
+                            "variant": "noir_zombie"
+                        },
+                        {
+                            "type": "wotr:add_death_notifier"
+                        },
+                        {
+                            "type": "wotr:finalize_spawn"
+                        }
+                    ]
+                }
+            }
+        ],
         "count": {
             "type": "uniform",
             "min_inclusive": 5,
