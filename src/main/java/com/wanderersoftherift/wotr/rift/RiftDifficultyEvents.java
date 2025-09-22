@@ -20,7 +20,7 @@ public class RiftDifficultyEvents {
 
     @SubscribeEvent
     public static void onEntitySpawned(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide() || event.getEntity() instanceof Player) {
+        if (event.getLevel().isClientSide() || event.getEntity() instanceof Player || event.loadedFromDisk()) {
             return;
         }
         if (event.getLevel() instanceof ServerLevel serverLevel && RiftLevelManager.isRift(serverLevel)
