@@ -10,6 +10,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 
+/**
+ * Trigger for when a player breaks a block
+ * 
+ * @param pos The block that was broken
+ * @param dir The direction in which the block was broken
+ */
 public record BreakBlockTrigger(BlockPos pos, Direction dir) implements TrackedAbilityTrigger {
 
     public static final MapCodec<BreakBlockTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

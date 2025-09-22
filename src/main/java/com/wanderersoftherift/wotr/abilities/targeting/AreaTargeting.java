@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * Base type for targeting within an AABB.
+ * Base type for targeting an area. Subtypes provide logic for the broad AABB to target, and the more narrow targeting
+ * within that area (e.g. for a sphere the AABB is the box that contains it, and the targets in the corners are
+ * rejected).
  */
 public abstract class AreaTargeting implements AbilityTargeting {
     private final TargetEntityPredicate entityPredicate;

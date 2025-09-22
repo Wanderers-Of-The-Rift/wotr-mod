@@ -17,6 +17,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * ConnectedBlockTargeting follows blocks adjacent to each target, up to a maximum count.
+ * 
+ * @param blocks A predicate for which blocks can be targeted. Connectivity will not flow through blocks that cannot be
+ *               targeted.
+ * @param count  A count of blocks to target
+ */
 public record ConnectedBlockTargeting(TargetBlockPredicate blocks, int count) implements AbilityTargeting {
     public static final MapCodec<ConnectedBlockTargeting> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(

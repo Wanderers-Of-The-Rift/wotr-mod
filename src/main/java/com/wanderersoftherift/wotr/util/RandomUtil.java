@@ -11,12 +11,21 @@ public final class RandomUtil {
     private RandomUtil() {
     }
 
-    public static <T> List<T> randomSubset(Collection<T> set, int count, RandomSource random) {
-        if (count > set.size()) {
-            return List.copyOf(set);
+    /**
+     * Created a random subset of a given collection
+     * 
+     * @param input  The full set
+     * @param count  The number of items to return
+     * @param random A random source
+     * @return A list containing the lesser of input.size() and count items, randomly selected
+     * @param <T>
+     */
+    public static <T> List<T> randomSubset(Collection<T> input, int count, RandomSource random) {
+        if (count > input.size()) {
+            return List.copyOf(input);
         }
-        if (set.size() - count > count) {
-            List<T> choices = new ArrayList<>(set);
+        if (input.size() - count > count) {
+            List<T> choices = new ArrayList<>(input);
             List<T> result = new ArrayList<>(count);
             while (result.size() < count) {
                 int choice = random.nextInt(choices.size());
@@ -28,7 +37,7 @@ public final class RandomUtil {
             }
             return result;
         } else {
-            List<T> result = new ArrayList<>(set);
+            List<T> result = new ArrayList<>(input);
             while (result.size() > count) {
                 int toRemove = random.nextInt(result.size());
                 if (toRemove < result.size() - 1) {

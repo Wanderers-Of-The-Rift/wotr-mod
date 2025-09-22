@@ -11,6 +11,12 @@ public final class ItemUtil {
     private ItemUtil() {
     }
 
+    /**
+     * Condenses a list of items, combining stacks of like items.
+     * 
+     * @param randomItems
+     * @return The condensed list.
+     */
     public static List<ItemStack> condense(Collection<ItemStack> randomItems) {
         List<ItemStack> result = new ArrayList<>();
         for (ItemStack item : randomItems) {

@@ -26,9 +26,6 @@
                 {
                   "type": "wotr:surface",
                   "space": 2
-                },
-                {
-                  "type": "solid"
                 }
               ]
             }
