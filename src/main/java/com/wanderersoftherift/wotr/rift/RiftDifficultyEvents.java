@@ -10,22 +10,21 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class RiftDifficultyEvents {
 
-    @SubscribeEvent
-    public static void onEntitySpawned(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide() || event.getEntity() instanceof Player || event.loadedFromDisk()) {
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onMobSpawning(FinalizeSpawnEvent event) {
+        if (event.getLevel().isClientSide()) {
             return;
         }
-        if (event.getLevel() instanceof ServerLevel serverLevel && RiftLevelManager.isRift(serverLevel)
-                && event.getEntity() instanceof LivingEntity livingEntity) {
-            applyDifficultyToEntity(livingEntity, serverLevel);
+        if (event.getLevel() instanceof ServerLevel serverLevel && RiftLevelManager.isRift(serverLevel)) {
+            applyDifficultyToEntity(event.getEntity(), serverLevel);
         }
     }
 
