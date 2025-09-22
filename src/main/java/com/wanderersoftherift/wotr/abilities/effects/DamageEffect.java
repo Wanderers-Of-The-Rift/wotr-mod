@@ -15,6 +15,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
 
+/**
+ * Effect that applies damage to target entities
+ */
 public class DamageEffect implements AbilityEffect {
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),

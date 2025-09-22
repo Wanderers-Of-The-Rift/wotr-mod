@@ -81,12 +81,10 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
             AbilityContext context) {
         boolean canDrop = dropMode != DropMode.NONE
                 && (!blockState.requiresCorrectToolForDrops() || tool.isCorrectToolForDrops(blockState));
-        boolean dropFromBreak;
+        boolean dropFromBreak = canDrop;
         if (canDrop && dropMode == DropMode.COLLATE && !blockState.hasBlockEntity()) {
             drops.addAll(Block.getDrops(blockState, (ServerLevel) context.level(), pos, null, context.caster(), tool));
             dropFromBreak = false;
-        } else {
-            dropFromBreak = canDrop;
         }
 
         if (dropFromBreak) {

@@ -7,6 +7,11 @@ import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * Effect that sets (replaces) a block
+ * 
+ * @param block
+ */
 public record SetBlockEffect(BlockState block) implements AbilityEffect {
 
     public static final MapCodec<SetBlockEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

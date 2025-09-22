@@ -15,6 +15,9 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 
+/**
+ * Effect that summons an entity, and applies effects to it
+ */
 public class SummonEffect implements AbilityEffect {
     public static final MapCodec<SummonEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             AbilityEffect.DIRECT_CODEC.listOf()
@@ -25,9 +28,6 @@ public class SummonEffect implements AbilityEffect {
 
     private final List<AbilityEffect> effects;
     private final ResourceLocation entityType;
-
-    // TODO look into handling different types of teleports and better handle relative motion
-    // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
 
     public SummonEffect(List<AbilityEffect> effects, ResourceLocation entityType) {
         this.effects = List.copyOf(effects);
