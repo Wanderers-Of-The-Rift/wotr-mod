@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * Interface for classes that provide instant targeting functionality for abilities
+ * Interface for classes that provide instant targeting functionality for abilities.
+ * <p>
+ * Implementations should take each target of origin and produce a new list of targets from it
+ * </p>
  */
 public interface AbilityTargeting {
 

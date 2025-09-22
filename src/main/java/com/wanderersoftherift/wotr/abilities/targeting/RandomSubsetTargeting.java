@@ -8,6 +8,11 @@ import com.wanderersoftherift.wotr.util.RandomUtil;
 
 import java.util.List;
 
+/**
+ * This targeting limits the number of targets to a max count
+ * 
+ * @param count
+ */
 public record RandomSubsetTargeting(int count) implements AbilityTargeting {
 
     public static final MapCodec<RandomSubsetTargeting> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

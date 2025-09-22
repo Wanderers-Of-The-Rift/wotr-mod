@@ -8,6 +8,11 @@ import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
+/**
+ * This targeting filters targets against a chance of being selected
+ * 
+ * @param chance
+ */
 public record RandomChanceTargeting(float chance) implements AbilityTargeting {
     public static final MapCodec<RandomChanceTargeting> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.floatRange(0, 1).fieldOf("chance").forGetter(RandomChanceTargeting::chance)

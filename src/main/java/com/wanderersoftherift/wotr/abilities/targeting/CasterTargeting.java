@@ -7,6 +7,9 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 
+/**
+ * Caster targeting selects the caster as the target, from each target
+ */
 public final class CasterTargeting implements AbilityTargeting {
 
     public static final CasterTargeting INSTANCE = new CasterTargeting();

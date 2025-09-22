@@ -9,6 +9,9 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 
+/**
+ * Targets the target provided by the trigger activating the ability, if any
+ */
 public final class TriggerTargetTargeting implements AbilityTargeting {
 
     public static final TriggerTargetTargeting INSTANCE = new TriggerTargetTargeting();

@@ -15,6 +15,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This targeting selects a single target via raycast
+ */
 public class RaycastTargeting implements AbilityTargeting {
 
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(

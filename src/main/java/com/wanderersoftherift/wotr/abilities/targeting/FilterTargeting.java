@@ -10,6 +10,12 @@ import net.minecraft.world.phys.HitResult;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This targeting just provides filtering on an existing set of targets
+ * 
+ * @param entities A predicate for what entities can be targeted
+ * @param blocks   A predicate for what blocks can be targeted
+ */
 public record FilterTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks) implements AbilityTargeting {
 
     public static final MapCodec<FilterTargeting> CODEC = RecordCodecBuilder.mapCodec(
