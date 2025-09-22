@@ -10,6 +10,9 @@ import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.world.entity.LivingEntity;
 
+/**
+ * Effect that applies healing to target entities
+ */
 public class HealEffect implements AbilityEffect {
     public static final MapCodec<HealEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.fieldOf("amount").forGetter(HealEffect::getAmount)

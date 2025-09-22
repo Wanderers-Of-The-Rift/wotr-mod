@@ -17,6 +17,9 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
+/**
+ * Effect that produces a projectile (which can have effects attached to apply on whatever it hits)
+ */
 public class ProjectileEffect implements AbilityEffect {
     public static final MapCodec<ProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.list(AbilityEffect.DIRECT_CODEC)

@@ -9,15 +9,30 @@ import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Interface for classes that provide instant targeting functionality for abilities
+ */
 public interface AbilityTargeting {
 
     Codec<AbilityTargeting> DIRECT_CODEC = WotrRegistries.EFFECT_TARGETING_TYPES.byNameCodec()
             .dispatch(AbilityTargeting::getCodec, Function.identity());
 
+    /**
+     * @return Codec for serializing the AbilityTargeting type
+     */
     MapCodec<? extends AbilityTargeting> getCodec();
 
+    /**
+     * @param context The context of the ability
+     * @param origin  A starting targeting state
+     * @return A list of new targeting states. It is expected that each will have effects applied to them
+     */
     List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin);
 
+    /**
+     * @param modifierEffect
+     * @return Whether the given modifier effect applies to the targeting
+     */
     default boolean isRelevant(ModifierEffect modifierEffect) {
         return false;
     }

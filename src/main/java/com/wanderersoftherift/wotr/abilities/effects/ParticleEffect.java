@@ -10,6 +10,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Effect that applies particle effects
+ */
 public class ParticleEffect implements AbilityEffect {
 
     public static final MapCodec<ParticleEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

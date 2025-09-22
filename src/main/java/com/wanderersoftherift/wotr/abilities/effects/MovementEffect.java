@@ -13,6 +13,9 @@ import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Effect that applies physics movement to target entities
+ */
 public class MovementEffect implements AbilityEffect {
     public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity),

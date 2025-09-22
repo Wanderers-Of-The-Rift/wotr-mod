@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
@@ -28,40 +27,28 @@ public final class TargetingUtil {
     }
 
     /**
-     * @param level            The level to find entities in
-     * @param area             The AABB area to find entities in
-     * @param narrowPhaseCheck Fine-grained check for positions to include within the area
-     * @param entityPredicate  Predicate for what entities to accept
+     * @param level           The level to find entities in
+     * @param area            The AABB area to find entities in
+     * @param entityPredicate Predicate for what entities to accept
      * @return A list of entities within the area that meet all conditions
      */
-    public static List<EntityHitResult> getEntitiesInArea(
-            Level level,
-            AABB area,
-            BiPredicate<Vec3, Vec3> narrowPhaseCheck,
-            Predicate<Entity> entityPredicate) {
-        Vec3 center = area.getCenter();
-        return level
-                .getEntities((Entity) null, area,
-                        (target) -> narrowPhaseCheck.test(center, target.position()) && entityPredicate.test(target))
+    public static List<EntityHitResult> getEntitiesInArea(Level level, AABB area, Predicate<Entity> entityPredicate) {
+        return level.getEntities((Entity) null, area, entityPredicate)
                 .stream()
                 .map(entity -> new EntityHitResult(entity, entity.position()))
                 .toList();
     }
 
     /**
-     * @param area             The AABB area to find blocks within
-     * @param narrowPhaseCheck Fine-grained check for acceptable positions
-     * @param blockPredicate   Predicate for determining whether a block should be accepted
+     * @param area           The AABB area to find blocks within
+     * @param blockPredicate Predicate for determining whether a block should be accepted
      * @return A list of blocks within the area that meet all conditions
      */
-    public static List<BlockHitResult> getBlocksInArea(
-            AABB area,
-            BiPredicate<Vec3, BlockPos> narrowPhaseCheck,
-            Predicate<BlockPos> blockPredicate) {
+    public static List<BlockHitResult> getBlocksInArea(AABB area, Predicate<BlockPos> blockPredicate) {
         Vec3 center = area.getCenter();
         List<BlockHitResult> results = new ArrayList<>();
         for (BlockPos pos : BlockPos.betweenClosed(area)) {
-            if (narrowPhaseCheck.test(center, pos) && blockPredicate.test(pos)) {
+            if (blockPredicate.test(pos)) {
                 // TODO: how should we set isInside?
                 results.add(new BlockHitResult(pos.getCenter(),
                         Direction.getApproximateNearest(pos.getCenter().subtract(center)), new BlockPos(pos), false));

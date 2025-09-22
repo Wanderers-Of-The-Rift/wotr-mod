@@ -4,6 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 
+/**
+ * Effect that does nothing
+ */
 public final class NoopEffect implements AbilityEffect {
 
     public static final NoopEffect INSTANCE = new NoopEffect();

@@ -13,6 +13,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Effect that applies a number of targeting steps to produce a new set of targets, before applying additional effects
+ * to those targets.
+ * 
+ * @param targetingSteps The targeting steps to apply
+ * @param effects        The effects to apply to the resulting targets
+ */
 public record TargetingEffect(List<AbilityTargeting> targetingSteps, List<AbilityEffect> effects)
         implements AbilityEffect {
 

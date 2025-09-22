@@ -21,6 +21,9 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 
+/**
+ * Effect that produces a projectile, with effects that apply to what it hits
+ */
 public class SimpleProjectileEffect implements AbilityEffect {
     public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             AbilityEffect.DIRECT_CODEC.listOf()
