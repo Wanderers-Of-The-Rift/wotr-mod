@@ -26,7 +26,7 @@ public record OwnAttachedEffectRequirement(Optional<ResourceLocation> id) implem
         if (id.isPresent()) {
             return context.caster()
                     .getExistingData(WotrAttachments.ATTACHED_EFFECTS)
-                    .map(effects -> effects.has(context.instanceId(), (effect) -> effect.getId().equals(id)))
+                    .map(effects -> effects.has(context.instanceId(), (effect) -> effect.id().equals(id)))
                     .orElse(false);
         } else {
             return context.caster()

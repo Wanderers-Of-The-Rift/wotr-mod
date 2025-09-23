@@ -17,7 +17,9 @@ import java.util.function.Predicate;
 /**
  * Effect that applies different sub-effects based a condition being present.
  */
-public class ConditionalEffect implements AbilityEffect {
+public record ConditionalEffect(List<AbilityEffect> effectsAlways, List<AbilityEffect> effectsTrue,
+        List<AbilityEffect> effectsFalse, ResourceLocation condition) implements AbilityEffect {
+
     public static final MapCodec<ConditionalEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             AbilityEffect.DIRECT_CODEC.listOf()
                     .optionalFieldOf("always", Collections.emptyList())
@@ -30,35 +32,6 @@ public class ConditionalEffect implements AbilityEffect {
                     .forGetter(ConditionalEffect::effectsFalse),
             ResourceLocation.CODEC.fieldOf("condition_name").forGetter(ConditionalEffect::condition)
     ).apply(instance, ConditionalEffect::new));
-
-    private final List<AbilityEffect> effectsAlways;
-    private final List<AbilityEffect> effectsTrue;
-    private final List<AbilityEffect> effectsFalse;
-    private final ResourceLocation condition;
-
-    public ConditionalEffect(List<AbilityEffect> effectsAlways, List<AbilityEffect> effectsTrue,
-            List<AbilityEffect> effectsFalse, ResourceLocation condition) {
-        this.effectsAlways = effectsAlways;
-        this.effectsTrue = effectsTrue;
-        this.effectsFalse = effectsFalse;
-        this.condition = condition;
-    }
-
-    private List<AbilityEffect> effectsTrue() {
-        return effectsTrue;
-    }
-
-    private List<AbilityEffect> effectsFalse() {
-        return effectsFalse;
-    }
-
-    private List<AbilityEffect> effectsAlways() {
-        return effectsAlways;
-    }
-
-    private ResourceLocation condition() {
-        return condition;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {

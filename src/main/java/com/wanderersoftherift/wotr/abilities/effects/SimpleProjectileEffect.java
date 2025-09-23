@@ -24,33 +24,18 @@ import java.util.List;
 /**
  * Effect that produces a projectile, with effects that apply to what it hits
  */
-public class SimpleProjectileEffect implements AbilityEffect {
+public record SimpleProjectileEffect(List<AbilityEffect> effects, SimpleProjectileConfig config)
+        implements AbilityEffect {
     public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             AbilityEffect.DIRECT_CODEC.listOf()
                     .optionalFieldOf("effects", List.of())
-                    .forGetter(SimpleProjectileEffect::getEffects),
-            SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::getConfig)
+                    .forGetter(SimpleProjectileEffect::effects),
+            SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::config)
     ).apply(instance, SimpleProjectileEffect::new));
-
-    private final List<AbilityEffect> effects;
-    private final SimpleProjectileConfig config;
-
-    public SimpleProjectileEffect(List<AbilityEffect> effects, SimpleProjectileConfig config) {
-        this.effects = effects;
-        this.config = config;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
-    }
-
-    public List<AbilityEffect> getEffects() {
-        return effects;
-    }
-
-    public SimpleProjectileConfig getConfig() {
-        return config;
     }
 
     @Override

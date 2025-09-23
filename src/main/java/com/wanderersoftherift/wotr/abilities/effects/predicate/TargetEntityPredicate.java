@@ -1,18 +1,17 @@
 package com.wanderersoftherift.wotr.abilities.effects.predicate;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -22,21 +21,14 @@ import java.util.Optional;
  * wraps the standard {@link EntityPredicate} while providing targeting specific options.
  * </p>
  */
-public interface TargetEntityPredicate {
+public sealed interface TargetEntityPredicate {
 
-    TargetEntityPredicate ALL = (target, source, context) -> true;
-    TargetEntityPredicate NONE = (target, source, context) -> false;
-
-    BiMap<String, TargetEntityPredicate> BUILT_INS = ImmutableBiMap.of("all", ALL, "none", NONE);
-
-    Codec<TargetEntityPredicate> CODEC = Codec
-            .either(Codec.STRING.xmap(val -> BUILT_INS.get(val.toLowerCase(Locale.ROOT)),
-                    val -> BUILT_INS.inverse().get(val)), Filter.CODEC)
-            .xmap(either -> either.left().orElseGet(() -> either.right().get()), predicate -> {
+    Codec<TargetEntityPredicate> CODEC = Codec.either(StringRepresentable.fromEnum(Trivial::values), Filter.CODEC)
+            .xmap(either -> either.left().isPresent() ? either.left().get() : either.right().get(), predicate -> {
                 if (predicate instanceof Filter filter) {
                     return Either.right(filter);
                 }
-                return Either.left(predicate);
+                return Either.left((Trivial) predicate);
             });
 
     /**
@@ -81,6 +73,29 @@ public interface TargetEntityPredicate {
                 return false;
             }
             return true;
+        }
+    }
+
+    enum Trivial implements TargetEntityPredicate, StringRepresentable {
+        ALL("all", true),
+        NONE("none", false);
+
+        private String id;
+        private boolean result;
+
+        Trivial(String id, boolean result) {
+            this.id = id;
+            this.result = result;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return id;
+        }
+
+        @Override
+        public boolean matches(Entity target, HitResult source, AbilityContext context) {
+            return result;
         }
     }
 

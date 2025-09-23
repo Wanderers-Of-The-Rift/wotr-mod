@@ -18,29 +18,11 @@ import java.util.List;
 /**
  * Effect that summons an entity, and applies effects to it
  */
-public class SummonEffect implements AbilityEffect {
+public record SummonEffect(List<AbilityEffect> effects, ResourceLocation entityType) implements AbilityEffect {
     public static final MapCodec<SummonEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            AbilityEffect.DIRECT_CODEC.listOf()
-                    .optionalFieldOf("effects", List.of())
-                    .forGetter(SummonEffect::getEffects),
-            ResourceLocation.CODEC.fieldOf("entity_type").forGetter(SummonEffect::getEntityType)
+            AbilityEffect.DIRECT_CODEC.listOf().optionalFieldOf("effects", List.of()).forGetter(SummonEffect::effects),
+            ResourceLocation.CODEC.fieldOf("entity_type").forGetter(SummonEffect::entityType)
     ).apply(instance, SummonEffect::new));
-
-    private final List<AbilityEffect> effects;
-    private final ResourceLocation entityType;
-
-    public SummonEffect(List<AbilityEffect> effects, ResourceLocation entityType) {
-        this.effects = List.copyOf(effects);
-        this.entityType = entityType;
-    }
-
-    private ResourceLocation getEntityType() {
-        return this.entityType;
-    }
-
-    private List<AbilityEffect> getEffects() {
-        return effects;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {

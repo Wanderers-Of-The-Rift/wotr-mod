@@ -18,25 +18,13 @@ import net.minecraft.world.entity.LivingEntity;
 /**
  * Effect that applies damage to target entities
  */
-public class DamageEffect implements AbilityEffect {
+public record DamageEffect(float damageAmount, Holder<DamageType> damageTypeKey) implements AbilityEffect {
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-            .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::getAmount),
-                    DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::getDamageTypeKey))
+            .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::amount),
+                    DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::damageTypeKey))
             .apply(instance, DamageEffect::new));
 
-    private float damageAmount = 0;
-    private final Holder<DamageType> damageTypeKey;
-
-    public DamageEffect(float amount, Holder<DamageType> damageTypeKey) {
-        this.damageAmount = amount;
-        this.damageTypeKey = damageTypeKey;
-    }
-
-    private Holder<DamageType> getDamageTypeKey() {
-        return damageTypeKey;
-    }
-
-    private float getAmount() {
+    private float amount() {
         return damageAmount;
     }
 

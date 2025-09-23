@@ -14,17 +14,11 @@ import net.minecraft.world.phys.EntityHitResult;
 /**
  * Effect that plays a sound. The sounds plays either as a Player or Hostile sound depending on the caster.
  */
-public class SoundEffect implements AbilityEffect {
+public record SoundEffect(Holder<SoundEvent> sound) implements AbilityEffect {
 
     public static final MapCodec<SoundEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            SoundEvent.CODEC.fieldOf("sound").forGetter(SoundEffect::getSound)
+            SoundEvent.CODEC.fieldOf("sound").forGetter(SoundEffect::sound)
     ).apply(instance, SoundEffect::new));
-
-    private final Holder<SoundEvent> sound;
-
-    public SoundEffect(Holder<SoundEvent> sound) {
-        this.sound = sound;
-    }
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
@@ -46,9 +40,5 @@ public class SoundEffect implements AbilityEffect {
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
-    }
-
-    public Holder<SoundEvent> getSound() {
-        return sound;
     }
 }

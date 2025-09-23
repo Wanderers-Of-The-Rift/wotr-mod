@@ -20,9 +20,9 @@ public record FilterTargeting(TargetEntityPredicate entities, TargetBlockPredica
 
     public static final MapCodec<FilterTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.ALL)
+                    TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
                             .forGetter(FilterTargeting::entities),
-                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.NONE)
+                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.NONE)
                             .forGetter(FilterTargeting::blocks)
             ).apply(instance, FilterTargeting::new));
 

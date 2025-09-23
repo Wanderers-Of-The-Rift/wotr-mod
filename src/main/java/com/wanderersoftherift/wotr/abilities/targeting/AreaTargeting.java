@@ -35,9 +35,9 @@ public abstract class AreaTargeting implements AbilityTargeting {
     protected static <T extends AreaTargeting> Products.P3<RecordCodecBuilder.Mu<T>, TargetEntityPredicate, TargetBlockPredicate, Boolean> commonFields(
             RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
-                TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.ALL)
+                TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
                         .forGetter(AreaTargeting::getEntityPredicate),
-                TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.NONE)
+                TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.NONE)
                         .forGetter(AreaTargeting::getBlockPredicate),
                 Codec.BOOL.optionalFieldOf("align_to_block", false).forGetter(AreaTargeting::getAlignToBlock)
         );
@@ -92,12 +92,12 @@ public abstract class AreaTargeting implements AbilityTargeting {
         for (HitResult source : origin.targets()) {
             AABB aabb = getArea(source, context, alignToBlock);
             List<HitResult> hits = new ArrayList<>();
-            if (entityPredicate != TargetEntityPredicate.NONE) {
+            if (entityPredicate != TargetEntityPredicate.Trivial.NONE) {
                 var entityNarrowphase = generateEntityInAreaPredicate(source, aabb, context, alignToBlock);
                 hits.addAll(TargetingUtil.getEntitiesInArea(level, aabb, (target) -> entityNarrowphase.test(target)
                         && entityPredicate.matches(target, source, context)));
             }
-            if (blockPredicate != TargetBlockPredicate.NONE) {
+            if (blockPredicate != TargetBlockPredicate.Trivial.NONE) {
                 var blockNarrowphase = generateBlockInAreaPredicate(source, aabb, context, alignToBlock);
                 hits.addAll(TargetingUtil.getBlocksInArea(aabb,
                         (pos) -> blockNarrowphase.test(pos) && blockPredicate.matches(pos, source, context)));

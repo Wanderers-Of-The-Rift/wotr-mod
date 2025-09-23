@@ -29,7 +29,7 @@ public class DetachOwnEffect implements AbilityEffect {
         targetInfo.targetEntities().forEach(target -> {
             AttachedEffects attachedEffects = target.getData(WotrAttachments.ATTACHED_EFFECTS);
             if (id.isPresent()) {
-                attachedEffects.detach(context.instanceId(), effect -> effect.getId().equals(id));
+                attachedEffects.detach(context.instanceId(), effect -> effect.id().equals(id));
             } else {
                 attachedEffects.detach(context.instanceId());
             }
