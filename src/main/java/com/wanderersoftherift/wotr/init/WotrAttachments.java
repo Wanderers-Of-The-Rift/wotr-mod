@@ -18,6 +18,7 @@ import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
@@ -162,4 +163,8 @@ public class WotrAttachments {
                     () -> AttachmentType.builder(() -> new TriggerRegistry<>(WotrTrackedAbilityTriggers.TICK_TRIGGER))
                             .build()
             );
+    public static final Supplier<AttachmentType<RiftParameterData>> RIFT_PARAMETER_DATA = ATTACHMENT_TYPES.register(
+            "rift_parameters",
+            () -> AttachmentType.builder(() -> new RiftParameterData()).serialize(RiftParameterData.CODEC).build()
+    );
 }

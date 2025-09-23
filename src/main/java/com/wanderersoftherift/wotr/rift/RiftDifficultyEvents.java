@@ -1,9 +1,10 @@
 package com.wanderersoftherift.wotr.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -18,6 +19,13 @@ import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class RiftDifficultyEvents {
 
+    public static final ResourceLocation MOB_DAMAGE_MULTIPLIER = WanderersOfTheRift.id(
+            "mob_difficulty/damage_multiplier");
+    public static final ResourceLocation MOB_HEALTH_MULTIPLIER = WanderersOfTheRift.id(
+            "mob_difficulty/health_multiplier");
+    public static final ResourceLocation MOB_SPEED_MULTIPLIER = WanderersOfTheRift.id(
+            "mob_difficulty/speed_multiplier");
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onMobSpawning(FinalizeSpawnEvent event) {
         if (event.getLevel().isClientSide()) {
@@ -29,12 +37,14 @@ public class RiftDifficultyEvents {
     }
 
     private static void applyDifficultyToEntity(LivingEntity livingEntity, ServerLevel serverLevel) {
-        var optionalTier = RiftData.get(serverLevel).getTier();
-        if (livingEntity instanceof Mob mob && optionalTier.isPresent()) {
-            var tier = optionalTier.getAsInt();
-            updateAttribute(mob, Attributes.ATTACK_DAMAGE, getDamageMultiplier(tier));
-            updateAttribute(mob, Attributes.MAX_HEALTH, getHealthMultiplier(tier));
-            updateAttribute(mob, Attributes.MOVEMENT_SPEED, getSpeedMultiplier(tier));
+        var riftData = RiftParameterData.forLevel(serverLevel);
+        if (livingEntity instanceof Mob mob && riftData != null) {
+            var damage = riftData.getParameter(MOB_DAMAGE_MULTIPLIER);
+            var health = riftData.getParameter(MOB_HEALTH_MULTIPLIER);
+            var speed = riftData.getParameter(MOB_SPEED_MULTIPLIER);
+            updateAttribute(mob, Attributes.ATTACK_DAMAGE, damage.get());
+            updateAttribute(mob, Attributes.MAX_HEALTH, health.get());
+            updateAttribute(mob, Attributes.MOVEMENT_SPEED, speed.get());
             livingEntity.setHealth(livingEntity.getMaxHealth());
         }
     }
@@ -45,17 +55,5 @@ public class RiftDifficultyEvents {
             return;
         }
         attributeInstance.setBaseValue(attributeInstance.getBaseValue() * tier);
-    }
-
-    private static double getSpeedMultiplier(int tier) {
-        return tier * 0.02 + 1;
-    }
-
-    private static double getHealthMultiplier(int tier) {
-        return tier * 0.3 + 1;
-    }
-
-    private static double getDamageMultiplier(int tier) {
-        return tier * 0.15 + 1;
     }
 }

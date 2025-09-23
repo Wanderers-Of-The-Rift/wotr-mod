@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
@@ -13,11 +14,13 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.HashMap;
 
-// @EventBusSubscriber
-public class RiftConfigInitializationEvents {
+@EventBusSubscriber
+public class RiftInitializationEvents {
     private static final ImmutableList<String> POI_VARIANTS = ImmutableList.of("free", "ceiling", "halfway", "inwall");
 
     // @SubscribeEvent
@@ -102,5 +105,15 @@ public class RiftConfigInitializationEvents {
                 .build();
         riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
         event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
+    }
+
+    @SubscribeEvent
+    private static void initRiftParameters(RiftEvent.Created.Post event) {
+        var registry = event.getLevel().registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS);
+        registry.asHolderIdMap().forEach(it -> {
+            RiftParameterData.forLevel(event.getLevel())
+                    .getParameter(it.getKey().location())
+                    .addBase(it.value().getValue(event.getConfig().tier()));
+        });
     }
 }
