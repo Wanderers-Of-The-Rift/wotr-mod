@@ -27,7 +27,7 @@ import java.util.Set;
 public record ConnectedBlockTargeting(TargetBlockPredicate blocks, int count) implements AbilityTargeting {
     public static final MapCodec<ConnectedBlockTargeting> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
-                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.ALL)
+                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.ALL)
                             .forGetter(ConnectedBlockTargeting::blocks),
                     Codec.intRange(1, Integer.MAX_VALUE).fieldOf("count").forGetter(ConnectedBlockTargeting::count)
             ).apply(instance, ConnectedBlockTargeting::new));

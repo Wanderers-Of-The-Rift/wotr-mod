@@ -16,20 +16,12 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Effect that applies physics movement to target entities
  */
-public class MovementEffect implements AbilityEffect {
+public record MovementEffect(Vec3 velocity, RelativeFrame relativeFrame) implements AbilityEffect {
     public static final MapCodec<MovementEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::getVelocity),
+            Vec3.CODEC.fieldOf("velocity").forGetter(MovementEffect::velocity),
             RelativeFrame.CODEC.optionalFieldOf("relative_frame", RelativeFrame.TARGET_FACING)
-                    .forGetter(MovementEffect::getRelativeFrame)
+                    .forGetter(MovementEffect::relativeFrame)
     ).apply(instance, MovementEffect::new));
-
-    private final Vec3 velocity;
-    private final RelativeFrame relativeFrame;
-
-    public MovementEffect(Vec3 velocity, RelativeFrame relativeFrame) {
-        this.velocity = velocity;
-        this.relativeFrame = relativeFrame;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
@@ -62,13 +54,5 @@ public class MovementEffect implements AbilityEffect {
             }
         });
 
-    }
-
-    public Vec3 getVelocity() {
-        return this.velocity;
-    }
-
-    public RelativeFrame getRelativeFrame() {
-        return relativeFrame;
     }
 }

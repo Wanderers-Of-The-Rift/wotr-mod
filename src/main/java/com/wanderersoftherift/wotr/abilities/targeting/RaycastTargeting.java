@@ -22,9 +22,9 @@ public class RaycastTargeting implements AbilityTargeting {
 
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.ALL)
+                    TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
                             .forGetter(RaycastTargeting::getEntityPredicate),
-                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.ALL)
+                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.ALL)
                             .forGetter(RaycastTargeting::getBlockPredicate),
                     Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange)
             ).apply(instance, RaycastTargeting::new));

@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.abilities.effects;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -22,47 +21,24 @@ import java.util.Optional;
 /**
  * AttachEffect attaches all of its child effects to each target entity, with a durationTicks
  */
-public class AttachEffect implements AbilityEffect {
+public record AttachEffect(Optional<ResourceLocation> id, List<AbilityEffect> effects,
+        TriggerPredicate triggerPredicate, ContinueEffectPredicate continuePredicate,
+        Optional<Holder<EffectMarker>> display, List<ModifierInstance> modifiers) implements AbilityEffect {
 
     public static final MapCodec<AttachEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.optionalFieldOf("id").forGetter(AttachEffect::getId),
+            ResourceLocation.CODEC.optionalFieldOf("id").forGetter(AttachEffect::id),
             Codec.list(AbilityEffect.DIRECT_CODEC)
                     .optionalFieldOf("effects", List.of())
-                    .forGetter(AttachEffect::getEffects),
+                    .forGetter(AttachEffect::effects),
             TriggerPredicate.CODEC.optionalFieldOf("trigger", new TriggerPredicate())
-                    .forGetter(AttachEffect::getTriggerPredicate),
+                    .forGetter(AttachEffect::triggerPredicate),
             ContinueEffectPredicate.CODEC.optionalFieldOf("continue", new ContinueEffectPredicate())
-                    .forGetter(AttachEffect::getContinuePredicate),
+                    .forGetter(AttachEffect::continuePredicate),
             RegistryFixedCodec.create(WotrRegistries.Keys.EFFECT_MARKERS)
                     .optionalFieldOf("display")
-                    .forGetter(AttachEffect::getDisplay),
-            ModifierInstance.CODEC.listOf()
-                    .optionalFieldOf("modifiers", List.of())
-                    .forGetter(AttachEffect::getModifiers))
+                    .forGetter(AttachEffect::display),
+            ModifierInstance.CODEC.listOf().optionalFieldOf("modifiers", List.of()).forGetter(AttachEffect::modifiers))
             .apply(instance, AttachEffect::new));
-
-    private final Optional<ResourceLocation> id;
-    private final List<AbilityEffect> effects;
-    private final TriggerPredicate triggerPredicate;
-    private final ContinueEffectPredicate continuePredicate;
-    private final Holder<EffectMarker> display;
-    private final List<ModifierInstance> modifiers;
-
-    public AttachEffect(Optional<ResourceLocation> id, List<AbilityEffect> effects, TriggerPredicate triggerPredicate,
-            ContinueEffectPredicate continuePredicate, Optional<Holder<EffectMarker>> display,
-            List<ModifierInstance> modifiers) {
-        this(id, effects, triggerPredicate, continuePredicate, display.orElse(null), modifiers);
-    }
-
-    public AttachEffect(Optional<ResourceLocation> id, List<AbilityEffect> effects, TriggerPredicate triggerPredicate,
-            ContinueEffectPredicate continuePredicate, Holder<EffectMarker> display, List<ModifierInstance> modifiers) {
-        this.id = id;
-        this.effects = effects;
-        this.triggerPredicate = triggerPredicate;
-        this.continuePredicate = continuePredicate;
-        this.display = display;
-        this.modifiers = ImmutableList.copyOf(modifiers);
-    }
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
@@ -75,27 +51,4 @@ public class AttachEffect implements AbilityEffect {
         return CODEC;
     }
 
-    public Optional<ResourceLocation> getId() {
-        return id;
-    }
-
-    public TriggerPredicate getTriggerPredicate() {
-        return triggerPredicate;
-    }
-
-    public ContinueEffectPredicate getContinuePredicate() {
-        return continuePredicate;
-    }
-
-    public Optional<Holder<EffectMarker>> getDisplay() {
-        return Optional.ofNullable(display);
-    }
-
-    public List<ModifierInstance> getModifiers() {
-        return modifiers;
-    }
-
-    public List<AbilityEffect> getEffects() {
-        return effects;
-    }
 }

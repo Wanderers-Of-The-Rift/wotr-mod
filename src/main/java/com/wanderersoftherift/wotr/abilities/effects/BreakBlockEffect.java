@@ -1,7 +1,5 @@
 package com.wanderersoftherift.wotr.abilities.effects;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -26,28 +24,18 @@ import java.util.List;
 // TODO: trigger item ToolSource
 public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awardMineStat) implements AbilityEffect {
 
-    public static final ToolSource NO_TOOL = (context) -> ItemStack.EMPTY;
-    public static final ToolSource ABILITY_ITEM = AbilityContext::abilityItem;
-
-    // spotless:off
-    public static final BiMap<String, ToolSource> SIMPLE_TOOL_SOURCES = ImmutableBiMap.of(
-            "none", NO_TOOL,
-            "ability_item", ABILITY_ITEM
-    );
-    // spotless:on
-
     public static final MapCodec<BreakBlockEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             DropMode.CODEC.optionalFieldOf("drops", DropMode.COLLATE).forGetter(BreakBlockEffect::dropMode),
             Codec.either(
-                    Codec.STRING.xmap(SIMPLE_TOOL_SOURCES::get, val -> SIMPLE_TOOL_SOURCES.inverse().get(val)),
+                    StringRepresentable.fromEnum(SimpleToolSource::values),
                     ItemStack.OPTIONAL_CODEC.xmap(FixedToolSource::new, FixedToolSource::tool))
-                    .xmap(either -> either.left().orElseGet(() -> either.right().get()), source -> {
+                    .xmap(either -> either.left().isPresent() ? either.left().get() : either.right().get(), source -> {
                         if (source instanceof FixedToolSource fixed) {
                             return Either.right(fixed);
                         }
-                        return Either.left(source);
+                        return Either.left((SimpleToolSource) source);
                     })
-                    .optionalFieldOf("as_tool", NO_TOOL)
+                    .optionalFieldOf("as_tool", SimpleToolSource.NONE)
                     .forGetter(BreakBlockEffect::asTool),
             Codec.BOOL.optionalFieldOf("reward_mine_state", false).forGetter(BreakBlockEffect::awardMineStat)
     ).apply(instance, BreakBlockEffect::new));
@@ -124,8 +112,34 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
         }
     }
 
-    public interface ToolSource {
+    public sealed interface ToolSource {
         ItemStack getTool(AbilityContext context);
+    }
+
+    public enum SimpleToolSource implements ToolSource, StringRepresentable {
+        NONE("none") {
+            @Override
+            public ItemStack getTool(AbilityContext context) {
+                return ItemStack.EMPTY;
+            }
+        },
+        ABILITY_ITEM("ability_item") {
+            @Override
+            public ItemStack getTool(AbilityContext context) {
+                return context.abilityItem();
+            }
+        };
+
+        private final String id;
+
+        SimpleToolSource(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return id;
+        }
     }
 
     public record FixedToolSource(ItemStack tool) implements ToolSource {

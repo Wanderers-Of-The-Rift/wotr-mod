@@ -13,25 +13,15 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Effect that applies particle effects
  */
-public class ParticleEffect implements AbilityEffect {
+public record ParticleEffect(ParticleOptions particle) implements AbilityEffect {
 
     public static final MapCodec<ParticleEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ParticleTypes.CODEC.fieldOf("particle").forGetter(ParticleEffect::getParticle)
+            ParticleTypes.CODEC.fieldOf("particle").forGetter(ParticleEffect::particle)
     ).apply(instance, ParticleEffect::new));
-
-    private final ParticleOptions particle;
-
-    public ParticleEffect(ParticleOptions particle) {
-        this.particle = particle;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
-    }
-
-    public ParticleOptions getParticle() {
-        return particle;
     }
 
     @Override

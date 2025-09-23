@@ -13,20 +13,10 @@ import net.minecraft.world.entity.LivingEntity;
 /**
  * Effect that applies healing to target entities
  */
-public class HealEffect implements AbilityEffect {
+public record HealEffect(float amount) implements AbilityEffect {
     public static final MapCodec<HealEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.FLOAT.fieldOf("amount").forGetter(HealEffect::getAmount)
+            Codec.FLOAT.fieldOf("amount").forGetter(HealEffect::amount)
     ).apply(instance, HealEffect::new));
-
-    private float healAmount = 0;
-
-    public HealEffect(float amount) {
-        this.healAmount = amount;
-    }
-
-    public float getAmount() {
-        return healAmount;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
@@ -35,7 +25,7 @@ public class HealEffect implements AbilityEffect {
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
-        float finalHealAmount = context.getAbilityAttribute(WotrAttributes.HEAL_POWER, healAmount);
+        float finalHealAmount = context.getAbilityAttribute(WotrAttributes.HEAL_POWER, amount);
         targetInfo.targetEntities()
                 .filter(LivingEntity.class::isInstance)
                 .map(LivingEntity.class::cast)

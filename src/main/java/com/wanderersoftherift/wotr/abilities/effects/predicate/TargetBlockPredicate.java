@@ -1,19 +1,17 @@
 package com.wanderersoftherift.wotr.abilities.effects.predicate;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-
-import java.util.Locale;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Predicate for filtering blocks for ability targeting.
@@ -23,20 +21,13 @@ import java.util.Locale;
  * targeting specific options.
  * </p>
  */
-public interface TargetBlockPredicate {
-    TargetBlockPredicate ALL = (target, source, context) -> true;
-    TargetBlockPredicate NONE = (target, source, context) -> false;
-
-    BiMap<String, TargetBlockPredicate> BUILT_INS = ImmutableBiMap.of("all", ALL, "none", NONE);
-
-    Codec<TargetBlockPredicate> CODEC = Codec
-            .either(Codec.STRING.xmap(val -> BUILT_INS.get(val.toLowerCase(Locale.ROOT)),
-                    val -> BUILT_INS.inverse().get(val)), Filter.CODEC)
-            .xmap(either -> either.left().orElseGet(() -> either.right().get()), predicate -> {
+public sealed interface TargetBlockPredicate {
+    Codec<TargetBlockPredicate> CODEC = Codec.either(StringRepresentable.fromEnum(Trivial::values), Filter.CODEC)
+            .xmap(either -> either.left().isPresent() ? either.left().get() : either.right().get(), predicate -> {
                 if (predicate instanceof Filter filter) {
                     return Either.right(filter);
                 }
-                return Either.left(predicate);
+                return Either.left((Trivial) predicate);
             });
 
     /**
@@ -71,6 +62,29 @@ public interface TargetBlockPredicate {
                 }
             }
             return blockPredicate.test(level, target);
+        }
+    }
+
+    enum Trivial implements TargetBlockPredicate, StringRepresentable {
+        ALL("all", true),
+        NONE("none", true);
+
+        private String id;
+        private boolean result;
+
+        Trivial(String id, boolean result) {
+            this.id = id;
+            this.result = result;
+        }
+
+        @Override
+        public boolean matches(BlockPos target, HitResult source, AbilityContext context) {
+            return result;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return id;
         }
     }
 }

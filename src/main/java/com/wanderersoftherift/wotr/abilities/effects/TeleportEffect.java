@@ -8,50 +8,41 @@ import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class TeleportEffect implements AbilityEffect {
+public record TeleportEffect(TeleportInfo teleportInfo) implements AbilityEffect {
     public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::getTeleportInfo)
+            TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::teleportInfo)
     ).apply(instance, TeleportEffect::new));
-
-    private final TeleportInfo teleInfo;
 
     // TODO look into handling different types of teleports and better handle relative motion
     // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
-
-    public TeleportEffect(TeleportInfo teleInfo) {
-        this.teleInfo = teleInfo;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 
-    public TeleportInfo getTeleportInfo() {
-        return this.teleInfo;
-    }
-
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
-        switch (teleInfo.getTarget()) {
+        switch (teleportInfo.getTarget()) {
             case USER -> {
                 if (!(targetInfo.source() instanceof EntityHitResult entitySource)) {
                     return;
                 }
                 HitResult randomTarget = targetInfo.getRandomTarget(context.level().getRandom());
                 entitySource.getEntity()
-                        .teleportTo(randomTarget.getLocation().x + teleInfo.getPosition().x,
-                                randomTarget.getLocation().y + teleInfo.getPosition().y,
-                                randomTarget.getLocation().z + teleInfo.getPosition().z);
+                        .teleportTo(randomTarget.getLocation().x + teleportInfo.getPosition().x,
+                                randomTarget.getLocation().y + teleportInfo.getPosition().y,
+                                randomTarget.getLocation().z + teleportInfo.getPosition().z);
             }
             case TARGET -> {
                 targetInfo.targetEntities().forEach(target -> {
-                    if (teleInfo.isRelative().isEmpty()
-                            || (teleInfo.isRelative().isPresent() && teleInfo.isRelative().get())) {
-                        target.teleportRelative(teleInfo.getPosition().x, teleInfo.getPosition().y,
-                                teleInfo.getPosition().z);
+                    if (teleportInfo.isRelative().isEmpty()
+                            || (teleportInfo.isRelative().isPresent() && teleportInfo.isRelative().get())) {
+                        target.teleportRelative(teleportInfo.getPosition().x, teleportInfo.getPosition().y,
+                                teleportInfo.getPosition().z);
                     } else {
-                        target.teleportTo(teleInfo.getPosition().x, teleInfo.getPosition().y, teleInfo.getPosition().z);
+                        target.teleportTo(teleportInfo.getPosition().x, teleportInfo.getPosition().y,
+                                teleportInfo.getPosition().z);
                     }
                 });
             }
