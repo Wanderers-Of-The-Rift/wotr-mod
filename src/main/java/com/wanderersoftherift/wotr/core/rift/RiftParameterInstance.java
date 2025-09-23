@@ -50,4 +50,31 @@ public class RiftParameterInstance {
     public double get() {
         return finalValue;
     }
+
+    public double getBase() {
+        return baseValue;
+    }
+
+    public double getAccumulatedMultiplier() {
+        return accumulatedMultiplierValue;
+    }
+
+    public double getTotalMultiplier() {
+        return totalMultiplierValue;
+    }
+
+    public void setBase(double value) {
+        baseValue = value;
+        updateFinal();
+    }
+
+    public void setAccumulatedMultiplier(double value) {
+        accumulatedMultiplierValue = value;
+        updateFinal();
+    }
+
+    public void setTotalMultiplier(double value) {
+        totalMultiplierValue = value;
+        updateFinal();
+    }
 }
