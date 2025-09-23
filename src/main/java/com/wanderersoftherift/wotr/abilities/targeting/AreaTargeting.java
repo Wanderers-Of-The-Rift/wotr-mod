@@ -1,87 +1,58 @@
 package com.wanderersoftherift.wotr.abilities.targeting;
 
-import com.mojang.datafixers.Products;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetEntityPredicate;
-import net.minecraft.core.BlockPos;
+import com.wanderersoftherift.wotr.abilities.targeting.shape.TargetAreaShape;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Base type for targeting an area. Subtypes provide logic for the broad AABB to target, and the more narrow targeting
  * within that area (e.g. for a sphere the AABB is the box that contains it, and the targets in the corners are
  * rejected).
  */
-public abstract class AreaTargeting implements AbilityTargeting {
+public class AreaTargeting implements AbilityTargeting {
+    public static final MapCodec<AreaTargeting> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            TargetAreaShape.DIRECT_CODEC.fieldOf("shape").forGetter(AreaTargeting::getShape),
+            TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
+                    .forGetter(AreaTargeting::getEntityPredicate),
+            TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.NONE)
+                    .forGetter(AreaTargeting::getBlockPredicate)
+    ).apply(instance, AreaTargeting::new));
+
+    private static final Vec3 FORWARDS = new Vec3(0, 0, -1);
+
     private final TargetEntityPredicate entityPredicate;
     private final TargetBlockPredicate blockPredicate;
-    private final boolean alignToBlock;
+    private final TargetAreaShape shape;
 
-    public AreaTargeting(TargetEntityPredicate entities, TargetBlockPredicate blocks, boolean alignToBlock) {
+    public AreaTargeting(TargetAreaShape shape, TargetEntityPredicate entities, TargetBlockPredicate blocks) {
+        this.shape = shape;
         this.entityPredicate = entities;
         this.blockPredicate = blocks;
-        this.alignToBlock = alignToBlock;
     }
 
-    protected static <T extends AreaTargeting> Products.P3<RecordCodecBuilder.Mu<T>, TargetEntityPredicate, TargetBlockPredicate, Boolean> commonFields(
-            RecordCodecBuilder.Instance<T> instance) {
-        return instance.group(
-                TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
-                        .forGetter(AreaTargeting::getEntityPredicate),
-                TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.NONE)
-                        .forGetter(AreaTargeting::getBlockPredicate),
-                Codec.BOOL.optionalFieldOf("align_to_block", false).forGetter(AreaTargeting::getAlignToBlock)
-        );
+    @Override
+    public MapCodec<? extends AbilityTargeting> getCodec() {
+        return CODEC;
     }
 
-    /**
-     * Produces the broadphase check for the targeting in the form of an AABB
-     * 
-     * @param source       The source to generate the area from
-     * @param context
-     * @param alignToBlock Whether the area should be aligned with blocks
-     * @return The AABB to search for blocks and/or entities within
-     */
-    protected abstract AABB getArea(HitResult source, AbilityContext context, boolean alignToBlock);
-
-    /**
-     * Produces the narrowphase check for whether an entity is in the area
-     * 
-     * @param source       The source to generate the predicate from
-     * @param broadArea    The broadphase area
-     * @param context
-     * @param alignToBlock Whether the area should be aligned with blocks
-     * @return A predicate to check if individual entity hit results are in the area
-     */
-    protected abstract Predicate<Entity> generateEntityInAreaPredicate(
-            HitResult source,
-            AABB broadArea,
-            AbilityContext context,
-            boolean alignToBlock);
-
-    /**
-     * Produces the narrowphase check for whether a block is in the area
-     * 
-     * @param source       The source to generate the predicate from
-     * @param broadArea    The broadphase area
-     * @param context
-     * @param alignToBlock Whether the area should be aligned with blocks
-     * @return A predicate to check if individual block hit results are in the area
-     */
-    protected abstract Predicate<BlockPos> generateBlockInAreaPredicate(
-            HitResult source,
-            AABB broadArea,
-            AbilityContext context,
-            boolean alignToBlock);
+    @Override
+    public boolean isRelevant(ModifierEffect modifierEffect) {
+        return shape.isRelevant(modifierEffect);
+    }
 
     @Override
     public final List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
@@ -90,15 +61,18 @@ public abstract class AreaTargeting implements AbilityTargeting {
         }
         List<TargetInfo> result = new ArrayList<>();
         for (HitResult source : origin.targets()) {
-            AABB aabb = getArea(source, context, alignToBlock);
+            Vec3 location = source.getLocation();
+            Vec3 direction = getDirection(source);
+            AABB aabb = shape.getAABB(location, direction, context);
+
             List<HitResult> hits = new ArrayList<>();
             if (entityPredicate != TargetEntityPredicate.Trivial.NONE) {
-                var entityNarrowphase = generateEntityInAreaPredicate(source, aabb, context, alignToBlock);
+                var entityNarrowphase = shape.getEntityPredicate(location, direction, context);
                 hits.addAll(TargetingUtil.getEntitiesInArea(level, aabb, (target) -> entityNarrowphase.test(target)
                         && entityPredicate.matches(target, source, context)));
             }
             if (blockPredicate != TargetBlockPredicate.Trivial.NONE) {
-                var blockNarrowphase = generateBlockInAreaPredicate(source, aabb, context, alignToBlock);
+                var blockNarrowphase = shape.getBlockPredicate(location, direction, context);
                 hits.addAll(TargetingUtil.getBlocksInArea(aabb,
                         (pos) -> blockNarrowphase.test(pos) && blockPredicate.matches(pos, source, context)));
             }
@@ -110,15 +84,25 @@ public abstract class AreaTargeting implements AbilityTargeting {
         return result;
     }
 
+    private Vec3 getDirection(HitResult source) {
+        if (source instanceof EntityHitResult entityHitResult) {
+            Entity entity = entityHitResult.getEntity();
+            return entity.calculateViewVector(entity.getXRot(), entity.getYRot());
+        } else if (source instanceof BlockHitResult blockHitResult) {
+            return blockHitResult.getDirection().getUnitVec3();
+        }
+        return FORWARDS;
+    }
+
+    public TargetAreaShape getShape() {
+        return shape;
+    }
+
     public TargetEntityPredicate getEntityPredicate() {
         return entityPredicate;
     }
 
     public TargetBlockPredicate getBlockPredicate() {
         return blockPredicate;
-    }
-
-    public boolean getAlignToBlock() {
-        return alignToBlock;
     }
 }

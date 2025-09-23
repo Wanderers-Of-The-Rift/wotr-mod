@@ -17,7 +17,10 @@
         },
         {
           "type": "wotr:area",
-          "range": 5,
+          "shape": {
+            "type": "wotr:cube",
+            "range": 5
+          },
           "entities": "none",
           "blocks": {
             "filter": {

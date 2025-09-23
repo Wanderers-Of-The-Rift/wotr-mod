@@ -6,7 +6,10 @@
       "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:area",
-        "range": 10,
+        "shape": {
+          "type": "wotr:cube",
+          "range": 10
+        },
         "entities": {
           "sentiment": "foe",
           "exclude_source": true

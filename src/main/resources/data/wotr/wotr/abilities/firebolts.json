@@ -51,7 +51,10 @@
               "type": "wotr:targeting",
               "targeting": {
                 "type": "wotr:area",
-                "range": 4.0,
+                "shape": {
+                  "type": "wotr:cube",
+                  "range": 4.0
+                },
                 "entities": {
                   "sentiment": "not_friend"
                 }

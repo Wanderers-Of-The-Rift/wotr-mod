@@ -37,7 +37,7 @@ public record StoredAbilityContext(UUID instanceId, Holder<Ability> ability, UUI
                     .optionalFieldOf("upgrades", List.of())
                     .forGetter(StoredAbilityContext::upgrades),
             EnhancingModifierInstance.CODEC.listOf()
-                    .fieldOf("enhancements")
+                    .optionalFieldOf("enhancements", List.of())
                     .forGetter(StoredAbilityContext::enhancements),
             DataComponentPatch.CODEC
                     .xmap(patch -> PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, patch),
