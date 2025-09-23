@@ -32,7 +32,10 @@
               "type": "wotr:targeting",
               "targeting": {
                 "type": "wotr:area",
-                "range": 10,
+                "shape": {
+                  "type": "wotr:cube",
+                  "range": 10
+                },
                 "entities": {
                   "exclude_source": true
                 }

@@ -22,11 +22,14 @@
         {
           "type": "wotr:targeting",
           "targeting": {
-            "type": "wotr:radial",
-            "range": 4.0,
+            "type": "wotr:area",
+            "shape": {
+              "type": "wotr:sphere",
+              "range": 4.0,
+              "align_to_block": true
+            },
             "blocks": "all",
-            "entities": "none",
-            "align_to_block": true
+            "entities": "none"
           },
           "effects": [
             {
@@ -39,15 +42,18 @@
           "type": "wotr:targeting",
           "targeting": [
             {
-              "type": "wotr:radial",
-              "range": 5.0,
+              "type": "wotr:area",
+              "shape": {
+                "type": "wotr:sphere",
+                "range": 5.0,
+                "align_to_block": true
+              },
               "blocks": {
                 "filter": {
                   "type": "solid"
                 }
               },
-              "entities": "none",
-              "align_to_block": true
+              "entities": "none"
             },
             {
               "type": "wotr:random_chance",

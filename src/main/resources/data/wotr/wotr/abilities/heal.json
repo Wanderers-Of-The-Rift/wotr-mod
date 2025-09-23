@@ -5,7 +5,10 @@
       "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:area",
-        "range": 2.0,
+        "shape": {
+          "type": "wotr:cube",
+          "range": 2.0
+        },
         "entities": {
           "sentiment": "not_foe"
         }
