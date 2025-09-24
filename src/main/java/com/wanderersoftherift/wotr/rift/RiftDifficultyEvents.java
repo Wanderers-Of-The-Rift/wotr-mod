@@ -3,14 +3,14 @@ package com.wanderersoftherift.wotr.rift;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,13 +18,6 @@ import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class RiftDifficultyEvents {
-
-    public static final ResourceLocation MOB_DAMAGE_MULTIPLIER = WanderersOfTheRift.id(
-            "mob_difficulty/damage_multiplier");
-    public static final ResourceLocation MOB_HEALTH_MULTIPLIER = WanderersOfTheRift.id(
-            "mob_difficulty/health_multiplier");
-    public static final ResourceLocation MOB_SPEED_MULTIPLIER = WanderersOfTheRift.id(
-            "mob_difficulty/speed_multiplier");
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onMobSpawning(FinalizeSpawnEvent event) {
@@ -39,20 +32,20 @@ public class RiftDifficultyEvents {
     private static void applyDifficultyToEntity(LivingEntity livingEntity, ServerLevel serverLevel) {
         var riftData = RiftParameterData.forLevel(serverLevel);
         if (livingEntity instanceof Mob mob && riftData != null) {
-            var damage = riftData.getParameter(MOB_DAMAGE_MULTIPLIER);
-            if (damage != null) {
-                updateAttribute(mob, Attributes.ATTACK_DAMAGE, damage.get());
-            }
-
-            var health = riftData.getParameter(MOB_HEALTH_MULTIPLIER);
-            if (health != null) {
-                updateAttribute(mob, Attributes.MAX_HEALTH, health.get());
-                livingEntity.setHealth(livingEntity.getMaxHealth());
-            }
-            var speed = riftData.getParameter(MOB_SPEED_MULTIPLIER);
-            if (speed != null) {
-                updateAttribute(mob, Attributes.MOVEMENT_SPEED, speed.get());
-            }
+            serverLevel.registryAccess().lookupOrThrow(Registries.ATTRIBUTE).asHolderIdMap().forEach(attribute -> {
+                var parameter = attribute.getData(WotrDataMaps.DIFFICULTY_SCALING);
+                if (parameter == null) {
+                    return;
+                }
+                var value = riftData.getParameter(parameter.getKey().location());
+                if (value == null) {
+                    return;
+                }
+                updateAttribute(mob, attribute, value.get());
+                if ("minecraft:max_health".equals(attribute.getKey().location().toString())) {
+                    livingEntity.setHealth(livingEntity.getMaxHealth());
+                }
+            });
         }
     }
 
