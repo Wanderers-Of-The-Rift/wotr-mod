@@ -1,0 +1,5 @@
+{
+    "type": "wotr:polynomial",
+    "orders": [2, 1],
+    "position": "wotr:rift_shape/base_size"
+}
