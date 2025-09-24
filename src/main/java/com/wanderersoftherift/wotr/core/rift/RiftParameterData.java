@@ -2,14 +2,19 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameter;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.MutableMapCodec;
+import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +28,8 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
     public static final RiftConfigDataType<RiftParameterData> RIFT_CONFIG_DATA_TYPE = RiftConfigDataType.create(CODEC,
             RiftParameterData::initialize);
 
+    private static final long SALT = 676869343536951L;
+
     public RiftParameterData() {
         this(new HashMap<>());
     }
@@ -33,13 +40,29 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
         var params = ImmutableMap.<ResourceLocation, RiftParameterInstance>builder();
         var tierOptional = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_TIER);
         var tier = Objects.requireNonNullElse(tierOptional, 0);
+        var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0), seed + SALT);
         registry.asHolderIdMap().forEach(it -> {
-            var baseValue = it.value().getValue(tier);
             var param = new RiftParameterInstance();
-            param.setBase(baseValue);
-            params.put(it.getKey().location(), param);
+            var key = it.getKey().location();
+            try {
+                var baseValue = getValueFor(it.value(), rng, tier, key, registry);
+                param.setBase(baseValue);
+            } catch (StackOverflowError e) {
+                WanderersOfTheRift.LOGGER.error("definition of rift parameter {} contains reference loop!", key);
+            }
+            params.put(key, param);
         });
         return new RiftParameterData(params.build());
+    }
+
+    private static double getValueFor(
+            RiftParameter value,
+            PositionalRandomFactory rng,
+            int tier,
+            ResourceLocation key,
+            Registry<RiftParameter> registry) {
+        return value.getValue(tier, rng.fromHashOf(key),
+                (key2) -> getValueFor(registry.getValue(key2), rng, tier, key2, registry));
     }
 
     public static RiftParameterData forLevel(ServerLevel level) {

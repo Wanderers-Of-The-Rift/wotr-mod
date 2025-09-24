@@ -2,8 +2,11 @@ package com.wanderersoftherift.wotr.core.rift.parameter;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
+import java.util.function.Function;
 
 public record PolynomialRiftParameter(List<RiftParameter> orderParameters, RiftParameter position)
         implements RegisteredRiftParameter {
@@ -13,11 +16,11 @@ public record PolynomialRiftParameter(List<RiftParameter> orderParameters, RiftP
                             .forGetter(PolynomialRiftParameter::position))
             .apply(instance, PolynomialRiftParameter::new));
 
-    public double getValue(int tier) {
+    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
         var x = 1.0;
         var result = 0.0;
         for (var order : orderParameters) {
-            result += order.getValue(tier) * x;
+            result += order.getValue(tier, rng, parameterGetter) * x;
             x *= tier;
         }
         return result;

@@ -2,6 +2,10 @@ package com.wanderersoftherift.wotr.core.rift.parameter;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+
+import java.util.function.Function;
 
 public record PowRiftParameter(RiftParameter base, RiftParameter exp) implements RegisteredRiftParameter {
     public static final MapCodec<PowRiftParameter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -11,8 +15,8 @@ public record PowRiftParameter(RiftParameter base, RiftParameter exp) implements
             .apply(instance, PowRiftParameter::new));
 
     @Override
-    public double getValue(int tier) {
-        return Math.pow(base().getValue(tier), exp().getValue(tier));
+    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
+        return Math.pow(base().getValue(tier, rng, parameterGetter), exp().getValue(tier, rng, parameterGetter));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.parameter.PolynomialRiftParameter;
 import com.wanderersoftherift.wotr.core.rift.parameter.PowRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.RandomRangeRiftParameter;
 import com.wanderersoftherift.wotr.core.rift.parameter.RegisteredRiftParameter;
 import com.wanderersoftherift.wotr.core.rift.parameter.SumRiftParameter;
 import com.wanderersoftherift.wotr.core.rift.parameter.TableRiftParameter;
@@ -26,4 +27,6 @@ public class WotrRiftParameterTypes {
             "tier", () -> TierRiftParameter.CODEC);
     public static final Supplier<MapCodec<TableRiftParameter>> TABLE = PARAMETER_TYPES.register(
             "table", () -> TableRiftParameter.CODEC);
+    public static final Supplier<MapCodec<RandomRangeRiftParameter>> RANDOM_RANGE = PARAMETER_TYPES.register(
+            "random_range", () -> RandomRangeRiftParameter.CODEC);
 }

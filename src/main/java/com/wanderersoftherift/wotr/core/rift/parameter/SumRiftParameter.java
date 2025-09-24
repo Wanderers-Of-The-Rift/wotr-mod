@@ -1,18 +1,21 @@
 package com.wanderersoftherift.wotr.core.rift.parameter;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
+import java.util.function.Function;
 
 public record SumRiftParameter(List<RiftParameter> values) implements RegisteredRiftParameter {
     public static final MapCodec<SumRiftParameter> CODEC = RiftParameter.CODEC.listOf()
             .xmap(SumRiftParameter::new, SumRiftParameter::values)
             .fieldOf("values");
 
-    public double getValue(int tier) {
+    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
         var result = 0.0;
         for (var order : values) {
-            result += order.getValue(tier);
+            result += order.getValue(tier, rng, parameterGetter);
         }
         return result;
     }
