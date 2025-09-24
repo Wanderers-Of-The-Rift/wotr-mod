@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.rift.objective;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -44,4 +45,11 @@ public interface OngoingObjective {
      * @return The message to display when starting the objective
      */
     Component getObjectiveStartMessage();
+
+    /**
+     * todo this javadoc
+     * 
+     * @param data
+     */
+    void registerUpdaters(RiftParameterData data, RiftData riftData, ServerLevel serverLevel);
 }

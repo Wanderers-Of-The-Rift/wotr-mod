@@ -3,6 +3,10 @@ package com.wanderersoftherift.wotr.core.rift;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 public class RiftParameterInstance {
     public static final Codec<RiftParameterInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
@@ -15,6 +19,7 @@ public class RiftParameterInstance {
     private double baseValue = 0.0;
     private double accumulatedMultiplierValue = 1.0;
     private double totalMultiplierValue = 1.0;
+    private List<Consumer<Double>> listeners = new ArrayList<>();
 
     public RiftParameterInstance() {
 
@@ -45,6 +50,9 @@ public class RiftParameterInstance {
 
     private void updateFinal() {
         finalValue = baseValue * accumulatedMultiplierValue * totalMultiplierValue;
+        for (var listener : listeners) {
+            listener.accept(finalValue);
+        }
     }
 
     public double get() {
@@ -76,5 +84,10 @@ public class RiftParameterInstance {
     public void setTotalMultiplier(double value) {
         totalMultiplierValue = value;
         updateFinal();
+    }
+
+    public void registerListener(Consumer<Double> listener) {
+        listeners.add(listener);
+        listener.accept(finalValue);
     }
 }

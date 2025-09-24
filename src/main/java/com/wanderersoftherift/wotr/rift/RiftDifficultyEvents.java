@@ -40,12 +40,19 @@ public class RiftDifficultyEvents {
         var riftData = RiftParameterData.forLevel(serverLevel);
         if (livingEntity instanceof Mob mob && riftData != null) {
             var damage = riftData.getParameter(MOB_DAMAGE_MULTIPLIER);
+            if (damage != null) {
+                updateAttribute(mob, Attributes.ATTACK_DAMAGE, damage.get());
+            }
+
             var health = riftData.getParameter(MOB_HEALTH_MULTIPLIER);
+            if (health != null) {
+                updateAttribute(mob, Attributes.MAX_HEALTH, health.get());
+                livingEntity.setHealth(livingEntity.getMaxHealth());
+            }
             var speed = riftData.getParameter(MOB_SPEED_MULTIPLIER);
-            updateAttribute(mob, Attributes.ATTACK_DAMAGE, damage.get());
-            updateAttribute(mob, Attributes.MAX_HEALTH, health.get());
-            updateAttribute(mob, Attributes.MOVEMENT_SPEED, speed.get());
-            livingEntity.setHealth(livingEntity.getMaxHealth());
+            if (speed != null) {
+                updateAttribute(mob, Attributes.MOVEMENT_SPEED, speed.get());
+            }
         }
     }
 

@@ -222,6 +222,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_parameter.get", "Current value of parameter is %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_parameter.set", "Updated value of parameter %s -> %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.missing",
+                "This parameter does not exist in this world");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
         add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");

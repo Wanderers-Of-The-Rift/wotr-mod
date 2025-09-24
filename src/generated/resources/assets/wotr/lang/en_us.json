@@ -292,6 +292,7 @@
   "command.wotr.rift_key.set_theme": "Rift key theme set to %s",
   "command.wotr.rift_key.set_tier": "Rift key tier set to %s",
   "command.wotr.rift_parameter.get": "Current value of parameter is %s",
+  "command.wotr.rift_parameter.missing": "This parameter does not exist in this world",
   "command.wotr.rift_parameter.set": "Updated value of parameter %s -> %s",
   "command.wotr.set_attribute": "%s set to %s",
   "command.wotr.show_attribute": "%s: %s",

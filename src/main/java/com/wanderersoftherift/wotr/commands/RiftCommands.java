@@ -29,6 +29,14 @@ import java.util.function.Function;
 public class RiftCommands extends BaseCommand {
     private static final DynamicCommandExceptionType ERROR_INVALID_RIFT_PARAMETER = new DynamicCommandExceptionType(
             id -> Component.translatableEscape("command." + WanderersOfTheRift.MODID + ".invalid_rift_parameter", id));
+    private static final BiConsumer<RiftParameterInstance, Double> NOOP_SETTER = (parameterInstance, oldValue) -> {
+    };
+    private static final String PARAMETER_SET_TRANSLATION_KEY = "command." + WanderersOfTheRift.MODID
+            + ".rift_parameter.set";
+    private static final String PARAMETER_GET_TRANSLATION_KEY = "command." + WanderersOfTheRift.MODID
+            + ".rift_parameter.get";
+    private static final String PARAMETER_MISSING_TRANSLATION_KEY = "command." + WanderersOfTheRift.MODID
+            + ".rift_parameter.MISSING";
 
     public RiftCommands() {
         super("rift", Commands.LEVEL_GAMEMASTERS);
@@ -74,20 +82,17 @@ public class RiftCommands extends BaseCommand {
                 .executes(ctx -> updateParameter(
                         ctx, ResourceKeyArgument.resolveKey(ctx, parameterName,
                                 WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, ERROR_INVALID_RIFT_PARAMETER),
-                        getter, (parameterInstance, oldValue) -> {
-                        }, "command." + WanderersOfTheRift.MODID + ".rift_parameter.get"));
+                        getter, NOOP_SETTER, PARAMETER_GET_TRANSLATION_KEY));
         for (var updater : updaters) {
             node = node.then(Commands.literal(updater.getA())
                     .then(Commands.argument(value, DoubleArgumentType.doubleArg())
-                            .executes(ctx -> updateParameter(
-                                    ctx,
+                            .executes(ctx -> updateParameter(ctx,
                                     ResourceKeyArgument.resolveKey(ctx, parameterName,
                                             WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, ERROR_INVALID_RIFT_PARAMETER),
                                     getter,
                                     (param, oldValue) -> updater.getB()
                                             .set(param, oldValue, DoubleArgumentType.getDouble(ctx, value)),
-                                    "command." + WanderersOfTheRift.MODID + ".rift_parameter.set"
-                            ))));
+                                    PARAMETER_SET_TRANSLATION_KEY))));
         }
         return node;
     }
@@ -106,6 +111,10 @@ public class RiftCommands extends BaseCommand {
         var parameterData = RiftParameterData.forLevel(level);
 
         var parameter = parameterData.getParameter(riftParameterReference.key().location());
+        if (parameter == null) {
+            ctx.getSource().sendSuccess(() -> Component.translatable(PARAMETER_MISSING_TRANSLATION_KEY), true);
+            return 0;
+        }
         var oldValue = getter.apply(parameter);
         setter.accept(parameter, oldValue);
         var newValue = getter.apply(parameter);
@@ -117,12 +126,8 @@ public class RiftCommands extends BaseCommand {
     private int getParameter(
             CommandContext<CommandSourceStack> ctx,
             Holder.Reference<RiftParameter> riftParameterReference) {
-        var level = ctx.getSource().getLevel();
-        var parameterData = RiftParameterData.forLevel(level);
-        ctx.getSource()
-                .sendSuccess(() -> Component.translatable("command." + WanderersOfTheRift.MODID + ".rift_parameter.get",
-                        parameterData.getParameter(riftParameterReference.key().location()).getBase()), true);
-        return 1;
+        return updateParameter(ctx, riftParameterReference, RiftParameterInstance::get, NOOP_SETTER,
+                PARAMETER_GET_TRANSLATION_KEY);
     }
 
     private int exitRift(CommandContext<CommandSourceStack> ctx) {

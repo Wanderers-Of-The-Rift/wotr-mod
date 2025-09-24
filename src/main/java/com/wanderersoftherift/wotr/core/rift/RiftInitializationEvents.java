@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
@@ -14,6 +14,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
@@ -107,13 +108,19 @@ public class RiftInitializationEvents {
         event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     private static void initRiftParameters(RiftEvent.Created.Post event) {
-        var registry = event.getLevel().registryAccess().lookupOrThrow(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS);
-        registry.asHolderIdMap().forEach(it -> {
-            RiftParameterData.forLevel(event.getLevel())
-                    .getParameter(it.getKey().location())
-                    .addBase(it.value().getValue(event.getConfig().tier()));
-        });
+        var newParams = new HashMap<ResourceLocation, RiftParameterInstance>();
+        event.getConfig()
+                .getCustomData(WotrRiftConfigDataTypes.INITIAL_RIFT_PARAMETERS)
+                .parameters()
+                .forEach((key, value) -> {
+                    var newParam = new RiftParameterInstance();
+                    newParam.setBase(value.getBase());
+                    newParam.setAccumulatedMultiplier(value.getAccumulatedMultiplier());
+                    newParam.setTotalMultiplier(value.getTotalMultiplier());
+                    newParams.put(key, newParam);
+                });
+        event.getLevel().setData(WotrAttachments.RIFT_PARAMETER_DATA, new RiftParameterData(newParams));
     }
 }

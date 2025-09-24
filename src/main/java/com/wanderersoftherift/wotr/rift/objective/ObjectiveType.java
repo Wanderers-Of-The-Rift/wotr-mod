@@ -2,13 +2,14 @@ package com.wanderersoftherift.wotr.rift.objective;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 import java.util.function.Function;
 
@@ -29,9 +30,10 @@ public interface ObjectiveType {
 
     /**
      * Generates an objective instance from this definition. This allows for randomised elements
-     * 
-     * @param level The level to generate the objective detail for
+     *
+     * @param level  The level to generate the objective detail for
+     * @param config
      * @return An ongoing objective instance from this objective definition
      */
-    OngoingObjective generate(LevelAccessor level);
+    OngoingObjective generate(ServerLevelAccessor level, RiftConfig config);
 }

@@ -5,12 +5,18 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ProgressObjective;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.Optional;
 
 /**
  * Ongoing kill objective
@@ -19,18 +25,23 @@ public class KillOngoingObjective implements ProgressObjective {
 
     public static final MapCodec<KillOngoingObjective> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Codec.INT.fieldOf("targetKills").forGetter(KillOngoingObjective::getTargetProgress),
-                    Codec.INT.fieldOf("currentKills").forGetter(KillOngoingObjective::getCurrentProgress)
+                    ResourceLocation.CODEC.fieldOf("target_parameter_key")
+                            .forGetter(KillOngoingObjective::getTargetParameterKey),
+                    Codec.INT.fieldOf("target_kills")
+                            .forGetter(killOngoingObjective -> killOngoingObjective.getTargetProgress()),
+                    Codec.INT.fieldOf("current_kills").forGetter(KillOngoingObjective::getCurrentProgress)
             ).apply(instance, KillOngoingObjective::new));
 
-    private final int targetKills;
+    private final ResourceLocation targetParameterKey;
+    private int targetKills;
     private int currentKills;
 
-    public KillOngoingObjective(int targetKills) {
-        this(targetKills, 0);
+    public KillOngoingObjective(ResourceLocation targetParameterKey, int targetKills) {
+        this(targetParameterKey, targetKills, 0);
     }
 
-    public KillOngoingObjective(int targetKills, int currentKills) {
+    public KillOngoingObjective(ResourceLocation targetParameterKey, int targetKills, int currentKills) {
+        this.targetParameterKey = targetParameterKey;
         this.targetKills = targetKills;
         this.currentKills = currentKills;
     }
@@ -60,6 +71,26 @@ public class KillOngoingObjective implements ProgressObjective {
     @Override
     public int getTargetProgress() {
         return targetKills;
+    }
+
+    public void setTargetProgress(int target) {
+        this.targetKills = target;
+    }
+
+    public void registerUpdaters(RiftParameterData data, RiftData riftData, ServerLevel serverLevel) {
+        var param = data.getParameter(targetParameterKey);
+        if (param != null) {
+            param.registerListener(newValue -> {
+                setTargetProgress(newValue.intValue());
+                riftData.setDirty();
+                PacketDistributor.sendToPlayersInDimension(serverLevel,
+                        new S2CRiftObjectiveStatusPacket(Optional.of(this)));
+            });
+        }
+    }
+
+    private ResourceLocation getTargetParameterKey() {
+        return targetParameterKey;
     }
 
     @Override
