@@ -27,7 +27,7 @@ import java.util.function.Function;
  * Commands relating to the rift level for testing
  */
 public class RiftCommands extends BaseCommand {
-    private static final DynamicCommandExceptionType ERROR_INVALID_RIFT_PARAMETER = new DynamicCommandExceptionType(
+    static final DynamicCommandExceptionType ERROR_INVALID_RIFT_PARAMETER = new DynamicCommandExceptionType(
             id -> Component.translatableEscape("command." + WanderersOfTheRift.MODID + ".invalid_rift_parameter", id));
     private static final BiConsumer<RiftParameterInstance, Double> NOOP_SETTER = (parameterInstance, oldValue) -> {
     };
@@ -36,7 +36,7 @@ public class RiftCommands extends BaseCommand {
     private static final String PARAMETER_GET_TRANSLATION_KEY = "command." + WanderersOfTheRift.MODID
             + ".rift_parameter.get";
     private static final String PARAMETER_MISSING_TRANSLATION_KEY = "command." + WanderersOfTheRift.MODID
-            + ".rift_parameter.MISSING";
+            + ".rift_parameter.missing";
 
     public RiftCommands() {
         super("rift", Commands.LEVEL_GAMEMASTERS);

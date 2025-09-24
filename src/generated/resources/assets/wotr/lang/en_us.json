@@ -600,6 +600,7 @@
   "tooltip.wotr.mana_bar": "Mana: %s/%s",
   "tooltip.wotr.rift_key_generator_preset": "Generator Preset: %s",
   "tooltip.wotr.rift_key_objective": "Objective: %s",
+  "tooltip.wotr.rift_key_parameter_entry": "%s: %s",
   "tooltip.wotr.rift_key_seed": "Seed: %s",
   "tooltip.wotr.rift_key_theme": "Theme: %s",
   "tooltip.wotr.rift_key_tier": "Tier: %s",

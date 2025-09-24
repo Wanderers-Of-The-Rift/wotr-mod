@@ -277,6 +277,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_parameter_entry", "%s: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");

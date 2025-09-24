@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftKeyParameterData;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
@@ -86,6 +87,9 @@ public class WotrDataComponentType {
                 ByteBufCodecs.fromCodecWithRegistries(ListEdit.editCodec(JigsawListProcessor.CODEC))
                         .apply(ByteBufCodecs.list())
         );
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<RiftKeyParameterData>> RIFT_PARAMETERS = register(
+                "rift_config/rift_parameters", RiftKeyParameterData.CODEC,
+                ByteBufCodecs.fromCodecWithRegistries(RiftKeyParameterData.CODEC));
     }
 
     static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(

@@ -41,11 +41,12 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
         var tierOptional = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_TIER);
         var tier = Objects.requireNonNullElse(tierOptional, 0);
         var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0), seed + SALT);
+        var riftKeyParameters = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
         registry.asHolderIdMap().forEach(it -> {
             var param = new RiftParameterInstance();
             var key = it.getKey().location();
             try {
-                var baseValue = getValueFor(it.value(), rng, tier, key, registry);
+                var baseValue = getValueFor(it.value(), rng, tier, key, registry, riftKeyParameters);
                 param.setBase(baseValue);
             } catch (StackOverflowError e) {
                 WanderersOfTheRift.LOGGER.error("definition of rift parameter {} contains reference loop!", key);
@@ -56,13 +57,20 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
     }
 
     private static double getValueFor(
-            RiftParameter value,
+            RiftParameter config,
             PositionalRandomFactory rng,
             int tier,
             ResourceLocation key,
-            Registry<RiftParameter> registry) {
-        return value.getValue(tier, rng.fromHashOf(key),
-                (key2) -> getValueFor(registry.getValue(key2), rng, tier, key2, registry));
+            Registry<RiftParameter> registry,
+            RiftKeyParameterData riftKeyParameters) {
+        if (riftKeyParameters != null) {
+            var keyValue = riftKeyParameters.getParameter(key);
+            if (keyValue != null) {
+                return keyValue;
+            }
+        }
+        return config.getValue(tier, rng.fromHashOf(key),
+                (key2) -> getValueFor(registry.getValue(key2), rng, tier, key2, registry, riftKeyParameters));
     }
 
     public static RiftParameterData forLevel(ServerLevel level) {

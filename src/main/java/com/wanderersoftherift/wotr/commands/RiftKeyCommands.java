@@ -5,6 +5,7 @@ import com.google.gson.FormattingStyle;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -14,6 +15,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.core.rift.RiftKeyParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameter;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -79,6 +82,8 @@ public class RiftKeyCommands extends BaseCommand {
         String tierArg = "tier";
         String objectiveArg = "objective";
         String seedArg = "seed";
+        String parameterNameArg = "parameterArg";
+        String parameterValueArg = "valueArg";
         builder.then(Commands.literal("tier")
                 .then(Commands.argument(tierArg, IntegerArgumentType.integer(0))
                         .executes(ctx -> configTier(ctx, IntegerArgumentType.getInteger(ctx, tierArg)))))
@@ -98,6 +103,24 @@ public class RiftKeyCommands extends BaseCommand {
                         .then(Commands.argument(seedArg, LongArgumentType.longArg())
                                 .executes(ctx -> configSeed(ctx, LongArgumentType.getLong(ctx, seedArg))))
                         .then(Commands.literal("random").executes(ctx -> configSeed(ctx, null))))
+                .then(Commands.literal("parameter")
+                        .then(Commands
+                                .argument(parameterNameArg,
+                                        ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS))
+                                .then(Commands.argument(parameterValueArg, DoubleArgumentType.doubleArg())
+                                        .executes(ctx -> configParameterSet(ctx,
+                                                ResourceKeyArgument.resolveKey(ctx, parameterNameArg,
+                                                        WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS,
+                                                        RiftCommands.ERROR_INVALID_RIFT_PARAMETER),
+                                                DoubleArgumentType.getDouble(ctx, parameterValueArg)
+                                        )))
+                                .then(Commands.literal("remove")
+                                        .executes(ctx -> configParameterRemove(ctx,
+                                                ResourceKeyArgument.resolveKey(ctx, parameterNameArg,
+                                                        WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS,
+                                                        RiftCommands.ERROR_INVALID_RIFT_PARAMETER)
+                                        )))
+                        ))
                 .then(generatorCommands());
     }
 
@@ -195,6 +218,35 @@ public class RiftKeyCommands extends BaseCommand {
                                         .executes(ctx -> configExportGenerator(ctx,
                                                 ResourceLocationArgument.getId(ctx, export)))
                         ));
+    }
+
+    private int configParameterSet(
+            CommandContext<CommandSourceStack> ctx,
+            Holder.Reference<RiftParameter> riftParameterReference,
+            double value) {
+        return applyToRiftKey(ctx, (riftKey) -> {
+            var currentParameters = riftKey.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
+            if (currentParameters == null) {
+                currentParameters = new RiftKeyParameterData();
+            }
+            currentParameters = currentParameters.withParameter(riftParameterReference.key().location(), value);
+            riftKey.set(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS, currentParameters);
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.parameter.set"));
+        });
+    }
+
+    private int configParameterRemove(
+            CommandContext<CommandSourceStack> ctx,
+            Holder.Reference<RiftParameter> riftParameterReference) {
+        return applyToRiftKey(ctx, (riftKey) -> {
+            var currentParameters = riftKey.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
+            if (currentParameters == null) {
+                currentParameters = new RiftKeyParameterData();
+            }
+            currentParameters = currentParameters.withoutParameter(riftParameterReference.key().location());
+            riftKey.set(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS, currentParameters);
+            return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.parameter.remove"));
+        });
     }
 
     private int configAddRoom(
