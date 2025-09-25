@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.entity.player;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -36,11 +37,13 @@ public final class StatisticsEventHandler {
     }
 
     @SubscribeEvent
-    public static void applySecondaryAttributeChanges(PlayerAttributeChangedEvent event) {
-        SecondaryAttributes data = event.getAttribute().getData(WotrDataMaps.SECONDARY_ATTRIBUTES);
-        if (data != null) {
-            int value = (int) event.getEntity().getAttributeValue(event.getAttribute());
-            data.apply(event.getEntity(), value);
+    public static void applySecondaryAttributeChanges(LivingAttributeChangedEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            SecondaryAttributes data = event.getAttribute().getData(WotrDataMaps.SECONDARY_ATTRIBUTES);
+            if (data != null) {
+                int value = (int) player.getAttributeValue(event.getAttribute());
+                data.apply(player, value);
+            }
         }
     }
 

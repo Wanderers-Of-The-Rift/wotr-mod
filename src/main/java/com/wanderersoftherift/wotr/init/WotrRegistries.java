@@ -4,11 +4,12 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
+import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.abilities.EffectMarker;
-import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
+import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
@@ -116,7 +117,7 @@ public class WotrRegistries {
             Keys.THEME_SOURCE_TYPES).create();
     public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
-    public static final Registry<TrackedAbilityTrigger.TriggerType<?>> TRACKED_ABILITY_TRIGGERS = new RegistryBuilder<>(
+    public static final Registry<TrackableTrigger.TriggerType<?>> TRACKABLE_TRIGGERS = new RegistryBuilder<>(
             Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
     public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
             Keys.ABILITY_SOURCES).sync(true).create();
@@ -175,8 +176,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
-        public static final ResourceKey<Registry<TrackedAbilityTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("tracked_ability_activation"));
+        public static final ResourceKey<Registry<TrackableTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("trackable_trigger"));
 
         // Quests
         public static final ResourceKey<Registry<Quest>> QUESTS = ResourceKey
@@ -217,6 +218,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_source"));
         public static final ResourceKey<Registry<DualCodec<? extends ModifierSource>>> MODIFIER_SOURCES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("modifier_source"));
+        public static final ResourceKey<Registry<AbilityResource>> ABILITY_RESOURCES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("ability_resources"));
 
         // Mobs
         public static final ResourceKey<Registry<MapCodec<? extends MobInteraction>>> MOB_INTERACTIONS = ResourceKey
@@ -246,7 +249,7 @@ public class WotrRegistries {
         event.register(REWARD_TYPES);
         event.register(MOB_INTERACTIONS);
         event.register(EDIT_TYPES);
-        event.register(TRACKED_ABILITY_TRIGGERS);
+        event.register(TRACKABLE_TRIGGERS);
         event.register(ABILITY_SOURCES);
         event.register(MODIFIER_SOURCES);
 
@@ -280,5 +283,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
+        event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
     }
 }

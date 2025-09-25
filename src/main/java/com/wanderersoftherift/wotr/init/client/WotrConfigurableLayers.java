@@ -8,8 +8,8 @@ import com.wanderersoftherift.wotr.gui.config.ConfigurableLayerAdapter;
 import com.wanderersoftherift.wotr.gui.config.FixedSizeLayerAdapter;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.layer.AbilityBar;
+import com.wanderersoftherift.wotr.gui.layer.AbilityResourceBars;
 import com.wanderersoftherift.wotr.gui.layer.EffectBar;
-import com.wanderersoftherift.wotr.gui.layer.ManaBar;
 import com.wanderersoftherift.wotr.gui.layer.objective.ObjectiveLayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +29,8 @@ public class WotrConfigurableLayers {
             .create(WotrClientRegistries.Keys.CONFIGURABLE_LAYERS, WanderersOfTheRift.MODID);
 
     public static final Supplier<ConfigurableLayer> ABILITY_BAR = LAYERS.register("ability_bar", AbilityBar::new);
-    public static final Supplier<ConfigurableLayer> MANA_BAR = LAYERS.register("mana_bar", ManaBar::new);
+    public static final Supplier<ConfigurableLayer> ABILITY_RESOURCE_BARS = LAYERS.register("ability_resource_bars",
+            AbilityResourceBars::new);
     public static final Supplier<ConfigurableLayer> EFFECT_BAR = LAYERS.register("effect_bar", EffectBar::new);
     public static final Supplier<ConfigurableLayer> OBJECTIVE = LAYERS.register("objective", ObjectiveLayer::new);
 

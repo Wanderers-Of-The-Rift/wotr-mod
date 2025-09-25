@@ -1,0 +1,20 @@
+{
+    "color": -7829249,
+    "maximum": "wotr:max_mana",
+    "modificators": {
+        "recharge": {
+            "amount": "wotr:mana_regen_rate",
+            "action": {
+                "type": "wotr:tick"
+            },
+            "is_positive": true
+        },
+        "drain": {
+            "amount": "wotr:mana_degen_rate",
+            "action": {
+                "type": "wotr:tick"
+            },
+            "is_positive": false
+        }
+    }
+}
