@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.entity.npc.QuestGiverInteract;
+import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.ChatFormatting;
@@ -19,7 +20,9 @@ import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -37,6 +40,7 @@ public class DebugCommands extends BaseCommand {
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
         builder.then(Commands.literal("devWorld").executes(this::devWorld));
         builder.then(Commands.literal("listItemStackComponents").executes(this::listItemStackComponents));
+        builder.then(Commands.literal("openTradingMenu").executes(this::openTradingMenu));
         builder.then(
                 Commands.literal("makeQuestGiver")
                         .then(Commands.argument("mob", EntityArgument.entity())
@@ -78,6 +82,20 @@ public class DebugCommands extends BaseCommand {
                                 new QuestGiverInteract(Optional.of(holders), count))
                 );
         return 1;
+    }
+
+    private int openTradingMenu(CommandContext<CommandSourceStack> context) {
+        if (context.getSource().getPlayer() != null) {
+            context.getSource()
+                    .getPlayer()
+                    .openMenu(new SimpleMenuProvider(
+                            ((containerId, playerInventory, player) -> new TradingMenu(containerId, playerInventory,
+                                    ContainerLevelAccess.create(player.level(), player.getOnPos()),
+                                    context.getSource().getPlayer().getData(WotrAttachments.WALLET))),
+                            Component.translatable(WanderersOfTheRift.translationId("container", "trading"), "Guild")));
+            return 1;
+        }
+        return 0;
     }
 
     private int devWorld(CommandContext<CommandSourceStack> stack) {
