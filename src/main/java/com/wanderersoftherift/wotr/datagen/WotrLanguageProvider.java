@@ -217,7 +217,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".invalid_objective", "Invalid objective '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_generator_preset", "Invalid generator preset '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_template_pool", "Invalid template pool '%s'");
-        add("command." + WanderersOfTheRift.MODID + ".invalid_rift_parametert", "Invalid rift parameter %s");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_rift_parameter", "Invalid rift parameter %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
         add("command." + WanderersOfTheRift.MODID + ".rift_parameter.get", "Current value of parameter is %s");
