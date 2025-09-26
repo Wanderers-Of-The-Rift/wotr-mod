@@ -6,9 +6,11 @@ import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -34,6 +36,20 @@ public interface AnomalyTask<T> {
     int particleColor();
 
     AnomalyTaskDisplay taskDisplay(T task);
+
+    default void handleMobDeath(LivingEntity mob, AnomalyBlockEntity anomalyBlockEntity, T state) {
+    }
+
+    /**
+     *
+     * @param serverLevel
+     * @param anomalyBlockEntity
+     * @param state
+     * @return delay until next tick
+     */
+    default int scheduledTick(ServerLevel serverLevel, AnomalyBlockEntity anomalyBlockEntity, T state) {
+        return -1;
+    }
 
     record AnomalyTaskType<T>(MapCodec<? extends AnomalyTask<T>> mainCodec, Codec<T> stateCodec) {
     }

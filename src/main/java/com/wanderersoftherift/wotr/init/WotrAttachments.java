@@ -13,7 +13,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
-import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleMobAttachment;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.DeathNotifierAttachment;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
@@ -40,11 +40,12 @@ public class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
 
-    public static final Supplier<AttachmentType<BattleMobAttachment>> BATTLE_TASK_MOB = ATTACHMENT_TYPES.register(
-            "battle_task_mob",
-            () -> AttachmentType.builder(() -> new BattleMobAttachment(BlockPos.ZERO))
-                    .serialize(BattleMobAttachment.CODEC)
-                    .build());
+    public static final Supplier<AttachmentType<DeathNotifierAttachment>> DEATH_NOTIFICATION = ATTACHMENT_TYPES
+            .register(
+                    "death_notification",
+                    () -> AttachmentType.builder(() -> new DeathNotifierAttachment(BlockPos.ZERO))
+                            .serialize(DeathNotifierAttachment.CODEC)
+                            .build());
 
     public static final Supplier<AttachmentType<List<ItemStack>>> RESPAWN_ITEMS = ATTACHMENT_TYPES.register(
             "respawn_items",

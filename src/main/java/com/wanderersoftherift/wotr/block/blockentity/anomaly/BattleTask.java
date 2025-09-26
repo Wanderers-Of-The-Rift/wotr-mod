@@ -18,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -106,11 +107,12 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
         };
     }
 
-    public void handleMobDeath(UUID mob, BattleTaskState state, AnomalyBlockEntity anomalyBlockEntity) {
+    @Override
+    public void handleMobDeath(LivingEntity mob, AnomalyBlockEntity anomalyBlockEntity, BattleTaskState state) {
         if (!state.isInProgress()) {
             return;
         }
-        state.mobs().remove(mob);
+        state.mobs().remove(mob.getUUID());
         if (state.isRewarding()) {
             anomalyBlockEntity.getLevel()
                     .scheduleTick(anomalyBlockEntity.getBlockPos(), anomalyBlockEntity.getBlockState().getBlock(), 1);
@@ -169,7 +171,7 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
 
         @Override
         public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-            mob.setData(WotrAttachments.BATTLE_TASK_MOB, new BattleMobAttachment(spawner.getBlockPos()));
+            mob.setData(WotrAttachments.DEATH_NOTIFICATION, new DeathNotifierAttachment(spawner.getBlockPos()));
         }
     }
 
