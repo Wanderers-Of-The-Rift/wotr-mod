@@ -122,7 +122,7 @@ public class RiftKey extends Item {
             for (var parameter : parameters.parameters().entrySet()) {
                 components.add(Component
                         .translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_parameter_entry",
-                                parameter.getKey().toString(), parameter.getValue().doubleValue())
+                                parameter.getKey().location().toString(), parameter.getValue().doubleValue())
                         .withColor(ChatFormatting.GRAY.getColor()));
             }
         }

@@ -27,7 +27,7 @@ public record KillObjective(Holder<RiftParameter> quantity) implements Objective
     @Override
     public OngoingObjective generate(ServerLevelAccessor level, RiftConfig config) {
         var parameters = config.getCustomData(WotrRiftConfigDataTypes.INITIAL_RIFT_PARAMETERS);
-        var key = quantity.getKey().location();
+        var key = quantity.getKey();
         var param = parameters.getParameter(key);
         if (param == null) {
             return new KillOngoingObjective(key, 0);

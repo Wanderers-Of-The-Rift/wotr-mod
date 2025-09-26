@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterInstance;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
@@ -112,7 +113,7 @@ public class RiftInitializationEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     private static void initRiftParameters(RiftEvent.Created.Post event) {
-        var newParams = new HashMap<ResourceLocation, RiftParameterInstance>();
+        var newParams = new HashMap<ResourceKey<RiftParameter>, RiftParameterInstance>();
         event.getConfig()
                 .getCustomData(WotrRiftConfigDataTypes.INITIAL_RIFT_PARAMETERS)
                 .parameters()

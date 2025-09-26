@@ -37,7 +37,7 @@ public class RiftDifficultyEvents {
                 if (parameter == null) {
                     return;
                 }
-                var value = riftData.getParameter(parameter.getKey().location());
+                var value = riftData.getParameter(parameter.getKey());
                 if (value == null) {
                     return;
                 }

@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public record PolynomialRiftParameter(List<RiftParameter> orderParameters, RiftP
                             .forGetter(PolynomialRiftParameter::position))
             .apply(instance, PolynomialRiftParameter::new));
 
-    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
+    public double getValue(int tier, RandomSource rng, Function<ResourceKey<RiftParameter>, Double> parameterGetter) {
         var x = position.getValue(tier, rng, parameterGetter);
         var x2 = 1.0;
         var result = 0.0;

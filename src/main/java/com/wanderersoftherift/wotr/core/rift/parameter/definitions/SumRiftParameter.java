@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public record SumRiftParameter(List<RiftParameter> values) implements Registered
             .xmap(SumRiftParameter::new, SumRiftParameter::values)
             .fieldOf("values");
 
-    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
+    public double getValue(int tier, RandomSource rng, Function<ResourceKey<RiftParameter>, Double> parameterGetter) {
         var result = 0.0;
         for (var order : values) {
             result += order.getValue(tier, rng, parameterGetter);

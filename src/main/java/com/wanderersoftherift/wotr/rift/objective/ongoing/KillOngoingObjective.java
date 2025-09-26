@@ -6,11 +6,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ProgressObjective;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -25,22 +27,23 @@ public class KillOngoingObjective implements ProgressObjective {
 
     public static final MapCodec<KillOngoingObjective> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    ResourceLocation.CODEC.fieldOf("target_parameter_key")
+                    ResourceKey.codec(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS)
+                            .fieldOf("target_parameter_key")
                             .forGetter(KillOngoingObjective::getTargetParameterKey),
                     Codec.INT.fieldOf("target_kills")
                             .forGetter(killOngoingObjective -> killOngoingObjective.getTargetProgress()),
                     Codec.INT.fieldOf("current_kills").forGetter(KillOngoingObjective::getCurrentProgress)
             ).apply(instance, KillOngoingObjective::new));
 
-    private final ResourceLocation targetParameterKey;
+    private final ResourceKey<RiftParameter> targetParameterKey;
     private int targetKills;
     private int currentKills;
 
-    public KillOngoingObjective(ResourceLocation targetParameterKey, int targetKills) {
+    public KillOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, int targetKills) {
         this(targetParameterKey, targetKills, 0);
     }
 
-    public KillOngoingObjective(ResourceLocation targetParameterKey, int targetKills, int currentKills) {
+    public KillOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, int targetKills, int currentKills) {
         this.targetParameterKey = targetParameterKey;
         this.targetKills = targetKills;
         this.currentKills = currentKills;
@@ -89,7 +92,7 @@ public class KillOngoingObjective implements ProgressObjective {
         }
     }
 
-    private ResourceLocation getTargetParameterKey() {
+    private ResourceKey<RiftParameter> getTargetParameterKey() {
         return targetParameterKey;
     }
 

@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 
 import java.util.function.Function;
@@ -17,7 +17,7 @@ public record RandomRangeRiftParameter(RiftParameter min, RiftParameter max) imp
                     .apply(instance, RandomRangeRiftParameter::new));
 
     @Override
-    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
+    public double getValue(int tier, RandomSource rng, Function<ResourceKey<RiftParameter>, Double> parameterGetter) {
         var min = min().getValue(tier, rng, parameterGetter);
         var max = max().getValue(tier, rng, parameterGetter);
         return rng.nextDouble() * (max - min) + min;

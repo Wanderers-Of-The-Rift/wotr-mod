@@ -27,7 +27,7 @@ public record StealthObjective(Holder<RiftParameter> stealthTicks) implements Ob
     @Override
     public OngoingObjective generate(ServerLevelAccessor level, RiftConfig config) {
         var parameters = config.getCustomData(WotrRiftConfigDataTypes.INITIAL_RIFT_PARAMETERS);
-        var key = stealthTicks.getKey().location();
+        var key = stealthTicks.getKey();
         var param = parameters.getParameter(key);
         if (param == null) {
             return new StealthOngoingObjective(key, 0);

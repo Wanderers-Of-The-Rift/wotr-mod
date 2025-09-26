@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public record TableRiftParameter(List<Double> values) implements RegisteredRiftP
             .xmap(TableRiftParameter::new, TableRiftParameter::values)
             .fieldOf("values");
 
-    public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
+    public double getValue(int tier, RandomSource rng, Function<ResourceKey<RiftParameter>, Double> parameterGetter) {
         if (tier >= values.size()) {
             return values.getLast();
         }

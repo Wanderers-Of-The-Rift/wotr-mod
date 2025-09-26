@@ -110,7 +110,7 @@ public class RiftCommands extends BaseCommand {
         var level = ctx.getSource().getLevel();
         var parameterData = RiftParameterData.forLevel(level);
 
-        var parameter = parameterData.getParameter(riftParameterReference.key().location());
+        var parameter = parameterData.getParameter(riftParameterReference.key());
         if (parameter == null) {
             ctx.getSource().sendSuccess(() -> Component.translatable(PARAMETER_MISSING_TRANSLATION_KEY), true);
             return 0;

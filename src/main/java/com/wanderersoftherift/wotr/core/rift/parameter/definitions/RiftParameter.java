@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 
 import java.util.function.Function;
@@ -24,5 +24,5 @@ public interface RiftParameter {
                 default -> throw new IllegalStateException("Unexpected value: " + it);
             });
 
-    double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter);
+    double getValue(int tier, RandomSource rng, Function<ResourceKey<RiftParameter>, Double> parameterGetter);
 }

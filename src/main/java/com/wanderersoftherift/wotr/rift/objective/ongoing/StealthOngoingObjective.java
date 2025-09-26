@@ -6,10 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -23,21 +25,23 @@ public class StealthOngoingObjective implements OngoingObjective {
 
     public static final MapCodec<StealthOngoingObjective> CODEC = RecordCodecBuilder.mapCodec(
             inst -> inst.group(
-                    ResourceLocation.CODEC.fieldOf("target_parameter_key")
+                    ResourceKey.codec(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS)
+                            .fieldOf("target_parameter_key")
                             .forGetter(StealthOngoingObjective::getTargetParameterKey),
                     Codec.INT.fieldOf("target_progress").forGetter(StealthOngoingObjective::getTargetProgress),
                     Codec.INT.fieldOf("alarm_progress").forGetter(StealthOngoingObjective::getAlarmProgress)
             ).apply(inst, StealthOngoingObjective::new));
 
-    private final ResourceLocation targetParameterKey;
+    private final ResourceKey<RiftParameter> targetParameterKey;
     private int targetProgress;
     private int alarmProgress;
 
-    public StealthOngoingObjective(ResourceLocation targetParameterKey, int targetProgress) {
+    public StealthOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, int targetProgress) {
         this(targetParameterKey, targetProgress, 0);
     }
 
-    public StealthOngoingObjective(ResourceLocation targetParameterKey, int targetProgress, int alarmProgress) {
+    public StealthOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, int targetProgress,
+            int alarmProgress) {
         this.targetParameterKey = targetParameterKey;
         this.targetProgress = targetProgress;
         this.alarmProgress = alarmProgress;
@@ -86,7 +90,7 @@ public class StealthOngoingObjective implements OngoingObjective {
         }
     }
 
-    private ResourceLocation getTargetParameterKey() {
+    private ResourceKey<RiftParameter> getTargetParameterKey() {
         return targetParameterKey;
     }
 

@@ -3,13 +3,15 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.CoarseDiamondRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
@@ -22,12 +24,14 @@ public record DefaultLayoutFactory(List<LayeredRiftLayout.LayoutLayer.Factory> l
             .xmap(DefaultLayoutFactory::new, DefaultLayoutFactory::layers);
     private static final int SWITCH_TO_INFINITE_TIER_THRESHOLD = 16;
     private static final int DEFAULT_RIFT_HEIGHT_IN_CHUNKS = 24;
-    private static final ResourceLocation BOX_START_PARAMETER_KEY = WanderersOfTheRift.id("rift_shape/box_start");
-    private static final ResourceLocation BOX_SIZE_PARAMETER_KEY = WanderersOfTheRift.id("rift_shape/box_size");
-    private static final ResourceLocation PYRAMID_HEIGHT_PARAMETER_KEY = WanderersOfTheRift
-            .id("rift_shape/pyramid_height");
-    private static final ResourceLocation PYRAMID_SLOPE_PARAMETER_KEY = WanderersOfTheRift
-            .id("rift_shape/pyramid_slope");
+    private static final ResourceKey<RiftParameter> BOX_START_PARAMETER_KEY = ResourceKey
+            .create(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("rift_shape/box_start"));
+    private static final ResourceKey<RiftParameter> BOX_SIZE_PARAMETER_KEY = ResourceKey
+            .create(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("rift_shape/box_size"));
+    private static final ResourceKey<RiftParameter> PYRAMID_HEIGHT_PARAMETER_KEY = ResourceKey
+            .create(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("rift_shape/pyramid_height"));
+    private static final ResourceKey<RiftParameter> PYRAMID_SLOPE_PARAMETER_KEY = ResourceKey
+            .create(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("rift_shape/pyramid_slope"));
 
     @Override
     public LayeredRiftLayout.Factory withLayers(List<LayeredRiftLayout.LayoutLayer.Factory> layers) {

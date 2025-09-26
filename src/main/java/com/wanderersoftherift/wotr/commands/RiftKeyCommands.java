@@ -229,7 +229,7 @@ public class RiftKeyCommands extends BaseCommand {
             if (currentParameters == null) {
                 currentParameters = new RiftKeyParameterData();
             }
-            currentParameters = currentParameters.withParameter(riftParameterReference.key().location(), value);
+            currentParameters = currentParameters.withParameter(riftParameterReference.key(), value);
             riftKey.set(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS, currentParameters);
             return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.parameter.set"));
         });
@@ -243,7 +243,7 @@ public class RiftKeyCommands extends BaseCommand {
             if (currentParameters == null) {
                 currentParameters = new RiftKeyParameterData();
             }
-            currentParameters = currentParameters.withoutParameter(riftParameterReference.key().location());
+            currentParameters = currentParameters.withoutParameter(riftParameterReference.key());
             riftKey.set(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS, currentParameters);
             return Component.translatable(WanderersOfTheRift.translationId("command", "rift_key.parameter.remove"));
         });
