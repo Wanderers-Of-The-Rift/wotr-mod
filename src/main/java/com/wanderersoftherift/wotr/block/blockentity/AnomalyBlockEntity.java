@@ -5,8 +5,6 @@ import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
-import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
-import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTaskState;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
@@ -32,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class AnomalyBlockEntity extends BlockEntity {
+public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiable {
 
     private static final float COMPLETED_STATE = 0.1f;
     private static final float INCOMPLETE_STATE = 1f;
@@ -70,32 +68,17 @@ public class AnomalyBlockEntity extends BlockEntity {
     }
 
     public void scheduledTick(ServerLevel serverLevel, BlockPos pos, BlockState state1) {
-        if (state == null) {
-            return;
-        }
-        var taskState = state.state();
-        if (taskState.isPresent() && taskState.get() instanceof BattleTaskState battleTask) {
-            if (battleTask.isRewarding()) {
-                var player = serverLevel.getPlayerByUUID(battleTask.player().get());
-                if (player != null) {
-                    closeAndReward(player);
-                    return;
-                }
-            }
-        }
-        serverLevel.scheduleTick(pos, state1.getBlock(), 1);
+        var nextTick = state.scheduledTick(serverLevel, this);
+        serverLevel.scheduleTick(pos, state1.getBlock(), nextTick);
 
     }
 
-    public void battleMobDeath(LivingEntity entity) {
+    @Override
+    public void notifyOfDeath(LivingEntity entity) {
         if (state == null) {
             return;
         }
-        if (state.task().value() instanceof BattleTask battleTask && state.state().isPresent()
-                && state.state().get() instanceof BattleTaskState battleTaskState) {
-            battleTask.handleMobDeath(entity.getUUID(), battleTaskState, this);
-        }
-
+        state.handleMobDeath(entity, this);
     }
 
     public InteractionResult interact(Player player, InteractionHand hand) {
@@ -245,6 +228,20 @@ public class AnomalyBlockEntity extends BlockEntity {
                 return null;
             }
             return task.value().taskDisplay(state.get());
+        }
+
+        public void handleMobDeath(LivingEntity entity, AnomalyBlockEntity anomalyBlockEntity) {
+            if (state.isEmpty()) {
+                return;
+            }
+            task().value().handleMobDeath(entity, anomalyBlockEntity, state().get());
+        }
+
+        public int scheduledTick(ServerLevel serverLevel, AnomalyBlockEntity anomalyBlockEntity) {
+            if (state.isEmpty()) {
+                return -1;
+            }
+            return task().value().scheduledTick(serverLevel, anomalyBlockEntity, state().get());
         }
     }
 }
