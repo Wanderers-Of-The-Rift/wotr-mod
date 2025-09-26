@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.init.worldgen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
-import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.player.SecondaryAttributes;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import net.minecraft.core.Holder;

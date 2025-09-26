@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
-import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;

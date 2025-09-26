@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.rift;
+package com.wanderersoftherift.wotr.item.riftkey;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;

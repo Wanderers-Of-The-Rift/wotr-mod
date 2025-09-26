@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterInstance;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;

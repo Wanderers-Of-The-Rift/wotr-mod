@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.rift.parameter;
+package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;

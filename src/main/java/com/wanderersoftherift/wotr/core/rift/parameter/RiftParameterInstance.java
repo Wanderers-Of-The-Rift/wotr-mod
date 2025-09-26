@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.rift;
+package com.wanderersoftherift.wotr.core.rift.parameter;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

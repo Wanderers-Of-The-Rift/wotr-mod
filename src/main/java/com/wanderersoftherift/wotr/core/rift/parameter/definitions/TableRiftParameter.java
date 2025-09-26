@@ -1,5 +1,6 @@
-package com.wanderersoftherift.wotr.core.rift.parameter;
+package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -7,17 +8,16 @@ import net.minecraft.util.RandomSource;
 import java.util.List;
 import java.util.function.Function;
 
-public record SumRiftParameter(List<RiftParameter> values) implements RegisteredRiftParameter {
-    public static final MapCodec<SumRiftParameter> CODEC = RiftParameter.CODEC.listOf()
-            .xmap(SumRiftParameter::new, SumRiftParameter::values)
+public record TableRiftParameter(List<Double> values) implements RegisteredRiftParameter {
+    public static final MapCodec<TableRiftParameter> CODEC = Codec.DOUBLE.listOf()
+            .xmap(TableRiftParameter::new, TableRiftParameter::values)
             .fieldOf("values");
 
     public double getValue(int tier, RandomSource rng, Function<ResourceLocation, Double> parameterGetter) {
-        var result = 0.0;
-        for (var order : values) {
-            result += order.getValue(tier, rng, parameterGetter);
+        if (tier >= values.size()) {
+            return values.getLast();
         }
-        return result;
+        return values.get(tier);
     }
 
     @Override

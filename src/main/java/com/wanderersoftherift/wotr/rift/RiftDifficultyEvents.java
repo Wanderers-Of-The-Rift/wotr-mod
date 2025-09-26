@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
-import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;

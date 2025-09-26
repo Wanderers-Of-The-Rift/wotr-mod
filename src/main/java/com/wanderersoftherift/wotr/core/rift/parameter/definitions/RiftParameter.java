@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.rift.parameter;
+package com.wanderersoftherift.wotr.core.rift.parameter.definitions;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;

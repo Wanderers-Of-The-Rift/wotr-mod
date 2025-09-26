@@ -2,13 +2,13 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.parameter.PolynomialRiftParameter;
-import com.wanderersoftherift.wotr.core.rift.parameter.PowRiftParameter;
-import com.wanderersoftherift.wotr.core.rift.parameter.RandomRangeRiftParameter;
-import com.wanderersoftherift.wotr.core.rift.parameter.RegisteredRiftParameter;
-import com.wanderersoftherift.wotr.core.rift.parameter.SumRiftParameter;
-import com.wanderersoftherift.wotr.core.rift.parameter.TableRiftParameter;
-import com.wanderersoftherift.wotr.core.rift.parameter.TierRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.PolynomialRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.PowRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RandomRangeRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RegisteredRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.SumRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.TableRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.TierRiftParameter;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;

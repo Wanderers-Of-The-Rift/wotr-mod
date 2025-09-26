@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.rift.objective.definition;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
-import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;

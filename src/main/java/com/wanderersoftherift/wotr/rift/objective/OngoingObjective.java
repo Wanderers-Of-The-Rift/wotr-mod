@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.rift.objective;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
-import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;

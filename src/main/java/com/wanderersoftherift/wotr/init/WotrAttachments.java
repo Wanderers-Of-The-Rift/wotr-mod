@@ -18,7 +18,7 @@ import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
-import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;

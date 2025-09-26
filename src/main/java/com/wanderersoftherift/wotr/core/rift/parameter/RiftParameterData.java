@@ -1,12 +1,15 @@
-package com.wanderersoftherift.wotr.core.rift;
+package com.wanderersoftherift.wotr.core.rift.parameter;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameter;
+import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.riftkey.RiftKeyParameterData;
+import com.wanderersoftherift.wotr.item.riftkey.RiftParameterModifierProvider;
 import com.wanderersoftherift.wotr.serialization.MutableMapCodec;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.core.Registry;
@@ -42,21 +45,31 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
         var tier = Objects.requireNonNullElse(tierOptional, 0);
         var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0), seed + SALT);
         var riftKeyParameters = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
+        var modifierProviders = itemStack.getAllOfType(RiftParameterModifierProvider.class)
+                .flatMap(RiftParameterModifierProvider::getModifiers)
+                .toList();
         registry.asHolderIdMap().forEach(it -> {
             var param = new RiftParameterInstance();
             var key = it.getKey().location();
             try {
-                var baseValue = getValueFor(it.value(), rng, tier, key, registry, riftKeyParameters);
+                var baseValue = computeDefaultValueForParameter(it.value(), rng, tier, key, registry,
+                        riftKeyParameters);
                 param.setBase(baseValue);
             } catch (StackOverflowError e) {
                 WanderersOfTheRift.LOGGER.error("definition of rift parameter {} contains reference loop!", key);
             }
+            for (var modifier : modifierProviders) {
+                if (modifier.isApplicable(it)) {
+                    modifier.enable(param);
+                }
+            }
+
             params.put(key, param);
         });
         return new RiftParameterData(params.build());
     }
 
-    private static double getValueFor(
+    private static double computeDefaultValueForParameter(
             RiftParameter config,
             PositionalRandomFactory rng,
             int tier,
@@ -70,7 +83,8 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
             }
         }
         return config.getValue(tier, rng.fromHashOf(key),
-                (key2) -> getValueFor(registry.getValue(key2), rng, tier, key2, registry, riftKeyParameters));
+                (key2) -> computeDefaultValueForParameter(registry.getValue(key2), rng, tier, key2, registry,
+                        riftKeyParameters));
     }
 
     public static RiftParameterData forLevel(ServerLevel level) {
@@ -79,5 +93,17 @@ public record RiftParameterData(Map<ResourceLocation, RiftParameterInstance> par
 
     public RiftParameterInstance getParameter(ResourceLocation typeHolder) {
         return parameters.get(typeHolder);
+    }
+
+    public void apply(RiftParameterModifier modifier) {
+        modifier.applicableParameters().forEach(it -> {
+            modifier.enable(getParameter(it.getKey().location()));
+        });
+    }
+
+    public void remove(RiftParameterModifier modifier) {
+        modifier.applicableParameters().forEach(it -> {
+            modifier.disable(getParameter(it.getKey().location()));
+        });
     }
 }

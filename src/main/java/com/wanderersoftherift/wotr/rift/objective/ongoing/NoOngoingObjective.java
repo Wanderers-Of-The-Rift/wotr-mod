@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.rift.objective.ongoing;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
-import com.wanderersoftherift.wotr.core.rift.RiftParameterData;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
