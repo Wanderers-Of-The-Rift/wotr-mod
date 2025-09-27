@@ -593,12 +593,8 @@ public class WotrRuneGemDataProvider {
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "mining_speed"))
-                                )), new RunegemData.ModifierGroup(
-                                        mainHandHybridTag, List.of(
-                                                new TieredModifier(1, getModifier(lookup, "mining_speed")),
-                                                new TieredModifier(1, getModifier(lookup, "attack_flat"))
-                                        ))
-                        ), RunegemTier.RAW));
+                                ))),
+                        RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("projectile_raw"),
                 new RunegemData(getTranslatableName("projectile_raw"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
