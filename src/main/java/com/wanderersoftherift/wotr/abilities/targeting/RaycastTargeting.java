@@ -18,38 +18,17 @@ import java.util.List;
 /**
  * This targeting selects a single target via raycast
  */
-public class RaycastTargeting implements AbilityTargeting {
+public record RaycastTargeting(TargetEntityPredicate entityPredicate, TargetBlockPredicate blockPredicate, double range)
+        implements AbilityTargeting {
 
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
-                            .forGetter(RaycastTargeting::getEntityPredicate),
+                            .forGetter(RaycastTargeting::entityPredicate),
                     TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.ALL)
-                            .forGetter(RaycastTargeting::getBlockPredicate),
-                    Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange)
+                            .forGetter(RaycastTargeting::blockPredicate),
+                    Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::range)
             ).apply(instance, RaycastTargeting::new));
-
-    private final TargetEntityPredicate entityPredicate;
-    private final TargetBlockPredicate blockPredicate;
-    private final double range;
-
-    public RaycastTargeting(TargetEntityPredicate entityPredicate, TargetBlockPredicate blockPredicate, double range) {
-        this.entityPredicate = entityPredicate;
-        this.blockPredicate = blockPredicate;
-        this.range = range;
-    }
-
-    public double getRange() {
-        return range;
-    }
-
-    public TargetEntityPredicate getEntityPredicate() {
-        return entityPredicate;
-    }
-
-    public TargetBlockPredicate getBlockPredicate() {
-        return blockPredicate;
-    }
 
     @Override
     public MapCodec<? extends AbilityTargeting> getCodec() {
