@@ -19,7 +19,6 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
-import com.wanderersoftherift.wotr.network.guild.SelectTradePayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
@@ -100,8 +99,6 @@ public class WotrPayloadHandlers {
                 WalletReplicationPayload::handleOnClient);
         registrar.playToClient(WalletUpdatePayload.TYPE, WalletUpdatePayload.STREAM_CODEC,
                 WalletUpdatePayload::handleOnClient);
-        registrar.playToServer(SelectTradePayload.TYPE, SelectTradePayload.STREAM_CODEC,
-                SelectTradePayload::handleOnServer);
 
         // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,

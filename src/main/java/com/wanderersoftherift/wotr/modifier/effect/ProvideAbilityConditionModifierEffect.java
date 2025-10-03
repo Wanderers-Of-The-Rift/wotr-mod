@@ -42,14 +42,14 @@ public record ProvideAbilityConditionModifierEffect(Holder<Ability> ability, Res
 
     @Override
     public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
-        return List.of(new ImageComponent(stack,
+        return List.of(new ImageComponent(
                 Component.translatable(condition().toLanguageKey("ability_conditions")).append(" (T" + tier + ")"),
                 null));
     }
 
     @Override
     public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
-        return List.of(new ImageComponent(stack,
+        return List.of(new ImageComponent(
                 Component.translatable(condition().toLanguageKey("ability_conditions")), null));
     }
 }
