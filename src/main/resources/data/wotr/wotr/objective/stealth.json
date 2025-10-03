@@ -1,5 +1,4 @@
 {
   "type": "wotr:stealth",
-  "min_stealth_ticks" : 15000,
-  "max_stealth_ticks" : 25000
+  "stealth_ticks": "wotr:objective/stealth"
 }

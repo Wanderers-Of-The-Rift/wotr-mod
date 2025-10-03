@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
@@ -16,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -25,6 +27,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
@@ -38,6 +41,22 @@ public class RiftObjectiveEvents {
             WanderersOfTheRift.id("rift_objective/fail"));
     private static final ResourceKey<LootTable> SURVIVE_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
             WanderersOfTheRift.id("rift_objective/survive"));
+
+    @SubscribeEvent
+    public static void onLevelLoaded(LevelEvent.Load event) {
+        var levelAccessor = event.getLevel();
+        if (!(levelAccessor instanceof ServerLevelAccessor sla)) {
+            return;
+        }
+        var level = sla.getLevel();
+        if (!RiftLevelManager.isRift(level)) {
+            return;
+        }
+        var riftData = RiftData.get(level);
+        var parameterData = RiftParameterData.forLevel(level);
+        riftData.getObjective()
+                .ifPresent(ongoingObjective -> ongoingObjective.registerUpdaters(parameterData, riftData, level));
+    }
 
     @SubscribeEvent
     public static void onPlayerJoinLevel(EntityJoinLevelEvent event) {

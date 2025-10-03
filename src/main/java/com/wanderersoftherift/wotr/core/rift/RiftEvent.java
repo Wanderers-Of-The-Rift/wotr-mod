@@ -43,7 +43,7 @@ public abstract class RiftEvent extends Event {
         /**
          * Invoked before the {@link ServerLevel} and {@link com.wanderersoftherift.wotr.world.level.FastRiftGenerator}
          * of the rift are created. Could be used for modifying {@link RiftConfig} of the rift (some examples are in
-         * {@link RiftConfigInitializationEvents}). {@link #getLevel()} will return null.
+         * {@link RiftInitializationEvents}). {@link #getLevel()} will return null.
          */
         public static class Pre extends Created {
 

@@ -1,15 +1,16 @@
 package com.wanderersoftherift.wotr.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
+import com.wanderersoftherift.wotr.init.WotrDataMaps;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -29,13 +30,22 @@ public class RiftDifficultyEvents {
     }
 
     private static void applyDifficultyToEntity(LivingEntity livingEntity, ServerLevel serverLevel) {
-        var optionalTier = RiftData.get(serverLevel).getTier();
-        if (livingEntity instanceof Mob mob && optionalTier.isPresent()) {
-            var tier = optionalTier.getAsInt();
-            updateAttribute(mob, Attributes.ATTACK_DAMAGE, getDamageMultiplier(tier));
-            updateAttribute(mob, Attributes.MAX_HEALTH, getHealthMultiplier(tier));
-            updateAttribute(mob, Attributes.MOVEMENT_SPEED, getSpeedMultiplier(tier));
-            livingEntity.setHealth(livingEntity.getMaxHealth());
+        var riftData = RiftParameterData.forLevel(serverLevel);
+        if (livingEntity instanceof Mob mob && riftData != null) {
+            serverLevel.registryAccess().lookupOrThrow(Registries.ATTRIBUTE).asHolderIdMap().forEach(attribute -> {
+                var parameter = attribute.getData(WotrDataMaps.DIFFICULTY_SCALING);
+                if (parameter == null) {
+                    return;
+                }
+                var value = riftData.getParameter(parameter.getKey());
+                if (value == null) {
+                    return;
+                }
+                updateAttribute(mob, attribute, value.get());
+                if ("minecraft:max_health".equals(attribute.getKey().location().toString())) {
+                    livingEntity.setHealth(livingEntity.getMaxHealth());
+                }
+            });
         }
     }
 
@@ -45,17 +55,5 @@ public class RiftDifficultyEvents {
             return;
         }
         attributeInstance.setBaseValue(attributeInstance.getBaseValue() * tier);
-    }
-
-    private static double getSpeedMultiplier(int tier) {
-        return tier * 0.02 + 1;
-    }
-
-    private static double getHealthMultiplier(int tier) {
-        return tier * 0.3 + 1;
-    }
-
-    private static double getDamageMultiplier(int tier) {
-        return tier * 0.15 + 1;
     }
 }

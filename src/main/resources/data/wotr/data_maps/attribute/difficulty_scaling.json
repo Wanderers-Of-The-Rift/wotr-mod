@@ -1,0 +1,7 @@
+{
+    "values": {
+        "minecraft:max_health": "wotr:mob_difficulty/health_multiplier",
+        "minecraft:attack_damage": "wotr:mob_difficulty/damage_multiplier",
+        "minecraft:movement_speed": "wotr:mob_difficulty/speed_multiplier"
+    }
+}

@@ -21,6 +21,8 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RegisteredRiftParameter;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
@@ -100,6 +102,8 @@ public class WotrRegistries {
             Keys.LAYOUT_LAYER_TYPES).create();
     public static final Registry<MapCodec<? extends RiftShape>> RIFT_SHAPE_TYPES = new RegistryBuilder<>(
             Keys.RIFT_SHAPE_TYPES).create();
+    public static final Registry<MapCodec<? extends RegisteredRiftParameter>> RIFT_PARAMETER_TYPES = new RegistryBuilder<>(
+            Keys.RIFT_PARAMETER_TYPES).create();
     public static final Registry<MapCodec<? extends RiftRoomGenerator.Factory>> RIFT_ROOM_GENERATOR_FACTORY_TYPES = new RegistryBuilder<>(
             Keys.RIFT_ROOM_GENERATOR_FACTORY_TYPES).create();
     public static final Registry<MapCodec<? extends JigsawListProcessor>> JIGSAW_LIST_PROCESSOR_TYPES = new RegistryBuilder<>(
@@ -167,6 +171,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("primary_statistic"));
         public static final ResourceKey<Registry<RiftTheme>> RIFT_THEMES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
+        public static final ResourceKey<Registry<RiftParameter>> RIFT_PARAMETER_CONFIGS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("rift_parameter"));
+        public static final ResourceKey<Registry<MapCodec<? extends RegisteredRiftParameter>>> RIFT_PARAMETER_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("rift_parameter_type"));
         public static final ResourceKey<Registry<MapCodec<? extends AbilityTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_targeting"));
         public static final ResourceKey<Registry<MobVariantData>> MOB_VARIANTS = ResourceKey
@@ -249,6 +257,7 @@ public class WotrRegistries {
         event.register(TRACKED_ABILITY_TRIGGERS);
         event.register(ABILITY_SOURCES);
         event.register(MODIFIER_SOURCES);
+        event.register(RIFT_PARAMETER_TYPES);
 
         // worldgen registries
         event.register(THEME_SOURCE_TYPE);
@@ -268,6 +277,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.MODIFIER_EFFECTS, ModifierEffect.DIRECT_CODEC, ModifierEffect.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MODIFIERS, Modifier.DIRECT_CODEC, Modifier.DIRECT_CODEC);
         event.dataPackRegistry(Keys.RIFT_THEMES, RiftTheme.DIRECT_CODEC, RiftTheme.DIRECT_SYNC_CODEC);
+        event.dataPackRegistry(Keys.RIFT_PARAMETER_CONFIGS, RiftParameter.CODEC, RiftParameter.CODEC);
         event.dataPackRegistry(Keys.RUNEGEM_DATA, RunegemData.CODEC, RunegemData.CODEC);
         event.dataPackRegistry(Keys.GEAR_IMPLICITS_CONFIG, ImplicitConfig.CODEC, ImplicitConfig.CODEC);
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);

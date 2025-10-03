@@ -1,5 +1,4 @@
 {
   "type": "wotr:kill",
-  "min_quantity" : 1,
-  "max_quantity" : 1
+  "quantity": "wotr:objective/test_kill"
 }

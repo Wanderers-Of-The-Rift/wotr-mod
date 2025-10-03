@@ -65,6 +65,12 @@ public class RiftData extends SavedData {
                         level.getServer().overworld().getSharedSpawnPos()), "rift_data");
     }
 
+    @Nullable public static RiftData getNullable(ServerLevel level) {
+        return level.getDataStorage()
+                .get(factory(level.getServer().overworld().dimension(),
+                        level.getServer().overworld().getSharedSpawnPos()), "rift_data");
+    }
+
     private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         return new SavedData.Factory<>(
                 () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(),
