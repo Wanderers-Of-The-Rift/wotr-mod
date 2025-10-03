@@ -23,26 +23,18 @@ import java.util.List;
  * within that area (e.g. for a sphere the AABB is the box that contains it, and the targets in the corners are
  * rejected).
  */
-public class AreaTargeting implements AbilityTargeting {
+public record AreaTargeting(TargetAreaShape shape, TargetEntityPredicate entityPredicate,
+        TargetBlockPredicate blockPredicate) implements AbilityTargeting {
+
     public static final MapCodec<AreaTargeting> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            TargetAreaShape.DIRECT_CODEC.fieldOf("shape").forGetter(AreaTargeting::getShape),
+            TargetAreaShape.DIRECT_CODEC.fieldOf("shape").forGetter(AreaTargeting::shape),
             TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
-                    .forGetter(AreaTargeting::getEntityPredicate),
+                    .forGetter(AreaTargeting::entityPredicate),
             TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.NONE)
-                    .forGetter(AreaTargeting::getBlockPredicate)
+                    .forGetter(AreaTargeting::blockPredicate)
     ).apply(instance, AreaTargeting::new));
 
     private static final Vec3 FORWARDS = new Vec3(0, 0, -1);
-
-    private final TargetEntityPredicate entityPredicate;
-    private final TargetBlockPredicate blockPredicate;
-    private final TargetAreaShape shape;
-
-    public AreaTargeting(TargetAreaShape shape, TargetEntityPredicate entities, TargetBlockPredicate blocks) {
-        this.shape = shape;
-        this.entityPredicate = entities;
-        this.blockPredicate = blocks;
-    }
 
     @Override
     public MapCodec<? extends AbilityTargeting> getCodec() {
@@ -55,7 +47,7 @@ public class AreaTargeting implements AbilityTargeting {
     }
 
     @Override
-    public final List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
+    public List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
         if (!(context.level() instanceof ServerLevel level)) {
             return List.of();
         }
@@ -92,17 +84,5 @@ public class AreaTargeting implements AbilityTargeting {
             return blockHitResult.getDirection().getUnitVec3();
         }
         return FORWARDS;
-    }
-
-    public TargetAreaShape getShape() {
-        return shape;
-    }
-
-    public TargetEntityPredicate getEntityPredicate() {
-        return entityPredicate;
-    }
-
-    public TargetBlockPredicate getBlockPredicate() {
-        return blockPredicate;
     }
 }
