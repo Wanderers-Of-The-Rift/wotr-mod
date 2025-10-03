@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.abilities.attachment;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
@@ -26,8 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class OngoingAbilities {
 
@@ -163,14 +164,18 @@ public class OngoingAbilities {
         activeAbilities.removeAll(channelled);
     }
 
-    private <T> T activateContextFor(AbilityContext context, Supplier<T> action) {
+    // TODO: Get rid of this after ability context stores attribute state.
+    private <T> T activateContextFor(AbilityContext context, Callable<T> action) {
         AbilityContext.Activation previousContext = currentContextActivation;
         if (previousContext != null) {
             previousContext.pause();
         }
         try (var activation = context.activate()) {
             currentContextActivation = activation;
-            return action.get();
+            return action.call();
+        } catch (Exception e) {
+            WanderersOfTheRift.LOGGER.error("Error occurred processing ability", e);
+            return null;
         } finally {
             if (previousContext != null) {
                 previousContext.resume();
