@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
-public interface RiftMobVariants {
+public interface VariedRiftMob {
     Holder<RiftMobVariantData> getVariant();
 
     void setVariant(Holder<RiftMobVariantData> variant);
@@ -69,7 +69,8 @@ public interface RiftMobVariants {
                 .lookupOrThrow(WotrRegistries.Keys.MOB_VARIANTS);
 
         Holder<RiftMobVariantData> defaultVariant = registry.get(defaultId)
-                .orElse(registry.getAny().orElseThrow(() -> new IllegalStateException("No mob variants registered")));
+                .orElseGet(() -> registry.getAny()
+                        .orElseThrow(() -> new IllegalStateException("No mob variants registered")));
 
         builder.define(dataVariantAccessor, defaultVariant);
     }

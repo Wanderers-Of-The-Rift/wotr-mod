@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -33,12 +32,6 @@ public record RiftMobVariantData(Map<Holder<Attribute>, Double> attributes, Reso
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<RiftMobVariantData>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.MOB_VARIANTS);
-
-    public static ResourceLocation getTextureForVariant(
-            ResourceLocation variantId,
-            Registry<RiftMobVariantData> registry) {
-        return registry.get(variantId).map(ref -> ref.value().texture()).orElse(variantId);
-    }
 
     // Applies attributes to a LivingEntity, first spawn sets health to max health
     public void applyTo(LivingEntity entity) {

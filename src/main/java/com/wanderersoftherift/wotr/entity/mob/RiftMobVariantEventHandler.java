@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 public class RiftMobVariantEventHandler {
     @SubscribeEvent
     public static void onEntityFinalizeSpawn(FinalizeSpawnEvent event) {
-        if (event.getEntity() instanceof RiftMobVariants mob) {
+        if (event.getEntity() instanceof VariedRiftMob mob) {
             mob.applyVariantStats();
         }
     }

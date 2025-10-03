@@ -6,5 +6,5 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RiftZombieRenderState extends ZombieRenderState {
     // required for RiftZombieRenderer to extract/keep the variant from the entity
-    public ResourceLocation variant = WanderersOfTheRift.id("zombie/default_zombie");
+    public ResourceLocation variant = WanderersOfTheRift.id("textures/entity/mob_variant/zombie/default_zombie.png");
 }

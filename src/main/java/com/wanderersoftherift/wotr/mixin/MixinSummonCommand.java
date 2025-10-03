@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.entity.mob.RiftMobVariants;
+import com.wanderersoftherift.wotr.entity.mob.VariedRiftMob;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +24,7 @@ public class MixinSummonCommand {
             boolean randomizeProperties,
             CallbackInfoReturnable<Entity> cir) {
         Entity entity = cir.getReturnValue();
-        if (entity instanceof RiftMobVariants mvi) {
+        if (entity instanceof VariedRiftMob mvi) {
             mvi.applyVariantStats();
         }
     }

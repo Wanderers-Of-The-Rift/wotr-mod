@@ -5,5 +5,6 @@ import net.minecraft.client.renderer.entity.state.SkeletonRenderState;
 import net.minecraft.resources.ResourceLocation;
 
 public class RiftSkeletonRenderState extends SkeletonRenderState {
-    public ResourceLocation variant = WanderersOfTheRift.id("skeleton/default_skeleton");
+    public ResourceLocation variant = WanderersOfTheRift
+            .id("textures/entity/mob_variant/skeleton/default_skeleton.png");
 }
