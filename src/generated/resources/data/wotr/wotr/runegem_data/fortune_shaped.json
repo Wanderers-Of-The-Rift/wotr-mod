@@ -1,0 +1,18 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:fortune",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.fortune_shaped"
+  },
+  "shape": "square",
+  "tier": "shaped"
+}

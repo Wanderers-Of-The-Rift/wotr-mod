@@ -7,8 +7,11 @@ import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.ModifierTier;
 import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.EnchantmentModifierEffect;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
@@ -16,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,6 +33,32 @@ public class WotrModifierProvider {
     public static final Map<ResourceKey<Modifier>, Modifier> DATA = new LinkedHashMap<>();
 
     public static void bootstrapModifiers(BootstrapContext<Modifier> context) {
+
+        // Fortune enchantment: one modifier that spans all possible levels
+        ResourceKey<Enchantment> fortuneKey = ResourceKey.create(
+                Registries.ENCHANTMENT,
+                ResourceLocation.parse("minecraft:fortune")
+        );
+
+        registerModifier(context, getResourceKey("fortune"), new Modifier(
+                generateEqualRollSpread(
+                        3, // Fortune max level is 3
+                        List.of(new ToBeTieredModifierEffect(
+                                1.0F,
+                                3.0F,
+                                (minRoll, maxRoll) -> new EnchantmentModifierEffect(
+                                        WanderersOfTheRift.id("fortune"),
+                                        fortuneKey, // store the key, don’t resolve the Holder now
+                                        minRoll,
+                                        maxRoll
+                                )
+                        ))
+                ),
+                Style.EMPTY.withColor(ColorUtil.SOFT_GOLD)
+        ));
+
+        WanderersOfTheRift.LOGGER.info("Registered modifier: {}", getResourceKey("fortune"));
+
         registerModifier(context, getResourceKey("ability_aoe"), new Modifier(
                 generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
@@ -371,6 +401,12 @@ public class WotrModifierProvider {
             Holder<Attribute> attribute,
             AttributeModifier.Operation operation) {
         return (minRoll, maxRoll) -> new AttributeModifierEffect(id, attribute, minRoll, maxRoll, operation);
+    }
+
+    private static BiFunction<Float, Float, AbstractModifierEffect> enchantmentModifierEffectGetter(
+            ResourceLocation id,
+            ResourceKey<Enchantment> enchantmentKey) {
+        return (Float minRoll, Float maxRoll) -> new EnchantmentModifierEffect(id, enchantmentKey, minRoll, maxRoll);
     }
 
     private static @NotNull ResourceKey<Modifier> getResourceKey(String id) {
