@@ -80,8 +80,7 @@ public record AttributeModifierEffect(ResourceLocation id, Holder<Attribute> att
             case ADD_VALUE -> getAddTooltipComponent(stack, roll, style);
             case ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL -> getMultiplyTooltipComponent(stack, roll, style);
         };
-        base = new ImageComponent(base.stack(), ComponentUtil.mutable(base.base()).append(getTierInfoString(tier)),
-                base.asset());
+        base = new ImageComponent(ComponentUtil.mutable(base.base()).append(getTierInfoString(tier)), base.asset());
         return List.of(base);
     }
 
@@ -108,7 +107,7 @@ public record AttributeModifierEffect(ResourceLocation id, Holder<Attribute> att
         if (style != null) {
             cmp = cmp.withStyle(style);
         }
-        return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
+        return new ImageComponent(cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
     private ImageComponent getMultiplyTooltipComponent(ItemStack stack, float roll, Style style) {
@@ -127,7 +126,7 @@ public record AttributeModifierEffect(ResourceLocation id, Holder<Attribute> att
         if (style != null) {
             cmp = cmp.withStyle(style);
         }
-        return new ImageComponent(stack, cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
+        return new ImageComponent(cmp, WanderersOfTheRift.id("textures/tooltip/attribute/damage_attribute.png"));
     }
 
     private static String formatRoll(double value) {

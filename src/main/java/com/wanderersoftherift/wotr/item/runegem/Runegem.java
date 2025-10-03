@@ -58,7 +58,7 @@ public class Runegem extends Item {
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         if (stack.has(WotrDataComponentType.RUNEGEM_DATA)) {
             RunegemData gemData = stack.get(WotrDataComponentType.RUNEGEM_DATA);
-            ImageComponent fancyComponent = new ImageComponent(stack, Component.empty(),
+            ImageComponent fancyComponent = new ImageComponent(Component.empty(),
                     TIER_RESOURCE_LOCATION_MAP.get(Objects.requireNonNull(gemData).tier()));
             return Optional.of(fancyComponent);
         }

@@ -55,7 +55,7 @@ public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<
         var result = getBaseTooltipComponent(stack, roll, style);
         result.addAll(modifier.value()
                 .getAdvancedTooltipComponent(stack, roll, new ModifierInstance(modifier, this.tier, roll)));
-        result.add(new ImageComponent(stack, Component.literal("] (T" + tier + ")").withStyle(style), null));
+        result.add(new ImageComponent(Component.literal("] (T" + tier + ")").withStyle(style), null));
         return result.build();
     }
 
@@ -63,7 +63,7 @@ public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<
     public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
         var result = getBaseTooltipComponent(stack, roll, style);
         result.addAll(modifier.value().getTooltipComponent(stack, roll, new ModifierInstance(modifier, tier, roll)));
-        result.add(new ImageComponent(stack, Component.literal("]").withStyle(style), null));
+        result.add(new ImageComponent(Component.literal("]").withStyle(style), null));
         return result.build();
     }
 
@@ -75,7 +75,7 @@ public record EnhanceAbilityModifierEffect(HolderSet<Ability> abilities, Holder<
                 .map(Component::translatable)
                 .reduce((a, b) -> a.append(", ").append(b));
         var result = ImmutableList.<ImageComponent>builder();
-        result.add(new ImageComponent(stack,
+        result.add(new ImageComponent(
                 Component.literal("for ")
                         .append(abilityTextComponent
                                 .orElse(Component.literal("nothing").withStyle(Style.EMPTY.withItalic(true))))

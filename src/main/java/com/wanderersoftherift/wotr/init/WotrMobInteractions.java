@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.npc.MerchantInteract;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.npc.QuestGiverInteract;
@@ -19,5 +20,8 @@ public class WotrMobInteractions {
 
     public static final Supplier<MapCodec<? extends MobInteraction>> QUEST_GIVER = MOB_INTERACTIONS
             .register("quest_giver", () -> QuestGiverInteract.CODEC);
+
+    public static final Supplier<MapCodec<? extends MobInteraction>> MERCHANT = MOB_INTERACTIONS.register("merchant",
+            () -> MerchantInteract.CODEC);
 
 }
