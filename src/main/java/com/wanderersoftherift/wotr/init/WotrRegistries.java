@@ -12,7 +12,6 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.trading.TradeListing;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.core.quest.Goal;
@@ -138,8 +137,6 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("container_type"));
         public static final ResourceKey<Registry<Currency>> CURRENCIES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("currency"));
-        public static final ResourceKey<Registry<TradeListing>> TRADE_LISTING = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("trade_listing"));
         public static final ResourceKey<Registry<EffectMarker>> EFFECT_MARKERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_marker"));
         public static final ResourceKey<Registry<DualCodec<? extends WotrEquipmentSlot>>> EQUIPMENT_SLOTS = ResourceKey
@@ -279,7 +276,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MOB_VARIANTS, MobVariantData.CODEC, MobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.TRADE_LISTING, TradeListing.CODEC, TradeListing.CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);

@@ -50,7 +50,7 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
     @Override
     public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
         var base = getBaseTooltipComponent(stack, roll, style);
-        return List.of(new ImageComponent(base.stack(),
+        return List.of(new ImageComponent(
                 ComponentUtil.mutable(base.base()).append(getTierInfoString(tier)), base.asset()));
     }
 
@@ -66,7 +66,7 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
                 Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
         );
 
-        return new ImageComponent(stack, text.withStyle(style),
+        return new ImageComponent(text.withStyle(style),
                 providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon()));
     }
 
