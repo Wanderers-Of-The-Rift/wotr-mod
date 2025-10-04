@@ -45,7 +45,7 @@ public final class TargetComponent {
         Preconditions.checkNotNull(hit);
         this.location = hit.getLocation();
         switch (hit) {
-            case BlockHitResult blockHit: {
+            case BlockHitResult blockHit -> {
                 if (blockHit.getType() == HitResult.Type.MISS) {
                     this.blockPos = Optional.empty();
                 } else {
@@ -53,15 +53,13 @@ public final class TargetComponent {
                 }
                 this.direction = blockHit.getDirection();
                 this.entityId = Optional.empty();
-                break;
             }
-            case EntityHitResult entityHit: {
+            case EntityHitResult entityHit -> {
                 this.entityId = Optional.of(entityHit.getEntity().getUUID());
                 this.blockPos = Optional.empty();
                 this.direction = Direction.UP;
-                break;
             }
-            default: {
+            default -> {
                 this.entityId = Optional.empty();
                 this.blockPos = Optional.empty();
                 this.direction = Direction.UP;

@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -66,7 +67,7 @@ public record ConnectedBlockTargeting(TargetBlockPredicate blocks, int count) im
             Set<BlockPos> closed,
             BlockHitResult source,
             AbilityContext context) {
-        for (Direction dir : Direction.values()) {
+        for (Direction dir : EnumEntries.DIRECTIONS) {
             BlockPos adj = pos.relative(dir);
             if (closed.add(adj) && blocks.matches(adj, source, context)) {
                 open.add(adj);

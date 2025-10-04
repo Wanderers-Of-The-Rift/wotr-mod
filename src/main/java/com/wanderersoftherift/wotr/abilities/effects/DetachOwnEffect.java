@@ -13,16 +13,10 @@ import java.util.Optional;
 /**
  * Removed attach effects created by this ability
  */
-public class DetachOwnEffect implements AbilityEffect {
+public record DetachOwnEffect(Optional<ResourceLocation> id) implements AbilityEffect {
     public static final MapCodec<DetachOwnEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.optionalFieldOf("id").forGetter(DetachOwnEffect::getId)
+            ResourceLocation.CODEC.optionalFieldOf("id").forGetter(DetachOwnEffect::id)
     ).apply(instance, DetachOwnEffect::new));
-
-    private final Optional<ResourceLocation> id;
-
-    public DetachOwnEffect(Optional<ResourceLocation> id) {
-        this.id = id;
-    }
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
@@ -34,10 +28,6 @@ public class DetachOwnEffect implements AbilityEffect {
                 attachedEffects.detach(context.instanceId());
             }
         });
-    }
-
-    public Optional<ResourceLocation> getId() {
-        return id;
     }
 
     @Override
