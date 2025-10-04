@@ -73,6 +73,10 @@ public class WotrDataComponentType {
                 "trigger_target", TargetComponent.CODEC, null
         );
 
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> PARENT_ABILITY = register(
+                "parent_ability", UUIDUtil.CODEC, null
+        );
+
         private AbilityContextData() {
         }
     }

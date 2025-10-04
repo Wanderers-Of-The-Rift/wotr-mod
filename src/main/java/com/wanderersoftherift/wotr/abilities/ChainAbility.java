@@ -105,7 +105,10 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
     private boolean activateChild(AbilityContext context, int index) {
         ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
         Holder<Ability> childAbility = abilities.get(index).ability();
-        if (context.caster().getData(WotrAttachments.ONGOING_ABILITIES).activate(childSource, childAbility)) {
+        if (context.caster()
+                .getData(WotrAttachments.ONGOING_ABILITIES)
+                .activate(childSource, childAbility, (childContext) -> childContext
+                        .set(WotrDataComponentType.AbilityContextData.PARENT_ABILITY, context.instanceId()))) {
             return !childAbility.value().isActive(context.caster(), childSource);
         }
         return true;
