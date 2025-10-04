@@ -20,13 +20,9 @@ import net.minecraft.world.entity.LivingEntity;
  */
 public record DamageEffect(float damageAmount, Holder<DamageType> damageTypeKey) implements AbilityEffect {
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-            .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::amount),
+            .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::damageAmount),
                     DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::damageTypeKey))
             .apply(instance, DamageEffect::new));
-
-    private float amount() {
-        return damageAmount;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {

@@ -23,12 +23,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public sealed interface TargetBlockPredicate {
     Codec<TargetBlockPredicate> CODEC = Codec.either(StringRepresentable.fromEnum(Trivial::values), Filter.CODEC)
-            .xmap(either -> either.left().isPresent() ? either.left().get() : either.right().get(), predicate -> {
-                if (predicate instanceof Filter filter) {
-                    return Either.right(filter);
-                }
-                return Either.left((Trivial) predicate);
-            });
+            .xmap(either -> either.left().isPresent() ? either.left().get() : either.right().get(),
+                    predicate -> switch (predicate) {
+                        case Filter filter -> Either.right(filter);
+                        case Trivial trivial -> Either.left(trivial);
+                    });
 
     /**
      * @param target  The target block (position with context.level)
