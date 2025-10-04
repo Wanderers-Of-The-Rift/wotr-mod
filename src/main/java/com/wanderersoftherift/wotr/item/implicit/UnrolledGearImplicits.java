@@ -19,7 +19,7 @@ public record UnrolledGearImplicits() implements GearImplicits {
 
     @Override
     public List<ModifierInstance> modifierInstances(ItemStack stack, Level level) {
-        if (level.isClientSide()) {
+        if (level == null || level.isClientSide()) {
             return List.of();
         }
         Registry<ImplicitConfig> implicitConfigs = level.registryAccess().lookupOrThrow(GEAR_IMPLICITS_CONFIG);
