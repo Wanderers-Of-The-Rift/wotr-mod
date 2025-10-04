@@ -63,6 +63,12 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
         blockModels.createTrivialCube(WotrBlocks.QUEST_HUB.get());
 
+        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator
+                .multiVariant(WotrBlocks.ANOMALY.get(),
+                        Variant.variant().with(VariantProperties.MODEL, baseAnomalyBaseModel))
+                .with(createFacingDispatchFromUpModel()));
+
         createBlockStatesForTrapBlock(WotrBlocks.MOB_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.TRAP_BLOCK, blockModels);

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
@@ -40,5 +41,9 @@ public class WotrBlockEntities {
             .register("ability_bench_block_entity",
                     // The block entity type.
                     () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
+    public static final Supplier<BlockEntityType<AnomalyBlockEntity>> ANOMALY_BLOCK_ENTITY = BLOCK_ENTITIES.register(
+            "anomaly_block_entity",
+            // The block entity type.
+            () -> new BlockEntityType<>(AnomalyBlockEntity::new, WotrBlocks.ANOMALY.get()));
 
 }

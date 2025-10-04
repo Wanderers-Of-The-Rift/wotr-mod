@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init.worldgen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.world.level.levelgen.processor.AnomalyProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.AttachmentProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.GradientReplaceProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.MushroomProcessor;
@@ -36,4 +37,6 @@ public class WotrProcessors {
             .register("rift_chests", () -> () -> RiftChestProcessor.CODEC);
     public static final Supplier<StructureProcessorType<RiftMobSpawnerProcessor>> RIFT_MOB_SPAWNER = PROCESSORS
             .register("trial_spawner", () -> () -> RiftMobSpawnerProcessor.CODEC);
+    public static final Supplier<StructureProcessorType<AnomalyProcessor>> ANOMALY = PROCESSORS.register("anomaly",
+            () -> () -> AnomalyProcessor.CODEC);
 }
