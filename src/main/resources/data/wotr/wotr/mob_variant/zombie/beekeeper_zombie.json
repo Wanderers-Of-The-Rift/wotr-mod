@@ -1,0 +1,9 @@
+{
+  "stats": {
+    "minecraft:max_health": 14.0,
+    "minecraft:attack_damage": 2.75,
+    "minecraft:movement_speed": 0.27,
+    "minecraft:scale": 1.1
+  },
+  "texture": "wotr:textures/entity/mob_variant/zombie/beekeeper_zombie.png"
+}

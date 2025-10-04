@@ -7,22 +7,20 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.level.Level;
 
-// Requires: RiftZombie.java, RiftZombieRenderer.java, RiftZombieRenderState.java
-// Append to: WotrEntityAttributes.java, WotrEntities.java, WotrEntityRenderers.java
-// Uses variant_zombie.json for stats, or default attributes for missing stats.
-public class RiftZombie extends Zombie implements VariedRiftMob {
+public class RiftSkeleton extends Skeleton implements VariedRiftMob {
     private static final EntityDataAccessor<Holder<RiftMobVariantData>> DATA_VARIANT = SynchedEntityData
-            .defineId(RiftZombie.class, WotrEntityDataSerializers.MOB_VARIANT_HOLDER.get());
+            .defineId(RiftSkeleton.class, WotrEntityDataSerializers.MOB_VARIANT_HOLDER.get());
 
-    public RiftZombie(EntityType<? extends RiftZombie> type, Level level) {
+    public RiftSkeleton(EntityType<? extends RiftSkeleton> type, Level level) {
         super(type, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Zombie.createAttributes();
+        return AbstractSkeleton.createAttributes();
     }
 
     public Holder<RiftMobVariantData> getVariant() {
@@ -34,7 +32,7 @@ public class RiftZombie extends Zombie implements VariedRiftMob {
     }
 
     public String getMobType() {
-        return "zombie";
+        return "skeleton";
     }
 
     @Override
