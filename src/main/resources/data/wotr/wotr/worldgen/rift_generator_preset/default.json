@@ -77,6 +77,27 @@
         },
         {
             "type": "wotr:shuffle"
+        },
+        {
+            "type": "wotr:replace_bulk",
+            "values": {
+                "wotr:rift/poi/free/3": {
+                    "new_pool": "wotr:rift/anomaly/free/3",
+                    "chance": 0.15
+                },
+                "wotr:rift/poi/ceiling/3": {
+                    "new_pool": "wotr:rift/anomaly/ceiling/3",
+                    "chance": 0.15
+                },
+                "wotr:rift/poi/halfway/3": {
+                    "new_pool": "wotr:rift/anomaly/halfway/3",
+                    "chance": 0.15
+                },
+                "wotr:rift/poi/inwall/3": {
+                    "new_pool": "wotr:rift/anomaly/inwall/3",
+                    "chance": 0.15
+                }
+            }
         }
     ],
     "empty_chunk_generatable": {
