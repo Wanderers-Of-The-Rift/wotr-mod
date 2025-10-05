@@ -23,6 +23,7 @@ import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
 import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
+import com.wanderersoftherift.wotr.modifier.EnchantsAttachment;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
 import net.minecraft.world.item.ItemStack;
@@ -162,4 +163,7 @@ public class WotrAttachments {
                     () -> AttachmentType.builder(() -> new TriggerRegistry<>(WotrTrackedAbilityTriggers.TICK_TRIGGER))
                             .build()
             );
+    public static final Supplier<AttachmentType<EnchantsAttachment>> ENCHANTS = ATTACHMENT_TYPES.register(
+            "enchants", () -> AttachmentType.builder(() -> new EnchantsAttachment()).build()
+    );
 }
