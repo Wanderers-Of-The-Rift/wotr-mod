@@ -2,17 +2,25 @@ package com.wanderersoftherift.wotr.abilities.triggers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.abilities.AbilityContext;
+import com.wanderersoftherift.wotr.abilities.attachment.TargetComponent;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.phys.BlockHitResult;
 
-public record LootTrigger(Holder<BlockEntityType<?>> container, ContextKeySet context, ResourceLocation lootTable)
-        implements TrackableTrigger {
+import static net.minecraft.core.Direction.UP;
+
+public record LootTrigger(BlockPos position, Holder<BlockEntityType<?>> container, ContextKeySet context,
+        ResourceLocation lootTable) implements TrackableTrigger {
 
     private static final MapCodec<LootTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            BlockPos.CODEC.fieldOf("position").forGetter(LootTrigger::position),
             BuiltInRegistries.BLOCK_ENTITY_TYPE.holderByNameCodec()
                     .fieldOf("container")
                     .forGetter(LootTrigger::container),
@@ -26,4 +34,9 @@ public record LootTrigger(Holder<BlockEntityType<?>> container, ContextKeySet co
         return TRIGGER_TYPE;
     }
 
+    @Override
+    public void addComponents(AbilityContext context) {
+        context.set(WotrDataComponentType.AbilityContextData.TRIGGER_TARGET,
+                new TargetComponent(new BlockHitResult(position.getCenter(), UP, position, false)));
+    }
 }

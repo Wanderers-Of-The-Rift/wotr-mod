@@ -229,6 +229,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
         add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
+        add("ability." + WanderersOfTheRift.MODID + ".firebolts", "Firebolts");
+        add("ability." + WanderersOfTheRift.MODID + ".strength", "Strength");
+        add("ability." + WanderersOfTheRift.MODID + ".weak_strength", "Strength (Exhausted)");
+        add("ability." + WanderersOfTheRift.MODID + ".test_chain_ability", "Strength Chain");
         add("ability." + WanderersOfTheRift.MODID + ".icicles", "Icicles");
         add("ability." + WanderersOfTheRift.MODID + ".mega_boost", "Mega Boost");
         add("ability." + WanderersOfTheRift.MODID + ".dash", "Dash");
@@ -238,9 +242,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+        add("ability." + WanderersOfTheRift.MODID + ".veinminer", "Veinmine");
         add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
         add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
+        add("trigger." + WanderersOfTheRift.MODID + ".break_block", "Break Block");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 

@@ -1,0 +1,13 @@
+{
+  "type": "wotr:chain",
+  "icon": "minecraft:textures/mob_effect/strength.png",
+  "abilities": [
+    {
+      "ability": "wotr:strength"
+    },
+    {
+      "ability": "wotr:weak_strength",
+      "auto_activate": true
+    }
+  ]
+}

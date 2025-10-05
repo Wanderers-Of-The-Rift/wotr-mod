@@ -9,20 +9,22 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
-public record SimpleProjectileConfig(int projectiles, int pierce, float velocity, boolean gravityAffected,
-        float gravity, int groundPersistTicks, SimpleProjectileConfigRenderConfig renderConfig,
-        SimpleProjectileConfigSoundConfig soundConfig) {
+public record SimpleProjectileConfig(int projectiles, int pierce, boolean pierceBlocks, float velocity,
+        boolean gravityAffected, float gravity, int persistTicks, int groundPersistTicks,
+        SimpleProjectileConfigRenderConfig renderConfig, SimpleProjectileConfigSoundConfig soundConfig) {
 
     public static final SimpleProjectileConfig DEFAULT = new SimpleProjectileConfig(
-            1, 0, 1.0F, true, 0.05F, 0, SimpleProjectileConfigRenderConfig.DEFAULT,
+            1, 0, false, 1.0F, true, 0.05F, 0, 0, SimpleProjectileConfigRenderConfig.DEFAULT,
             SimpleProjectileConfigSoundConfig.DEFAULT);
 
     public static final Codec<SimpleProjectileConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.optionalFieldOf("projectiles", 1).forGetter(SimpleProjectileConfig::projectiles),
             Codec.INT.optionalFieldOf("pierce", 0).forGetter(SimpleProjectileConfig::pierce),
+            Codec.BOOL.optionalFieldOf("pierce_blocks", false).forGetter(SimpleProjectileConfig::pierceBlocks),
             Codec.FLOAT.fieldOf("velocity").forGetter(SimpleProjectileConfig::velocity),
             Codec.BOOL.optionalFieldOf("gravity_affected", true).forGetter(SimpleProjectileConfig::gravityAffected),
             Codec.FLOAT.optionalFieldOf("gravity", 0.05F).forGetter(SimpleProjectileConfig::gravity),
+            Codec.INT.optionalFieldOf("persist_ticks", 1200).forGetter(SimpleProjectileConfig::persistTicks),
             Codec.INT.optionalFieldOf("ground_persist_ticks", 0).forGetter(SimpleProjectileConfig::groundPersistTicks),
             SimpleProjectileConfigRenderConfig.CODEC.fieldOf("render").forGetter(SimpleProjectileConfig::renderConfig),
             SimpleProjectileConfigSoundConfig.CODEC.optionalFieldOf("sound", SimpleProjectileConfigSoundConfig.DEFAULT)

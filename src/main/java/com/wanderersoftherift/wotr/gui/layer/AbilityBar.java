@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.gui.layer;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.config.ClientConfig;
@@ -105,8 +104,6 @@ public final class AbilityBar implements ConfigurableLayer {
         orientation.renderBackground(graphics, pos, abilitySlots.getSlots());
         Vector2ic slotOffset = orientation.getSlotOffset();
 
-        AbilityCooldowns cooldowns = player.getData(WotrAttachments.ABILITY_COOLDOWNS);
-
         for (int i = 0; i < abilitySlots.getSlots(); i++) {
             ItemStack abilityItem = abilitySlots.getStackInSlot(i);
             ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
@@ -114,11 +111,13 @@ public final class AbilityBar implements ConfigurableLayer {
                 continue;
             }
             var abilitySource = AbilitySource.sourceForSlot(i);
-            float cooldown = 1f - cooldowns.getCooldown(abilitySource)
+            var ability = abilitySource.getAbility(player);
+            float cooldown = 1f - ability.value()
+                    .getCooldown(player, abilitySource)
                     .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
-            boolean isActive = player.getData(WotrAttachments.ABILITY_STATES).isActive(abilitySource);
-            renderAbility(graphics, pos.x + ICON_OFFSET + i * slotOffset.x(), pos.y + ICON_OFFSET + i * slotOffset.y(),
-                    abilityComponent.ability(), isActive, cooldown);
+            boolean isActive = ability.value().isActive(player, abilitySource);
+            renderAbility(graphics, player, abilitySource, pos.x + ICON_OFFSET + i * slotOffset.x(),
+                    pos.y + ICON_OFFSET + i * slotOffset.y(), ability, isActive, cooldown);
         }
         renderSelected(graphics, pos.x + abilitySlots.getSelectedSlot() * slotOffset.x(),
                 pos.y + abilitySlots.getSelectedSlot() * slotOffset.y());
@@ -133,9 +132,10 @@ public final class AbilityBar implements ConfigurableLayer {
                 ItemStack abilityItem = abilitySlots.getStackInSlot(slot);
                 ActivatableAbility abilityComponent = abilityItem.get(WotrDataComponentType.ABILITY);
                 if (abilityComponent != null) {
+                    var abilitySource = AbilitySource.sourceForSlot(slot);
                     graphics.renderComponentTooltip(Minecraft.getInstance().font,
-                            List.of(Ability.getDisplayName(abilityComponent.ability())), mouseScreenPos.x,
-                            mouseScreenPos.y + 8);
+                            List.of(Ability.getDisplayName(abilityComponent.ability(), player, abilitySource)),
+                            mouseScreenPos.x, mouseScreenPos.y + 8);
                 }
             });
         }
@@ -151,14 +151,16 @@ public final class AbilityBar implements ConfigurableLayer {
 
     private void renderAbility(
             GuiGraphics graphics,
+            LocalPlayer player,
+            AbilitySource source,
             int xOffset,
             int yOffset,
             Holder<Ability> ability,
             boolean isActive,
             float cooldownFraction) {
         if (ability != null) {
-            graphics.blit(RenderType::guiTextured, ability.value().getIcon(), xOffset, yOffset, 0, 0, ICON_SIZE,
-                    ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            graphics.blit(RenderType::guiTextured, ability.value().getIcon(player, source), xOffset, yOffset, 0, 0,
+                    ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
         }
 
         if (isActive) {

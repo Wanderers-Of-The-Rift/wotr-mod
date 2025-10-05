@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.triggers.BreakBlockTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.DealDamageTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.KillTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.LootTrigger;
@@ -21,6 +22,8 @@ public class WotrTrackedAbilityTriggers {
             .register("take_damage", () -> TakeDamageTrigger.TRIGGER_TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<DealDamageTrigger>> DEAL_DAMAGE = TRIGGERS
             .register("deal_damage", () -> DealDamageTrigger.TRIGGER_TYPE);
+    public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<BreakBlockTrigger>> BREAK_BLOCK = TRIGGERS
+            .register("break_block", () -> BreakBlockTrigger.TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<LootTrigger>> LOOT = TRIGGERS
             .register("loot", () -> LootTrigger.TRIGGER_TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<KillTrigger>> KILL = TRIGGERS

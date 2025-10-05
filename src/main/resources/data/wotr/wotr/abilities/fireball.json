@@ -31,7 +31,10 @@
                       },
                       "targeting": {
                           "type": "wotr:area",
-                          "range": 12.0,
+                          "shape": {
+                            "type": "wotr:cube",
+                            "range": 12.0
+                          },
                           "target": {
                               "sentiment": "not_friend"
                           }
@@ -41,36 +44,35 @@
               "condition_name": "wotr:poison_fireball"
           },
         {
-          "type": "wotr:damage",
-          "amount": 10.0,
-          "damage_type": "wotr:fire",
+          "type": "wotr:targeting",
           "targeting": {
             "type": "wotr:area",
-            "range": 12.0,
-            "target": {
+            "shape": {
+              "type": "wotr:cube",
+              "range": 4.0
+            },
+            "entities": {
               "sentiment": "not_friend"
             }
-          }
+          },
+          "effects": [
+            {
+              "type": "wotr:damage",
+              "amount": 10.0,
+              "damage_type": "wotr:fire"
+            }
+          ]
         },
         {
           "type": "wotr:particle",
-          "targeting": {
-            "type": "wotr:self"
-          },
           "particle": {
             "type": "minecraft:explosion"
           }
         }
-      ],
-      "targeting": {
-        "type": "wotr:self"
-      }
+      ]
     },
     {
       "type": "wotr:particle",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "particle": {
         "type": "minecraft:bubble"
       }

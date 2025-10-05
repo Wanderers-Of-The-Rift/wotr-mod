@@ -127,7 +127,8 @@ public class TriggerTracker {
             if (predicate().type().value() != activation.type()) {
                 return false;
             }
-            return holder.getData(WotrAttachments.ONGOING_ABILITIES).activate(source, source.getItem(holder), ability);
+            return holder.getData(WotrAttachments.ONGOING_ABILITIES)
+                    .activate(source, ability, activation::addComponents);
         }
 
         // todo https://github.com/Wanderers-Of-The-Rift/wotr-mod/issues/180

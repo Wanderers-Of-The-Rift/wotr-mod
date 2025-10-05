@@ -4,18 +4,34 @@
     "cooldown": 40,
     "effects": [
         {
-            "type": "wotr:summon",
+            "type": "wotr:targeting",
             "targeting": {
                 "type": "wotr:area",
-                "range": 5
+                "shape": {
+                    "type": "wotr:cube",
+                    "range": 5
+                }
             },
-            "entity_type": "minecraft:iron_golem",
-            "amount": 1,
             "effects": [
-            ],
-            "particles": {
-                "user": "minecraft:bubble",
-                "target": "minecraft:explosion"
+                {
+                    "type": "wotr:summon",
+                    "entity_type": "minecraft:iron_golem",
+                    "amount": 1,
+                    "effects": [
+                        {
+                            "type": "wotr:particle",
+                            "particle": {
+                                "type": "minecraft:explosion"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "wotr:particle",
+            "particle": {
+                "type": "minecraft:bubble"
             }
         }
     ],

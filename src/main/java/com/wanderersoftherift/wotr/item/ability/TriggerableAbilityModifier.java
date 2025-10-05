@@ -66,8 +66,7 @@ public record TriggerableAbilityModifier(Holder<Ability> providedAbility, Trigge
                         .translatable(WanderersOfTheRift.translationId("trigger", trigger().type().getKey().location()))
         );
 
-        return new ImageComponent(stack, text.withStyle(style),
-                providedAbility.value().getSmallIcon().orElse(providedAbility.value().getIcon()));
+        return new ImageComponent(stack, text.withStyle(style), providedAbility.value().getEmblemIcon());
     }
 
     private String getTierInfoString(int tier) {

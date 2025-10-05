@@ -14,6 +14,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @EventBusSubscriber
@@ -62,8 +63,18 @@ public class AbilityTriggerEvents {
                 && event.getContainer() instanceof BlockEntity entity) {
             var looter = event.getLootContext().getParameter(LootContextParams.THIS_ENTITY);
             TriggerTracker.forEntity(looter)
-                    .trigger(new LootTrigger(BuiltInRegistries.BLOCK_ENTITY_TYPE.wrapAsHolder(entity.getType()),
+                    .trigger(new LootTrigger(entity.getBlockPos(),
+                            BuiltInRegistries.BLOCK_ENTITY_TYPE.wrapAsHolder(entity.getType()),
                             event.getLootTable().getParamSet(), event.getLootTable().getLootTableId()));
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void breakBlockEvent(BlockEvent.BreakEvent event) {
+        if (event.isCanceled()) {
+            return;
+        }
+        TriggerTracker.forEntity(event.getPlayer())
+                .trigger(new BreakBlockTrigger(event.getState(), event.getPos(), event.getPlayer().getDirection()));
     }
 }
