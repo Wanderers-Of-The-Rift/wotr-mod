@@ -68,8 +68,13 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
     }
 
     public void scheduledTick(ServerLevel serverLevel, BlockPos pos, BlockState state1) {
+        if (state == null) {
+            return;
+        }
         var nextTick = state.scheduledTick(serverLevel, this);
-        serverLevel.scheduleTick(pos, state1.getBlock(), nextTick);
+        if (nextTick >= 0) {
+            serverLevel.scheduleTick(pos, state1.getBlock(), nextTick);
+        }
 
     }
 
