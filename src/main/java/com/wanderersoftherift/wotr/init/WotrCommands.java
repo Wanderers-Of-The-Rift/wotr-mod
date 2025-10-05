@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.commands.CurrencyCommands;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.ExportCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
+import com.wanderersoftherift.wotr.commands.NPCCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
@@ -27,6 +28,7 @@ public final class WotrCommands {
     public static void registerCommands(RegisterCommandsEvent event) {
         new SpawnPieceCommand().registerCommand(event.getDispatcher(), event.getBuildContext());
         new DebugCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new NPCCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new RiftKeyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new RiftCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new CurrencyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());

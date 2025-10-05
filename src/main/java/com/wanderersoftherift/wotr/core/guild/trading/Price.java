@@ -50,8 +50,9 @@ public record Price(Object2IntMap<Holder<Currency>> amounts) {
 
     public Collection<Either<FormattedText, TooltipComponent>> getTooltips() {
         List<Either<FormattedText, TooltipComponent>> result = new ArrayList<>();
-        amounts.forEach((currency, amount) -> result
-                .add(Either.right(new ImageComponent(Component.literal(amount.toString()), currency.value().icon()))));
+        amounts.forEach((currency, amount) -> result.add(Either.right(new ImageComponent(
+                Component.literal(amount.toString()).append(" ").append(Currency.getDisplayName(currency)),
+                currency.value().icon()))));
         return result;
     }
 
