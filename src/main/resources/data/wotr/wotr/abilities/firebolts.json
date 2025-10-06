@@ -2,14 +2,11 @@
   "type": "wotr:persistent",
   "icon": "minecraft:textures/item/fire_charge.png",
   "can_deactivate": false,
-  "channelled": true,
+  "channelled": false,
   "requirements": [
     {
       "type": "wotr:mana",
       "amount": 10
-    },
-    {
-      "type": "wotr:no_move"
     }
   ],
   "on_deactivation_costs": [
@@ -22,18 +19,12 @@
     {
       "type": "wotr:own_attached_effect",
       "id": "main"
-    },
-    {
-      "type": "wotr:no_move"
     }
   ],
   "activation_effects": [
     {
       "type": "wotr:attach",
       "id": "main",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "trigger": {
         "frequency": 10
       },
@@ -57,26 +48,32 @@
           },
           "effects": [
             {
-              "type": "wotr:damage",
-              "amount": 10.0,
-              "damage_type": "wotr:fire",
+              "type": "wotr:targeting",
               "targeting": {
                 "type": "wotr:area",
-                "range": 12.0,
-                "target": {
+                "shape": {
+                  "type": "wotr:cube",
+                  "range": 4.0
+                },
+                "entities": {
                   "sentiment": "not_friend"
                 }
+              },
+              "effects": [
+                {
+                  "type": "wotr:damage",
+                  "amount": 10.0,
+                  "damage_type": "wotr:fire"
+                }
+              ]
+            },
+            {
+              "type": "wotr:particle",
+              "particle": {
+                "type": "minecraft:explosion"
               }
             }
-          ],
-          "particles": {
-            "target_block": {
-              "type": "minecraft:explosion"
-            }
-          },
-          "targeting": {
-            "type": "wotr:self"
-          }
+          ]
         }
       ]
     }
@@ -84,10 +81,7 @@
   "on_deactivation_effects": [
     {
       "type": "wotr:detach_own",
-      "id": "main",
-      "targeting": {
-        "type": "wotr:self"
-      }
+      "id": "main"
     }
   ]
 }

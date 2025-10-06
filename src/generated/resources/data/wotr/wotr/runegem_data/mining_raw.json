@@ -1,0 +1,18 @@
+{
+  "modifier_options": [
+    {
+      "modifiers": [
+        {
+          "modifier": "wotr:mining_speed",
+          "tier": 1
+        }
+      ],
+      "supported_items": "#wotr:socketable_main_hand_slot_tool"
+    }
+  ],
+  "name": {
+    "translate": "runegem.wotr.mining_raw"
+  },
+  "shape": "circle",
+  "tier": "raw"
+}

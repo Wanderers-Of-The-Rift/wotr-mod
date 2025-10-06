@@ -15,9 +15,6 @@
   "activation_effects": [
     {
       "type": "wotr:attach",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "modifiers": [
         {
           "modifier": "wotr:ability/mana_degen",
@@ -31,31 +28,36 @@
       },
       "effects": [
         {
-          "type": "wotr:movement",
+          "type": "wotr:targeting",
           "targeting": {
             "type": "wotr:area",
-            "range": 10,
-            "include_self": false,
-            "target": {
-              "sentiment": "any"
+            "shape": {
+              "type": "wotr:cube",
+              "range": 10
+            },
+            "entities": {
+              "sentiment": "any",
+              "exclude_source": true
             }
           },
-          "velocity": [
-            0,
-            0,
-            -1
-          ],
-          "relativeFrame": "source_from_target"
+          "effects": [
+            {
+              "type": "wotr:movement",
+              "velocity": [
+                0,
+                0,
+                -1
+              ],
+              "relative_frame": "source_from_target"
+            }
+          ]
         }
       ]
     }
   ],
   "on_deactivation_effects": [
     {
-      "type": "wotr:detach_own",
-      "targeting": {
-        "type": "wotr:self"
-      }
+      "type": "wotr:detach_own"
     }
   ]
 }

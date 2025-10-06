@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityState;
+import com.wanderersoftherift.wotr.abilities.attachment.TargetComponent;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.item.LootBox;
@@ -24,11 +26,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class WotrDataComponentType {
@@ -57,7 +61,28 @@ public class WotrDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(
             "gear_rift_tier", Codec.INT, ByteBufCodecs.INT);
 
-    public static class RiftKeyData {
+    public static final class AbilityContextData {
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChainAbilityState>> CHAIN_ABILITY_STATE = register(
+                "chain_ability_state", ChainAbilityState.CODEC, null
+        );
+
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<Set<ResourceLocation>>> CONDITIONS = register(
+                "conditions", Codec.list(ResourceLocation.CODEC).xmap(Set::copyOf, List::copyOf), null
+        );
+
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<TargetComponent>> TRIGGER_TARGET = register(
+                "trigger_target", TargetComponent.CODEC, null
+        );
+
+        public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> PARENT_ABILITY = register(
+                "parent_ability", UUIDUtil.CODEC, null
+        );
+
+        private AbilityContextData() {
+        }
+    }
+
+    public static final class RiftKeyData {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RIFT_TIER = register(
                 "rift_config/tier", Codec.INT, ByteBufCodecs.INT);
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<RiftTheme>>> RIFT_THEME = register(
@@ -90,6 +115,9 @@ public class WotrDataComponentType {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<RiftKeyParameterData>> RIFT_PARAMETERS = register(
                 "rift_config/rift_parameters", RiftKeyParameterData.CODEC,
                 ByteBufCodecs.fromCodecWithRegistries(RiftKeyParameterData.CODEC));
+
+        private RiftKeyData() {
+        }
     }
 
     static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(
@@ -106,5 +134,6 @@ public class WotrDataComponentType {
 
     static {
         var unused = RiftKeyData.RIFT_TIER; // invokes <cinit>
+        var unused2 = AbilityContextData.CHAIN_ABILITY_STATE;
     }
 }

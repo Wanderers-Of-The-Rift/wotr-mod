@@ -1,0 +1,27 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+     {
+      "type": "wotr:targeting",
+      "targeting": [
+        {
+          "type": "wotr:trigger_target"
+        },
+        {
+          "type": "wotr:connected_block",
+          "blocks": {
+            "match_source" : true
+          },
+          "count": 8
+        }
+      ],
+      "effects": [
+        {
+          "type": "wotr:break",
+          "as_tool": "ability_item"
+        }
+      ]
+    }
+  ],
+  "icon": "minecraft:textures/item/iron_pickaxe.png"
+}

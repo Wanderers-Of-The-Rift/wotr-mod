@@ -10,9 +10,6 @@
   "effects": [
     {
       "type": "wotr:attach",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "continue": {
         "duration": 200
       },
@@ -23,9 +20,6 @@
       "effects": [
         {
           "type": "wotr:attach",
-          "targeting": {
-            "type": "wotr:self"
-          },
           "continue": {
             "duration": 200
           },
@@ -35,21 +29,28 @@
           },
           "effects": [
             {
-              "type": "wotr:movement",
+              "type": "wotr:targeting",
               "targeting": {
                 "type": "wotr:area",
-                "range": 10,
-                "include_self": false,
-                "target": {
-                  "sentiment": "any"
+                "shape": {
+                  "type": "wotr:cube",
+                  "range": 10
+                },
+                "entities": {
+                  "exclude_source": true
                 }
               },
-              "velocity": [
-                0,
-                0,
-                -1
-              ],
-              "relativeFrame": "source_from_target"
+              "effects": [
+                {
+                  "type": "wotr:movement",
+                  "velocity": [
+                    0,
+                    0,
+                    -1
+                  ],
+                  "relative_frame": "source_from_target"
+                }
+              ]
             }
           ]
         }

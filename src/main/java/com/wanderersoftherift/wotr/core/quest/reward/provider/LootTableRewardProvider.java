@@ -5,15 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
+import com.wanderersoftherift.wotr.util.ItemUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,27 +35,6 @@ public record LootTableRewardProvider(ResourceKey<LootTable> lootTable) implemen
     @Override
     public @NotNull List<Reward> generateReward(LootParams params) {
         LootTable table = params.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
-        return condense(table.getRandomItems(params)).stream().<Reward>map(ItemReward::new).toList();
-    }
-
-    private List<ItemStack> condense(Collection<ItemStack> randomItems) {
-        List<ItemStack> result = new ArrayList<>();
-        for (ItemStack item : randomItems) {
-            for (ItemStack existing : result) {
-                if (existing.getCount() < existing.getMaxStackSize()
-                        && ItemStack.isSameItemSameComponents(existing, item)) {
-                    int amount = Math.min(existing.getMaxStackSize() - existing.getCount(), item.getCount());
-                    existing.setCount(existing.getCount() + amount);
-                    item.setCount(item.getCount() - amount);
-                    if (item.isEmpty()) {
-                        break;
-                    }
-                }
-            }
-            if (!item.isEmpty()) {
-                result.add(item);
-            }
-        }
-        return result;
+        return ItemUtil.condense(table.getRandomItems(params)).stream().<Reward>map(ItemReward::new).toList();
     }
 }
