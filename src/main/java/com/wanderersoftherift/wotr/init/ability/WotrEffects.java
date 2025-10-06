@@ -5,18 +5,20 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.effects.AbilityEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ApplyStatusEffect;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
-import com.wanderersoftherift.wotr.abilities.effects.BlankEffect;
 import com.wanderersoftherift.wotr.abilities.effects.BreakBlockEffect;
+import com.wanderersoftherift.wotr.abilities.effects.ConditionalEffect;
 import com.wanderersoftherift.wotr.abilities.effects.DamageEffect;
 import com.wanderersoftherift.wotr.abilities.effects.DetachOwnEffect;
 import com.wanderersoftherift.wotr.abilities.effects.HealEffect;
 import com.wanderersoftherift.wotr.abilities.effects.MovementEffect;
+import com.wanderersoftherift.wotr.abilities.effects.NoopEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ParticleEffect;
 import com.wanderersoftherift.wotr.abilities.effects.ProjectileEffect;
+import com.wanderersoftherift.wotr.abilities.effects.SetBlockEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SoundEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SummonEffect;
-import com.wanderersoftherift.wotr.abilities.effects.TargetEffect;
+import com.wanderersoftherift.wotr.abilities.effects.TargetingEffect;
 import com.wanderersoftherift.wotr.abilities.effects.TeleportEffect;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -34,8 +36,8 @@ public class WotrEffects {
             () -> DetachOwnEffect.CODEC);
     public static final Supplier<MapCodec<? extends SoundEffect>> SOUND = EFFECTS.register("sound",
             () -> SoundEffect.CODEC);
-    public static final Supplier<MapCodec<? extends BlankEffect>> BLANK = EFFECTS.register("blank",
-            () -> BlankEffect.CODEC);
+    public static final Supplier<MapCodec<? extends NoopEffect>> NOOP = EFFECTS.register("noop",
+            () -> NoopEffect.CODEC);
     public static final Supplier<MapCodec<? extends SimpleProjectileEffect>> SIMPLE_PROJECTILE = EFFECTS
             .register("simple_projectile", () -> SimpleProjectileEffect.CODEC);
     public static final Supplier<MapCodec<? extends ProjectileEffect>> PROJECTILE = EFFECTS.register("projectile",
@@ -54,8 +56,12 @@ public class WotrEffects {
             () -> DamageEffect.CODEC);
     public static final Supplier<MapCodec<? extends AbilityEffect>> HEAL = EFFECTS.register("heal",
             () -> HealEffect.CODEC);
-    public static final Supplier<MapCodec<? extends AbilityEffect>> TARGET = EFFECTS.register("target",
-            () -> TargetEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> TARGETING = EFFECTS.register("targeting",
+            () -> TargetingEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> CONDITIONAL = EFFECTS.register("conditional",
+            () -> ConditionalEffect.CODEC);
     public static final Supplier<MapCodec<? extends AbilityEffect>> PARTICLE = EFFECTS.register("particle",
             () -> ParticleEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> SET_BLOCK = EFFECTS.register("set_block",
+            () -> SetBlockEffect.CODEC);
 }

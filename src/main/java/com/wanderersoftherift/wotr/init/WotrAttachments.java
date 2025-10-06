@@ -1,7 +1,9 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityConditions;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
@@ -11,6 +13,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.DeathNotifierAttachment;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
@@ -23,6 +26,7 @@ import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -35,6 +39,13 @@ import java.util.function.Supplier;
 public class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
+
+    public static final Supplier<AttachmentType<DeathNotifierAttachment>> DEATH_NOTIFICATION = ATTACHMENT_TYPES
+            .register(
+                    "death_notification",
+                    () -> AttachmentType.builder(() -> new DeathNotifierAttachment(BlockPos.ZERO))
+                            .serialize(DeathNotifierAttachment.CODEC)
+                            .build());
 
     public static final Supplier<AttachmentType<List<ItemStack>>> RESPAWN_ITEMS = ATTACHMENT_TYPES.register(
             "respawn_items",
@@ -96,6 +107,14 @@ public class WotrAttachments {
 
     public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
             "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());
+    public static final Supplier<AttachmentType<AbilityEnhancements>> ABILITY_ENHANCEMENTS = ATTACHMENT_TYPES.register(
+            "ability_enhancements", () -> AttachmentType.builder(AbilityEnhancements::new).build()
+    );
+    public static final Supplier<AttachmentType<? extends AbilityConditions>> ABILITY_CONDITIONS = ATTACHMENT_TYPES
+            .register(
+                    "ability_conditions", () -> AttachmentType.builder(AbilityConditions::new).build()
+            );
+
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());

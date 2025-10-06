@@ -1,0 +1,14 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:ability_condition",
+                "ability": "wotr:fireball",
+                "condition": "wotr:poison_fireball"
+            }
+        ]
+    ]
+}

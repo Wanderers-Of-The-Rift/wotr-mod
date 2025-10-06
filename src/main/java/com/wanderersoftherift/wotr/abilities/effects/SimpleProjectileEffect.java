@@ -3,79 +3,67 @@ package com.wanderersoftherift.wotr.abilities.effects;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleEffectProjectile;
 import com.wanderersoftherift.wotr.entity.projectile.SimpleProjectileConfig;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import net.minecraft.core.BlockPos;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 
-public class SimpleProjectileEffect extends AbilityEffect {
-    public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbilityEffect.commonFields(instance)
-                    .and(SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::getConfig))
-                    .apply(instance, SimpleProjectileEffect::new));
-
-    private SimpleProjectileConfig config;
-
-    public SimpleProjectileEffect(AbilityTargeting targeting, List<AbilityEffect> effects,
-            SimpleProjectileConfig config) {
-        super(targeting, effects);
-        this.config = config;
-    }
+/**
+ * Effect that produces a projectile, with effects that apply to what it hits
+ */
+public record SimpleProjectileEffect(List<AbilityEffect> effects, SimpleProjectileConfig config)
+        implements AbilityEffect {
+    public static final MapCodec<SimpleProjectileEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            AbilityEffect.DIRECT_CODEC.listOf()
+                    .optionalFieldOf("effects", List.of())
+                    .forGetter(SimpleProjectileEffect::effects),
+            SimpleProjectileConfig.CODEC.fieldOf("config").forGetter(SimpleProjectileEffect::config)
+    ).apply(instance, SimpleProjectileEffect::new));
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 
-    public SimpleProjectileConfig getConfig() {
-        return config;
-    }
-
     @Override
-    public void apply(Entity source, List<BlockPos> blocks, AbilityContext context) {
-        List<BlockPos> targets = getTargeting().getBlocks(source);
-        List<Entity> targetEntities = getTargeting().getTargets(source, blocks, context);
+    public void apply(AbilityContext context, TargetInfo targetInfo) {
 
-        if (!targetEntities.isEmpty()) {
+        // NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it
+        // inline with the other effects
+        // Target to me has always been more of a frame of reference for the effect not what the effect actually
+        // "targets" but we can change this later if we want to make the change towards it being the actual target.
+        targetInfo.targetEntities().forEach(target -> {
+            EntityType<?> type = WotrEntities.SIMPLE_EFFECT_PROJECTILE.get();
+            int numberOfProjectiles = getNumberOfProjectiles(context);
 
-            // NOTE: Making a change here based on what I originally envisioned "target" to be used for, and pulling it
-            // inline with the other effects
-            // Target to me has always been more of a frame of reference for the effect not what the effect actually
-            // "targets" but we can change this later if we want to make the change towards it being the actual target.
-            for (Entity target : targetEntities) {
-                EntityType<?> type = WotrEntities.SIMPLE_EFFECT_PROJECTILE.get();
-                int numberOfProjectiles = getNumberOfProjectiles(context);
-
-                float spread = getSpread(context);
-                float f1;
-                if (numberOfProjectiles == 1) {
-                    f1 = 0.0F;
-                } else {
-                    f1 = 2.0F * spread / (float) (numberOfProjectiles - 1);
-                }
-                float f2 = (float) ((numberOfProjectiles - 1) % 2) * f1 / 2.0F;
-                float f3 = 1.0F;
-                for (int i = 0; i < numberOfProjectiles; i++) {
-                    float angle = f2 + f3 * (float) ((i + 1) / 2) * f1;
-                    f3 = -f3;
-                    spawnProjectile(target, type, angle, context);
-                }
+            float spread = getSpread(context);
+            float f1;
+            if (numberOfProjectiles == 1) {
+                f1 = 0.0F;
+            } else {
+                f1 = 2.0F * spread / (float) (numberOfProjectiles - 1);
             }
-
-        }
+            float f2 = (float) ((numberOfProjectiles - 1) % 2) * f1 / 2.0F;
+            float f3 = 1.0F;
+            for (int i = 0; i < numberOfProjectiles; i++) {
+                float angle = f2 + f3 * (float) ((i + 1) / 2) * f1;
+                f3 = -f3;
+                spawnProjectile(target, type, angle, context);
+            }
+        });
     }
 
     private float getSpread(AbilityContext context) {
@@ -102,19 +90,28 @@ public class SimpleProjectileEffect extends AbilityEffect {
         }
     }
 
-    public void applyDelayed(Level level, Entity target, List<BlockPos> blocks, AbilityContext context) {
-        try (var ignore = context.enableTemporaryUpgradeModifiers()) {
-            super.apply(target, blocks, context);
+    public void applyDelayed(Entity projectile, HitResult hit, AbilityContext context) {
+        try (var ignore = context.activate()) {
+            TargetInfo targetInfo = new TargetInfo(new EntityHitResult(projectile, projectile.position()),
+                    List.of(hit));
+            for (AbilityEffect effect : effects) {
+                effect.apply(context, targetInfo);
+            }
         }
     }
 
     @Override
-    protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevant(ModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
-            Holder<Attribute> attribute = attributeModifier.getAttribute();
+            Holder<Attribute> attribute = attributeModifier.attribute();
             return WotrAttributes.PROJECTILE_SPREAD.equals(attribute)
                     || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
                     || WotrAttributes.PROJECTILE_SPEED.equals(attribute);
+        }
+        for (AbilityEffect effect : effects) {
+            if (effect.isRelevant(modifierEffect)) {
+                return true;
+            }
         }
         return false;
     }

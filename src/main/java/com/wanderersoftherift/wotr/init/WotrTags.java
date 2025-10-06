@@ -32,12 +32,19 @@ public class WotrTags {
         public static final TagKey<Item> SOCKETABLE_LEGGINGS_SLOT = createTag("socketable_leggings_slot");
         public static final TagKey<Item> SOCKETABLE_BOOTS_SLOT = createTag("socketable_boots_slot");
         public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT = createTag("socketable_main_hand_slot");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT_WEAPON = createTag(
+                "socketable_main_hand_slot_weapon");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT_TOOL = createTag("socketable_main_hand_slot_tool");
+        public static final TagKey<Item> SOCKETABLE_MAIN_HAND_SLOT_HYBRID = createTag(
+                "socketable_main_hand_slot_hybrid");
         public static final TagKey<Item> SOCKETABLE_OFF_HAND_SLOT = createTag("socketable_off_hand_slot");
 
         public static final TagKey<Item> LEATHER_TYPE_GEAR = createTag("gear_type.leather_type_gear");
+        public static final TagKey<Item> CHAINMAIL_TYPE_GEAR = createTag("gear_type.chainmail_type_gear");
         public static final TagKey<Item> IRON_TYPE_GEAR = createTag("gear_type.iron_type_gear");
         public static final TagKey<Item> DIAMOND_TYPE_GEAR = createTag("gear_type.diamond_type_gear");
         public static final TagKey<Item> GOLD_TYPE_GEAR = createTag("gear_type.gold_type_gear");
+        public static final TagKey<Item> NETHERITE_TYPE_GEAR = createTag("gear_type.netherite_type_gear");
 
         public static final TagKey<Item> RANGE_TYPE_WEAPON = createTag("weapon_type.range_type_weapon");
         public static final TagKey<Item> IRON_TYPE_WEAPON = createTag("weapon_type.iron_type_weapon");

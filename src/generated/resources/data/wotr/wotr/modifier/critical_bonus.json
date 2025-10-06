@@ -3,70 +3,55 @@
     "color": "#FF4500"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:critical_bonus",
-          "id": "wotr:critical_bonus",
-          "max_roll": 1.0,
-          "min_roll": 0.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:critical_bonus",
-          "id": "wotr:critical_bonus",
-          "max_roll": 1.5,
-          "min_roll": 1.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:critical_bonus",
-          "id": "wotr:critical_bonus",
-          "max_roll": 2.0,
-          "min_roll": 1.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:critical_bonus",
-          "id": "wotr:critical_bonus",
-          "max_roll": 2.5,
-          "min_roll": 2.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 4
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "wotr:critical_bonus",
-          "id": "wotr:critical_bonus",
-          "max_roll": 3.0,
-          "min_roll": 2.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 5
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:critical_bonus",
+        "id": "wotr:critical_bonus",
+        "max_roll": 1.0,
+        "min_roll": 0.5,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:critical_bonus",
+        "id": "wotr:critical_bonus",
+        "max_roll": 1.5,
+        "min_roll": 1.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:critical_bonus",
+        "id": "wotr:critical_bonus",
+        "max_roll": 2.0,
+        "min_roll": 1.5,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:critical_bonus",
+        "id": "wotr:critical_bonus",
+        "max_roll": 2.5,
+        "min_roll": 2.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:critical_bonus",
+        "id": "wotr:critical_bonus",
+        "max_roll": 3.0,
+        "min_roll": 2.5,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

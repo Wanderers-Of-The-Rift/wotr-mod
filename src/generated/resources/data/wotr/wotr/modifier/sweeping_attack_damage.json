@@ -3,57 +3,45 @@
     "color": "#FF4500"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:sweeping_damage_ratio",
-          "id": "wotr:sweeping_attack_damage",
-          "max_roll": 0.25,
-          "min_roll": 0.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:sweeping_damage_ratio",
-          "id": "wotr:sweeping_attack_damage",
-          "max_roll": 0.5,
-          "min_roll": 0.25,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:sweeping_damage_ratio",
-          "id": "wotr:sweeping_attack_damage",
-          "max_roll": 0.75,
-          "min_roll": 0.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:sweeping_damage_ratio",
-          "id": "wotr:sweeping_attack_damage",
-          "max_roll": 1.0,
-          "min_roll": 0.75,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 4
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:sweeping_damage_ratio",
+        "id": "wotr:sweeping_attack_damage",
+        "max_roll": 0.25,
+        "min_roll": 0.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:sweeping_damage_ratio",
+        "id": "wotr:sweeping_attack_damage",
+        "max_roll": 0.5,
+        "min_roll": 0.25,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:sweeping_damage_ratio",
+        "id": "wotr:sweeping_attack_damage",
+        "max_roll": 0.75,
+        "min_roll": 0.5,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:sweeping_damage_ratio",
+        "id": "wotr:sweeping_attack_damage",
+        "max_roll": 1.0,
+        "min_roll": 0.75,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

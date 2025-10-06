@@ -4,35 +4,19 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.world.entity.Entity;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 
-import java.util.List;
-import java.util.Set;
-
-public class HealEffect extends AbilityEffect {
-    public static final MapCodec<HealEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbilityEffect.commonFields(instance)
-                    .and(Codec.FLOAT.fieldOf("amount").forGetter(HealEffect::getAmount))
-                    .apply(instance, HealEffect::new));
-
-    private float healAmount = 0;
-
-    public HealEffect(AbilityTargeting targeting, List<AbilityEffect> effects, float amount) {
-        super(targeting, effects);
-        this.healAmount = amount;
-    }
-
-    public float getAmount() {
-        return healAmount;
-    }
+/**
+ * Effect that applies healing to target entities
+ */
+public record HealEffect(float amount) implements AbilityEffect {
+    public static final MapCodec<HealEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.FLOAT.fieldOf("amount").forGetter(HealEffect::amount)
+    ).apply(instance, HealEffect::new));
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
@@ -40,31 +24,17 @@ public class HealEffect extends AbilityEffect {
     }
 
     @Override
-    public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
-        List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-
-        float finalHealAmount = context.getAbilityAttribute(WotrAttributes.HEAL_POWER, healAmount);
-        for (Entity target : targets) {
-            if (target instanceof LivingEntity living) {
-                living.heal(finalHealAmount);
-            }
-            // Then apply children affects to targets
-            super.apply(target, getTargeting().getBlocks(user), context);
-        }
-
-        if (targets.isEmpty()) {
-            super.apply(null, getTargeting().getBlocks(user), context);
-        }
+    public void apply(AbilityContext context, TargetInfo targetInfo) {
+        float finalHealAmount = context.getAbilityAttribute(WotrAttributes.HEAL_POWER, amount);
+        targetInfo.targetEntities()
+                .filter(LivingEntity.class::isInstance)
+                .map(LivingEntity.class::cast)
+                .forEach(target -> target.heal(finalHealAmount));
     }
 
     @Override
-    public Set<Holder<Attribute>> getApplicableAttributes() {
-        return super.getApplicableAttributes();
-    }
-
-    @Override
-    protected boolean isRelevantToThis(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevant(ModifierEffect modifierEffect) {
         return modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.HEAL_POWER.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.HEAL_POWER.equals(attributeModifierEffect.attribute());
     }
 }

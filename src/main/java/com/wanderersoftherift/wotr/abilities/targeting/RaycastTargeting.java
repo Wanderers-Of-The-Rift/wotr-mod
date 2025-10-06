@@ -3,37 +3,32 @@ package com.wanderersoftherift.wotr.abilities.targeting;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
-import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetPredicate;
-import net.minecraft.core.BlockPos;
+import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
+import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetEntityPredicate;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.entity.EntityTypeTest;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RaycastTargeting extends AbilityTargeting {
+/**
+ * This targeting selects a single target via raycast
+ */
+public record RaycastTargeting(TargetEntityPredicate entityPredicate, TargetBlockPredicate blockPredicate, double range)
+        implements AbilityTargeting {
+
     public static final MapCodec<RaycastTargeting> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> commonFields(instance).and(Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::getRange)
+            instance -> instance.group(
+                    TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
+                            .forGetter(RaycastTargeting::entityPredicate),
+                    TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.ALL)
+                            .forGetter(RaycastTargeting::blockPredicate),
+                    Codec.DOUBLE.fieldOf("range").forGetter(RaycastTargeting::range)
             ).apply(instance, RaycastTargeting::new));
-
-    private final double range;
-
-    public RaycastTargeting(TargetPredicate targetPredicate, double range) {
-        super(targetPredicate);
-        this.range = range;
-    }
-
-    public double getRange() {
-        return range;
-    }
 
     @Override
     public MapCodec<? extends AbilityTargeting> getCodec() {
@@ -41,58 +36,34 @@ public class RaycastTargeting extends AbilityTargeting {
     }
 
     @Override
-    public List<Entity> getTargetsFromEntity(Entity entity, AbilityContext context) {
-        WanderersOfTheRift.LOGGER.debug("Targeting Raycast");
-
-        // TODO optimize AABB to not look behind player
-        List<LivingEntity> lookedAtEntities = entity.level()
-                .getEntities(EntityTypeTest.forClass(LivingEntity.class),
-                        new AABB(entity.position().x - (range / 2), entity.position().y - (range / 2),
-                                entity.position().z - (range / 2), entity.position().x + (range / 2),
-                                entity.position().y + (range / 2), entity.position().z + (range / 2)),
-                        livingEntity -> !livingEntity.is(entity)
-                                && getTargetPredicate().matches(livingEntity, context.caster())
-                                && livingEntity.isLookingAtMe((LivingEntity) entity, 0.025, true, false,
-                                        livingEntity.getEyeY()));
-
-        return new ArrayList<>(lookedAtEntities);
-    }
-
-    @Override
-    public List<BlockPos> getBlocks(Entity entity) {
-        WanderersOfTheRift.LOGGER.debug("Raycasting blocks");
-
-        List<BlockPos> blocks = new ArrayList<>();
-        if (entity == null) {
-            return blocks;
+    public List<TargetInfo> getTargets(AbilityContext context, TargetInfo origin) {
+        List<TargetInfo> result = new ArrayList<>();
+        for (HitResult source : origin.targets()) {
+            Entity entity = null;
+            Vec3 start;
+            Vec3 end;
+            if (source instanceof EntityHitResult entitySource) {
+                entity = entitySource.getEntity();
+                start = entity.getEyePosition();
+                end = start.add(
+                        entitySource.getEntity().calculateViewVector(entity.getXRot(), entity.getYRot()).scale(range));
+            } else if (source instanceof BlockHitResult blockSource) {
+                start = source.getLocation();
+                end = start.add(blockSource.getDirection().getUnitVec3().scale(range));
+            } else {
+                continue;
+            }
+            HitResult hit = TargetingUtil.rayTrace(start, end, 0, 0, context.level(),
+                    e -> entityPredicate.matches(e, source, context), entity);
+            if (hit instanceof BlockHitResult blockHitResult
+                    && !blockPredicate.matches(blockHitResult.getBlockPos(), source, context)) {
+                continue;
+            }
+            if (hit.getType() != HitResult.Type.MISS) {
+                result.add(new TargetInfo(source, List.of(hit)));
+            }
         }
 
-        BlockHitResult hitBlock = getEntityPOVHitResult(entity, this.range);
-        blocks.add(hitBlock.getBlockPos());
-
-        return blocks;
-    }
-
-    @Override
-    public List<BlockPos> getBlocksInArea(Entity entity, List<BlockPos> targetPos, AbilityContext context) {
-        WanderersOfTheRift.LOGGER.debug("Raycasting blocks in area");
-
-        List<BlockPos> blocks = new ArrayList<>();
-        if (entity == null || targetPos.isEmpty()) {
-            return blocks;
-        }
-
-        BlockHitResult hitBlock = getEntityPOVHitResult(entity, this.range);
-        blocks.add(hitBlock.getBlockPos());
-
-        return blocks;
-    }
-
-    private BlockHitResult getEntityPOVHitResult(Entity entity, double range) {
-        Level level = entity.level();
-        Vec3 eyePosition = entity.getEyePosition();
-        Vec3 rayVector = eyePosition.add(entity.calculateViewVector(entity.getXRot(), entity.getYRot()).scale(range));
-        return level.clip(new ClipContext(eyePosition, rayVector, net.minecraft.world.level.ClipContext.Block.OUTLINE,
-                ClipContext.Fluid.NONE, entity));
+        return result;
     }
 }

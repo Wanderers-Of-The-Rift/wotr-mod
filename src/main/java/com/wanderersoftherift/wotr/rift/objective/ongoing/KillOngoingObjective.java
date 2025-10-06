@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.rift.objective.ProgressObjective;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 /**
@@ -41,6 +42,9 @@ public class KillOngoingObjective implements ProgressObjective {
             return false;
         }
         if (!MobCategory.MONSTER.equals(event.getEntity().getClassification(false))) {
+            return false;
+        }
+        if (!(event.getSource().getEntity() instanceof Player)) {
             return false;
         }
         currentKills++;

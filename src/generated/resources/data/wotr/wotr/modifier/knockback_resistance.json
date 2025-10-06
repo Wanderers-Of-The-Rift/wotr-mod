@@ -3,44 +3,35 @@
     "color": "#778899"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 0.5,
-          "min_roll": 0.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 1.0,
-          "min_roll": 0.5,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:knockback_resistance",
-          "id": "wotr:knockback_resistance",
-          "max_roll": 1.5,
-          "min_roll": 1.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:knockback_resistance",
+        "id": "wotr:knockback_resistance",
+        "max_roll": 0.5,
+        "min_roll": 0.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:knockback_resistance",
+        "id": "wotr:knockback_resistance",
+        "max_roll": 1.0,
+        "min_roll": 0.5,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:knockback_resistance",
+        "id": "wotr:knockback_resistance",
+        "max_roll": 1.5,
+        "min_roll": 1.0,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

@@ -2,72 +2,50 @@ package com.wanderersoftherift.wotr.abilities.effects;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.util.TeleportInfo;
-import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
-import java.util.List;
-
-public class TeleportEffect extends AbilityEffect {
-    public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder
-            .mapCodec(instance -> AbilityEffect.commonFields(instance)
-                    .and(TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::getTeleportInfo))
-                    .apply(instance, TeleportEffect::new));
-
-    private TeleportInfo teleInfo;
+public record TeleportEffect(TeleportInfo teleportInfo) implements AbilityEffect {
+    public static final MapCodec<TeleportEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            TeleportInfo.CODEC.fieldOf("tele_info").forGetter(TeleportEffect::teleportInfo)
+    ).apply(instance, TeleportEffect::new));
 
     // TODO look into handling different types of teleports and better handle relative motion
     // TODO also look into teleporting "towards" a location to find the nearest safe spot that isnt the exact location
-
-    public TeleportEffect(AbilityTargeting targeting, List<AbilityEffect> effects, TeleportInfo teleInfo) {
-        super(targeting, effects);
-        this.teleInfo = teleInfo;
-    }
 
     @Override
     public MapCodec<? extends AbilityEffect> getCodec() {
         return CODEC;
     }
 
-    public TeleportInfo getTeleportInfo() {
-        return this.teleInfo;
-    }
-
     @Override
-    public void apply(Entity user, List<BlockPos> blocks, AbilityContext context) {
-        List<Entity> targets = getTargeting().getTargets(user, blocks, context);
-        for (Entity target : targets) {
-
-            switch (teleInfo.getTarget()) {
-                case USER -> {
-                    WanderersOfTheRift.LOGGER.info("Teleporting Self");
-                    Entity random = targets.get(user.getRandom().nextIntBetweenInclusive(0, targets.size() - 1));
-                    user.teleportTo(random.getX() + teleInfo.getPosition().x, random.getY() + teleInfo.getPosition().y,
-                            random.getZ() + teleInfo.getPosition().z);
-
+    public void apply(AbilityContext context, TargetInfo targetInfo) {
+        switch (teleportInfo.getTarget()) {
+            case USER -> {
+                if (!(targetInfo.source() instanceof EntityHitResult entitySource)) {
+                    return;
                 }
-
-                case TARGET -> {
-                    WanderersOfTheRift.LOGGER.info("Teleporting Target");
-                    if (teleInfo.isRelative().isEmpty()
-                            || (teleInfo.isRelative().isPresent() && teleInfo.isRelative().get())) {
-                        target.teleportRelative(teleInfo.getPosition().x, teleInfo.getPosition().y,
-                                teleInfo.getPosition().z);
-                    } else {
-                        target.teleportTo(teleInfo.getPosition().x, teleInfo.getPosition().y, teleInfo.getPosition().z);
-                    }
-                }
+                HitResult randomTarget = targetInfo.getRandomTarget(context.level().getRandom());
+                entitySource.getEntity()
+                        .teleportTo(randomTarget.getLocation().x + teleportInfo.getPosition().x,
+                                randomTarget.getLocation().y + teleportInfo.getPosition().y,
+                                randomTarget.getLocation().z + teleportInfo.getPosition().z);
             }
-
-            // Then apply children affects to targets
-            super.apply(target, getTargeting().getBlocks(user), context);
-        }
-
-        if (targets.isEmpty()) {
-            super.apply(null, getTargeting().getBlocks(user), context);
+            case TARGET -> {
+                targetInfo.targetEntities().forEach(target -> {
+                    if (teleportInfo.isRelative().isEmpty()
+                            || (teleportInfo.isRelative().isPresent() && teleportInfo.isRelative().get())) {
+                        target.teleportRelative(teleportInfo.getPosition().x, teleportInfo.getPosition().y,
+                                teleportInfo.getPosition().z);
+                    } else {
+                        target.teleportTo(teleportInfo.getPosition().x, teleportInfo.getPosition().y,
+                                teleportInfo.getPosition().z);
+                    }
+                });
+            }
         }
     }
 

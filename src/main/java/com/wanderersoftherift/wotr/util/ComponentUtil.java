@@ -57,19 +57,30 @@ public class ComponentUtil {
      * @return a MutableComponent that brightens/darkens its color as time progresses
      */
     public static MutableComponent wavingComponent(Component base, int color, float frequency, float amplitude) {
-        String text = base.getString();
         MutableComponent result = Component.empty();
 
         float time = (float) Minecraft.getInstance().level.getGameTime();
 
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
+        var sin = Math.sin(frequency * time);
+        var cos = Math.cos(frequency * time);
+        for (var component : base.toFlatList()) {
+            var text = component.getString();
+            var baseStyle = component.getStyle();
+            var baseColor = baseStyle.getColor();
+            if (baseColor == null) {
+                baseColor = TextColor.fromRgb(0xffffff);
+            }
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
 
-            // Compute brightness factor in a wave pattern
-            float wave = (float) Math.sin((time - i) * frequency) * amplitude + 1f;
+                // Compute brightness factor in a wave pattern
+                cos += frequency * sin * 1.35;
+                sin -= frequency * cos * 1.35;
+                float wave = ((float) -sin) * amplitude + 1f;
 
-            result.append(Component.literal(String.valueOf(c))
-                    .withStyle(base.getStyle().withColor(ColorUtil.brightenColor(color, wave))));
+                result.append(Component.literal(String.valueOf(c))
+                        .withStyle(baseStyle.withColor(ColorUtil.brightenColor(baseColor.getValue(), wave))));
+            }
         }
 
         return result;

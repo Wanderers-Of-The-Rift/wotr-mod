@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -29,7 +29,7 @@ public final class AbilityUpgrade {
                             ModifierIndicator.CODEC.optionalFieldOf("indicator", ModifierIndicator.NEUTRAL)
                                     .forGetter(AbilityUpgrade::indicator),
                             Codec.INT.fieldOf("maxCount").forGetter(AbilityUpgrade::maxCount),
-                            AbstractModifierEffect.DIRECT_CODEC.listOf()
+                            ModifierEffect.DIRECT_CODEC.listOf()
                                     .optionalFieldOf("effects", Collections.emptyList())
                                     .forGetter(AbilityUpgrade::modifierEffects))
                     .apply(instance, AbilityUpgrade::new));
@@ -38,7 +38,7 @@ public final class AbilityUpgrade {
     private final ResourceLocation icon;
     private final ModifierIndicator indicator;
     private final int maxCount;
-    private final List<AbstractModifierEffect> modifierEffects;
+    private final List<ModifierEffect> modifierEffects;
     private final Component name;
     private final Component description;
 
@@ -49,7 +49,7 @@ public final class AbilityUpgrade {
      * @param modifierEffects A list of modifier effects this upgrade applies
      */
     public AbilityUpgrade(ResourceLocation id, ResourceLocation icon, ModifierIndicator indicator, int maxCount,
-            List<AbstractModifierEffect> modifierEffects) {
+            List<ModifierEffect> modifierEffects) {
         this.id = id;
         this.icon = icon;
         this.indicator = indicator;
@@ -105,7 +105,7 @@ public final class AbilityUpgrade {
     /**
      * @return The ModifierEffects this upgrade grants
      */
-    public List<AbstractModifierEffect> modifierEffects() {
+    public List<ModifierEffect> modifierEffects() {
         return modifierEffects;
     }
 

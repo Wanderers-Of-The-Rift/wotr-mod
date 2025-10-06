@@ -3,83 +3,65 @@
     "color": "#228B22"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "wotr:health_percent",
-          "max_roll": 0.03999999910593033,
-          "min_roll": 0.009999999776482582,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "wotr:health_percent",
-          "max_roll": 0.07000000029802322,
-          "min_roll": 0.03999999910593033,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "wotr:health_percent",
-          "max_roll": 0.10999999940395355,
-          "min_roll": 0.07000000029802322,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 3
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "wotr:health_percent",
-          "max_roll": 0.14000000059604645,
-          "min_roll": 0.10999999940395355,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 4
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "wotr:health_percent",
-          "max_roll": 0.17000000178813934,
-          "min_roll": 0.14000000059604645,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 5
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:max_health",
-          "id": "wotr:health_percent",
-          "max_roll": 0.20000000298023224,
-          "min_roll": 0.17000000178813934,
-          "operation": "add_multiplied_base"
-        }
-      ],
-      "tier": 6
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:max_health",
+        "id": "wotr:health_percent",
+        "max_roll": 0.03999999910593033,
+        "min_roll": 0.009999999776482582,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:max_health",
+        "id": "wotr:health_percent",
+        "max_roll": 0.07000000029802322,
+        "min_roll": 0.03999999910593033,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:max_health",
+        "id": "wotr:health_percent",
+        "max_roll": 0.10999999940395355,
+        "min_roll": 0.07000000029802322,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:max_health",
+        "id": "wotr:health_percent",
+        "max_roll": 0.14000000059604645,
+        "min_roll": 0.10999999940395355,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:max_health",
+        "id": "wotr:health_percent",
+        "max_roll": 0.17000000178813934,
+        "min_roll": 0.14000000059604645,
+        "operation": "add_multiplied_base"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:max_health",
+        "id": "wotr:health_percent",
+        "max_roll": 0.20000000298023224,
+        "min_roll": 0.17000000178813934,
+        "operation": "add_multiplied_base"
+      }
+    ]
   ]
 }

@@ -4,9 +4,6 @@
   "activation_effects": [
     {
       "type": "wotr:attach",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "modifiers": [
         {
           "modifier": "wotr:test_provide_golem_ability",
@@ -18,10 +15,7 @@
   ],
   "deactivation_effects": [
     {
-      "type": "wotr:detach_own",
-      "targeting": {
-        "type": "wotr:self"
-      }
+      "type": "wotr:detach_own"
     }
   ],
   "icon": "minecraft:textures/mob_effect/speed.png",

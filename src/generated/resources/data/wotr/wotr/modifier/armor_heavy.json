@@ -3,89 +3,77 @@
     "color": "#4B3621"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor_heavy",
-          "max_roll": 13.5,
-          "min_roll": 8.0,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:movement_speed",
-          "id": "wotr:armor_heavy",
-          "max_roll": -0.0010000000474974513,
-          "min_roll": -0.029999999329447746,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor_heavy",
-          "max_roll": 19.0,
-          "min_roll": 13.5,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:movement_speed",
-          "id": "wotr:armor_heavy",
-          "max_roll": -0.0010000000474974513,
-          "min_roll": -0.029999999329447746,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor_heavy",
-          "max_roll": 24.5,
-          "min_roll": 19.0,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:movement_speed",
-          "id": "wotr:armor_heavy",
-          "max_roll": -0.0010000000474974513,
-          "min_roll": -0.029999999329447746,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:armor",
-          "id": "wotr:armor_heavy",
-          "max_roll": 30.0,
-          "min_roll": 24.5,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:movement_speed",
-          "id": "wotr:armor_heavy",
-          "max_roll": -0.0010000000474974513,
-          "min_roll": -0.029999999329447746,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 4
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor_heavy",
+        "max_roll": 13.5,
+        "min_roll": 8.0,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:movement_speed",
+        "id": "wotr:armor_heavy",
+        "max_roll": -0.0010000000474974513,
+        "min_roll": -0.029999999329447746,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor_heavy",
+        "max_roll": 19.0,
+        "min_roll": 13.5,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:movement_speed",
+        "id": "wotr:armor_heavy",
+        "max_roll": -0.0010000000474974513,
+        "min_roll": -0.029999999329447746,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor_heavy",
+        "max_roll": 24.5,
+        "min_roll": 19.0,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:movement_speed",
+        "id": "wotr:armor_heavy",
+        "max_roll": -0.0010000000474974513,
+        "min_roll": -0.029999999329447746,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:armor",
+        "id": "wotr:armor_heavy",
+        "max_roll": 30.0,
+        "min_roll": 24.5,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:movement_speed",
+        "id": "wotr:armor_heavy",
+        "max_roll": -0.0010000000474974513,
+        "min_roll": -0.029999999329447746,
+        "operation": "add_value"
+      }
+    ]
   ]
 }
