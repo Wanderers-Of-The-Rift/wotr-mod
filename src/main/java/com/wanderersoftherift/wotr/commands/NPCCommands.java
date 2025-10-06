@@ -34,7 +34,7 @@ public class NPCCommands extends BaseCommand {
         builder.then(
                 Commands.literal("make")
                         .then(Commands.argument("mob", EntityArgument.entity())
-                                .then(Commands.literal("quest_giver")
+                                .then(Commands.literal("questGiver")
                                         .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob")))
                                         .then(Commands
                                                 .argument("selection",

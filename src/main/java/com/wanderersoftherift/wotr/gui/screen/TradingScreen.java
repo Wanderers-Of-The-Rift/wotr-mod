@@ -51,7 +51,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         super.init();
 
         Wallet wallet = minecraft.player.getData(WotrAttachments.WALLET.get());
-        currencies = new ScrollContainerWidget<>(leftPos + BACKGROUND_WIDTH - 48, topPos + 5, 43, 140,
+        currencies = new ScrollContainerWidget<>(leftPos + BACKGROUND_WIDTH - 48, topPos + 5, 43, 30,
                 wallet.availableCurrencies().stream().map(x -> new CurrencyDisplay(font, wallet, x)).toList());
         addRenderableWidget(currencies);
     }

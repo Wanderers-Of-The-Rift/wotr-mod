@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.guild.trading.Price;
@@ -9,9 +8,7 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -37,7 +34,6 @@ public class TradingMenu extends AbstractContainerMenu {
             .build();
 
     private final ValidatingLevelAccess access;
-    private final Wallet wallet;
 
     private final IItemHandler merchantInventory;
 
@@ -50,7 +46,6 @@ public class TradingMenu extends AbstractContainerMenu {
             Wallet wallet, ValidatingLevelAccess access) {
         super(WotrMenuTypes.TRADING_MENU.get(), containerId);
         this.access = access;
-        this.wallet = wallet;
         this.merchantInventory = new ChangeAwareItemHandler(merchantInventory) {
             @Override
             public void onSlotChanged(int slot, ItemStack oldStack, ItemStack newStack) {
@@ -84,10 +79,11 @@ public class TradingMenu extends AbstractContainerMenu {
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack stack = MOVER.quickMove(this, player, index);
+        // If the item partially moved, force move the rest
         if (index >= 0 && index < AvailableTrades.MERCHANT_INVENTORY_SIZE) {
-            int remaining = stack.getCount();
-            if (remaining > 0) {
-                ItemStack removed = merchantInventory.extractItem(index, stack.getCount(), false);
+            int remaining = merchantInventory.getStackInSlot(index).getCount();
+            if (remaining > 0 && remaining < stack.getCount()) {
+                ItemStack removed = merchantInventory.extractItem(index, remaining, false);
                 if (getCarried().getCount() == 0) {
                     setCarried(removed);
                 } else {
@@ -101,12 +97,5 @@ public class TradingMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(@NotNull Player player) {
         return access.isValid(player);
-    }
-
-    private boolean canPay(Object2IntMap<Holder<Currency>> price) {
-        return price.object2IntEntrySet()
-                .stream()
-                .map(currencyCost -> wallet.get(currencyCost.getKey()) >= currencyCost.getIntValue())
-                .reduce(true, (x, y) -> x && y);
     }
 }
