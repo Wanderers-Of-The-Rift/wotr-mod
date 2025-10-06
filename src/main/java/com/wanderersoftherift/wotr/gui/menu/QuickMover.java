@@ -31,7 +31,7 @@ public final class QuickMover {
      * @param menu
      * @param player
      * @param slotIndex
-     * @return The residual content of the slot being moved that could still be moved
+     * @return The original stack in the slot before the move
      */
     public ItemStack quickMove(AbstractContainerMenu menu, Player player, int slotIndex) {
         Slot slot = menu.slots.get(slotIndex);
@@ -66,10 +66,11 @@ public final class QuickMover {
                     slotStack.setCount(transformedStack.getCount());
                     slot.set(slotStack);
                 }
+                slot.onTake(player, transformedStack);
                 return resultStack;
             }
             return ItemStack.EMPTY;
-        }).orElse(ItemStack.EMPTY);
+        }).orElse(resultStack);
     }
 
     /**
@@ -88,67 +89,86 @@ public final class QuickMover {
             int endIndex,
             boolean reverseDirection) {
         MoveResult result = MoveResult.NO_MOVE;
-        int i, dir;
+
+        int start, end, dir;
         if (reverseDirection) {
-            i = endIndex - 1;
+            start = endIndex - 1;
             dir = -1;
+            end = startIndex - 1;
         } else {
-            i = startIndex;
+            start = startIndex;
             dir = 1;
+            end = endIndex;
         }
 
         if (stack.isStackable()) {
-            while (!stack.isEmpty() && (reverseDirection ? i >= startIndex : i < endIndex)) {
-                Slot slot = menu.slots.get(i);
-                ItemStack existingStack = slot.getItem().copy();
-                if (!existingStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, existingStack)) {
-                    int j = existingStack.getCount() + stack.getCount();
-                    int k = slot.getMaxStackSize(existingStack);
-                    if (j <= k) {
-                        stack.setCount(0);
-                        existingStack.setCount(j);
-                        slot.set(existingStack);
-                        result = MoveResult.MOVED;
-                    } else if (existingStack.getCount() < k) {
-                        stack.shrink(k - existingStack.getCount());
-                        existingStack.setCount(k);
-                        slot.set(existingStack);
-                        result = MoveResult.MOVED;
-                    } else if (result != MoveResult.MOVED) {
-                        result = MoveResult.VALID_BUT_FULL;
-                    }
-                }
-
-                i += dir;
-            }
+            result = combineIntoSameStacks(menu, stack, start, end, dir);
         }
 
         if (!stack.isEmpty()) {
-            if (reverseDirection) {
-                i = endIndex - 1;
-            } else {
-                i = startIndex;
-            }
-
-            while (reverseDirection ? i >= startIndex : i < endIndex) {
-                Slot targetSlot = menu.slots.get(i);
-                ItemStack existingItem = targetSlot.getItem();
-                if (targetSlot.mayPlace(stack)) {
-                    if (existingItem.isEmpty()) {
-                        int l = targetSlot.getMaxStackSize(stack);
-                        ItemStack split = stack.split(Math.min(stack.getCount(), l));
-                        targetSlot.setByPlayer(split);
-                        result = MoveResult.MOVED;
-                        break;
-                    } else if (result != MoveResult.MOVED) {
-                        result = MoveResult.VALID_BUT_FULL;
-                    }
-                }
-
-                i += dir;
-            }
+            result = moveIntoEmptySlot(menu, stack, start, end, dir, result);
         }
 
+        return result;
+    }
+
+    private static MoveResult moveIntoEmptySlot(
+            AbstractContainerMenu menu,
+            @NotNull ItemStack stack,
+            int start,
+            int end,
+            int dir,
+            MoveResult result) {
+        for (int index = start; index != end; index += dir) {
+            Slot targetSlot = menu.slots.get(start);
+            ItemStack existingItem = targetSlot.getItem();
+            if (targetSlot.mayPlace(stack)) {
+                if (existingItem.isEmpty()) {
+                    int l = targetSlot.getMaxStackSize(stack);
+                    ItemStack split = stack.split(Math.min(stack.getCount(), l));
+                    targetSlot.setByPlayer(split);
+                    result = MoveResult.MOVED;
+                    break;
+                } else if (result != MoveResult.MOVED) {
+                    result = MoveResult.VALID_BUT_FULL;
+                }
+            }
+
+            start += dir;
+        }
+        return result;
+    }
+
+    private static MoveResult combineIntoSameStacks(
+            AbstractContainerMenu menu,
+            @NotNull ItemStack stack,
+            int start,
+            int end,
+            int dir) {
+        MoveResult result = MoveResult.NO_MOVE;
+        for (int i = start; i != end && !stack.isEmpty(); i += dir) {
+            Slot slot = menu.slots.get(i);
+            ItemStack existingStack = slot.getItem().copy();
+            if (!existingStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, existingStack)) {
+                int j = existingStack.getCount() + stack.getCount();
+                int k = slot.getMaxStackSize(existingStack);
+                if (j <= k) {
+                    stack.setCount(0);
+                    existingStack.setCount(j);
+                    slot.set(existingStack);
+                    result = MoveResult.MOVED;
+                } else if (existingStack.getCount() < k) {
+                    stack.shrink(k - existingStack.getCount());
+                    existingStack.setCount(k);
+                    slot.set(existingStack);
+                    result = MoveResult.MOVED;
+                } else if (result != MoveResult.MOVED) {
+                    result = MoveResult.VALID_BUT_FULL;
+                }
+            }
+
+            i += dir;
+        }
         return result;
     }
 

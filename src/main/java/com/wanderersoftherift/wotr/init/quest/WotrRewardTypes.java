@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
+import com.wanderersoftherift.wotr.core.quest.reward.CurrencyReward;
 import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
+import com.wanderersoftherift.wotr.core.quest.reward.provider.CurrencyRewardProvider;
 import com.wanderersoftherift.wotr.core.quest.reward.provider.FixedRewardProvider;
 import com.wanderersoftherift.wotr.core.quest.reward.provider.LootTableRewardProvider;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -21,12 +23,17 @@ public final class WotrRewardTypes {
 
     public static final Supplier<MapCodec<? extends RewardProvider>> LOOT_TABLE_REWARD = REWARD_PROVIDER_TYPES
             .register("loot_table", () -> LootTableRewardProvider.CODEC);
-    public static final Supplier<DualCodec<? extends Reward>> ITEM_REWARD = register("item", () -> ItemReward.TYPE);
+    public static final Supplier<MapCodec<? extends RewardProvider>> CURRENCY_REWARD_PROVIDER = REWARD_PROVIDER_TYPES
+            .register("currency", () -> CurrencyRewardProvider.CODEC);
+    public static final Supplier<DualCodec<? extends Reward>> ITEM_REWARD = registerWithFixedProvider("item",
+            () -> ItemReward.TYPE);
+    public static final Supplier<DualCodec<? extends Reward>> CURRENCY_REWARD = REWARD_TYPES.register("currency",
+            () -> CurrencyReward.TYPE);
 
     private WotrRewardTypes() {
     }
 
-    private static Supplier<DualCodec<? extends Reward>> register(
+    private static Supplier<DualCodec<? extends Reward>> registerWithFixedProvider(
             String id,
             Supplier<DualCodec<? extends Reward>> supplier) {
         REWARD_PROVIDER_TYPES.register(id, () -> FixedRewardProvider.codec(supplier.get().codec()));
