@@ -437,8 +437,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
         add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
 
-        add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
-        add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
+        add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
         add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
         add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");

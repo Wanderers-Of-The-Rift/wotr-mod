@@ -24,7 +24,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 2.0,
                   "min": 1.0
@@ -43,7 +43,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
@@ -60,7 +60,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 10.0,
                   "min": 5.0
@@ -77,7 +77,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
@@ -94,7 +94,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
@@ -111,7 +111,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
@@ -128,7 +128,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
@@ -147,7 +147,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
@@ -166,7 +166,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 2.0,
                   "min": 1.0
@@ -183,7 +183,7 @@
             {
               "function": "wotr:set_price",
               "amounts": {
-                "wotr:boondongle": {
+                "wotr:coin": {
                   "type": "minecraft:uniform",
                   "max": 4.0,
                   "min": 2.0
