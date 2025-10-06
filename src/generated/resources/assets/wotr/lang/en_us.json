@@ -337,6 +337,7 @@
   "effect_marker.wotr.fireshield": "Fire Shield",
   "entity.wotr.rift_entrance": "Rift Entrance",
   "entity.wotr.rift_exit": "Rift Egress",
+  "entity.wotr.rift_skeleton": "Rift Skeleton",
   "entity.wotr.rift_zombie": "Rift Zombie",
   "entity.wotr.simple_effect_projectile": "Projectile",
   "essence_type.wotr.air": "Air",
