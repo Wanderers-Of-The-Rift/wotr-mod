@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -42,18 +43,18 @@ public class RiftDifficultyEvents {
                     return;
                 }
                 updateAttribute(mob, attribute, value.get());
-                if ("minecraft:max_health".equals(attribute.getKey().location().toString())) {
+                if (Attributes.MAX_HEALTH.value() == attribute.value()) {
                     livingEntity.setHealth(livingEntity.getMaxHealth());
                 }
             });
         }
     }
 
-    private static void updateAttribute(LivingEntity livingEntity, Holder<Attribute> attribute, double tier) {
+    private static void updateAttribute(LivingEntity livingEntity, Holder<Attribute> attribute, double multiplier) {
         AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
         if (attributeInstance == null) {
             return;
         }
-        attributeInstance.setBaseValue(attributeInstance.getBaseValue() * tier);
+        attributeInstance.setBaseValue(attributeInstance.getBaseValue() * multiplier);
     }
 }
