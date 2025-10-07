@@ -4,11 +4,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.abilities.TrackedAbilityTrigger;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
+import com.wanderersoftherift.wotr.abilities.triggers.TriggerPredicate;
 import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
@@ -21,16 +20,14 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbilityTrigger.TriggerType<?>> trigger)
+public record TriggerableAbilityModifier(Holder<Ability> providedAbility, TriggerPredicate<?> trigger)
         implements ModifierEffect {
 
-    public static final MapCodec<AbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> instance
-                    .group(Ability.CODEC.fieldOf("provided_ability").forGetter(AbilityModifier::providedAbility),
-                            WotrRegistries.TRACKED_ABILITY_TRIGGERS.holderByNameCodec()
-                                    .fieldOf("trigger")
-                                    .forGetter(AbilityModifier::trigger)
-                    ).apply(instance, AbilityModifier::new));
+    public static final MapCodec<TriggerableAbilityModifier> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    Ability.CODEC.fieldOf("provided_ability").forGetter(TriggerableAbilityModifier::providedAbility),
+                    TriggerPredicate.CODEC.fieldOf("trigger").forGetter(TriggerableAbilityModifier::trigger)
+            ).apply(instance, TriggerableAbilityModifier::new));
 
     @Override
     public MapCodec<? extends ModifierEffect> getCodec() {
@@ -39,12 +36,14 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
 
     @Override
     public void enableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
-        AbilityTracker.forEntity(entity).registerAbility(this, AbilitySource.byModifierSource(source, effectIndex));
+        TriggerTracker.forEntity(entity)
+                .registerAbilityTrigger(this, AbilitySource.byModifierSource(source, effectIndex));
     }
 
     @Override
     public void disableModifier(double roll, Entity entity, ModifierSource source, int effectIndex) {
-        AbilityTracker.forEntity(entity).unregisterAbility(this, AbilitySource.byModifierSource(source, effectIndex));
+        TriggerTracker.forEntity(entity)
+                .unregisterAbilityTrigger(this, AbilitySource.byModifierSource(source, effectIndex));
     }
 
     @Override
@@ -63,7 +62,8 @@ public record AbilityModifier(Holder<Ability> providedAbility, Holder<TrackedAbi
         var text = Component.translatable(
                 WanderersOfTheRift.translationId("modifier_effect", "ability"), Component.translatable(
                         WanderersOfTheRift.translationId("ability", providedAbility().getKey().location())),
-                Component.translatable(WanderersOfTheRift.translationId("trigger", trigger().getKey().location()))
+                Component
+                        .translatable(WanderersOfTheRift.translationId("trigger", trigger().type().getKey().location()))
         );
 
         return new ImageComponent(stack, text.withStyle(style), providedAbility.value().getEmblemIcon());

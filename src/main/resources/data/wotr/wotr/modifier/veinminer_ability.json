@@ -7,7 +7,9 @@
             {
                 "type": "wotr:ability",
                 "provided_ability": "wotr:veinminer",
-                "trigger": "wotr:break_block"
+                "trigger": {
+                    "type": "wotr:break_block"
+                }
             }
         ]
     ]

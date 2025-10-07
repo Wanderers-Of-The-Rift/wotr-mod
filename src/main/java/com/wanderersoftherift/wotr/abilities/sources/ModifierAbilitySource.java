@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
-import com.wanderersoftherift.wotr.item.ability.AbilityModifier;
+import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.Holder;
@@ -39,7 +39,8 @@ public record ModifierAbilitySource(ModifierSource base, int effectIndex) implem
     @Override
     public Holder<Ability> getAbility(Entity entity) {
         var baseEffects = base.getModifierEffects(entity);
-        if (baseEffects.size() > effectIndex && baseEffects.get(effectIndex) instanceof AbilityModifier ability) {
+        if (baseEffects.size() > effectIndex
+                && baseEffects.get(effectIndex) instanceof TriggerableAbilityModifier ability) {
             return ability.providedAbility();
         }
         return null;

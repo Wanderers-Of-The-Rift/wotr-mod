@@ -5,7 +5,8 @@
   "toggleable": true,
   "requirements": [
     {
-      "type": "wotr:mana",
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
       "amount": 10,
       "consume": false
     }
@@ -30,7 +31,8 @@
   ],
   "ongoing_requirements" : [
     {
-      "type": "wotr:mana"
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana"
     }
   ],
   "on_deactivation_effects": [
