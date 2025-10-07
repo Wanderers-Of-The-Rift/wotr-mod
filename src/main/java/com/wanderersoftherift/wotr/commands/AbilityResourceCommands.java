@@ -39,7 +39,8 @@ public class AbilityResourceCommands extends BaseCommand {
     private int refillMana(CommandContext<CommandSourceStack> stack, Holder<AbilityResource> resource) {
         AbilityResourceData data = stack.getSource().getEntity().getData(WotrAttachments.ABILITY_RESOURCE_DATA);
         if (resource == null) {
-            data.getAmounts().keySet().forEach(it -> {
+            var reg = stack.getSource().registryAccess().lookupOrThrow(WotrRegistries.Keys.ABILITY_RESOURCES);
+            reg.asHolderIdMap().forEach(it -> {
                 data.setAmount(it, it.value().maxForEntity(stack.getSource().getEntity()), true);
             });
         } else {

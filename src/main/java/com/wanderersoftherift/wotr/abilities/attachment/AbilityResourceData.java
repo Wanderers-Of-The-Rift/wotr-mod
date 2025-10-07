@@ -6,10 +6,12 @@ import com.google.common.collect.Multimaps;
 import com.mojang.math.Constants;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.ability.AbilityResourceChangePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,10 +31,10 @@ import java.util.Map;
  */
 public class AbilityResourceData {
 
-    private static final Codec<Map<Holder<AbilityResource>, Float>> DATA_CODEC = Codec
-            .unboundedMap(AbilityResource.HOLDER_CODEC, Codec.FLOAT);
+    private static final Codec<Map<ResourceKey<AbilityResource>, Float>> DATA_CODEC = Codec
+            .unboundedMap(ResourceKey.codec(WotrRegistries.Keys.ABILITY_RESOURCES), Codec.FLOAT);
 
-    private static final AttachmentSerializerFromDataCodec<Map<Holder<AbilityResource>, Float>, AbilityResourceData> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
+    private static final AttachmentSerializerFromDataCodec<Map<ResourceKey<AbilityResource>, Float>, AbilityResourceData> SERIALIZER = new AttachmentSerializerFromDataCodec<>(
             DATA_CODEC, AbilityResourceData::new, AbilityResourceData::getAmounts);
 
     private final IAttachmentHolder holder;
@@ -44,21 +46,26 @@ public class AbilityResourceData {
         this(holder, Collections.emptyMap());
     }
 
-    public AbilityResourceData(IAttachmentHolder holder, Map<Holder<AbilityResource>, Float> amounts) {
+    public AbilityResourceData(IAttachmentHolder holder, Map<ResourceKey<AbilityResource>, Float> amounts) {
         this.holder = holder;
 
-        amounts.forEach((resource, amount) -> {
-            var state = createStateIfAbsent(resource);
-            state.setAmount(amount, true);
-            if (holder instanceof LivingEntity livingEntity) {
+        var reg = ((Entity) holder).registryAccess().lookupOrThrow(WotrRegistries.Keys.ABILITY_RESOURCES);
 
-                resource.value().events().forEach((key, event) -> {
-                    var attribute = event.amount();
-                    var deltaAmount = livingEntity.getAttributeValue(attribute);
-                    state.setHasNonZeroDelta(key, isNotZero(deltaAmount));
-                });
-            }
-        });
+        reg.asHolderIdMap()
+                .forEach(
+                        resource -> {
+                            var amount = amounts.getOrDefault(resource.getKey(), 0f);
+                            var state = createStateIfAbsent(resource);
+                            state.setAmount(amount, true);
+                            if (holder instanceof LivingEntity livingEntity) {
+                                resource.value().events().forEach((key, event) -> {
+                                    var attribute = event.amount();
+                                    var deltaAmount = livingEntity.getAttributeValue(attribute);
+                                    state.setHasNonZeroDelta(key, isNotZero(deltaAmount));
+                                });
+                            }
+                        }
+                );
 
     }
 
@@ -73,10 +80,10 @@ public class AbilityResourceData {
         return createStateIfAbsent(resource).value;
     }
 
-    public Map<Holder<AbilityResource>, Float> getAmounts() {
-        var result = new HashMap<Holder<AbilityResource>, Float>();
+    public Map<ResourceKey<AbilityResource>, Float> getAmounts() {
+        var result = new HashMap<ResourceKey<AbilityResource>, Float>();
         amounts.forEach(
-                (resource, state) -> result.put(resource, state.value)
+                (resource, state) -> result.put(resource.getKey(), state.value)
         );
         return result;
     }
@@ -84,7 +91,7 @@ public class AbilityResourceData {
     /**
      * Consumes an amount of ability resource (will not consume past 0). This will be replicated to the player if on the
      * server.
-     * 
+     *
      * @param resource The ability resource to consume
      * @param quantity The quantity of ability resource to consume
      */
@@ -98,7 +105,7 @@ public class AbilityResourceData {
 
     /**
      * Sets the amount of ability resource in the pool. This will be replicated to the player if on the server.
-     * 
+     *
      * @param resource         The ability resource to change
      * @param value            The new value of ability resource
      * @param sendClientUpdate whether to notify the client about change in ability resource, check whether holder is
@@ -128,7 +135,7 @@ public class AbilityResourceData {
 
     /**
      * Disables/enables triggers for all resources affected by this attribute
-     * 
+     *
      * @param attribute
      */
     public void onAttributeChanged(Holder<Attribute> attribute) {

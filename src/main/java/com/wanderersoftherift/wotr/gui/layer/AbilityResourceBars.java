@@ -16,6 +16,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.GameType;
@@ -60,7 +61,7 @@ public class AbilityResourceBars implements ConfigurableLayer {
 
     private float animCounter = 0.f;
 
-    private static List<Map.Entry<Holder<AbilityResource>, Float>> getAbilityResources() {
+    private static List<Map.Entry<ResourceKey<AbilityResource>, Float>> getAbilityResources() {
         return new ArrayList<>(
                 Minecraft.getInstance().player.getData(WotrAttachments.ABILITY_RESOURCE_DATA).getAmounts().entrySet());
     }
@@ -97,7 +98,7 @@ public class AbilityResourceBars implements ConfigurableLayer {
     public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
         var index = 0;
         var resources = getAbilityResources();
-        resources.sort(Comparator.comparing(it -> it.getKey().getKey().toString()));
+        resources.sort(Comparator.comparing(it -> it.getKey().toString()));
 
         for (var resourceEntry : resources) {
             Vector2i offset;
@@ -108,7 +109,9 @@ public class AbilityResourceBars implements ConfigurableLayer {
                 offset = new Vector2i(-index * BAR_SPACING, 0);
             }
 
-            render(guiGraphics, deltaTracker, resourceEntry.getKey(), resourceEntry.getValue(), offset);
+            var resource = Minecraft.getInstance().player.registryAccess().get(resourceEntry.getKey());
+
+            resource.ifPresent(it -> render(guiGraphics, deltaTracker, it, resourceEntry.getValue(), offset));
             index++;
         }
     }
