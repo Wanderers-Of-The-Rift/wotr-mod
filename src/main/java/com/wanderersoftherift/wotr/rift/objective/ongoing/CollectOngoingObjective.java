@@ -10,7 +10,9 @@ import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
 import com.wanderersoftherift.wotr.core.inventory.containers.DirectContainerItemWrapper;
 import com.wanderersoftherift.wotr.core.inventory.containers.NonContainerWrapper;
 import com.wanderersoftherift.wotr.core.inventory.snapshot.InventorySnapshot;
+import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
@@ -234,4 +236,10 @@ public class CollectOngoingObjective implements ProgressObjective {
     public static Item pickItemFromLootOrThrow(ServerPlayer sp, ResourceKey<LootTable> tableKey) {
         return pickItemFromLootOrThrow(sp.serverLevel(), tableKey);
     }
+
+    @Override
+    public void registerUpdaters(RiftParameterData params, RiftData data, ServerLevel level) {
+        // No-op: Collect-objektiivin etenemä päivittyy item pickup / container close -tapahtumista.
+    }
+
 }

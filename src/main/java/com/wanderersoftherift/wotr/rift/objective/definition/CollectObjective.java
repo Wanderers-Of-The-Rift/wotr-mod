@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.rift.objective.definition;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ongoing.CollectOngoingObjective;
@@ -12,8 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.Optional;
@@ -60,14 +60,16 @@ public class CollectObjective implements ObjectiveType {
     }
 
     @Override
-    public OngoingObjective generate(LevelAccessor level) {
+    public OngoingObjective generate(ServerLevelAccessor level, RiftConfig config) {
         int target = level.getRandom().nextIntBetweenInclusive(minQuantity, maxQuantity);
 
-        if (lootTable != null && level instanceof ServerLevel sl) {
+        if (lootTable != null) {
+            ServerLevel sl = level.getLevel();
             Item picked = CollectOngoingObjective.pickItemFromLootOrThrow(sl, lootTable);
             return new CollectOngoingObjective(target, picked);
         }
-        return new CollectOngoingObjective(target, item != null ? item : Items.IRON_INGOT);
+
+        return new CollectOngoingObjective(target, item != null ? item : net.minecraft.world.item.Items.IRON_INGOT);
     }
 
     public int getMinQuantity() {
