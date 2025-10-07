@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.rift.objective.ongoing.CollectOngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ongoing.KillOngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ongoing.NoOngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ongoing.StealthOngoingObjective;
@@ -20,6 +21,10 @@ public class WotrOngoingObjectiveTypes {
 
     public static final Supplier<MapCodec<? extends OngoingObjective>> KILL = ONGOING_OBJECTIVE_TYPES.register("kill",
             () -> KillOngoingObjective.CODEC);
+
+    public static final Supplier<MapCodec<? extends OngoingObjective>> COLLECT = ONGOING_OBJECTIVE_TYPES
+            .register("collect", () -> CollectOngoingObjective.CODEC);
+
     public static final Supplier<MapCodec<? extends OngoingObjective>> NOTHING = ONGOING_OBJECTIVE_TYPES
             .register("none", () -> NoOngoingObjective.CODEC);
 }
