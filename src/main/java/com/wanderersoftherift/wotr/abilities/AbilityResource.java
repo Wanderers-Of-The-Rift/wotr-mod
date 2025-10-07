@@ -81,14 +81,16 @@ public record AbilityResource(int color, Holder<Attribute> maximum, Map<String, 
 
         @Override
         public void sendUnregister(ServerPlayer player) {
-            var abilityResources = player.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
-            var amount = abilityResources.getAmount(resource);
-            player.connection.send(new ResourceRechargeTriggerablePayload(resource, event, false, amount));
+            if (player.hasData(WotrAttachments.ABILITY_RESOURCE_DATA)) {
+                var abilityResources = player.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
+                var amount = abilityResources.getAmount(resource);
+                player.connection.send(new ResourceRechargeTriggerablePayload(resource, event, false, amount));
+            }
         }
 
         @Override
         public void sendRegister(ServerPlayer player) {
-            if (player.connection != null) {
+            if (player.connection != null && player.hasData(WotrAttachments.ABILITY_RESOURCE_DATA)) {
                 var abilityResources = player.getData(WotrAttachments.ABILITY_RESOURCE_DATA);
                 var amount = abilityResources.getAmount(resource);
                 player.connection.send(new ResourceRechargeTriggerablePayload(resource, event, true, amount));
