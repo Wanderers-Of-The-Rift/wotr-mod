@@ -9,7 +9,7 @@
                     "spawn_functions": [
                         {
                             "type": "wotr:apply_mob_variant",
-                            "variant": "noir_zombie"
+                            "variant": "wotr:zombie/noir_zombie"
                         },
                         {
                             "type": "wotr:add_death_notifier"

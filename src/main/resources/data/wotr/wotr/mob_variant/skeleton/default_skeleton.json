@@ -1,0 +1,7 @@
+{
+  "stats": {
+    "minecraft:max_health": 20.0,
+    "minecraft:movement_speed": 0.25
+  },
+  "texture": "wotr:textures/entity/mob_variant/skeleton/default_skeleton.png"
+}
