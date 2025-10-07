@@ -5,9 +5,10 @@ import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
-import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -30,12 +32,16 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/trading/background.png");
 
+    private static final ResourceKey<Currency> TRADE_CURRENCY = ResourceKey.create(WotrRegistries.Keys.CURRENCIES,
+            WanderersOfTheRift.id("coin"));
+
     private static final int BACKGROUND_WIDTH = 277;
     private static final int BACKGROUND_HEIGHT = 166;
     private static final int BORDER_X = 5;
     private static final int ICON_SIZE = 16;
 
-    private ScrollContainerWidget<CurrencyDisplay> currencies;
+    private final Holder<Currency> tradeCurrency;
+    private CurrencyDisplay currencyDisplay;
 
     public TradingScreen(TradingMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -44,6 +50,7 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         this.inventoryLabelY = this.imageHeight - 94;
         this.inventoryLabelX = 107;
         this.titleLabelX = BORDER_X;
+        this.tradeCurrency = Minecraft.getInstance().level.registryAccess().holderOrThrow(TRADE_CURRENCY);
     }
 
     @Override
@@ -51,9 +58,11 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
         super.init();
 
         Wallet wallet = minecraft.player.getData(WotrAttachments.WALLET.get());
-        currencies = new ScrollContainerWidget<>(leftPos + BACKGROUND_WIDTH - 48, topPos + 5, 43, 30,
-                wallet.availableCurrencies().stream().map(x -> new CurrencyDisplay(font, wallet, x)).toList());
-        addRenderableWidget(currencies);
+        currencyDisplay = new CurrencyDisplay(font, wallet, tradeCurrency);
+        currencyDisplay.setPosition(this.leftPos + 206, this.topPos + 6);
+        currencyDisplay.setWidth(65);
+        currencyDisplay.setHeight(13);
+        addRenderableWidget(currencyDisplay);
     }
 
     @Override
@@ -93,15 +102,16 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 
         @Override
         protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            guiGraphics.blit(RenderType::guiTextured, currency.value().icon(), getX(), getY(), 0, 0, ICON_SIZE,
-                    ICON_SIZE, ICON_SIZE, ICON_SIZE);
+            guiGraphics.blit(RenderType::guiTextured, currency.value().icon(), getX() + getWidth() - ICON_SIZE, getY(),
+                    0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
 
             int amount = wallet.get(currency);
             String amountString = Integer.toString(amount);
-            guiGraphics.drawString(font, amountString, getX() + 10, getY() + ICON_SIZE - font.lineHeight,
-                    ChatFormatting.WHITE.getColor(), true);
+            int amountWidth = font.width(amountString);
+            guiGraphics.drawString(font, amountString, getX() + getWidth() - ICON_SIZE - amountWidth,
+                    getY() + (ICON_SIZE - font.lineHeight) / 2, ChatFormatting.WHITE.getColor(), true);
 
-            isHovered = mouseX >= getX() && mouseX < getX() + ICON_SIZE && mouseY >= getY()
+            isHovered = mouseX >= getX() + getWidth() - ICON_SIZE && mouseX < getX() + getWidth() && mouseY >= getY()
                     && mouseY < getY() + ICON_SIZE;
         }
 
