@@ -66,7 +66,7 @@ public sealed interface TargetBlockPredicate {
 
     enum Trivial implements TargetBlockPredicate, StringRepresentable {
         ALL("all", true),
-        NONE("none", true);
+        NONE("none", false);
 
         private String id;
         private boolean result;

@@ -1,0 +1,23 @@
+{
+    "neoforge:conditions": [
+        {"type": "neoforge:never"}
+    ],
+    "color": -43691,
+    "maximum": "wotr:max_blood",
+    "modificators": {
+        "recharge": {
+            "amount": "wotr:blood_regen_rate",
+            "action": {
+                "type": "wotr:kill"
+            },
+            "is_positive": true
+        },
+        "drain": {
+            "amount": "wotr:blood_degen_rate",
+            "action": {
+                "type": "wotr:tick"
+            },
+            "is_positive": false
+        }
+    }
+}

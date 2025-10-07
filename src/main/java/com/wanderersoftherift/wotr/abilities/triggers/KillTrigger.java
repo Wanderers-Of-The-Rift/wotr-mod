@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.abilities.triggers;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
@@ -14,17 +13,14 @@ import net.minecraft.world.phys.EntityHitResult;
 
 import java.util.UUID;
 
-public record DealDamageTrigger(SerializableDamageSource source, UUID victim, float amount)
-        implements TrackableTrigger {
+public record KillTrigger(SerializableDamageSource source, UUID victim) implements TrackableTrigger {
 
-    private static final MapCodec<DealDamageTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            SerializableDamageSource.CODEC.fieldOf("source").forGetter(DealDamageTrigger::source),
-            UUIDUtil.CODEC.fieldOf("victim").forGetter(DealDamageTrigger::victim),
-            Codec.FLOAT.fieldOf("amount").forGetter(DealDamageTrigger::amount)
-    ).apply(instance, DealDamageTrigger::new));
+    private static final MapCodec<KillTrigger> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            SerializableDamageSource.CODEC.fieldOf("source").forGetter(KillTrigger::source),
+            UUIDUtil.CODEC.fieldOf("victim").forGetter(KillTrigger::victim)
+    ).apply(instance, KillTrigger::new));
 
-    public static final TriggerType<DealDamageTrigger> TRIGGER_TYPE = new TriggerType<>(
-            DealDamagePredicate.CODEC, null);
+    public static final TriggerType<KillTrigger> TRIGGER_TYPE = new TriggerType<>(KillPredicate.CODEC, null);
 
     @Override
     public TriggerType<?> type() {
@@ -42,5 +38,4 @@ public record DealDamageTrigger(SerializableDamageSource source, UUID victim, fl
                     new TargetComponent(new EntityHitResult(victimEntity)));
         }
     }
-
 }
