@@ -87,7 +87,9 @@ public class CollectOngoingObjective implements ProgressObjective {
     }
 
     public boolean onInventoryCheck(Player player) {
-        if (isComplete()) return false;
+        if (isComplete()) {
+            return false;
+        }
 
         int newAmount;
         if (player instanceof ServerPlayer sp) {
@@ -126,7 +128,9 @@ public class CollectOngoingObjective implements ProgressObjective {
 
     private static InventorySnapshot getEntranceSnapshot(ServerPlayer player) {
         var states = player.getData(WotrAttachments.RIFT_ENTRY_STATES);
-        if (states == null || states.isEmpty()) return null;
+        if (states == null || states.isEmpty()) {
+            return null;
+        }
         RiftEntryState last = states.get(states.size() - 1);
         return last.entranceInventory();
     }
@@ -190,8 +194,8 @@ public class CollectOngoingObjective implements ProgressObjective {
     public static Item pickItemFromLootOrThrow(ServerLevel level, ResourceKey<LootTable> tableKey) {
         LootTable table = level.getServer().reloadableRegistries().getLootTable(tableKey);
 
-        final int ATTEMPTS = 6;
-        for (int attempt = 0; attempt < ATTEMPTS; attempt++) {
+        final int attempts = 6;
+        for (int attempt = 0; attempt < attempts; attempt++) {
             long seed = level.getRandom().nextLong();
 
             LootParams params = new LootParams.Builder(level)
@@ -218,8 +222,11 @@ public class CollectOngoingObjective implements ProgressObjective {
                 .withLuck(0.0f)
                 .create(LootContextParamSets.CHEST);
         List<ItemStack> rolls = table.getRandomItems(params, level.getRandom().nextLong());
-        for (ItemStack s : rolls)
-            if (!s.isEmpty()) return s.getItem();
+        for (ItemStack s : rolls) {
+            if (!s.isEmpty()) {
+                return s.getItem();
+            }
+        }
 
         return net.minecraft.world.item.Items.IRON_INGOT;
     }

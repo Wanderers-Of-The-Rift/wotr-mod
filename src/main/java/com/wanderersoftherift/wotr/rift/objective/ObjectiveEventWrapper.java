@@ -5,6 +5,8 @@ import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import com.wanderersoftherift.wotr.rift.objective.ongoing.CollectOngoingObjective;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -31,12 +33,17 @@ public class ObjectiveEventWrapper {
 
     @SubscribeEvent
     public static void onItemPickup(ItemEntityPickupEvent.Post event) {
-        var player = event.getPlayer();
-        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        Player player = event.getPlayer();
+        if (!(player instanceof ServerPlayer)) {
+            return;
+        }
+        ServerPlayer sp = (ServerPlayer) player;
+        ServerLevel serverLevel = sp.serverLevel();
 
-        var data = RiftData.get(serverLevel);
-        var ongoing = data.getObjective().orElse(null);
-        if (ongoing instanceof CollectOngoingObjective co) {
+        RiftData data = RiftData.get(serverLevel);
+        OngoingObjective ongoing = data.getObjective().orElse(null);
+        if (ongoing instanceof CollectOngoingObjective) {
+            CollectOngoingObjective co = (CollectOngoingObjective) ongoing;
             if (co.onInventoryCheck(player)) {
                 data.setDirty();
                 broadcastObjectiveStatus(serverLevel, data);
@@ -46,12 +53,17 @@ public class ObjectiveEventWrapper {
 
     @SubscribeEvent
     public static void onContainerClose(PlayerContainerEvent.Close event) {
-        var player = event.getEntity();
-        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        Player player = event.getEntity();
+        if (!(player instanceof ServerPlayer)) {
+            return;
+        }
+        ServerPlayer sp = (ServerPlayer) player;
+        ServerLevel serverLevel = sp.serverLevel();
 
-        var data = RiftData.get(serverLevel);
-        var ongoing = data.getObjective().orElse(null);
-        if (ongoing instanceof CollectOngoingObjective co) {
+        RiftData data = RiftData.get(serverLevel);
+        OngoingObjective ongoing = data.getObjective().orElse(null);
+        if (ongoing instanceof CollectOngoingObjective) {
+            CollectOngoingObjective co = (CollectOngoingObjective) ongoing;
             if (co.onInventoryCheck(player)) {
                 data.setDirty();
                 broadcastObjectiveStatus(serverLevel, data);

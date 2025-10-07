@@ -22,7 +22,7 @@ public class WotrObjectiveTypes {
     public static final Supplier<MapCodec<? extends ObjectiveType>> KILL = OBJECTIVE_TYPES.register("kill",
             () -> KillObjective.CODEC);
 
-    public static final Supplier<MapCodec<? extends ObjectiveType>> collect = OBJECTIVE_TYPES.register("collect",
+    public static final Supplier<MapCodec<? extends ObjectiveType>> COLLECT = OBJECTIVE_TYPES.register("collect",
             () -> CollectObjective.CODEC);
 
     public static final Supplier<MapCodec<? extends NoObjective>> NOTHING = OBJECTIVE_TYPES.register("none",
