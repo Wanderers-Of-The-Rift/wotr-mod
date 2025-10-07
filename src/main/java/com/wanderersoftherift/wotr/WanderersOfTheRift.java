@@ -28,6 +28,7 @@ import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
+import com.wanderersoftherift.wotr.init.WotrRiftParameterTypes;
 import com.wanderersoftherift.wotr.init.WotrSoundEvents;
 import com.wanderersoftherift.wotr.init.WotrSpawnFunctionTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityRequirementTypes;
@@ -141,6 +142,7 @@ public class WanderersOfTheRift {
         WotrGoalTypes.GOAL_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_PROVIDER_TYPES.register(modEventBus);
         WotrRewardTypes.REWARD_TYPES.register(modEventBus);
+        WotrRiftParameterTypes.PARAMETER_TYPES.register(modEventBus);
         WotrTrackedAbilityTriggers.TRIGGERS.register(modEventBus);
 
         WotrMobInteractions.MOB_INTERACTIONS.register(modEventBus);

@@ -116,6 +116,16 @@ public class RiftKey extends Item {
                         .withColor(ChatFormatting.GRAY.getColor()));
             }
         }
+        var parameters = stack.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
+        if (parameters != null && !parameters.parameters().isEmpty()) {
+            components.add(Component.literal("Rift parameters: ").withColor(ChatFormatting.GRAY.getColor()));
+            for (var parameter : parameters.parameters().entrySet()) {
+                components.add(Component
+                        .translatable("tooltip." + WanderersOfTheRift.MODID + ".rift_key_parameter_entry",
+                                parameter.getKey().location().toString(), parameter.getValue().doubleValue())
+                        .withColor(ChatFormatting.GRAY.getColor()));
+            }
+        }
         var jigsawEdits = stack.get(WotrDataComponentType.RiftKeyData.JIGSAW_PROCESSORS_EDIT);
         var postEdits = stack.get(WotrDataComponentType.RiftKeyData.POST_STEPS_EDIT);
         if ((jigsawEdits != null && !jigsawEdits.isEmpty()) || (postEdits != null && !postEdits.isEmpty())) {

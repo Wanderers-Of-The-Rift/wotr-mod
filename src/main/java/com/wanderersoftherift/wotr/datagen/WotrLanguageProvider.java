@@ -218,9 +218,14 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".invalid_objective", "Invalid objective '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_generator_preset", "Invalid generator preset '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_template_pool", "Invalid template pool '%s'");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_rift_parameter", "Invalid rift parameter %s");
         add("command." + WanderersOfTheRift.MODID + ".invalid_ability_resource", "Invalid ability resource '%s'");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.get", "Current value of parameter is %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.set", "Updated value of parameter %s -> %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.missing",
+                "This parameter does not exist in this world");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
         add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
@@ -280,6 +285,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_parameter_entry", "%s: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
