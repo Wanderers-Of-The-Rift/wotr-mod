@@ -112,6 +112,9 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(WotrItems.NOIR_HELMET.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/noir_helmet")));
 
+        itemModels.itemModelOutput.accept(WotrItems.COLOR_HELMET.get(),
+                ItemModelUtils.plainModel(WanderersOfTheRift.id("item/color_helmet")));
+
         itemModels.generateFlatItem(WotrItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.RAW_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.SHAPED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);

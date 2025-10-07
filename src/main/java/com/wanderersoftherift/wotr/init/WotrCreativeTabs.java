@@ -83,6 +83,7 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.BUILDER_GLASSES);
                         output.accept(WotrItems.NOIR_HELMET);
+                        output.accept(WotrItems.COLOR_HELMET);
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
