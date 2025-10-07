@@ -26,7 +26,7 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
-import com.wanderersoftherift.wotr.entity.mob.MobVariantData;
+import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
@@ -166,7 +166,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("primary_statistic"));
         public static final ResourceKey<Registry<RiftTheme>> RIFT_THEMES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("rift_theme"));
-        public static final ResourceKey<Registry<MobVariantData>> MOB_VARIANTS = ResourceKey
+        public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
         public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
@@ -302,7 +302,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.EFFECT_MARKERS, EffectMarker.DIRECT_CODEC, EffectMarker.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITIES, Ability.DIRECT_CODEC, Ability.DIRECT_CODEC);
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.MOB_VARIANTS, MobVariantData.CODEC, MobVariantData.CODEC);
+        event.dataPackRegistry(Keys.MOB_VARIANTS, RiftMobVariantData.CODEC, RiftMobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);

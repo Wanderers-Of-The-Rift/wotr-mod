@@ -33,7 +33,9 @@
         "MixinStairBlock",
         "MixinStructureTemplate",
         "MixinStructureTemplateManager",
-        "MixinWorldDimensions"
+        "MixinWorldDimensions",
+        "MixinSummonCommand"
+
     ],
     "client": [
         "MixinAccessibilityOptionsScreen",

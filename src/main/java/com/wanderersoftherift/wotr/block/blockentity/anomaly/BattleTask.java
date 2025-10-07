@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
+import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -142,9 +143,9 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
         void applyToMob(Mob mob, BlockEntity spawner, RandomSource random);
     }
 
-    // todo fix after #344
-    public record ApplyMobVariant(String variant) implements SpawnFunction {
-        public static final MapCodec<ApplyMobVariant> MAP_CODEC = Codec.STRING.fieldOf("variant")
+    public record ApplyMobVariant(Holder<RiftMobVariantData> variant) implements SpawnFunction {
+        public static final MapCodec<ApplyMobVariant> MAP_CODEC = RiftMobVariantData.VARIANT_HOLDER_CODEC
+                .fieldOf("variant")
                 .xmap(ApplyMobVariant::new, ApplyMobVariant::variant);
 
         @Override
