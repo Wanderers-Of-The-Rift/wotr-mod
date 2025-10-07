@@ -502,6 +502,8 @@
   "modifier.wotr.thorns_chance": "Thorns Chance",
   "modifier.wotr.thorns_damage": "Thorns Damage",
   "modifier_effect.wotr.ability": "Cast %s when %s",
+  "objective.wotr.collect.description": "Collect %1$s of %2$s",
+  "objective.wotr.collect.name": "Collect items",
   "objective.wotr.kill.description": "Defeat %s monsters",
   "objective.wotr.kill.name": "Kill mobs",
   "objective.wotr.nothing.description": "Do nothing",
