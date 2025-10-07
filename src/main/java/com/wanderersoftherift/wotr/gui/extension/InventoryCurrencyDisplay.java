@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.client;
+package com.wanderersoftherift.wotr.gui.extension;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
@@ -20,8 +20,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ContainerScreenEvent;
 
+/**
+ * Injects a currency display into the Inventory GUI
+ */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
-public final class InventoryUIEvents {
+public final class InventoryCurrencyDisplay {
 
     private static final ResourceLocation CURRENCY_TAB = WanderersOfTheRift.id("textures/gui/container/tab.png");
     private static final ResourceKey<Currency> TRADE_CURRENCY = ResourceKey.create(WotrRegistries.Keys.CURRENCIES,
@@ -32,7 +35,7 @@ public final class InventoryUIEvents {
 
     private static Holder<Currency> tradeCurrency;
 
-    private InventoryUIEvents() {
+    private InventoryCurrencyDisplay() {
     }
 
     @SubscribeEvent
