@@ -1,4 +1,9 @@
 {
-    "type": "wotr:polynomial",
-    "orders": [1.0, 0.02]
+    "initializer": {
+        "type": "wotr:polynomial",
+        "orders": [
+            1.0,
+            0.02
+        ]
+    }
 }

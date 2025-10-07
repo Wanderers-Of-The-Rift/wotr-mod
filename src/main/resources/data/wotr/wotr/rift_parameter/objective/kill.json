@@ -1,5 +1,7 @@
 {
-    "type": "wotr:random_range",
-    "min": 8,
-    "max": 32
+    "initializer": {
+        "type": "wotr:random_range",
+        "min": 8,
+        "max": 32
+    }
 }

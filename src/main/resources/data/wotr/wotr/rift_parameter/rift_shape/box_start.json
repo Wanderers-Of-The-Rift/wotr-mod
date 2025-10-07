@@ -1,5 +1,10 @@
 {
-    "type": "wotr:polynomial",
-    "orders": [-1, -1],
-    "position": "wotr:rift_shape/base_size"
+    "initializer": {
+        "type": "wotr:polynomial",
+        "orders": [
+            -1,
+            -1
+        ],
+        "position": "wotr:rift_shape/base_size"
+    }
 }

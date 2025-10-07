@@ -302,7 +302,8 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.MODIFIER_EFFECTS, ModifierEffect.DIRECT_CODEC, ModifierEffect.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MODIFIERS, Modifier.DIRECT_CODEC, Modifier.DIRECT_CODEC);
         event.dataPackRegistry(Keys.RIFT_THEMES, RiftTheme.DIRECT_CODEC, RiftTheme.DIRECT_SYNC_CODEC);
-        event.dataPackRegistry(Keys.RIFT_PARAMETER_CONFIGS, RiftParameter.CODEC, RiftParameter.CODEC);
+        event.dataPackRegistry(Keys.RIFT_PARAMETER_CONFIGS, RiftParameter.DEFINITION_CODEC,
+                RiftParameter.DEFINITION_CODEC);
         event.dataPackRegistry(Keys.RUNEGEM_DATA, RunegemData.CODEC, RunegemData.CODEC);
         event.dataPackRegistry(Keys.GEAR_IMPLICITS_CONFIG, ImplicitConfig.CODEC, ImplicitConfig.CODEC);
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);

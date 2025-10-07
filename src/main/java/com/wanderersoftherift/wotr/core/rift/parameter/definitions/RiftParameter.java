@@ -24,5 +24,7 @@ public interface RiftParameter {
                 default -> throw new IllegalStateException("Unexpected value: " + it);
             });
 
+    Codec<RiftParameter> DEFINITION_CODEC = CODEC.fieldOf("initializer").codec();
+
     double getValue(int tier, RandomSource rng, Function<ResourceKey<RiftParameter>, Double> parameterGetter);
 }
