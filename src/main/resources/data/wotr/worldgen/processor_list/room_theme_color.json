@@ -11,6 +11,10 @@
         {
             "type": "neoforge:mod_loaded",
             "modid": "stoneworks"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "motr"
         }
     ],
     "processors": [
@@ -24,27 +28,27 @@
                     "input_state": "wotr:processor_block_1",
                     "output_steps": [
                         {
-                            "output_state": "wotr:nograv_pink_concrete_powder",
+                            "output_state": "motr:nograv_pink_concrete_powder",
                             "step_size": 0.05
                         },
                         {
-                            "output_state": "wotr:nograv_light_blue_concrete_powder",
+                            "output_state": "motr:nograv_light_blue_concrete_powder",
                             "step_size": 0.1
                         },
                         {
-                            "output_state": "wotr:nograv_lime_concrete_powder",
+                            "output_state": "motr:nograv_lime_concrete_powder",
                             "step_size": 0.15
                         },
                         {
-                            "output_state": "wotr:nograv_yellow_concrete_powder",
+                            "output_state": "motr:nograv_yellow_concrete_powder",
                             "step_size": 0.2
                         },
                         {
-                            "output_state": "wotr:nograv_magenta_concrete_powder",
+                            "output_state": "motr:nograv_magenta_concrete_powder",
                             "step_size": 0.25
                         },
                         {
-                            "output_state": "wotr:nograv_orange_concrete_powder",
+                            "output_state": "motr:nograv_orange_concrete_powder",
                             "step_size": 0.25
                         }
                     ]
@@ -580,23 +584,23 @@
                     "input_state": "wotr:processor_block_4",
                     "output_steps": [
                         {
-                            "output_state": "wotr:nograv_cyan_concrete_powder",
+                            "output_state": "motr:nograv_cyan_concrete_powder",
                             "step_size": 0.067
                         },
                         {
-                            "output_state": "wotr:nograv_blue_concrete_powder",
+                            "output_state": "motr:nograv_blue_concrete_powder",
                             "step_size": 0.133
                         },
                         {
-                            "output_state": "wotr:nograv_purple_concrete_powder",
+                            "output_state": "motr:nograv_purple_concrete_powder",
                             "step_size": 0.2
                         },
                         {
-                            "output_state": "wotr:nograv_red_concrete_powder",
+                            "output_state": "motr:nograv_red_concrete_powder",
                             "step_size": 0.267
                         },
                         {
-                            "output_state": "wotr:nograv_green_concrete_powder",
+                            "output_state": "motr:nograv_green_concrete_powder",
                             "step_size": 0.333
                         }
                     ]

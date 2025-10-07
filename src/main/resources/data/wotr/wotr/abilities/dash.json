@@ -2,7 +2,8 @@
   "type": "wotr:instant",
   "requirements": [
     {
-      "type": "wotr:mana",
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
       "amount": 10
     },
     {
@@ -13,9 +14,6 @@
   "effects": [
     {
       "type": "wotr:movement",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "velocity": [
         0.0,
         0.0,
@@ -24,23 +22,17 @@
     },
     {
       "type": "wotr:movement",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "velocity": [
         0.0,
         0.4,
         0.0
       ],
-      "relativeFrame": "absolute"
+      "relative_frame": "absolute"
     },
     {
       "type": "wotr:sound",
       "sound": {
         "sound_id": "minecraft:entity.breeze.charge"
-      },
-      "targeting": {
-        "type": "wotr:self"
       }
     }
   ],

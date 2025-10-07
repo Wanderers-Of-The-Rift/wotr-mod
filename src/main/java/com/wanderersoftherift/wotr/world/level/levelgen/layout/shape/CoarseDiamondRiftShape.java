@@ -19,6 +19,6 @@ public record CoarseDiamondRiftShape(double offset, double scaleY, int levelCoun
 
     @Override
     public double riftHeightAt(double x, double z) {
-        return offset - scaleY * (Math.abs(Math.floor((x + 1) / 3)) + Math.abs(Math.floor((z + 1) / 3)));
+        return offset - 3.0 * scaleY * (Math.abs(Math.floor((x + 1) / 3)) + Math.abs(Math.floor((z + 1) / 3)));
     }
 }

@@ -48,25 +48,6 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
-        addBlock(WotrBlocks.NOGRAVGRAVEL, "No Gravity Gravel");
-        addBlock(WotrBlocks.NOGRAVSAND, "No Gravity Sand");
-        addBlock(WotrBlocks.NOGRAVREDSAND, "No Gravity Red Sand");
-        addBlock(WotrBlocks.NOGRAVWHITECONCRETEPOWDER, "No Gravity White Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVORANGECONCRETEPOWDER, "No Gravity Orange Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVMAGENTACONCRETEPOWDER, "No Gravity Magenta Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIGHTBLUECONCRETEPOWDER, "No Gravity Light Blue Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVYELLOWCONCRETEPOWDER, "No Gravity Yellow Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIMECONCRETEPOWDER, "No Gravity Lime Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVPINKCONCRETEPOWDER, "No Gravity Pink Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVGRAYCONCRETEPOWDER, "No Gravity Gray Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVLIGHTGRAYCONCRETEPOWDER, "No Gravity Light Gray Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVCYANCONCRETEPOWDER, "No Gravity Cyan Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVPURPLECONCRETEPOWDER, "No Gravity Purple Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBLUECONCRETEPOWDER, "No Gravity Blue Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBROWNCONCRETEPOWDER, "No Gravity Brown Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVGREENCONCRETEPOWDER, "No Gravity Green Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVREDCONCRETEPOWDER, "No Gravity Red Concrete Powder");
-        addBlock(WotrBlocks.NOGRAVBLACKCONCRETEPOWDER, "No Gravity Black Concrete Powder");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
@@ -93,6 +74,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
         addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
+        addEntityType(WotrEntities.RIFT_SKELETON, "Rift Skeleton");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
@@ -237,16 +219,27 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".invalid_objective", "Invalid objective '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_generator_preset", "Invalid generator preset '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_template_pool", "Invalid template pool '%s'");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_rift_parameter", "Invalid rift parameter %s");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_ability_resource", "Invalid ability resource '%s'");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.get", "Current value of parameter is %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.set", "Updated value of parameter %s -> %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.missing",
+                "This parameter does not exist in this world");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
         add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
         add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
+        add(WanderersOfTheRift.translationId("command", "place.processor.invalid"), "Invalid processor %s");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
         add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
+        add("ability." + WanderersOfTheRift.MODID + ".firebolts", "Firebolts");
+        add("ability." + WanderersOfTheRift.MODID + ".strength", "Strength");
+        add("ability." + WanderersOfTheRift.MODID + ".weak_strength", "Strength (Exhausted)");
+        add("ability." + WanderersOfTheRift.MODID + ".test_chain_ability", "Strength Chain");
         add("ability." + WanderersOfTheRift.MODID + ".icicles", "Icicles");
         add("ability." + WanderersOfTheRift.MODID + ".mega_boost", "Mega Boost");
         add("ability." + WanderersOfTheRift.MODID + ".dash", "Dash");
@@ -256,9 +249,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+        add("ability." + WanderersOfTheRift.MODID + ".veinminer", "Veinmine");
         add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
         add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
+        add("trigger." + WanderersOfTheRift.MODID + ".break_block", "Break Block");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -291,6 +286,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_parameter_entry", "%s: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");

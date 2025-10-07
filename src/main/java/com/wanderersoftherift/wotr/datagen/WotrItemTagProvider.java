@@ -60,40 +60,50 @@ public class WotrItemTagProvider extends ItemTagsProvider {
 
         /* Handles all the socketable main/off hand items */
         tag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT)
-                .add(Items.WOODEN_AXE)
-                .add(Items.WOODEN_PICKAXE)
-                .add(Items.WOODEN_HOE)
-                .add(Items.WOODEN_SHOVEL)
+                .addTag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_WEAPON)
+                .addTag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_TOOL);
+
+        tag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_WEAPON)
                 .add(Items.WOODEN_SWORD)
-                .add(Items.STONE_AXE)
-                .add(Items.STONE_PICKAXE)
-                .add(Items.STONE_HOE)
-                .add(Items.STONE_SHOVEL)
                 .add(Items.STONE_SWORD)
-                .add(Items.IRON_AXE)
-                .add(Items.IRON_PICKAXE)
-                .add(Items.IRON_HOE)
-                .add(Items.IRON_SHOVEL)
                 .add(Items.IRON_SWORD)
-                .add(Items.GOLDEN_AXE)
-                .add(Items.GOLDEN_PICKAXE)
-                .add(Items.GOLDEN_HOE)
-                .add(Items.GOLDEN_SHOVEL)
                 .add(Items.GOLDEN_SWORD)
-                .add(Items.DIAMOND_AXE)
-                .add(Items.DIAMOND_PICKAXE)
-                .add(Items.DIAMOND_HOE)
-                .add(Items.DIAMOND_SHOVEL)
                 .add(Items.DIAMOND_SWORD)
-                .add(Items.NETHERITE_AXE)
-                .add(Items.NETHERITE_PICKAXE)
-                .add(Items.NETHERITE_HOE)
-                .add(Items.NETHERITE_SHOVEL)
                 .add(Items.NETHERITE_SWORD)
                 .add(Items.TRIDENT)
                 .add(Items.MACE)
                 .add(Items.BOW)
-                .add(Items.CROSSBOW);
+                .add(Items.CROSSBOW)
+                .addTag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_HYBRID);
+
+        tag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_TOOL)
+                .add(Items.WOODEN_PICKAXE)
+                .add(Items.WOODEN_HOE)
+                .add(Items.WOODEN_SHOVEL)
+                .add(Items.STONE_PICKAXE)
+                .add(Items.STONE_HOE)
+                .add(Items.STONE_SHOVEL)
+                .add(Items.IRON_PICKAXE)
+                .add(Items.IRON_HOE)
+                .add(Items.IRON_SHOVEL)
+                .add(Items.GOLDEN_PICKAXE)
+                .add(Items.GOLDEN_HOE)
+                .add(Items.GOLDEN_SHOVEL)
+                .add(Items.DIAMOND_PICKAXE)
+                .add(Items.DIAMOND_HOE)
+                .add(Items.DIAMOND_SHOVEL)
+                .add(Items.NETHERITE_PICKAXE)
+                .add(Items.NETHERITE_HOE)
+                .add(Items.NETHERITE_SHOVEL)
+                .addTag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_HYBRID);
+
+        tag(WotrTags.Items.SOCKETABLE_MAIN_HAND_SLOT_HYBRID)
+                .add(Items.WOODEN_AXE)
+                .add(Items.STONE_AXE)
+                .add(Items.IRON_AXE)
+                .add(Items.GOLDEN_AXE)
+                .add(Items.DIAMOND_AXE)
+                .add(Items.NETHERITE_AXE);
 
         tag(WotrTags.Items.SOCKETABLE_OFF_HAND_SLOT)
                 .add(Items.SHIELD);
@@ -113,6 +123,12 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.LEATHER_LEGGINGS)
                 .add(Items.LEATHER_BOOTS);
 
+        tag(WotrTags.Items.CHAINMAIL_TYPE_GEAR)
+                .add(Items.CHAINMAIL_HELMET)
+                .add(Items.CHAINMAIL_CHESTPLATE)
+                .add(Items.CHAINMAIL_LEGGINGS)
+                .add(Items.CHAINMAIL_BOOTS);
+
         tag(WotrTags.Items.IRON_TYPE_GEAR)
                 .add(Items.IRON_HELMET)
                 .add(Items.IRON_CHESTPLATE)
@@ -130,6 +146,12 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.GOLDEN_CHESTPLATE)
                 .add(Items.GOLDEN_LEGGINGS)
                 .add(Items.GOLDEN_BOOTS);
+
+        tag(WotrTags.Items.NETHERITE_TYPE_GEAR)
+                .add(Items.NETHERITE_HELMET)
+                .add(Items.NETHERITE_CHESTPLATE)
+                .add(Items.NETHERITE_LEGGINGS)
+                .add(Items.NETHERITE_BOOTS);
 
         tag(WotrTags.Items.RANGE_TYPE_WEAPON)
                 .add(Items.CROSSBOW)

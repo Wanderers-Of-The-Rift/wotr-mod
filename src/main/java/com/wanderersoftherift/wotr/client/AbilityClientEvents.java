@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.client;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
@@ -89,17 +88,6 @@ public final class AbilityClientEvents {
         if (player.getData(WotrAttachments.ONGOING_ABILITIES).activate(AbilitySource.sourceForSlot(slot))) {
             PacketDistributor.sendToServer(new UseAbilityPayload(slot));
         }
-    }
-
-    @SubscribeEvent
-    public static void tickMana(ClientTickEvent.Pre event) {
-        Player player = Minecraft.getInstance().player;
-        if (player == null || Minecraft.getInstance().isPaused()) {
-            return;
-        }
-
-        ManaData manaData = player.getData(WotrAttachments.MANA);
-        manaData.tick();
     }
 
 }

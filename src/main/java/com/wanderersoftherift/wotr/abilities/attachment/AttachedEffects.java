@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.StoredAbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.AttachEffect;
 import com.wanderersoftherift.wotr.abilities.effects.attachment.EffectMarkerInstance;
+import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.modifier.ModifierInstance;
 import com.wanderersoftherift.wotr.modifier.source.AttachEffectModifierSource;
@@ -144,7 +145,7 @@ public class AttachedEffects {
     public List<ModifierInstance> getModifiers(UUID id) {
         return this.effects.stream()
                 .filter(it -> it.id.equals(id))
-                .map(it -> it.attachEffect.getModifiers())
+                .map(it -> it.attachEffect.modifiers())
                 .findAny()
                 .orElse(Collections.emptyList());
     }
@@ -234,16 +235,15 @@ public class AttachedEffects {
                 expired = true;
                 return;
             }
-            if (attachEffect.getTriggerPredicate().matches(attachedTo, age, caster)) {
-                AbilityContext triggerContext = context.toContext(caster, attachedTo.level());
-                try (var ignore = triggerContext.enableTemporaryUpgradeModifiers()) {
-                    attachEffect.getEffects()
-                            .forEach(child -> child.apply(attachedTo, Collections.emptyList(), triggerContext));
+            if (attachEffect.triggerPredicate().matches(attachedTo, age, caster)) {
+                AbilityContext triggerContext = context.toContext(caster, attachedTo.level(), age);
+                try (var ignore = triggerContext.activate()) {
+                    attachEffect.effects().forEach(child -> child.apply(triggerContext, new TargetInfo(attachedTo)));
                 }
                 triggeredTimes++;
             }
             age++;
-            expired = !attachEffect.getContinuePredicate().matches(attachedTo, age, triggeredTimes, caster);
+            expired = !attachEffect.continuePredicate().matches(attachedTo, age, triggeredTimes, caster);
         }
 
         public boolean isExpired() {
@@ -264,34 +264,34 @@ public class AttachedEffects {
         }
 
         private void applyModifiers(Entity attachedTo) {
-            for (int i = 0; i < attachEffect.getModifiers().size(); i++) {
-                ModifierInstance modifier = attachEffect.getModifiers().get(i);
+            for (int i = 0; i < attachEffect.modifiers().size(); i++) {
+                ModifierInstance modifier = attachEffect.modifiers().get(i);
                 ModifierSource source = new AttachEffectModifierSource(id, i);
                 modifier.modifier().value().enableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
 
         private void removeModifiers(Entity attachedTo) {
-            for (int i = 0; i < attachEffect.getModifiers().size(); i++) {
-                ModifierInstance modifier = attachEffect.getModifiers().get(i);
+            for (int i = 0; i < attachEffect.modifiers().size(); i++) {
+                ModifierInstance modifier = attachEffect.modifiers().get(i);
                 ModifierSource source = new AttachEffectModifierSource(id, i);
                 modifier.modifier().value().disableModifier(modifier.roll(), attachedTo, source, modifier.tier());
             }
         }
 
         private void addEffectMarker(ServerPlayer player) {
-            if (attachEffect.getDisplay().isPresent()) {
+            if (attachEffect.display().isPresent()) {
                 Long until = null;
-                if (attachEffect.getContinuePredicate().duration() < Integer.MAX_VALUE) {
-                    until = player.level().getGameTime() + attachEffect.getContinuePredicate().duration() - age;
+                if (attachEffect.continuePredicate().duration() < Integer.MAX_VALUE) {
+                    until = player.level().getGameTime() + attachEffect.continuePredicate().duration() - age;
                 }
                 PacketDistributor.sendToPlayer(player, new AddEffectMarkerPayload(
-                        new EffectMarkerInstance(id, attachEffect.getDisplay(), Optional.ofNullable(until))));
+                        new EffectMarkerInstance(id, attachEffect.display(), Optional.ofNullable(until))));
             }
         }
 
         private void removeEffectMarker(ServerPlayer player) {
-            if (attachEffect.getDisplay().isPresent()) {
+            if (attachEffect.display().isPresent()) {
                 PacketDistributor.sendToPlayer(player, new RemoveEffectMarkerPayload(id));
             }
         }

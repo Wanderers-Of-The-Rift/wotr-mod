@@ -24,6 +24,7 @@
         "MixinJigsawReplacementProcessor",
         "MixinLavaFluid",
         "MixinLivingEntity",
+        "MixinLootTable",
         "MixinMob",
         "MixinOctahedralGroup",
         "MixinProtoChunk",
@@ -32,7 +33,9 @@
         "MixinStairBlock",
         "MixinStructureTemplate",
         "MixinStructureTemplateManager",
-        "MixinWorldDimensions"
+        "MixinWorldDimensions",
+        "MixinSummonCommand"
+
     ],
     "client": [
         "MixinAccessibilityOptionsScreen",

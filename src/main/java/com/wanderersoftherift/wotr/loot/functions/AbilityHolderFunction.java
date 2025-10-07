@@ -4,17 +4,22 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.commands.AbilityCommands;
+import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
+import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,23 +60,41 @@ public class AbilityHolderFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
+    public @NotNull LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
         return ABILITY_HOLDER_FUNCTION.get();
     }
 
     @Override
-    protected ItemStack run(ItemStack itemStack, LootContext lootContext) {
+    protected @NotNull ItemStack run(@NotNull ItemStack itemStack, LootContext lootContext) {
         RandomSource random = lootContext.getRandom();
         Optional<Holder<Ability>> randomElement = abilities.getRandomElement(random);
         if (randomElement.isEmpty()) {
             return itemStack;
         }
         int choices = random.nextInt(maxLevel - minLevel + 1) + minLevel;
-        return AbilityCommands.generateAbilityItem(itemStack, randomElement.get(), choices, lootContext.getLevel());
+        return generateAbilityItem(itemStack, randomElement.get(), choices, lootContext.getLevel());
     }
 
     public static Builder<?> setAbilityOptions(int minLevel, int maxLevel, HolderSet<Ability> abilities) {
         return simpleBuilder(
                 (lootItemConditions) -> new AbilityHolderFunction(lootItemConditions, minLevel, maxLevel, abilities));
+    }
+
+    private static ItemStack generateAbilityItem(
+            ItemStack item,
+            Holder<Ability> ability,
+            int choices,
+            ServerLevel serverLevel) {
+        if (item.isEmpty()) {
+            return item;
+        }
+        AbilityUpgradePool.Mutable upgradePool = new AbilityUpgradePool.Mutable();
+        upgradePool.generateChoices(serverLevel.registryAccess(), ability.value(), choices, serverLevel.random, 3);
+        DataComponentPatch patch = DataComponentPatch.builder()
+                .set(WotrDataComponentType.ABILITY.get(), new ActivatableAbility(ability))
+                .set(WotrDataComponentType.ABILITY_UPGRADE_POOL.get(), upgradePool.toImmutable())
+                .build();
+        item.applyComponents(patch);
+        return item;
     }
 }

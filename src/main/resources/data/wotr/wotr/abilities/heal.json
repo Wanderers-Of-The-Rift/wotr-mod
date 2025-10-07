@@ -2,30 +2,36 @@
   "type": "wotr:instant",
   "effects": [
     {
-      "type": "wotr:heal",
-      "amount": 2.0,
+      "type": "wotr:targeting",
       "targeting": {
         "type": "wotr:area",
-        "range": 2.0,
-        "target": {
+        "shape": {
+          "type": "wotr:cube",
+          "range": 2.0
+        },
+        "entities": {
           "sentiment": "not_foe"
         }
-      }
+      },
+      "effects": [
+        {
+          "type": "wotr:heal",
+          "amount": 2.0
+        }
+      ]
     },
     {
       "type": "wotr:sound",
       "sound": {
         "sound_id": "minecraft:entity.splash_potion.break"
-      },
-      "targeting": {
-        "type": "wotr:self"
       }
     }
   ],
   "icon": "minecraft:textures/mob_effect/regeneration.png",
   "requirements": [
     {
-      "type": "wotr:mana",
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
       "amount": 10
     },
     {

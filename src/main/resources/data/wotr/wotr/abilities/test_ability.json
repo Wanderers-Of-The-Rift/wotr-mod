@@ -11,14 +11,15 @@
     {
       "type": "wotr:damage",
       "amount": 1,
-      "damage_type": "wotr:fire",
+      "damage_type": "wotr:fire"
+    },
+    {
+      "type": "wotr:particle",
       "targeting": {
         "type": "wotr:self"
       },
-      "effects": [],
-      "particles": {
-        "user": "minecraft:bubble",
-        "target": "minecraft:explosion"
+      "particle": {
+        "type": "minecraft:bubble"
       }
     }
   ]

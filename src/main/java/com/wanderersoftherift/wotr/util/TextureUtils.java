@@ -1,55 +1,52 @@
 package com.wanderersoftherift.wotr.util;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
+import org.lwjgl.opengl.GL33;
 
 public class TextureUtils {
+
     /**
-     * Returns the file image width of a given {@link ResourceLocation}
+     * Returns the image width of a given {@link ResourceLocation}
      *
      * @param resource the {@link ResourceLocation} to read
      * @return The Image width as an int
      */
-    public static int getTextureWidth(ResourceLocation resource) {
-        try {
-            Optional<Resource> mcResource = Minecraft.getInstance().getResourceManager().getResource(resource);
-            if (mcResource.isPresent()) {
-                try (InputStream inputStream = mcResource.get().open()) {
-                    BufferedImage image = ImageIO.read(inputStream);
-                    return image.getWidth();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static int getTextureWidthGL(ResourceLocation resource) {
+        if (!RenderSystem.isOnRenderThread()) {
+            return -1;
         }
-        return -1; // Return -1 if the texture can't be loaded
+        var id = Minecraft.getInstance().getTextureManager().getTexture(resource).getId();
+        // return GL45.glGetTextureLevelParameteri(id, 0, GL45.GL_TEXTURE_WIDTH); // requires OpenGL 4.5
+        var current = GL33.glGetInteger(GL33.GL_TEXTURE_BINDING_2D);
+        try {
+            GL33.glBindTexture(GL33.GL_TEXTURE_2D, id);
+            return GL33.glGetTexLevelParameteri(GL33.GL_TEXTURE_2D, 0, GL33.GL_TEXTURE_WIDTH);
+        } finally {
+            GL33.glBindTexture(GL33.GL_TEXTURE_2D, current);
+        }
     }
 
     /**
-     * Returns the file image width of a given {@link ResourceLocation}
+     * Returns the image height of a given {@link ResourceLocation}
      *
      * @param resource the {@link ResourceLocation} to read
      * @return The Image height as an int
      */
-    public static int getTextureHeight(ResourceLocation resource) {
-        try {
-            Optional<Resource> mcResource = Minecraft.getInstance().getResourceManager().getResource(resource);
-            if (mcResource.isPresent()) {
-                try (InputStream inputStream = mcResource.get().open()) {
-                    BufferedImage image = ImageIO.read(inputStream);
-                    return image.getHeight();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static int getTextureHeightGL(ResourceLocation resource) {
+        if (!RenderSystem.isOnRenderThread()) {
+            return -1;
         }
-        return -1; // Return -1 if the texture can't be loaded
+        var id = Minecraft.getInstance().getTextureManager().getTexture(resource).getId();
+        // return GL45.glGetTextureLevelParameteri(id, 0, GL45.GL_TEXTURE_HEIGHT); // requires OpenGL 4.5
+        var current = GL33.glGetInteger(GL33.GL_TEXTURE_BINDING_2D);
+        try {
+            GL33.glBindTexture(GL33.GL_TEXTURE_2D, id);
+            return GL33.glGetTexLevelParameteri(GL33.GL_TEXTURE_2D, 0, GL33.GL_TEXTURE_HEIGHT);
+        } finally {
+            GL33.glBindTexture(GL33.GL_TEXTURE_2D, current);
+        }
     }
+
 }

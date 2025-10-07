@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.util;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatImmutableList;
 import net.minecraft.util.RandomSource;
@@ -38,6 +39,16 @@ public class FastWeightedList<T> {
                             }
                             return result;
                         });
+    }
+
+    public static <T> Codec<FastWeightedList<T>> listCodec(Codec<T> valueCodec) {
+        return RecordCodecBuilder.<Pair<Float, T>>create(
+                instance -> instance
+                        .group(Codec.FLOAT.fieldOf("weight").forGetter(Pair::getA),
+                                valueCodec.fieldOf("value").forGetter(Pair::getB))
+                        .apply(instance, Pair::new))
+                .listOf()
+                .xmap(it -> of(it.<Pair<Float, T>>toArray(Pair[]::new)), it -> it.entries().toList());
     }
 
     public static <T> FastWeightedList<T> of(Pair<Float, T>... entries) {

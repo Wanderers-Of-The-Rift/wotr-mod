@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.AbilityRequirement;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.modifier.effect.AbstractModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 
 public record CooldownCost(int ticks) implements AbilityRequirement {
     public static final MapCodec<CooldownCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -33,8 +33,8 @@ public record CooldownCost(int ticks) implements AbilityRequirement {
     }
 
     @Override
-    public boolean isRelevant(AbstractModifierEffect modifierEffect) {
+    public boolean isRelevant(ModifierEffect modifierEffect) {
         return ticks > 0 && modifierEffect instanceof AttributeModifierEffect attributeModifierEffect
-                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.getAttribute());
+                && WotrAttributes.COOLDOWN.equals(attributeModifierEffect.attribute());
     }
 }

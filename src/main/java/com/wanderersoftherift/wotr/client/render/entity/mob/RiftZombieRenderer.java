@@ -1,39 +1,41 @@
 package com.wanderersoftherift.wotr.client.render.entity.mob;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
+import net.minecraft.client.model.ZombieModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ZombieRenderer;
-import net.minecraft.client.renderer.entity.state.ZombieRenderState;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.monster.Zombie;
 
-public class RiftZombieRenderer extends ZombieRenderer {
-    // Makes render for RiftZombie from variant png
+public class RiftZombieRenderer
+        extends AbstractZombieRenderer<RiftZombie, RiftZombieRenderState, ZombieModel<RiftZombieRenderState>> {
+    // Makes render for RiftZombie from variant_zombie.png, if valid variant.json found.
 
     public RiftZombieRenderer(EntityRendererProvider.Context context) {
-        super(context);
+        super(context, new ZombieModel<>(context.bakeLayer(ModelLayers.ZOMBIE)),
+                new ZombieModel<>(context.bakeLayer(ModelLayers.ZOMBIE_BABY)),
+                new ZombieModel<>(context.bakeLayer(ModelLayers.ZOMBIE_INNER_ARMOR)),
+                new ZombieModel<>(context.bakeLayer(ModelLayers.ZOMBIE_OUTER_ARMOR)),
+                new ZombieModel<>(context.bakeLayer(ModelLayers.ZOMBIE_BABY_INNER_ARMOR)),
+                new ZombieModel<>(context.bakeLayer(ModelLayers.ZOMBIE_BABY_OUTER_ARMOR)));
     }
 
     @Override
-    public ZombieRenderState createRenderState() {
+    public RiftZombieRenderState createRenderState() {
         return new RiftZombieRenderState();
     }
 
     @Override
-    public void extractRenderState(Zombie entity, ZombieRenderState state, float partialTick) {
-        super.extractRenderState(entity, state, partialTick);
-        if (entity instanceof RiftZombie riftZombie && state instanceof RiftZombieRenderState riftState) {
-            riftState.variant = riftZombie.getVariant();
-        }
+    public void extractRenderState(RiftZombie riftZombie, RiftZombieRenderState riftState, float partialTick) {
+        super.extractRenderState(riftZombie, riftState, partialTick);
+        Holder<RiftMobVariantData> varientHolder = riftZombie.getVariant();
+        riftState.variant = varientHolder.value().texture();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ZombieRenderState state) {
-        String variant = "default_zombie";
-        if (state instanceof RiftZombieRenderState riftState) {
-            variant = riftState.variant != null ? riftState.variant : "default_zombie";
-        }
-        return WanderersOfTheRift.id("textures/entity/mob/" + variant + ".png");
+    public ResourceLocation getTextureLocation(RiftZombieRenderState riftZombieRenderState) {
+        return riftZombieRenderState.variant;
     }
 }

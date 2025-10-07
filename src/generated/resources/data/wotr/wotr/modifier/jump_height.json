@@ -3,68 +3,59 @@
     "color": "#00BFFF"
   },
   "tiers": [
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:jump_strength",
-          "id": "wotr:jump_height",
-          "max_roll": 0.15000000596046448,
-          "min_roll": 0.0,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:safe_fall_distance",
-          "id": "wotr:fall_reduction",
-          "max_roll": 1.350000023841858,
-          "min_roll": 0.0,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 1
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:jump_strength",
-          "id": "wotr:jump_height",
-          "max_roll": 0.3499999940395355,
-          "min_roll": 0.15000000596046448,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:safe_fall_distance",
-          "id": "wotr:fall_reduction",
-          "max_roll": 2.6500000953674316,
-          "min_roll": 1.350000023841858,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 2
-    },
-    {
-      "modifiers": [
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:jump_strength",
-          "id": "wotr:jump_height",
-          "max_roll": 0.5,
-          "min_roll": 0.3499999940395355,
-          "operation": "add_value"
-        },
-        {
-          "type": "wotr:attribute",
-          "attribute": "minecraft:safe_fall_distance",
-          "id": "wotr:fall_reduction",
-          "max_roll": 4.0,
-          "min_roll": 2.6500000953674316,
-          "operation": "add_value"
-        }
-      ],
-      "tier": 3
-    }
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:jump_strength",
+        "id": "wotr:jump_height",
+        "max_roll": 0.15000000596046448,
+        "min_roll": 0.0,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:safe_fall_distance",
+        "id": "wotr:fall_reduction",
+        "max_roll": 1.350000023841858,
+        "min_roll": 0.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:jump_strength",
+        "id": "wotr:jump_height",
+        "max_roll": 0.3499999940395355,
+        "min_roll": 0.15000000596046448,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:safe_fall_distance",
+        "id": "wotr:fall_reduction",
+        "max_roll": 2.6500000953674316,
+        "min_roll": 1.350000023841858,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:jump_strength",
+        "id": "wotr:jump_height",
+        "max_roll": 0.5,
+        "min_roll": 0.3499999940395355,
+        "operation": "add_value"
+      },
+      {
+        "type": "wotr:attribute",
+        "attribute": "minecraft:safe_fall_distance",
+        "id": "wotr:fall_reduction",
+        "max_roll": 4.0,
+        "min_roll": 2.6500000953674316,
+        "operation": "add_value"
+      }
+    ]
   ]
 }

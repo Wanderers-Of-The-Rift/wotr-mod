@@ -1,21 +1,25 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityConditions;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityResourceData;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
-import com.wanderersoftherift.wotr.abilities.attachment.AbilityTracker;
 import com.wanderersoftherift.wotr.abilities.attachment.AttachedEffects;
 import com.wanderersoftherift.wotr.abilities.attachment.EffectMarkers;
-import com.wanderersoftherift.wotr.abilities.attachment.ManaData;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.DeathNotifierAttachment;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
@@ -23,6 +27,7 @@ import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
 import com.wanderersoftherift.wotr.util.EntityAttachmentRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -35,6 +40,13 @@ import java.util.function.Supplier;
 public class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
+
+    public static final Supplier<AttachmentType<DeathNotifierAttachment>> DEATH_NOTIFICATION = ATTACHMENT_TYPES
+            .register(
+                    "death_notification",
+                    () -> AttachmentType.builder(() -> new DeathNotifierAttachment(BlockPos.ZERO))
+                            .serialize(DeathNotifierAttachment.CODEC)
+                            .build());
 
     public static final Supplier<AttachmentType<List<ItemStack>>> RESPAWN_ITEMS = ATTACHMENT_TYPES.register(
             "respawn_items",
@@ -85,8 +97,11 @@ public class WotrAttachments {
             () -> AttachmentType.builder(AttachedEffects::new).serialize(AttachedEffects.getSerializer()).build());
     public static final Supplier<AttachmentType<EffectMarkers>> EFFECT_MARKERS = ATTACHMENT_TYPES.register(
             "effect_markers", () -> AttachmentType.builder(EffectMarkers::new).build());
-    public static final Supplier<AttachmentType<ManaData>> MANA = ATTACHMENT_TYPES.register("mana",
-            () -> AttachmentType.builder(ManaData::new).serialize(ManaData.getSerializer()).build());
+    public static final Supplier<AttachmentType<AbilityResourceData>> ABILITY_RESOURCE_DATA = ATTACHMENT_TYPES.register(
+            "ability_resources",
+            () -> AttachmentType.builder(AbilityResourceData::new)
+                    .serialize(AbilityResourceData.getSerializer())
+                    .build());
     public static final Supplier<AttachmentType<OngoingAbilities>> ONGOING_ABILITIES = ATTACHMENT_TYPES.register(
             "ongoing_abilities",
             () -> AttachmentType.builder(OngoingAbilities::new).serialize(OngoingAbilities.getSerializer()).build());
@@ -94,8 +109,16 @@ public class WotrAttachments {
             "ability_states",
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
 
-    public static final Supplier<AttachmentType<? extends AbilityTracker>> ABILITY_TRACKER = ATTACHMENT_TYPES.register(
-            "ability_tracker", () -> AttachmentType.builder(AbilityTracker::new).build());
+    public static final Supplier<AttachmentType<? extends TriggerTracker>> TRIGGER_TRACKER = ATTACHMENT_TYPES.register(
+            "trigger_tracker", () -> AttachmentType.builder(TriggerTracker::new).build());
+    public static final Supplier<AttachmentType<AbilityEnhancements>> ABILITY_ENHANCEMENTS = ATTACHMENT_TYPES.register(
+            "ability_enhancements", () -> AttachmentType.builder(AbilityEnhancements::new).build()
+    );
+    public static final Supplier<AttachmentType<? extends AbilityConditions>> ABILITY_CONDITIONS = ATTACHMENT_TYPES
+            .register(
+                    "ability_conditions", () -> AttachmentType.builder(AbilityConditions::new).build()
+            );
+
     /// Guilds
     public static final Supplier<AttachmentType<Wallet>> WALLET = ATTACHMENT_TYPES.register("wallet",
             () -> AttachmentType.builder(Wallet::new).serialize(Wallet.getSerializer()).copyOnDeath().build());
@@ -140,16 +163,14 @@ public class WotrAttachments {
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
             );
 
-    public static final Supplier<AttachmentType<EntityAttachmentRegistry<ManaData>>> MANA_ENTITY_REGISTRY = ATTACHMENT_TYPES
-            .register(
-                    "mana_entity_registry",
-                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(MANA)).build()
-            );
-
     public static final Supplier<AttachmentType<TriggerRegistry<TickTrigger>>> TICK_TRIGGER_REGISTRY = ATTACHMENT_TYPES
             .register(
                     "tick_trigger_registry",
                     () -> AttachmentType.builder(() -> new TriggerRegistry<>(WotrTrackedAbilityTriggers.TICK_TRIGGER))
                             .build()
             );
+    public static final Supplier<AttachmentType<RiftParameterData>> RIFT_PARAMETER_DATA = ATTACHMENT_TYPES.register(
+            "rift_parameters",
+            () -> AttachmentType.builder(() -> new RiftParameterData()).serialize(RiftParameterData.CODEC).build()
+    );
 }
