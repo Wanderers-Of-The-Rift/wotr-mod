@@ -1,4 +1,7 @@
 {
+    "neoforge:conditions": [
+        {"type": "neoforge:never"}
+    ],
     "color": -43691,
     "maximum": "wotr:max_blood",
     "modificators": {
