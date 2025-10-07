@@ -64,6 +64,7 @@ public class CollectObjective implements ObjectiveType {
         int target = level.getRandom().nextIntBetweenInclusive(minQuantity, maxQuantity);
 
         if (lootTable != null) {
+            // ServerLevelAccessor -> ServerLevel
             ServerLevel sl = level.getLevel();
             Item picked = CollectOngoingObjective.pickItemFromLootOrThrow(sl, lootTable);
             return new CollectOngoingObjective(target, picked);

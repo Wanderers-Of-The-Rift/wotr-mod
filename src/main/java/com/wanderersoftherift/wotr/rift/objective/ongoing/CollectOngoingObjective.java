@@ -239,7 +239,5 @@ public class CollectOngoingObjective implements ProgressObjective {
 
     @Override
     public void registerUpdaters(RiftParameterData params, RiftData data, ServerLevel level) {
-        // No-op: Collect-objektiivin etenemä päivittyy item pickup / container close -tapahtumista.
     }
-
 }
