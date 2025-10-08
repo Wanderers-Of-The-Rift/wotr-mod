@@ -59,7 +59,7 @@ public class WotrDataComponentType {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CurrencyProvider>> CURRENCY_PROVIDER = register(
             "currency_provider", CurrencyProvider.CODEC, CurrencyProvider.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Price>> PRICE = register(
-            "cost", Price.CODEC, Price.STREAM_CODEC
+            "price", Price.CODEC, Price.STREAM_CODEC
     );
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(

@@ -120,7 +120,7 @@ public final class QuickMover {
             int dir,
             MoveResult result) {
         for (int index = start; index != end; index += dir) {
-            Slot targetSlot = menu.slots.get(start);
+            Slot targetSlot = menu.slots.get(index);
             ItemStack existingItem = targetSlot.getItem();
             if (targetSlot.mayPlace(stack)) {
                 if (existingItem.isEmpty()) {
@@ -133,8 +133,6 @@ public final class QuickMover {
                     result = MoveResult.VALID_BUT_FULL;
                 }
             }
-
-            start += dir;
         }
         return result;
     }
@@ -146,8 +144,8 @@ public final class QuickMover {
             int end,
             int dir) {
         MoveResult result = MoveResult.NO_MOVE;
-        for (int i = start; i != end && !stack.isEmpty(); i += dir) {
-            Slot slot = menu.slots.get(i);
+        for (int index = start; index != end && !stack.isEmpty(); index += dir) {
+            Slot slot = menu.slots.get(index);
             ItemStack existingStack = slot.getItem().copy();
             if (!existingStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, existingStack)) {
                 int j = existingStack.getCount() + stack.getCount();
@@ -166,8 +164,6 @@ public final class QuickMover {
                     result = MoveResult.VALID_BUT_FULL;
                 }
             }
-
-            i += dir;
         }
         return result;
     }
@@ -199,8 +195,7 @@ public final class QuickMover {
         private static final int UNSET = -1;
 
         private int playerSlotsStart = UNSET;
-
-        private List<SlotMover> slotMovers = new ArrayList<>();
+        private final List<SlotMover> slotMovers = new ArrayList<>();
 
         private Builder() {
         }

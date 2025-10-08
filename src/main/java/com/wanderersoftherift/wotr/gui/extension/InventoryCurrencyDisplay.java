@@ -32,6 +32,7 @@ public final class InventoryCurrencyDisplay {
     private static final int ICON_SIZE = 16;
     private static final int TAB_WIDTH = 64;
     private static final int TAB_HEIGHT = 19;
+    private static final int RIGHT_OFFSET = 3;
 
     private static Holder<Currency> tradeCurrency;
 
@@ -45,21 +46,31 @@ public final class InventoryCurrencyDisplay {
 
     @SubscribeEvent
     public static void onRenderInventoryForeground(ContainerScreenEvent.Render.Foreground event) {
-        if (!(event.getContainerScreen() instanceof InventoryScreen)) {
+        if (!(event.getContainerScreen() instanceof InventoryScreen) || Minecraft.getInstance().player == null) {
             return;
         }
+
         GuiGraphics guiGraphics = event.getGuiGraphics();
-        if (Minecraft.getInstance().player == null) {
-            return;
-        }
+        Font font = Minecraft.getInstance().font;
+        int mouseX = event.getMouseX() - event.getContainerScreen().getGuiLeft();
+        int mouseY = event.getMouseY() - event.getContainerScreen().getGuiTop();
         Wallet wallet = Minecraft.getInstance().player.getData(WotrAttachments.WALLET);
         int amount = wallet.get(tradeCurrency);
 
-        int x = event.getContainerScreen().getXSize() - TAB_WIDTH - 3;
+        int x = event.getContainerScreen().getXSize() - TAB_WIDTH - RIGHT_OFFSET;
         int y = -TAB_HEIGHT;
 
-        Font font = Minecraft.getInstance().font;
+        renderCurrencyDisplay(guiGraphics, font, x, y, mouseX, mouseY, amount);
+    }
 
+    private static void renderCurrencyDisplay(
+            GuiGraphics guiGraphics,
+            Font font,
+            int x,
+            int y,
+            int mouseX,
+            int mouseY,
+            int amount) {
         guiGraphics.blit(RenderType::guiTextured, CURRENCY_TAB, x, y, 0, 0, TAB_WIDTH, TAB_HEIGHT, TAB_WIDTH,
                 TAB_HEIGHT);
         guiGraphics.blit(RenderType::guiTextured, tradeCurrency.value().icon(), x + TAB_WIDTH - ICON_SIZE - 4, y + 3, 0,
@@ -70,8 +81,6 @@ public final class InventoryCurrencyDisplay {
         guiGraphics.drawString(font, amountString, x + TAB_WIDTH - ICON_SIZE - 6 - amountWidth, -font.lineHeight,
                 ChatFormatting.BLACK.getColor(), false);
 
-        int mouseX = event.getMouseX() - event.getContainerScreen().getGuiLeft();
-        int mouseY = event.getMouseY() - event.getContainerScreen().getGuiTop();
         if (mouseX >= x + TAB_WIDTH - ICON_SIZE - 4 && mouseX < x + TAB_WIDTH - 4 && mouseY >= y + 3 && mouseY < 0) {
             guiGraphics.renderTooltip(font, Currency.getDisplayName(tradeCurrency), mouseX, mouseY);
         }

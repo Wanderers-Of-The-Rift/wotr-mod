@@ -19,7 +19,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Menu for guild trading
+ * Menu for trading
  */
 public class TradingMenu extends AbstractContainerMenu {
 
@@ -32,6 +32,8 @@ public class TradingMenu extends AbstractContainerMenu {
             })
             .tryMoveToPlayer()
             .build();
+
+    private static final int TRADE_SLOT_COLUMNS = 5;
 
     private final ValidatingLevelAccess access;
 
@@ -57,8 +59,8 @@ public class TradingMenu extends AbstractContainerMenu {
         };
 
         for (int i = 0; i < AvailableTrades.MERCHANT_INVENTORY_SIZE; i++) {
-            int x = i % 5;
-            int y = i / 5;
+            int x = i % TRADE_SLOT_COLUMNS;
+            int y = i / TRADE_SLOT_COLUMNS;
 
             this.addSlot(new TakeAllOnlyItemHandlerSlot(this.merchantInventory, i, 8 + 18 * x, 30 + 18 * y) {
                 @Override

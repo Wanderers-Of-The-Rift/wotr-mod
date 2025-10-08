@@ -25,46 +25,52 @@ import java.util.Optional;
 
 public class NPCCommands extends BaseCommand {
 
+    private static final String MOB_ARG = "mob";
+    private static final String QUESTS_ARG = "quests";
+    private static final String COUNT_ARG = "count";
+    private static final String TRADES_ARG = "trades";
+
     public NPCCommands() {
         super("npc", Commands.LEVEL_GAMEMASTERS);
     }
 
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
+
         builder.then(
                 Commands.literal("make")
-                        .then(Commands.argument("mob", EntityArgument.entity())
+                        .then(Commands.argument(MOB_ARG, EntityArgument.entity())
                                 .then(Commands.literal("questGiver")
-                                        .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob")))
+                                        .executes(ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, MOB_ARG)))
                                         .then(Commands
-                                                .argument("selection",
+                                                .argument(QUESTS_ARG,
                                                         ResourceOrTagArgument.resourceOrTag(context,
                                                                 WotrRegistries.Keys.QUESTS))
                                                 .executes(
-                                                        ctx -> makeQuestGiver(ctx, EntityArgument.getEntity(ctx, "mob"),
-                                                                ResourceOrTagArgument.getResourceOrTag(ctx, "selection",
+                                                        ctx -> makeQuestGiver(ctx,
+                                                                EntityArgument.getEntity(ctx, MOB_ARG),
+                                                                ResourceOrTagArgument.getResourceOrTag(ctx, QUESTS_ARG,
                                                                         WotrRegistries.Keys.QUESTS),
                                                                 5))
                                                 .then(
-                                                        Commands.argument("count", IntegerArgumentType.integer(1))
+                                                        Commands.argument(COUNT_ARG, IntegerArgumentType.integer(1))
                                                                 .executes(ctx -> makeQuestGiver(ctx,
-                                                                        EntityArgument.getEntity(ctx, "mob"),
+                                                                        EntityArgument.getEntity(ctx, MOB_ARG),
                                                                         ResourceOrTagArgument.getResourceOrTag(ctx,
-                                                                                "selection",
-                                                                                WotrRegistries.Keys.QUESTS),
-                                                                        IntegerArgumentType.getInteger(ctx, "count")))
+                                                                                QUESTS_ARG, WotrRegistries.Keys.QUESTS),
+                                                                        IntegerArgumentType.getInteger(ctx, COUNT_ARG)))
                                                 )
                                         )
                                 )
                                 .then(Commands.literal("merchant")
                                         .then(Commands
-                                                .argument("trades",
+                                                .argument(TRADES_ARG,
                                                         ResourceOrIdArgument.LootTableArgument.lootTable(context))
                                                 .suggests(LootCommand.SUGGEST_LOOT_TABLE)
                                                 .executes(
-                                                        ctx -> makeMerchant(ctx, EntityArgument.getEntity(ctx, "mob"),
+                                                        ctx -> makeMerchant(ctx, EntityArgument.getEntity(ctx, MOB_ARG),
                                                                 ResourceOrIdArgument.LootTableArgument.getLootTable(ctx,
-                                                                        "trades"))
+                                                                        TRADES_ARG))
                                                 )
                                         )
                                 )
@@ -72,7 +78,7 @@ public class NPCCommands extends BaseCommand {
         );
     }
 
-    private int makeMerchant(CommandContext<CommandSourceStack> ctx, Entity mob, Holder<LootTable> trades) {
+    private int makeMerchant(CommandContext<CommandSourceStack> context, Entity mob, Holder<LootTable> trades) {
         mob.setData(WotrAttachments.MOB_INTERACT, new MerchantInteract(trades.getKey()));
         return Command.SINGLE_SUCCESS;
     }

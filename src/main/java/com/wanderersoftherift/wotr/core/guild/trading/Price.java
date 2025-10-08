@@ -24,6 +24,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * A data component for storing the price of an item. A price is composed of the quantity of one or more currencies.
+ * 
+ * @param amounts
+ */
 public record Price(Object2IntMap<Holder<Currency>> amounts) {
     public static final Codec<Price> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.unboundedMap(Currency.CODEC, Codec.intRange(1, Integer.MAX_VALUE))
