@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TradingMenu extends AbstractContainerMenu {
 
+    public static final int TRADE_SLOT_COLUMNS = 5;
+
     private static final QuickMover MOVER = QuickMover.create()
             .forPlayerSlots(AvailableTrades.MERCHANT_INVENTORY_SIZE)
             .forSlots(0, AvailableTrades.MERCHANT_INVENTORY_SIZE)
@@ -32,8 +34,6 @@ public class TradingMenu extends AbstractContainerMenu {
             })
             .tryMoveToPlayer()
             .build();
-
-    private static final int TRADE_SLOT_COLUMNS = 5;
 
     private final ValidatingLevelAccess access;
 
@@ -99,5 +99,13 @@ public class TradingMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(@NotNull Player player) {
         return access.isValid(player);
+    }
+
+    public boolean canPurchase(int slot, Player player) {
+        Price price = merchantInventory.getStackInSlot(slot).get(WotrDataComponentType.PRICE);
+        if (price != null) {
+            return price.canPay(player);
+        }
+        return true;
     }
 }

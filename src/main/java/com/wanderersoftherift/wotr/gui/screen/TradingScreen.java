@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.gui.screen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -67,6 +68,19 @@ public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        for (int slot = 0; slot < AvailableTrades.MERCHANT_INVENTORY_SIZE; slot++) {
+            if (!menu.canPurchase(slot, minecraft.player)) {
+
+                int slotX = slot % TradingMenu.TRADE_SLOT_COLUMNS;
+                int slotY = slot / TradingMenu.TRADE_SLOT_COLUMNS;
+                int x = leftPos + 8 + 18 * slotX;
+                int y = topPos + 30 + 18 * slotY;
+
+                guiGraphics.fill(x, y, x + 16, y + 16, 0x77FF7777);
+            }
+        }
+
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
