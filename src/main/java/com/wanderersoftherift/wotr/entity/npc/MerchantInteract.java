@@ -44,19 +44,19 @@ public record MerchantInteract(ResourceKey<LootTable> lootTable) implements MobI
         }
 
         AvailableTrades availableTrades = player.getData(WotrAttachments.AVAILABLE_TRADES);
-        IItemHandlerModifiable merchantInventory = availableTrades.getExisting(mob.getUUID());
-        if (merchantInventory == null) {
+
+        IItemHandlerModifiable merchantInventory = availableTrades.getExisting(mob.getUUID()).orElseGet(() -> {
             LootParams params = new LootParams.Builder(serverPlayer.serverLevel())
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.PIGLIN_BARTER);
             LootTable table = params.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
-            merchantInventory = availableTrades.generate(mob.getUUID(), table, params);
-        }
-        final IItemHandlerModifiable finalMerchantInventory = merchantInventory;
+            return availableTrades.create(mob.getUUID(), table.getRandomItems(params));
+        });
+
         player.openMenu(
                 new SimpleMenuProvider(
                         (containerId, playerInventory, p) -> new TradingMenu(containerId, playerInventory,
-                                finalMerchantInventory, player.getData(WotrAttachments.WALLET),
+                                merchantInventory, player.getData(WotrAttachments.WALLET),
                                 ValidatingLevelAccess.create(mob)),
                         mob.getDisplayName())
         );

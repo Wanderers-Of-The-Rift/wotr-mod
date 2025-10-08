@@ -24,8 +24,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A screen for trading with guilds. Provides a list of available trades of which one can be selected, and a display of
- * available currency for spending.
+ * A screen for trading with guilds.
  */
 public class TradingScreen extends AbstractContainerScreen<TradingMenu> {
 

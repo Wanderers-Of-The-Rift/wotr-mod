@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
@@ -20,9 +19,6 @@ import net.minecraft.world.level.Level;
 import java.util.Objects;
 
 public class DebugCommands extends BaseCommand {
-
-    private static final DynamicCommandExceptionType ERROR_INVALID_LOOT_TABLE = new DynamicCommandExceptionType(
-            id -> Component.translatableEscape("command." + WanderersOfTheRift.MODID + ".invalid_loot_table", id));
 
     public DebugCommands() {
         super("debug", Commands.LEVEL_GAMEMASTERS);
