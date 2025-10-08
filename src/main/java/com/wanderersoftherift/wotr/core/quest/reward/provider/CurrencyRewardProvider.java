@@ -16,6 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Generates a potentially randomised currency reward
+ * 
+ * @param currency The currency to reward
+ * @param amount   A provider for the amount to reward
+ */
 public record CurrencyRewardProvider(Holder<Currency> currency, NumberProvider amount) implements RewardProvider {
 
     public static final MapCodec<CurrencyRewardProvider> CODEC = RecordCodecBuilder.mapCodec(

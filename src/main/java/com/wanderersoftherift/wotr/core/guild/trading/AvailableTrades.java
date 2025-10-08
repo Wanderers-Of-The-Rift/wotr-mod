@@ -8,15 +8,13 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -41,12 +39,12 @@ public class AvailableTrades {
         this.merchantStock = new HashMap<>(stock);
     }
 
-    public @Nullable IItemHandlerModifiable getExisting(UUID merchantId) {
-        return merchantStock.get(merchantId);
+    public Optional<IItemHandlerModifiable> getExisting(UUID merchantId) {
+        return Optional.ofNullable(merchantStock.get(merchantId));
     }
 
-    public IItemHandlerModifiable generate(UUID merchantId, LootTable lootTable, LootParams params) {
-        StockInventory stock = new StockInventory(lootTable.getRandomItems(params));
+    public IItemHandlerModifiable create(UUID merchantId, List<ItemStack> items) {
+        StockInventory stock = new StockInventory(items);
         merchantStock.put(merchantId, stock);
         return stock;
     }
@@ -95,17 +93,16 @@ public class AvailableTrades {
                 return ItemStack.EMPTY;
             }
             var original = stock.get(slot).copy();
-            var extracted = Integer.min(amount, original.getMaxStackSize());
+            int extractCount = Integer.min(amount, original.getMaxStackSize());
             if (!simulate) {
-                var newCount = original.getCount() - extracted;
-                if (newCount > 0) {
-                    var newStack = stock.get(slot);
-                    newStack.setCount(newCount);
+                int remainder = original.getCount() - extractCount;
+                if (remainder > 0) {
+                    stock.get(slot).setCount(remainder);
                 } else {
                     stock.set(slot, ItemStack.EMPTY);
                 }
             }
-            original.setCount(extracted);
+            original.setCount(extractCount);
             original.remove(WotrDataComponentType.PRICE);
             return original;
         }
