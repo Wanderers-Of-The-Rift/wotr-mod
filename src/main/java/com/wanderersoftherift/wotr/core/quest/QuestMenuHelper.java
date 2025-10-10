@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
 import com.wanderersoftherift.wotr.util.HolderSetUtil;
 import com.wanderersoftherift.wotr.util.RandomUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -108,11 +107,10 @@ public final class QuestMenuHelper {
             HolderSet<Quest> choices,
             int choiceCount) {
         LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
-        List<Holder<Quest>> quests = choices.stream().collect(Collectors.toList());
-        return RandomUtil.randomSubset(quests, choiceCount, level.getRandom())
+        return RandomUtil.randomSubset(choices.stream().toList(), choiceCount, level.getRandom())
                 .stream()
                 .map(quest -> new QuestState(quest, quest.value().generateGoals(params),
                         quest.value().generateRewards(params)))
-                .toList();
+                .collect(Collectors.toList());
     }
 }
