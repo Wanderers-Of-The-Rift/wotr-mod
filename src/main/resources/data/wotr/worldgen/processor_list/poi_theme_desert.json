@@ -895,7 +895,8 @@
       ]
     },
     {
-      "processor_type": "wotr:trial_spawner"
+      "processor_type": "wotr:trial_spawner",
+      "config": "wotr:desert"
     }
   ]
 }
