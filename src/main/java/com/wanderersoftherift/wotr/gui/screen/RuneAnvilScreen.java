@@ -61,7 +61,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
             int height = tooltip.size() * this.font.lineHeight + (tooltip.size() - 1) + 8;
 
             int leftX = this.leftPos - tooltipWidth - 25;
-            int rightX = guiGraphics.guiWidth();
+            int rightX = guiGraphics.guiWidth() + 8;
             int y = this.topPos + this.imageHeight / 2 - height / 2;
             ((WotrGuiGraphics) guiGraphics).wotr$RenderTooltipLeft(this.font, tooltip, itemstack.getTooltipImage(),
                     itemstack, leftX, y, itemstack.get(DataComponents.TOOLTIP_STYLE)
