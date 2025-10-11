@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.abilities.attachment;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Tracks the state of the abilities for each equipment slot, and replicates to holder clients
@@ -105,8 +107,20 @@ public class AbilityStates {
     }
 
     private record Data(Map<AbilitySource, Integer> activeSources) {
-        private static final Codec<Data> CODEC = Codec.unboundedMap(AbilitySource.DIRECT_CODEC, Codec.INT)
-                .xmap(Data::new, Data::activeSources);
+        private static final Codec<Data> CODEC = DataEntry.CODEC.listOf()
+                .xmap(dataEntries -> new Data(
+                        dataEntries.stream().collect(Collectors.toMap(DataEntry::source, DataEntry::state))),
+                        data -> data.activeSources.entrySet()
+                                .stream()
+                                .map(entry -> new DataEntry(entry.getKey(), entry.getValue()))
+                                .toList());
+    }
+
+    private record DataEntry(AbilitySource source, int state) {
+        private static final Codec<DataEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                AbilitySource.DIRECT_CODEC.fieldOf("source").forGetter(DataEntry::source),
+                Codec.INT.fieldOf("state").forGetter(DataEntry::state)
+        ).apply(instance, DataEntry::new));
     }
 
 }
