@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.Collections;
 import java.util.List;
 
 public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implements Ability {
@@ -65,7 +66,11 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
     public boolean canActivate(AbilityContext context) {
         int index = currentIndex(context.caster(), context.source());
         ChainAbilitySource subSource = new ChainAbilitySource(context.source(), index);
-        Holder<Ability> subAbility = abilities.get(index).ability();
+        var subAbilityEntry = abilities.get(index);
+        if (!subAbilityEntry.requirements().stream().allMatch(x -> x.check(context))) {
+            return false;
+        }
+        Holder<Ability> subAbility = subAbilityEntry.ability();
         return subAbility.value().canActivate(context.forSubAbility(subAbility, subSource));
     }
 
@@ -104,14 +109,16 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
      */
     private boolean activateChild(AbilityContext context, int index) {
         ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
-        Holder<Ability> childAbility = abilities.get(index).ability();
-        if (context.caster()
+        var subAbilityEntry = abilities.get(index);
+        Holder<Ability> childAbility = subAbilityEntry.ability();
+        if (!context.caster()
                 .getData(WotrAttachments.ONGOING_ABILITIES)
                 .activate(childSource, childAbility, (childContext) -> childContext
                         .set(WotrDataComponentType.AbilityContextData.PARENT_ABILITY, context.instanceId()))) {
-            return !childAbility.value().isActive(context.caster(), childSource);
+            return true;
         }
-        return true;
+        subAbilityEntry.requirements().forEach(it -> it.pay(context));
+        return !childAbility.value().isActive(context.caster(), childSource);
     }
 
     @Override
@@ -178,11 +185,15 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         return owner.getData(WotrAttachments.ABILITY_STATES).getState(source);
     }
 
-    public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate) {
+    public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate,
+            List<AbilityRequirement> requirements) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Ability.CODEC.fieldOf("ability").forGetter(Entry::ability),
                 Codec.INT.optionalFieldOf("ticks_to_reset", 100).forGetter(Entry::ticksToReset),
-                Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(Entry::autoActivate)
+                Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(Entry::autoActivate),
+                AbilityRequirement.CODEC.listOf()
+                        .optionalFieldOf("requirements", Collections.emptyList())
+                        .forGetter(Entry::requirements)
         ).apply(instance, Entry::new));
     }
 }

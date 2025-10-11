@@ -1,0 +1,42 @@
+{
+    "type": "wotr:instant",
+    "effects": [
+        {
+            "type": "wotr:particle",
+            "particle": {
+                "type":"sweep_attack"
+            }
+        },
+        {
+            "type": "wotr:sound",
+            "sound": "entity.player.attack.sweep"
+        },
+        {
+            "type": "wotr:targeting",
+            "targeting": [
+                {
+                    "type": "wotr:area",
+                    "shape": {
+                        "type": "wotr:cube",
+                        "_comment": "todo propper view targeting",
+                        "range": 3
+                    }
+                }
+            ],
+            "effects": [
+                {
+                    "type": "wotr:damage",
+                    "amount": 7.0,
+                    "damage_type": "player_attack"
+                }
+            ]
+        }
+    ],
+    "icon": "minecraft:textures/item/iron_pickaxe.png",
+    "requirements": [
+        {
+            "type": "wotr:cooldown",
+            "ticks": 18
+        }
+    ]
+}

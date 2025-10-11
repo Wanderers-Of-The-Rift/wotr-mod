@@ -41,7 +41,7 @@ public class AbilityEventHandler {
         if (event.getKeyMapping() == minecraft.options.keyAttack
                 && ClientSideTrigger.hasTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
             ClientSideTrigger.useTrigger(MainAttackTrigger.INSTANCE);
-            event.setCanceled(true);
+            // event.setCanceled(true);
         }
     }
 
