@@ -1,0 +1,52 @@
+package com.wanderersoftherift.wotr.gui.widget.quest;
+
+import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.quest.reward.CurrencyReward;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Display for an {@link CurrencyReward}
+ */
+public class CurrencyRewardWidget extends AbstractWidget {
+    private static final int ICON_SIZE = 16;
+
+    private final Holder<Currency> currency;
+    private final int amount;
+
+    public CurrencyRewardWidget(CurrencyReward reward) {
+        super(0, 0, ICON_SIZE, ICON_SIZE, Component.empty());
+        this.currency = reward.currency();
+        this.amount = reward.amount();
+        setTooltip(Tooltip.create(Currency.getDisplayName(currency)));
+    }
+
+    @Override
+    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        Font font = Minecraft.getInstance().font;
+        guiGraphics.blit(RenderType::guiTextured, currency.value().icon(), getX(), getY(), 0, 0, ICON_SIZE, ICON_SIZE,
+                ICON_SIZE, ICON_SIZE);
+        String amountText = Integer.toString(amount);
+        guiGraphics.drawString(Minecraft.getInstance().font, amountText,
+                getX() + ICON_SIZE + 2 - font.width(amountText), getY() + ICON_SIZE - font.lineHeight + 2, 0xFFFFFFFF,
+                true);
+    }
+
+    @Override
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+        // TODO
+    }
+
+    @Override
+    protected boolean isValidClickButton(int button) {
+        return false;
+    }
+}

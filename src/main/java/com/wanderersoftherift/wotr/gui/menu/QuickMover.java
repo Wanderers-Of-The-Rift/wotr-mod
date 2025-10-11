@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * QuickMover provides a simple API for defining the {@link AbstractContainerMenu#quickMoveStack} implementation.
@@ -30,7 +31,7 @@ public final class QuickMover {
      * @param menu
      * @param player
      * @param slotIndex
-     * @return The residual content of the slot being moved that could still be moved
+     * @return The original stack in the slot before the move
      */
     public ItemStack quickMove(AbstractContainerMenu menu, Player player, int slotIndex) {
         Slot slot = menu.slots.get(slotIndex);
@@ -41,32 +42,35 @@ public final class QuickMover {
         ItemStack slotStack = slot.getItem().copy();
         ItemStack resultStack = slotStack.copy();
         return slotMovers.stream().filter(x -> x.isFor(slotIndex)).findFirst().map(mover -> {
+            ItemStack transformedStack = mover.transform.apply(slotStack);
             MoveResult result = MoveResult.NO_MOVE;
             for (MoveAction moveAction : mover.moveActions) {
                 if (moveAction.onlyIfNoOtherValid && result != MoveResult.NO_MOVE) {
                     break;
                 }
-                MoveResult newResult = moveItemStackTo(menu, slotStack, moveAction.startSlot,
+                MoveResult newResult = moveItemStackTo(menu, transformedStack, moveAction.startSlot,
                         moveAction.startSlot + moveAction.count, moveAction.reverse);
                 if (newResult == MoveResult.MOVED
                         || (newResult == MoveResult.VALID_BUT_FULL && result != MoveResult.MOVED)) {
                     result = newResult;
                 }
-                if (slotStack.isEmpty()) {
+                if (transformedStack.isEmpty()) {
                     break;
                 }
             }
             if (result == MoveResult.MOVED) {
-                slot.onQuickCraft(slotStack, resultStack);
-                if (slotStack.isEmpty()) {
+                slot.onQuickCraft(transformedStack, resultStack);
+                if (transformedStack.isEmpty()) {
                     slot.set(ItemStack.EMPTY);
                 } else {
+                    slotStack.setCount(transformedStack.getCount());
                     slot.set(slotStack);
                 }
+                slot.onTake(player, transformedStack);
                 return resultStack;
             }
             return ItemStack.EMPTY;
-        }).orElse(ItemStack.EMPTY);
+        }).orElse(resultStack);
     }
 
     /**
@@ -85,67 +89,82 @@ public final class QuickMover {
             int endIndex,
             boolean reverseDirection) {
         MoveResult result = MoveResult.NO_MOVE;
-        int i, dir;
+
+        int start, end, dir;
         if (reverseDirection) {
-            i = endIndex - 1;
+            start = endIndex - 1;
             dir = -1;
+            end = startIndex - 1;
         } else {
-            i = startIndex;
+            start = startIndex;
             dir = 1;
+            end = endIndex;
         }
 
         if (stack.isStackable()) {
-            while (!stack.isEmpty() && (reverseDirection ? i >= startIndex : i < endIndex)) {
-                Slot slot = menu.slots.get(i);
-                ItemStack existingStack = slot.getItem().copy();
-                if (!existingStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, existingStack)) {
-                    int j = existingStack.getCount() + stack.getCount();
-                    int k = slot.getMaxStackSize(existingStack);
-                    if (j <= k) {
-                        stack.setCount(0);
-                        existingStack.setCount(j);
-                        slot.set(existingStack);
-                        result = MoveResult.MOVED;
-                    } else if (existingStack.getCount() < k) {
-                        stack.shrink(k - existingStack.getCount());
-                        existingStack.setCount(k);
-                        slot.set(existingStack);
-                        result = MoveResult.MOVED;
-                    } else if (result != MoveResult.MOVED) {
-                        result = MoveResult.VALID_BUT_FULL;
-                    }
-                }
-
-                i += dir;
-            }
+            result = combineIntoSameStacks(menu, stack, start, end, dir);
         }
 
         if (!stack.isEmpty()) {
-            if (reverseDirection) {
-                i = endIndex - 1;
-            } else {
-                i = startIndex;
-            }
-
-            while (reverseDirection ? i >= startIndex : i < endIndex) {
-                Slot targetSlot = menu.slots.get(i);
-                ItemStack existingItem = targetSlot.getItem();
-                if (targetSlot.mayPlace(stack)) {
-                    if (existingItem.isEmpty()) {
-                        int l = targetSlot.getMaxStackSize(stack);
-                        ItemStack split = stack.split(Math.min(stack.getCount(), l));
-                        targetSlot.setByPlayer(split);
-                        result = MoveResult.MOVED;
-                        break;
-                    } else if (result != MoveResult.MOVED) {
-                        result = MoveResult.VALID_BUT_FULL;
-                    }
-                }
-
-                i += dir;
-            }
+            result = moveIntoEmptySlot(menu, stack, start, end, dir, result);
         }
 
+        return result;
+    }
+
+    private static MoveResult moveIntoEmptySlot(
+            AbstractContainerMenu menu,
+            @NotNull ItemStack stack,
+            int start,
+            int end,
+            int dir,
+            MoveResult result) {
+        for (int index = start; index != end; index += dir) {
+            Slot targetSlot = menu.slots.get(index);
+            ItemStack existingItem = targetSlot.getItem();
+            if (targetSlot.mayPlace(stack)) {
+                if (existingItem.isEmpty()) {
+                    int l = targetSlot.getMaxStackSize(stack);
+                    ItemStack split = stack.split(Math.min(stack.getCount(), l));
+                    targetSlot.setByPlayer(split);
+                    result = MoveResult.MOVED;
+                    break;
+                } else if (result != MoveResult.MOVED) {
+                    result = MoveResult.VALID_BUT_FULL;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static MoveResult combineIntoSameStacks(
+            AbstractContainerMenu menu,
+            @NotNull ItemStack stack,
+            int start,
+            int end,
+            int dir) {
+        MoveResult result = MoveResult.NO_MOVE;
+        for (int index = start; index != end && !stack.isEmpty(); index += dir) {
+            Slot slot = menu.slots.get(index);
+            ItemStack existingStack = slot.getItem().copy();
+            if (!existingStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, existingStack)) {
+                int j = existingStack.getCount() + stack.getCount();
+                int k = slot.getMaxStackSize(existingStack);
+                if (j <= k) {
+                    stack.setCount(0);
+                    existingStack.setCount(j);
+                    slot.set(existingStack);
+                    result = MoveResult.MOVED;
+                } else if (existingStack.getCount() < k) {
+                    stack.shrink(k - existingStack.getCount());
+                    existingStack.setCount(k);
+                    slot.set(existingStack);
+                    result = MoveResult.MOVED;
+                } else if (result != MoveResult.MOVED) {
+                    result = MoveResult.VALID_BUT_FULL;
+                }
+            }
+        }
         return result;
     }
 
@@ -157,11 +176,14 @@ public final class QuickMover {
         private final int start;
         private final int count;
         private final List<MoveAction> moveActions;
+        private final Function<ItemStack, ItemStack> transform;
 
-        private SlotMover(int start, int count, List<MoveAction> moveActions) {
+        private SlotMover(int start, int count, List<MoveAction> moveActions,
+                Function<ItemStack, ItemStack> transform) {
             this.start = start;
             this.count = count;
             this.moveActions = moveActions;
+            this.transform = transform;
         }
 
         public boolean isFor(int slot) {
@@ -173,8 +195,7 @@ public final class QuickMover {
         private static final int UNSET = -1;
 
         private int playerSlotsStart = UNSET;
-
-        private List<SlotMover> slotMovers = new ArrayList<>();
+        private final List<SlotMover> slotMovers = new ArrayList<>();
 
         private Builder() {
         }
@@ -223,10 +244,22 @@ public final class QuickMover {
             protected final int start;
             protected final int count;
             protected List<MoveAction> moveActions = new ArrayList<>();
+            protected Function<ItemStack, ItemStack> transform = Function.identity();
 
             private SlotMoverBuilder(int start, int count) {
                 this.start = start;
                 this.count = count;
+            }
+
+            /**
+             * Sets a transform to apply to items moving from the current slot(s)
+             *
+             * @param transform
+             * @return
+             */
+            public SlotMoverBuilder withTransform(Function<ItemStack, ItemStack> transform) {
+                this.transform = transform;
+                return this;
             }
 
             /**
@@ -315,7 +348,8 @@ public final class QuickMover {
             }
 
             protected void createSlotMovers() {
-                slotMovers.add(new SlotMover(start, count, ImmutableList.copyOf(moveActions)));
+                slotMovers.add(new SlotMover(start, count, ImmutableList.copyOf(moveActions), transform));
+                this.transform = Function.identity();
             }
         }
 
@@ -330,11 +364,13 @@ public final class QuickMover {
                 // Main inventory
                 List<MoveAction> mainActions = new ArrayList<>(moveActions);
                 mainActions.add(new MoveAction(playerSlotsStart + PLAYER_INVENTORY_SLOTS, 9, false, true));
-                slotMovers.add(new SlotMover(start, PLAYER_INVENTORY_SLOTS, ImmutableList.copyOf(mainActions)));
+                slotMovers.add(new SlotMover(start, PLAYER_INVENTORY_SLOTS, ImmutableList.copyOf(mainActions),
+                        Function.identity()));
                 // Hotbar inventory
                 List<MoveAction> hotbarActions = new ArrayList<>(moveActions);
                 hotbarActions.add(new MoveAction(playerSlotsStart, PLAYER_INVENTORY_SLOTS, false, true));
-                slotMovers.add(new SlotMover(start + PLAYER_INVENTORY_SLOTS, 9, ImmutableList.copyOf(hotbarActions)));
+                slotMovers.add(new SlotMover(start + PLAYER_INVENTORY_SLOTS, 9, ImmutableList.copyOf(hotbarActions),
+                        Function.identity()));
             }
 
         }
