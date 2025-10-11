@@ -1,0 +1,7 @@
+{
+  "type": "wotr:collect",
+  "min_quantity": 40,
+  "max_quantity": 70,
+  "loot_table": "wotr:chests/wooden"
+}
+

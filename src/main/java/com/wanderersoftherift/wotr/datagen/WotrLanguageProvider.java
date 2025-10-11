@@ -378,9 +378,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
         add(WanderersOfTheRift.translationId("objective", "nothing.name"), "Nothing");
+        add(WanderersOfTheRift.translationId("objective", "collect.name"), "Collect items");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");
         add(WanderersOfTheRift.translationId("objective", "stealth.description"), "Defeat monsters stealthily");
         add(WanderersOfTheRift.translationId("objective", "nothing.description"), "Do nothing");
+        add(WanderersOfTheRift.translationId("objective", "collect.description"), "Collect %1$s of %2$s");
         add(WanderersOfTheRift.translationId("gui", "objective_status.complete"), "Objective Complete");
 
         add(WanderersOfTheRift.translationId("button", "reset"), "Reset");
