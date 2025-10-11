@@ -616,7 +616,7 @@
   "tooltip.wotr.rift_key_tier": "Tier: %s",
   "tooltip.wotr.runegem.modifiers": "Modifiers:",
   "tooltip.wotr.runegem.shape": "Shape: %s",
-  "tooltip.wotr.show_extra_info": "Hold [%s] for additional information",
+  "tooltip.wotr.show_extra_info": "Hold [%s] for more info",
   "tooltip.wotr.socket": "Sockets: ",
   "trigger.wotr.break_block": "Break Block",
   "trigger.wotr.deal_damage": "Deal Damage",
