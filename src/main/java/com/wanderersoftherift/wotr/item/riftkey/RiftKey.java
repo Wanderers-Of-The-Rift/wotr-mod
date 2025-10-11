@@ -173,7 +173,7 @@ public class RiftKey extends Item {
         portalEntranceEntity.setPos(pos);
         portalEntranceEntity.setYRot(dir.toYRot());
         portalEntranceEntity.setBillboard(dir.getAxis().isVertical());
-        portalEntranceEntity.setKeyItem(riftKey);
+        portalEntranceEntity.setKeyItem(riftKey.copy());
         level.addFreshEntity(portalEntranceEntity);
         portalEntranceEntity.playSound(WotrSoundEvents.RIFT_OPEN.value());
     }
