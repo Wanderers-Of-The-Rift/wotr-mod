@@ -44,7 +44,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
 
     @Override
     public void tick() {
-        if (entrance().generated() && !levelExists(entrance().target())) {
+        if (!level().isClientSide && entrance().generated() && !levelExists(entrance().target())) {
             this.remove(RemovalReason.DISCARDED);
             return;
         }
