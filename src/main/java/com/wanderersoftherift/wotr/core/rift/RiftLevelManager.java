@@ -60,6 +60,7 @@ public final class RiftLevelManager {
     /**
      * @param id
      * @return Whether a level with the given id exists
+     * @throws NullPointerException if called from client when connected to a server
      */
     public static boolean levelExists(ResourceKey<Level> id) {
         return levelExists(id.location());
