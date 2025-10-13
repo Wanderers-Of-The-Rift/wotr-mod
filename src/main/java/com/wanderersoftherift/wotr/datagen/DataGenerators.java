@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -40,6 +41,8 @@ public class DataGenerators {
                         .add(WotrRegistries.Keys.RUNEGEM_DATA, WotrRuneGemDataProvider::bootstrapRuneGems)
 
         );
+
+        event.createProvider((output) -> new WotrTextureProvider(event.getResourceManager(PackType.CLIENT_RESOURCES), output));
         event.createProvider(WotrModelProvider::new);
 
         event.createProvider(WotrDataMapProvider::new);
