@@ -15,12 +15,9 @@
             "type": "wotr:targeting",
             "targeting": [
                 {
-                    "type": "wotr:area",
-                    "shape": {
-                        "type": "wotr:cube",
-                        "_comment": "todo propper view targeting",
-                        "range": 3
-                    },
+                    "type": "wotr:field_of_view",
+                    "range": 3,
+                    "angle_cosine": 0.9,
                     "entities":{
                         "exclude_caster": true,
                         "exclude_source": true
