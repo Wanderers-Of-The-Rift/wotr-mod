@@ -7,7 +7,6 @@ import com.mojang.serialization.JsonOps;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.Util;
 import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
-import net.minecraft.client.resources.metadata.texture.TextureMetadataSection;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -33,7 +32,8 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
     private final PackOutput.PathProvider pathProvider;
     private final ArrayList<TextureTransform> transforms;
 
-    public TextureGeneratorCollector(ResourceManager resourceManager, CachedOutput output, PackOutput.PathProvider pathProvider) {
+    public TextureGeneratorCollector(ResourceManager resourceManager, CachedOutput output,
+            PackOutput.PathProvider pathProvider) {
         this.resourceManager = resourceManager;
         this.transforms = new ArrayList<>();
         this.output = output;
@@ -47,7 +47,7 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
 
     public CompletableFuture<?> applyTransform(TextureTransform transform) {
         ResourceLocation resourceLocation = transform.sourcePath.withPrefix("textures/").withSuffix(".png");
-        Path path_out = pathProvider.file(transform.destinationPath, "png");
+        Path pathOut = pathProvider.file(transform.destinationPath, "png");
 
         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
         HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha1(), bytearrayoutputstream);
@@ -78,11 +78,12 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
 
             if (textureMeta != null) {
                 WanderersOfTheRift.LOGGER.info("{} has metadata", resourceLocation);
-                JsonElement json = AnimationMetadataSection.CODEC.encodeStart(JsonOps.INSTANCE, textureMeta).getOrThrow();
+                JsonElement json = AnimationMetadataSection.CODEC.encodeStart(JsonOps.INSTANCE, textureMeta)
+                        .getOrThrow();
                 DataProvider.saveStable(output, json, pathProvider.file(transform.destinationPath, "mcmeta"));
             }
 
-            output.writeIfNeeded(path_out, bytearrayoutputstream.toByteArray(), hashingoutputstream.hash());
+            output.writeIfNeeded(pathOut, bytearrayoutputstream.toByteArray(), hashingoutputstream.hash());
 
         } catch (Exception e) {
             WanderersOfTheRift.LOGGER.warn("WotrTextureProvider - Error with resource {}", resourceLocation);
@@ -92,11 +93,13 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
     }
 
     public CompletableFuture<?> applyTransformAsync(TextureTransform transform) {
-        return CompletableFuture.runAsync(() -> applyTransform(transform), Util.backgroundExecutor().forName("saveStable"));
+        return CompletableFuture.runAsync(() -> applyTransform(transform),
+                Util.backgroundExecutor().forName("saveStable"));
     }
 
     public CompletableFuture<?> save() {
         WanderersOfTheRift.LOGGER.info("TextureGeneratorCollector save {}", transforms.size());
-        return CompletableFuture.allOf(transforms.stream().map(this::applyTransformAsync).toArray(CompletableFuture[]::new));
+        return CompletableFuture
+                .allOf(transforms.stream().map(this::applyTransformAsync).toArray(CompletableFuture[]::new));
     }
 }

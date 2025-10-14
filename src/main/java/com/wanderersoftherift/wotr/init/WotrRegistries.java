@@ -179,7 +179,6 @@ public class WotrRegistries {
         public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
 
-
         public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey

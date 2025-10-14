@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.datagen.textures;
 
 import net.minecraft.resources.ResourceLocation;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.function.Consumer;
 
 public class TextureGenerator {

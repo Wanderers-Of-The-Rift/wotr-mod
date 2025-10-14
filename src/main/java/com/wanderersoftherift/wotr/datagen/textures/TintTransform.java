@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.datagen.textures;
 
 import net.minecraft.resources.ResourceLocation;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class TintTransform extends TextureTransform {
     Color tint;
@@ -21,10 +21,8 @@ public class TintTransform extends TextureTransform {
     public int transform(int x, int y, int pix) {
         Color current = new Color(pix, true);
         return new Color(
-                (current.getRed() * tint.getRed()) / 255,
-                (current.getGreen() * tint.getGreen()) / 255,
-                (current.getBlue() * tint.getBlue()) / 255,
-                current.getAlpha()
+                (current.getRed() * tint.getRed()) / 255, (current.getGreen() * tint.getGreen()) / 255,
+                (current.getBlue() * tint.getBlue()) / 255, current.getAlpha()
         ).getRGB();
     }
 }

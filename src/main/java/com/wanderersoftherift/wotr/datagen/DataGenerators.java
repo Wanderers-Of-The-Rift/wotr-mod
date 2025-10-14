@@ -42,7 +42,8 @@ public class DataGenerators {
 
         );
 
-        event.createProvider((output) -> new WotrTextureProvider(event.getResourceManager(PackType.CLIENT_RESOURCES), output));
+        event.createProvider(
+                (output) -> new WotrTextureProvider(event.getResourceManager(PackType.CLIENT_RESOURCES), output));
         event.createProvider(WotrModelProvider::new);
 
         event.createProvider(WotrDataMapProvider::new);
