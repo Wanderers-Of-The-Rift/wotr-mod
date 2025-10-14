@@ -154,6 +154,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("objective"));
         public static final ResourceKey<Registry<RunegemData>> RUNEGEM_DATA = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("runegem_data"));
+
+        // Riftgen
         public static final ResourceKey<Registry<MapCodec<? extends InputBlockState>>> INPUT_BLOCKSTATE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("input_blockstate_type"));
         public static final ResourceKey<Registry<MapCodec<? extends ModifierEffect>>> MODIFIER_EFFECT_TYPES = ResourceKey
@@ -176,6 +178,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_parameter_type"));
         public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
+
+
         public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
