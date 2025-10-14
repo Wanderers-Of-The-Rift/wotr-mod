@@ -31,10 +31,12 @@ public record DamageEffect(float damageAmount, Holder<DamageType> damageTypeKey)
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
-        DamageSource damageSource = new DamageSource(context.level()
-                .registryAccess()
-                .lookupOrThrow(Registries.DAMAGE_TYPE)
-                .getOrThrow(this.damageTypeKey.getKey()), null, context.caster(), null);
+        DamageSource damageSource = new DamageSource(
+                context.level()
+                        .registryAccess()
+                        .lookupOrThrow(Registries.DAMAGE_TYPE)
+                        .getOrThrow(this.damageTypeKey.getKey()),
+                null, context.caster(), targetInfo.source().getLocation());
 
         // for now its ABILITY_DAMAGE but needs to be considered how multiple types are going to be implemented ie AP or
         // AD
