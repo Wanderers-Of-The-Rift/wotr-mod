@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
@@ -38,10 +39,14 @@ public class AbilityEventHandler {
     @OnlyIn(Dist.CLIENT)
     public static void overrideAttack(InputEvent.InteractionKeyMappingTriggered event) {
         var minecraft = Minecraft.getInstance();
-        if (event.getKeyMapping() == minecraft.options.keyAttack
-                && ClientSideTrigger.hasTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
-            ClientSideTrigger.useTrigger(MainAttackTrigger.INSTANCE);
-            // event.setCanceled(true);
+        if (event.getKeyMapping() == minecraft.options.keyAttack) {
+            var triggers = TriggerTracker.forEntity(minecraft.player);
+            if (triggers.hasListenersOnTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
+                if (triggers.trigger(MainAttackTrigger.INSTANCE)) {
+                    // minecraft.player.swing(InteractionHand.MAIN_HAND);
+                }
+                event.setCanceled(true);
+            }
         }
     }
 

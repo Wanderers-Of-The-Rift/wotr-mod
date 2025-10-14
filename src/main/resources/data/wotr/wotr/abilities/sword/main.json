@@ -7,7 +7,7 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 11
+                    "ticks": 7
                 }
             ]
         },
@@ -16,7 +16,7 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 11
+                    "ticks": 12
                 }
             ]
         },

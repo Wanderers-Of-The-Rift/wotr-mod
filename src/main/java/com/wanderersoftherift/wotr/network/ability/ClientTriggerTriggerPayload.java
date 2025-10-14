@@ -1,7 +1,8 @@
 package com.wanderersoftherift.wotr.network.ability;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.abilities.ClientSideTrigger;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
+import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -23,7 +24,11 @@ public record ClientTriggerTriggerPayload(int trigger) implements CustomPacketPa
 
     public void handleOnServer(IPayloadContext iPayloadContext) {
         if (iPayloadContext.player() instanceof ServerPlayer player) {
-            ClientSideTrigger.useTriggerServer(player, trigger());
+            switch (this.trigger()) {
+                case 0 -> {
+                    TriggerTracker.forEntity(player).trigger(MainAttackTrigger.INSTANCE);
+                }
+            }
         }
     }
 }

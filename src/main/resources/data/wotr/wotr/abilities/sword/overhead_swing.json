@@ -20,6 +20,10 @@
                         "type": "wotr:cube",
                         "_comment": "todo propper view targeting",
                         "range": 3
+                    },
+                    "entities":{
+                        "exclude_caster": true,
+                        "exclude_source": true
                     }
                 }
             ],
