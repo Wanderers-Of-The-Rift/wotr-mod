@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public interface GearImplicits extends ModifierProvider {
         }
     }
 
-    default Collection<Either<FormattedText, TooltipComponent>> tooltips(ItemStack stack) {
+    default List<Either<FormattedText, TooltipComponent>> tooltips(int maxWidth) {
         if (modifierInstances().isEmpty()) {
             return Collections.emptyList();
         }
