@@ -21,6 +21,9 @@ public class ObjectiveRenderers {
     public static final Function<OngoingObjective, ObjectiveRenderer> KILL = register(WanderersOfTheRift.id("kill"),
             GeneralObjectiveBarRenderer::create);
 
+    public static final Function<OngoingObjective, ObjectiveRenderer> COLLECT = register(
+            WanderersOfTheRift.id("collect"), GeneralObjectiveBarRenderer::create);
+
     public static Function<OngoingObjective, ObjectiveRenderer> register(
             ResourceLocation id,
             Function<OngoingObjective, ObjectiveRenderer> renderer) {

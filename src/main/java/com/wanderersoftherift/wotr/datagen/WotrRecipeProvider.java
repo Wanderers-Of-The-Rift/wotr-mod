@@ -267,6 +267,13 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .setPriority(1)
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("dark")).setMinPercent(5f).build())
                 .save(output, WanderersOfTheRift.id("rift_objective_stealth"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("collect")))
+                .setPriority(1)
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("food")).setMinPercent(5f).build())
+                .save(output, WanderersOfTheRift.id("rift_objective_collect"));
         // </editor-fold>
 
     }

@@ -1,0 +1,5 @@
+{
+  "type": "wotr:collect",
+  "quantity" : "wotr:objective/collect",
+  "loot_table": "wotr:chests/wooden"
+}
