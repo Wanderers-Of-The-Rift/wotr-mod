@@ -17,26 +17,15 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.rift.objective.ProgressObjective;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
-
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 public class CollectOngoingObjective implements ProgressObjective {
 
@@ -191,50 +180,6 @@ public class CollectOngoingObjective implements ProgressObjective {
             }
         }
         return total;
-    }
-
-    public static Item pickItemFromLootOrThrow(ServerLevel level, ResourceKey<LootTable> tableKey) {
-        LootTable table = level.getServer().reloadableRegistries().getLootTable(tableKey);
-
-        final int attempts = 6;
-        for (int attempt = 0; attempt < attempts; attempt++) {
-            long seed = level.getRandom().nextLong();
-
-            LootParams params = new LootParams.Builder(level)
-                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(BlockPos.ZERO))
-                    .withLuck(0.0f)
-                    .create(LootContextParamSets.CHEST);
-
-            List<ItemStack> rolls = table.getRandomItems(params, seed);
-
-            Set<Item> stackables = new LinkedHashSet<>();
-            for (ItemStack s : rolls) {
-                if (!s.isEmpty() && s.getMaxStackSize() > 1) {
-                    stackables.add(s.getItem());
-                }
-            }
-            if (!stackables.isEmpty()) {
-                int idx = level.getRandom().nextInt(stackables.size());
-                return stackables.stream().skip(idx).findFirst().orElseGet(() -> stackables.iterator().next());
-            }
-        }
-
-        LootParams params = new LootParams.Builder(level)
-                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(BlockPos.ZERO))
-                .withLuck(0.0f)
-                .create(LootContextParamSets.CHEST);
-        List<ItemStack> rolls = table.getRandomItems(params, level.getRandom().nextLong());
-        for (ItemStack s : rolls) {
-            if (!s.isEmpty()) {
-                return s.getItem();
-            }
-        }
-
-        return net.minecraft.world.item.Items.IRON_INGOT;
-    }
-
-    public static Item pickItemFromLootOrThrow(ServerPlayer sp, ResourceKey<LootTable> tableKey) {
-        return pickItemFromLootOrThrow(sp.serverLevel(), tableKey);
     }
 
     @Override

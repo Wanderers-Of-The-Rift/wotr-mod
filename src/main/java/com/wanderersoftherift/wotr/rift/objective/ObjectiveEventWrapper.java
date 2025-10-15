@@ -34,17 +34,17 @@ public class ObjectiveEventWrapper {
     @SubscribeEvent
     public static void onItemPickup(ItemEntityPickupEvent.Post event) {
         Player player = event.getPlayer();
-        if (!(player instanceof ServerPlayer)) {
+
+        if (!(player instanceof ServerPlayer sp)) {
             return;
         }
-        ServerPlayer sp = (ServerPlayer) player;
+
         ServerLevel serverLevel = sp.serverLevel();
 
         RiftData data = RiftData.get(serverLevel);
         OngoingObjective ongoing = data.getObjective().orElse(null);
-        if (ongoing instanceof CollectOngoingObjective) {
-            CollectOngoingObjective co = (CollectOngoingObjective) ongoing;
-            if (co.onInventoryCheck(player)) {
+        if (ongoing instanceof CollectOngoingObjective co) {
+            if (co.onInventoryCheck(sp)) {
                 data.setDirty();
                 broadcastObjectiveStatus(serverLevel, data);
             }
