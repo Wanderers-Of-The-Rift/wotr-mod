@@ -4,15 +4,17 @@
     "abilities": [
         {
             "ability": "wotr:sword/right_swing",
+            "ticks_to_reset": 20,
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 8
+                    "ticks": 9
                 }
             ]
         },
         {
             "ability": "wotr:sword/left_swing",
+            "ticks_to_reset": 20,
             "requirements": [
                 {
                     "type": "wotr:cooldown",
@@ -22,10 +24,11 @@
         },
         {
             "ability": "wotr:sword/overhead_swing",
+            "ticks_to_reset": 20,
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 18
+                    "ticks": 16
                 }
             ]
         }

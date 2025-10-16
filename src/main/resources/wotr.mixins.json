@@ -27,15 +27,15 @@
         "MixinLootTable",
         "MixinMob",
         "MixinOctahedralGroup",
+        "MixinPlayer",
         "MixinProtoChunk",
         "MixinRegionFileVersion",
         "MixinSetItemDamageFunction",
         "MixinStairBlock",
         "MixinStructureTemplate",
         "MixinStructureTemplateManager",
-        "MixinWorldDimensions",
-        "MixinSummonCommand"
-
+        "MixinSummonCommand",
+        "MixinWorldDimensions"
     ],
     "client": [
         "MixinAccessibilityOptionsScreen",

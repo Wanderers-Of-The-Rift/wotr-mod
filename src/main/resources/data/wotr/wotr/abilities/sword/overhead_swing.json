@@ -27,7 +27,7 @@
             "effects": [
                 {
                     "type": "wotr:damage",
-                    "amount": 7.0,
+                    "amount": 6.5,
                     "damage_type": "player_attack"
                 }
             ]

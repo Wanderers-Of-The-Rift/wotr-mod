@@ -1,5 +1,5 @@
 {
   "modifiers": [
-    "wotr:ability_cooldown"
+    "wotr:sword", "wotr:sword_damage/wooden"
   ]
 }
