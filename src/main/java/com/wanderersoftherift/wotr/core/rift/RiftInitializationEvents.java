@@ -49,7 +49,7 @@ public class RiftInitializationEvents {
 
         var layout = riftGenConfig.layout();
         if (layout instanceof LayeredRiftLayout.Factory layeredLayout) {
-            var access = event.getFirstPlayer().server.registryAccess();
+            var access = event.getFirstPlayer().level().registryAccess();
             riftGenConfig = riftGenConfig
                     .withLayout(layeredLayout.withLayers(ImmutableList.<LayeredRiftLayout.LayoutLayer.Factory>builder()
                             .add(

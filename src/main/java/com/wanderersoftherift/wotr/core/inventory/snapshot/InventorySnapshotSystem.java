@@ -12,6 +12,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 
@@ -64,7 +65,7 @@ public final class InventorySnapshotSystem {
      *                       removed
      */
 
-    public static InventorySnapshot captureSnapshot(ServerPlayer player, List<InventorySnapshot> validSnapshots) {
+    public static InventorySnapshot captureSnapshot(Player player, List<InventorySnapshot> validSnapshots) {
         clearItemIds(player, snapshotsToIdSet(validSnapshots.stream()));
         return new InventorySnapshotBuilder(player).build();
     }
@@ -131,7 +132,7 @@ public final class InventorySnapshotSystem {
          * @param player
          * @return A new InventorySnapshot
          */
-        public InventorySnapshotBuilder(ServerPlayer player) {
+        public InventorySnapshotBuilder(Player player) {
             containerTypes = player.level().registryAccess().lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
             for (ItemStack item : player.getInventory().items) {
                 captureItem(new DirectContainerItemWrapper(item));
@@ -295,7 +296,7 @@ public final class InventorySnapshotSystem {
      *
      * @param player
      */
-    private static void clearItemIds(ServerPlayer player, Set<UUID> keepIds) {
+    private static void clearItemIds(Player player, Set<UUID> keepIds) {
         Registry<ContainerType> containerTypes = player.getServer()
                 .registryAccess()
                 .lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
