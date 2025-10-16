@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.core.rift;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.Event;
 
 import javax.annotation.Nonnull;
@@ -29,14 +30,14 @@ public abstract class RiftEvent extends Event {
      * Event when a new rift has been created
      */
     public abstract static class Created extends RiftEvent {
-        private final ServerPlayer firstPlayer;
+        private final Player firstPlayer;
 
-        public Created(ServerLevel level, RiftConfig config, ServerPlayer firstPlayer) {
+        public Created(ServerLevel level, RiftConfig config, Player firstPlayer) {
             super(level, config);
             this.firstPlayer = firstPlayer;
         }
 
-        public ServerPlayer getFirstPlayer() {
+        public Player getFirstPlayer() {
             return firstPlayer;
         }
 
@@ -47,7 +48,7 @@ public abstract class RiftEvent extends Event {
          */
         public static class Pre extends Created {
 
-            public Pre(RiftConfig config, ServerPlayer firstPlayer) {
+            public Pre(RiftConfig config, Player firstPlayer) {
                 super(null, config, firstPlayer);
             }
 
@@ -63,7 +64,7 @@ public abstract class RiftEvent extends Event {
          */
         public static class Post extends Created {
 
-            public Post(@Nonnull ServerLevel level, RiftConfig config, ServerPlayer firstPlayer) {
+            public Post(@Nonnull ServerLevel level, RiftConfig config, Player firstPlayer) {
                 super(level, config, firstPlayer);
             }
         }
