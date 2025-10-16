@@ -2,10 +2,26 @@
     "type": "wotr:instant",
     "effects": [
         {
-            "type": "wotr:particle",
-            "particle": {
-                "type":"sweep_attack"
-            }
+            "type": "wotr:targeting",
+            "targeting": {
+                "type": "wotr:offset",
+                "x": 0,
+                "y": 1.75,
+                "z": 0.5
+            },
+            "effects": [
+                {
+                    "type": "wotr:particle",
+                    "particle": {
+                        "type":"sweep_attack"
+                    },
+                    "count": 1,
+                    "distribution_x": 0,
+                    "distribution_y": 0,
+                    "distribution_z": 0,
+                    "speed": 0
+                }
+            ]
         },
         {
             "type": "wotr:sound",

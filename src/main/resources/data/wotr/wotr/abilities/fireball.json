@@ -57,7 +57,12 @@
           "type": "wotr:particle",
           "particle": {
             "type": "minecraft:explosion"
-          }
+          },
+          "count": 10,
+          "distribution_x": 1,
+          "distribution_y": 1,
+          "distribution_z": 1,
+          "speed": 2
         }
       ]
     },
@@ -65,7 +70,12 @@
       "type": "wotr:particle",
       "particle": {
         "type": "minecraft:bubble"
-      }
+      },
+      "count": 10,
+      "distribution_x": 1,
+      "distribution_y": 1,
+      "distribution_z": 1,
+      "speed": 2
     }
   ],
   "icon": "minecraft:textures/item/fire_charge.png",

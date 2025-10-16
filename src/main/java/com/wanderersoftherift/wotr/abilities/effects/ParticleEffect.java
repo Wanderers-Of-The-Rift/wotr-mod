@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities.effects;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
@@ -13,10 +14,16 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Effect that applies particle effects
  */
-public record ParticleEffect(ParticleOptions particle) implements AbilityEffect {
+public record ParticleEffect(ParticleOptions particle, int count, float distributionX, float distributionY,
+        float distributionZ, float speed) implements AbilityEffect {
 
     public static final MapCodec<ParticleEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ParticleTypes.CODEC.fieldOf("particle").forGetter(ParticleEffect::particle)
+            ParticleTypes.CODEC.fieldOf("particle").forGetter(ParticleEffect::particle),
+            Codec.INT.fieldOf("count").forGetter(ParticleEffect::count),
+            Codec.FLOAT.fieldOf("distribution_x").forGetter(ParticleEffect::distributionX),
+            Codec.FLOAT.fieldOf("distribution_y").forGetter(ParticleEffect::distributionY),
+            Codec.FLOAT.fieldOf("distribution_z").forGetter(ParticleEffect::distributionZ),
+            Codec.FLOAT.fieldOf("speed").forGetter(ParticleEffect::speed)
     ).apply(instance, ParticleEffect::new));
 
     @Override
@@ -36,7 +43,7 @@ public record ParticleEffect(ParticleOptions particle) implements AbilityEffect 
     }
 
     private void spawnParticles(ServerLevel level, Vec3 position, ParticleOptions particleOptions) {
-        level.sendParticles(particleOptions, false, true, position.x, position.y + 1.5, position.z, 10, Math.random(),
-                Math.random(), Math.random(), 2);
+        level.sendParticles(particleOptions, false, true, position.x, position.y, position.z, count, distributionX,
+                distributionY, distributionZ, speed);
     }
 }

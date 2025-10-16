@@ -15,12 +15,14 @@
     },
     {
       "type": "wotr:particle",
-      "targeting": {
-        "type": "wotr:self"
-      },
       "particle": {
         "type": "minecraft:bubble"
-      }
+      },
+      "count": 10,
+      "distribution_x": 1,
+      "distribution_y": 1,
+      "distribution_z": 1,
+      "speed": 2
     }
   ]
 }
