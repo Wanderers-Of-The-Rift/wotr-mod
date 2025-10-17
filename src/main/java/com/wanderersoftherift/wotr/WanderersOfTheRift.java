@@ -27,6 +27,7 @@ import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
 import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
+import com.wanderersoftherift.wotr.init.WotrParticleTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
 import com.wanderersoftherift.wotr.init.WotrRiftParameterTypes;
 import com.wanderersoftherift.wotr.init.WotrSoundEvents;
@@ -165,6 +166,7 @@ public class WanderersOfTheRift {
         // Utilities
         WotrEditTypes.EDIT_TYPES.register(modEventBus);
         WotrSpawnFunctionTypes.SPAWN_FUNCTION_TYPES.register(modEventBus);
+        WotrParticleTypes.PARTICLE_TYPES.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);

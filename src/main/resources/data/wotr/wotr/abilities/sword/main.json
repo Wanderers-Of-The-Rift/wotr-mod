@@ -3,7 +3,7 @@
     "icon": "minecraft:textures/mob_effect/strength.png",
     "abilities": [
         {
-            "ability": "wotr:sword/right_swing",
+            "ability": "wotr:sword/left_swing",
             "ticks_to_reset": 20,
             "requirements": [
                 {
@@ -13,7 +13,7 @@
             ]
         },
         {
-            "ability": "wotr:sword/left_swing",
+            "ability": "wotr:sword/right_swing",
             "ticks_to_reset": 20,
             "requirements": [
                 {
