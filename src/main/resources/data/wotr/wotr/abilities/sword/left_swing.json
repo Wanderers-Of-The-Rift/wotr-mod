@@ -33,7 +33,7 @@
                 {
                     "type": "wotr:field_of_view",
                     "range": 3,
-                    "angle_cosine": 0.9,
+                    "angle_cosine": 0.875,
                     "entities":{
                         "exclude_caster": true,
                         "exclude_source": true

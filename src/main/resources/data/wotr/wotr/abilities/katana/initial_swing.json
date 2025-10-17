@@ -6,14 +6,14 @@
             "targeting": {
                 "type": "wotr:offset",
                 "x": 0,
-                "y": 1.25,
+                "y": 1.65,
                 "z": 0.5
             },
             "effects": [
                 {
                     "type": "wotr:particle",
                     "particle": {
-                        "type": "wotr:sweep_attack_right"
+                        "type": "wotr:sweep_attack_overhead"
                     },
                     "count": 1,
                     "distribution_x": 0,
@@ -32,8 +32,8 @@
             "targeting": [
                 {
                     "type": "wotr:field_of_view",
-                    "range": 3,
-                    "angle_cosine": 0.875,
+                    "range": 4.5,
+                    "angle_cosine": 0.8,
                     "entities":{
                         "exclude_caster": true,
                         "exclude_source": true
@@ -43,7 +43,7 @@
             "effects": [
                 {
                     "type": "wotr:damage",
-                    "amount": 5.0,
+                    "amount": 10.0,
                     "damage_type": "player_attack"
                 }
             ]
@@ -53,7 +53,7 @@
     "requirements": [
         {
             "type": "wotr:cooldown",
-            "ticks": 11
+            "ticks": 18
         }
     ]
 }

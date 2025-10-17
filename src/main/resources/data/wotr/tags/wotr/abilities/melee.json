@@ -2,6 +2,9 @@
     "values": [
         "wotr:sword/left_swing",
         "wotr:sword/right_swing",
-        "wotr:sword/overhead_swing"
+        "wotr:sword/overhead_swing",
+        "wotr:katana/left_swing",
+        "wotr:katana/right_swing",
+        "wotr:katana/initial_swing"
     ]
 }

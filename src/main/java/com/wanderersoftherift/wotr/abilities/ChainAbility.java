@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implements Ability {
 
@@ -81,7 +82,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
 
     private boolean progressChain(AbilityContext context, int index) {
         boolean childComplete = activateChild(context, index);
-        while (childComplete && ++index < abilities.size() && abilities.get(index).autoActivate) {
+        while (childComplete && (index = nextIndex(index)) < abilities.size() && abilities.get(index).autoActivate) {
             childComplete = activateChild(context, index);
         }
         if (childComplete && index >= abilities.size()) {
@@ -90,6 +91,10 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         }
         updateState(context, index, !childComplete);
         return false;
+    }
+
+    private int nextIndex(int index) {
+        return this.abilities.get(index).next.orElse(index + 1);
     }
 
     private void updateState(AbilityContext context, int index, boolean active) {
@@ -145,7 +150,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(currentSubabilitySource)) {
             return false;
         }
-        index++;
+        index = nextIndex(index);
         if (index >= abilities.size()) {
             deactivate(context);
             return true;
@@ -186,14 +191,15 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
     }
 
     public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate,
-            List<AbilityRequirement> requirements) {
+            List<AbilityRequirement> requirements, Optional<Integer> next) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Ability.CODEC.fieldOf("ability").forGetter(Entry::ability),
                 Codec.INT.optionalFieldOf("ticks_to_reset", 100).forGetter(Entry::ticksToReset),
                 Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(Entry::autoActivate),
                 AbilityRequirement.CODEC.listOf()
                         .optionalFieldOf("requirements", Collections.emptyList())
-                        .forGetter(Entry::requirements)
+                        .forGetter(Entry::requirements),
+                Codec.INT.optionalFieldOf("next").forGetter(Entry::next)
         ).apply(instance, Entry::new));
     }
 }
