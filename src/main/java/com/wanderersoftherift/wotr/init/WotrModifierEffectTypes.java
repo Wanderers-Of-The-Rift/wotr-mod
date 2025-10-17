@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
+import com.wanderersoftherift.wotr.modifier.effect.EnchantmentModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.EnhanceAbilityModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ProvideAbilityConditionModifierEffect;
@@ -26,4 +27,6 @@ public class WotrModifierEffectTypes {
             .register("ability_enhancement", () -> EnhanceAbilityModifierEffect.MODIFIER_CODEC);
     public static final Supplier<MapCodec<? extends ModifierEffect>> ABILITY_CONDITIONING_MODIFIER = MODIFIER_EFFECT_TYPES
             .register("ability_condition", () -> ProvideAbilityConditionModifierEffect.MODIFIER_CODEC);
+    public static final Supplier<MapCodec<? extends ModifierEffect>> ENCHANT_MODIFIER = MODIFIER_EFFECT_TYPES
+            .register("enchant", () -> EnchantmentModifierEffect.CODEC);
 }
