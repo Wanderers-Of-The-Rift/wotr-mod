@@ -439,12 +439,14 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
-        add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
-        add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");
-        add(WanderersOfTheRift.translationId("guild", "stick"), "Figures of the Stick");
-        add(WanderersOfTheRift.translationId("guild", "stick.rank.0"), "Twigling");
-        add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
-        add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle"), "Cats Cradle");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.0"), "Damp Kitten");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.1"), "Pawprentis");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.2"), "Purrfessional");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.3"), "Journeynyan");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.4"), "Furrmidable");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.5"), "Meowster");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.6"), "Gwand Meowster");
 
         add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
         add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
