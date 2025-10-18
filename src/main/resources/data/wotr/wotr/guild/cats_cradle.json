@@ -1,0 +1,23 @@
+{
+  "emblem": "wotr:textures/guild/cat.png",
+  "ranks": [
+    {
+      "reputation_requirement": 1000
+    },
+    {
+      "reputation_requirement": 2000
+    },
+    {
+      "reputation_requirement": 4000
+    },
+    {
+      "reputation_requirement": 10000
+    },
+    {
+      "reputation_requirement": 20000
+    },
+    {
+      "reputation_requirement": 50000
+    }
+  ]
+}
