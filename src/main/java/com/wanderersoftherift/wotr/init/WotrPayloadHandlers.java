@@ -19,6 +19,8 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
+import com.wanderersoftherift.wotr.network.guild.GuildStatusReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.GuildStatusUpdatePayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
@@ -99,6 +101,10 @@ public class WotrPayloadHandlers {
                 WalletReplicationPayload::handleOnClient);
         registrar.playToClient(WalletUpdatePayload.TYPE, WalletUpdatePayload.STREAM_CODEC,
                 WalletUpdatePayload::handleOnClient);
+        registrar.playToClient(GuildStatusReplicationPayload.TYPE, GuildStatusReplicationPayload.STREAM_CODEC,
+                GuildStatusReplicationPayload::handleOnClient);
+        registrar.playToClient(GuildStatusUpdatePayload.TYPE, GuildStatusUpdatePayload.STREAM_CODEC,
+                GuildStatusUpdatePayload::handleOnClient);
 
         // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
@@ -141,6 +147,7 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new AbilityStateReplicationPayload(player.getData(WotrAttachments.ABILITY_STATES)));
             player.getData(WotrAttachments.ATTACHED_EFFECTS).replicateEffects();
+            player.getData(WotrAttachments.GUILD_STATUS).replicate();
         }
     }
 
@@ -154,6 +161,7 @@ public class WotrPayloadHandlers {
             BannedFromRiftPayload.sendTo(player);
             PacketDistributor.sendToPlayer(player,
                     new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
+            player.getData(WotrAttachments.GUILD_STATUS).replicate();
         }
     }
 
@@ -171,6 +179,7 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new AbilityStateReplicationPayload(player.getData(WotrAttachments.ABILITY_STATES)));
             player.getData(WotrAttachments.ATTACHED_EFFECTS).replicateEffects();
+            player.getData(WotrAttachments.GUILD_STATUS).replicate();
         }
     }
 

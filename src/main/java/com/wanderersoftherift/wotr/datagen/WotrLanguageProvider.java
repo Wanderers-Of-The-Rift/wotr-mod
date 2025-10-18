@@ -179,6 +179,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
         add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
         add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
+        add(WanderersOfTheRift.translationId("container", "guild.reputation.max"), "Reputation: MAX");
 
         add(WanderersOfTheRift.translationId("container", "wallet"), "Wallet");
 
