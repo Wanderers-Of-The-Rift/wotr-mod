@@ -15,6 +15,7 @@ import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.DeathNotifierAttachment;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
+import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
@@ -137,6 +138,12 @@ public class WotrAttachments {
             "active_quests",
             () -> AttachmentType.builder(ActiveQuests::new)
                     .serialize(ActiveQuests.getSerializer())
+                    .copyOnDeath()
+                    .build());
+    public static final Supplier<AttachmentType<GuildStatus>> GUILD_STATUS = ATTACHMENT_TYPES.register(
+            "guild_status",
+            () -> AttachmentType.builder(GuildStatus::new)
+                    .serialize(GuildStatus.getSerializer())
                     .copyOnDeath()
                     .build());
 

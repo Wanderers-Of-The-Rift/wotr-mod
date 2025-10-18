@@ -2,8 +2,13 @@ package com.wanderersoftherift.wotr.core.guild;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -18,6 +23,11 @@ public record GuildInfo(ResourceLocation emblem, List<GuildRank> ranks) {
             ResourceLocation.CODEC.fieldOf("emblem").forGetter(GuildInfo::emblem),
             GuildRank.DIRECT_CODEC.listOf().fieldOf("ranks").forGetter(GuildInfo::ranks)
     ).apply(instance, GuildInfo::new));
+
+    public static final Codec<Holder<GuildInfo>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.GUILDS);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<GuildInfo>> STREAM_CODEC = ByteBufCodecs
+            .holderRegistry(WotrRegistries.Keys.GUILDS);
 
     // TODO: Max rank? reputation reqs? What else do we need to capture about guilds?
 
