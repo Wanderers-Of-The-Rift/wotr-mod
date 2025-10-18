@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -28,12 +29,20 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Optional;
+import java.util.TreeMap;
 
 public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiable {
 
     private static final float COMPLETED_STATE = 0.1f;
     private static final float INCOMPLETE_STATE = 1f;
+    /**
+     * key: minimum distance squared; value: particle count per tick
+     */
+    private static final NavigableMap<Double, Integer> PARTICLE_LODS = new TreeMap<>(
+            Map.of(0.0, 6, 1024.0, 3, 2048.0, 2, 3072.0, 1, 4096.0, 0));
     private long seed = 0L;
     private Holder<AnomalyReward> reward;
     private AnomalyState<?> state;
@@ -49,8 +58,14 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
             double centerY = pos.getY();
             double centerZ = pos.getZ() + 0.5;
 
-            var count = 6;
-            for (int i = 0; i < count; i++) {
+            var playerDistance = pos.distToCenterSqr(Minecraft.getInstance().player.position());
+
+            var count = PARTICLE_LODS.floorEntry(playerDistance).getValue();
+            if (count <= 0) {
+                return;
+            }
+            var delta = 6 / count;
+            for (int i = Math.floorMod(pos.hashCode(), delta); i < count; i += delta) {
                 double angle = (level.getGameTime() - 25.0 * Math.sin(0.03 * level.getGameTime() + 1.2)) * 0.2
                         + i * Math.PI * 2 / count;
                 double radius = 0.4 + Math.sin(level.getGameTime() * 0.03) * 0.25;
