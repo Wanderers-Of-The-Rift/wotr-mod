@@ -32,7 +32,7 @@
             "targeting": [
                 {
                     "type": "wotr:field_of_view",
-                    "range": 3,
+                    "range": 2.75,
                     "angle_cosine": 0.875,
                     "entities":{
                         "exclude_caster": true,

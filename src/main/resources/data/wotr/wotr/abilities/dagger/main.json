@@ -1,0 +1,56 @@
+{
+    "type": "wotr:chain",
+    "icon": "minecraft:textures/mob_effect/strength.png",
+    "abilities": [
+        {
+            "ability": "wotr:dagger/right_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 5
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/left_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 5
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/right_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 5
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/left_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 5
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/stab",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 9
+                }
+            ]
+        }
+    ]
+}

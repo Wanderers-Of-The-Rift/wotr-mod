@@ -32,8 +32,8 @@
             "targeting": [
                 {
                     "type": "wotr:field_of_view",
-                    "range": 4.0,
-                    "angle_cosine": 0.8,
+                    "range": 3.25,
+                    "angle_cosine": 0.95,
                     "entities":{
                         "exclude_caster": true,
                         "exclude_source": true
@@ -43,7 +43,7 @@
             "effects": [
                 {
                     "type": "wotr:damage",
-                    "amount": 10.0,
+                    "amount": 4.5,
                     "damage_type": "player_attack"
                 }
             ]
