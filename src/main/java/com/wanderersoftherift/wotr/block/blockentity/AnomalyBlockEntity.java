@@ -60,19 +60,20 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
 
             var playerDistance = pos.distToCenterSqr(Minecraft.getInstance().player.position());
 
-            var count = PARTICLE_LODS.floorEntry(playerDistance).getValue();
-            if (count <= 0) {
+            var realCount = PARTICLE_LODS.floorEntry(playerDistance).getValue();
+            if (realCount <= 0) {
                 return;
             }
-            var delta = 6 / count;
-            for (int i = Math.floorMod(pos.hashCode(), delta); i < count; i += delta) {
+            var maxCount = 6;
+            var delta = 6 / realCount;
+            for (int i = Math.floorMod(pos.hashCode(), delta); i < maxCount; i += delta) {
                 double angle = (level.getGameTime() - 25.0 * Math.sin(0.03 * level.getGameTime() + 1.2)) * 0.2
-                        + i * Math.PI * 2 / count;
+                        + i * Math.PI * 2 / maxCount;
                 double radius = 0.4 + Math.sin(level.getGameTime() * 0.03) * 0.25;
 
                 double x = centerX + Math.cos(angle) * radius;
                 double z = centerZ + Math.sin(angle) * radius;
-                double y = centerY + 0.5 + Math.sin(level.getGameTime() * 0.5 + i * Math.PI * 2 / count) * 0.1
+                double y = centerY + 0.5 + Math.sin(level.getGameTime() * 0.5 + i * Math.PI * 2 / maxCount) * 0.1
                         * (1 + Math.sin(0.03 * level.getGameTime()));
 
                 var particleColor = state.task.value().particleColor();
