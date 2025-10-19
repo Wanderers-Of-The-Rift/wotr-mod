@@ -1,9 +1,11 @@
 package com.wanderersoftherift.wotr.network.guild;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.client.toast.GuildRankToast;
 import com.wanderersoftherift.wotr.core.guild.GuildInfo;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -32,8 +34,12 @@ public record GuildStatusUpdatePayload(Holder<GuildInfo> guild, int reputation, 
 
     public void handleOnClient(final IPayloadContext context) {
         GuildStatus guildStatus = context.player().getData(WotrAttachments.GUILD_STATUS.get());
+        int previousRank = guildStatus.getRank(guild);
         guildStatus.setReputation(guild, reputation);
         guildStatus.setRank(guild, rank);
+        if (previousRank < rank) {
+            Minecraft.getInstance().getToastManager().addToast(new GuildRankToast(guild, rank));
+        }
     }
 
 }

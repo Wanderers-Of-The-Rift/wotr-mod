@@ -77,7 +77,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
 
         @Override
         protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            guiGraphics.blit(RenderType::guiTextured, guild.value().emblem(), getX() + 4, getY() + 4, 0, 0, EMBLEM_SIZE,
+            guiGraphics.blit(RenderType::guiTextured, guild.value().icon32(), getX() + 4, getY() + 4, 0, 0, EMBLEM_SIZE,
                     EMBLEM_SIZE, EMBLEM_SIZE, EMBLEM_SIZE);
             guiGraphics.drawString(font, getMessage(), getX() + EMBLEM_SIZE + 8, getY() + 8,
                     ChatFormatting.WHITE.getColor(), true);

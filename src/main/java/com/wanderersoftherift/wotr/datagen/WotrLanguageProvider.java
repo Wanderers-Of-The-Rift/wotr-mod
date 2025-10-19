@@ -489,6 +489,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("template_pool.wotr.rift.room_stable", "Stable");
         add("template_pool.wotr.rift.room_unstable", "Unstable");
         add("template_pool.wotr.rift.room_chaos", "Chaos");
+
+        add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
+        add(WanderersOfTheRift.translationId("toast", "guild.rank"), "Guild Rank Up");
     }
 
     private void addRunegems() {

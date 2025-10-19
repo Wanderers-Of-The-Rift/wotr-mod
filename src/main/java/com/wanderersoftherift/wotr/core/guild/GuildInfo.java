@@ -16,11 +16,14 @@ import java.util.List;
 /**
  * GuildInfo provides information describing a guild
  * 
- * @param emblem
+ * @param icon32 - 32x32 pixel icon for the guild
+ * @param icon16 - 16x16 pixel icon for the guild
  */
-public record GuildInfo(ResourceLocation emblem, List<GuildRank> ranks) {
+public record GuildInfo(ResourceLocation icon32, ResourceLocation icon16, List<GuildRank> ranks) {
+
     public static final Codec<GuildInfo> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("emblem").forGetter(GuildInfo::emblem),
+            ResourceLocation.CODEC.fieldOf("icon32").forGetter(GuildInfo::icon32),
+            ResourceLocation.CODEC.fieldOf("icon16").forGetter(GuildInfo::icon16),
             GuildRank.DIRECT_CODEC.listOf().fieldOf("ranks").forGetter(GuildInfo::ranks)
     ).apply(instance, GuildInfo::new));
 
@@ -28,8 +31,6 @@ public record GuildInfo(ResourceLocation emblem, List<GuildRank> ranks) {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<GuildInfo>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.GUILDS);
-
-    // TODO: Max rank? reputation reqs? What else do we need to capture about guilds?
 
     public static Component getDisplayName(Holder<GuildInfo> guild) {
         ResourceLocation loc = guild.getKey().location();
