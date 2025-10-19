@@ -4,6 +4,18 @@
   "ranks": [
     {
       "icon": "wotr:textures/guild/cat_sm.png",
+      "reputation_requirement": 100
+    },
+    {
+      "icon": "wotr:textures/guild/cat_sm.png",
+      "reputation_requirement": 200
+    },
+    {
+      "icon": "wotr:textures/guild/cat_sm.png",
+      "reputation_requirement": 400
+    },
+    {
+      "icon": "wotr:textures/guild/cat_sm.png",
       "reputation_requirement": 1000
     },
     {
@@ -12,19 +24,7 @@
     },
     {
       "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 4000
-    },
-    {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 10000
-    },
-    {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 20000
-    },
-    {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 50000
+      "reputation_requirement": 5000
     }
   ]
 }

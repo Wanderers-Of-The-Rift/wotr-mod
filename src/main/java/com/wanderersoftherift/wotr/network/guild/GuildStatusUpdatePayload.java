@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.network.guild;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.client.toast.GuildRankToast;
-import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.client.Minecraft;
@@ -15,15 +15,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public record GuildStatusUpdatePayload(Holder<GuildInfo> guild, int reputation, int rank)
-        implements CustomPacketPayload {
+public record GuildStatusUpdatePayload(Holder<Guild> guild, int reputation, int rank) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<GuildStatusUpdatePayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "guild_status_update"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, GuildStatusUpdatePayload> STREAM_CODEC = StreamCodec
             .composite(
-                    GuildInfo.STREAM_CODEC, GuildStatusUpdatePayload::guild, ByteBufCodecs.INT,
+                    Guild.STREAM_CODEC, GuildStatusUpdatePayload::guild, ByteBufCodecs.INT,
                     GuildStatusUpdatePayload::reputation, ByteBufCodecs.INT, GuildStatusUpdatePayload::rank,
                     GuildStatusUpdatePayload::new);
 
