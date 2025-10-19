@@ -19,25 +19,25 @@ import java.util.List;
  * @param icon32 - 32x32 pixel icon for the guild
  * @param icon16 - 16x16 pixel icon for the guild
  */
-public record GuildInfo(ResourceLocation icon32, ResourceLocation icon16, List<GuildRank> ranks) {
+public record Guild(ResourceLocation icon32, ResourceLocation icon16, List<GuildRank> ranks) {
 
-    public static final Codec<GuildInfo> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("icon32").forGetter(GuildInfo::icon32),
-            ResourceLocation.CODEC.fieldOf("icon16").forGetter(GuildInfo::icon16),
-            GuildRank.DIRECT_CODEC.listOf().fieldOf("ranks").forGetter(GuildInfo::ranks)
-    ).apply(instance, GuildInfo::new));
+    public static final Codec<Guild> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("icon32").forGetter(Guild::icon32),
+            ResourceLocation.CODEC.fieldOf("icon16").forGetter(Guild::icon16),
+            GuildRank.DIRECT_CODEC.listOf().fieldOf("ranks").forGetter(Guild::ranks)
+    ).apply(instance, Guild::new));
 
-    public static final Codec<Holder<GuildInfo>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.GUILDS);
+    public static final Codec<Holder<Guild>> CODEC = RegistryFixedCodec.create(WotrRegistries.Keys.GUILDS);
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<GuildInfo>> STREAM_CODEC = ByteBufCodecs
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Guild>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.GUILDS);
 
-    public static Component getDisplayName(Holder<GuildInfo> guild) {
+    public static Component getDisplayName(Holder<Guild> guild) {
         ResourceLocation loc = guild.getKey().location();
         return Component.translatable(loc.toLanguageKey("guild"));
     }
 
-    public static Component getRankTitle(Holder<GuildInfo> guild, int rank) {
+    public static Component getRankTitle(Holder<Guild> guild, int rank) {
         ResourceLocation loc = guild.getKey().location();
         return Component.translatable(loc.toLanguageKey("guild", "rank." + rank));
     }

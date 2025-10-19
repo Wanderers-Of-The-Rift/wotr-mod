@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
@@ -36,7 +36,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
     protected void init() {
         super.init();
         guildStatus = minecraft.player.getData(WotrAttachments.GUILD_STATUS);
-        List<Holder<GuildInfo>> guilds = guildStatus.getGuilds();
+        List<Holder<Guild>> guilds = guildStatus.getGuilds();
         guildsDisplay = new ScrollContainerWidget<>(300, 30, 200, 140,
                 guilds.stream().map(guild -> new GuildDisplay(font, guild, guildStatus)).toList());
         addRenderableWidget(guildsDisplay);
@@ -60,11 +60,11 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
         private static final int DISPLAY_HEIGHT = 68;
 
         private final Font font;
-        private final Holder<GuildInfo> guild;
+        private final Holder<Guild> guild;
         private final GuildStatus status;
 
-        public GuildDisplay(Font font, Holder<GuildInfo> guild, GuildStatus status) {
-            super(0, 0, 300, DISPLAY_HEIGHT, GuildInfo.getDisplayName(guild));
+        public GuildDisplay(Font font, Holder<Guild> guild, GuildStatus status) {
+            super(0, 0, 300, DISPLAY_HEIGHT, Guild.getDisplayName(guild));
             this.font = font;
             this.guild = guild;
             this.status = status;
@@ -84,7 +84,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
             int rank = status.getRank(guild);
             guiGraphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("container", "guild.rank"),
-                            GuildInfo.getRankTitle(guild, rank)),
+                            Guild.getRankTitle(guild, rank)),
                     getX() + EMBLEM_SIZE + 8, getY() + 8 + 2 * font.lineHeight, ChatFormatting.WHITE.getColor(), false);
 
             if (rank < guild.value().ranks().size()) {

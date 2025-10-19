@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -56,13 +56,13 @@ public class GuildCommands extends BaseCommand {
                                 ))));
     }
 
-    private int setReputation(CommandContext<CommandSourceStack> ctx, Holder<GuildInfo> guild, int amount) {
+    private int setReputation(CommandContext<CommandSourceStack> ctx, Holder<Guild> guild, int amount) {
         GuildStatus status = ctx.getSource().getPlayer().getData(WotrAttachments.GUILD_STATUS);
         status.setReputation(guild, amount);
         return Command.SINGLE_SUCCESS;
     }
 
-    private int setRank(CommandContext<CommandSourceStack> ctx, Holder<GuildInfo> guild, int amount) {
+    private int setRank(CommandContext<CommandSourceStack> ctx, Holder<Guild> guild, int amount) {
         GuildStatus status = ctx.getSource().getPlayer().getData(WotrAttachments.GUILD_STATUS);
         status.setRank(guild, amount);
         return Command.SINGLE_SUCCESS;

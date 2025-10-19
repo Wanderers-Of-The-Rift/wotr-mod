@@ -10,8 +10,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,8 +25,8 @@ import java.util.Map;
 public class GuildStatus {
     private final IAttachmentHolder holder;
 
-    private final Object2IntMap<Holder<GuildInfo>> reputation = new Object2IntArrayMap<>();
-    private final Object2IntMap<Holder<GuildInfo>> ranks = new Object2IntArrayMap<>();
+    private final Object2IntMap<Holder<Guild>> reputation = new Object2IntArrayMap<>();
+    private final Object2IntMap<Holder<Guild>> ranks = new Object2IntArrayMap<>();
 
     public GuildStatus(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -38,15 +40,15 @@ public class GuildStatus {
         }
     }
 
-    public int getReputation(Holder<GuildInfo> guild) {
+    public int getReputation(Holder<Guild> guild) {
         return reputation.getOrDefault(guild, 0);
     }
 
-    public void addReputation(Holder<GuildInfo> guild, int amount) {
+    public void addReputation(Holder<Guild> guild, int amount) {
         setReputation(guild, reputation.getOrDefault(guild, 0) + amount);
     }
 
-    public void setReputation(Holder<GuildInfo> guild, int value) {
+    public void setReputation(Holder<Guild> guild, int value) {
         int previous = reputation.put(guild, value);
         if (previous == value) {
             return;
@@ -64,15 +66,17 @@ public class GuildStatus {
         }
     }
 
-    public int getRank(Holder<GuildInfo> guild) {
+    public int getRank(Holder<Guild> guild) {
         return ranks.getOrDefault(guild, 0);
     }
 
-    public void setRank(Holder<GuildInfo> guild, int rank) {
+    public void setRank(Holder<Guild> guild, int rank) {
         rank = Math.min(rank, guild.value().ranks().size());
         int oldRank = ranks.put(guild, rank);
         if (oldRank != rank) {
-            // TODO: provide rewards
+            if (holder instanceof Player player) {
+                NeoForge.EVENT_BUS.post(new GuildEvent.RankChange(player, guild, oldRank, rank));
+            }
             if (holder instanceof ServerPlayer player) {
                 PacketDistributor.sendToPlayer(player, new GuildStatusUpdatePayload(guild, getReputation(guild), rank));
             }
@@ -87,7 +91,7 @@ public class GuildStatus {
         return new Data(reputation, ranks);
     }
 
-    public void setAll(Map<Holder<GuildInfo>, Integer> reputation, Map<Holder<GuildInfo>, Integer> ranks) {
+    public void setAll(Map<Holder<Guild>, Integer> reputation, Map<Holder<Guild>, Integer> ranks) {
         this.reputation.clear();
         this.reputation.putAll(reputation);
         this.ranks.clear();
@@ -100,7 +104,7 @@ public class GuildStatus {
         }
     }
 
-    public List<Holder<GuildInfo>> getGuilds() {
+    public List<Holder<Guild>> getGuilds() {
         return reputation.keySet()
                 .stream()
                 .sorted(Comparator.comparing(guild -> ranks.getOrDefault(guild, 0))
@@ -108,10 +112,10 @@ public class GuildStatus {
                 .toList();
     }
 
-    private record Data(Map<Holder<GuildInfo>, Integer> reputation, Map<Holder<GuildInfo>, Integer> rank) {
+    private record Data(Map<Holder<Guild>, Integer> reputation, Map<Holder<Guild>, Integer> rank) {
         private static final Codec<Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.unboundedMap(GuildInfo.CODEC, Codec.INT).fieldOf("reputation").forGetter(Data::reputation),
-                Codec.unboundedMap(GuildInfo.CODEC, Codec.INT).fieldOf("ranks").forGetter(Data::rank)
+                Codec.unboundedMap(Guild.CODEC, Codec.INT).fieldOf("reputation").forGetter(Data::reputation),
+                Codec.unboundedMap(Guild.CODEC, Codec.INT).fieldOf("ranks").forGetter(Data::rank)
         ).apply(instance, Data::new));
     }
 }

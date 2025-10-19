@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.client.toast;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.GuildRank;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.ChatFormatting;
@@ -23,10 +23,10 @@ public class GuildRankToast extends SimpleToast {
     private static final Component TITLE = Component
             .translatable(WanderersOfTheRift.translationId("toast", "guild.rank"));
 
-    private final Holder<GuildInfo> guild;
+    private final Holder<Guild> guild;
     private final int rank;
 
-    public GuildRankToast(Holder<GuildInfo> guild, int rank) {
+    public GuildRankToast(Holder<Guild> guild, int rank) {
         super(true);
         this.guild = guild;
         this.rank = rank;
@@ -35,7 +35,7 @@ public class GuildRankToast extends SimpleToast {
     @Override
     public void renderMessage(GuiGraphics guiGraphics, Font font, long visibilityTime) {
         GuildRank guildRank = guild.value().ranks().get(rank - 1);
-        List<FormattedCharSequence> list = font.split(GuildInfo.getRankTitle(guild, rank),
+        List<FormattedCharSequence> list = font.split(Guild.getRankTitle(guild, rank),
                 width() - ICON_SIZE - 2 * TEXT_X_PADDING - ICON_X_PADDING);
         guiGraphics.blit(RenderType.GUI_TEXTURED, guildRank.icon(), ICON_X_PADDING, ICON_Y_PADDING, 0, 0, ICON_SIZE,
                 ICON_SIZE, ICON_SIZE, ICON_SIZE);
