@@ -16,6 +16,7 @@ import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.DeathNotifierAttachment;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
+import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
@@ -146,6 +147,13 @@ public class WotrAttachments {
                     .serialize(GuildStatus.getSerializer())
                     .copyOnDeath()
                     .build());
+    public static final Supplier<AttachmentType<UnclaimedGuildRewards>> UNCLAIMED_GUILD_REWARDS = ATTACHMENT_TYPES
+            .register(
+                    "unclaimed_guild_rewards",
+                    () -> AttachmentType.builder(UnclaimedGuildRewards::new)
+                            .serialize(UnclaimedGuildRewards.getSerializer())
+                            .copyOnDeath()
+                            .build());
 
     public static final Supplier<AttachmentType<MobInteraction>> MOB_INTERACT = ATTACHMENT_TYPES.register(
             "mob_interact",

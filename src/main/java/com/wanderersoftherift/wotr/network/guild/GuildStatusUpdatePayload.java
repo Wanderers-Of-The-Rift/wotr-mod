@@ -12,6 +12,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +34,15 @@ public record GuildStatusUpdatePayload(Holder<Guild> guild, int reputation, int 
     }
 
     public void handleOnClient(final IPayloadContext context) {
+        handleClientOnly(context);
+    }
+
+    /*
+     * Client-side only: references other Client-only classes and would cause crash if it existed on the server. The
+     * main handler still has to exist on client and server since it's directly referenced in the packet registration.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void handleClientOnly(final IPayloadContext context) {
         GuildStatus guildStatus = context.player().getData(WotrAttachments.GUILD_STATUS.get());
         int previousRank = guildStatus.getRank(guild);
         guildStatus.setReputation(guild, reputation);

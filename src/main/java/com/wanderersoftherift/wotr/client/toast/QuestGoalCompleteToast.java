@@ -22,7 +22,7 @@ public class QuestGoalCompleteToast extends SimpleToast {
     private final GoalStateWidget goal;
 
     public QuestGoalCompleteToast(QuestState quest, int goalIndex) {
-        super(true);
+        super(false);
         this.quest = quest;
         this.goal = new GoalStateWidget(quest, goalIndex, Style.EMPTY.withColor(ChatFormatting.GRAY));
         goal.setX(PADDING);
