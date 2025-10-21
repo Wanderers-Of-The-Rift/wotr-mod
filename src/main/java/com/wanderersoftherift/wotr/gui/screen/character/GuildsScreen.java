@@ -90,7 +90,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
             if (rank < guild.value().ranks().size()) {
                 guiGraphics.drawString(font,
                         Component.translatable(WanderersOfTheRift.translationId("container", "guild.reputation"),
-                                status.getReputation(guild), guild.value().ranks().get(rank).reputationRequirement()),
+                                status.getReputation(guild), guild.value().getNextRank(rank).reputationRequirement()),
                         getX() + EMBLEM_SIZE + 8, getY() + 8 + 3 * font.lineHeight, ChatFormatting.WHITE.getColor(),
                         false);
             } else {

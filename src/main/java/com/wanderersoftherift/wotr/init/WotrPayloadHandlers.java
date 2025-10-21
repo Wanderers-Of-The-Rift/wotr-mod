@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
+import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
@@ -21,6 +22,7 @@ import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
 import com.wanderersoftherift.wotr.network.guild.GuildStatusReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.GuildStatusUpdatePayload;
+import com.wanderersoftherift.wotr.network.guild.UnclaimedGuildRewardsReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
@@ -32,7 +34,7 @@ import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
-import com.wanderersoftherift.wotr.network.quest.QuestRewardsPayload;
+import com.wanderersoftherift.wotr.network.quest.RewardsPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -105,6 +107,9 @@ public class WotrPayloadHandlers {
                 GuildStatusReplicationPayload::handleOnClient);
         registrar.playToClient(GuildStatusUpdatePayload.TYPE, GuildStatusUpdatePayload.STREAM_CODEC,
                 GuildStatusUpdatePayload::handleOnClient);
+        registrar.playToClient(UnclaimedGuildRewardsReplicationPayload.TYPE,
+                UnclaimedGuildRewardsReplicationPayload.STREAM_CODEC,
+                UnclaimedGuildRewardsReplicationPayload::handleOnClient);
 
         // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
@@ -125,8 +130,7 @@ public class WotrPayloadHandlers {
                 AbandonQuestPayload::handleOnServer);
         registrar.playToClient(AvailableQuestsPayload.TYPE, AvailableQuestsPayload.STREAM_CODEC,
                 AvailableQuestsPayload::handleOnClient);
-        registrar.playToClient(QuestRewardsPayload.TYPE, QuestRewardsPayload.STREAM_CODEC,
-                QuestRewardsPayload::handleOnClient);
+        registrar.playToClient(RewardsPayload.TYPE, RewardsPayload.STREAM_CODEC, RewardsPayload::handleOnClient);
 
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,
@@ -148,6 +152,7 @@ public class WotrPayloadHandlers {
                     new AbilityStateReplicationPayload(player.getData(WotrAttachments.ABILITY_STATES)));
             player.getData(WotrAttachments.ATTACHED_EFFECTS).replicateEffects();
             player.getData(WotrAttachments.GUILD_STATUS).replicate();
+            player.getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(UnclaimedGuildRewards::replicate);
         }
     }
 
@@ -162,6 +167,7 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
             player.getData(WotrAttachments.GUILD_STATUS).replicate();
+            player.getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(UnclaimedGuildRewards::replicate);
         }
     }
 
@@ -180,6 +186,7 @@ public class WotrPayloadHandlers {
                     new AbilityStateReplicationPayload(player.getData(WotrAttachments.ABILITY_STATES)));
             player.getData(WotrAttachments.ATTACHED_EFFECTS).replicateEffects();
             player.getData(WotrAttachments.GUILD_STATUS).replicate();
+            player.getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(UnclaimedGuildRewards::replicate);
         }
     }
 

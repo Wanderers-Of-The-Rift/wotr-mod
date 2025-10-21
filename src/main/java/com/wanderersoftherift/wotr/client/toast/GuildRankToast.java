@@ -34,7 +34,7 @@ public class GuildRankToast extends SimpleToast {
 
     @Override
     public void renderMessage(GuiGraphics guiGraphics, Font font, long visibilityTime) {
-        GuildRank guildRank = guild.value().ranks().get(rank - 1);
+        GuildRank guildRank = guild.value().getRank(rank);
         List<FormattedCharSequence> list = font.split(Guild.getRankTitle(guild, rank),
                 width() - ICON_SIZE - 2 * TEXT_X_PADDING - ICON_X_PADDING);
         guiGraphics.blit(RenderType.GUI_TEXTURED, guildRank.icon(), ICON_X_PADDING, ICON_Y_PADDING, 0, 0, ICON_SIZE,

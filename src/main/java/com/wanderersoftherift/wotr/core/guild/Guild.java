@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.core.guild;
 
+import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -31,6 +32,18 @@ public record Guild(ResourceLocation icon32, ResourceLocation icon16, List<Guild
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Guild>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.GUILDS);
+
+    public GuildRank getRank(int index) {
+        if (index == 0) {
+            return new GuildRank(icon16, 0, List.of());
+        }
+        return ranks.get(Math.min(index, ranks.size()) - 1);
+    }
+
+    public GuildRank getNextRank(int index) {
+        Preconditions.checkArgument(index >= 0, "Rank must be 0 or greater");
+        return ranks.get(Math.min(index, ranks.size() - 1));
+    }
 
     public static Component getDisplayName(Holder<Guild> guild) {
         ResourceLocation loc = guild.getKey().location();
