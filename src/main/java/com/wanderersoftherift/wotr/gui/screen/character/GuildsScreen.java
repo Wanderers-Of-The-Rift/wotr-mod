@@ -3,19 +3,24 @@ package com.wanderersoftherift.wotr.gui.screen.character;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
+import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import com.wanderersoftherift.wotr.network.guild.ClaimRewardPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.AbstractContainerWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -37,8 +42,10 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
         super.init();
         guildStatus = minecraft.player.getData(WotrAttachments.GUILD_STATUS);
         List<Holder<Guild>> guilds = guildStatus.getGuilds();
-        guildsDisplay = new ScrollContainerWidget<>(300, 30, 200, 140,
-                guilds.stream().map(guild -> new GuildDisplay(font, guild, guildStatus)).toList());
+        UnclaimedGuildRewards unclaimedGuildRewards = minecraft.player.getData(WotrAttachments.UNCLAIMED_GUILD_REWARDS);
+        guildsDisplay = new ScrollContainerWidget<>(300, 30, 200, 140, guilds.stream()
+                .map(guild -> new GuildDisplay(font, guild, guildStatus, unclaimedGuildRewards.hasRewards(guild)))
+                .toList());
         addRenderableWidget(guildsDisplay);
     }
 
@@ -54,25 +61,44 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
 
     }
 
-    private static class GuildDisplay extends AbstractWidget implements ScrollContainerEntry {
+    private static class GuildDisplay extends AbstractContainerWidget implements ScrollContainerEntry {
 
         private static final int EMBLEM_SIZE = 32;
-        private static final int DISPLAY_HEIGHT = 68;
+        private static final int DISPLAY_HEIGHT = 47;
+        private static final Component CLAIM_MESSAGE = Component
+                .translatable(WanderersOfTheRift.translationId("container", "guilds.claim_reward"));
 
         private final Font font;
         private final Holder<Guild> guild;
         private final GuildStatus status;
+        private final Button claimRewardsButton;
+        private final boolean hasRewards;
 
-        public GuildDisplay(Font font, Holder<Guild> guild, GuildStatus status) {
+        public GuildDisplay(Font font, Holder<Guild> guild, GuildStatus status, boolean hasRewards) {
             super(0, 0, 300, DISPLAY_HEIGHT, Guild.getDisplayName(guild));
             this.font = font;
             this.guild = guild;
             this.status = status;
+            this.hasRewards = hasRewards;
+            this.claimRewardsButton = new Button.Builder(CLAIM_MESSAGE, button -> {
+                if (hasRewards) {
+                    PacketDistributor.sendToServer(new ClaimRewardPayload(guild));
+                }
+            }).pos(0, 0).size(font.width(CLAIM_MESSAGE) + 8, font.lineHeight + 8).build();
         }
 
         @Override
         public int getHeight(int width) {
-            return DISPLAY_HEIGHT;
+            int height = DISPLAY_HEIGHT;
+            if (hasRewards) {
+                height += claimRewardsButton.getHeight();
+            }
+            return height;
+        }
+
+        @Override
+        public @NotNull List<? extends GuiEventListener> children() {
+            return List.of(claimRewardsButton);
         }
 
         @Override
@@ -100,11 +126,27 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
                         false);
             }
 
+            if (hasRewards) {
+                claimRewardsButton.setX(getX() + 4);
+                claimRewardsButton.setY(getY() + font.lineHeight * 5);
+                claimRewardsButton.render(guiGraphics, mouseX, mouseY, partialTick);
+            }
+
         }
 
         @Override
         protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
             // TODO
+        }
+
+        @Override
+        protected int contentHeight() {
+            return getHeight(getWidth());
+        }
+
+        @Override
+        protected double scrollRate() {
+            return 0;
         }
     }
 }

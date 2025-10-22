@@ -20,6 +20,7 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
+import com.wanderersoftherift.wotr.network.guild.ClaimRewardPayload;
 import com.wanderersoftherift.wotr.network.guild.GuildStatusReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.GuildStatusUpdatePayload;
 import com.wanderersoftherift.wotr.network.guild.UnclaimedGuildRewardsReplicationPayload;
@@ -110,6 +111,8 @@ public class WotrPayloadHandlers {
         registrar.playToClient(UnclaimedGuildRewardsReplicationPayload.TYPE,
                 UnclaimedGuildRewardsReplicationPayload.STREAM_CODEC,
                 UnclaimedGuildRewardsReplicationPayload::handleOnClient);
+        registrar.playToServer(ClaimRewardPayload.TYPE, ClaimRewardPayload.STREAM_CODEC,
+                ClaimRewardPayload::handleOnServer);
 
         // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,

@@ -9,9 +9,8 @@ public class GuildEventHandler {
 
     @SubscribeEvent
     public static void rewardRankUp(GuildEvent.RankChange event) {
-        if (event.newRank() <= event.oldRank()) {
-            return;
+        for (int rank = event.oldRank() + 1; rank <= event.newRank(); rank++) {
+            event.player().getData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).addReward(event.guild(), rank);
         }
-        event.player().getData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).addReward(event.guild(), event.newRank());
     }
 }
