@@ -56,7 +56,7 @@ public class GuildStatus {
         int currentRank = ranks.getOrDefault(guild, 0);
         List<GuildRank> guildRanks = guild.value().ranks();
         int newRank = currentRank;
-        while (newRank < guildRanks.size() && guildRanks.get(newRank).reputationRequirement() < value) {
+        while (newRank < guildRanks.size() && guildRanks.get(newRank).reputationRequirement() <= value) {
             newRank++;
         }
         if (newRank != currentRank) {

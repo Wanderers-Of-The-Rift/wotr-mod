@@ -8,7 +8,7 @@ import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.network.guild.ClaimRewardPayload;
+import com.wanderersoftherift.wotr.network.guild.ClaimGuildRewardPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -82,7 +82,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
             this.hasRewards = hasRewards;
             this.claimRewardsButton = new Button.Builder(CLAIM_MESSAGE, button -> {
                 if (hasRewards) {
-                    PacketDistributor.sendToServer(new ClaimRewardPayload(guild));
+                    PacketDistributor.sendToServer(new ClaimGuildRewardPayload(guild));
                 }
             }).pos(0, 0).size(font.width(CLAIM_MESSAGE) + 8, font.lineHeight + 8).build();
         }

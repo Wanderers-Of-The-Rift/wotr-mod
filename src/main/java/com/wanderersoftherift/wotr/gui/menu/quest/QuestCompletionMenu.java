@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import com.wanderersoftherift.wotr.gui.menu.slot.UUIDDataSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
@@ -144,7 +145,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
         List<Reward> rewards = questState.getRewards();
         access.execute((level, blockPos) -> {
-            RewardMenu.giveRewards(player, rewards,
+            RewardMenu.openRewardMenu(player, rewards,
                     Component.translatable(WanderersOfTheRift.translationId("container", "quest_complete")));
         });
     }

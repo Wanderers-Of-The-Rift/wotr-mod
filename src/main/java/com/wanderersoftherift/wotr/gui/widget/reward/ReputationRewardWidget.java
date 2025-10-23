@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.gui.widget.quest;
+package com.wanderersoftherift.wotr.gui.widget.reward;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.Guild;
@@ -7,7 +7,6 @@ import com.wanderersoftherift.wotr.core.quest.reward.ReputationReward;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderType;
@@ -18,14 +17,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Display for an {@link CurrencyReward}
  */
-public class ReputationRewardWidget extends AbstractWidget {
+public class ReputationRewardWidget extends RewardWidget {
     private static final int ICON_SIZE = 16;
 
     private final Holder<Guild> guild;
     private final int amount;
 
     public ReputationRewardWidget(ReputationReward reward) {
-        super(0, 0, ICON_SIZE, ICON_SIZE, Component.empty());
+        super(reward, 0, 0, ICON_SIZE, ICON_SIZE, Component.empty());
         this.guild = reward.guild();
         this.amount = reward.amount();
         setTooltip(Tooltip.create(Component.translatable(
@@ -46,10 +45,5 @@ public class ReputationRewardWidget extends AbstractWidget {
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
         // TODO
-    }
-
-    @Override
-    protected boolean isValidClickButton(int button) {
-        return false;
     }
 }

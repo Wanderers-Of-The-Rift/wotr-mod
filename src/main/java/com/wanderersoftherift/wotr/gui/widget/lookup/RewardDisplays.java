@@ -1,7 +1,8 @@
 package com.wanderersoftherift.wotr.gui.widget.lookup;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.gui.components.AbstractWidget;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.gui.widget.reward.RewardWidget;
 import net.neoforged.fml.ModLoader;
 
 import java.util.Map;
@@ -10,16 +11,16 @@ import java.util.function.Function;
 
 public final class RewardDisplays {
 
-    private static final Map<Class<?>, Function<?, AbstractWidget>> lookup = Maps.newHashMap();
+    private static final Map<Class<?>, Function<? extends Reward, RewardWidget>> lookup = Maps.newHashMap();
 
     private RewardDisplays() {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Optional<AbstractWidget> createFor(T object) {
-        Function<?, AbstractWidget> creator = lookup.get(object.getClass());
+    public static <T extends Reward> Optional<RewardWidget> createFor(T object) {
+        Function<? extends Reward, RewardWidget> creator = lookup.get(object.getClass());
         if (creator != null) {
-            return Optional.of(((Function<T, AbstractWidget>) creator).apply(object));
+            return Optional.of(((Function<T, RewardWidget>) creator).apply(object));
         }
         return Optional.empty();
     }

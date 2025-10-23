@@ -11,7 +11,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * This reward provides guild reputation
@@ -44,7 +44,7 @@ public record ReputationReward(Holder<Guild> guild, int amount) implements Rewar
     }
 
     @Override
-    public void apply(ServerPlayer player) {
+    public void apply(Player player) {
         player.getData(WotrAttachments.GUILD_STATUS).addReputation(guild, amount);
     }
 }

@@ -2,7 +2,9 @@ package com.wanderersoftherift.wotr.gui.widget.scrollentry;
 
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractContainerWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -14,15 +16,15 @@ import java.util.List;
 /**
  * Widget that "flows" its child widgets, wrapping when they exceed its width
  */
-public class FlowContainer extends AbstractWidget implements ScrollContainerEntry {
+public class FlowContainer extends AbstractContainerWidget implements ScrollContainerEntry {
     private final List<AbstractWidget> children;
     private final int padding;
 
-    public FlowContainer(Collection<AbstractWidget> children) {
+    public FlowContainer(Collection<? extends AbstractWidget> children) {
         this(children, 0);
     }
 
-    public FlowContainer(Collection<AbstractWidget> children, int padding) {
+    public FlowContainer(Collection<? extends AbstractWidget> children, int padding) {
         super(0, 0, 0, 0, Component.empty());
         this.children = new ArrayList<>(children);
         this.padding = padding;
@@ -69,6 +71,21 @@ public class FlowContainer extends AbstractWidget implements ScrollContainerEntr
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
         // TODO
+    }
+
+    @Override
+    protected int contentHeight() {
+        return getHeight(getWidth());
+    }
+
+    @Override
+    protected double scrollRate() {
+        return 0;
+    }
+
+    @Override
+    public List<? extends GuiEventListener> children() {
+        return children;
     }
 
     private interface ChildAction {
