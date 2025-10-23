@@ -9,6 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 public final class GuavaStreamCodecs {
 
@@ -29,8 +30,9 @@ public final class GuavaStreamCodecs {
 
         return new StreamCodec<>() {
             public void encode(@NotNull B buffer, @NotNull ListMultimap<K, V> multimap) {
-                ByteBufCodecs.writeCount(buffer, multimap.size(), Integer.MAX_VALUE);
-                Multimaps.asMap(multimap).forEach((key, valueList) -> {
+                Map<K, List<V>> map = Multimaps.asMap(multimap);
+                ByteBufCodecs.writeCount(buffer, map.size(), Integer.MAX_VALUE);
+                map.forEach((key, valueList) -> {
                     keyCodec.encode(buffer, key);
                     valueCodec.encode(buffer, valueList);
                 });
@@ -38,7 +40,7 @@ public final class GuavaStreamCodecs {
 
             public @NotNull ListMultimap<K, V> decode(@NotNull B buffer) {
                 int size = ByteBufCodecs.readCount(buffer, Integer.MAX_VALUE);
-                ListMultimap<K, V> result = ArrayListMultimap.create(size, 1);
+                ListMultimap<K, V> result = ArrayListMultimap.create(size, 3);
 
                 for (int j = 0; j < size; j++) {
                     K k = keyCodec.decode(buffer);

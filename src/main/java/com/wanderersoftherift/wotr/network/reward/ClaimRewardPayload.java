@@ -1,9 +1,8 @@
-package com.wanderersoftherift.wotr.network.guild;
+package com.wanderersoftherift.wotr.network.reward;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.Guild;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
-import net.minecraft.core.Holder;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -11,12 +10,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public record ClaimRewardPayload(Holder<Guild> guild) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ClaimRewardPayload> TYPE = new CustomPacketPayload.Type<>(
+/**
+ * Payload for claiming non-item rewards from the Rewards menu
+ * 
+ * @param reward
+ */
+public record ClaimRewardPayload(Reward reward) implements CustomPacketPayload {
+    public static final Type<ClaimRewardPayload> TYPE = new Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "claim_reward"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClaimRewardPayload> STREAM_CODEC = StreamCodec
-            .composite(Guild.STREAM_CODEC, ClaimRewardPayload::guild, ClaimRewardPayload::new);
+            .composite(Reward.STREAM_CODEC, ClaimRewardPayload::reward, ClaimRewardPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -24,8 +28,8 @@ public record ClaimRewardPayload(Holder<Guild> guild) implements CustomPacketPay
     }
 
     public void handleOnServer(final IPayloadContext context) {
-        context.player().getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(unclaimedGuildRewards -> {
-            unclaimedGuildRewards.claimRewards(guild);
-        });
+        if (context.player().containerMenu instanceof RewardMenu menu && menu.stillValid(context.player())) {
+            menu.claimReward(context.player(), reward);
+        }
     }
 }

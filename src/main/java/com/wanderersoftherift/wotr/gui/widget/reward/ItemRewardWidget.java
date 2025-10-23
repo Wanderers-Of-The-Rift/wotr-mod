@@ -1,10 +1,9 @@
-package com.wanderersoftherift.wotr.gui.widget.quest;
+package com.wanderersoftherift.wotr.gui.widget.reward;
 
 import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Display for an {@link ItemReward}
  */
-public class ItemRewardWidget extends AbstractWidget {
+public class ItemRewardWidget extends RewardWidget {
     private final ItemStack rewardItem;
 
     public ItemRewardWidget(ItemReward reward) {
-        super(0, 0, 16, 16, Component.empty());
+        super(reward, 0, 0, 16, 16, Component.empty());
         this.rewardItem = reward.generateItem();
         setTooltip(Tooltip.create(
                 ComponentUtil.joinWithNewLines(Screen.getTooltipFromItem(Minecraft.getInstance(), rewardItem))));
@@ -34,10 +33,5 @@ public class ItemRewardWidget extends AbstractWidget {
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
         // TODO
-    }
-
-    @Override
-    protected boolean isValidClickButton(int button) {
-        return false;
     }
 }

@@ -1,8 +1,8 @@
-package com.wanderersoftherift.wotr.network.quest;
+package com.wanderersoftherift.wotr.network.reward;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Reward;
-import com.wanderersoftherift.wotr.gui.menu.quest.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

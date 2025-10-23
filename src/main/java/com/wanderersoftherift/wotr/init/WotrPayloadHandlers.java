@@ -20,7 +20,7 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
-import com.wanderersoftherift.wotr.network.guild.ClaimRewardPayload;
+import com.wanderersoftherift.wotr.network.guild.ClaimGuildRewardPayload;
 import com.wanderersoftherift.wotr.network.guild.GuildStatusReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.GuildStatusUpdatePayload;
 import com.wanderersoftherift.wotr.network.guild.UnclaimedGuildRewardsReplicationPayload;
@@ -35,7 +35,8 @@ import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
-import com.wanderersoftherift.wotr.network.quest.RewardsPayload;
+import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
+import com.wanderersoftherift.wotr.network.reward.RewardsPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -111,8 +112,8 @@ public class WotrPayloadHandlers {
         registrar.playToClient(UnclaimedGuildRewardsReplicationPayload.TYPE,
                 UnclaimedGuildRewardsReplicationPayload.STREAM_CODEC,
                 UnclaimedGuildRewardsReplicationPayload::handleOnClient);
-        registrar.playToServer(ClaimRewardPayload.TYPE, ClaimRewardPayload.STREAM_CODEC,
-                ClaimRewardPayload::handleOnServer);
+        registrar.playToServer(ClaimGuildRewardPayload.TYPE, ClaimGuildRewardPayload.STREAM_CODEC,
+                ClaimGuildRewardPayload::handleOnServer);
 
         // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
@@ -133,7 +134,11 @@ public class WotrPayloadHandlers {
                 AbandonQuestPayload::handleOnServer);
         registrar.playToClient(AvailableQuestsPayload.TYPE, AvailableQuestsPayload.STREAM_CODEC,
                 AvailableQuestsPayload::handleOnClient);
+
+        // Rewards
         registrar.playToClient(RewardsPayload.TYPE, RewardsPayload.STREAM_CODEC, RewardsPayload::handleOnClient);
+        registrar.playToServer(ClaimRewardPayload.TYPE, ClaimRewardPayload.STREAM_CODEC,
+                ClaimRewardPayload::handleOnServer);
 
         // Character Menu
         registrar.playToServer(OpenCharacterMenuPayload.TYPE, OpenCharacterMenuPayload.STREAM_CODEC,

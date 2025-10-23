@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -33,7 +33,7 @@ public interface Reward {
      *
      * @param player The player to give the reward to
      */
-    void apply(ServerPlayer player);
+    void apply(Player player);
 
     /**
      * Generates item for this is an item reward

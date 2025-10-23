@@ -11,7 +11,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * This reward provides an amount of currency when the quest is completed
@@ -44,7 +44,7 @@ public record CurrencyReward(Holder<Currency> currency, int amount) implements R
     }
 
     @Override
-    public void apply(ServerPlayer player) {
+    public void apply(Player player) {
         player.getData(WotrAttachments.WALLET).add(currency, amount);
     }
 

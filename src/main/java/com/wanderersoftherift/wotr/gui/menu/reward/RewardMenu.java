@@ -1,9 +1,10 @@
-package com.wanderersoftherift.wotr.gui.menu.quest;
+package com.wanderersoftherift.wotr.gui.menu.reward;
 
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.network.quest.RewardsPayload;
+import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
+import com.wanderersoftherift.wotr.network.reward.RewardsPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -60,7 +61,7 @@ public class RewardMenu extends AbstractContainerMenu {
         addStandardInventorySlots(playerInventory, 8, 80);
     }
 
-    public static void giveRewards(Player player, List<Reward> rewards, Component title) {
+    public static void openRewardMenu(Player player, List<Reward> rewards, Component title) {
         if (player.containerMenu instanceof RewardMenu existingMenu) {
             existingMenu.addRewards(player, rewards);
         } else {
@@ -118,11 +119,26 @@ public class RewardMenu extends AbstractContainerMenu {
         });
     }
 
+    public void claimReward(Player player, Reward reward) {
+        access.execute((level, pos) -> {
+            if (nonItemRewards.remove(reward)) {
+                reward.apply(player);
+            }
+        });
+    }
+
     public boolean isDirty() {
         return dirty;
     }
 
     public void clearDirty() {
         dirty = false;
+    }
+
+    public void clientClaimReward(Reward reward) {
+        if (nonItemRewards.remove(reward)) {
+            PacketDistributor.sendToServer(new ClaimRewardPayload(reward));
+            dirty = true;
+        }
     }
 }

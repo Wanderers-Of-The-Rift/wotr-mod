@@ -23,7 +23,7 @@ public final class GuavaCodecs {
      */
     public static <K, V> Codec<ListMultimap<K, V>> unboundListMultimap(Codec<K> keyCodec, Codec<V> valueCodec) {
         return Codec.unboundedMap(keyCodec, valueCodec.listOf()).xmap(x -> {
-            ListMultimap<K, V> result = ArrayListMultimap.create(x.size(), 1);
+            ListMultimap<K, V> result = ArrayListMultimap.create(x.size(), 3);
             x.forEach(result::putAll);
             return result;
         }, Multimaps::asMap);

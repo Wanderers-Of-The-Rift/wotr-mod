@@ -1,12 +1,12 @@
 package com.wanderersoftherift.wotr.gui.screen.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.gui.menu.quest.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
+import com.wanderersoftherift.wotr.gui.widget.reward.RewardWidget;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,11 +37,12 @@ public class RewardScreen extends EnhancedContainerScreen<RewardMenu> {
         clearWidgets();
         super.init();
         titleLabelX = (BACKGROUND_WIDTH - font.width(title)) / 2;
-        List<AbstractWidget> rewards = menu.getNonItemRewards()
+        List<RewardWidget> rewards = menu.getNonItemRewards()
                 .stream()
                 .map(RewardDisplays::createFor)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .peek(t -> t.setClickListener((reward) -> menu.clientClaimReward(reward)))
                 .toList();
         FlowContainer rewardContainer = new FlowContainer(rewards, 2);
         rewardContainer.setRectangle(162, 16, leftPos + 7, topPos + 28);

@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Reward;
-import com.wanderersoftherift.wotr.gui.menu.quest.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.network.guild.UnclaimedGuildRewardsReplicationPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -61,7 +61,7 @@ public class UnclaimedGuildRewards {
                 .flatMap(provider -> provider.generateReward(params).stream())
                 .toList();
         if (!rewards.isEmpty()) {
-            RewardMenu.giveRewards(player, rewards,
+            RewardMenu.openRewardMenu(player, rewards,
                     Component.translatable(WanderersOfTheRift.translationId("container", "guild_rank_up")));
         }
         replicate();

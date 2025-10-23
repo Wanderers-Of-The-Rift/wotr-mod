@@ -11,7 +11,7 @@ import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
-import com.wanderersoftherift.wotr.gui.menu.quest.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
