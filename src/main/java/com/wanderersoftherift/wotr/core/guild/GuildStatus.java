@@ -22,6 +22,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Attachment for tracking guild status of an entity (generally player)
+ */
 public class GuildStatus {
     private final IAttachmentHolder holder;
 
@@ -40,17 +43,30 @@ public class GuildStatus {
         }
     }
 
+    /**
+     * @param guild
+     * @return The current reputation with the guild
+     */
     public int getReputation(Holder<Guild> guild) {
         return reputation.getOrDefault(guild, 0);
     }
 
+    /**
+     * @param guild  The guild to add reputation for
+     * @param amount Amount of reputation to add
+     */
     public void addReputation(Holder<Guild> guild, int amount) {
         setReputation(guild, reputation.getOrDefault(guild, 0) + amount);
     }
 
+    /**
+     * Sets the reputation the holder has with a guild. This may trigger rank up.
+     * 
+     * @param guild The guild to set reputation for
+     * @param value
+     */
     public void setReputation(Holder<Guild> guild, int value) {
-        int previous = reputation.put(guild, value);
-        if (previous == value) {
+        if (value == reputation.put(guild, value)) {
             return;
         }
         int currentRank = ranks.getOrDefault(guild, 0);
@@ -66,10 +82,20 @@ public class GuildStatus {
         }
     }
 
+    /**
+     * @param guild
+     * @return The holder's current rank in the given guild
+     */
     public int getRank(Holder<Guild> guild) {
         return ranks.getOrDefault(guild, 0);
     }
 
+    /**
+     * Sets the holder's rank in the given guild
+     * 
+     * @param guild
+     * @param rank
+     */
     public void setRank(Holder<Guild> guild, int rank) {
         rank = Math.min(rank, guild.value().ranks().size());
         int oldRank = ranks.put(guild, rank);
@@ -83,14 +109,12 @@ public class GuildStatus {
         }
     }
 
-    public static IAttachmentSerializer<Tag, GuildStatus> getSerializer() {
-        return new AttachmentSerializerFromDataCodec<>(Data.CODEC, GuildStatus::new, GuildStatus::getData);
-    }
-
-    private Data getData() {
-        return new Data(reputation, ranks);
-    }
-
+    /**
+     * Sets all the reputation and ranks (for use by server->client replication)
+     * 
+     * @param reputation
+     * @param ranks
+     */
     public void setAll(Map<Holder<Guild>, Integer> reputation, Map<Holder<Guild>, Integer> ranks) {
         this.reputation.clear();
         this.reputation.putAll(reputation);
@@ -98,18 +122,32 @@ public class GuildStatus {
         this.ranks.putAll(ranks);
     }
 
+    /**
+     * Replicates the guild status to the client
+     */
     public void replicate() {
         if (holder instanceof ServerPlayer serverPlayer) {
             PacketDistributor.sendToPlayer(serverPlayer, new GuildStatusReplicationPayload(reputation, ranks));
         }
     }
 
-    public List<Holder<Guild>> getGuilds() {
+    /**
+     * @return A list of all guilds with any non-zero reputation and/or rank
+     */
+    public List<Holder<Guild>> getGuildsWithStanding() {
         return reputation.keySet()
                 .stream()
                 .sorted(Comparator.comparing(guild -> ranks.getOrDefault(guild, 0))
                         .thenComparing(guild -> reputation.getOrDefault(guild, 0)))
                 .toList();
+    }
+
+    public static IAttachmentSerializer<Tag, GuildStatus> getSerializer() {
+        return new AttachmentSerializerFromDataCodec<>(Data.CODEC, GuildStatus::new, GuildStatus::getData);
+    }
+
+    private Data getData() {
+        return new Data(reputation, ranks);
     }
 
     private record Data(Map<Holder<Guild>, Integer> reputation, Map<Holder<Guild>, Integer> rank) {

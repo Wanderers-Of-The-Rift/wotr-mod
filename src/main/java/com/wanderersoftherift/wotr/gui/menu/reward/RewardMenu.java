@@ -61,6 +61,13 @@ public class RewardMenu extends AbstractContainerMenu {
         addStandardInventorySlots(playerInventory, 8, 80);
     }
 
+    /**
+     * Opens a reward menu, or if a reward menu is already open adds rewards to it.
+     * 
+     * @param player  The player to open the menu
+     * @param rewards A list of rewards to provide
+     * @param title   The title of the menu (if there is an existing open menu the title doesn't change)
+     */
     public static void openRewardMenu(Player player, List<Reward> rewards, Component title) {
         if (player.containerMenu instanceof RewardMenu existingMenu) {
             existingMenu.addRewards(player, rewards);
@@ -88,6 +95,9 @@ public class RewardMenu extends AbstractContainerMenu {
         return true;
     }
 
+    /**
+     * @return A list of unclaimed non-item rewards
+     */
     public List<Reward> getNonItemRewards() {
         return nonItemRewards;
     }
@@ -103,6 +113,13 @@ public class RewardMenu extends AbstractContainerMenu {
         }
     }
 
+    /**
+     * Adds rewards to the reward menu. If they don't fit in the menu they are directly given to the player or dropped
+     * at their location.
+     * 
+     * @param player
+     * @param rewards
+     */
     public void addRewards(Player player, List<Reward> rewards) {
         dirty = true;
         nonItemRewards.addAll(rewards.stream().filter(x -> !x.isItem()).toList());
@@ -119,6 +136,24 @@ public class RewardMenu extends AbstractContainerMenu {
         });
     }
 
+    /**
+     * Client-side request to claim a non-item reward
+     * 
+     * @param reward
+     */
+    public void clientClaimReward(Reward reward) {
+        if (nonItemRewards.remove(reward)) {
+            PacketDistributor.sendToServer(new ClaimRewardPayload(reward));
+            dirty = true;
+        }
+    }
+
+    /**
+     * Server-side handling of claiming a non-item reward
+     * 
+     * @param player
+     * @param reward
+     */
     public void claimReward(Player player, Reward reward) {
         access.execute((level, pos) -> {
             if (nonItemRewards.remove(reward)) {
@@ -127,18 +162,14 @@ public class RewardMenu extends AbstractContainerMenu {
         });
     }
 
+    /**
+     * @return Whether the non-item rewards list has changed
+     */
     public boolean isDirty() {
         return dirty;
     }
 
     public void clearDirty() {
         dirty = false;
-    }
-
-    public void clientClaimReward(Reward reward) {
-        if (nonItemRewards.remove(reward)) {
-            PacketDistributor.sendToServer(new ClaimRewardPayload(reward));
-            dirty = true;
-        }
     }
 }

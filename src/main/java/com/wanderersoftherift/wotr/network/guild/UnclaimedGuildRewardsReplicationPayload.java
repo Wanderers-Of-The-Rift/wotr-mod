@@ -14,6 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Payload for replicating unclaimed guild rewards to a client player
+ * 
+ * @param unclaimedRankRewards
+ */
 public record UnclaimedGuildRewardsReplicationPayload(ListMultimap<Holder<Guild>, Integer> unclaimedRankRewards)
         implements CustomPacketPayload {
     public static final Type<UnclaimedGuildRewardsReplicationPayload> TYPE = new Type<>(

@@ -84,7 +84,7 @@ public class FlowContainer extends AbstractContainerWidget implements ScrollCont
     }
 
     @Override
-    public List<? extends GuiEventListener> children() {
+    public @NotNull List<? extends GuiEventListener> children() {
         return children;
     }
 

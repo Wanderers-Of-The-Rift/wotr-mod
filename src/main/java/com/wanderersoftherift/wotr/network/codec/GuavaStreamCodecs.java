@@ -41,13 +41,11 @@ public final class GuavaStreamCodecs {
             public @NotNull ListMultimap<K, V> decode(@NotNull B buffer) {
                 int size = ByteBufCodecs.readCount(buffer, Integer.MAX_VALUE);
                 ListMultimap<K, V> result = ArrayListMultimap.create(size, 3);
-
                 for (int j = 0; j < size; j++) {
                     K k = keyCodec.decode(buffer);
                     List<V> v = valueCodec.decode(buffer);
                     result.putAll(k, v);
                 }
-
                 return result;
             }
         };

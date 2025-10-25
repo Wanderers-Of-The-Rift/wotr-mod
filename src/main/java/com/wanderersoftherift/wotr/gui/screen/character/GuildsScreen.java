@@ -41,7 +41,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
     protected void init() {
         super.init();
         guildStatus = minecraft.player.getData(WotrAttachments.GUILD_STATUS);
-        List<Holder<Guild>> guilds = guildStatus.getGuilds();
+        List<Holder<Guild>> guilds = guildStatus.getGuildsWithStanding();
         UnclaimedGuildRewards unclaimedGuildRewards = minecraft.player.getData(WotrAttachments.UNCLAIMED_GUILD_REWARDS);
         guildsDisplay = new ScrollContainerWidget<>(300, 30, 200, 140, guilds.stream()
                 .map(guild -> new GuildDisplay(font, guild, guildStatus, unclaimedGuildRewards.hasRewards(guild)))
@@ -57,8 +57,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
-
+    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
     }
 
     private static class GuildDisplay extends AbstractContainerWidget implements ScrollContainerEntry {
@@ -113,18 +112,19 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
                             Guild.getRankTitle(guild, rank)),
                     getX() + EMBLEM_SIZE + 8, getY() + 8 + 2 * font.lineHeight, ChatFormatting.WHITE.getColor(), false);
 
+            Component reputationLabel;
             if (rank < guild.value().ranks().size()) {
-                guiGraphics.drawString(font,
-                        Component.translatable(WanderersOfTheRift.translationId("container", "guild.reputation"),
-                                status.getReputation(guild), guild.value().getNextRank(rank).reputationRequirement()),
-                        getX() + EMBLEM_SIZE + 8, getY() + 8 + 3 * font.lineHeight, ChatFormatting.WHITE.getColor(),
-                        false);
+                reputationLabel = Component.translatable(
+                        WanderersOfTheRift.translationId("container", "guild.reputation"), status.getReputation(guild),
+                        guild.value().getRank(rank + 1).reputationRequirement());
+
             } else {
-                guiGraphics.drawString(font,
-                        Component.translatable(WanderersOfTheRift.translationId("container", "guild.reputation.max")),
-                        getX() + EMBLEM_SIZE + 8, getY() + 8 + 3 * font.lineHeight, ChatFormatting.WHITE.getColor(),
-                        false);
+                reputationLabel = Component
+                        .translatable(WanderersOfTheRift.translationId("container", "guild.reputation.max"));
             }
+
+            guiGraphics.drawString(font, reputationLabel, getX() + EMBLEM_SIZE + 8, getY() + 8 + 3 * font.lineHeight,
+                    ChatFormatting.WHITE.getColor(), false);
 
             if (hasRewards) {
                 claimRewardsButton.setX(getX() + 4);

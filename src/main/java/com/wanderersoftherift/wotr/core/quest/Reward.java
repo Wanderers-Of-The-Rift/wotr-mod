@@ -26,7 +26,9 @@ public interface Reward {
     /**
      * @return Whether this is an item-based reward
      */
-    boolean isItem();
+    default boolean isItem() {
+        return false;
+    }
 
     /**
      * Applies non-item reward elements to the player

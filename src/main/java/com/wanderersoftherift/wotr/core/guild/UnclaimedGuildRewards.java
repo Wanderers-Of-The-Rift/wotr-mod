@@ -27,6 +27,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Attachment for tracking guild rank up rewards that are available to be claimed
+ */
 public class UnclaimedGuildRewards {
     private final IAttachmentHolder holder;
     private final ListMultimap<Holder<Guild>, Integer> unclaimedRewards = ArrayListMultimap.create();
@@ -42,6 +45,14 @@ public class UnclaimedGuildRewards {
         }
     }
 
+    /**
+     * @param guild
+     * @return Whether there are rewards available for the given guild
+     */
+    public boolean hasRewards(Holder<Guild> guild) {
+        return unclaimedRewards.containsKey(guild);
+    }
+
     public void addReward(Holder<Guild> guild, int rank) {
         if (guild.value().getRank(rank).rewards().isEmpty()) {
             return;
@@ -50,6 +61,11 @@ public class UnclaimedGuildRewards {
         replicate();
     }
 
+    /**
+     * If the player has unclaimed rewards for the guild, generates them and opens up a reward menu for claiming them
+     * 
+     * @param guild
+     */
     public void claimRewards(Holder<Guild> guild) {
         List<Integer> ranks = unclaimedRewards.removeAll(guild);
         if (ranks.isEmpty() || !(holder instanceof Player player) || !(player.level() instanceof ServerLevel level)) {
@@ -70,12 +86,20 @@ public class UnclaimedGuildRewards {
         }
     }
 
+    /**
+     * Replicates to the client player
+     */
     public void replicate() {
         if (holder instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new UnclaimedGuildRewardsReplicationPayload(unclaimedRewards));
         }
     }
 
+    /**
+     * Sets all data (intended for replication updates)
+     * 
+     * @param newValues
+     */
     public void setAll(ListMultimap<Holder<Guild>, Integer> newValues) {
         unclaimedRewards.clear();
         unclaimedRewards.putAll(newValues);
@@ -88,10 +112,6 @@ public class UnclaimedGuildRewards {
 
     private Data getData() {
         return new Data(unclaimedRewards);
-    }
-
-    public boolean hasRewards(Holder<Guild> guild) {
-        return unclaimedRewards.containsKey(guild);
     }
 
     private record Data(ListMultimap<Holder<Guild>, Integer> unclaimedRewards) {
