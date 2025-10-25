@@ -19,12 +19,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ReputationRewardWidget extends RewardWidget {
     private static final int ICON_SIZE = 16;
+    private static final int AMOUNT_OFFSET = 8;
 
     private final Holder<Guild> guild;
     private final int amount;
 
     public ReputationRewardWidget(ReputationReward reward) {
-        super(reward, 0, 0, ICON_SIZE, ICON_SIZE, Component.empty());
+        super(reward, 0, 0,
+                Math.max(ICON_SIZE,
+                        AMOUNT_OFFSET + Minecraft.getInstance().font.width(Integer.toString(reward.amount())) - 2),
+                ICON_SIZE, Component.empty());
         this.guild = reward.guild();
         this.amount = reward.amount();
         setTooltip(Tooltip.create(Component.translatable(
@@ -37,9 +41,8 @@ public class ReputationRewardWidget extends RewardWidget {
         guiGraphics.blit(RenderType::guiTextured, guild.value().icon16(), getX(), getY(), 0, 0, ICON_SIZE, ICON_SIZE,
                 ICON_SIZE, ICON_SIZE);
         String amountText = Integer.toString(amount);
-        guiGraphics.drawString(Minecraft.getInstance().font, amountText,
-                getX() + ICON_SIZE + 2 - font.width(amountText), getY() + ICON_SIZE - font.lineHeight + 2, 0xFFFFFFFF,
-                true);
+        guiGraphics.drawString(Minecraft.getInstance().font, amountText, getX() + AMOUNT_OFFSET,
+                getY() + ICON_SIZE - font.lineHeight + 2, 0xFFFFFFFF, true);
     }
 
     @Override
