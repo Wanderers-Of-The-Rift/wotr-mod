@@ -32,5 +32,5 @@ jobs:
           # Request Body as JSON String
           data: '{"issue": "${{ github.event.issue.number }}", "token": "${{ secrets.GH_TOKEN_SECRET }}"}'
           # Custom HTTP Headers
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "Accept": "application/json"}'
           ignoreSsl: true
