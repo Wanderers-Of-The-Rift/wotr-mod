@@ -18,7 +18,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -66,7 +66,7 @@ public record RiftEntrance(ItemStack keyItem, ResourceKey<Level> target, boolean
      * @param currentPosition portal position, could also be player position if portal position cannot be determined
      * @return a new value for {@link #generated}
      */
-    public boolean teleportPlayer(ServerPlayer player, ServerLevel level, Vec3i currentPosition) {
+    public boolean teleportPlayer(Player player, ServerLevel level, Vec3i currentPosition) {
         var riftId = target();
         var plDir = player.getDirection().getOpposite();
 

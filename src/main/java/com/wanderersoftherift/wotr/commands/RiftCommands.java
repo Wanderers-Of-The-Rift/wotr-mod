@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.commands;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -69,6 +71,30 @@ public class RiftCommands extends BaseCommand {
                                                 (param, oldValue, cmdValue) -> param.setTotalMultiplier(cmdValue)),
                                         new Pair<>("multiply",
                                                 (param, oldValue, cmdValue) -> param.multiplyTotal(cmdValue))))));
+        builder.then(Commands.literal("list").executes(this::listRifts));
+        builder.then(Commands.literal("close").then(Commands.literal("all").executes(this::closeRifts)));
+    }
+
+    private int closeRifts(CommandContext<CommandSourceStack> context) {
+        for (ServerLevel level : ImmutableList.copyOf(context.getSource().getLevel().getServer().getAllLevels())) {
+            if (RiftLevelManager.isRift(level)) {
+                RiftLevelManager.forceClose(level);
+            }
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int listRifts(CommandContext<CommandSourceStack> context) {
+        int count = 0;
+        for (ServerLevel level : context.getSource().getLevel().getServer().getAllLevels()) {
+            if (RiftLevelManager.isRift(level)) {
+                count++;
+                context.getSource().sendSystemMessage(Component.literal(level.dimension().location().toString()));
+            }
+        }
+        context.getSource()
+                .sendSystemMessage(Component.translatable(WanderersOfTheRift.translationId("command", "total"), count));
+        return Command.SINGLE_SUCCESS;
     }
 
     private LiteralArgumentBuilder<CommandSourceStack> buildParameterComponent(
