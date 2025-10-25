@@ -33,12 +33,17 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class RunegemTooltipRenderer implements ClientTooltipComponent {
+    private static int currentIndex;
+    private static int maxIndex = -1;
+    private static final int LINE_SPACING = 10;
+
+
     private final RunegemComponent cmp;
 
     // maybe change this? idk
@@ -46,11 +51,6 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     private final ResourceLocation shapeLocation;
     private final Dimension tierDimensions;
     private final Dimension shapeDimensions;
-
-    private static int currentIndex;
-    private static int maxIndex = -1;
-
-    private static final int LINE_SPACING = 10;
 
     public RunegemTooltipRenderer(RunegemComponent cmp) {
         this.cmp = cmp;
