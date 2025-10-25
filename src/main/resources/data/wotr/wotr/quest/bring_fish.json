@@ -13,6 +13,21 @@
         "count": 1,
         "id": "minecraft:gold_ingot"
       }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 10
     }
-  ]
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:cats_cradle",
+        "max": 2
+      }
+    ]
+  }
 }

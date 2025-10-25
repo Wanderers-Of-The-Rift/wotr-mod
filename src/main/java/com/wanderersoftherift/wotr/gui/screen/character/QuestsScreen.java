@@ -88,7 +88,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
                 questInfo.addChild(new GoalStateWidget(questState, i));
             }
             questInfo.addChild(new SpacerEntry(2)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
-            List<AbstractWidget> rewards = questState.getRewards()
+            List<? extends AbstractWidget> rewards = questState.getRewards()
                     .stream()
                     .map(RewardDisplays::createFor)
                     .filter(Optional::isPresent)

@@ -103,11 +103,13 @@ public final class QuestMenuHelper {
 
     private static @NotNull List<QuestState> generateNewQuestList(
             Level level,
-            ServerPlayer serverPlayer,
+            ServerPlayer player,
             HolderSet<Quest> choices,
             int choiceCount) {
-        LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
-        return RandomUtil.randomSubset(choices.stream().toList(), choiceCount, level.getRandom())
+        LootParams params = new LootParams.Builder(player.serverLevel()).create(LootContextParamSets.EMPTY);
+        return RandomUtil.randomSubset(
+                choices.stream().filter(quest -> quest.value().isAvailable(player, player.serverLevel())).toList(),
+                choiceCount, level.getRandom())
                 .stream()
                 .map(quest -> new QuestState(quest, quest.value().generateGoals(params),
                         quest.value().generateRewards(params)))

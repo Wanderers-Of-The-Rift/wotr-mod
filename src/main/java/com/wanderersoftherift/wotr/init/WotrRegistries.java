@@ -15,7 +15,7 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
-import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
@@ -176,7 +176,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_parameter_type"));
         public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
-        public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
+        public static final ResourceKey<Registry<Guild>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
@@ -315,7 +315,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MOB_VARIANTS, RiftMobVariantData.CODEC, RiftMobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GUILDS, Guild.DIRECT_CODEC, Guild.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);

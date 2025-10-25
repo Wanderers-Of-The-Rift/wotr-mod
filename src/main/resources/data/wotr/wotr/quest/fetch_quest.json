@@ -46,6 +46,11 @@
     {
       "type": "wotr:loot_table",
       "loot_table" : "wotr:chests/wooden"
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 10
     }
   ]
 }

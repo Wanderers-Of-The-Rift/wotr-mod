@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -26,14 +26,16 @@ public interface Reward {
     /**
      * @return Whether this is an item-based reward
      */
-    boolean isItem();
+    default boolean isItem() {
+        return false;
+    }
 
     /**
      * Applies non-item reward elements to the player
      *
      * @param player The player to give the reward to
      */
-    void apply(ServerPlayer player);
+    void apply(Player player);
 
     /**
      * Generates item for this is an item reward

@@ -13,6 +13,11 @@
         "count": 8,
         "id": "minecraft:gold_ingot"
       }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 10
     }
   ]
 }

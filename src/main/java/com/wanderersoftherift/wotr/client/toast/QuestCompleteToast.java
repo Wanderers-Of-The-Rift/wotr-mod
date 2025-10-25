@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.client.toast;
 
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.ChatFormatting;
@@ -17,7 +18,8 @@ import java.util.List;
 public class QuestCompleteToast extends SimpleToast {
     private static final int PADDING = 6;
     private static final int ICON_SIZE = 0;
-    private static final Component TITLE = Component.literal("Quest Complete");
+    private static final Component TITLE = Component
+            .translatable(WanderersOfTheRift.translationId("toast", "quest.complete"));
 
     private final Holder<Quest> quest;
 

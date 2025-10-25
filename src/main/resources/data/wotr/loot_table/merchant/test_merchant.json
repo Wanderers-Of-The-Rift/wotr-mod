@@ -178,7 +178,14 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:experience_bottle",
-          "weight": 10,
+          "weight": 50,
+          "conditions": [
+            {
+              "condition": "wotr:guild_rank_check",
+              "guild": "wotr:cats_cradle",
+              "min": 2
+            }
+          ],
           "functions": [
             {
               "function": "wotr:set_price",
