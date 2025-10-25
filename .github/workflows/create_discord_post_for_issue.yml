@@ -33,3 +33,4 @@ jobs:
           data: '{"issue": "${{ github.event.issue.id }}", "token", "${{ secrets.GH_TOKEN_SECRET }}"}'
           # Custom HTTP Headers
           customHeaders: '{"Content-Type": "application/json"}'
+          ignoreSsl: true
