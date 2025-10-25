@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.interop.rei.client;
 
+import com.wanderersoftherift.wotr.gui.screen.RuneAnvilScreen;
 import com.wanderersoftherift.wotr.gui.screen.character.BaseCharacterScreen;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -50,7 +51,8 @@ public class WotrREIPluginClient implements REIClientPlugin {
         registry.registerDecider(new OverlayDecider() {
             @Override
             public <R extends Screen> boolean isHandingScreen(Class<R> screen) {
-                return BaseCharacterScreen.class.isAssignableFrom(screen);
+                return BaseCharacterScreen.class.isAssignableFrom(screen)
+                        || RuneAnvilScreen.class.isAssignableFrom(screen);
             }
 
             @Override
@@ -63,5 +65,6 @@ public class WotrREIPluginClient implements REIClientPlugin {
                 return InteractionResult.FAIL;
             }
         });
+
     }
 }

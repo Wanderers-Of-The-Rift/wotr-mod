@@ -245,6 +245,6 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
         sockets.sort(Comparator.comparingInt(GearSocketTooltipRenderer::getModifierTierCount).reversed());
     }
 
-    public record GearSocketComponent(ItemStack socketed, List<GearSocket> gearSocket) implements TooltipComponent {
+    public record GearSocketComponent(List<GearSocket> gearSocket) implements TooltipComponent {
     }
 }

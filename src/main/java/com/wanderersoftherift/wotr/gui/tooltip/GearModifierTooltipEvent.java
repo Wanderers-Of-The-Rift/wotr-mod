@@ -10,6 +10,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import org.joml.Math;
 
 import java.util.List;
 
@@ -23,8 +24,7 @@ public class GearModifierTooltipEvent {
 
         var modifierProviders = stack.getAllOfType(ModifierProvider.class);
 
-        modifierProviders.forEach(it -> {
-            list.addAll(1, it.tooltips(stack));
-        });
+        modifierProviders.forEach(it -> list.addAll(Math.min(1, list.size()),
+                it.tooltips(event.getMaxWidth() != -1 ? event.getMaxWidth() : event.getScreenWidth())));
     }
 }
