@@ -30,7 +30,7 @@ jobs:
           # Request Method
           method: 'POST'
           # Request Body as JSON String
-          data: '{"issue": "${{ github.event.issue.number }}", "token", "${{ secrets.GH_TOKEN_SECRET }}"}'
+          data: '{"issue": "${{ github.event.issue.number }}", "token": "${{ secrets.GH_TOKEN_SECRET }}"}'
           # Custom HTTP Headers
           customHeaders: '{"Content-Type": "application/json"}'
           ignoreSsl: true
