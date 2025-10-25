@@ -14,7 +14,7 @@ jobs:
           echo "Issue body: ${{ github.event.issue.body }}"
           echo "Opened by: ${{ github.event.issue.user.login }}"
       - name: Connect Tailscale
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v4.0.3
         with:
           # Your Tailscale OAuth Client ID.
           oauth-client-id: ${{ secrets.TS_OAUTH_ID }}# optional
@@ -23,7 +23,7 @@ jobs:
           # Comma separated list of Tags to be applied to nodes. The OAuth client must have permission to apply these tags.
           tags: tag:gh-runner # optional
       - name: HTTP Request Action
-        uses: fjogeleit/http-request-action@v1.15.5
+        uses: fjogeleit/http-request-action@v1.16.5
         with:
           # Request URL
           url: 'http://attack8-pc-2.elf-tyrannosaurus.ts.net:8000/create_for_issue'
