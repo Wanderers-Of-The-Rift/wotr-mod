@@ -55,8 +55,9 @@ hs_err_pid*
 .AppleDouble
 .LSOverride
 
-# Icon must end with two \r
-Icon
+# Icon (for OSX folder icon - it is actually Icon\r, but this should be close enough with being brittle)
+Icon?
+![iI]con[_a-zA-Z0-9]
 
 # Thumbnails
 ._*
