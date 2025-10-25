@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractContainerScreen.class)
 public abstract class MixinAbstractContainerScreen {
 
-    @Shadow protected abstract void addItemSlotMouseAction(ItemSlotMouseAction itemSlotMouseAction);
-
+    @Shadow
+    protected abstract void addItemSlotMouseAction(ItemSlotMouseAction itemSlotMouseAction);
 
     @Inject(method = "init", at = @At("TAIL"))
     private void addAdditionalSlotMouseActions(CallbackInfo ci) {

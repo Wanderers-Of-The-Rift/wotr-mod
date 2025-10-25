@@ -50,21 +50,21 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     private static int currentIndex;
     private static int maxIndex = -1;
 
-
     private static final int LINE_SPACING = 10;
 
     public RunegemTooltipRenderer(RunegemComponent cmp) {
         this.cmp = cmp;
         this.tierLocation = getTierResourceLocation(this.cmp.data.tier());
         this.shapeLocation = getShapeResourceLocation(this.cmp.data.shape());
-        this.tierDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.tierLocation), TextureUtils.getTextureHeightGL(this.tierLocation));
-        this.shapeDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.shapeLocation), TextureUtils.getTextureHeightGL(this.shapeLocation));
+        this.tierDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.tierLocation),
+                TextureUtils.getTextureHeightGL(this.tierLocation));
+        this.shapeDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.shapeLocation),
+                TextureUtils.getTextureHeightGL(this.shapeLocation));
 
         if (maxIndex == -1) {
             maxIndex = this.cmp.data.modifierLists().size();
         }
     }
-
 
     @Override
     public int getHeight(@NotNull Font font) {
@@ -90,9 +90,11 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     @Override
     public int getWidth(@NotNull Font font) {
         int width = 0;
-        width = Math.max(width, font.width(Component.translatable(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"))));
-        width = Math.max(width, font.width(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())));
-
+        width = Math.max(width,
+                font.width(Component.translatable(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"))));
+        width = Math.max(width,
+                font.width(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
+                        WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())));
 
         RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(currentIndex);
         ResourceLocation socketable = getSocketable(group);
@@ -111,11 +113,14 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
             MutableComponent cmp = Component.literal("> ")
                     .append(Component.literal("[T" + tier + "] "))
-                    .append(Component.translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location())).withStyle(mod.value().getStyle()));
-
+                    .append(Component
+                            .translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
+                            .withStyle(mod.value().getStyle()));
 
             if (ModifierRenderHelper.isKeyDown()) {
-                String tierInfo = mod.value().getModifierTier(tieredModifier.tier()).stream()
+                String tierInfo = mod.value()
+                        .getModifierTier(tieredModifier.tier())
+                        .stream()
                         .map(effect -> getTierInfoString(effect, tieredModifier.tier()))
                         .reduce("", (a, b) -> a + " " + b);
 
@@ -129,28 +134,34 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(@NotNull Font font, int x, int y, @NotNull Matrix4f matrix, MultiBufferSource.@NotNull BufferSource bufferSource) {
+    public void renderText(
+            @NotNull Font font,
+            int x,
+            int y,
+            @NotNull Matrix4f matrix,
+            MultiBufferSource.@NotNull BufferSource bufferSource) {
         y += LINE_SPACING; // Leave space for image drawing
 
-        int lightCoords = 15728880;
+        int lightCoords = 15_728_880;
         int bgColor = 0;
 
         if (!ModifierRenderHelper.isKeyDown()) {
             font.drawInBatch(
-                    Component.translatable(WanderersOfTheRift.translationId("tooltip", "show_extra_info"),
-                            WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()).withStyle(ChatFormatting.DARK_GRAY),
-                    x, y, ColorUtil.WHITE, true, matrix, bufferSource,
-                    Font.DisplayMode.NORMAL, bgColor, lightCoords);
-            y+= LINE_SPACING;
+                    Component
+                            .translatable(WanderersOfTheRift.translationId("tooltip", "show_extra_info"),
+                                    WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())
+                            .withStyle(ChatFormatting.DARK_GRAY),
+                    x, y, ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords);
+            y += LINE_SPACING;
         }
 
-        font.drawInBatch(Component.translatable(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers")), x, y, ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords);
-         y += LINE_SPACING;
+        font.drawInBatch(Component.translatable(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers")), x, y,
+                ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords);
+        y += LINE_SPACING;
 
         RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(currentIndex);
         List<TieredModifier> mods = new ArrayList<>(group.modifiers());
         mods.sort(Comparator.comparing(mod -> mod.getName().getString())); // Sort alphabetically
-
 
         for (TieredModifier tieredModifier : mods) {
             Holder<Modifier> mod = tieredModifier.modifier();
@@ -162,8 +173,8 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
             MutableComponent cmp = Component.literal("> ").withStyle(ChatFormatting.DARK_GRAY);
             cmp.append(Component.literal("[T" + tier + "] ").withStyle(mod.value().getStyle()));
-            cmp.append(Component
-                    .translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location())).withStyle(mod.value().getStyle()));
+            cmp.append(Component.translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
+                    .withStyle(mod.value().getStyle()));
 
             if (ModifierRenderHelper.isKeyDown()) {
                 String tierInfo = "";
@@ -177,8 +188,8 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
             }
 
             font.drawInBatch(
-                    cmp,
-                    x, y, ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords
+                    cmp, x, y, ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor,
+                    lightCoords
             );
             y += LINE_SPACING;
         }
@@ -192,9 +203,13 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
         int horizontalSpacing = 5; // spacing between the rendered images
 
-        guiGraphics.blit(RenderType.GUI_TEXTURED, tierLocation, x, y, 0, 0, tierDimensions.width, tierDimensions.height, tierDimensions.width, tierDimensions.height);
-        guiGraphics.blit(RenderType.GUI_TEXTURED, shapeLocation, x + horizontalSpacing + tierDimensions.width, y, 0, 0, shapeDimensions.width, shapeDimensions.height, shapeDimensions.width, shapeDimensions.height);
-        guiGraphics.blit(RenderType.GUI_TEXTURED, socketable, x + (horizontalSpacing * 2) + tierDimensions.width + shapeDimensions.width, y, 0, 0, socketableWidth, socketableHeight, socketableWidth, socketableHeight);
+        guiGraphics.blit(RenderType.GUI_TEXTURED, tierLocation, x, y, 0, 0, tierDimensions.width, tierDimensions.height,
+                tierDimensions.width, tierDimensions.height);
+        guiGraphics.blit(RenderType.GUI_TEXTURED, shapeLocation, x + horizontalSpacing + tierDimensions.width, y, 0, 0,
+                shapeDimensions.width, shapeDimensions.height, shapeDimensions.width, shapeDimensions.height);
+        guiGraphics.blit(RenderType.GUI_TEXTURED, socketable,
+                x + (horizontalSpacing * 2) + tierDimensions.width + shapeDimensions.width, y, 0, 0, socketableWidth,
+                socketableHeight, socketableWidth, socketableHeight);
 
         // y-spacing for all the modifiers
         y += (LINE_SPACING * this.cmp.data.modifierLists().get(currentIndex).modifiers().size()) + 30;
@@ -225,23 +240,19 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
         for (int i = 0; i < maxIndex; i++) {
             int dotX = startX + i * (dotSize + dotSpacing);
 
-
-
-
             if (i == currentIndex) {
                 guiGraphics.fill(dotX - halfDiff + shadowOffset, y - halfDiff + shadowOffset,
-                        dotX + dotSize + halfDiff + shadowOffset, y + dotSize + halfDiff + shadowOffset,
-                        shadowColor);
+                        dotX + dotSize + halfDiff + shadowOffset, y + dotSize + halfDiff + shadowOffset, shadowColor);
 
                 guiGraphics.fill(dotX - 1, y - 1, dotX + dotSize + 1, y + dotSize + 1, selectedColor);
 
             } else {
-                guiGraphics.fill(dotX + shadowOffset, y + shadowOffset, dotX + dotSize + shadowOffset, y + dotSize + shadowOffset, shadowColor);
+                guiGraphics.fill(dotX + shadowOffset, y + shadowOffset, dotX + dotSize + shadowOffset,
+                        y + dotSize + shadowOffset, shadowColor);
                 guiGraphics.fill(dotX, y, dotX + dotSize, y + dotSize, inactiveColor);
             }
         }
     }
-
 
     /* --- Helpers --- */
     private static List<RunegemData.ModifierGroup> getModifierGroups(ItemStack stack) {
@@ -250,21 +261,29 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
         }
 
         RunegemData gemData = stack.get(WotrDataComponentType.RUNEGEM_DATA);
-        return gemData != null ? gemData.modifierLists() : null;
+        if (gemData != null) {
+            return gemData.modifierLists();
+        } else {
+            return null;
+        }
     }
 
     private static String getTierInfoString(ModifierEffect effect, int tier) {
-        return effect instanceof AttributeModifierEffect attr
-                ? attr.getTierInfoString(tier)
-                : " (T " + tier + ")";
+        if (effect instanceof AttributeModifierEffect attr) {
+            return attr.getTierInfoString(tier);
+        } else {
+            return " (T " + tier + ")";
+        }
     }
 
     private static ResourceLocation getSocketable(RunegemData.ModifierGroup modifierGroup) {
         if (modifierGroup.supportedItems().unwrapKey().isPresent()) {
-            return WanderersOfTheRift.id("textures/tooltip/runegem/socketable/" + modifierGroup.supportedItems().unwrapKey().get().location().getPath() + ".png");
+            return WanderersOfTheRift.id("textures/tooltip/runegem/socketable/"
+                    + modifierGroup.supportedItems().unwrapKey().get().location().getPath() + ".png");
         }
 
-        WanderersOfTheRift.LOGGER.warn("Supported Items key missing or invalid when rendering Runegem tooltip, using fallback.");
+        WanderersOfTheRift.LOGGER
+                .warn("Supported Items key missing or invalid when rendering Runegem tooltip, using fallback.");
         return WanderersOfTheRift.id("textures/tooltip/runegem/socketable/socketable.png");
     }
 
@@ -276,13 +295,13 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
         return WanderersOfTheRift.id("textures/tooltip/runegem/shape/text/" + shape.getName() + ".png");
     }
 
-
     public static class RunegemMouseActions implements ItemSlotMouseAction {
         private final ScrollWheelHandler scrollWheelHandler;
 
         public RunegemMouseActions() {
             this.scrollWheelHandler = new ScrollWheelHandler();
         }
+
         @Override
         public boolean matches(Slot slot) {
             return slot.getItem().is(WotrItems.RUNEGEM) && slot.getItem().has(WotrDataComponentType.RUNEGEM_DATA);
@@ -298,9 +317,14 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
             maxIndex = groups.size();
             Vector2i scroll = this.scrollWheelHandler.onMouseScroll(xOffset, yOffset);
-            int direction = scroll.y == 0 ? -scroll.x : scroll.y;
+            int direction;
+            if (scroll.y == 0) {
+                direction = -scroll.x;
+            } else {
+                direction = scroll.y;
+            }
 
-            if(direction == 0) {
+            if (direction == 0) {
                 return false;
             }
 
