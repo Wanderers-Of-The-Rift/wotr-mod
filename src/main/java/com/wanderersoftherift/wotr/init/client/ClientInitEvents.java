@@ -6,10 +6,7 @@ import com.wanderersoftherift.wotr.client.map.MapCell;
 import com.wanderersoftherift.wotr.client.map.MapData;
 import com.wanderersoftherift.wotr.client.map.MapRoom;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
-import com.wanderersoftherift.wotr.client.tooltip.GearImplicitRenderer;
-import com.wanderersoftherift.wotr.client.tooltip.GearSocketTooltipRenderer;
-import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
-import com.wanderersoftherift.wotr.client.tooltip.ImageTooltipRenderer;
+import com.wanderersoftherift.wotr.client.tooltip.*;
 import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionSpecialEffects;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
@@ -70,6 +67,7 @@ public final class ClientInitEvents {
         event.register(ImageComponent.class, ImageTooltipRenderer::new);
         event.register(GearSocketTooltipRenderer.GearSocketComponent.class, GearSocketTooltipRenderer::new);
         event.register(GearImplicitRenderer.GearImplicitsComponent.class, GearImplicitRenderer::new);
+        event.register(RunegemTooltipRenderer.RunegemComponent.class, RunegemTooltipRenderer::new);
     }
 
     @SubscribeEvent
