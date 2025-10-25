@@ -18,7 +18,7 @@ import java.util.List;
 public record GuildRank(ResourceLocation icon, int reputationRequirement, List<RewardProvider> rewards) {
     public static final Codec<GuildRank> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("icon").forGetter(GuildRank::icon),
-            ExtraCodecs.POSITIVE_INT.optionalFieldOf("reputation_requirement", 0)
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("reputation_requirement", 0)
                     .forGetter(GuildRank::reputationRequirement),
             RewardProvider.DIRECT_CODEC.listOf().optionalFieldOf("rewards", List.of()).forGetter(GuildRank::rewards)
     ).apply(instance, GuildRank::new));
