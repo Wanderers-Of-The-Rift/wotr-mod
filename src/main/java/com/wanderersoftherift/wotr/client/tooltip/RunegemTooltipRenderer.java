@@ -43,7 +43,6 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     private static int maxIndex = -1;
     private static final int LINE_SPACING = 10;
 
-
     private final RunegemComponent cmp;
 
     // maybe change this? idk
