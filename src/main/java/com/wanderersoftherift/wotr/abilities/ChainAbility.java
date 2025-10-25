@@ -13,6 +13,8 @@ import com.wanderersoftherift.wotr.util.LongRange;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Collections;
@@ -94,7 +96,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
     }
 
     private int nextIndex(int index) {
-        return this.abilities.get(index).next.orElse(index + 1);
+        return this.abilities.get(index).next.map(it -> it.sample(RandomSource.create())).orElse(index + 1);
     }
 
     private void updateState(AbilityContext context, int index, boolean active) {
@@ -191,7 +193,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
     }
 
     public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate,
-            List<AbilityRequirement> requirements, Optional<Integer> next) {
+            List<AbilityRequirement> requirements, Optional<IntProvider> next) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Ability.CODEC.fieldOf("ability").forGetter(Entry::ability),
                 Codec.INT.optionalFieldOf("ticks_to_reset", 100).forGetter(Entry::ticksToReset),
@@ -199,7 +201,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
                 AbilityRequirement.CODEC.listOf()
                         .optionalFieldOf("requirements", Collections.emptyList())
                         .forGetter(Entry::requirements),
-                Codec.INT.optionalFieldOf("next").forGetter(Entry::next)
+                IntProvider.CODEC.optionalFieldOf("next").forGetter(Entry::next)
         ).apply(instance, Entry::new));
     }
 }
