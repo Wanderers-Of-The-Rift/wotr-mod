@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class WotrTrackedAbilityTriggers {
     public static final DeferredRegister<TrackableTrigger.TriggerType<?>> TRIGGERS = DeferredRegister
-            .create(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS, WanderersOfTheRift.MODID);
+            .create(WotrRegistries.Keys.TRACKABLE_TRIGGERS, WanderersOfTheRift.MODID);
 
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<TickTrigger>> TICK_TRIGGER = TRIGGERS
             .register("tick", () -> TickTrigger.TRIGGER_TYPE);

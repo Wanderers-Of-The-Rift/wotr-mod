@@ -4,7 +4,6 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
 import com.wanderersoftherift.wotr.abilities.sources.AbilitySource;
-import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerPredicate;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -53,13 +52,9 @@ public record AbilityTriggerablePayload(AbilitySource source, Holder<Ability> ab
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
             var flag = holder.getData(WotrAttachments.ONGOING_ABILITIES)
                     .activate(source, ability, activation::addComponents);
-            if (flag) {
-                switch (activation) {
-                    case MainAttackTrigger mainAttackTrigger ->
-                        PacketDistributor.sendToServer(new ClientTriggerTriggerPayload(0));
-                    default -> {
-                    }
-                }
+            var type = activation.type();
+            if (flag && type.clientTriggerInstance() != null) {
+                PacketDistributor.sendToServer(new ClientTriggerTriggerPayload(type));
             }
             return flag;
         }

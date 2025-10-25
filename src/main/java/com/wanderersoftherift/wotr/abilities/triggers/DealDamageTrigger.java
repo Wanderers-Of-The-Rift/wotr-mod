@@ -24,7 +24,7 @@ public record DealDamageTrigger(SerializableDamageSource source, UUID victim, fl
     ).apply(instance, DealDamageTrigger::new));
 
     public static final TriggerType<DealDamageTrigger> TRIGGER_TYPE = new TriggerType<>(
-            DealDamagePredicate.CODEC, null);
+            DealDamagePredicate.CODEC, null, null);
 
     @Override
     public TriggerType<?> type() {

@@ -52,7 +52,7 @@ public class TriggerTracker {
         }
         var result = false;
         var typeHolder = getLevel().registryAccess()
-                .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
+                .lookupOrThrow(WotrRegistries.Keys.TRACKABLE_TRIGGERS)
                 .wrapAsHolder(activation.type());
         var triggerables = new ArrayList<>(this.triggerables.get(typeHolder));
         for (Triggerable tracked : triggerables) {
