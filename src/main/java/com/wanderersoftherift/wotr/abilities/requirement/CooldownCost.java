@@ -10,9 +10,12 @@ import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 
-public record CooldownCost(int ticks) implements AbilityRequirement {
+public record CooldownCost(int ticks, int milliticks, int margin) implements AbilityRequirement {
+
     public static final MapCodec<CooldownCost> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.INT.optionalFieldOf("ticks", 20).forGetter(CooldownCost::ticks)
+            Codec.INT.optionalFieldOf("ticks", 20).forGetter(CooldownCost::ticks),
+            Codec.INT.optionalFieldOf("milliticks", 0).forGetter(CooldownCost::ticks),
+            Codec.INT.optionalFieldOf("margin_milliticks", 1000).forGetter(CooldownCost::margin)
     ).apply(instance, CooldownCost::new));
 
     @Override
@@ -22,14 +25,16 @@ public record CooldownCost(int ticks) implements AbilityRequirement {
 
     @Override
     public boolean check(AbilityContext context) {
-        return !context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source());
+        return !context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source(), margin);
     }
 
     @Override
     public void pay(AbilityContext context) {
-        context.caster()
-                .getData(WotrAttachments.ABILITY_COOLDOWNS)
-                .setCooldown(context.source(), (int) context.getAbilityAttribute(WotrAttributes.COOLDOWN, ticks));
+        var cooldownData = context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS);
+        var cooldown = cooldownData.remainingCooldown(context.source());
+        cooldownData.setCooldown(context.source(),
+                (int) (context.getAbilityAttribute(WotrAttributes.COOLDOWN, ticks + 0.001f * milliticks) * 1000
+                        + cooldown));
     }
 
     @Override

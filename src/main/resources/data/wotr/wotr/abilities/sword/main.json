@@ -8,7 +8,8 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 9
+                    "ticks": 9,
+                    "margin_milliticks": 3000
                 }
             ]
         },
@@ -18,7 +19,8 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 12
+                    "ticks": 12,
+                    "margin_milliticks": 3000
                 }
             ]
         },
@@ -28,7 +30,8 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 16
+                    "ticks": 16,
+                    "margin_milliticks": 3000
                 }
             ]
         }

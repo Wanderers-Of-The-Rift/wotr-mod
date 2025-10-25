@@ -50,10 +50,10 @@ public record AbilityTriggerablePayload(AbilitySource source, Holder<Ability> ab
 
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
-            var flag = holder.getData(WotrAttachments.ONGOING_ABILITIES)
-                    .activate(source, ability, activation::addComponents);
             var type = activation.type();
-            if (flag && type.clientTriggerInstance() != null) {
+            var flag = holder.getData(WotrAttachments.ONGOING_ABILITIES)
+                    .activate(source, ability, activation::addComponents) && type.clientTriggerInstance() != null;
+            if (flag) {
                 PacketDistributor.sendToServer(new ClientTriggerTriggerPayload(type));
             }
             return flag;
