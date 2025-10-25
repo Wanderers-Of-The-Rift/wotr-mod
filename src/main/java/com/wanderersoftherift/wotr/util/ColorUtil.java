@@ -34,6 +34,7 @@ public final class ColorUtil {
     public static final int GRAY = 0xA9A9A9;
     public static final int SILVER_GRAY = 0x778899;
     public static final int PURPLE = 0xB68CFF;
+    public static final int WHITE = 0xFFFFFF;
 
     public static final List<String> RAINBOW = Arrays.asList(
             "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8B00FF"

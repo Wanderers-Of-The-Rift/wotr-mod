@@ -133,7 +133,7 @@ public record AttributeModifierEffect(ResourceLocation id, Holder<Attribute> att
         return String.format(Locale.ROOT, "%.2f", value);
     }
 
-    private String getTierInfoString(int tier) {
+    public String getTierInfoString(int tier) {
         return " (T%d : %s - %s)".formatted(tier, formatRoll(this.minRoll()), formatRoll(this.maxRoll()));
     }
 
