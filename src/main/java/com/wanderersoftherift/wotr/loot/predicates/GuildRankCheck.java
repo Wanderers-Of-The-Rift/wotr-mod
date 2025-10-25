@@ -72,7 +72,7 @@ public record GuildRankCheck(Holder<Guild> guild, int minRank, int maxRank) impl
         }
 
         @Override
-        public LootItemCondition build() {
+        public @NotNull LootItemCondition build() {
             return new GuildRankCheck(guild, min, max);
         }
     }

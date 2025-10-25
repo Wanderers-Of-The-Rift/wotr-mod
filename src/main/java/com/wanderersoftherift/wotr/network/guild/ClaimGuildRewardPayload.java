@@ -11,6 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Payload for claiming guild rank up rewards from the Guilds character screen
+ * 
+ * @param guild
+ */
 public record ClaimGuildRewardPayload(Holder<Guild> guild) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClaimGuildRewardPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "claim_guild_reward"));

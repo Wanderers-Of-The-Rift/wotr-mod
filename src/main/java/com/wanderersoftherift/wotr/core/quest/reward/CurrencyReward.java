@@ -39,11 +39,6 @@ public record CurrencyReward(Holder<Currency> currency, int amount) implements R
     }
 
     @Override
-    public boolean isItem() {
-        return false;
-    }
-
-    @Override
     public void apply(Player player) {
         player.getData(WotrAttachments.WALLET).add(currency, amount);
     }

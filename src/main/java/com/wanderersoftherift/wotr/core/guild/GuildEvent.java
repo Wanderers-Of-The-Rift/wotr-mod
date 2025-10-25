@@ -9,18 +9,24 @@ import net.neoforged.bus.api.Event;
  */
 public abstract class GuildEvent extends Event {
 
-    private Player player;
-    private Holder<Guild> guild;
+    private final Player player;
+    private final Holder<Guild> guild;
 
     public GuildEvent(Player player, Holder<Guild> guild) {
         this.player = player;
         this.guild = guild;
     }
 
+    /**
+     * @return The player involved
+     */
     public Player player() {
         return player;
     }
 
+    /**
+     * @return The guild involved
+     */
     public Holder<Guild> guild() {
         return guild;
     }
@@ -38,10 +44,16 @@ public abstract class GuildEvent extends Event {
             this.newRank = newRank;
         }
 
+        /**
+         * @return The player's previous rank
+         */
         public int oldRank() {
             return oldRank;
         }
 
+        /**
+         * @return The player's new rank
+         */
         public int newRank() {
             return newRank;
         }

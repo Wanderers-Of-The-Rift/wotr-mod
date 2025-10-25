@@ -15,6 +15,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Payload for replicating the GuildStatus attachment to a client player
+ * 
+ * @param reputation
+ * @param ranks
+ */
 public record GuildStatusReplicationPayload(Map<Holder<Guild>, Integer> reputation, Map<Holder<Guild>, Integer> ranks)
         implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<GuildStatusReplicationPayload> TYPE = new CustomPacketPayload.Type<>(

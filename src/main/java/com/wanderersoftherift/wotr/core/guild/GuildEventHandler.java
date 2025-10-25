@@ -4,6 +4,9 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
+/**
+ * Event handler for supporting guild logic
+ */
 @EventBusSubscriber
 public class GuildEventHandler {
 

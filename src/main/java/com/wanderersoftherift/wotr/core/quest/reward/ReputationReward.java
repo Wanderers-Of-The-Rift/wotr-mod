@@ -39,11 +39,6 @@ public record ReputationReward(Holder<Guild> guild, int amount) implements Rewar
     }
 
     @Override
-    public boolean isItem() {
-        return false;
-    }
-
-    @Override
     public void apply(Player player) {
         player.getData(WotrAttachments.GUILD_STATUS).addReputation(guild, amount);
     }

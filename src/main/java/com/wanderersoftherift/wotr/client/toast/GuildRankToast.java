@@ -14,6 +14,9 @@ import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 
+/**
+ * Toast when the player increases their guild rank
+ */
 public class GuildRankToast extends SimpleToast {
     private static final int TEXT_X_PADDING = 4;
     private static final int TEXT_Y_PADDING = 7;

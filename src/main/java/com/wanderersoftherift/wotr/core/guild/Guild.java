@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.core.guild;
 
-import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -15,10 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 /**
- * GuildInfo provides information describing a guild
+ * Guild defines a guild - an organisation that the player can gain reputation with
  * 
- * @param icon32 - 32x32 pixel icon for the guild
- * @param icon16 - 16x16 pixel icon for the guild
+ * @param icon32 32x32 pixel icon for the guild
+ * @param icon16 16x16 pixel icon for the guild
+ * @param ranks  A list of ranks (starting with rank 1) that the player can achieve in the guild.
  */
 public record Guild(ResourceLocation icon32, ResourceLocation icon16, List<GuildRank> ranks) {
 
@@ -33,16 +33,15 @@ public record Guild(ResourceLocation icon32, ResourceLocation icon16, List<Guild
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Guild>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.GUILDS);
 
+    /**
+     * @param index The index of the rank. Will be clamped to the available ranks, including a rank 0.
+     * @return The definition of the rank
+     */
     public GuildRank getRank(int index) {
-        if (index == 0) {
+        if (index <= 0) {
             return new GuildRank(icon16, 0, List.of());
         }
         return ranks.get(Math.min(index, ranks.size()) - 1);
-    }
-
-    public GuildRank getNextRank(int index) {
-        Preconditions.checkArgument(index >= 0, "Rank must be 0 or greater");
-        return ranks.get(Math.min(index, ranks.size() - 1));
     }
 
     public static Component getDisplayName(Holder<Guild> guild) {

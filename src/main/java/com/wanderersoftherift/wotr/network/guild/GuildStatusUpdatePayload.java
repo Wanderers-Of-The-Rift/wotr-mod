@@ -17,6 +17,13 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Payload for updating the status of a single guild for a client
+ * 
+ * @param guild
+ * @param reputation
+ * @param rank
+ */
 public record GuildStatusUpdatePayload(Holder<Guild> guild, int reputation, int rank) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<GuildStatusUpdatePayload> TYPE = new CustomPacketPayload.Type<>(
