@@ -18,6 +18,7 @@ import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrEditTypes;
 import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
+import com.wanderersoftherift.wotr.init.WotrEntitySubPredicates;
 import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
@@ -97,6 +98,7 @@ public class WanderersOfTheRift {
         WotrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         WotrCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         WotrEntities.ENTITIES.register(modEventBus);
+        WotrEntitySubPredicates.ENTITY_SUBPREDICATES.register(modEventBus);
         WotrEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(modEventBus);
         WotrItems.ITEMS.register(modEventBus);
         WotrMenuTypes.MENUS.register(modEventBus);
