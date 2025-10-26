@@ -196,7 +196,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphics guiGraphics) {
-        ResourceLocation socketable = getSocketable(getModifierGroups(this.cmp.runegem).get(currentIndex));
+        ResourceLocation socketable = getSocketable(this.cmp.data.modifierLists().get(currentIndex));
         int socketableHeight = TextureUtils.getTextureHeightGL(socketable); // TODO necessary?
         int socketableWidth = TextureUtils.getTextureWidthGL(socketable);
 
@@ -348,6 +348,6 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
         }
     }
 
-    public record RunegemComponent(ItemStack runegem, RunegemData data) implements TooltipComponent {
+    public record RunegemComponent(RunegemData data) implements TooltipComponent {
     }
 }
