@@ -212,6 +212,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("reward_provider_type"));
         public static final ResourceKey<Registry<DualCodec<? extends Reward>>> REWARD_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("reward_type"));
+
         public static final ResourceKey<Registry<MapCodec<? extends RiftLayout.Factory>>> LAYOUT_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout"));
         public static final ResourceKey<Registry<MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory>>> LAYOUT_LAYER_TYPES = ResourceKey

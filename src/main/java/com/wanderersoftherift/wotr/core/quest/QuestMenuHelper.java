@@ -20,9 +20,11 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +47,7 @@ public final class QuestMenuHelper {
      * @param block
      */
     public static void openQuestMenu(ServerPlayer player, Component title, BlockPos pos, Block block) {
-        openQuestMenu(player, title, ValidatingLevelAccess.create(player.serverLevel(), pos, block),
+        openQuestMenu(player, null, title, ValidatingLevelAccess.create(player.serverLevel(), pos, block),
                 HolderSetUtil.registryToHolderSet(player.level().registryAccess(), WotrRegistries.Keys.QUESTS),
                 DEFAULT_SELECTION_SIZE);
     }
@@ -57,19 +59,20 @@ public final class QuestMenuHelper {
      * @param questGiver
      */
     public static void openQuestMenu(ServerPlayer player, Mob questGiver, HolderSet<Quest> choices, int choiceCount) {
-        openQuestMenu(player, questGiver.getDisplayName(), ValidatingLevelAccess.create(questGiver), choices,
-                choiceCount);
+        openQuestMenu(player, questGiver.getUUID(), questGiver.getDisplayName(),
+                ValidatingLevelAccess.create(questGiver), choices, choiceCount);
     }
 
     private static void openQuestMenu(
             ServerPlayer player,
+            UUID npc,
             Component title,
             ValidatingLevelAccess access,
             HolderSet<Quest> choices,
             int choiceCount) {
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
-            List<QuestState> availableQuests = getAvailableQuests(player.level(), player, choices, choiceCount);
+            List<QuestState> availableQuests = getAvailableQuests(player.level(), player, npc, choices, choiceCount);
 
             player.openMenu(
                     new SimpleMenuProvider(
@@ -91,12 +94,15 @@ public final class QuestMenuHelper {
     private static @NotNull List<QuestState> getAvailableQuests(
             Level level,
             ServerPlayer serverPlayer,
+            @Nullable UUID npc,
             HolderSet<Quest> choices,
             int choiceCount) {
-        List<QuestState> availableQuests = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
-        if (serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS).isEmpty()) {
-            availableQuests = generateNewQuestList(level, serverPlayer, choices, choiceCount);
-            serverPlayer.setData(WotrAttachments.AVAILABLE_QUESTS, availableQuests);
+        AvailableQuests availableQuestData = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
+        List<QuestState> availableQuests = availableQuestData.getQuests(npc);
+
+        if (availableQuests.isEmpty()) {
+            availableQuests = generateNewQuestList(level, serverPlayer, npc, choices, choiceCount);
+            availableQuestData.setQuests(npc, availableQuests);
         }
         return availableQuests;
     }
@@ -104,6 +110,7 @@ public final class QuestMenuHelper {
     private static @NotNull List<QuestState> generateNewQuestList(
             Level level,
             ServerPlayer player,
+            @Nullable UUID npc,
             HolderSet<Quest> choices,
             int choiceCount) {
         LootParams params = new LootParams.Builder(player.serverLevel()).create(LootContextParamSets.EMPTY);
@@ -111,7 +118,7 @@ public final class QuestMenuHelper {
                 choices.stream().filter(quest -> quest.value().isAvailable(player, player.serverLevel())).toList(),
                 choiceCount, level.getRandom())
                 .stream()
-                .map(quest -> new QuestState(quest, quest.value().generateGoals(params),
+                .map(quest -> new QuestState(quest, npc, quest.value().generateGoals(params),
                         quest.value().generateRewards(params)))
                 .collect(Collectors.toList());
     }
