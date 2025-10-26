@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.client.tooltip.RunegemTooltipRenderer;
+import com.wanderersoftherift.wotr.client.tooltip.RunegemMouseActions;
 import net.minecraft.client.gui.ItemSlotMouseAction;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +17,6 @@ public abstract class MixinAbstractContainerScreen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void addAdditionalSlotMouseActions(CallbackInfo ci) {
-        addItemSlotMouseAction(new RunegemTooltipRenderer.RunegemMouseActions());
+        addItemSlotMouseAction(RunegemMouseActions.getInstance());
     }
 }

@@ -44,7 +44,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     private static final int LINE_SPACING = 10;
 
     private final RunegemComponent cmp;
-
+    private final RunegemMouseActions runegemMouseActions;
     // maybe change this? idk
     private final ResourceLocation tierLocation;
     private final ResourceLocation shapeLocation;
@@ -53,15 +53,16 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
     public RunegemTooltipRenderer(RunegemComponent cmp) {
         this.cmp = cmp;
+        this.runegemMouseActions = RunegemMouseActions.getInstance();
         this.tierLocation = getTierResourceLocation(this.cmp.data.tier());
         this.shapeLocation = getShapeResourceLocation(this.cmp.data.shape());
         this.tierDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.tierLocation),
                 TextureUtils.getTextureHeightGL(this.tierLocation));
         this.shapeDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.shapeLocation),
                 TextureUtils.getTextureHeightGL(this.shapeLocation));
-
-        if (maxIndex == -1) {
-            maxIndex = this.cmp.data.modifierLists().size();
+        
+        if (runegemMouseActions.getMaxIndex() == -1) {
+            runegemMouseActions.setMaxIndex(this.cmp.data.modifierLists().size());
         }
     }
 
@@ -95,7 +96,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 font.width(Component.translatable("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info",
                         WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())));
 
-        RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(currentIndex);
+        RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex());
         ResourceLocation socketable = getSocketable(group);
         int socketableWidth = TextureUtils.getTextureWidthGL(socketable);
         int imageSpacing = 10; // total spacing for the rendered images
@@ -158,7 +159,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords);
         y += LINE_SPACING;
 
-        RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(currentIndex);
+        RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex());
         List<TieredModifier> mods = new ArrayList<>(group.modifiers());
         mods.sort(Comparator.comparing(mod -> mod.getName().getString())); // Sort alphabetically
 
@@ -196,7 +197,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphics guiGraphics) {
-        ResourceLocation socketable = getSocketable(this.cmp.data.modifierLists().get(currentIndex));
+        ResourceLocation socketable = getSocketable(this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()));
         int socketableHeight = TextureUtils.getTextureHeightGL(socketable); // TODO necessary?
         int socketableWidth = TextureUtils.getTextureWidthGL(socketable);
 
@@ -211,22 +212,22 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 socketableHeight, socketableWidth, socketableHeight);
 
         // y-spacing for all the modifiers
-        y += (LINE_SPACING * this.cmp.data.modifierLists().get(currentIndex).modifiers().size()) + 30;
+        y += (LINE_SPACING * this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()).modifiers().size()) + 30;
 
         if (!ModifierRenderHelper.isKeyDown()) {
             y += LINE_SPACING;
         }
 
-        if (maxIndex > 1) {
-            drawScrollableDots(x, y, width, guiGraphics);
+        if (runegemMouseActions.getMaxIndex() > 1) {
+            drawScrollableDots(x, y, width, guiGraphics, runegemMouseActions);
         }
     }
 
-    private static void drawScrollableDots(int x, int y, int width, GuiGraphics guiGraphics) {
+    private static void drawScrollableDots(int x, int y, int width, GuiGraphics guiGraphics, RunegemMouseActions runegemMouseActions) {
         int dotSize = 4;
         int dotSpacing = 3;
         int shadowOffset = 1;
-        int totalWidth = maxIndex * dotSize + (maxIndex - 1) * dotSpacing;
+        int totalWidth = runegemMouseActions.getMaxIndex() * dotSize + (runegemMouseActions.getMaxIndex() - 1) * dotSpacing;
         int startX = x + (width - totalWidth) / 2;
         int selectedSize = dotSize + 2;
         int halfDiff = (selectedSize - dotSize) / 2;
@@ -236,10 +237,10 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
         int selectedColor = 0xFFAAAAAA;
         int inactiveColor = 0xFF555555;
 
-        for (int i = 0; i < maxIndex; i++) {
+        for (int i = 0; i < runegemMouseActions.getMaxIndex(); i++) {
             int dotX = startX + i * (dotSize + dotSpacing);
 
-            if (i == currentIndex) {
+            if (i == runegemMouseActions.getCurrentIndex()) {
                 guiGraphics.fill(dotX - halfDiff + shadowOffset, y - halfDiff + shadowOffset,
                         dotX + dotSize + halfDiff + shadowOffset, y + dotSize + halfDiff + shadowOffset, shadowColor);
 
@@ -254,18 +255,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     }
 
     /* --- Helpers --- */
-    private static List<RunegemData.ModifierGroup> getModifierGroups(ItemStack stack) {
-        if (stack == null || !stack.has(WotrDataComponentType.RUNEGEM_DATA)) {
-            return null;
-        }
 
-        RunegemData gemData = stack.get(WotrDataComponentType.RUNEGEM_DATA);
-        if (gemData != null) {
-            return gemData.modifierLists();
-        } else {
-            return null;
-        }
-    }
 
     private static String getTierInfoString(ModifierEffect effect, int tier) {
         if (effect instanceof AttributeModifierEffect attr) {
@@ -292,60 +282,6 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
     private static ResourceLocation getShapeResourceLocation(RunegemShape shape) {
         return WanderersOfTheRift.id("textures/tooltip/runegem/shape/text/" + shape.getName() + ".png");
-    }
-
-    public static class RunegemMouseActions implements ItemSlotMouseAction {
-        private final ScrollWheelHandler scrollWheelHandler;
-
-        public RunegemMouseActions() {
-            this.scrollWheelHandler = new ScrollWheelHandler();
-        }
-
-        @Override
-        public boolean matches(Slot slot) {
-            return slot.getItem().is(WotrItems.RUNEGEM) && slot.getItem().has(WotrDataComponentType.RUNEGEM_DATA);
-        }
-
-        @Override
-        public boolean onMouseScrolled(double xOffset, double yOffset, int index, @NotNull ItemStack itemStack) {
-            List<RunegemData.ModifierGroup> groups = getModifierGroups(itemStack);
-
-            if (groups == null || groups.isEmpty()) {
-                return false;
-            }
-
-            maxIndex = groups.size();
-            Vector2i scroll = this.scrollWheelHandler.onMouseScroll(xOffset, yOffset);
-            int direction;
-            if (scroll.y == 0) {
-                direction = -scroll.x;
-            } else {
-                direction = scroll.y;
-            }
-
-            if (direction == 0) {
-                return false;
-            }
-
-            int nextIndex = ScrollWheelHandler.getNextScrollWheelSelection(direction, currentIndex, maxIndex);
-            if (nextIndex != currentIndex) {
-                currentIndex = nextIndex;
-                return true;
-            }
-
-            return false;
-        }
-
-        @Override
-        public void onStopHovering(@NotNull Slot slot) {
-            RunegemTooltipRenderer.currentIndex = 0;
-            RunegemTooltipRenderer.maxIndex = -1;
-        }
-
-        @Override
-        public void onSlotClicked(@NotNull Slot slot, @NotNull ClickType clickType) {
-
-        }
     }
 
     public record RunegemComponent(RunegemData data) implements TooltipComponent {
