@@ -1,8 +1,6 @@
 package com.wanderersoftherift.wotr.client.tooltip;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
@@ -14,24 +12,19 @@ import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import com.wanderersoftherift.wotr.util.TextureUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.ItemSlotMouseAction;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
-import org.joml.Vector2i;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -39,10 +32,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RunegemTooltipRenderer implements ClientTooltipComponent {
-    private static int currentIndex;
-    private static int maxIndex = -1;
-    private static final int LINE_SPACING = 10;
-
     private final RunegemComponent cmp;
     private final RunegemMouseActions runegemMouseActions;
     // maybe change this? idk
@@ -69,19 +58,19 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     @Override
     public int getHeight(@NotNull Font font) {
         List<RunegemData.ModifierGroup> modifierGroups = this.cmp.data.modifierLists();
-        int height = LINE_SPACING * 3; // base height for things that always display
+        int height = font.lineHeight * 3; // base height for things that always display
 
         // Spacing for the modifiers themselves
-        height += modifierGroups.get(currentIndex).modifiers().size() * LINE_SPACING;
+        height += modifierGroups.get(runegemMouseActions.getCurrentIndex()).modifiers().size() * font.lineHeight;
 
         // Spacing for the scroll visualization
         if (modifierGroups.size() > 1) {
-            height += LINE_SPACING;
+            height += font.lineHeight;
         }
 
         // Spacing for the info tooltip
         if (!ModifierRenderHelper.isKeyDown()) {
-            height += LINE_SPACING;
+            height += font.lineHeight;
         }
 
         return height;
@@ -112,10 +101,11 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
             }
 
             MutableComponent cmp = Component.literal("> ")
-                    .append(Component.literal("[T" + tier + "] "))
+                    .append(Component.literal("["))
+                    .append(Component.translatable(WanderersOfTheRift.translationId("tooltip", "tier"), tier))
+                    .append(Component.literal("]"))
                     .append(Component
-                            .translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
-                            .withStyle(mod.value().getStyle()));
+                            .translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location())));
 
             if (ModifierRenderHelper.isKeyDown()) {
                 String tierInfo = mod.value()
@@ -140,7 +130,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
             int y,
             @NotNull Matrix4f matrix,
             MultiBufferSource.@NotNull BufferSource bufferSource) {
-        y += LINE_SPACING; // Leave space for image drawing
+        y += font.lineHeight; // Leave space for image drawing
 
         int lightCoords = 15_728_880;
         int bgColor = 0;
@@ -152,12 +142,12 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                                     WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString())
                             .withStyle(ChatFormatting.DARK_GRAY),
                     x, y, ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords);
-            y += LINE_SPACING;
+            y += font.lineHeight;
         }
 
         font.drawInBatch(Component.translatable(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers")), x, y,
                 ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor, lightCoords);
-        y += LINE_SPACING;
+        y += font.lineHeight;
 
         RunegemData.ModifierGroup group = this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex());
         List<TieredModifier> mods = new ArrayList<>(group.modifiers());
@@ -165,16 +155,19 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
         for (TieredModifier tieredModifier : mods) {
             Holder<Modifier> mod = tieredModifier.modifier();
+            Style modStyle = mod.value().getStyle();
             int tier = tieredModifier.tier();
 
             if (mod.getKey() == null) {
                 continue;
             }
 
-            MutableComponent cmp = Component.literal("> ").withStyle(ChatFormatting.DARK_GRAY);
-            cmp.append(Component.literal("[T" + tier + "] ").withStyle(mod.value().getStyle()));
-            cmp.append(Component.translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
-                    .withStyle(mod.value().getStyle()));
+            MutableComponent cmp = Component.literal("> ").withStyle(ChatFormatting.DARK_GRAY)
+                    .append(Component.literal("[").withStyle(modStyle))
+                    .append(Component.translatable(WanderersOfTheRift.translationId("tooltip", "tier"), tier).withStyle(modStyle))
+                    .append(Component.literal("] ").withStyle(modStyle))
+                    .append(Component.translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
+                            .withStyle(modStyle));
 
             if (ModifierRenderHelper.isKeyDown()) {
                 String tierInfo = "";
@@ -191,7 +184,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                     cmp, x, y, ColorUtil.WHITE, true, matrix, bufferSource, Font.DisplayMode.NORMAL, bgColor,
                     lightCoords
             );
-            y += LINE_SPACING;
+            y += font.lineHeight;
         }
     }
 
@@ -212,10 +205,10 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 socketableHeight, socketableWidth, socketableHeight);
 
         // y-spacing for all the modifiers
-        y += (LINE_SPACING * this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()).modifiers().size()) + 30;
+        y += (font.lineHeight * this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()).modifiers().size()) + 30;
 
         if (!ModifierRenderHelper.isKeyDown()) {
-            y += LINE_SPACING;
+            y += font.lineHeight;
         }
 
         if (runegemMouseActions.getMaxIndex() > 1) {
