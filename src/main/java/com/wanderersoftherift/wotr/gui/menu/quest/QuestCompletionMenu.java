@@ -140,7 +140,7 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
         }
 
         // Remove the quest so the player cannot take it again, if it is still available
-        player.getData(WotrAttachments.AVAILABLE_QUESTS).removeIf(x -> x.getId().equals(questState.getId()));
+        player.getData(WotrAttachments.AVAILABLE_QUESTS).removeQuest(questState);
         player.closeContainer();
 
         List<Reward> rewards = questState.getRewards();
