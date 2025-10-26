@@ -6,7 +6,7 @@ on:
 
 jobs:
   send_api_request:
-    if: ${{ !github.event.issue.pull_request }}
+    if: ${{ !github.event.issue.pull_request && github.event.comment.user.login != 'wotr-bot'}}
     runs-on: ubuntu-latest
     steps:
       - name: Connect Tailscale
