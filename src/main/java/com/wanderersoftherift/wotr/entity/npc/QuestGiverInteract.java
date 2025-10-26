@@ -22,7 +22,7 @@ import java.util.Optional;
 public record QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCount) implements MobInteraction {
     public static final MapCodec<QuestGiverInteract> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Quest.SET_CODEC.optionalFieldOf("quests").forGetter(QuestGiverInteract::quests),
-            Codec.INT.optionalFieldOf("choice_count", 5).forGetter(QuestGiverInteract::choiceCount)
+            Codec.INT.optionalFieldOf("choice_count", 3).forGetter(QuestGiverInteract::choiceCount)
     ).apply(instance, QuestGiverInteract::new));
 
     @Override

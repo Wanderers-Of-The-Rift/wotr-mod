@@ -20,7 +20,7 @@ import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
@@ -129,12 +129,9 @@ public class WotrAttachments {
             "available_trades",
             () -> AttachmentType.builder(AvailableTrades::new).serialize(AvailableTrades.CODEC).copyOnDeath().build()
     );
-    public static final Supplier<AttachmentType<List<QuestState>>> AVAILABLE_QUESTS = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<AvailableQuests>> AVAILABLE_QUESTS = ATTACHMENT_TYPES.register(
             "available_quests",
-            () -> AttachmentType.<List<QuestState>>builder(() -> new ArrayList<>())
-                    .serialize(MutableListCodec.of(QuestState.CODEC))
-                    .copyOnDeath()
-                    .build());
+            () -> AttachmentType.builder(AvailableQuests::new).serialize(AvailableQuests.CODEC).copyOnDeath().build());
     public static final Supplier<AttachmentType<ActiveQuests>> ACTIVE_QUESTS = ATTACHMENT_TYPES.register(
             "active_quests",
             () -> AttachmentType.builder(ActiveQuests::new)
