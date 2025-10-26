@@ -22,7 +22,6 @@ public class RunegemMouseActions implements ItemSlotMouseAction {
     private int currentIndex = 0;
     private int maxIndex = -1;
 
-
     private RunegemMouseActions() {
         this.scrollWheelHandler = new ScrollWheelHandler();
     }

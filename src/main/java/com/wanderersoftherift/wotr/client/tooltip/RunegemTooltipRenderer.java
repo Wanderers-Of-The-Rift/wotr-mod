@@ -49,7 +49,7 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 TextureUtils.getTextureHeightGL(this.tierLocation));
         this.shapeDimensions = new Dimension(TextureUtils.getTextureWidthGL(this.shapeLocation),
                 TextureUtils.getTextureHeightGL(this.shapeLocation));
-        
+
         if (runegemMouseActions.getMaxIndex() == -1) {
             runegemMouseActions.setMaxIndex(this.cmp.data.modifierLists().size());
         }
@@ -162,11 +162,14 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 continue;
             }
 
-            MutableComponent cmp = Component.literal("> ").withStyle(ChatFormatting.DARK_GRAY)
+            MutableComponent cmp = Component.literal("> ")
+                    .withStyle(ChatFormatting.DARK_GRAY)
                     .append(Component.literal("[").withStyle(modStyle))
-                    .append(Component.translatable(WanderersOfTheRift.translationId("tooltip", "tier"), tier).withStyle(modStyle))
+                    .append(Component.translatable(WanderersOfTheRift.translationId("tooltip", "tier"), tier)
+                            .withStyle(modStyle))
                     .append(Component.literal("] ").withStyle(modStyle))
-                    .append(Component.translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
+                    .append(Component
+                            .translatable(WanderersOfTheRift.translationId("modifier", mod.getKey().location()))
                             .withStyle(modStyle));
 
             if (ModifierRenderHelper.isKeyDown()) {
@@ -190,7 +193,8 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphics guiGraphics) {
-        ResourceLocation socketable = getSocketable(this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()));
+        ResourceLocation socketable = getSocketable(
+                this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()));
         int socketableHeight = TextureUtils.getTextureHeightGL(socketable); // TODO necessary?
         int socketableWidth = TextureUtils.getTextureWidthGL(socketable);
 
@@ -205,7 +209,8 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
                 socketableHeight, socketableWidth, socketableHeight);
 
         // y-spacing for all the modifiers
-        y += (font.lineHeight * this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()).modifiers().size()) + 30;
+        y += (font.lineHeight
+                * this.cmp.data.modifierLists().get(runegemMouseActions.getCurrentIndex()).modifiers().size()) + 30;
 
         if (!ModifierRenderHelper.isKeyDown()) {
             y += font.lineHeight;
@@ -216,11 +221,17 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
         }
     }
 
-    private static void drawScrollableDots(int x, int y, int width, GuiGraphics guiGraphics, RunegemMouseActions runegemMouseActions) {
+    private static void drawScrollableDots(
+            int x,
+            int y,
+            int width,
+            GuiGraphics guiGraphics,
+            RunegemMouseActions runegemMouseActions) {
         int dotSize = 4;
         int dotSpacing = 3;
         int shadowOffset = 1;
-        int totalWidth = runegemMouseActions.getMaxIndex() * dotSize + (runegemMouseActions.getMaxIndex() - 1) * dotSpacing;
+        int totalWidth = runegemMouseActions.getMaxIndex() * dotSize
+                + (runegemMouseActions.getMaxIndex() - 1) * dotSpacing;
         int startX = x + (width - totalWidth) / 2;
         int selectedSize = dotSize + 2;
         int halfDiff = (selectedSize - dotSize) / 2;
@@ -248,7 +259,6 @@ public class RunegemTooltipRenderer implements ClientTooltipComponent {
     }
 
     /* --- Helpers --- */
-
 
     private static String getTierInfoString(ModifierEffect effect, int tier) {
         if (effect instanceof AttributeModifierEffect attr) {
