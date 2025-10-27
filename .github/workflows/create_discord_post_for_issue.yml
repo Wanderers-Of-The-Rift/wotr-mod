@@ -5,7 +5,7 @@ on:
     types: [opened]
 
 jobs:
-  do_something:
+  create_post:
     runs-on: ubuntu-latest
     steps:
       - name: Log issue details
