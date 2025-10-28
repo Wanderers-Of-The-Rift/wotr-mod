@@ -1,10 +1,14 @@
 package com.wanderersoftherift.wotr.block;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
+import com.wanderersoftherift.wotr.util.EnumEntries;
+import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
@@ -12,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
@@ -23,9 +28,19 @@ import java.util.function.Supplier;
 public class RiftChestEntityBlock extends ChestBlock {
     public static final MapCodec<RiftChestEntityBlock> CODEC = simpleCodec(
             (properties) -> new RiftChestEntityBlock(WotrBlockEntities.RIFT_CHEST::get, properties));
-    protected static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 15.0, 15.0);
 
-    private static final Component CONTAINER_TITLE = Component.translatable("container.wotr.rift_chest");
+    protected static final VoxelShape DEFAULT_SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 15.0, 15.0);
+    protected static final Table<ChestType, Direction, VoxelShape> SHAPES;
+
+    static {
+        VoxelShape left = Block.box(1.0, 0.0, 1.0, 16.0, 15.0, 15.0);
+        VoxelShape right = Block.box(0.0, 0.0, 1.0, 15.0, 15.0, 15.0);
+        SHAPES = HashBasedTable.create();
+        for (Direction dir : EnumEntries.DIRECTIONS) {
+            SHAPES.put(ChestType.LEFT, dir, VoxelShapeUtils.rotateHorizontal(left, dir));
+            SHAPES.put(ChestType.RIGHT, dir, VoxelShapeUtils.rotateHorizontal(right, dir));
+        }
+    }
 
     public RiftChestEntityBlock(Supplier<BlockEntityType<? extends ChestBlockEntity>> riftChest,
             Properties properties) {
@@ -43,7 +58,12 @@ public class RiftChestEntityBlock extends ChestBlock {
             BlockGetter level,
             BlockPos pos,
             CollisionContext context) {
-        return SHAPE;
+
+        VoxelShape result = SHAPES.get(state.getValue(ChestBlock.TYPE), state.getValue(FACING));
+        if (result == null) {
+            return DEFAULT_SHAPE;
+        }
+        return result;
     }
 
     @Override

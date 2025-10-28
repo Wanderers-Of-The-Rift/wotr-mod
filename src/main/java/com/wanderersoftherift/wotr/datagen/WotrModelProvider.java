@@ -35,7 +35,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -94,9 +96,13 @@ public class WotrModelProvider extends ModelProvider {
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
         ResourceLocation baseChestModel = WanderersOfTheRift.id("block/rift_chest");
-        blockModels.blockStateOutput.accept(MultiVariantGenerator
-                .multiVariant(WotrBlocks.RIFT_CHEST.get(),
-                        Variant.variant().with(VariantProperties.MODEL, baseChestModel))
+        ResourceLocation baseLeftChestModel = WanderersOfTheRift.id("block/rift_chest_left");
+        ResourceLocation baseRightChestModel = WanderersOfTheRift.id("block/rift_chest_right");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(WotrBlocks.RIFT_CHEST.get())
+                .with(PropertyDispatch.property(ChestBlock.TYPE)
+                        .select(ChestType.SINGLE, Variant.variant().with(VariantProperties.MODEL, baseChestModel))
+                        .select(ChestType.LEFT, Variant.variant().with(VariantProperties.MODEL, baseLeftChestModel))
+                        .select(ChestType.RIGHT, Variant.variant().with(VariantProperties.MODEL, baseRightChestModel)))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
         ResourceLocation baseRiftSpawnerModel = WanderersOfTheRift.id("block/rift_spawner");
