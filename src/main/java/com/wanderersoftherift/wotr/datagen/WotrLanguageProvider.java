@@ -297,6 +297,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
+        add(WanderersOfTheRift.translationId("tooltip", "tier"), "T%s");
         add(WanderersOfTheRift.translationId("tooltip", "currency_bag"), "Gain %s when consumed");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
