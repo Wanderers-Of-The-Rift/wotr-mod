@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetEntityPredicate;
+import com.wanderersoftherift.wotr.abilities.targeting.shape.SphereShape;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -63,17 +64,25 @@ public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, Target
             Vec3 start,
             Vec3 dirLength,
             HitResult source) {
-        var area = new AABB(start.x - range, start.y - range, start.z - range, start.x + range, start.y + range,
-                start.z + range);
-        var allEntities = TargetingUtil.getEntitiesInArea(context.level(), area,
+
+        HitResult hit = TargetingUtil.rayTrace(start, start.add(dirLength), 0, 0, context.level(),
+                e -> entityPredicate.matches(e, source, context), null);
+        if (hit.getType() != HitResult.Type.MISS) {
+            dirLength = hit.getLocation().subtract(start);
+        }
+        var dirLength2 = dirLength;
+
+        var shape = new SphereShape((float) dirLength2.length(), false);
+        var predicate = shape.getEntityPredicate(start, dirLength, context);
+        var allEntities = TargetingUtil.getEntitiesInArea(context.level(), shape.getAABB(start, dirLength, context),
                 entity -> entityPredicate.matches(entity, source, context));
-        return allEntities.stream().map(entityHitResult -> {
+        return allEntities.stream().filter(entityHit -> predicate.test(entityHit.getEntity())).map(entityHitResult -> {
             var box = entityHitResult.getEntity().getBoundingBox();
-            var boxPoint = findClosestToRay(box, new Ray(start, dirLength));
+            var boxPoint = findClosestToRay(box, new Ray(start, dirLength2));
             return new EntityHitResult(entityHitResult.getEntity(), boxPoint);
         }).filter(entityHitResult -> {
             var entityHitDirection = entityHitResult.getLocation().subtract(start).normalize();
-            var angle = entityHitDirection.dot(dirLength.normalize());
+            var angle = entityHitDirection.dot(dirLength2.normalize());
             return angle > this.cosine;
         });
     }
