@@ -6,6 +6,8 @@ import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
 import com.wanderersoftherift.wotr.network.reward.RewardsPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
+import io.netty.util.collection.IntObjectHashMap;
+import io.netty.util.collection.IntObjectMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -19,7 +21,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,7 +43,8 @@ public class RewardMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final ItemStackHandler itemRewards;
-    private final List<Reward> nonItemRewards = new ArrayList<>();
+    private final IntObjectMap<RewardSlot> nonItemRewards = new IntObjectHashMap<>();
+    private int nextId = 0;
 
     private boolean dirty = true;
 
@@ -79,9 +82,8 @@ public class RewardMenu extends AbstractContainerMenu {
                 return menu;
             }, title));
         }
-        if (player instanceof ServerPlayer serverPlayer) {
-            PacketDistributor.sendToPlayer(serverPlayer,
-                    new RewardsPayload(rewards.stream().filter(x -> !x.isItem()).toList()));
+        if (player instanceof ServerPlayer serverPlayer && player.containerMenu instanceof RewardMenu menu) {
+            PacketDistributor.sendToPlayer(serverPlayer, new RewardsPayload(List.copyOf(menu.nonItemRewards.values())));
         }
     }
 
@@ -98,8 +100,8 @@ public class RewardMenu extends AbstractContainerMenu {
     /**
      * @return A list of unclaimed non-item rewards
      */
-    public List<Reward> getNonItemRewards() {
-        return nonItemRewards;
+    public Collection<RewardSlot> getNonItemRewards() {
+        return nonItemRewards.values();
     }
 
     @Override
@@ -107,8 +109,8 @@ public class RewardMenu extends AbstractContainerMenu {
         super.removed(player);
         if (player instanceof ServerPlayer serverPlayer) {
             ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, itemRewards);
-            for (Reward reward : nonItemRewards) {
-                reward.apply(serverPlayer);
+            for (RewardSlot rewardSlot : nonItemRewards.values()) {
+                rewardSlot.reward().apply(serverPlayer);
             }
         }
     }
@@ -121,9 +123,11 @@ public class RewardMenu extends AbstractContainerMenu {
      * @param rewards
      */
     public void addRewards(Player player, List<Reward> rewards) {
-        dirty = true;
-        nonItemRewards.addAll(rewards.stream().filter(x -> !x.isItem()).toList());
         access.execute((level, pos) -> {
+            rewards.stream()
+                    .filter(x -> !x.isItem())
+                    .map(x -> new RewardSlot(nextId++, x))
+                    .forEach(x -> nonItemRewards.put(x.id(), x));
             if (!(player instanceof ServerPlayer serverPlayer)) {
                 return;
             }
@@ -136,14 +140,21 @@ public class RewardMenu extends AbstractContainerMenu {
         });
     }
 
+    public void setClientRewards(List<RewardSlot> rewards) {
+        nonItemRewards.clear();
+        rewards.forEach(reward -> nonItemRewards.put(reward.id(), reward));
+        dirty = true;
+    }
+
     /**
      * Client-side request to claim a non-item reward
      * 
      * @param reward
      */
-    public void clientClaimReward(Reward reward) {
-        if (nonItemRewards.remove(reward)) {
-            PacketDistributor.sendToServer(new ClaimRewardPayload(reward));
+    public void clientClaimReward(RewardSlot reward) {
+        RewardSlot removed = nonItemRewards.remove(reward.id());
+        if (removed != null) {
+            PacketDistributor.sendToServer(new ClaimRewardPayload(removed.id()));
             dirty = true;
         }
     }
@@ -152,12 +163,13 @@ public class RewardMenu extends AbstractContainerMenu {
      * Server-side handling of claiming a non-item reward
      * 
      * @param player
-     * @param reward
+     * @param rewardId
      */
-    public void claimReward(Player player, Reward reward) {
+    public void claimReward(Player player, int rewardId) {
         access.execute((level, pos) -> {
-            if (nonItemRewards.remove(reward)) {
-                reward.apply(player);
+            RewardSlot rewardSlot = nonItemRewards.remove(rewardId);
+            if (rewardSlot != null) {
+                rewardSlot.reward().apply(player);
             }
         });
     }

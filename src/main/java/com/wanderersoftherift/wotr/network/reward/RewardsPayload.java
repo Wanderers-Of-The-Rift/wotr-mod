@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.network.reward;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardSlot;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,12 +18,12 @@ import java.util.List;
  * 
  * @param rewards
  */
-public record RewardsPayload(List<Reward> rewards) implements CustomPacketPayload {
+public record RewardsPayload(List<RewardSlot> rewards) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<RewardsPayload> TYPE = new CustomPacketPayload.Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "rewards"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RewardsPayload> STREAM_CODEC = StreamCodec.composite(
-            Reward.STREAM_CODEC.apply(ByteBufCodecs.list()), RewardsPayload::rewards, RewardsPayload::new);
+            RewardSlot.STREAM_CODEC.apply(ByteBufCodecs.list()), RewardsPayload::rewards, RewardsPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -32,7 +32,7 @@ public record RewardsPayload(List<Reward> rewards) implements CustomPacketPayloa
 
     public void handleOnClient(final IPayloadContext context) {
         if (context.player().containerMenu instanceof RewardMenu menu) {
-            menu.addRewards(context.player(), rewards);
+            menu.setClientRewards(rewards);
         }
     }
 }
