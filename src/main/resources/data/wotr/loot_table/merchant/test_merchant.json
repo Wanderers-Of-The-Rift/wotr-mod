@@ -181,9 +181,15 @@
           "weight": 50,
           "conditions": [
             {
-              "condition": "wotr:guild_rank_check",
-              "guild": "wotr:cats_cradle",
-              "min": 2
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "subPredicate":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 2
+                }
+              }
             }
           ],
           "functions": [

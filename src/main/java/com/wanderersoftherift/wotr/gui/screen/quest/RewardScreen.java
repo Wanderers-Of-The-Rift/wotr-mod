@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.gui.screen.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardSlot;
 import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
 import com.wanderersoftherift.wotr.gui.widget.reward.RewardWidget;
@@ -12,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,14 +39,15 @@ public class RewardScreen extends EnhancedContainerScreen<RewardMenu> {
         clearWidgets();
         super.init();
         titleLabelX = (BACKGROUND_WIDTH - font.width(title)) / 2;
-        List<RewardWidget> rewards = menu.getNonItemRewards()
-                .stream()
-                .map(RewardDisplays::createFor)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .peek(t -> t.setClickListener((reward) -> menu.clientClaimReward(reward)))
-                .toList();
-        FlowContainer rewardContainer = new FlowContainer(rewards, 2);
+        List<RewardWidget> rewardWidgets = new ArrayList<>();
+        for (RewardSlot rewardSlot : menu.getNonItemRewards()) {
+            Optional<RewardWidget> widget = RewardDisplays.createFor(rewardSlot.reward());
+            if (widget.isPresent()) {
+                widget.get().setClickListener(reward -> menu.clientClaimReward(rewardSlot));
+                rewardWidgets.add(widget.get());
+            }
+        }
+        FlowContainer rewardContainer = new FlowContainer(rewardWidgets, 2);
         rewardContainer.setRectangle(162, 16, leftPos + 7, topPos + 28);
 
         addRenderableWidget(rewardContainer);

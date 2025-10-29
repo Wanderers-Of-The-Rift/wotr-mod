@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.network.reward;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -13,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Payload for claiming non-item rewards from the Rewards menu
  * 
- * @param reward
+ * @param rewardId
  */
-public record ClaimRewardPayload(Reward reward) implements CustomPacketPayload {
+public record ClaimRewardPayload(int rewardId) implements CustomPacketPayload {
     public static final Type<ClaimRewardPayload> TYPE = new Type<>(
             ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "claim_reward"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClaimRewardPayload> STREAM_CODEC = StreamCodec
-            .composite(Reward.STREAM_CODEC, ClaimRewardPayload::reward, ClaimRewardPayload::new);
+            .composite(ByteBufCodecs.INT, ClaimRewardPayload::rewardId, ClaimRewardPayload::new);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -29,7 +29,7 @@ public record ClaimRewardPayload(Reward reward) implements CustomPacketPayload {
 
     public void handleOnServer(final IPayloadContext context) {
         if (context.player().containerMenu instanceof RewardMenu menu && menu.stillValid(context.player())) {
-            menu.claimReward(context.player(), reward);
+            menu.claimReward(context.player(), rewardId);
         }
     }
 }
