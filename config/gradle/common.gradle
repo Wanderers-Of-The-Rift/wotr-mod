@@ -1,0 +1,76 @@
+repositories {
+    mavenLocal()
+    maven { url = "https://api.modrinth.com/maven" }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
+    maven {
+        name = 'Shedaniel'
+        url 'https://maven.shedaniel.me'
+        content {
+            includeGroup("me.shedaniel")
+            includeGroup("me.shedaniel.cloth")
+            includeGroup("dev.architectury")
+        }
+    }
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+spotless {
+    java {
+        toggleOffOn()
+        cleanthat()
+                .version('2.23')
+                .sourceCompatibility('1.21.0')
+                .addMutator('SafeAndConsensual')
+                .addMutator('SafeButNotConsensual')
+                .excludeMutator('UnnecessaryModifier')
+        importOrder('', 'javax|java', '\\#')
+        removeUnusedImports()
+        // apply a specific flavor of google-java-format
+        eclipse('4.35')
+                .configFile("${project.rootDir}/config/spotless/formatter.xml")
+        // fix formatting of type annotations
+        formatAnnotations()
+        // make sure every file has the following copyright header.
+        // optionally, Spotless can set copyright years by digging
+        // through git history (see "license" section below)
+        // licenseHeader '/* (C)$YEAR */'
+    }
+    format 'misc', {
+        // define the files to apply `misc` to
+        target '*.gradle', '.gitattributes', '.gitignore'
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        leadingTabsToSpaces()
+        endWithNewline()
+    }
+}
+
+checkstyle {
+    toolVersion = '10.23.0'
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

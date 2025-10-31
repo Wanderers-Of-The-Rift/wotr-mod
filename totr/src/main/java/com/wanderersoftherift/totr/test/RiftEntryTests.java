@@ -1,7 +1,7 @@
-package com.wanderersoftherift.wotr.test;
+package com.wanderersoftherift.totr.test;
 
 import com.mojang.authlib.GameProfile;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.totr.TestersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
@@ -26,7 +26,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-@GameTestHolder(WanderersOfTheRift.MODID)
+@GameTestHolder(TestersOfTheRift.MOD_ID)
 public class RiftEntryTests {
 
     @PrefixGameTestTemplate(false)
