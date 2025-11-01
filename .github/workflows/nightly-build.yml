@@ -19,6 +19,8 @@ jobs:
     - name: Compute Short Commit Hash
       id: vars
       run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    - name: Data Gen
+      run: ./gradlew runData
     - name: Build with Gradle
       run: ./gradlew build -Pmod_version=${{ steps.vars.outputs.sha_short }}
     - name: Upload Artifact
