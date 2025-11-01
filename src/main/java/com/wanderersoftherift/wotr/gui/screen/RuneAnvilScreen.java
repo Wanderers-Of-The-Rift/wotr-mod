@@ -34,6 +34,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
     private static final int TOOLTIP_BORDER = 8;
+    private static final int TOOLTIP_WIDTH_HINT = 230;
 
     // If the screen width is too small, remove a preview window
     private boolean fullDisplay = false;
@@ -49,9 +50,9 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
     protected void init() {
         super.init();
 
-        fullDisplay = minecraft.screen.width > imageWidth * 3;
+        fullDisplay = minecraft.screen.width > imageWidth + 2 * TOOLTIP_WIDTH_HINT + 4 * TOOLTIP_BORDER;
         if (!fullDisplay) {
-            leftPos = 16;
+            leftPos = Math.max(16, minecraft.screen.width - imageWidth - TOOLTIP_WIDTH_HINT - TOOLTIP_BORDER) / 2;
         }
 
         Button applyButtonWidget = Button
@@ -70,13 +71,14 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
         ItemStack itemstack = this.menu.getGearSlotItem();
         if (!itemstack.isEmpty()) {
             List<ClientTooltipComponent> tooltipLines = ClientHooks.gatherTooltipComponents(itemstack,
-                    getTooltipFromContainerItem(itemstack), itemstack.getTooltipImage(), 0, 280, height, font);
+                    getTooltipFromContainerItem(itemstack), itemstack.getTooltipImage(), 0, TOOLTIP_WIDTH_HINT, height,
+                    font);
             Vector2i size = getTooltipsSize(tooltipLines);
 
-            if (fullDisplay) {
-                renderItemPane(guiGraphics, tooltipLines, this.leftPos - size.x - TOOLTIP_BORDER,
-                        topPos + 2 * TOOLTIP_BORDER, size, partialTick);
-            }
+//            if (false) {
+//                renderItemPane(guiGraphics, tooltipLines, this.leftPos - size.x - TOOLTIP_BORDER,
+//                        topPos + 2 * TOOLTIP_BORDER, size, partialTick);
+//            }
             renderItemPane(guiGraphics, tooltipLines, this.leftPos + imageWidth + TOOLTIP_BORDER,
                     topPos + 2 * TOOLTIP_BORDER, size, partialTick);
         }
