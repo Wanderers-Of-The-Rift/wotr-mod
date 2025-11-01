@@ -8,19 +8,30 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Math;
 
 import java.util.List;
 
 import static net.minecraft.core.Direction.Axis;
 
-public record OffsetTargeting(float x, float y, float z, boolean isXZViewRelative, boolean isYViewRelative)
+/**
+ * Moves {@link HitResult#getLocation()} for existing target
+ *
+ * @param x
+ * @param y
+ * @param z
+ * @param isXZViewRelative whether X and Z are relative to view direction (equivalent to using ^x ^y ^z in commands) or
+ *                         not (equivalent to using ~x ~y ~z in commands) (see
+ *                         <a href="https://minecraft.wiki/w/Coordinates#Commands">command coordinates</a> for more
+ *                         details)
+ * @param isYViewRelative  whether Y is in view space
+ */
+public record OffsetTargeting(Vec3 offset, boolean isXZViewRelative, boolean isYViewRelative)
         implements AbilityTargeting {
 
     public static final MapCodec<OffsetTargeting> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Codec.FLOAT.fieldOf("x").forGetter(OffsetTargeting::x),
-                    Codec.FLOAT.fieldOf("y").forGetter(OffsetTargeting::y),
-                    Codec.FLOAT.fieldOf("z").forGetter(OffsetTargeting::z),
+                    Vec3.CODEC.fieldOf("offset").forGetter(OffsetTargeting::offset),
                     Codec.BOOL.optionalFieldOf("is_xz_view_relative", true)
                             .forGetter(OffsetTargeting::isXZViewRelative),
                     Codec.BOOL.optionalFieldOf("is_y_view_relative", false).forGetter(OffsetTargeting::isYViewRelative)
@@ -46,7 +57,7 @@ public record OffsetTargeting(float x, float y, float z, boolean isXZViewRelativ
             case EntityHitResult entityHit -> new EntityHitResult(entityHit.getEntity(),
                     mapPosition(entityHit.getLocation(), entityHit.getEntity().getViewVector(0),
                             entityHit.getEntity()
-                                    .calculateViewVector(entityHit.getEntity().getXRot(0) + ((float) Math.PI) / 2,
+                                    .calculateViewVector(entityHit.getEntity().getXRot(0) + Math.PI_OVER_2_f,
                                             entityHit.getEntity().getYRot(0))));
             case null, default -> {
                 yield hitResult;
@@ -57,15 +68,15 @@ public record OffsetTargeting(float x, float y, float z, boolean isXZViewRelativ
     private Vec3 mapPosition(Vec3 location, Vec3 z, Vec3 y) {
         var x = z.cross(y);
         if (isXZViewRelative) {
-            location = location.add(x.scale(this.x));
-            location = location.add(z.scale(this.z));
+            location = location.add(x.scale(this.offset.x));
+            location = location.add(z.scale(this.offset.z));
         } else {
-            location = location.add(this.x, 0, this.z);
+            location = location.add(this.offset.x, 0, this.offset.z);
         }
         if (isYViewRelative) {
-            location = location.add(y.scale(this.y));
+            location = location.add(y.scale(this.offset.y));
         } else {
-            location = location.add(0, this.y, 0);
+            location = location.add(0, this.offset.y, 0);
         }
 
         return location;
