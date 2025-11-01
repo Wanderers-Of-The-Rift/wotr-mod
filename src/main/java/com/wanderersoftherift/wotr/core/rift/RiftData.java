@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -126,7 +125,7 @@ public class RiftData extends SavedData {
         this.setDirty();
     }
 
-    public void removePlayer(ServerPlayer player) {
+    public void removePlayer(Player player) {
         this.players.remove(player.getUUID());
         this.bannedPlayers.add(player.getUUID());
         this.setDirty();
