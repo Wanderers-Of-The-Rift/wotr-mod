@@ -14,16 +14,14 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Effect that applies particle effects
  */
-public record ParticleEffect(ParticleOptions particle, int count, float distributionX, float distributionY,
-        float distributionZ, float speed) implements AbilityEffect {
+public record ParticleEffect(ParticleOptions particle, int count, Vec3 distribution, float speed)
+        implements AbilityEffect {
 
     public static final MapCodec<ParticleEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ParticleTypes.CODEC.fieldOf("particle").forGetter(ParticleEffect::particle),
-            Codec.INT.fieldOf("count").forGetter(ParticleEffect::count),
-            Codec.FLOAT.fieldOf("distribution_x").forGetter(ParticleEffect::distributionX),
-            Codec.FLOAT.fieldOf("distribution_y").forGetter(ParticleEffect::distributionY),
-            Codec.FLOAT.fieldOf("distribution_z").forGetter(ParticleEffect::distributionZ),
-            Codec.FLOAT.fieldOf("speed").forGetter(ParticleEffect::speed)
+            Codec.INT.optionalFieldOf("count", 1).forGetter(ParticleEffect::count),
+            Vec3.CODEC.optionalFieldOf("distribution", Vec3.ZERO).forGetter(ParticleEffect::distribution),
+            Codec.FLOAT.optionalFieldOf("speed", 0f).forGetter(ParticleEffect::speed)
     ).apply(instance, ParticleEffect::new));
 
     @Override
@@ -43,7 +41,7 @@ public record ParticleEffect(ParticleOptions particle, int count, float distribu
     }
 
     private void spawnParticles(ServerLevel level, Vec3 position, ParticleOptions particleOptions) {
-        level.sendParticles(particleOptions, false, true, position.x, position.y, position.z, count, distributionX,
-                distributionY, distributionZ, speed);
+        level.sendParticles(particleOptions, false, true, position.x, position.y, position.z, count, distribution.x,
+                distribution.y, distribution.z, speed);
     }
 }

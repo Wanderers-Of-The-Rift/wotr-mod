@@ -12,12 +12,7 @@
                     "type": "wotr:particle",
                     "particle": {
                         "type": "wotr:sweep_attack_right"
-                    },
-                    "count": 1,
-                    "distribution_x": 0,
-                    "distribution_y": 0,
-                    "distribution_z": 0,
-                    "speed": 0
+                    }
                 }
             ]
         },
