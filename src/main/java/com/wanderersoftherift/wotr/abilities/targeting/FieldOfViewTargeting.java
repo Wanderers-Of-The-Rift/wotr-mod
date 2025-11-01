@@ -7,18 +7,25 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetEntityPredicate;
 import com.wanderersoftherift.wotr.abilities.targeting.shape.SphereShape;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * This targeting selects a single target via raycast
+ * This targeting selects targets within range an angle of entity's viewing direction
+ *
+ * @param entityPredicate test whether an entity is allowed to be selected
+ * @param blockPredicate  test whether a block is allowed to be selected (todo block selection currently not supported)
+ * @param range           maximum distance of targets
+ * @param cosine          of angle in which the targets are selected (todo change method of specifying angle)
  */
 public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, TargetBlockPredicate blockPredicate,
         double range, double cosine) implements AbilityTargeting {
@@ -65,8 +72,9 @@ public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, Target
             Vec3 dirLength,
             HitResult source) {
 
-        HitResult hit = TargetingUtil.rayTrace(start, start.add(dirLength), 0, 0, context.level(),
-                e -> entityPredicate.matches(e, source, context), null);
+        HitResult hit = context.level()
+                .clipIncludingBorder(new ClipContext(start, start.add(dirLength), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, CollisionContext.empty()));
         if (hit.getType() != HitResult.Type.MISS) {
             dirLength = hit.getLocation().subtract(start);
         }
