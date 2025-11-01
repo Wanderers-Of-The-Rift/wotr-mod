@@ -15,9 +15,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -30,6 +32,7 @@ public class QuestState {
 
     public static final Codec<QuestState> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("id").forGetter(QuestState::getId),
+            UUIDUtil.CODEC.optionalFieldOf("quest_giver").forGetter(x -> Optional.ofNullable(x.giverId)),
             Quest.CODEC.fieldOf("origin").forGetter(QuestState::getOrigin),
             Goal.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(QuestState::getGoals),
             Reward.DIRECT_CODEC.listOf().fieldOf("rewards").forGetter(QuestState::getRewards),
@@ -45,21 +48,29 @@ public class QuestState {
 
     private IAttachmentHolder holder;
     private final UUID id;
+    private final @Nullable UUID giverId;
     private final Holder<Quest> origin;
     private final List<Goal> goals;
     private final List<Reward> rewards;
     private final int[] goalProgress;
 
-    public QuestState(Holder<Quest> origin, Collection<Goal> goals, List<Reward> rewards) {
+    public QuestState(UUID id, Holder<Quest> origin, List<Goal> goals, List<Reward> rewards, List<Integer> progress) {
+        this(id, Optional.empty(), origin, goals, rewards, progress);
+    }
+
+    public QuestState(Holder<Quest> origin, UUID giver, Collection<Goal> goals, List<Reward> rewards) {
         this.id = UUID.randomUUID();
+        this.giverId = giver;
         this.origin = origin;
         this.goals = ImmutableList.copyOf(goals);
         this.rewards = ImmutableList.copyOf(rewards);
         this.goalProgress = new int[goals.size()];
     }
 
-    public QuestState(UUID id, Holder<Quest> origin, List<Goal> goals, List<Reward> rewards, List<Integer> progress) {
+    public QuestState(UUID id, Optional<UUID> giver, Holder<Quest> origin, List<Goal> goals, List<Reward> rewards,
+            List<Integer> progress) {
         this.id = id;
+        this.giverId = giver.orElse(null);
         this.origin = origin;
         this.goals = goals;
         this.rewards = rewards;
@@ -75,6 +86,10 @@ public class QuestState {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getQuestGiver() {
+        return giverId;
     }
 
     public Holder<Quest> getOrigin() {
@@ -137,7 +152,7 @@ public class QuestState {
 
     /**
      * Sets the progress of the nth goal
-     * 
+     *
      * @param index
      * @param amount
      */
