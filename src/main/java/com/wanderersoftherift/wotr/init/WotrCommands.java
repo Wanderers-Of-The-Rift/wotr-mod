@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.commands.BugReportCommand;
 import com.wanderersoftherift.wotr.commands.CurrencyCommands;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.ExportCommands;
+import com.wanderersoftherift.wotr.commands.GuildCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
 import com.wanderersoftherift.wotr.commands.NPCCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
@@ -34,6 +35,7 @@ public final class WotrCommands {
         new CurrencyCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new StatCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new AbilityResourceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new GuildCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent

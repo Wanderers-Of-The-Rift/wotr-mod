@@ -36,5 +36,5 @@
       }
     }
   ],
-  "icon": "minecraft:textures/mob_effect/speed.png"
+  "icon": "wotr:textures/ability/icon/dash.png"
 }

@@ -11,7 +11,7 @@ import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
-import com.wanderersoftherift.wotr.gui.menu.quest.QuestRewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -46,8 +46,8 @@ public class WotrMenuTypes {
     public static final Supplier<MenuType<QuestCompletionMenu>> QUEST_COMPLETION_MENU = MENUS.register(
             "quest_completion_menu", () -> new MenuType<>(QuestCompletionMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
-    public static final Supplier<MenuType<QuestRewardMenu>> QUEST_REWARD_MENU = MENUS.register(
-            "quest_reward_menu", () -> new MenuType<>(QuestRewardMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final Supplier<MenuType<RewardMenu>> REWARD_MENU = MENUS.register(
+            "reward_menu", () -> new MenuType<>(RewardMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     /// Character Menus
 

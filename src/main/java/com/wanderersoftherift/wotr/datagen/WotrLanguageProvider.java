@@ -170,6 +170,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
+        add(WanderersOfTheRift.translationId("container", "guild_rank_up"), "Guild Rank Up!");
+        add(WanderersOfTheRift.translationId("container", "guilds.claim_reward"), "Claim rank up reward");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
@@ -179,6 +181,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
         add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
         add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
+        add(WanderersOfTheRift.translationId("container", "guild.reputation.max"), "Reputation: MAX");
 
         add(WanderersOfTheRift.translationId("container", "wallet"), "Wallet");
 
@@ -297,7 +300,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
+        add(WanderersOfTheRift.translationId("tooltip", "tier"), "T%s");
         add(WanderersOfTheRift.translationId("tooltip", "currency_bag"), "Gain %s when consumed");
+        add(WanderersOfTheRift.translationId("tooltip", "reward.reputation"), "%s Reputation");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -439,12 +444,14 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
-        add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
-        add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");
-        add(WanderersOfTheRift.translationId("guild", "stick"), "Figures of the Stick");
-        add(WanderersOfTheRift.translationId("guild", "stick.rank.0"), "Twigling");
-        add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
-        add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle"), "Cats Cradle");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.0"), "Damp Kitten");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.1"), "Pawprentis");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.2"), "Purrfessional");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.3"), "Journeynyan");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.4"), "Furrmidable");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.5"), "Meowster");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.6"), "Gwand Meowster");
 
         add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
         add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
@@ -485,6 +492,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("template_pool.wotr.rift.room_stable", "Stable");
         add("template_pool.wotr.rift.room_unstable", "Unstable");
         add("template_pool.wotr.rift.room_chaos", "Chaos");
+
+        add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
+        add(WanderersOfTheRift.translationId("toast", "guild.rank"), "Guild Rank Up");
     }
 
     private void addRunegems() {

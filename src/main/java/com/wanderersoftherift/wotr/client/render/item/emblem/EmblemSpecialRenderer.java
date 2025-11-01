@@ -81,11 +81,11 @@ public record EmblemSpecialRenderer(Holder<Item> baseItem, EmblemProvider emblem
 
     private static RenderType getRenderType(ResourceLocation icon) {
         return RENDER_TYPES.computeIfAbsent(icon,
-                resourceLocation -> RenderType.create("emblem_" + icon.toString(), DefaultVertexFormat.BLOCK,
+                resourceLocation -> RenderType.create("emblem_" + icon.toString(), DefaultVertexFormat.NEW_ENTITY,
                         VertexFormat.Mode.QUADS, 786_432, true, false,
                         RenderType.CompositeState.builder()
                                 .setLightmapState(RenderStateShard.LIGHTMAP)
-                                .setShaderState(RenderStateShard.RENDERTYPE_CUTOUT_SHADER)
+                                .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER)
                                 .setTextureState(
                                         new RenderStateShard.TextureStateShard(icon, TriState.FALSE, false))
                                 .setCullState(RenderStateShard.NO_CULL)

@@ -78,7 +78,7 @@
       "speed": 2
     }
   ],
-  "icon": "minecraft:textures/item/fire_charge.png",
+  "icon": "wotr:textures/ability/icon/fireball.png",
   "requirements": [
     {
       "type": "wotr:food_level",
