@@ -946,7 +946,11 @@
     {
       "processor_type": "wotr:rift_chests",
       "base_loot_table": "wotr:chests/",
-      "rarity": 0.6,
+      "count": {
+        "type": "uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 3
+      },
       "chest_types": [
         {
           "chest_type": "wooden",

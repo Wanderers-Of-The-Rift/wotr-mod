@@ -7,15 +7,18 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 /**
  * temporary storage for blocks before they are placed in the world
@@ -149,6 +152,31 @@ public class RiftProcessedRoom {
         if (chunk != null) {
             chunk.entities.add(nbt);
         }
+    }
+
+    public Stream<BlockEntity> getBlockEntities() {
+        return Arrays.stream(chunkArray)
+                .filter(Objects::nonNull)
+                .map(AtomicReference::get)
+                .filter(Objects::nonNull)
+                .flatMap(x -> x.blockEntities.stream());
+    }
+
+    public void setBlockEntity(BlockEntity entity) {
+        var entityPos = entity.getBlockPos();
+        var chunkX = entityPos.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = entityPos.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = entityPos.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        chunk.setBlockEntity(entity);
+    }
+
+    public void removeBlockEntity(BlockPos pos) {
+        var chunkX = pos.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = pos.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = pos.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        chunk.removeBlockEntity(pos);
     }
 
     public BlockState getBlock(int x, int y, int z) {
