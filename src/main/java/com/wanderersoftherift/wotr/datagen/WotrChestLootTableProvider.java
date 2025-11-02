@@ -72,6 +72,9 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))))
+                                .add(LootItem.lootTableItem(Items.STRING).setWeight(20))
+                                .add(LootItem.lootTableItem(Items.LEATHER).setWeight(20))
+                                .add(LootItem.lootTableItem(Items.SHULKER_SHELL).setWeight(10))
 
                 ));
         consumer.accept(getResourceKey("chests/rift_spawner/default"), LootTable.lootTable()
