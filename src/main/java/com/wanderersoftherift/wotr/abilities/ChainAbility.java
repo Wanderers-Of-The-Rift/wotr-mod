@@ -118,14 +118,14 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
         var subAbilityEntry = abilities.get(index);
         Holder<Ability> childAbility = subAbilityEntry.ability();
-        if (!context.caster()
+        subAbilityEntry.requirements().forEach(it -> it.pay(context));
+        if (context.caster()
                 .getData(WotrAttachments.ONGOING_ABILITIES)
                 .activate(childSource, childAbility, (childContext) -> childContext
                         .set(WotrDataComponentType.AbilityContextData.PARENT_ABILITY, context.instanceId()))) {
-            return true;
+            return !childAbility.value().isActive(context.caster(), childSource);
         }
-        subAbilityEntry.requirements().forEach(it -> it.pay(context));
-        return !childAbility.value().isActive(context.caster(), childSource);
+        return true;
     }
 
     @Override
