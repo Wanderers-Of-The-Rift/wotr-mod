@@ -210,14 +210,14 @@ public class WotrModifierProvider {
                 Style.EMPTY.withColor(ColorUtil.SKY_BLUE))
         );
         registerModifier(context, getResourceKey("knockback"), new Modifier(
-                generateEqualRollSpread(3,
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 7.5F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE)))),
                 Style.EMPTY.withColor(ColorUtil.DARK_ORANGE))
         );
         registerModifier(context, getResourceKey("knockback_heavy"), new Modifier(
-                generateEqualRollSpread(3,
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 15F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("knockback_heavy"),
                                         Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE))),
