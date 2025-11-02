@@ -43,13 +43,13 @@ public record EnchantmentModifierEffect(ResourceKey<Enchantment> enchant, int le
 
     @Override
     public List<ImageComponent> getTooltipComponent(ItemStack stack, float roll, Style style) {
-        return List.of(new ImageComponent(stack,
+        return List.of(new ImageComponent(
                 Component.translatable(enchant().location().toLanguageKey("enchantment")).withColor(0xdddd44), null));
     }
 
     @Override
     public List<ImageComponent> getAdvancedTooltipComponent(ItemStack stack, float roll, Style style, int tier) {
-        return List.of(new ImageComponent(stack,
+        return List.of(new ImageComponent(
                 Component.translatable(enchant().location().toLanguageKey("enchantment")).withColor(0xdddd44), null));
     }
 }
