@@ -825,8 +825,8 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(2, getModifier(lookup, "attack_heavy")),
                                         new TieredModifier(2, getModifier(lookup, "attack_percent")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
+                                        new TieredModifier(2, getModifier(lookup, "knockback")),
+                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("zombie_shaped"),
@@ -836,8 +836,8 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(2, getModifier(lookup, "attack_heavy")),
                                         new TieredModifier(3, getModifier(lookup, "attack_percent")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback")),
-                                        new TieredModifier(1, getModifier(lookup, "knockback_heavy"))
+                                        new TieredModifier(3, getModifier(lookup, "knockback")),
+                                        new TieredModifier(3, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("zombie_polished"),
@@ -847,8 +847,8 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(3, getModifier(lookup, "attack_heavy")),
                                         new TieredModifier(4, getModifier(lookup, "attack_percent")),
-                                        new TieredModifier(2, getModifier(lookup, "knockback")),
-                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
+                                        new TieredModifier(4, getModifier(lookup, "knockback")),
+                                        new TieredModifier(3, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("zombie_framed"),
@@ -858,8 +858,8 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(4, getModifier(lookup, "attack_flat")),
                                         new TieredModifier(4, getModifier(lookup, "attack_heavy")),
                                         new TieredModifier(5, getModifier(lookup, "attack_percent")),
-                                        new TieredModifier(3, getModifier(lookup, "knockback")),
-                                        new TieredModifier(2, getModifier(lookup, "knockback_heavy"))
+                                        new TieredModifier(5, getModifier(lookup, "knockback")),
+                                        new TieredModifier(4, getModifier(lookup, "knockback_heavy"))
                                 ))),
                         RunegemTier.FRAMED));
     }
