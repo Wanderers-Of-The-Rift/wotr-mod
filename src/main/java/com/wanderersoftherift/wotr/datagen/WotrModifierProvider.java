@@ -194,7 +194,7 @@ public class WotrModifierProvider {
                 Style.EMPTY.withColor(ColorUtil.FOREST_GREEN))
         );
         registerModifier(context, getResourceKey("life_leech"), new Modifier(
-                generateEqualRollSpread(6,
+                generateEqualRollSpread(5,
                         List.of(new ToBeTieredModifierEffect(0.01F, 1F,
                                 attributeModifierEffectGetter(WanderersOfTheRift.id("life_leech"),
                                         WotrAttributes.LIFE_LEECH, AttributeModifier.Operation.ADD_VALUE)))),
