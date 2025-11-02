@@ -90,6 +90,15 @@ public class AbilityCooldowns {
      * @param source
      * @return Whether the given slot is on cooldown
      */
+    public boolean isOnCooldown(AbilitySource source) {
+        return isOnCooldown(source, 1000);
+    }
+
+    /**
+     * @param source
+     * @param margin how far in advance is the ability allowed to activate
+     * @return Whether the given slot is on cooldown
+     */
     public boolean isOnCooldown(AbilitySource source, int margin) {
         return remainingCooldown(source) > margin;
     }

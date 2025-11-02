@@ -95,7 +95,7 @@ public class PersistentAbility implements Ability {
     public boolean canActivate(AbilityContext context) {
         if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(context.source())) {
             return canDeactivate;
-        } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source(), 1000)) {
+        } else if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         } else {
             return getActivationRequirements().stream().allMatch(x -> x.check(context));

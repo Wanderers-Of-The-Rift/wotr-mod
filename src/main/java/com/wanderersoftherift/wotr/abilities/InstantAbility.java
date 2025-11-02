@@ -67,7 +67,7 @@ public class InstantAbility implements Ability {
 
     @Override
     public boolean canActivate(AbilityContext context) {
-        if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source(), 1000)) {
+        if (context.caster().getData(WotrAttachments.ABILITY_COOLDOWNS).isOnCooldown(context.source())) {
             return false;
         }
         return getActivationRequirements().stream().allMatch(x -> x.check(context));
