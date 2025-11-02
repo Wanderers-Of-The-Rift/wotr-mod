@@ -1,0 +1,24 @@
+{
+
+    "neoforge:conditions": [
+        {"type": "neoforge:never"}
+    ],
+    "color": -256,
+    "maximum": "wotr:max_goblin",
+    "modificators": {
+        "recharge": {
+            "amount": "wotr:goblin_regen_rate",
+            "action": {
+                "type": "wotr:loot"
+            },
+            "is_positive": true
+        },
+        "drain": {
+            "amount": "wotr:goblin_degen_rate",
+            "action": {
+                "type": "wotr:tick"
+            },
+            "is_positive": false
+        }
+    }
+}

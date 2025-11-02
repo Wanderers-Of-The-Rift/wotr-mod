@@ -1,0 +1,211 @@
+{
+  "type": "minecraft:barter",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 10.0,
+        "min": 5
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ],
+          "name": "minecraft:iron_ingot",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/geode_runegem",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/ability",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 10.0,
+                  "min": 5.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_armor",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_weapons",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_tools",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "minecraft:healing"
+            },
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ],
+          "name": "minecraft:potion",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bread",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 50,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "subPredicate":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 2
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -7,25 +7,22 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import com.wanderersoftherift.wotr.gui.menu.slot.UUIDDataSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.item.handler.QuestItemStackHandler;
-import com.wanderersoftherift.wotr.network.quest.QuestRewardsPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -148,16 +145,9 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
 
         List<Reward> rewards = questState.getRewards();
         access.execute((level, blockPos) -> {
-            player.openMenu(new SimpleMenuProvider(
-                    (containerId, playerInventory, p) -> {
-                        var menu = new QuestRewardMenu(containerId, playerInventory,
-                                ContainerLevelAccess.create(level, p.getOnPos()));
-                        menu.setRewards(p, rewards);
-                        return menu;
-                    }, Component.translatable(WanderersOfTheRift.translationId("container", "quest_complete"))));
+            RewardMenu.openRewardMenu(player, rewards,
+                    Component.translatable(WanderersOfTheRift.translationId("container", "quest_complete")));
         });
-        PacketDistributor.sendToPlayer(player,
-                new QuestRewardsPayload(rewards.stream().filter(x -> !x.isItem()).toList()));
     }
 
     @Override

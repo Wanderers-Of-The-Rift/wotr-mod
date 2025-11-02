@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if ! ./gradlew runData --quiet; then
+    echo "Failed to generate data."
+    exit 1
+fi
+
+echo "✓ Post-checkout update complete."
+

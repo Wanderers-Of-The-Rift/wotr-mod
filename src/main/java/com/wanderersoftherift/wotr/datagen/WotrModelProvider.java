@@ -63,6 +63,12 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
         blockModels.createTrivialCube(WotrBlocks.QUEST_HUB.get());
 
+        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator
+                .multiVariant(WotrBlocks.ANOMALY.get(),
+                        Variant.variant().with(VariantProperties.MODEL, baseAnomalyBaseModel))
+                .with(createFacingDispatchFromUpModel()));
+
         createBlockStatesForTrapBlock(WotrBlocks.MOB_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.PLAYER_TRAP_BLOCK, blockModels);
         createBlockStatesForTrapBlock(WotrBlocks.TRAP_BLOCK, blockModels);
@@ -106,6 +112,9 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(WotrItems.NOIR_HELMET.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/noir_helmet")));
 
+        itemModels.itemModelOutput.accept(WotrItems.COLOR_HELMET.get(),
+                ItemModelUtils.plainModel(WanderersOfTheRift.id("item/color_helmet")));
+
         itemModels.generateFlatItem(WotrItems.RIFT_KEY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.RAW_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(WotrItems.SHAPED_RUNEGEM_GEODE.get(), ModelTemplates.FLAT_ITEM);
@@ -124,7 +133,7 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(WotrItems.ABILITY_HOLDER.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_ability_holder"),
                         new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER, new AbilityEmblemProvider(),
-                                0.5f, 0f, 0f, 0f)));
+                                1f, 0f, 0f, -0.033f)));
 
         itemModels.itemModelOutput.accept(WotrItems.CURRENCY_BAG.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_currency_bag"),

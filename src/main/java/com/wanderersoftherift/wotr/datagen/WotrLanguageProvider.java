@@ -68,11 +68,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.CURRENCY_BAG, "Currency Bag");
 
         addItem(WotrItems.NOIR_HELMET, "Fedora");
+        addItem(WotrItems.COLOR_HELMET, "Clown");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
         addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
+        addEntityType(WotrEntities.RIFT_SKELETON, "Rift Skeleton");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
@@ -168,6 +170,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
+        add(WanderersOfTheRift.translationId("container", "guild_rank_up"), "Guild Rank Up!");
+        add(WanderersOfTheRift.translationId("container", "guilds.claim_reward"), "Claim rank up reward");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
@@ -177,6 +181,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
         add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
         add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
+        add(WanderersOfTheRift.translationId("container", "guild.reputation.max"), "Reputation: MAX");
 
         add(WanderersOfTheRift.translationId("container", "wallet"), "Wallet");
 
@@ -217,8 +222,14 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("command." + WanderersOfTheRift.MODID + ".invalid_objective", "Invalid objective '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_generator_preset", "Invalid generator preset '%s'");
         add("command." + WanderersOfTheRift.MODID + ".invalid_template_pool", "Invalid template pool '%s'");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_rift_parameter", "Invalid rift parameter %s");
+        add("command." + WanderersOfTheRift.MODID + ".invalid_ability_resource", "Invalid ability resource '%s'");
         add("command." + WanderersOfTheRift.MODID + ".rift_key.invalid_item", "You must hold a rift key in your hand!");
         add("command." + WanderersOfTheRift.MODID + ".spawn_piece.generating", "Generating %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.get", "Current value of parameter is %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.set", "Updated value of parameter %s -> %s");
+        add("command." + WanderersOfTheRift.MODID + ".rift_parameter.missing",
+                "This parameter does not exist in this world");
         add(WanderersOfTheRift.translationId("command", "make_ability_item.success"), "Applied ability components");
         add(WanderersOfTheRift.translationId("command", "stats.invalid"), "Invalid primary statistic");
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
@@ -228,6 +239,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
         add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
+        add("ability." + WanderersOfTheRift.MODID + ".firebolts", "Firebolts");
+        add("ability." + WanderersOfTheRift.MODID + ".strength", "Strength");
+        add("ability." + WanderersOfTheRift.MODID + ".weak_strength", "Strength (Exhausted)");
+        add("ability." + WanderersOfTheRift.MODID + ".test_chain_ability", "Strength Chain");
         add("ability." + WanderersOfTheRift.MODID + ".icicles", "Icicles");
         add("ability." + WanderersOfTheRift.MODID + ".mega_boost", "Mega Boost");
         add("ability." + WanderersOfTheRift.MODID + ".dash", "Dash");
@@ -237,9 +252,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".pull", "Pull");
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
+        add("ability." + WanderersOfTheRift.MODID + ".veinminer", "Veinmine");
         add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
         add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
+        add("trigger." + WanderersOfTheRift.MODID + ".break_block", "Break Block");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -272,6 +289,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_tier", "Tier: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_theme", "Theme: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_objective", "Objective: %s");
+        add("tooltip." + WanderersOfTheRift.MODID + ".rift_key_parameter_entry", "%s: %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_value", "Essence: %s %s");
         add("tooltip." + WanderersOfTheRift.MODID + ".essence_header", "Essence:");
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
@@ -282,7 +300,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
+        add(WanderersOfTheRift.translationId("tooltip", "tier"), "T%s");
         add(WanderersOfTheRift.translationId("tooltip", "currency_bag"), "Gain %s when consumed");
+        add(WanderersOfTheRift.translationId("tooltip", "reward.reputation"), "%s Reputation");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -422,15 +442,16 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
         add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
 
-        add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
-        add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
+        add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
-        add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
-        add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");
-        add(WanderersOfTheRift.translationId("guild", "stick"), "Figures of the Stick");
-        add(WanderersOfTheRift.translationId("guild", "stick.rank.0"), "Twigling");
-        add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
-        add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle"), "Cats Cradle");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.0"), "Damp Kitten");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.1"), "Pawprentis");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.2"), "Purrfessional");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.3"), "Journeynyan");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.4"), "Furrmidable");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.5"), "Meowster");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.6"), "Gwand Meowster");
 
         add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
         add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
@@ -471,6 +492,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("template_pool.wotr.rift.room_stable", "Stable");
         add("template_pool.wotr.rift.room_unstable", "Unstable");
         add("template_pool.wotr.rift.room_chaos", "Chaos");
+
+        add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
+        add(WanderersOfTheRift.translationId("toast", "guild.rank"), "Guild Rank Up");
     }
 
     private void addRunegems() {

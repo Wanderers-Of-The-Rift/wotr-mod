@@ -83,6 +83,7 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.BUILDER_GLASSES);
                         output.accept(WotrItems.NOIR_HELMET);
+                        output.accept(WotrItems.COLOR_HELMET);
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
@@ -90,7 +91,7 @@ public class WotrCreativeTabs {
     private static void generateAbilityItems(
             CreativeModeTab.Output output,
             HolderLookup.RegistryLookup<Ability> registry) {
-        registry.listElements().forEach(abilityHolder -> {
+        registry.listElements().filter(x -> x.value().isInCreativeMenu()).forEach(abilityHolder -> {
             ItemStack item = WotrItems.ABILITY_HOLDER.toStack();
             item.set(WotrDataComponentType.ABILITY, new ActivatableAbility(abilityHolder));
             output.accept(item);

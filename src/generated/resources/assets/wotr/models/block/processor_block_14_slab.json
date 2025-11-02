@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "wotr:block/processor_block_14",
-    "side": "wotr:block/processor_block_14",
-    "top": "wotr:block/processor_block_14"
-  }
-}

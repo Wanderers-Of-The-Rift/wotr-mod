@@ -13,7 +13,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.GUILD_MENU_KEY;
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.QUEST_MENU_KEY;
-import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.WALLET_MENU_KEY;
 
 /**
  * Event handling related to the character menu
@@ -35,8 +34,9 @@ public final class CharacterMenuClientEvents {
         if (QUEST_MENU_KEY.consumeClick()) {
             PacketDistributor.sendToServer(new OpenCharacterMenuPayload(WotrCharacterMenuItems.QUESTS));
         }
-        if (WALLET_MENU_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new OpenCharacterMenuPayload(WotrCharacterMenuItems.WALLET));
-        }
+//        if (WALLET_MENU_KEY.consumeClick()) {
+//            PacketDistributor.sendToServer(new OpenCharacterMenuPayload(WotrCharacterMenuItems.WALLET));
+//        }
     }
+
 }

@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.player.SecondaryAttributes;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
@@ -26,9 +28,14 @@ public class WotrDataMaps {
             .builder(WanderersOfTheRift.id("secondary_attributes"), Registries.ATTRIBUTE, SecondaryAttributes.CODEC)
             .build();
 
+    public static final DataMapType<Attribute, Holder<RiftParameter>> DIFFICULTY_SCALING = DataMapType
+            .builder(WanderersOfTheRift.id("difficulty_scaling"), Registries.ATTRIBUTE, RiftParameter.HOLDER_CODEC)
+            .build();
+
     @SubscribeEvent
     public static void registerDataMapTypes(RegisterDataMapTypesEvent event) {
         event.register(ESSENCE_VALUE_DATA);
         event.register(SECONDARY_ATTRIBUTES);
+        event.register(DIFFICULTY_SCALING);
     }
 }

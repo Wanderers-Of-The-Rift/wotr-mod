@@ -5,7 +5,6 @@ import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.OrderHint;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
-import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -23,13 +22,13 @@ public class WotrCharacterMenuItems {
                     ContainerLevelAccess.create(player.level(), player.getOnPos()))
     ));
 
-    public static final Holder<CharacterMenuItem> WALLET = MENU_ITEMS.register("wallet", () -> new CharacterMenuItem(
-            Component.translatable(WanderersOfTheRift.translationId("container", "wallet")),
-            WotrMenuTypes.WALLET_MENU.get(),
-            (id, inventory, player) -> new WalletMenu(id, inventory,
-                    ContainerLevelAccess.create(player.level(), player.getOnPos())),
-            WotrMenuTypes.GUILDS_MENU.get(), OrderHint.AFTER
-    ));
+//    public static final Holder<CharacterMenuItem> WALLET = MENU_ITEMS.register("wallet", () -> new CharacterMenuItem(
+//            Component.translatable(WanderersOfTheRift.translationId("container", "wallet")),
+//            WotrMenuTypes.WALLET_MENU.get(),
+//            (id, inventory, player) -> new WalletMenu(id, inventory,
+//                    ContainerLevelAccess.create(player.level(), player.getOnPos())),
+//            WotrMenuTypes.GUILDS_MENU.get(), OrderHint.AFTER
+//    ));
 
     public static final Holder<CharacterMenuItem> QUESTS = MENU_ITEMS.register("quests", () -> new CharacterMenuItem(
             Component.translatable(WanderersOfTheRift.translationId("container", "quests")),

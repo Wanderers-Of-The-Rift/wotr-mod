@@ -5,12 +5,13 @@ import com.wanderersoftherift.wotr.gui.menu.AbilityBenchMenu;
 import com.wanderersoftherift.wotr.gui.menu.KeyForgeMenu;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
+import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
-import com.wanderersoftherift.wotr.gui.menu.quest.QuestRewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -34,6 +35,9 @@ public class WotrMenuTypes {
     public static final Supplier<MenuType<RiftCompleteMenu>> RIFT_COMPLETE_MENU = MENUS.register("rift_complete_menu",
             () -> new MenuType<>(RiftCompleteMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
+    public static final Supplier<MenuType<TradingMenu>> TRADING_MENU = MENUS.register("trading_menu",
+            () -> new MenuType<>(TradingMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
     /// Quest Menus
 
     public static final Supplier<MenuType<QuestGiverMenu>> QUEST_GIVER_MENU = MENUS.register("quest_giver_menu",
@@ -42,8 +46,8 @@ public class WotrMenuTypes {
     public static final Supplier<MenuType<QuestCompletionMenu>> QUEST_COMPLETION_MENU = MENUS.register(
             "quest_completion_menu", () -> new MenuType<>(QuestCompletionMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
-    public static final Supplier<MenuType<QuestRewardMenu>> QUEST_REWARD_MENU = MENUS.register(
-            "quest_reward_menu", () -> new MenuType<>(QuestRewardMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final Supplier<MenuType<RewardMenu>> REWARD_MENU = MENUS.register(
+            "reward_menu", () -> new MenuType<>(RewardMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     /// Character Menus
 

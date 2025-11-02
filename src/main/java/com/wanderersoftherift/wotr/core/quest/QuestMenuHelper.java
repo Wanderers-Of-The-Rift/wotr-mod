@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
 import com.wanderersoftherift.wotr.util.HolderSetUtil;
+import com.wanderersoftherift.wotr.util.RandomUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -103,22 +103,16 @@ public final class QuestMenuHelper {
 
     private static @NotNull List<QuestState> generateNewQuestList(
             Level level,
-            ServerPlayer serverPlayer,
+            ServerPlayer player,
             HolderSet<Quest> choices,
             int choiceCount) {
-        LootParams params = new LootParams.Builder(serverPlayer.serverLevel()).create(LootContextParamSets.EMPTY);
-        List<Holder<Quest>> quests = choices.stream().collect(Collectors.toList());
-        List<QuestState> generatedQuests = new ArrayList<>();
-        for (int i = 0; i < choiceCount && !quests.isEmpty(); i++) {
-            int index = level.random.nextInt(quests.size());
-            Holder<Quest> quest = quests.get(index);
-            if (index < quests.size() - 1) {
-                quest = quests.set(index, quests.getLast());
-            }
-            quests.removeLast();
-            generatedQuests.add(
-                    new QuestState(quest, quest.value().generateGoals(params), quest.value().generateRewards(params)));
-        }
-        return generatedQuests;
+        LootParams params = new LootParams.Builder(player.serverLevel()).create(LootContextParamSets.EMPTY);
+        return RandomUtil.randomSubset(
+                choices.stream().filter(quest -> quest.value().isAvailable(player, player.serverLevel())).toList(),
+                choiceCount, level.getRandom())
+                .stream()
+                .map(quest -> new QuestState(quest, quest.value().generateGoals(params),
+                        quest.value().generateRewards(params)))
+                .collect(Collectors.toList());
     }
 }

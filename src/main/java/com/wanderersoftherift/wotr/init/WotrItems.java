@@ -104,6 +104,9 @@ public class WotrItems {
     public static final DeferredItem<Item> NOIR_HELMET = ITEMS.register("noir_helmet",
             () -> new WotrArmor(EquipmentSlot.HEAD, "noir_helmet", 165));
 
+    public static final DeferredItem<Item> COLOR_HELMET = ITEMS.register("color_helmet",
+            () -> new WotrArmor(EquipmentSlot.HEAD, "color_helmet", 165));
+
     private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
         return ITEMS.register(idString, registryName -> new Item(new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id(idString)))

@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
 import com.wanderersoftherift.wotr.gui.widget.quest.GoalStateWidget;
+import com.wanderersoftherift.wotr.gui.widget.reward.RewardWidget;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.SpacerEntry;
@@ -16,7 +17,6 @@ import com.wanderersoftherift.wotr.network.quest.CompleteQuestPayload;
 import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -102,7 +102,7 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
             questInfo.addChild(new GoalStateWidget(currentQuest, i));
         }
         questInfo.addChild(new SpacerEntry(6)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
-        List<AbstractWidget> rewards = currentQuest.getRewards()
+        List<RewardWidget> rewards = currentQuest.getRewards()
                 .stream()
                 .map(RewardDisplays::createFor)
                 .filter(Optional::isPresent)

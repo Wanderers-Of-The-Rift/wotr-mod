@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.loot.LootUtil;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A LootItemCondition that checks if the current rift level is between the min (inc) and max (inc) values.
@@ -20,7 +21,7 @@ public record RiftLevelCheck(int minTier, int maxTier) implements LootItemCondit
             ).apply(instance, RiftLevelCheck::new));
 
     @Override
-    public LootItemConditionType getType() {
+    public @NotNull LootItemConditionType getType() {
         return WotrLootItemConditionTypes.RIFT_LEVEL_CHECK.get();
     }
 
