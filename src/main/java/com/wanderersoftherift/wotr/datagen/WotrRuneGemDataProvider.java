@@ -912,12 +912,40 @@ public class WotrRuneGemDataProvider {
                                 ))),
                 RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("thorns_raw"), new RunegemData(
-                getTranslatableName("thorns_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                getTranslatableName("thorns_raw"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
                         socketablesTag, List.of(
                                 new TieredModifier(1, getModifier(lookup, "thorns_chance")),
                                 new TieredModifier(1, getModifier(lookup, "thorns_damage"))
                         ))),
                 RunegemTier.RAW));
+        registerRunegem(context, getRunegemResourceKey("thorns_cut"), new RunegemData(
+                getTranslatableName("thorns_cut"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
+                        socketablesTag, List.of(
+                                new TieredModifier(2, getModifier(lookup, "thorns_chance")),
+                                new TieredModifier(2, getModifier(lookup, "thorns_damage"))
+                        ))),
+                RunegemTier.CUT));
+        registerRunegem(context, getRunegemResourceKey("thorns_shaped"), new RunegemData(
+                getTranslatableName("thorns_shaped"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
+                        socketablesTag, List.of(
+                                new TieredModifier(3, getModifier(lookup, "thorns_chance")),
+                                new TieredModifier(3, getModifier(lookup, "thorns_damage"))
+                        ))),
+                RunegemTier.SHAPED));
+        registerRunegem(context, getRunegemResourceKey("thorns_polished"), new RunegemData(
+                getTranslatableName("thorns_polished"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
+                        socketablesTag, List.of(
+                                new TieredModifier(4, getModifier(lookup, "thorns_chance")),
+                                new TieredModifier(4, getModifier(lookup, "thorns_damage"))
+                        ))),
+                RunegemTier.POLISHED));
+        registerRunegem(context, getRunegemResourceKey("thorns_framed"), new RunegemData(
+                getTranslatableName("thorns_framed"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
+                        socketablesTag, List.of(
+                                new TieredModifier(5, getModifier(lookup, "thorns_chance")),
+                                new TieredModifier(5, getModifier(lookup, "thorns_damage"))
+                        ))),
+                RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("zombie_raw"),
                 new RunegemData(getTranslatableName("zombie_raw"), RunegemShape.DIAMOND,
                         List.of(new RunegemData.ModifierGroup(
