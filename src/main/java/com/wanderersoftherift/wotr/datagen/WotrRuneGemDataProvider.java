@@ -431,6 +431,76 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("heal_power_raw"),
+                new RunegemData(getTranslatableName("heal_power_raw"),
+                RunegemShape.HEART, List.of(
+                        new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "ability_heal_power_percent"))
+                                )),
+                        new RunegemData.ModifierGroup(
+                                offHandTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(1, getModifier(lookup, "ability_heal_power_percent"))
+                                ))),
+                RunegemTier.RAW));
+        registerRunegem(context, getRunegemResourceKey("heal_power_cut"),
+                new RunegemData(getTranslatableName("heal_power_cut"),
+                RunegemShape.HEART, List.of(
+                        new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(2, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "ability_heal_power_percent"))
+                                )),
+                        new RunegemData.ModifierGroup(
+                                offHandTag, List.of(
+                                        new TieredModifier(2, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(2, getModifier(lookup, "ability_heal_power_percent"))
+                                ))),
+                RunegemTier.CUT));
+        registerRunegem(context, getRunegemResourceKey("heal_power_shaped"),
+                new RunegemData(getTranslatableName("heal_power_shaped"),
+                RunegemShape.HEART, List.of(
+                        new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(3, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(3, getModifier(lookup, "ability_heal_power_percent"))
+                                )),
+                new RunegemData.ModifierGroup(
+                        offHandTag, List.of(
+                                        new TieredModifier(3, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(3, getModifier(lookup, "ability_heal_power_percent"))
+                                ))),
+                RunegemTier.SHAPED));
+        registerRunegem(context, getRunegemResourceKey("heal_power_polished"),
+                new RunegemData(getTranslatableName("heal_power_polished"),
+                RunegemShape.HEART, List.of(
+                        new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(4, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(4, getModifier(lookup, "ability_heal_power_percent"))
+                                )),
+                        new RunegemData.ModifierGroup(
+                                offHandTag, List.of(
+                                        new TieredModifier(4, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(4, getModifier(lookup, "ability_heal_power_percent"))
+                                ))),
+                RunegemTier.POLISHED));
+        registerRunegem(context, getRunegemResourceKey("heal_power_framed"),
+                new RunegemData(getTranslatableName("heal_power_framed"),
+                RunegemShape.HEART, List.of(
+                        new RunegemData.ModifierGroup(
+                                mainHandTag, List.of(
+                                        new TieredModifier(5, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(5, getModifier(lookup, "ability_heal_power_percent"))
+                                )),
+                        new RunegemData.ModifierGroup(
+                                offHandTag, List.of(
+                                        new TieredModifier(5, getModifier(lookup, "ability_heal_power_flat")),
+                                        new TieredModifier(5, getModifier(lookup, "ability_heal_power_percent"))
+                                ))),
+                RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("health_raw"), new RunegemData(getTranslatableName("health_raw"),
                 RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
