@@ -238,7 +238,7 @@ public class WotrRuneGemDataProvider {
                                 new TieredModifier(3, getModifier(lookup, "critical_bonus")),
                                 new TieredModifier(3, getModifier(lookup, "critical_dual")),
                                 new TieredModifier(3, getModifier(lookup, "critical_avoidance"))
-        ))),
+                        ))),
                 RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("critical_polished"), new RunegemData(
                 getTranslatableName("critical_polished"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
@@ -247,7 +247,7 @@ public class WotrRuneGemDataProvider {
                                 new TieredModifier(4, getModifier(lookup, "critical_bonus")),
                                 new TieredModifier(4, getModifier(lookup, "critical_dual")),
                                 new TieredModifier(4, getModifier(lookup, "critical_avoidance"))
-        ))),
+                        ))),
                 RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("critical_framed"), new RunegemData(
                 getTranslatableName("critical_framed"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
@@ -256,7 +256,7 @@ public class WotrRuneGemDataProvider {
                                 new TieredModifier(5, getModifier(lookup, "critical_bonus")),
                                 new TieredModifier(5, getModifier(lookup, "critical_dual")),
                                 new TieredModifier(5, getModifier(lookup, "critical_avoidance"))
-        ))),
+                        ))),
                 RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("defense_raw"), new RunegemData(
                 getTranslatableName("defense_raw"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
@@ -432,8 +432,7 @@ public class WotrRuneGemDataProvider {
                                 ))),
                 RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("heal_power_raw"),
-                new RunegemData(getTranslatableName("heal_power_raw"),
-                RunegemShape.HEART, List.of(
+                new RunegemData(getTranslatableName("heal_power_raw"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "ability_heal_power_flat")),
@@ -444,10 +443,9 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "ability_heal_power_flat")),
                                         new TieredModifier(1, getModifier(lookup, "ability_heal_power_percent"))
                                 ))),
-                RunegemTier.RAW));
+                        RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("heal_power_cut"),
-                new RunegemData(getTranslatableName("heal_power_cut"),
-                RunegemShape.HEART, List.of(
+                new RunegemData(getTranslatableName("heal_power_cut"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "ability_heal_power_flat")),
@@ -458,24 +456,22 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(2, getModifier(lookup, "ability_heal_power_flat")),
                                         new TieredModifier(2, getModifier(lookup, "ability_heal_power_percent"))
                                 ))),
-                RunegemTier.CUT));
+                        RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("heal_power_shaped"),
-                new RunegemData(getTranslatableName("heal_power_shaped"),
-                RunegemShape.HEART, List.of(
+                new RunegemData(getTranslatableName("heal_power_shaped"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "ability_heal_power_flat")),
                                         new TieredModifier(3, getModifier(lookup, "ability_heal_power_percent"))
                                 )),
-                new RunegemData.ModifierGroup(
-                        offHandTag, List.of(
+                        new RunegemData.ModifierGroup(
+                                offHandTag, List.of(
                                         new TieredModifier(3, getModifier(lookup, "ability_heal_power_flat")),
                                         new TieredModifier(3, getModifier(lookup, "ability_heal_power_percent"))
                                 ))),
-                RunegemTier.SHAPED));
+                        RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("heal_power_polished"),
-                new RunegemData(getTranslatableName("heal_power_polished"),
-                RunegemShape.HEART, List.of(
+                new RunegemData(getTranslatableName("heal_power_polished"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandTag, List.of(
                                         new TieredModifier(4, getModifier(lookup, "ability_heal_power_flat")),
@@ -486,10 +482,9 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(4, getModifier(lookup, "ability_heal_power_flat")),
                                         new TieredModifier(4, getModifier(lookup, "ability_heal_power_percent"))
                                 ))),
-                RunegemTier.POLISHED));
+                        RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("heal_power_framed"),
-                new RunegemData(getTranslatableName("heal_power_framed"),
-                RunegemShape.HEART, List.of(
+                new RunegemData(getTranslatableName("heal_power_framed"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandTag, List.of(
                                         new TieredModifier(5, getModifier(lookup, "ability_heal_power_flat")),
@@ -500,7 +495,7 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(5, getModifier(lookup, "ability_heal_power_flat")),
                                         new TieredModifier(5, getModifier(lookup, "ability_heal_power_percent"))
                                 ))),
-                RunegemTier.FRAMED));
+                        RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("health_raw"), new RunegemData(getTranslatableName("health_raw"),
                 RunegemShape.HEART, List.of(new RunegemData.ModifierGroup(
                         offHandTag, List.of(
@@ -645,29 +640,29 @@ public class WotrRuneGemDataProvider {
                 new RunegemData(getTranslatableName("life_leech_cut"), RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandWeaponTag, List.of(
-                                new TieredModifier(2, getModifier(lookup, "life_leech"))
-                        ))),
+                                        new TieredModifier(2, getModifier(lookup, "life_leech"))
+                                ))),
                         RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("life_leech_shaped"),
                 new RunegemData(getTranslatableName("life_leech_shaped"), RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandWeaponTag, List.of(
-                                new TieredModifier(3, getModifier(lookup, "life_leech"))
-                        ))),
+                                        new TieredModifier(3, getModifier(lookup, "life_leech"))
+                                ))),
                         RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("life_leech_polished"),
                 new RunegemData(getTranslatableName("life_leech_polished"), RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandWeaponTag, List.of(
-                                new TieredModifier(4, getModifier(lookup, "life_leech"))
-                        ))),
+                                        new TieredModifier(4, getModifier(lookup, "life_leech"))
+                                ))),
                         RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("life_leech_framed"),
                 new RunegemData(getTranslatableName("life_leech_framed"), RunegemShape.HEART,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandWeaponTag, List.of(
-                                new TieredModifier(5, getModifier(lookup, "life_leech"))
-                        ))),
+                                        new TieredModifier(5, getModifier(lookup, "life_leech"))
+                                ))),
                         RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("magic_raw"),
                 new RunegemData(getTranslatableName("magic_raw"), RunegemShape.SQUARE,
@@ -735,29 +730,29 @@ public class WotrRuneGemDataProvider {
                 new RunegemData(getTranslatableName("mining_cut"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
-                                new TieredModifier(2, getModifier(lookup, "mining_speed"))
-                        ))),
+                                        new TieredModifier(2, getModifier(lookup, "mining_speed"))
+                                ))),
                         RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("mining_shaped"),
                 new RunegemData(getTranslatableName("mining_shaped"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
-                                new TieredModifier(3, getModifier(lookup, "mining_speed"))
-                        ))),
+                                        new TieredModifier(3, getModifier(lookup, "mining_speed"))
+                                ))),
                         RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("mining_polished"),
                 new RunegemData(getTranslatableName("mining_polished"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
-                                new TieredModifier(4, getModifier(lookup, "mining_speed"))
-                        ))),
+                                        new TieredModifier(4, getModifier(lookup, "mining_speed"))
+                                ))),
                         RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("mining_framed"),
                 new RunegemData(getTranslatableName("mining_framed"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
-                                new TieredModifier(5, getModifier(lookup, "mining_speed"))
-                        ))),
+                                        new TieredModifier(5, getModifier(lookup, "mining_speed"))
+                                ))),
                         RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("projectile_raw"),
                 new RunegemData(getTranslatableName("projectile_raw"), RunegemShape.PENTAGON,
@@ -863,72 +858,71 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(5, getModifier(lookup, "projectile_spread"))
                                 ))
                         ), RunegemTier.FRAMED));
-        registerRunegem(context, getRunegemResourceKey("speed_raw"), new RunegemData(getTranslatableName("speed_raw"),
-                RunegemShape.TRIANGLE, List.of(new RunegemData.ModifierGroup(
-                        mainHandWeaponTag, List.of(
-                                new TieredModifier(1, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                mainHandToolTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "movement_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                offHandTag, List.of(
+        registerRunegem(context, getRunegemResourceKey("speed_raw"),
+                new RunegemData(getTranslatableName("speed_raw"), RunegemShape.TRIANGLE,
+                        List.of(new RunegemData.ModifierGroup(
+                                mainHandWeaponTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                helmetTag, List.of(
+                                )), new RunegemData.ModifierGroup(
+                                        mainHandToolTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "movement_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        offHandTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        helmetTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        chestplateTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        leggingsTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "jump_height"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        bootsTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "jump_height"))
+                                        ))),
+                        RunegemTier.RAW));
+        registerRunegem(context, getRunegemResourceKey("speed_cut"),
+                new RunegemData(getTranslatableName("speed_cut"), RunegemShape.TRIANGLE,
+                        List.of(new RunegemData.ModifierGroup(
+                                mainHandWeaponTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                chestplateTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "attack_speed"))
-                            )),
-                        new RunegemData.ModifierGroup(
-                                leggingsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
-                                ))),
-                RunegemTier.RAW));
-        registerRunegem(context, getRunegemResourceKey("speed_cut"), new RunegemData(getTranslatableName("speed_cut"),
-                RunegemShape.TRIANGLE, List.of(new RunegemData.ModifierGroup(
-                        mainHandWeaponTag, List.of(
-                                new TieredModifier(1, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                mainHandToolTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "movement_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                offHandTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                helmetTag, List.of(
-                                        new TieredModifier(2, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                chestplateTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                leggingsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "jump_height"))
-                                ))),
-                RunegemTier.CUT));
+                                )), new RunegemData.ModifierGroup(
+                                        mainHandToolTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "movement_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        offHandTag, List.of(
+                                                new TieredModifier(2, getModifier(lookup, "attack_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        helmetTag, List.of(
+                                                new TieredModifier(2, getModifier(lookup, "attack_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        chestplateTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "attack_speed"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        leggingsTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "jump_height"))
+                                        )),
+                                new RunegemData.ModifierGroup(
+                                        bootsTag, List.of(
+                                                new TieredModifier(1, getModifier(lookup, "jump_height"))
+                                        ))),
+                        RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("speed_shaped"), new RunegemData(
                 getTranslatableName("speed_shaped"), RunegemShape.TRIANGLE, List.of(new RunegemData.ModifierGroup(
                         mainHandWeaponTag, List.of(
                                 new TieredModifier(2, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
+                        )), new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "movement_speed"))
                                 )),
@@ -959,8 +953,7 @@ public class WotrRuneGemDataProvider {
                 getTranslatableName("speed_polished"), RunegemShape.TRIANGLE, List.of(new RunegemData.ModifierGroup(
                         mainHandWeaponTag, List.of(
                                 new TieredModifier(3, getModifier(lookup, "attack_speed"))
-                                )),
-                        new RunegemData.ModifierGroup(
+                        )), new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "movement_speed"))
                                 )),
@@ -991,8 +984,7 @@ public class WotrRuneGemDataProvider {
                 getTranslatableName("speed_framed"), RunegemShape.TRIANGLE, List.of(new RunegemData.ModifierGroup(
                         mainHandWeaponTag, List.of(
                                 new TieredModifier(4, getModifier(lookup, "attack_speed"))
-                        )),
-                        new RunegemData.ModifierGroup(
+                        )), new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(2, getModifier(lookup, "movement_speed"))
                                 )),
