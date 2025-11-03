@@ -214,12 +214,50 @@ public class WotrRuneGemDataProvider {
                                 ))
                 ), RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("critical_raw"), new RunegemData(
-                getTranslatableName("critical_raw"), RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                getTranslatableName("critical_raw"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
                         mainHandWeaponTag, List.of(
                                 new TieredModifier(1, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(1, getModifier(lookup, "critical_bonus")),
+                                new TieredModifier(1, getModifier(lookup, "critical_dual")),
                                 new TieredModifier(1, getModifier(lookup, "critical_avoidance"))
                         ))),
                 RunegemTier.RAW));
+        registerRunegem(context, getRunegemResourceKey("critical_cut"), new RunegemData(
+                getTranslatableName("critical_cut"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
+                        mainHandWeaponTag, List.of(
+                                new TieredModifier(2, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(2, getModifier(lookup, "critical_bonus")),
+                                new TieredModifier(2, getModifier(lookup, "critical_dual")),
+                                new TieredModifier(2, getModifier(lookup, "critical_avoidance"))
+                        ))),
+                RunegemTier.CUT));
+        registerRunegem(context, getRunegemResourceKey("critical_shaped"), new RunegemData(
+                getTranslatableName("critical_shaped"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
+                        mainHandWeaponTag, List.of(
+                                new TieredModifier(3, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(3, getModifier(lookup, "critical_bonus")),
+                                new TieredModifier(3, getModifier(lookup, "critical_dual")),
+                                new TieredModifier(3, getModifier(lookup, "critical_avoidance"))
+        ))),
+                RunegemTier.SHAPED));
+        registerRunegem(context, getRunegemResourceKey("critical_polished"), new RunegemData(
+                getTranslatableName("critical_polished"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
+                        mainHandWeaponTag, List.of(
+                                new TieredModifier(4, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(4, getModifier(lookup, "critical_bonus")),
+                                new TieredModifier(4, getModifier(lookup, "critical_dual")),
+                                new TieredModifier(4, getModifier(lookup, "critical_avoidance"))
+        ))),
+                RunegemTier.POLISHED));
+        registerRunegem(context, getRunegemResourceKey("critical_framed"), new RunegemData(
+                getTranslatableName("critical_framed"), RunegemShape.PENTAGON, List.of(new RunegemData.ModifierGroup(
+                        mainHandWeaponTag, List.of(
+                                new TieredModifier(5, getModifier(lookup, "critical_chance")),
+                                new TieredModifier(5, getModifier(lookup, "critical_bonus")),
+                                new TieredModifier(5, getModifier(lookup, "critical_dual")),
+                                new TieredModifier(5, getModifier(lookup, "critical_avoidance"))
+        ))),
+                RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("defense_raw"), new RunegemData(
                 getTranslatableName("defense_raw"), RunegemShape.CIRCLE, List.of(new RunegemData.ModifierGroup(
                         mainHandTag, List.of(
