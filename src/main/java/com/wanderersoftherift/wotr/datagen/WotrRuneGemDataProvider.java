@@ -655,35 +655,35 @@ public class WotrRuneGemDataProvider {
                                 ))),
                         RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("mining_raw"),
-                new RunegemData(getTranslatableName("mining_raw"), RunegemShape.CIRCLE,
+                new RunegemData(getTranslatableName("mining_raw"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "mining_speed"))
                                 ))),
                         RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("mining_cut"),
-                new RunegemData(getTranslatableName("mining_cut"), RunegemShape.CIRCLE,
+                new RunegemData(getTranslatableName("mining_cut"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                 new TieredModifier(2, getModifier(lookup, "mining_speed"))
                         ))),
                         RunegemTier.CUT));
         registerRunegem(context, getRunegemResourceKey("mining_shaped"),
-                new RunegemData(getTranslatableName("mining_shaped"), RunegemShape.CIRCLE,
+                new RunegemData(getTranslatableName("mining_shaped"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                 new TieredModifier(3, getModifier(lookup, "mining_speed"))
                         ))),
                         RunegemTier.SHAPED));
         registerRunegem(context, getRunegemResourceKey("mining_polished"),
-                new RunegemData(getTranslatableName("mining_polished"), RunegemShape.CIRCLE,
+                new RunegemData(getTranslatableName("mining_polished"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                 new TieredModifier(4, getModifier(lookup, "mining_speed"))
                         ))),
                         RunegemTier.POLISHED));
         registerRunegem(context, getRunegemResourceKey("mining_framed"),
-                new RunegemData(getTranslatableName("mining_framed"), RunegemShape.CIRCLE,
+                new RunegemData(getTranslatableName("mining_framed"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                 new TieredModifier(5, getModifier(lookup, "mining_speed"))
