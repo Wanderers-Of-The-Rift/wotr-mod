@@ -182,7 +182,7 @@ public class WotrModifierProvider {
                         attributeModifierEffectGetter(WanderersOfTheRift.id("health_flat"), Attributes.MAX_HEALTH,
                                 AttributeModifier.Operation.ADD_VALUE)),
                 new ToBeTieredModifierEffect(0.01F, 0.1F,
-                        attributeModifierEffectGetter(WanderersOfTheRift.id("health_hybrid"), Attributes.MAX_HEALTH,
+                        attributeModifierEffectGetter(WanderersOfTheRift.id("health_percent"), Attributes.MAX_HEALTH,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
                 Style.EMPTY.withColor(ColorUtil.SEA_GREEN))
         );
