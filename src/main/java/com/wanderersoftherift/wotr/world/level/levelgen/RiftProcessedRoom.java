@@ -14,11 +14,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 /**
  * temporary storage for blocks before they are placed in the world
@@ -154,12 +152,18 @@ public class RiftProcessedRoom {
         }
     }
 
-    public Stream<BlockEntity> getBlockEntities() {
-        return Arrays.stream(chunkArray)
-                .filter(Objects::nonNull)
-                .map(AtomicReference::get)
-                .filter(Objects::nonNull)
-                .flatMap(x -> x.blockEntities.stream());
+    public List<List<BlockEntity>> getBlockEntities() {
+        List<List<BlockEntity>> result = new ArrayList<>();
+        for (AtomicReference<RiftProcessedChunk> chunk : chunkArray) {
+            if (chunk == null) {
+                continue;
+            }
+            RiftProcessedChunk processedChunk = chunk.get();
+            if (processedChunk != null) {
+                result.add(processedChunk.blockEntities);
+            }
+        }
+        return result;
     }
 
     public void setBlockEntity(BlockEntity entity) {
@@ -245,4 +249,5 @@ public class RiftProcessedRoom {
         }
         return result;
     }
+
 }

@@ -84,7 +84,7 @@ public final class RandomUtil {
                 values.set(selected, moving);
             }
         } else {
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < values.size() - count; i++) {
                 int selected = random.nextInt(values.size() - i);
                 T moving = values.get(values.size() - i - 1);
                 values.set(values.size() - i - 1, values.get(selected));

@@ -2,25 +2,24 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
+import com.wanderersoftherift.wotr.block.RiftChestBlock;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.item.RiftChestType;
+import com.wanderersoftherift.wotr.util.FastWeightedList;
 import com.wanderersoftherift.wotr.util.RandomUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.DefaultOutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.output.OutputBlockState;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType;
-import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.WeightedRiftChestTypeEntry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -37,9 +36,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.wanderersoftherift.wotr.init.WotrBlocks.CHEST_TYPES;
 import static com.wanderersoftherift.wotr.world.level.levelgen.processor.util.StructureRandomType.RANDOM_TYPE_CODEC;
@@ -54,7 +53,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftFinalP
             OutputBlockState.DIRECT_CODEC.optionalFieldOf("replace_removed_with", new DefaultOutputBlockState(AIR))
                     .forGetter(RiftChestProcessor::getReplaceOutput),
             IntProvider.CODEC.optionalFieldOf("count", ConstantInt.of(1)).forGetter(RiftChestProcessor::getCount),
-            WeightedRiftChestTypeEntry.CODEC.listOf()
+            FastWeightedList.codec(RiftChestType.CODEC)
                     .fieldOf("chest_types")
                     .forGetter(RiftChestProcessor::getChestTypes),
             RANDOM_TYPE_CODEC.optionalFieldOf("random_type", StructureRandomType.BLOCK)
@@ -66,14 +65,14 @@ public class RiftChestProcessor extends StructureProcessor implements RiftFinalP
     private final ResourceLocation baseLootTable;
     private final OutputBlockState replaceOutput;
     private final IntProvider count;
-    private final List<WeightedRiftChestTypeEntry> chestTypes;
+    private final FastWeightedList<RiftChestType> chestTypes;
     private final StructureRandomType randomType;
     private final PositionalRandomFactory randomFactory;
 
     private final List<ResourceKey<LootTable>> lootTableCache;
 
     public RiftChestProcessor(ResourceLocation baseLootTable, OutputBlockState replaceOutput, IntProvider count,
-            List<WeightedRiftChestTypeEntry> chestTypes, StructureRandomType randomType) {
+            FastWeightedList<RiftChestType> chestTypes, StructureRandomType randomType) {
         this.baseLootTable = baseLootTable;
         this.replaceOutput = replaceOutput;
         this.count = count;
@@ -89,11 +88,17 @@ public class RiftChestProcessor extends StructureProcessor implements RiftFinalP
             ServerLevelAccessor world,
             BlockPos structurePos,
             Vec3i pieceSize) {
-        List<BlockEntity> chests = room.getBlockEntities()
-                .filter(entity -> entity instanceof RandomizableContainerBlockEntity
+
+        List<BlockEntity> chests = new ArrayList<>();
+        for (List<BlockEntity> entityList : room.getBlockEntities()) {
+            for (BlockEntity entity : entityList) {
+                if (entity instanceof RandomizableContainerBlockEntity
                         && isInRoom(entity.getBlockPos(), structurePos, pieceSize)
-                        && isChest(room.getBlock(entity.getBlockPos())))
-                .collect(Collectors.toList());
+                        && isChest(room.getBlock(entity.getBlockPos()))) {
+                    chests.add(entity);
+                }
+            }
+        }
 
         RandomSource random = ProcessorUtil.getRandom(randomType, structurePos, structurePos, BlockPos.ZERO, world,
                 SEED);
@@ -103,37 +108,42 @@ public class RiftChestProcessor extends StructureProcessor implements RiftFinalP
         for (int i = actualCount; i < chests.size(); i++) {
             BlockEntity entity = chests.get(i);
             room.setBlock(entity.getBlockPos(), replaceOutput.convertBlockState());
-            room.removeBlockEntity(entity.getBlockPos());
         }
         for (int i = 0; i < actualCount && i < chests.size(); i++) {
-            BlockEntity originalEntity = chests.get(i);
-            BlockPos pos = originalEntity.getBlockPos();
-            BlockState inState = room.getBlock(pos);
-            BlockState outState = inState;
-            ChestType type = inState.getValue(ChestBlock.TYPE);
-            // TODO: Will need to review this logic in the presence of multiple rift chest types, if they are randomised
-            // here.
-            if (type != ChestType.SINGLE
-                    && !isChest(room.getBlock(pos.relative(ChestBlock.getConnectedDirection(outState))))) {
-                outState = outState.setValue(ChestBlock.TYPE, ChestType.SINGLE);
-            }
-
-            RiftChestType replaceType = getRandomChestType(random);
-            RiftChestEntityBlock newChestBlock = (RiftChestEntityBlock) CHEST_TYPES.get(replaceType).get();
-            outState = ProcessorUtil.copyState(newChestBlock.defaultBlockState(), outState);
-
-            BlockEntity entity = originalEntity;
-            if (inState.is(CHEST)) {
-                entity = newChestBlock.newBlockEntity(pos, outState);
-                entity.loadWithComponents(originalEntity.saveWithoutMetadata(world.registryAccess()),
-                        world.registryAccess());
-                room.setBlockEntity(entity);
-            }
-            if (entity instanceof RandomizableContainerBlockEntity container) {
-                container.setLootTable(lootTableCache.get(replaceType.ordinal()), random.nextLong());
-            }
-            room.setBlock(pos, outState);
+            processChest(chests.get(i), room, world.registryAccess(), random);
         }
+    }
+
+    private void processChest(
+            BlockEntity chestEntity,
+            RiftProcessedRoom room,
+            RegistryAccess registryAccess,
+            RandomSource random) {
+        BlockPos pos = chestEntity.getBlockPos();
+        BlockState initialState = room.getBlock(pos);
+
+        RiftChestType replaceType = getRandomChestType(random);
+        RiftChestBlock newChestBlock = CHEST_TYPES.get(replaceType).get();
+        BlockState outState = ProcessorUtil.copyState(initialState, newChestBlock.defaultBlockState());
+
+        ChestType connectivityType = outState.getValue(ChestBlock.TYPE);
+        // TODO: Will need to review this logic in the presence of multiple rift chest types, if they are randomised
+        // here.
+        if (connectivityType != ChestType.SINGLE
+                && !isChest(room.getBlock(pos.relative(ChestBlock.getConnectedDirection(outState))))) {
+            outState = outState.setValue(ChestBlock.TYPE, ChestType.SINGLE);
+        }
+
+        BlockEntity entity = chestEntity;
+        if (initialState.is(CHEST)) {
+            entity = newChestBlock.newBlockEntity(pos, outState);
+            entity.loadWithComponents(chestEntity.saveWithoutMetadata(registryAccess), registryAccess);
+            room.setBlockEntity(entity);
+        }
+        if (entity instanceof RandomizableContainerBlockEntity container) {
+            container.setLootTable(lootTableCache.get(replaceType.ordinal()), random.nextLong());
+        }
+        room.setBlock(pos, outState);
     }
 
     private static boolean isInRoom(BlockPos pos, BlockPos structurePos, Vec3i pieceSize) {
@@ -148,9 +158,11 @@ public class RiftChestProcessor extends StructureProcessor implements RiftFinalP
     }
 
     private RiftChestType getRandomChestType(RandomSource random) {
-        return WeightedRandom.getRandomItem(random, chestTypes)
-                .orElse(new WeightedRiftChestTypeEntry(RiftChestType.WOODEN, Weight.of(1)))
-                .getRiftChestType();
+        RiftChestType type = chestTypes.random(random);
+        if (type == null) {
+            return RiftChestType.WOODEN;
+        }
+        return type;
     }
 
     private @NotNull ResourceKey<LootTable> getLootTable(RiftChestType chestType) {
@@ -175,7 +187,7 @@ public class RiftChestProcessor extends StructureProcessor implements RiftFinalP
         return count;
     }
 
-    public List<WeightedRiftChestTypeEntry> getChestTypes() {
+    public FastWeightedList<RiftChestType> getChestTypes() {
         return chestTypes;
     }
 
