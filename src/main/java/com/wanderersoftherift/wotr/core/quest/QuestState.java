@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -15,7 +16,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +32,7 @@ public class QuestState {
 
     public static final Codec<QuestState> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("id").forGetter(QuestState::getId),
-            UUIDUtil.CODEC.optionalFieldOf("quest_giver").forGetter(x -> Optional.ofNullable(x.giverId)),
+            NpcIdentity.CODEC.optionalFieldOf("quest_giver").forGetter(x -> Optional.ofNullable(x.giverId)),
             Quest.CODEC.fieldOf("origin").forGetter(QuestState::getOrigin),
             Goal.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(QuestState::getGoals),
             Reward.DIRECT_CODEC.listOf().fieldOf("rewards").forGetter(QuestState::getRewards),
@@ -48,7 +48,7 @@ public class QuestState {
 
     private IAttachmentHolder holder;
     private final UUID id;
-    private final @Nullable UUID giverId;
+    private final Holder<NpcIdentity> giverId;
     private final Holder<Quest> origin;
     private final List<Goal> goals;
     private final List<Reward> rewards;
@@ -58,7 +58,7 @@ public class QuestState {
         this(id, Optional.empty(), origin, goals, rewards, progress);
     }
 
-    public QuestState(Holder<Quest> origin, UUID giver, Collection<Goal> goals, List<Reward> rewards) {
+    public QuestState(Holder<Quest> origin, Holder<NpcIdentity> giver, Collection<Goal> goals, List<Reward> rewards) {
         this.id = UUID.randomUUID();
         this.giverId = giver;
         this.origin = origin;
@@ -67,8 +67,8 @@ public class QuestState {
         this.goalProgress = new int[goals.size()];
     }
 
-    public QuestState(UUID id, Optional<UUID> giver, Holder<Quest> origin, List<Goal> goals, List<Reward> rewards,
-            List<Integer> progress) {
+    public QuestState(UUID id, Optional<Holder<NpcIdentity>> giver, Holder<Quest> origin, List<Goal> goals,
+            List<Reward> rewards, List<Integer> progress) {
         this.id = id;
         this.giverId = giver.orElse(null);
         this.origin = origin;
@@ -88,7 +88,7 @@ public class QuestState {
         return id;
     }
 
-    public UUID getQuestGiver() {
+    public Holder<NpcIdentity> getQuestGiver() {
         return giverId;
     }
 

@@ -1,0 +1,8 @@
+{
+  "guild": "wotr:cats_cradle",
+  "interaction": {
+    "type": "wotr:merchant",
+    "loot_table": "wotr:merchant/test_merchant"
+  },
+  "entity_type": "cat"
+}

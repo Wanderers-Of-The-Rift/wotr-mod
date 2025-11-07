@@ -38,6 +38,7 @@ public class DataGenerators {
                         .add(WotrRegistries.Keys.RIFT_THEMES, context -> {
                         })
                         .add(WotrRegistries.Keys.RUNEGEM_DATA, WotrRuneGemDataProvider::bootstrapRuneGems)
+                        .add(WotrRegistries.Keys.NPCS, WotrNpcsProvider::bootstrapNpcs)
 
         );
         event.createProvider(WotrModelProvider::new);

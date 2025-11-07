@@ -1,30 +1,25 @@
 package com.wanderersoftherift.wotr.core.quest;
 
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
-import com.wanderersoftherift.wotr.util.HolderSetUtil;
 import com.wanderersoftherift.wotr.util.RandomUtil;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -33,90 +28,68 @@ import java.util.stream.Collectors;
  */
 public final class QuestMenuHelper {
 
-    private static final int DEFAULT_SELECTION_SIZE = 5;
-
     private QuestMenuHelper() {
     }
 
-    /**
-     * Opens the quest menu from a block
-     * 
-     * @param player
-     * @param title
-     * @param pos
-     * @param block
-     */
-    public static void openQuestMenu(ServerPlayer player, Component title, BlockPos pos, Block block) {
-        openQuestMenu(player, null, title, ValidatingLevelAccess.create(player.serverLevel(), pos, block),
-                HolderSetUtil.registryToHolderSet(player.level().registryAccess(), WotrRegistries.Keys.QUESTS),
-                DEFAULT_SELECTION_SIZE);
-    }
-
-    /**
-     * Opens the quest menu from a given questGiver
-     * 
-     * @param player
-     * @param questGiver
-     */
-    public static void openQuestMenu(ServerPlayer player, Mob questGiver, HolderSet<Quest> choices, int choiceCount) {
-        openQuestMenu(player, questGiver.getUUID(), questGiver.getDisplayName(),
-                ValidatingLevelAccess.create(questGiver), choices, choiceCount);
-    }
-
-    private static void openQuestMenu(
-            ServerPlayer player,
-            UUID npc,
-            Component title,
+    public static void openQuestMenu(
+            Player player,
+            Holder<NpcIdentity> npc,
             ValidatingLevelAccess access,
             HolderSet<Quest> choices,
             int choiceCount) {
+        if (!(player.level() instanceof ServerLevel level)) {
+            return;
+        }
+
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
-            List<QuestState> availableQuests = getAvailableQuests(player.level(), player, npc, choices, choiceCount);
+            List<QuestState> availableQuests = getAvailableQuests(level, player, npc, choices, choiceCount);
 
             player.openMenu(
                     new SimpleMenuProvider(
                             (containerId, playerInventory, p) -> new QuestGiverMenu(containerId, playerInventory,
                                     access, new ArrayList<>(availableQuests)),
-                            title)
+                            NpcIdentity.getDisplayName(npc))
             );
-            PacketDistributor.sendToPlayer(player, new AvailableQuestsPayload(availableQuests));
+            if (player instanceof ServerPlayer serverPlayer) {
+                PacketDistributor.sendToPlayer(serverPlayer, new AvailableQuestsPayload(availableQuests));
+            }
         } else {
             player.openMenu(
                     new SimpleMenuProvider(
                             (containerId, playerInventory, p) -> new QuestCompletionMenu(containerId, playerInventory,
                                     access, activeQuests, activeQuests.getQuestList().getFirst().getId()),
-                            Component.empty())
+                            NpcIdentity.getDisplayName(npc))
             );
         }
     }
 
     private static @NotNull List<QuestState> getAvailableQuests(
-            Level level,
-            ServerPlayer serverPlayer,
-            @Nullable UUID npc,
+            ServerLevel level,
+            Player player,
+            Holder<NpcIdentity> npc,
             HolderSet<Quest> choices,
             int choiceCount) {
-        AvailableQuests availableQuestData = serverPlayer.getData(WotrAttachments.AVAILABLE_QUESTS);
+        AvailableQuests availableQuestData = player.getData(WotrAttachments.AVAILABLE_QUESTS);
         List<QuestState> availableQuests = availableQuestData.getQuests(npc);
 
         if (availableQuests.isEmpty()) {
-            availableQuests = generateNewQuestList(level, serverPlayer, npc, choices, choiceCount);
+            availableQuests = generateNewQuestList(level, player, npc, choices, choiceCount);
             availableQuestData.setQuests(npc, availableQuests);
         }
         return availableQuests;
     }
 
     private static @NotNull List<QuestState> generateNewQuestList(
-            Level level,
-            ServerPlayer player,
-            @Nullable UUID npc,
+            ServerLevel level,
+            Player player,
+            Holder<NpcIdentity> npc,
             HolderSet<Quest> choices,
             int choiceCount) {
-        LootParams params = new LootParams.Builder(player.serverLevel()).create(LootContextParamSets.EMPTY);
+        LootParams params = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
         return RandomUtil.randomSubset(
-                choices.stream().filter(quest -> quest.value().isAvailable(player, player.serverLevel())).toList(),
-                choiceCount, level.getRandom())
+                choices.stream().filter(quest -> quest.value().isAvailable(player, level)).toList(), choiceCount,
+                level.getRandom())
                 .stream()
                 .map(quest -> new QuestState(quest, npc, quest.value().generateGoals(params),
                         quest.value().generateRewards(params)))

@@ -3,16 +3,15 @@ package com.wanderersoftherift.wotr.entity.npc;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -34,33 +33,22 @@ public record MerchantInteract(ResourceKey<LootTable> lootTable) implements MobI
     }
 
     @Override
-    public InteractionResult interact(Mob mob, Player player, InteractionHand hand) {
-        if (player.isCrouching()) {
-            return InteractionResult.PASS;
-        }
-
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return InteractionResult.SUCCESS;
-        }
-
+    public void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
         AvailableTrades availableTrades = player.getData(WotrAttachments.AVAILABLE_TRADES);
 
-        IItemHandlerModifiable merchantInventory = availableTrades.getExisting(mob.getUUID()).orElseGet(() -> {
-            LootParams params = new LootParams.Builder(serverPlayer.serverLevel())
-                    .withParameter(LootContextParams.THIS_ENTITY, player)
+        IItemHandlerModifiable merchantInventory = availableTrades.getExisting(npc).orElseGet(() -> {
+            LootParams params = new LootParams.Builder(level).withParameter(LootContextParams.THIS_ENTITY, player)
                     .create(LootContextParamSets.PIGLIN_BARTER);
             LootTable table = params.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
-            return availableTrades.create(mob.getUUID(), table.getRandomItems(params));
+            return availableTrades.create(npc, table.getRandomItems(params));
         });
 
         player.openMenu(
                 new SimpleMenuProvider(
                         (containerId, playerInventory, p) -> new TradingMenu(containerId, playerInventory,
-                                merchantInventory, player.getData(WotrAttachments.WALLET),
-                                ValidatingLevelAccess.create(mob)),
-                        mob.getDisplayName())
+                                merchantInventory, player.getData(WotrAttachments.WALLET), access),
+                        NpcIdentity.getDisplayName(npc))
         );
-
-        return InteractionResult.CONSUME;
     }
+
 }

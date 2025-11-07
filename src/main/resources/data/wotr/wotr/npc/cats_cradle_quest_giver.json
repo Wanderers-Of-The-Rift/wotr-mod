@@ -1,0 +1,8 @@
+{
+  "guild": "wotr:cats_cradle",
+  "interaction": {
+    "type": "wotr:quest_giver",
+    "quests": "#wotr:feline"
+  },
+  "entity_type": "cat"
+}

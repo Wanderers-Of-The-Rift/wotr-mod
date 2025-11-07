@@ -1,5 +1,10 @@
 {
   "values": [
-    "wotr:bring_fish"
+    "wotr:bring_fish",
+    "wotr:complete_rift",
+    "wotr:fetch_quest",
+    "wotr:gold_and_iron",
+    "wotr:kill_skeletons",
+    "wotr:skillthread"
   ]
 }

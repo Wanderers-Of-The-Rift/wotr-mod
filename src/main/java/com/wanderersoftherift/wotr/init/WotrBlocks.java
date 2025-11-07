@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.DittoBlock;
 import com.wanderersoftherift.wotr.block.KeyForgeBlock;
 import com.wanderersoftherift.wotr.block.MobTrapBlock;
+import com.wanderersoftherift.wotr.block.NpcBlock;
 import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
-import com.wanderersoftherift.wotr.block.QuestHubBlock;
 import com.wanderersoftherift.wotr.block.RiftChestBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
@@ -99,8 +99,8 @@ public class WotrBlocks {
                     .strength(2.0f)
                     .sound(SoundType.WOOD)));
 
-    public static final DeferredBlock<QuestHubBlock> QUEST_HUB = registerBlock("quest_hub",
-            () -> new QuestHubBlock(BlockBehaviour.Properties.of().setId(blockId("quest_hub")).strength(2.0f)));
+    public static final DeferredBlock<NpcBlock> NPC = registerBlock("npc",
+            () -> new NpcBlock(BlockBehaviour.Properties.of().setId(blockId("npc")).strength(2.0f)));
 
     public static final DeferredBlock<DittoBlock> DITTO_BLOCK = registerBlock("ditto_block",
             () -> new DittoBlock(BlockBehaviour.Properties.of()

@@ -3,9 +3,10 @@ package com.wanderersoftherift.wotr.core.guild.trading;
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -15,35 +16,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Tracks available trades per merchant on the player
  */
 public class AvailableTrades {
     public static final Codec<AvailableTrades> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.unboundedMap(UUIDUtil.STRING_CODEC, StockInventory.CODEC)
+            Codec.unboundedMap(NpcIdentity.CODEC, StockInventory.CODEC)
                     .fieldOf("merchant_stock")
                     .forGetter(x -> x.merchantStock)
     ).apply(instance, AvailableTrades::new));
 
     public static final int MERCHANT_INVENTORY_SIZE = 30;
 
-    private final Map<UUID, StockInventory> merchantStock;
+    private final Map<Holder<NpcIdentity>, StockInventory> merchantStock;
 
     public AvailableTrades() {
         merchantStock = new HashMap<>();
     }
 
-    private AvailableTrades(Map<UUID, StockInventory> stock) {
+    private AvailableTrades(Map<Holder<NpcIdentity>, StockInventory> stock) {
         this.merchantStock = new HashMap<>(stock);
     }
 
-    public Optional<IItemHandlerModifiable> getExisting(UUID merchantId) {
+    public Optional<IItemHandlerModifiable> getExisting(Holder<NpcIdentity> merchantId) {
         return Optional.ofNullable(merchantStock.get(merchantId));
     }
 
-    public IItemHandlerModifiable create(UUID merchantId, List<ItemStack> items) {
+    public IItemHandlerModifiable create(Holder<NpcIdentity> merchantId, List<ItemStack> items) {
         StockInventory stock = new StockInventory(items);
         merchantStock.put(merchantId, stock);
         return stock;
