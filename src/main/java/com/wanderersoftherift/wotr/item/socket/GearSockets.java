@@ -20,7 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static com.wanderersoftherift.wotr.init.WotrTags.Items.SOCKETABLE;
@@ -90,7 +89,7 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
     }
 
     @Override
-    public Collection<Either<FormattedText, TooltipComponent>> tooltips(ItemStack stack) {
-        return List.of(Either.right(new GearSocketTooltipRenderer.GearSocketComponent(stack, sockets())));
+    public List<Either<FormattedText, TooltipComponent>> tooltips(int maxWidth) {
+        return List.of(Either.right(new GearSocketTooltipRenderer.GearSocketComponent(sockets())));
     }
 }
