@@ -52,7 +52,7 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
 
         fullDisplay = minecraft.screen.width > imageWidth + 2 * TOOLTIP_WIDTH_HINT + 4 * TOOLTIP_BORDER;
         if (!fullDisplay) {
-            leftPos = Math.max(16, minecraft.screen.width - imageWidth - TOOLTIP_WIDTH_HINT - TOOLTIP_BORDER) / 2;
+            leftPos = Math.max(16, minecraft.screen.width - imageWidth - TOOLTIP_WIDTH_HINT - 2 * TOOLTIP_BORDER);
         }
 
         Button applyButtonWidget = Button
