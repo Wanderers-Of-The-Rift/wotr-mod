@@ -63,7 +63,7 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialBlock(WotrBlocks.DITTO_BLOCK.get(),
                 TexturedModel.CUBE.updateTemplate(template -> template.extend().renderType("cutout").build()));
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
-        blockModels.createTrivialCube(WotrBlocks.QUEST_HUB.get());
+        blockModels.createTrivialCube(WotrBlocks.NPC.get());
 
         ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly");
         blockModels.blockStateOutput.accept(MultiVariantGenerator

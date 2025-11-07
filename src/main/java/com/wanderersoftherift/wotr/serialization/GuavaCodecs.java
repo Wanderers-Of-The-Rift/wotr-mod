@@ -26,7 +26,7 @@ public final class GuavaCodecs {
      * @param <K> The type of the key.
      * @param <V> The type of the value.
      */
-    public static <K, V> Codec<ListMultimap<K, V>> unboundListMultimap(Codec<K> keyCodec, Codec<V> valueCodec) {
+    public static <K, V> Codec<ListMultimap<K, V>> stringKeyListMultimap(Codec<K> keyCodec, Codec<V> valueCodec) {
         return Codec.unboundedMap(keyCodec, valueCodec.listOf()).xmap(x -> {
             ListMultimap<K, V> result = ArrayListMultimap.create(x.size(), 3);
             x.forEach(result::putAll);
@@ -43,7 +43,7 @@ public final class GuavaCodecs {
      * @param <K> The type of the key.
      * @param <V> The type of the value.
      */
-    public static <K, V> Codec<ListMultimap<K, V>> complexKeyListMultimap(Codec<K> keyCodec, Codec<V> valueCodec) {
+    public static <K, V> Codec<ListMultimap<K, V>> compoundKeyListMultimap(Codec<K> keyCodec, Codec<V> valueCodec) {
         return Codec.pair(keyCodec, valueCodec.listOf()).listOf().xmap(pairList -> {
             ListMultimap<K, V> result = ArrayListMultimap.create(pairList.size(), 3);
             pairList.forEach(pair -> result.putAll(pair.getFirst(), pair.getSecond()));
