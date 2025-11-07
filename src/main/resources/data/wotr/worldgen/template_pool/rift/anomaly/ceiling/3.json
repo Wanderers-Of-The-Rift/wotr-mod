@@ -5,7 +5,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/ceiling/3/overhang-1-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -14,7 +14,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/ceiling/3/overhang-2-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
