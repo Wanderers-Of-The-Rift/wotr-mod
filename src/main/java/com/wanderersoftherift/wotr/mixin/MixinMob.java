@@ -26,7 +26,8 @@ public abstract class MixinMob extends LivingEntity {
             CallbackInfoReturnable<InteractionResult> cir) {
         if (cir.getReturnValue() == InteractionResult.PASS) {
             this.getExistingData(WotrAttachments.MOB_INTERACT)
-                    .ifPresent(data -> cir.setReturnValue(data.interact((Mob) (LivingEntity) this, player, hand)));
+                    .ifPresent(
+                            data -> cir.setReturnValue(data.interactWithMob((Mob) (LivingEntity) this, player, hand)));
 
         }
     }

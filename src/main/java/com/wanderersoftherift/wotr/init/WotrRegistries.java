@@ -19,6 +19,7 @@ import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.quest.Goal;
 import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.Quest;
@@ -178,6 +179,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
         public static final ResourceKey<Registry<Guild>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<NpcIdentity>> NPCS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("npc"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
 
@@ -323,5 +326,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ANOMALY_TASK, AnomalyTask.DIRECT_CODEC, AnomalyTask.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ANOMALY_REWARD, AnomalyReward.DIRECT_CODEC, AnomalyReward.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.NPCS, NpcIdentity.DIRECT_CODEC, NpcIdentity.DIRECT_CODEC);
     }
 }

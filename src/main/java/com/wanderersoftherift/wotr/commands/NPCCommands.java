@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.entity.npc.MerchantInteract;
 import com.wanderersoftherift.wotr.entity.npc.QuestGiverInteract;
@@ -13,18 +14,24 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceOrIdArgument;
 import net.minecraft.commands.arguments.ResourceOrTagArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.server.commands.LootCommand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.Optional;
 
 public class NPCCommands extends BaseCommand {
 
+    private static final String NPC_ARG = "npc";
+    private static final String LOCATION_ARG = "location";
     private static final String MOB_ARG = "mob";
     private static final String QUESTS_ARG = "quests";
     private static final String COUNT_ARG = "count";
@@ -76,6 +83,27 @@ public class NPCCommands extends BaseCommand {
                                 )
                         )
         );
+
+        builder.then(
+                Commands.literal("create")
+                        .then(Commands.argument(NPC_ARG, ResourceArgument.resource(context, WotrRegistries.Keys.NPCS))
+                                .then(Commands.argument(LOCATION_ARG, BlockPosArgument.blockPos())
+                                        .executes(ctx -> createNpc(ctx,
+                                                ResourceArgument.getResource(ctx, NPC_ARG, WotrRegistries.Keys.NPCS),
+                                                BlockPosArgument.getBlockPos(ctx, LOCATION_ARG)))
+                                )));
+    }
+
+    private int createNpc(
+            CommandContext<CommandSourceStack> ctx,
+            Holder.Reference<NpcIdentity> npcIdentityReference,
+            BlockPos location) {
+        Entity result = NpcIdentity.spawn(npcIdentityReference, ctx.getSource().getLevel(), location.above(),
+                EntitySpawnReason.COMMAND);
+        if (result != null) {
+            return Command.SINGLE_SUCCESS;
+        }
+        return 0;
     }
 
     private int makeMerchant(CommandContext<CommandSourceStack> context, Entity mob, Holder<LootTable> trades) {

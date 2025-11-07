@@ -19,6 +19,7 @@ import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestLog;
@@ -39,6 +40,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class WotrAttachments {
@@ -161,6 +163,12 @@ public class WotrAttachments {
             "mob_interact",
             () -> AttachmentType.<MobInteraction>builder(() -> NoInteract.INSTANCE)
                     .serialize(MobInteraction.DIRECT_CODEC)
+                    .build()
+    );
+    public static final Supplier<AttachmentType<NpcIdentity.Attachment>> NPC_IDENTITY = ATTACHMENT_TYPES.register(
+            "npc_identity",
+            () -> AttachmentType.builder(() -> new NpcIdentity.Attachment(Optional.empty()))
+                    .serialize(NpcIdentity.Attachment.CODEC)
                     .build()
     );
 

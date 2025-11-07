@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.abilities.attachment.ChainAbilityState;
 import com.wanderersoftherift.wotr.abilities.attachment.TargetComponent;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgradePool;
 import com.wanderersoftherift.wotr.core.guild.trading.Price;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
@@ -60,6 +61,9 @@ public class WotrDataComponentType {
             "currency_provider", CurrencyProvider.CODEC, CurrencyProvider.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Price>> PRICE = register(
             "price", Price.CODEC, Price.STREAM_CODEC
+    );
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<NpcIdentity>>> NPC_IDENTITY = register(
+            "npc_identity", NpcIdentity.CODEC, NpcIdentity.STREAM_CODEC
     );
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(
