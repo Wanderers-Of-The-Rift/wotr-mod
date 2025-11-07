@@ -9,7 +9,7 @@ import com.wanderersoftherift.wotr.block.KeyForgeBlock;
 import com.wanderersoftherift.wotr.block.MobTrapBlock;
 import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
 import com.wanderersoftherift.wotr.block.QuestHubBlock;
-import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
+import com.wanderersoftherift.wotr.block.RiftChestBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RuneAnvilEntityBlock;
@@ -41,9 +41,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.wanderersoftherift.wotr.block.BlockFamilyHelper.BUTTON_SUFFIX;
@@ -61,15 +60,16 @@ import static net.minecraft.world.level.block.state.properties.WoodType.OAK;
 
 public class WotrBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(WanderersOfTheRift.MODID);
-    public static final Map<RiftChestType, DeferredBlock<Block>> CHEST_TYPES = new HashMap<>();
+    public static final EnumMap<RiftChestType, DeferredBlock<? extends RiftChestBlock>> CHEST_TYPES = new EnumMap<>(
+            RiftChestType.class);
     public static final List<BlockFamilyHelper> BLOCK_FAMILY_HELPERS = new ArrayList<>();
 
     public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlock("rune_anvil",
             () -> new RuneAnvilEntityBlock(
                     BlockBehaviour.Properties.of().setId(blockId("rune_anvil")).strength(2.5F).sound(SoundType.METAL)));
 
-    public static final DeferredBlock<RiftChestEntityBlock> RIFT_CHEST = registerChestBlock("rift_chest",
-            () -> new RiftChestEntityBlock(WotrBlockEntities.RIFT_CHEST::get,
+    public static final DeferredBlock<RiftChestBlock> RIFT_CHEST = registerChestBlock("rift_chest",
+            () -> new RiftChestBlock(WotrBlockEntities.RIFT_CHEST::get,
                     BlockBehaviour.Properties.of().setId(blockId("rift_chest")).strength(1.5F).sound(SoundType.WOOD)),
             RiftChestType.WOODEN);
 
@@ -231,12 +231,12 @@ public class WotrBlocks {
         return buildingBlockHelper;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerChestBlock(
+    private static <T extends RiftChestBlock> DeferredBlock<T> registerChestBlock(
             String riftChest,
             Supplier<T> supplier,
             RiftChestType riftChestType) {
         DeferredBlock<T> register = registerBlock(riftChest, supplier);
-        CHEST_TYPES.put(riftChestType, (DeferredBlock<Block>) register);
+        CHEST_TYPES.put(riftChestType, register);
         return register;
     }
 

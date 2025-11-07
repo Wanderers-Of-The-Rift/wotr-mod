@@ -25,9 +25,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
-public class RiftChestEntityBlock extends ChestBlock {
-    public static final MapCodec<RiftChestEntityBlock> CODEC = simpleCodec(
-            (properties) -> new RiftChestEntityBlock(WotrBlockEntities.RIFT_CHEST::get, properties));
+public class RiftChestBlock extends ChestBlock {
+    public static final MapCodec<RiftChestBlock> CODEC = simpleCodec(
+            (properties) -> new RiftChestBlock(WotrBlockEntities.RIFT_CHEST::get, properties));
 
     protected static final VoxelShape DEFAULT_SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 15.0, 15.0);
     protected static final Table<ChestType, Direction, VoxelShape> SHAPES;
@@ -42,13 +42,12 @@ public class RiftChestEntityBlock extends ChestBlock {
         }
     }
 
-    public RiftChestEntityBlock(Supplier<BlockEntityType<? extends ChestBlockEntity>> riftChest,
-            Properties properties) {
+    public RiftChestBlock(Supplier<BlockEntityType<? extends ChestBlockEntity>> riftChest, Properties properties) {
         super(riftChest, properties);
     }
 
     @Override
-    public @NotNull MapCodec<RiftChestEntityBlock> codec() {
+    public @NotNull MapCodec<RiftChestBlock> codec() {
         return CODEC;
     }
 

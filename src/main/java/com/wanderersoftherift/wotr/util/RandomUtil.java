@@ -64,4 +64,32 @@ public final class RandomUtil {
         }
         return result;
     }
+
+    /**
+     * Splits a list by selected a specified number of items at random and moving them to the front.
+     * 
+     * @param values A list of values, that will be changed in place (so should be modifiable)
+     * @param count  The number of items to randomly move to the front
+     * @param <T>
+     */
+    public static <T> void randomSplit(List<T> values, int count, RandomSource random) {
+        if (count >= values.size()) {
+            return;
+        }
+        if (values.size() - count > count) {
+            for (int i = 0; i < count; i++) {
+                int selected = random.nextInt(values.size() - i) + i;
+                T moving = values.get(i);
+                values.set(i, values.get(selected));
+                values.set(selected, moving);
+            }
+        } else {
+            for (int i = 0; i < values.size() - count; i++) {
+                int selected = random.nextInt(values.size() - i);
+                T moving = values.get(values.size() - i - 1);
+                values.set(values.size() - i - 1, values.get(selected));
+                values.set(selected, moving);
+            }
+        }
+    }
 }

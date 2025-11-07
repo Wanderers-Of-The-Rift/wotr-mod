@@ -210,4 +210,13 @@ public class RiftProcessedChunk {
         var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage, stateList);
         sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
     }
+
+    public void setBlockEntity(BlockEntity entity) {
+        removeBlockEntity(entity.getBlockPos());
+        blockEntities.add(entity);
+    }
+
+    public void removeBlockEntity(BlockPos pos) {
+        blockEntities.removeIf(e -> e.getBlockPos().equals(pos));
+    }
 }
