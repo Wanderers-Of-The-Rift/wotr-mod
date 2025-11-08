@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.core.npc;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -26,6 +28,9 @@ import java.util.Optional;
 
 public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityType<?>>> entityType,
         NpcInteraction npcInteraction) {
+
+    public static final ResourceKey<NpcIdentity> DEFAULT = ResourceKey.create(WotrRegistries.Keys.NPCS,
+            WanderersOfTheRift.id("default"));
 
     public static final Codec<NpcIdentity> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Guild.CODEC.optionalFieldOf("guild").forGetter(NpcIdentity::guild),
