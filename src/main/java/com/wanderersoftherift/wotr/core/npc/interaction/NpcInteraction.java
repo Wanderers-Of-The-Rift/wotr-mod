@@ -1,7 +1,8 @@
-package com.wanderersoftherift.wotr.core.npc;
+package com.wanderersoftherift.wotr.core.npc.interaction;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -32,7 +33,7 @@ public interface NpcInteraction {
      * @param hand   The hand the player is interacting with
      * @return The interaction result
      */
-    InteractionResult interactWithMob(Mob mob, Player player, InteractionHand hand);
+    InteractionResult interactAsMob(Mob mob, Player player, InteractionHand hand);
 
     /**
      * Npc interaction triggered on a block
@@ -43,7 +44,7 @@ public interface NpcInteraction {
      * @param block  The block type
      * @param player The player interacting
      */
-    void interactWithBlock(
+    void interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,

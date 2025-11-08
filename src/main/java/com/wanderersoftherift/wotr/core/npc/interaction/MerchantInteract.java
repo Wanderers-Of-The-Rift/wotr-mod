@@ -1,7 +1,8 @@
-package com.wanderersoftherift.wotr.core.npc;
+package com.wanderersoftherift.wotr.core.npc.interaction;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.npc.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
