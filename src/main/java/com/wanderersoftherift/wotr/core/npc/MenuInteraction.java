@@ -31,11 +31,10 @@ public interface MenuInteraction extends NpcInteraction {
             return InteractionResult.SUCCESS;
         }
 
-        mob.getData(WotrAttachments.NPC_IDENTITY)
+        Holder<NpcIdentity> npc = mob.getData(WotrAttachments.NPC_IDENTITY)
                 .identity()
-                .ifPresent(
-                        npc -> interact(npc, ValidatingLevelAccess.create(mob), level, player)
-                );
+                .orElse(level.registryAccess().get(NpcIdentity.DEFAULT).orElseThrow());
+        interact(npc, ValidatingLevelAccess.create(mob), level, player);
 
         return InteractionResult.CONSUME;
     }
