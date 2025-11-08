@@ -1,5 +1,6 @@
-package com.wanderersoftherift.wotr.core.npc;
+package com.wanderersoftherift.wotr.core.npc.interaction;
 
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.core.BlockPos;
@@ -12,9 +13,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * NpcInteraction that opens a menu.
+ */
 public interface MenuInteraction extends NpcInteraction {
 
     /**
+     * Generic interaction across block/mob, for opening a menu
+     * 
      * @param npc    The npc interacted with
      * @param access The level access to open the menu with, tracking the thing being interacted with
      * @param level  The level the menu is opening in
@@ -22,7 +28,7 @@ public interface MenuInteraction extends NpcInteraction {
      */
     void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player);
 
-    default InteractionResult interactWithMob(Mob mob, Player player, InteractionHand hand) {
+    default InteractionResult interactAsMob(Mob mob, Player player, InteractionHand hand) {
         if (player.isCrouching()) {
             return InteractionResult.PASS;
         }
@@ -39,7 +45,7 @@ public interface MenuInteraction extends NpcInteraction {
         return InteractionResult.CONSUME;
     }
 
-    default void interactWithBlock(
+    default void interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,

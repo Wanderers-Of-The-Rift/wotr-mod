@@ -33,7 +33,7 @@ public class NPCCommands extends BaseCommand {
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
 
         builder.then(
-                Commands.literal("make")
+                Commands.literal("makeInto")
                         .then(Commands.argument(MOB_ARG, EntityArgument.entity())
                                 .then(Commands
                                         .argument(NPC_ARG, ResourceArgument.resource(context, WotrRegistries.Keys.NPCS))

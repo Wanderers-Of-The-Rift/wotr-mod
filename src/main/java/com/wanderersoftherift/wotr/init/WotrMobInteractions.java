@@ -2,10 +2,10 @@ package com.wanderersoftherift.wotr.init;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.npc.MerchantInteract;
-import com.wanderersoftherift.wotr.core.npc.NoInteract;
-import com.wanderersoftherift.wotr.core.npc.NpcInteraction;
-import com.wanderersoftherift.wotr.core.npc.QuestGiverInteract;
+import com.wanderersoftherift.wotr.core.npc.interaction.MerchantInteract;
+import com.wanderersoftherift.wotr.core.npc.interaction.NoInteract;
+import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
+import com.wanderersoftherift.wotr.core.npc.interaction.QuestGiverInteract;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;

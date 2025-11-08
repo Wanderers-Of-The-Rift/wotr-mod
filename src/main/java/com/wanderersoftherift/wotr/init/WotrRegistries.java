@@ -20,7 +20,7 @@ import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
-import com.wanderersoftherift.wotr.core.npc.NpcInteraction;
+import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
 import com.wanderersoftherift.wotr.core.quest.Goal;
 import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.Quest;

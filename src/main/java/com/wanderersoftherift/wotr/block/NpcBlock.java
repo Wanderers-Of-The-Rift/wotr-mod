@@ -39,10 +39,10 @@ public class NpcBlock extends BaseEntityBlock {
 
     @Override
     public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext context,
-            List<Component> tooltipComponents,
-            TooltipFlag tooltipFlag) {
+            @NotNull ItemStack stack,
+            @NotNull Item.TooltipContext context,
+            @NotNull List<Component> tooltipComponents,
+            @NotNull TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         if (stack.get(WotrDataComponentType.NPC_IDENTITY) != null) {
             tooltipComponents.add(NpcIdentity.getDisplayName(stack.get(WotrDataComponentType.NPC_IDENTITY)));
