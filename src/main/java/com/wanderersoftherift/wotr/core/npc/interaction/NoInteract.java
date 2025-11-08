@@ -1,6 +1,7 @@
-package com.wanderersoftherift.wotr.core.npc;
+package com.wanderersoftherift.wotr.core.npc.interaction;
 
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -28,12 +29,12 @@ public final class NoInteract implements NpcInteraction {
     }
 
     @Override
-    public InteractionResult interactWithMob(Mob mob, Player player, InteractionHand hand) {
+    public InteractionResult interactAsMob(Mob mob, Player player, InteractionHand hand) {
         return InteractionResult.PASS;
     }
 
     @Override
-    public void interactWithBlock(
+    public void interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,

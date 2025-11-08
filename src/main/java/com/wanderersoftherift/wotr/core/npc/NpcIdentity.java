@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.Guild;
+import com.wanderersoftherift.wotr.core.npc.interaction.NoInteract;
+import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
@@ -26,6 +28,14 @@ import net.minecraft.world.entity.TamableAnimal;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
+/**
+ * The identity data for an NPC. Multiple entities (blocks, mobs) can share an identity, but they are considered the
+ * same for the purpose of available quests and/or trades and similar.
+ * 
+ * @param guild          The guild the NPC belongs to, if any
+ * @param entityType     The preferred entityType for this npc
+ * @param npcInteraction Interaction behavior for the NPC
+ */
 public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityType<?>>> entityType,
         NpcInteraction npcInteraction) {
 
@@ -45,11 +55,24 @@ public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityT
     public static final StreamCodec<? super RegistryFriendlyByteBuf, Holder<NpcIdentity>> STREAM_CODEC = ByteBufCodecs
             .holderRegistry(WotrRegistries.Keys.NPCS);
 
+    /**
+     * @param npc
+     * @return The display name for the npc
+     */
     public static Component getDisplayName(Holder<NpcIdentity> npc) {
         ResourceLocation loc = npc.getKey().location();
         return Component.translatable(loc.toLanguageKey("npc"));
     }
 
+    /**
+     * Spawns an instance of the npc as an entity
+     * 
+     * @param npcIdentity The npc to spawn
+     * @param level       The level to spawn in
+     * @param position    The position to place the npc
+     * @param reason      The reason the npc is being spawned
+     * @return The new npc entity, if any. Will be null if the npc does not define an entity type.
+     */
     public static @Nullable Entity spawn(
             Holder<NpcIdentity> npcIdentity,
             ServerLevel level,
@@ -70,6 +93,11 @@ public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityT
         }).orElse(null);
     }
 
+    /**
+     * Attachment for an NPC identity
+     * 
+     * @param identity
+     */
     public record Attachment(Optional<Holder<NpcIdentity>> identity) {
         public static final Codec<Attachment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 NpcIdentity.CODEC.optionalFieldOf("identity").forGetter(Attachment::identity)
