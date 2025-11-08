@@ -59,7 +59,7 @@ public class NpcBlockEntity extends BlockEntity implements Nameable {
         if (npcIdentity == null || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        npcIdentity.value().mobInteraction().interactWithBlock(npcIdentity, serverLevel, pos, block, player);
+        npcIdentity.value().npcInteraction().interactWithBlock(npcIdentity, serverLevel, pos, block, player);
     }
 
     @Override

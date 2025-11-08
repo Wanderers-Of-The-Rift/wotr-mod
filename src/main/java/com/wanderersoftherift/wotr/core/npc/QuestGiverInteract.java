@@ -1,59 +1,62 @@
-package com.wanderersoftherift.wotr.core.quest;
+package com.wanderersoftherift.wotr.core.npc;
 
-import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
+import com.wanderersoftherift.wotr.core.quest.Quest;
+import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.util.HolderSetUtil;
 import com.wanderersoftherift.wotr.util.RandomUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Common handling of opening quest related menus - at least while we have both the quest hub block and npc quest
- * givers.
+ * MobInteraction attachment for providing Quest Giver behavior
  */
-public final class QuestMenuHelper {
+public record QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCount) implements MenuInteraction {
+    public static final MapCodec<QuestGiverInteract> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Quest.SET_CODEC.optionalFieldOf("quests").forGetter(QuestGiverInteract::quests),
+            Codec.INT.optionalFieldOf("choice_count", 3).forGetter(QuestGiverInteract::choiceCount)
+    ).apply(instance, QuestGiverInteract::new));
 
-    private QuestMenuHelper() {
+    @Override
+    public MapCodec<? extends NpcInteraction> getCodec() {
+        return CODEC;
     }
 
-    public static void openQuestMenu(
-            Player player,
-            Holder<NpcIdentity> npc,
-            ValidatingLevelAccess access,
-            HolderSet<Quest> choices,
-            int choiceCount) {
-        if (!(player.level() instanceof ServerLevel level)) {
-            return;
-        }
+    @Override
+    public void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
+        HolderSet<Quest> choices = quests.orElse(
+                HolderSetUtil.registryToHolderSet(level.registryAccess(), WotrRegistries.Keys.QUESTS));
 
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
         if (activeQuests.isEmpty()) {
             List<QuestState> availableQuests = getAvailableQuests(level, player, npc, choices, choiceCount);
+            player.openMenu(new SimpleMenuProvider(
+                    (containerId, playerInventory, p) -> new QuestGiverMenu(containerId, playerInventory, access,
+                            new ArrayList<>(availableQuests)),
+                    NpcIdentity.getDisplayName(npc)),
+                    registryFriendlyByteBuf -> QuestGiverMenu.QUEST_LIST_CODEC.encode(registryFriendlyByteBuf,
+                            availableQuests));
 
-            player.openMenu(
-                    new SimpleMenuProvider(
-                            (containerId, playerInventory, p) -> new QuestGiverMenu(containerId, playerInventory,
-                                    access, new ArrayList<>(availableQuests)),
-                            NpcIdentity.getDisplayName(npc))
-            );
-            if (player instanceof ServerPlayer serverPlayer) {
-                PacketDistributor.sendToPlayer(serverPlayer, new AvailableQuestsPayload(availableQuests));
-            }
         } else {
             player.openMenu(
                     new SimpleMenuProvider(
