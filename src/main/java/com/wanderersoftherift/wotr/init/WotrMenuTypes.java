@@ -15,6 +15,7 @@ import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -41,7 +42,7 @@ public class WotrMenuTypes {
     /// Quest Menus
 
     public static final Supplier<MenuType<QuestGiverMenu>> QUEST_GIVER_MENU = MENUS.register("quest_giver_menu",
-            () -> new MenuType<>(QuestGiverMenu::new, FeatureFlags.DEFAULT_FLAGS));
+            () -> IMenuTypeExtension.create(QuestGiverMenu::new));
 
     public static final Supplier<MenuType<QuestCompletionMenu>> QUEST_COMPLETION_MENU = MENUS.register(
             "quest_completion_menu", () -> new MenuType<>(QuestCompletionMenu::new, FeatureFlags.DEFAULT_FLAGS));

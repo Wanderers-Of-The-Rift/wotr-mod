@@ -82,15 +82,12 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
     }
 
     private void updateQuestList() {
-        if (menu.isDirty()) {
-            questsWidget.children().clear();
-            for (int i = 0; i < menu.getAvailableQuests().size(); i++) {
-                final int index = i;
-                QuestState quest = menu.getAvailableQuests().get(i);
-                questsWidget.addChild(
-                        new ButtonEntry(Quest.title(quest.getOrigin()), QUEST_ITEM_HEIGHT, () -> selectQuest(index)));
-            }
-            menu.clearDirty();
+        questsWidget.children().clear();
+        for (int i = 0; i < menu.getAvailableQuests().size(); i++) {
+            final int index = i;
+            QuestState quest = menu.getAvailableQuests().get(i);
+            questsWidget.addChild(
+                    new ButtonEntry(Quest.title(quest.getOrigin()), QUEST_ITEM_HEIGHT, () -> selectQuest(index)));
         }
     }
 

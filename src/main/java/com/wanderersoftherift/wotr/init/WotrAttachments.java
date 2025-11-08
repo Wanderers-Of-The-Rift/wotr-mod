@@ -18,14 +18,14 @@ import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
-import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
+import com.wanderersoftherift.wotr.core.npc.NoInteract;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
+import com.wanderersoftherift.wotr.core.npc.NpcInteraction;
+import com.wanderersoftherift.wotr.core.npc.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
-import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
-import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
 import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
@@ -154,10 +154,10 @@ public class WotrAttachments {
                             .copyOnDeath()
                             .build());
 
-    public static final Supplier<AttachmentType<MobInteraction>> MOB_INTERACT = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<NpcInteraction>> NPC_INTERACT = ATTACHMENT_TYPES.register(
             "mob_interact",
-            () -> AttachmentType.<MobInteraction>builder(() -> NoInteract.INSTANCE)
-                    .serialize(MobInteraction.DIRECT_CODEC)
+            () -> AttachmentType.<NpcInteraction>builder(() -> NoInteract.INSTANCE)
+                    .serialize(NpcInteraction.DIRECT_CODEC)
                     .build()
     );
     public static final Supplier<AttachmentType<NpcIdentity.Attachment>> NPC_IDENTITY = ATTACHMENT_TYPES.register(
