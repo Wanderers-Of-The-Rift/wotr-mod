@@ -3,8 +3,6 @@ package com.wanderersoftherift.wotr.core.npc;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.guild.Guild;
-import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
-import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
@@ -27,15 +25,15 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityType<?>>> entityType,
-        MobInteraction mobInteraction) {
+        NpcInteraction npcInteraction) {
 
     public static final Codec<NpcIdentity> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Guild.CODEC.optionalFieldOf("guild").forGetter(NpcIdentity::guild),
             RegistryFixedCodec.create(BuiltInRegistries.ENTITY_TYPE.key())
                     .optionalFieldOf("entity_type")
                     .forGetter(NpcIdentity::entityType),
-            MobInteraction.DIRECT_CODEC.optionalFieldOf("interaction", NoInteract.INSTANCE)
-                    .forGetter(NpcIdentity::mobInteraction)
+            NpcInteraction.DIRECT_CODEC.optionalFieldOf("interaction", NoInteract.INSTANCE)
+                    .forGetter(NpcIdentity::npcInteraction)
     ).apply(instance, NpcIdentity::new));
 
     public static final Codec<Holder<NpcIdentity>> CODEC = LaxRegistryCodec.create(WotrRegistries.Keys.NPCS);
@@ -57,7 +55,7 @@ public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityT
             Entity entity = type.value().spawn(level, position, reason);
             if (entity != null) {
                 entity.setData(WotrAttachments.NPC_IDENTITY, new NpcIdentity.Attachment(Optional.of(npcIdentity)));
-                entity.setData(WotrAttachments.MOB_INTERACT, npc.mobInteraction);
+                entity.setData(WotrAttachments.NPC_INTERACT, npc.npcInteraction);
                 entity.setCustomName(getDisplayName(npcIdentity));
                 if (entity instanceof TamableAnimal tamableAnimal) {
                     tamableAnimal.setTame(true, true);

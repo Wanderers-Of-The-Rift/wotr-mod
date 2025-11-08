@@ -1,8 +1,6 @@
-package com.wanderersoftherift.wotr.entity.npc;
+package com.wanderersoftherift.wotr.core.npc;
 
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
-import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -14,9 +12,9 @@ import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * No-op mob interaction attachment
+ * No-op npc interaction attachment
  */
-public final class NoInteract implements MobInteraction {
+public final class NoInteract implements NpcInteraction {
 
     public static final NoInteract INSTANCE = new NoInteract();
     public static final MapCodec<NoInteract> CODEC = MapCodec.unit(INSTANCE);
@@ -25,7 +23,7 @@ public final class NoInteract implements MobInteraction {
     }
 
     @Override
-    public MapCodec<? extends MobInteraction> getCodec() {
+    public MapCodec<? extends NpcInteraction> getCodec() {
         return CODEC;
     }
 
@@ -41,9 +39,5 @@ public final class NoInteract implements MobInteraction {
             @NotNull BlockPos pos,
             @NotNull Block block,
             @NotNull Player player) {
-    }
-
-    @Override
-    public void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
     }
 }

@@ -1,9 +1,8 @@
-package com.wanderersoftherift.wotr.entity.npc;
+package com.wanderersoftherift.wotr.core.npc;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
-import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
+import com.wanderersoftherift.wotr.core.npc.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -20,15 +19,15 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 /**
- * MobInteraction attachment for Merchant behavior
+ * NpcInteraction attachment for Merchant behavior
  */
-public record MerchantInteract(ResourceKey<LootTable> lootTable) implements MobInteraction {
+public record MerchantInteract(ResourceKey<LootTable> lootTable) implements MenuInteraction {
     public static final MapCodec<MerchantInteract> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(MerchantInteract::lootTable)
     ).apply(instance, MerchantInteract::new));
 
     @Override
-    public MapCodec<? extends MobInteraction> getCodec() {
+    public MapCodec<? extends NpcInteraction> getCodec() {
         return CODEC;
     }
 

@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.trading;
+package com.wanderersoftherift.wotr.core.npc.trading;
 
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;

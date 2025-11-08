@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.trading;
+package com.wanderersoftherift.wotr.core.npc.trading;
 
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;

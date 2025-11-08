@@ -1,11 +1,7 @@
-package com.wanderersoftherift.wotr.entity.npc;
+package com.wanderersoftherift.wotr.core.npc;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -16,17 +12,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+public interface MenuInteraction extends NpcInteraction {
 
-/**
- * Interface for attachments providing mob interactions for any mob
- */
-public interface MobInteraction {
-    Codec<MobInteraction> DIRECT_CODEC = WotrRegistries.MOB_INTERACTIONS.byNameCodec()
-            .dispatch(MobInteraction::getCodec, Function.identity());
-
-    MapCodec<? extends MobInteraction> getCodec();
-
+    /**
+     * @param npc    The npc interacted with
+     * @param access The level access to open the menu with, tracking the thing being interacted with
+     * @param level  The level the menu is opening in
+     * @param player The player to open the menu for
+     */
     void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player);
 
     default InteractionResult interactWithMob(Mob mob, Player player, InteractionHand hand) {
