@@ -280,12 +280,6 @@ public class WotrModifierProvider {
                                         Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_VALUE)))),
                 Style.EMPTY.withColor(ColorUtil.NEON_GREEN))
         );
-        registerModifier(context, getResourceKey("projectile_count"), new Modifier(
-                generateEqualRollSpread(2, List.of(new ToBeTieredModifierEffect(.25F, 1F,
-                        attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_count"),
-                                WotrAttributes.PROJECTILE_COUNT, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)))),
-                Style.EMPTY.withColor(ColorUtil.SOFT_GOLD))
-        );
         registerModifier(context, getResourceKey("projectile_pierce"), new Modifier(
                 generateEqualRollSpread(2, List.of(new ToBeTieredModifierEffect(0.01F, 0.1F,
                         attributeModifierEffectGetter(WanderersOfTheRift.id("projectile_pierce"),
