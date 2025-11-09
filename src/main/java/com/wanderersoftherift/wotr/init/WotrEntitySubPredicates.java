@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.predicate.AndPredicate;
 import com.wanderersoftherift.wotr.entity.predicate.GuildRankPredicate;
 import com.wanderersoftherift.wotr.entity.predicate.OrPredicate;
+import com.wanderersoftherift.wotr.entity.predicate.QuestCompletionPredicate;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -21,5 +22,7 @@ public class WotrEntitySubPredicates {
             () -> OrPredicate.CODEC);
     public static final Supplier<MapCodec<? extends EntitySubPredicate>> GUILD_RANK = ENTITY_SUBPREDICATES
             .register("guild_rank", () -> GuildRankPredicate.CODEC);
+    public static final Supplier<MapCodec<? extends EntitySubPredicate>> QUEST_COMPLETION = ENTITY_SUBPREDICATES
+            .register("quest_completion", () -> QuestCompletionPredicate.CODEC);
 
 }

@@ -20,6 +20,7 @@ import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
 import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
+import com.wanderersoftherift.wotr.core.quest.QuestLog;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
@@ -141,6 +142,10 @@ public class WotrAttachments {
                     .serialize(ActiveQuests.getSerializer())
                     .copyOnDeath()
                     .build());
+    public static final Supplier<AttachmentType<QuestLog>> QUEST_LOG = ATTACHMENT_TYPES.register(
+            "quest_log",
+            () -> AttachmentType.builder(() -> new QuestLog()).serialize(QuestLog.CODEC).copyOnDeath().build()
+    );
     public static final Supplier<AttachmentType<GuildStatus>> GUILD_STATUS = ATTACHMENT_TYPES.register(
             "guild_status",
             () -> AttachmentType.builder(GuildStatus::new)

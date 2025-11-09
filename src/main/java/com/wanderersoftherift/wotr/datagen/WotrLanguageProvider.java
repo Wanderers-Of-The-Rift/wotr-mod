@@ -472,9 +472,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "kill_skeletons.description"), "Bones scare me! Save me!");
         add(WanderersOfTheRift.translationId("quest", "complete_rift.title"), "Complete Rifts");
         add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
+        add(WanderersOfTheRift.translationId("quest", "bring_big_fish.title"), "Prove your value");
+        add(WanderersOfTheRift.translationId("quest", "bring_big_fish.description"),
+                "I'm starving. Could you purlease bring me some fish?");
         add(WanderersOfTheRift.translationId("quest", "bring_fish.title"), "Fish of the day");
-        add(WanderersOfTheRift.translationId("quest", "bring_fish.description"),
-                "I'm starving. Could you purlease bring me a fish?");
+        add(WanderersOfTheRift.translationId("quest", "bring_fish.description"), "Purlease could I have another fish?");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
         add("modifier_effect.wotr.ability", "Cast %s when %s");
