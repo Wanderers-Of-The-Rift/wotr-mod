@@ -477,6 +477,8 @@ public class WotrLanguageProvider extends LanguageProvider {
                 "I'm starving. Could you purlease bring me a fish?");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("modifier.wotr.projectile_count", "Projectile Count");
+        add("modifier.wotr.projectile_pierce", "Projectile Pierce");
         add("modifier_effect.wotr.ability", "Cast %s when %s");
 
         add(Append.TYPE.translationKey(), "Add %s");
