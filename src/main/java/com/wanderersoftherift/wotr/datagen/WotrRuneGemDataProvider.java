@@ -779,7 +779,6 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(1, getModifier(lookup, "projectile_pierce")),
                                         new TieredModifier(1, getModifier(lookup, "projectile_count")),
                                         new TieredModifier(2, getModifier(lookup, "projectile_pierce")),
-                                        new TieredModifier(2, getModifier(lookup, "projectile_count")),
                                         new TieredModifier(3, getModifier(lookup, "projectile_speed")),
                                         new TieredModifier(3, getModifier(lookup, "projectile_spread"))
                                 ))
@@ -788,7 +787,6 @@ public class WotrRuneGemDataProvider {
                 new RunegemData(getTranslatableName("projectile_polished"), RunegemShape.PENTAGON,
                         List.of(new RunegemData.ModifierGroup(
                                 socketablesTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "projectile_pierce")),
                                         new TieredModifier(1, getModifier(lookup, "projectile_count")),
                                         new TieredModifier(2, getModifier(lookup, "projectile_pierce")),
                                         new TieredModifier(2, getModifier(lookup, "projectile_count")),
