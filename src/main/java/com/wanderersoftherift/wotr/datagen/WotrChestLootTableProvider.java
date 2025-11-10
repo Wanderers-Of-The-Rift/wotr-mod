@@ -328,7 +328,8 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
 
     /**
      * Generate a loot table for socketed vanilla weapons. This table only contains swords as the function that rolls
-     * sockets currently check specific tags and rerolls the item types
+     * sockets currently check specific tags and rerolls the item types, with the exception of BOW to create clarity
+     * about what's in that pool
      * 
      * @param consumer
      */
@@ -339,22 +340,22 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 // range type weapons
-                                .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
+                                .add(LootItem.lootTableItem(Items.BOW)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(3, 4,
                                                 WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
-                                .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
+                                .add(LootItem.lootTableItem(Items.BOW)
                                         .when(riftTier(2, 5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(4, 5,
                                                 WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
-                                .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
+                                .add(LootItem.lootTableItem(Items.BOW)
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(5, 6,
                                                 WotrTags.Items.RANGE_TYPE_WEAPON.location().getPath())))
-                                .add(LootItem.lootTableItem(Items.WOODEN_SWORD)
+                                .add(LootItem.lootTableItem(Items.BOW)
                                         .when(riftTier().min(7))
                                         .setWeight(20)
                                         .apply(RollGearFunction.rollRiftGear(6, 6,
