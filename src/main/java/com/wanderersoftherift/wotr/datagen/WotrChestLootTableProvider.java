@@ -182,24 +182,29 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 // 1 Socket
+                                .add(LootItem.lootTableItem(Items.CHAINMAIL_HELMET)
+                                        .when(riftTier().max(1))
+                                        .setWeight(60)
+                                        .apply(RollGearFunction.rollRiftGear(1, 1,
+                                                WotrTags.Items.CHAINMAIL_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.LEATHER_HELMET)
                                         .when(riftTier().max(2))
-                                        .setWeight(20)
+                                        .setWeight(10)
                                         .apply(RollGearFunction.rollRiftGear(1, 1,
                                                 WotrTags.Items.LEATHER_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.GOLDEN_HELMET)
                                         .when(riftTier().max(2))
-                                        .setWeight(20)
+                                        .setWeight(10)
                                         .apply(RollGearFunction.rollRiftGear(1, 1,
                                                 WotrTags.Items.GOLD_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.IRON_HELMET)
                                         .when(riftTier().max(2))
-                                        .setWeight(20)
+                                        .setWeight(10)
                                         .apply(RollGearFunction.rollRiftGear(1, 1,
                                                 WotrTags.Items.IRON_TYPE_GEAR.location().getPath())))
                                 .add(LootItem.lootTableItem(Items.DIAMOND_HELMET)
                                         .when(riftTier().max(2))
-                                        .setWeight(20)
+                                        .setWeight(10)
                                         .apply(RollGearFunction.rollRiftGear(1, 1,
                                                 WotrTags.Items.DIAMOND_TYPE_GEAR.location().getPath())))
                                 // 1-2 sockets
@@ -919,8 +924,8 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
     }
 
     /**
-     * Generate a loot table for socketed vanilla tools. as durability is disabled, this just rolls netherite tools with
-     * sockets
+     * Generate a loot table for socketed vanilla tools. while durability is disabled, this still has faux progression
+     * in tools with sockets for various tiers of rifts
      * 
      * @param consumer
      */
@@ -929,30 +934,70 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                 .withPool(
                         LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(Items.NETHERITE_PICKAXE)
-                                        .when(riftTier().max(4))
+                                // 1-2 sockets
+                                .add(LootItem.lootTableItem(Items.STONE_PICKAXE)
+                                        .when(riftTier().max(2))
+                                        .setWeight(40)
+                                        .apply(GearSocketsFunction.setGearSockets(1, 2)))
+                                .add(LootItem.lootTableItem(Items.STONE_SHOVEL)
+                                        .when(riftTier().max(2))
+                                        .setWeight(40)
+                                        .apply(GearSocketsFunction.setGearSockets(1, 2)))
+                                .add(LootItem.lootTableItem(Items.STONE_HOE)
+                                        .when(riftTier().max(2))
+                                        .setWeight(10)
+                                        .apply(GearSocketsFunction.setGearSockets(1, 2)))
+                                .add(LootItem.lootTableItem(Items.GOLDEN_PICKAXE)
+                                        .when(riftTier().max(3))
+                                        .setWeight(15)
+                                        .apply(GearSocketsFunction.setGearSockets(1, 2)))
+                                .add(LootItem.lootTableItem(Items.GOLDEN_SHOVEL)
+                                        .when(riftTier().max(3))
+                                        .setWeight(15)
+                                        .apply(GearSocketsFunction.setGearSockets(1, 2)))
+                                .add(LootItem.lootTableItem(Items.GOLDEN_HOE)
+                                        .when(riftTier().max(3))
+                                        .setWeight(4)
+                                        .apply(GearSocketsFunction.setGearSockets(1, 2)))
+                                // 2-4 sockets
+                                .add(LootItem.lootTableItem(Items.IRON_PICKAXE)
+                                        .when(riftTier(3, 5))
                                         .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(3, 5)))
-                                .add(LootItem.lootTableItem(Items.NETHERITE_PICKAXE)
-                                        .when(riftTier().min(5))
+                                        .apply(GearSocketsFunction.setGearSockets(2, 4)))
+                                .add(LootItem.lootTableItem(Items.IRON_SHOVEL)
+                                        .when(riftTier(3, 5))
                                         .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
-                                .add(LootItem.lootTableItem(Items.NETHERITE_SHOVEL)
-                                        .when(riftTier().max(4))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(3, 5)))
-                                .add(LootItem.lootTableItem(Items.NETHERITE_SHOVEL)
-                                        .when(riftTier().min(5))
-                                        .setWeight(20)
-                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
-                                .add(LootItem.lootTableItem(Items.NETHERITE_HOE)
-                                        .when(riftTier().max(4))
+                                        .apply(GearSocketsFunction.setGearSockets(2, 4)))
+                                .add(LootItem.lootTableItem(Items.IRON_HOE)
+                                        .when(riftTier(3, 5))
                                         .setWeight(5)
-                                        .apply(GearSocketsFunction.setGearSockets(3, 5)))
-                                .add(LootItem.lootTableItem(Items.NETHERITE_HOE)
-                                        .when(riftTier().min(5))
+                                        .apply(GearSocketsFunction.setGearSockets(2, 4)))
+                                // 4-6 sockets
+                                .add(LootItem.lootTableItem(Items.DIAMOND_PICKAXE)
+                                        .when(riftTier().min(4))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(4, 6)))
+                                .add(LootItem.lootTableItem(Items.DIAMOND_SHOVEL)
+                                        .when(riftTier().min(4))
+                                        .setWeight(20)
+                                        .apply(GearSocketsFunction.setGearSockets(4, 6)))
+                                .add(LootItem.lootTableItem(Items.DIAMOND_HOE)
+                                        .when(riftTier().min(4))
                                         .setWeight(5)
-                                        .apply(GearSocketsFunction.setGearSockets(5, 6)))
+                                        .apply(GearSocketsFunction.setGearSockets(4, 6)))
+                                // 6 sockets
+                                .add(LootItem.lootTableItem(Items.NETHERITE_PICKAXE)
+                                        .when(riftTier().min(6))
+                                        .setWeight(10)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
+                                .add(LootItem.lootTableItem(Items.NETHERITE_SHOVEL)
+                                        .when(riftTier().min(6))
+                                        .setWeight(10)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
+                                .add(LootItem.lootTableItem(Items.NETHERITE_HOE)
+                                        .when(riftTier().min(6))
+                                        .setWeight(2)
+                                        .apply(GearSocketsFunction.setGearSockets(6, 6)))
                 ));
     }
 
