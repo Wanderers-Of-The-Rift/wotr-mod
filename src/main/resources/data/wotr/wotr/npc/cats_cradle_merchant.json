@@ -1,8 +1,11 @@
 {
   "guild": "wotr:cats_cradle",
   "interaction": {
-    "type": "wotr:merchant",
-    "loot_table": "wotr:merchant/test_merchant"
+    "type": "wotr:quest_receiver",
+    "fallback": {
+      "type": "wotr:merchant",
+      "loot_table": "wotr:merchant/test_merchant"
+    }
   },
   "entity_type": "cat"
 }

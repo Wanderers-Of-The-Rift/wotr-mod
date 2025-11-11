@@ -3,13 +3,13 @@ package com.wanderersoftherift.wotr.core.npc.interaction;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
-import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestGiverMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -17,6 +17,7 @@ import com.wanderersoftherift.wotr.util.HolderSetUtil;
 import com.wanderersoftherift.wotr.util.RandomUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -32,11 +33,24 @@ import java.util.stream.Collectors;
 /**
  * MobInteraction attachment for providing Quest Giver behavior
  */
-public record QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCount) implements MenuInteraction {
+public final class QuestGiverInteract extends QuestReceiverInteract {
     public static final MapCodec<QuestGiverInteract> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Quest.SET_CODEC.optionalFieldOf("quests").forGetter(QuestGiverInteract::quests),
-            Codec.INT.optionalFieldOf("choice_count", 3).forGetter(QuestGiverInteract::choiceCount)
+            Codec.INT.optionalFieldOf("choice_count", 3).forGetter(QuestGiverInteract::choiceCount),
+            NpcInteraction.DIRECT_CODEC.optionalFieldOf("fallback").forGetter(MenuInteraction::fallback)
     ).apply(instance, QuestGiverInteract::new));
+
+    private static final Component ACTIVE_QUEST_MESSAGE = Component
+            .translatable(WanderersOfTheRift.translationId("message", "quest_already_active"));
+
+    private final Optional<HolderSet<Quest>> quests;
+    private final int choiceCount;
+
+    public QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCount, Optional<NpcInteraction> fallback) {
+        super(fallback);
+        this.quests = quests;
+        this.choiceCount = choiceCount;
+    }
 
     @Override
     public MapCodec<? extends NpcInteraction> getCodec() {
@@ -44,12 +58,15 @@ public record QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCo
     }
 
     @Override
-    public void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
+    public boolean interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
+        if (super.interact(npc, access, level, player)) {
+            return true;
+        }
         HolderSet<Quest> choices = quests.orElse(
                 HolderSetUtil.registryToHolderSet(level.registryAccess(), WotrRegistries.Keys.QUESTS));
 
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
-        if (activeQuests.isEmpty()) {
+        if (activeQuests.getQuestList().stream().noneMatch(quest -> quest.getQuestGiver().equals(npc))) {
             List<QuestState> availableQuests = getAvailableQuests(level, player, npc, choices, choiceCount);
             player.openMenu(new SimpleMenuProvider(
                     (containerId, playerInventory, p) -> new QuestGiverMenu(containerId, playerInventory, access,
@@ -57,15 +74,12 @@ public record QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCo
                     NpcIdentity.getDisplayName(npc)),
                     registryFriendlyByteBuf -> QuestGiverMenu.QUEST_LIST_CODEC.encode(registryFriendlyByteBuf,
                             availableQuests));
-
-        } else {
-            player.openMenu(
-                    new SimpleMenuProvider(
-                            (containerId, playerInventory, p) -> new QuestCompletionMenu(containerId, playerInventory,
-                                    access, activeQuests, activeQuests.getQuestList().getFirst().getId()),
-                            NpcIdentity.getDisplayName(npc))
-            );
+            return true;
+        } else if (fallback().isEmpty()) {
+            player.displayClientMessage(ACTIVE_QUEST_MESSAGE, true);
+            return true;
         }
+        return false;
     }
 
     private static @NotNull List<QuestState> getAvailableQuests(
@@ -95,8 +109,16 @@ public record QuestGiverInteract(Optional<HolderSet<Quest>> quests, int choiceCo
                 choices.stream().filter(quest -> quest.value().isAvailable(player, level)).toList(), choiceCount,
                 level.getRandom())
                 .stream()
-                .map(quest -> new QuestState(quest, npc, quest.value().generateGoals(params),
-                        quest.value().generateRewards(params)))
+                .map(quest -> new QuestState(quest, npc, quest.value().generateHandInTarget(params, npc),
+                        quest.value().generateGoals(params), quest.value().generateRewards(params)))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<HolderSet<Quest>> quests() {
+        return quests;
+    }
+
+    public int choiceCount() {
+        return choiceCount;
     }
 }
