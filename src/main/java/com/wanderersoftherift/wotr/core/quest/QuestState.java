@@ -19,7 +19,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,7 +31,8 @@ public class QuestState {
 
     public static final Codec<QuestState> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("id").forGetter(QuestState::getId),
-            NpcIdentity.CODEC.optionalFieldOf("quest_giver").forGetter(x -> Optional.ofNullable(x.giverId)),
+            NpcIdentity.CODEC.fieldOf("quest_giver").forGetter(QuestState::getQuestGiver),
+            NpcIdentity.CODEC.fieldOf("hand_in_to").forGetter(QuestState::getHandInTo),
             Quest.CODEC.fieldOf("origin").forGetter(QuestState::getOrigin),
             Goal.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(QuestState::getGoals),
             Reward.DIRECT_CODEC.listOf().fieldOf("rewards").forGetter(QuestState::getRewards),
@@ -40,7 +40,8 @@ public class QuestState {
     ).apply(instance, QuestState::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, QuestState> STREAM_CODEC = StreamCodec.composite(
-            UUIDUtil.STREAM_CODEC, QuestState::getId, ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS),
+            UUIDUtil.STREAM_CODEC, QuestState::getId, NpcIdentity.STREAM_CODEC, QuestState::getQuestGiver,
+            NpcIdentity.STREAM_CODEC, QuestState::getHandInTo, ByteBufCodecs.holderRegistry(WotrRegistries.Keys.QUESTS),
             QuestState::getOrigin, Goal.STREAM_CODEC.apply(ByteBufCodecs.list()), QuestState::getGoals,
             Reward.STREAM_CODEC.apply(ByteBufCodecs.list()), QuestState::getRewards,
             ByteBufCodecs.INT.apply(ByteBufCodecs.list()), x -> IntArrayList.wrap(x.goalProgress), QuestState::new
@@ -48,29 +49,29 @@ public class QuestState {
 
     private IAttachmentHolder holder;
     private final UUID id;
-    private final Holder<NpcIdentity> giverId;
+    private final Holder<NpcIdentity> giver;
+    private final Holder<NpcIdentity> handInTo;
     private final Holder<Quest> origin;
     private final List<Goal> goals;
     private final List<Reward> rewards;
     private final int[] goalProgress;
 
-    public QuestState(UUID id, Holder<Quest> origin, List<Goal> goals, List<Reward> rewards, List<Integer> progress) {
-        this(id, Optional.empty(), origin, goals, rewards, progress);
-    }
-
-    public QuestState(Holder<Quest> origin, Holder<NpcIdentity> giver, Collection<Goal> goals, List<Reward> rewards) {
+    public QuestState(Holder<Quest> origin, Holder<NpcIdentity> giver, Holder<NpcIdentity> handInTo,
+            Collection<Goal> goals, List<Reward> rewards) {
         this.id = UUID.randomUUID();
-        this.giverId = giver;
+        this.giver = giver;
         this.origin = origin;
         this.goals = ImmutableList.copyOf(goals);
         this.rewards = ImmutableList.copyOf(rewards);
         this.goalProgress = new int[goals.size()];
+        this.handInTo = handInTo;
     }
 
-    public QuestState(UUID id, Optional<Holder<NpcIdentity>> giver, Holder<Quest> origin, List<Goal> goals,
-            List<Reward> rewards, List<Integer> progress) {
+    public QuestState(UUID id, Holder<NpcIdentity> giver, Holder<NpcIdentity> handInTo, Holder<Quest> origin,
+            List<Goal> goals, List<Reward> rewards, List<Integer> progress) {
         this.id = id;
-        this.giverId = giver.orElse(null);
+        this.giver = giver;
+        this.handInTo = handInTo;
         this.origin = origin;
         this.goals = goals;
         this.rewards = rewards;
@@ -89,7 +90,11 @@ public class QuestState {
     }
 
     public Holder<NpcIdentity> getQuestGiver() {
-        return giverId;
+        return giver;
+    }
+
+    public Holder<NpcIdentity> getHandInTo() {
+        return handInTo;
     }
 
     public Holder<Quest> getOrigin() {

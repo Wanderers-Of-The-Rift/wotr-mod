@@ -27,7 +27,7 @@ public interface NpcInteraction {
 
     /**
      * Npc interaction triggered on a mob
-     * 
+     *
      * @param mob    The mob interacted with
      * @param player The player interacting
      * @param hand   The hand the player is interacting with
@@ -37,14 +37,15 @@ public interface NpcInteraction {
 
     /**
      * Npc interaction triggered on a block
-     * 
+     *
      * @param npc    The identity of the npc
      * @param level  The level the interaction occurred in
      * @param pos    The position of the interacted with block
      * @param block  The block type
      * @param player The player interacting
+     * @return Whether the interaction has been consumed
      */
-    void interactAsBlock(
+    boolean interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,

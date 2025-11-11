@@ -19,13 +19,22 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
+import java.util.Optional;
+
 /**
  * NpcInteraction attachment for Merchant behavior
  */
-public record MerchantInteract(ResourceKey<LootTable> lootTable) implements MenuInteraction {
+public class MerchantInteract extends MenuInteraction {
     public static final MapCodec<MerchantInteract> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(MerchantInteract::lootTable)
+            ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(MerchantInteract::lootTable),
+            NpcInteraction.DIRECT_CODEC.optionalFieldOf("fallback").forGetter(MenuInteraction::fallback)
     ).apply(instance, MerchantInteract::new));
+    private final ResourceKey<LootTable> lootTable;
+
+    public MerchantInteract(ResourceKey<LootTable> lootTable, Optional<NpcInteraction> fallback) {
+        super(fallback);
+        this.lootTable = lootTable;
+    }
 
     @Override
     public MapCodec<? extends NpcInteraction> getCodec() {
@@ -33,7 +42,7 @@ public record MerchantInteract(ResourceKey<LootTable> lootTable) implements Menu
     }
 
     @Override
-    public void interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
+    public boolean interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
         AvailableTrades availableTrades = player.getData(WotrAttachments.AVAILABLE_TRADES);
 
         IItemHandlerModifiable merchantInventory = availableTrades.getExisting(npc).orElseGet(() -> {
@@ -49,6 +58,10 @@ public record MerchantInteract(ResourceKey<LootTable> lootTable) implements Menu
                                 merchantInventory, player.getData(WotrAttachments.WALLET), access),
                         NpcIdentity.getDisplayName(npc))
         );
+        return true;
     }
 
+    public ResourceKey<LootTable> lootTable() {
+        return lootTable;
+    }
 }
