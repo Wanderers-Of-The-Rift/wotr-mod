@@ -1,6 +1,7 @@
 {
   "values": [
     "wotr:bring_fish",
+    "wotr:deliver_fish",
     "wotr:complete_rift",
     "wotr:fetch_quest",
     "wotr:gold_and_iron",

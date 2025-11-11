@@ -34,11 +34,12 @@ public final class NoInteract implements NpcInteraction {
     }
 
     @Override
-    public void interactAsBlock(
+    public boolean interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,
             @NotNull Block block,
             @NotNull Player player) {
+        return false;
     }
 }

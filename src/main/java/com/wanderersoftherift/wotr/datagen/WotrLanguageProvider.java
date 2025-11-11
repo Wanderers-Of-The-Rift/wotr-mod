@@ -442,6 +442,8 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
         add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
+        add(WanderersOfTheRift.translationId("message", "quest_already_active"),
+                "You must complete your existing quest before taking on another");
 
         add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
@@ -480,6 +482,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "bring_fish.title"), "Fish of the day");
         add(WanderersOfTheRift.translationId("quest", "bring_fish.description"),
                 "I'm starving. Could you purlease bring me a fish?");
+        add(WanderersOfTheRift.translationId("quest", "deliver_fish.title"), "A special delivery");
+        add(WanderersOfTheRift.translationId("quest", "deliver_fish.description"),
+                "The Cats Cradle merchant has been working very hard lately, I worry they're skipping lunch. Could you bring them a fish for me?");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
         add("modifier_effect.wotr.ability", "Cast %s when %s");
