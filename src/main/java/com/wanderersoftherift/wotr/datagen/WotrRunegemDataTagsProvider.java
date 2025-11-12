@@ -44,7 +44,8 @@ public class WotrRunegemDataTagsProvider extends TagsProvider<RunegemData> {
         WotrRuneGemDataProvider.DATA.forEach((key, value) -> {
             if (value.tier() == tier) {
                 if (!key.location().getPath().contains("zombie") && !key.location().getPath().contains("skeleton")
-                        && !key.location().getPath().contains("creeper")) {
+                        && !key.location().getPath().contains("creeper")
+                        && !key.location().getPath().contains("enderman")) {
                     tag(geodeTag).add(key);
                 }
             }
@@ -55,7 +56,8 @@ public class WotrRunegemDataTagsProvider extends TagsProvider<RunegemData> {
         WotrRuneGemDataProvider.DATA.forEach((key, value) -> {
             if (value.tier() == tier) {
                 if (key.location().getPath().contains("zombie") || key.location().getPath().contains("skeleton")
-                        || key.location().getPath().contains("creeper")) {
+                        || key.location().getPath().contains("creeper")
+                        || key.location().getPath().contains("enderman")) {
                     tag(tag).add(key);
                 }
             }

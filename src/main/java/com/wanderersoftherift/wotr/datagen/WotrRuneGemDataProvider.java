@@ -431,6 +431,12 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.FRAMED));
+        registerRunegem(context, getRunegemResourceKey("enderman_raw"), new RunegemData(getTranslatableName("enderman_raw"),
+                RunegemShape.DIAMOND, List.of(new RunegemData.ModifierGroup(
+                        bootsTag, List.of(
+                                new TieredModifier(1, getModifier(lookup, "test_fast_dash"))
+                        ))),
+                RunegemTier.RAW));
         registerRunegem(context, getRunegemResourceKey("heal_power_raw"),
                 new RunegemData(getTranslatableName("heal_power_raw"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
