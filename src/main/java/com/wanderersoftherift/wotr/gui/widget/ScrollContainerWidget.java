@@ -31,6 +31,7 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
 
     private final List<T> children = new ArrayList<>();
     private double scrollRate = 20;
+    private int spacing = 0;
 
     public ScrollContainerWidget(int x, int y, int width, int height) {
         this(x, y, width, height, Collections.emptyList());
@@ -39,6 +40,17 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
     public ScrollContainerWidget(int x, int y, int width, int height, Collection<? extends T> entries) {
         super(x, y, width, height, Component.empty());
         this.children.addAll(entries);
+    }
+
+    /**
+     * @return Space between children
+     */
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int value) {
+        spacing = value;
     }
 
     @Override
@@ -57,7 +69,11 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
 
     @Override
     protected int contentHeight() {
-        return children.stream().map(x -> x.getHeight(width - SCROLLBAR_SPACE)).reduce(0, Integer::sum);
+        if (children.isEmpty()) {
+            return 0;
+        }
+        return children.stream().map(x -> x.getHeight(width - SCROLLBAR_SPACE)).reduce(0, Integer::sum)
+                + (children().size() - 1) * spacing;
     }
 
     @Override
@@ -90,7 +106,7 @@ public class ScrollContainerWidget<T extends ScrollContainerEntry> extends Abstr
                 child.setHeight(childHeight);
                 child.render(graphics, mouseX, mouseY, delta);
             }
-            absoluteY = rowBottom;
+            absoluteY = rowBottom + spacing;
         }
         graphics.disableScissor();
     }
