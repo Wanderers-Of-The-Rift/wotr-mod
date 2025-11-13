@@ -108,7 +108,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        questInfo.setHeight(guiGraphics.guiHeight() - 80);
+        questInfo.setHeight(guiGraphics.guiHeight() - 40);
         questInfo.setX((guiGraphics.guiWidth() - questInfo.getWidth() - MENU_BAR_WIDTH) / 2 + MENU_BAR_WIDTH);
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
