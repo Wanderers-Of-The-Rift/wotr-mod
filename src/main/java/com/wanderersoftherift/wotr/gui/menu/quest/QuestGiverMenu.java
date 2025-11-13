@@ -56,7 +56,7 @@ public class QuestGiverMenu extends AbstractContainerMenu {
 
     public void acceptQuest(ServerPlayer player, int index) {
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
-        if (activeQuests.isEmpty() && index >= 0 && index < availableQuests.size()) {
+        if (index >= 0 && index < availableQuests.size()) {
             activeQuests.add(availableQuests.get(index));
             player.closeContainer();
         }
