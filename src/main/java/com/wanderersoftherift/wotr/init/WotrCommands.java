@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.commands.ExportCommands;
 import com.wanderersoftherift.wotr.commands.GuildCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
 import com.wanderersoftherift.wotr.commands.NPCCommands;
+import com.wanderersoftherift.wotr.commands.QuestCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
@@ -36,6 +37,7 @@ public final class WotrCommands {
         new StatCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new AbilityResourceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new GuildCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new QuestCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent
