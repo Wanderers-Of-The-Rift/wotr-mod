@@ -431,19 +431,8 @@ public class WotrRuneGemDataProvider {
                                         new TieredModifier(3, getModifier(lookup, "knockback_resistance"))
                                 ))),
                 RunegemTier.FRAMED));
-        registerRunegem(context, getRunegemResourceKey("enderman_raw"), new RunegemData(getTranslatableName("enderman_raw"),
-                RunegemShape.DIAMOND, List.of(
-                        new RunegemData.ModifierGroup(
-                                mainHandToolTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "silk_touch_enchant"))
-                                )),
-                        new RunegemData.ModifierGroup(
-                                bootsTag, List.of(
-                                        new TieredModifier(1, getModifier(lookup, "fast_dash_condition"))
-                        ))),
-                RunegemTier.RAW));
-        registerRunegem(context, getRunegemResourceKey("enderman_cut"), new RunegemData(getTranslatableName("enderman_cut"),
-                RunegemShape.DIAMOND, List.of(
+        registerRunegem(context, getRunegemResourceKey("enderman_raw"),
+                new RunegemData(getTranslatableName("enderman_raw"), RunegemShape.DIAMOND, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "silk_touch_enchant"))
@@ -452,9 +441,9 @@ public class WotrRuneGemDataProvider {
                                 bootsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "fast_dash_condition"))
                                 ))),
-                RunegemTier.CUT));
-        registerRunegem(context, getRunegemResourceKey("enderman_shaped"), new RunegemData(getTranslatableName("enderman_shaped"),
-                RunegemShape.DIAMOND, List.of(
+                        RunegemTier.RAW));
+        registerRunegem(context, getRunegemResourceKey("enderman_cut"),
+                new RunegemData(getTranslatableName("enderman_cut"), RunegemShape.DIAMOND, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "silk_touch_enchant"))
@@ -463,9 +452,9 @@ public class WotrRuneGemDataProvider {
                                 bootsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "fast_dash_condition"))
                                 ))),
-                RunegemTier.SHAPED));
-        registerRunegem(context, getRunegemResourceKey("enderman_polished"), new RunegemData(getTranslatableName("enderman_polished"),
-                RunegemShape.DIAMOND, List.of(
+                        RunegemTier.CUT));
+        registerRunegem(context, getRunegemResourceKey("enderman_shaped"),
+                new RunegemData(getTranslatableName("enderman_shaped"), RunegemShape.DIAMOND, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "silk_touch_enchant"))
@@ -474,9 +463,20 @@ public class WotrRuneGemDataProvider {
                                 bootsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "fast_dash_condition"))
                                 ))),
-                RunegemTier.POLISHED));
-        registerRunegem(context, getRunegemResourceKey("enderman_framed"), new RunegemData(getTranslatableName("enderman_framed"),
-                RunegemShape.DIAMOND, List.of(
+                        RunegemTier.SHAPED));
+        registerRunegem(context, getRunegemResourceKey("enderman_polished"),
+                new RunegemData(getTranslatableName("enderman_polished"), RunegemShape.DIAMOND, List.of(
+                        new RunegemData.ModifierGroup(
+                                mainHandToolTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "silk_touch_enchant"))
+                                )),
+                        new RunegemData.ModifierGroup(
+                                bootsTag, List.of(
+                                        new TieredModifier(1, getModifier(lookup, "fast_dash_condition"))
+                                ))),
+                        RunegemTier.POLISHED));
+        registerRunegem(context, getRunegemResourceKey("enderman_framed"),
+                new RunegemData(getTranslatableName("enderman_framed"), RunegemShape.DIAMOND, List.of(
                         new RunegemData.ModifierGroup(
                                 mainHandToolTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "silk_touch_enchant"))
