@@ -257,6 +257,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".break_block", "Break Block");
+        add("ability_conditions." + WanderersOfTheRift.MODID + ".fast_dash", "Fast Dash");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -438,6 +439,8 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         addRunegems();
         addModifiers();
+        add(WanderersOfTheRift.translationId("modifier", "silk_touch_enchant"), "Silk Touch");
+        add(WanderersOfTheRift.translationId("modifier", "fast_dash_condition"), "Fast Dash");
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
         add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
