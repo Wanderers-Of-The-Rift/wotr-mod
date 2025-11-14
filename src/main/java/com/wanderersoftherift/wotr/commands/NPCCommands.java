@@ -46,6 +46,9 @@ public class NPCCommands extends BaseCommand {
         builder.then(
                 Commands.literal("create")
                         .then(Commands.argument(NPC_ARG, ResourceArgument.resource(context, WotrRegistries.Keys.NPCS))
+                                .executes(ctx -> createNpc(ctx,
+                                        ResourceArgument.getResource(ctx, NPC_ARG, WotrRegistries.Keys.NPCS),
+                                        BlockPos.containing(ctx.getSource().getPosition())))
                                 .then(Commands.argument(LOCATION_ARG, BlockPosArgument.blockPos())
                                         .executes(ctx -> createNpc(ctx,
                                                 ResourceArgument.getResource(ctx, NPC_ARG, WotrRegistries.Keys.NPCS),
