@@ -86,7 +86,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/room/unstable/323/village-3-rachaelrose",
-                "processors": "wotr:room_theme_default",
+                "processors": "wotr:room_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
