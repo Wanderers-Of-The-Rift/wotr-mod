@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * MobInteraction attachment for providing Quest Giver behavior
  */
-public final class QuestGiverInteract extends QuestReceiverInteract {
+public final class QuestGiverInteract extends MenuInteraction {
     public static final MapCodec<QuestGiverInteract> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Quest.SET_CODEC.optionalFieldOf("quests").forGetter(QuestGiverInteract::quests),
             Codec.INT.optionalFieldOf("choice_count", 3).forGetter(QuestGiverInteract::choiceCount),
@@ -59,9 +59,6 @@ public final class QuestGiverInteract extends QuestReceiverInteract {
 
     @Override
     public boolean interact(Holder<NpcIdentity> npc, ValidatingLevelAccess access, ServerLevel level, Player player) {
-        if (super.interact(npc, access, level, player)) {
-            return true;
-        }
         HolderSet<Quest> choices = quests.orElse(
                 HolderSetUtil.registryToHolderSet(level.registryAccess(), WotrRegistries.Keys.QUESTS));
 

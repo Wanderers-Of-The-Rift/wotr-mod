@@ -59,16 +59,17 @@ public abstract class MenuInteraction implements NpcInteraction {
         return fallback.map(interaction -> interaction.interactAsMob(mob, player, hand)).orElse(InteractionResult.PASS);
     }
 
-    public final boolean interactAsBlock(
+    public final InteractionResult interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,
             @NotNull Block block,
             @NotNull Player player) {
         if (interact(npc, ValidatingLevelAccess.create(level, pos, block), level, player)) {
-            return true;
+            return InteractionResult.CONSUME;
         }
-        return fallback.map(interaction -> interaction.interactAsBlock(npc, level, pos, block, player)).orElse(false);
+        return fallback.map(interaction -> interaction.interactAsBlock(npc, level, pos, block, player))
+                .orElse(InteractionResult.PASS);
     }
 
     public Optional<NpcInteraction> fallback() {

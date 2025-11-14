@@ -43,9 +43,9 @@ public interface NpcInteraction {
      * @param pos    The position of the interacted with block
      * @param block  The block type
      * @param player The player interacting
-     * @return Whether the interaction has been consumed
+     * @return The interaction result
      */
-    boolean interactAsBlock(
+    InteractionResult interactAsBlock(
             Holder<NpcIdentity> npc,
             ServerLevel level,
             @NotNull BlockPos pos,
