@@ -322,7 +322,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("ability_upgrade", "aoe.description"),
                 "Increases Area of Effect by 1 block");
         add(WanderersOfTheRift.translationId("ability_upgrade", "cooldown.name"), "Decrease Cooldown");
-        add(WanderersOfTheRift.translationId("ability_upgrade", "cooldown.description"), "Decreases Cooldown by 10%");
+        add(WanderersOfTheRift.translationId("ability_upgrade", "cooldown.description"), "Decreases Cooldown by 3%");
         add(WanderersOfTheRift.translationId("ability_upgrade", "damage.name"), "Damage Up");
         add(WanderersOfTheRift.translationId("ability_upgrade", "damage.description"), "Increases Damage by 10%");
         add(WanderersOfTheRift.translationId("ability_upgrade", "drain_life.name"), "Drain Life");
