@@ -485,7 +485,7 @@ public class WotrRuneGemDataProvider {
                                 bootsTag, List.of(
                                         new TieredModifier(1, getModifier(lookup, "fast_dash_condition"))
                                 ))),
-                RunegemTier.FRAMED));
+                        RunegemTier.FRAMED));
         registerRunegem(context, getRunegemResourceKey("heal_power_raw"),
                 new RunegemData(getTranslatableName("heal_power_raw"), RunegemShape.HEART, List.of(
                         new RunegemData.ModifierGroup(
