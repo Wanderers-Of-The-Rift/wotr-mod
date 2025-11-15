@@ -26,9 +26,9 @@ import java.util.Optional;
 public class GearTests {
 
     @PrefixGameTestTemplate(false)
-    @GameTest(template = "rift_portal_test")
+    @GameTest(template = "rune_anvil_test")
     public static void addRunegemWithAnvil(GameTestHelper helper) {
-        BlockPos anvilBlockPos = new BlockPos(3, 1, 4);
+        BlockPos anvilBlockPos = new BlockPos(2, 1, 1);
         MockPlayer mockPlayer = MockPlayer.create(helper, GameType.SURVIVAL);
         helper.useBlock(anvilBlockPos, mockPlayer);
         if (!(mockPlayer.containerMenu instanceof RuneAnvilMenu menu)) {
