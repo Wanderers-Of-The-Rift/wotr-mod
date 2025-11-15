@@ -1,47 +1,68 @@
 package com.wanderersoftherift.wotr.block;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.block.blockentity.RiftSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
+import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
 
 /**
  * A Rift Spawner block is a usable block for generating rift entrances.
  */
-public class RiftSpawnerBlock extends Block {
+public class RiftSpawnerBlock extends BaseEntityBlock {
     public static final MapCodec<RiftSpawnerBlock> CODEC = simpleCodec(RiftSpawnerBlock::new);
-    // spotless:off
-    private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(
-            Direction.UP, Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0),
-            Direction.DOWN, Block.box(0.0, 3.0, 0.0, 16.0, 16.0, 16.0),
-            Direction.NORTH, Block.box(0.0, 0.0, 3.0, 16.0, 16.0, 16.0),
-            Direction.SOUTH, Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 13.0),
-            Direction.WEST, Block.box(3.0, 0.0, 0.0, 16.0, 16.0, 16.0),
-            Direction.EAST, Block.box(0.0, 0.0, 0.0, 13.0, 16.0, 16.0)));
-    // spotless:on
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+    private static final VoxelShape BASE_LOWER_SHAPE = VoxelShapeUtils.combine(
+            Block.box(0, 0, 1, 16, 2, 15), Block.box(0, 2, 6, 16, 16, 10));
+    private static final VoxelShape BASE_UPPER_SHAPE = Block.box(0, 0, 6, 16, 13, 10);
+    private static final Table<DoubleBlockHalf, Direction.Axis, VoxelShape> SHAPES;
+
+    static {
+        SHAPES = ImmutableTable.<DoubleBlockHalf, Direction.Axis, VoxelShape>builder()
+                .put(DoubleBlockHalf.LOWER, Direction.Axis.Z, BASE_LOWER_SHAPE)
+                .put(DoubleBlockHalf.LOWER, Direction.Axis.X,
+                        VoxelShapeUtils.rotateHorizontal(BASE_LOWER_SHAPE, Direction.EAST))
+                .put(DoubleBlockHalf.UPPER, Direction.Axis.Z, BASE_UPPER_SHAPE)
+                .put(DoubleBlockHalf.UPPER, Direction.Axis.X,
+                        VoxelShapeUtils.rotateHorizontal(BASE_UPPER_SHAPE, Direction.EAST))
+                .build();
+    }
 
     public RiftSpawnerBlock(Properties properties) {
         super(properties);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP));
+        registerDefaultState(
+                stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
     public @NotNull MapCodec<RiftSpawnerBlock> codec() {
@@ -54,17 +75,88 @@ public class RiftSpawnerBlock extends Block {
             @NotNull BlockGetter level,
             @NotNull BlockPos pos,
             @NotNull CollisionContext context) {
-        return SHAPES.get(state.getValue(BlockStateProperties.FACING));
+        return SHAPES.get(state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF),
+                state.getValue(HorizontalDirectionalBlock.FACING).getAxis());
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING).add(HALF);
+    }
+
+    @Override
+    protected @NotNull BlockState updateShape(
+            BlockState state,
+            @NotNull LevelReader level,
+            @NotNull ScheduledTickAccess scheduler,
+            @NotNull BlockPos pos,
+            Direction dir,
+            @NotNull BlockPos adjPos,
+            @NotNull BlockState adjState,
+            @NotNull RandomSource random) {
+        DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
+        if (dir.getAxis() == Direction.Axis.Y && (doubleBlockHalf == DoubleBlockHalf.LOWER) == (dir == Direction.UP)) {
+            if (adjState.getBlock() instanceof RiftSpawnerBlock && adjState.getValue(HALF) != doubleBlockHalf) {
+                return adjState.setValue(HALF, doubleBlockHalf);
+            } else {
+                return Blocks.AIR.defaultBlockState();
+            }
+        }
+        return state;
     }
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getClickedFace());
+        BlockPos blockpos = context.getClickedPos();
+        Level level = context.getLevel();
+        Direction direction = context.getHorizontalDirection().getOpposite();
+        if (blockpos.getY() < level.getMaxY() && level.getBlockState(blockpos.above()).canBeReplaced(context)) {
+            return this.defaultBlockState().setValue(FACING, direction).setValue(HALF, DoubleBlockHalf.LOWER);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setPlacedBy(
+            Level level,
+            BlockPos pos,
+            BlockState state,
+            LivingEntity placer,
+            @NotNull ItemStack stack) {
+        level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+    }
+
+    @Override
+    public @NotNull BlockState playerWillDestroy(
+            Level level,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull Player player) {
+        if (!level.isClientSide && (player.isCreative() || !player.hasCorrectToolForDrops(state, level, pos))) {
+            DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
+            if (doubleblockhalf == DoubleBlockHalf.UPPER) {
+                BlockPos blockpos = pos.below();
+                BlockState blockstate = level.getBlockState(blockpos);
+                if (blockstate.is(state.getBlock()) && blockstate.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                    level.setBlock(blockpos, Blocks.AIR.defaultBlockState(),
+                            Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
+                    level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockpos, Block.getId(blockstate));
+                }
+            }
+        }
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        BlockPos blockpos = pos.below();
+        BlockState blockstate = level.getBlockState(blockpos);
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            return blockstate.isFaceSturdy(level, blockpos, Direction.UP);
+        } else {
+            return blockstate.is(this);
+        }
     }
 
     /**
@@ -76,35 +168,18 @@ public class RiftSpawnerBlock extends Block {
      * @return A valid spawn location, or Optional#empty
      */
     public Optional<PortalSpawnLocation> getSpawnLocation(Level level, BlockPos pos, Direction dir) {
-        Direction facing = level.getBlockState(pos).getValue(BlockStateProperties.FACING);
-        if (facing.getAxis().isVertical()) {
-            BlockPos checkPos = pos;
-            for (int i = 0; i < 3; i++) {
-                checkPos = checkPos.relative(facing);
-                if (!allowsPortal(level, checkPos)) {
-                    return Optional.empty();
-                }
-            }
-            if (facing == Direction.UP) {
-                return Optional.of(new PortalSpawnLocation(pos.above().getBottomCenter(), Direction.UP));
-            } else {
-                BlockPos origin = pos.relative(dir, 3);
-                return Optional.of(new PortalSpawnLocation(origin.getBottomCenter(), Direction.UP));
-            }
-        }
-
-        BlockPos adjacentPos = pos.relative(facing);
-        if (allowsPortal(level, adjacentPos) && allowsPortal(level, adjacentPos.above())
-                && allowsPortal(level, adjacentPos.below())) {
-            return Optional.of(new PortalSpawnLocation(
-                    adjacentPos.below().getBottomCenter().subtract(facing.getUnitVec3().scale(0.475)), facing));
-        }
-        return Optional.empty();
-    }
-
-    private boolean allowsPortal(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        return state.isAir();
+        DoubleBlockHalf half = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF);
+
+        if (half == DoubleBlockHalf.LOWER) {
+            return Optional.of(new PortalSpawnLocation(pos.getBottomCenter(), Direction.UP));
+        } else {
+            return Optional.of(new PortalSpawnLocation(pos.below().getBottomCenter(), Direction.UP));
+        }
     }
 
+    @Override
+    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new RiftSpawnerBlockEntity(pos, state);
+    }
 }
