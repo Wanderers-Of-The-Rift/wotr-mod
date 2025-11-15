@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.client.render.blockentity.AbilityBenchBlockEn
 import com.wanderersoftherift.wotr.client.render.blockentity.AnomalyBlockEntityRenderer;
 import com.wanderersoftherift.wotr.client.render.blockentity.JigsawBlockEntityRenderer;
 import com.wanderersoftherift.wotr.client.render.blockentity.RiftMobSpawnerBlockEntityRenderer;
+import com.wanderersoftherift.wotr.client.render.blockentity.RiftSpawnerBlockEntityRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.AltSpiderRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.RiftPortalRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.SimpleEffectProjectileRenderer;
@@ -41,6 +42,7 @@ public class WotrEntityRenderers {
                 AnomalyBlockEntityRenderer::new);
         event.registerEntityRenderer(WotrEntities.RIFT_ZOMBIE.get(), RiftZombieRenderer::new);
         event.registerEntityRenderer(WotrEntities.RIFT_SKELETON.get(), RiftSkeletonRenderer::new);
+        event.registerBlockEntityRenderer(WotrBlockEntities.RIFT_SPAWNER.get(), RiftSpawnerBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(WotrBlockEntities.ABILITY_BENCH.get(), AbilityBenchBlockEntityRenderer::new);
         event.registerEntityRenderer(WotrEntities.DRONE_BEE.get(), DroneBeeRenderer::new);
     }

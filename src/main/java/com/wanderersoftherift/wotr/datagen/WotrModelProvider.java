@@ -113,7 +113,10 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.RIFT_SPAWNER.get(),
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
-                .with(createFacingDispatchFromUpModel()));
+                .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        itemModels.itemModelOutput.accept(WotrBlocks.RIFT_SPAWNER.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/rift_spawner"), new GeckolibSpecialRenderer.Unbaked()));
 
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));

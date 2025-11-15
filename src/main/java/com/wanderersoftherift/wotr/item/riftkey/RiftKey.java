@@ -20,7 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -57,15 +56,12 @@ public class RiftKey extends Item {
             return InteractionResult.SUCCESS;
         } else {
             Optional<PortalSpawnLocation> spawnLocation = spawnerBlock.getSpawnLocation(level, blockpos,
-                    context.getClickedFace());
+                    level.getBlockState(blockpos));
             if (spawnLocation.isPresent()) {
                 PortalSpawnLocation loc = spawnLocation.get();
                 List<RiftPortalEntranceEntity> existingRifts = getExistingRifts(level, loc.position());
                 if (!existingRifts.isEmpty()) {
-                    for (RiftPortalEntranceEntity entrance : existingRifts) {
-                        entrance.remove(Entity.RemovalReason.DISCARDED);
-                    }
-                    return InteractionResult.SUCCESS;
+                    return InteractionResult.FAIL;
                 }
 
                 spawnRift(level, loc.position(), loc.direction(), context.getItemInHand());
@@ -172,8 +168,9 @@ public class RiftKey extends Item {
                 level);
         portalEntranceEntity.setPos(pos);
         portalEntranceEntity.setYRot(dir.toYRot());
-        portalEntranceEntity.setBillboard(dir.getAxis().isVertical());
+        portalEntranceEntity.setBillboard(false);
         portalEntranceEntity.setKeyItem(riftKey.copy());
+
         level.addFreshEntity(portalEntranceEntity);
         portalEntranceEntity.playSound(WotrSoundEvents.RIFT_OPEN.value());
     }
