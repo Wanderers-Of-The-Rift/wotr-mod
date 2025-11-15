@@ -23,46 +23,34 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class RuneAnvilEntityBlock extends BaseEntityBlock {
+public class RuneAnvilBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
-    public static final MapCodec<RuneAnvilEntityBlock> CODEC = simpleCodec(RuneAnvilEntityBlock::new);
+    public static final MapCodec<RuneAnvilBlock> CODEC = simpleCodec(RuneAnvilBlock::new);
     private static final Component CONTAINER_TITLE = Component.translatable("container.wotr.rune_anvil");
-    private static final VoxelShape SHAPE = makeShape();
+    private static final VoxelShape SHAPE = VoxelShapeUtils.combine(
+            Block.box(3, 0, 2, 13, 14, 5), Block.box(3, 0, 11, 13, 14, 14), Block.box(1, 0, 4, 15, 4, 12),
+            Block.box(0, 10, 3, 16, 16, 13)
+    );
 
-    private static final Map<Direction, VoxelShape> SHAPES;
+    private static final Map<Direction.Axis, VoxelShape> SHAPES;
 
     static {
-        ImmutableMap.Builder<Direction, VoxelShape> builder = ImmutableMap.builder();
-        builder.put(Direction.NORTH, SHAPE);
-        builder.put(Direction.EAST, VoxelShapeUtils.rotateHorizontal(SHAPE, Direction.EAST));
-        builder.put(Direction.SOUTH, VoxelShapeUtils.rotateHorizontal(SHAPE, Direction.SOUTH));
-        builder.put(Direction.WEST, VoxelShapeUtils.rotateHorizontal(SHAPE, Direction.WEST));
+        ImmutableMap.Builder<Direction.Axis, VoxelShape> builder = ImmutableMap.builder();
+        builder.put(Direction.Axis.Z, SHAPE);
+        builder.put(Direction.Axis.X, VoxelShapeUtils.rotateHorizontal(SHAPE, Direction.EAST));
         SHAPES = builder.build();
     }
 
-    public RuneAnvilEntityBlock(BlockBehaviour.Properties properties) {
+    public RuneAnvilBlock(BlockBehaviour.Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
-    }
-
-    public static VoxelShape makeShape() {
-        VoxelShape shape = Shapes.empty();
-        shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.125, 0.8125, 0.25, 0.875), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.25, 0.25, 0.1875, 0.75, 0.3125, 0.8125), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.375, 0.3125, 0.3125, 0.625, 0.625, 0.6875), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.25, 0.625, 0, 0.75, 1, 1), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.6625, 0.75, 0.006_25, 0.85, 0.875, 0.256_25), BooleanOp.OR);
-
-        return shape;
     }
 
     @Override
@@ -76,7 +64,7 @@ public class RuneAnvilEntityBlock extends BaseEntityBlock {
             @NotNull BlockGetter level,
             @NotNull BlockPos pos,
             @NotNull CollisionContext context) {
-        return SHAPES.get(state.getValue(FACING));
+        return SHAPES.get(state.getValue(FACING).getAxis());
     }
 
     @Override
@@ -85,7 +73,7 @@ public class RuneAnvilEntityBlock extends BaseEntityBlock {
         return this.defaultBlockState().setValue(FACING, direction);
     }
 
-    public @NotNull MapCodec<RuneAnvilEntityBlock> codec() {
+    public @NotNull MapCodec<RuneAnvilBlock> codec() {
         return CODEC;
     }
 
