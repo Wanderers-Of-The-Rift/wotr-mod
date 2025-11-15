@@ -16,7 +16,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -26,9 +25,9 @@ public class RiftEntryTests {
     @PrefixGameTestTemplate(false)
     @GameTest(template = "rift_portal_test")
     public static void riftTest(GameTestHelper helper) {
-        BlockPos portalBlockPos = new BlockPos(5, 2, 2);
+        BlockPos portalBlockPos = new BlockPos(2, 2, 1);
         MockPlayer player = MockPlayer.create(helper, GameType.SURVIVAL);
-        player.setPos(helper.absoluteVec(new Vec3(5, 2, 2.5)));
+        player.setPos(helper.absoluteVec(new BlockPos(1, 1, 1).getCenter()));
         helper.getLevel().addFreshEntity(player);
 
         ItemStack key = WotrItems.RIFT_KEY.toStack(1);
