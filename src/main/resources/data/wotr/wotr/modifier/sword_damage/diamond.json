@@ -1,0 +1,15 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:ability_enhancement",
+                "ability": "#wotr:melee",
+                "modifier": "wotr:sword_damage/diamond_damage",
+                "tier": 1
+            }
+        ]
+    ]
+}

@@ -27,7 +27,7 @@ public record LootTrigger(BlockPos position, Holder<BlockEntityType<?>> containe
             LootContextParamSets.CODEC.fieldOf("context").forGetter(LootTrigger::context),
             ResourceLocation.CODEC.fieldOf("loot_table").forGetter(LootTrigger::lootTable)
     ).apply(instance, LootTrigger::new));
-    public static final TriggerType<LootTrigger> TRIGGER_TYPE = new TriggerType<>(LootPredicate.CODEC, null);
+    public static final TriggerType<LootTrigger> TRIGGER_TYPE = new TriggerType<>(LootPredicate.CODEC, null, null);
 
     @Override
     public TriggerType<?> type() {

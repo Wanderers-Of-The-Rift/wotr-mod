@@ -1,0 +1,17 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:attribute",
+                "id": "wotr:wooden_melee",
+                "attribute": "wotr:ability_raw_damage",
+                "min_roll": -0.4,
+                "max_roll": -0.2,
+                "operation": "add_multiplied_total"
+            }
+        ]
+    ]
+}
