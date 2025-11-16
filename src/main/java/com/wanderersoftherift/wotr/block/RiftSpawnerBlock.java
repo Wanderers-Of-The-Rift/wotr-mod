@@ -5,10 +5,12 @@ import com.google.common.collect.Table;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.RiftSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
+import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
 import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,11 +30,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -106,6 +112,23 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
     }
 
     @Override
+    protected void onRemove(
+            @NotNull BlockState state,
+            @NotNull Level level,
+            @NotNull BlockPos pos,
+            @NotNull BlockState newState,
+            boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        getSpawnLocation(level, pos, state).ifPresent(loc -> getExistingRifts(level, loc.position().add(0, 0.1, 0))
+                .forEach(rift -> rift.remove(Entity.RemovalReason.KILLED)));
+    }
+
+    public static List<RiftPortalEntranceEntity> getExistingRifts(Level level, Vec3 pos) {
+        return level.getEntities(EntityTypeTest.forClass(RiftPortalEntranceEntity.class),
+                new AABB(BlockPos.containing(pos)), x -> true);
+    }
+
+    @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos blockpos = context.getClickedPos();
         Level level = context.getLevel();
@@ -164,17 +187,17 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
      * 
      * @param level
      * @param pos
-     * @param dir
      * @return A valid spawn location, or Optional#empty
      */
-    public Optional<PortalSpawnLocation> getSpawnLocation(Level level, BlockPos pos, Direction dir) {
-        BlockState state = level.getBlockState(pos);
+    public Optional<PortalSpawnLocation> getSpawnLocation(Level level, BlockPos pos, BlockState state) {
         DoubleBlockHalf half = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF);
 
         if (half == DoubleBlockHalf.LOWER) {
-            return Optional.of(new PortalSpawnLocation(pos.getBottomCenter(), Direction.UP));
+            return Optional.of(new PortalSpawnLocation(pos.getBottomCenter().add(0, 0.525, 0),
+                    state.getValue(HorizontalDirectionalBlock.FACING)));
         } else {
-            return Optional.of(new PortalSpawnLocation(pos.below().getBottomCenter(), Direction.UP));
+            return Optional.of(new PortalSpawnLocation(pos.below().getBottomCenter().add(0, 0.525, 0),
+                    state.getValue(HorizontalDirectionalBlock.FACING)));
         }
     }
 

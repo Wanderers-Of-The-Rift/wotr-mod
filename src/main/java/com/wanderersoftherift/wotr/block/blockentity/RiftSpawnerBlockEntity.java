@@ -26,4 +26,5 @@ public class RiftSpawnerBlockEntity extends BlockEntity implements GeoBlockEntit
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
+
 }

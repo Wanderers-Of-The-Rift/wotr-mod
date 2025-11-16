@@ -30,6 +30,7 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
+                        output.accept(WotrItems.RIFT_SPAWNER);
                         WotrItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
                         parameters.holders().lookup(WotrRegistries.Keys.CURRENCIES).ifPresent((currencies) -> {
                             generateCurrencyBags(output, currencies);
