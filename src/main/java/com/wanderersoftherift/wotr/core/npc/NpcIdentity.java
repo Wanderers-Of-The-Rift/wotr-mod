@@ -83,7 +83,6 @@ public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityT
             Entity entity = type.value().spawn(level, position, reason);
             if (entity != null) {
                 entity.setData(WotrAttachments.NPC_IDENTITY, new NpcIdentity.Attachment(Optional.of(npcIdentity)));
-                entity.setData(WotrAttachments.NPC_INTERACT, npc.npcInteraction);
                 entity.setCustomName(getDisplayName(npcIdentity));
                 if (entity instanceof TamableAnimal tamableAnimal) {
                     tamableAnimal.setTame(true, true);

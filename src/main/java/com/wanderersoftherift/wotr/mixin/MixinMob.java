@@ -31,7 +31,7 @@ public abstract class MixinMob extends LivingEntity {
         if (result == InteractionResult.PASS) {
             NpcIdentity.Attachment identityAttachment = getData(WotrAttachments.NPC_IDENTITY);
             result = identityAttachment.identity().map(identity -> {
-                NpcEvent.OnInteract event = new NpcEvent.OnInteract(identity, player, (Mob) (Object) this);
+                NpcEvent.OnInteract event = new NpcEvent.OnInteract(identity, player, hand, (Mob) (Object) this);
                 NeoForge.EVENT_BUS.post(event);
                 return event.getResult();
             }).orElse(InteractionResult.PASS);

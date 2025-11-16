@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.core.npc;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -78,21 +79,24 @@ public abstract class NpcEvent extends Event {
     }
 
     /**
-     * Event for when an NPC is interacted with by a player. Occurs before the npc's default interaction handling.
+     * Event for when an NPC is interacted with by a player
      */
     public static class OnInteract extends NpcEvent {
 
         private final Player player;
+        private final InteractionHand hand;
         private InteractionResult result = InteractionResult.PASS;
 
-        public OnInteract(Holder<NpcIdentity> npc, Player player, Mob mob) {
+        public OnInteract(Holder<NpcIdentity> npc, Player player, InteractionHand hand, Mob mob) {
             super(npc, mob);
             this.player = player;
+            this.hand = hand;
         }
 
         public OnInteract(Holder<NpcIdentity> npc, Player player, Level level, BlockPos block) {
             super(npc, level, block);
             this.player = player;
+            this.hand = InteractionHand.OFF_HAND;
         }
 
         /**
@@ -100,6 +104,10 @@ public abstract class NpcEvent extends Event {
          */
         public Player getPlayer() {
             return player;
+        }
+
+        public InteractionHand getInteractionHand() {
+            return hand;
         }
 
         /**

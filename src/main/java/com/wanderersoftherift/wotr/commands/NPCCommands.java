@@ -58,7 +58,6 @@ public class NPCCommands extends BaseCommand {
 
     private int makeNpc(CommandContext<CommandSourceStack> ctx, Entity mob, Holder<NpcIdentity> npcIdentity) {
         mob.setData(WotrAttachments.NPC_IDENTITY, new NpcIdentity.Attachment(Optional.of(npcIdentity)));
-        mob.setData(WotrAttachments.NPC_INTERACT, npcIdentity.value().npcInteraction());
         mob.setCustomName(NpcIdentity.getDisplayName(npcIdentity));
         return Command.SINGLE_SUCCESS;
     }
