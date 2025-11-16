@@ -39,7 +39,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK, "Rune Anvil");
         addBlock(WotrBlocks.RIFT_CHEST, "Rift Chest");
         addBlock(WotrBlocks.RIFT_SPAWNER, "Rift Spawner");
-        addBlock(WotrBlocks.QUEST_HUB, "Quest Hub");
+        addBlock(WotrBlocks.NPC, "NPC Block");
         addBlock(WotrBlocks.KEY_FORGE, "Key Forge");
         addBlock(WotrBlocks.DITTO_BLOCK, "Ditto Block");
         addBlock(WotrBlocks.SPRING_BLOCK, "Spring Block");
@@ -145,6 +145,7 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
+        add(WanderersOfTheRift.translationId("itemGroup", "npc"), "NPCs");
         add(WanderersOfTheRift.translationId("itemGroup", "ability"), "Abilities");
         add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
         add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
@@ -164,6 +165,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.rewards"), "Reward");
         add(WanderersOfTheRift.translationId("container", "quest.abandon"), "Abandon");
         add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
+        add(WanderersOfTheRift.translationId("container", "quest.hand_in_to"), "Hand in to: %s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
         add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
@@ -445,6 +447,8 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
         add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
+        add(WanderersOfTheRift.translationId("message", "quest_already_active"),
+                "You must complete your existing quest before taking on another");
 
         add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
@@ -456,6 +460,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.4"), "Furrmidable");
         add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.5"), "Meowster");
         add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.6"), "Gwand Meowster");
+
+        add(WanderersOfTheRift.translationId("npc", "default"), "Bailey");
+        add(WanderersOfTheRift.translationId("npc", "cats_cradle_merchant"), "Cats Cradle Merchant");
+        add(WanderersOfTheRift.translationId("npc", "cats_cradle_quest_giver"), "Cats Cradle Quest Giver");
 
         add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
         add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
@@ -481,6 +489,9 @@ public class WotrLanguageProvider extends LanguageProvider {
                 "I'm starving. Could you purlease bring me some fish?");
         add(WanderersOfTheRift.translationId("quest", "bring_fish.title"), "Fish of the day");
         add(WanderersOfTheRift.translationId("quest", "bring_fish.description"), "Purlease could I have another fish?");
+        add(WanderersOfTheRift.translationId("quest", "deliver_fish.title"), "A special delivery");
+        add(WanderersOfTheRift.translationId("quest", "deliver_fish.description"),
+                "The Cats Cradle merchant has been working very hard lately, I worry they're skipping lunch. Could you bring them a fish for me?");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
         add("modifier.wotr.projectile_count", "Projectile Count");

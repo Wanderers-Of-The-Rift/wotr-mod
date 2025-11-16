@@ -57,7 +57,7 @@ public final class RandomUtil {
         while (result.size() < count) {
             int choice = random.nextInt(choices.size());
             result.add(choices.get(choice));
-            if (choice < result.size() - 1) {
+            if (choice < choices.size() - 1) {
                 choices.set(choice, choices.getLast());
             }
             choices.removeLast();

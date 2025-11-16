@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.trading;
+package com.wanderersoftherift.wotr.core.npc.trading;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;

@@ -116,7 +116,7 @@ public class UnclaimedGuildRewards {
 
     private record Data(ListMultimap<Holder<Guild>, Integer> unclaimedRewards) {
         private static final Codec<Data> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                GuavaCodecs.unboundListMultimap(Guild.CODEC, Codec.INT)
+                GuavaCodecs.stringKeyListMultimap(Guild.CODEC, Codec.INT)
                         .fieldOf("unclaimed_rewards")
                         .forGetter(Data::unclaimedRewards)
         ).apply(instance, Data::new));

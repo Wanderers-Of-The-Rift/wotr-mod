@@ -30,9 +30,26 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
-                        WotrItems.BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
+                        WotrItems.BLOCK_ITEMS.stream()
+                                .filter(x -> x.get().getBlock() != WotrBlocks.NPC.get())
+                                .forEach(item -> output.accept(item.get()));
                         parameters.holders().lookup(WotrRegistries.Keys.CURRENCIES).ifPresent((currencies) -> {
                             generateCurrencyBags(output, currencies);
+                        });
+                    })
+                    .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> WOTR_NPC_TAB = CREATIVE_MODE_TABS.register(
+            WanderersOfTheRift.MODID + "npc",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup." + WanderersOfTheRift.MODID + ".npc"))
+                    .withTabsBefore(WOTR_TAB.getId())
+                    .icon(WotrBlocks.NPC::toStack)
+                    .displayItems((parameters, output) -> {
+                        parameters.holders().lookupOrThrow(WotrRegistries.Keys.NPCS).listElements().forEach(npc -> {
+                            ItemStack item = new ItemStack(WotrBlocks.NPC.asItem());
+                            item.set(WotrDataComponentType.NPC_IDENTITY, npc);
+                            output.accept(item);
                         });
                     })
                     .build());

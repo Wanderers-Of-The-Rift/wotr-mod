@@ -80,7 +80,10 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_rune", this.has(WotrItems.RUNEGEM))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, WotrBlocks.QUEST_HUB.asItem())
+        ItemStack questGiverBlock = new ItemStack(WotrBlocks.NPC.asItem());
+        questGiverBlock.set(WotrDataComponentType.NPC_IDENTITY,
+                DeferredHolder.create(WotrRegistries.Keys.NPCS, WanderersOfTheRift.id("cats_cradle_quest_giver")));
+        ShapedRecipeBuilder.shaped(getter, RecipeCategory.MISC, questGiverBlock)
                 .pattern("sGs")
                 .pattern("sGs")
                 .pattern("sgs")

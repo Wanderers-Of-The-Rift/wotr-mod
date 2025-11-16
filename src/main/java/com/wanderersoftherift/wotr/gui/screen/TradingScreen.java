@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.gui.screen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
-import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
+import com.wanderersoftherift.wotr.core.npc.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.init.WotrAttachments;

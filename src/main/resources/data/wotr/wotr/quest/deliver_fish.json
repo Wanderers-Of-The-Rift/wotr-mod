@@ -1,0 +1,24 @@
+{
+  "goals": [
+    {
+      "type": "wotr:give_item",
+      "item" : "#c:foods/raw_fish",
+      "count": 1
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 1,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 10
+    }
+  ],
+  "hand_in_to": "wotr:cats_cradle_merchant"
+}
