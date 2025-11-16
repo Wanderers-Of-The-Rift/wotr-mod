@@ -58,7 +58,7 @@ public class AbilityBenchBlock extends BaseEntityBlock {
 
     @Override
     protected @NotNull VoxelShape getShape(
-            BlockState state,
+            @NotNull BlockState state,
             @NotNull BlockGetter level,
             @NotNull BlockPos pos,
             @NotNull CollisionContext context) {

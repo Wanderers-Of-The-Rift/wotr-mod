@@ -42,6 +42,7 @@ import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemp
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.renderer.GeckolibSpecialRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,10 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.RIFT_SPAWNER.get(),
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
-                .with(createFacingDispatchFromUpModel()));
+                .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        itemModels.itemModelOutput.accept(WotrBlocks.RIFT_SPAWNER.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/rift_spawner"), new GeckolibSpecialRenderer.Unbaked()));
 
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));

@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.RiftSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RuneAnvilBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -45,5 +46,9 @@ public class WotrBlockEntities {
             "anomaly_block_entity",
             // The block entity type.
             () -> new BlockEntityType<>(AnomalyBlockEntity::new, WotrBlocks.ANOMALY.get()));
+    public static final Supplier<BlockEntityType<RiftSpawnerBlockEntity>> RIFT_SPAWNER = BLOCK_ENTITIES.register(
+            "rift_spawner_block_entity",
+            () -> new BlockEntityType<>(RiftSpawnerBlockEntity::new, WotrBlocks.RIFT_SPAWNER.get())
+    );
 
 }
