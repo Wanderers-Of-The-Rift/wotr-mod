@@ -30,6 +30,9 @@ public class QuestEventHandler {
 
     @SubscribeEvent
     public static void onQuestReceiverInteract(NpcEvent.OnInteract event) {
+        if (event.getResult() != InteractionResult.PASS) {
+            return;
+        }
         ActiveQuests activeQuests = event.getPlayer().getData(WotrAttachments.ACTIVE_QUESTS);
         Optional<QuestState> questToHandIn = activeQuests.getQuestList()
                 .stream()
