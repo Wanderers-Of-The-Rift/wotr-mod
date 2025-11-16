@@ -12,7 +12,7 @@ import com.wanderersoftherift.wotr.block.QuestHubBlock;
 import com.wanderersoftherift.wotr.block.RiftChestBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
-import com.wanderersoftherift.wotr.block.RuneAnvilEntityBlock;
+import com.wanderersoftherift.wotr.block.RuneAnvilBlock;
 import com.wanderersoftherift.wotr.block.SpringBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
 import com.wanderersoftherift.wotr.item.RiftChestType;
@@ -64,8 +64,8 @@ public class WotrBlocks {
             RiftChestType.class);
     public static final List<BlockFamilyHelper> BLOCK_FAMILY_HELPERS = new ArrayList<>();
 
-    public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlock("rune_anvil",
-            () -> new RuneAnvilEntityBlock(
+    public static final DeferredBlock<RuneAnvilBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlock("rune_anvil",
+            () -> new RuneAnvilBlock(
                     BlockBehaviour.Properties.of().setId(blockId("rune_anvil")).strength(2.5F).sound(SoundType.METAL)));
 
     public static final DeferredBlock<RiftChestBlock> RIFT_CHEST = registerChestBlock("rift_chest",
