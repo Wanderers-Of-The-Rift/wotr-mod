@@ -93,12 +93,10 @@ public class LootCommands extends BaseCommand {
         level.setBlock(pos, WotrBlocks.RIFT_CHEST.get().defaultBlockState(), Block.UPDATE_ALL);
         if (level.getBlockEntity(pos) instanceof RiftChestBlockEntity chest) {
             chest.clearContent();
-            LootParams.Builder builder = new LootParams.Builder(level).withParameter(WotrLootContextParams.RIFT_TIER,
-                    riftTier);
-            if (ctx.getSource().getPlayer() != null) {
-                builder.withParameter(LootContextParams.THIS_ENTITY, ctx.getSource().getPlayer());
-            }
-            LootParams lootParams = builder.create(LootContextParamSets.EMPTY);
+            LootParams lootParams = new LootParams.Builder(level)
+                    .withParameter(WotrLootContextParams.RIFT_TIER, riftTier)
+                    .withOptionalParameter(LootContextParams.THIS_ENTITY, ctx.getSource().getEntity())
+                    .create(LootContextParamSets.EMPTY);
             ObjectArrayList<ItemStack> randomItems = lootTable.value().getRandomItems(lootParams, level.getRandom());
             for (int i = 0; i < randomItems.size(); i++) {
                 chest.setItem(i, randomItems.get(i));
