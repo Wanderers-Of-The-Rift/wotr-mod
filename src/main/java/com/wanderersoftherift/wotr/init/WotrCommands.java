@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.ExportCommands;
 import com.wanderersoftherift.wotr.commands.GuildCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
+import com.wanderersoftherift.wotr.commands.LootCommands;
 import com.wanderersoftherift.wotr.commands.NPCCommands;
 import com.wanderersoftherift.wotr.commands.QuestCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
@@ -38,6 +39,7 @@ public final class WotrCommands {
         new AbilityResourceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new GuildCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new QuestCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new LootCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent
