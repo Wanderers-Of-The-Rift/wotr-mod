@@ -84,6 +84,9 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, abilityBenchModel))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
+        itemModels.itemModelOutput.accept(WotrBlocks.ABILITY_BENCH.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/ability_bench"), new GeckolibSpecialRenderer.Unbaked()));
+
         ResourceLocation keyForgeModel = WanderersOfTheRift.id("block/key_forge");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.KEY_FORGE.get(),
