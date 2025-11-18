@@ -40,7 +40,7 @@ public class LootCommands extends BaseCommand {
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
 
-        builder.then(Commands.literal("generateInChest")
+        builder.then(Commands.literal("createChest")
                 .then(Commands.argument(LOCATION_ARG, BlockPosArgument.blockPos())
                         .then(Commands.argument(LOOT_TABLE_ARG, ResourceOrIdArgument.lootTable(context))
                                 .suggests(LootCommand.SUGGEST_LOOT_TABLE)
@@ -51,7 +51,7 @@ public class LootCommands extends BaseCommand {
                                                 ctx -> createChest(ctx, BlockPosArgument.getBlockPos(ctx, LOCATION_ARG),
                                                         ResourceOrIdArgument.getLootTable(ctx, LOOT_TABLE_ARG),
                                                         IntegerArgumentType.getInteger(ctx, RIFT_TIER_ARG)))))));
-        builder.then(Commands.literal("generateInChestArea")
+        builder.then(Commands.literal("fillAreaWithChests")
                 .then(Commands.argument(FROM_ARG, BlockPosArgument.blockPos())
                         .then(Commands.argument(TO_ARG, BlockPosArgument.blockPos())
                                 .then(Commands.argument(LOOT_TABLE_ARG, ResourceOrIdArgument.lootTable(context))
