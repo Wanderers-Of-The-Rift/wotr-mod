@@ -26,7 +26,6 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(WotrBlocks.ABILITY_BENCH.get());
         dropSelf(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK.get());
         dropSelf(WotrBlocks.RIFT_CHEST.get());
-        dropSelf(WotrBlocks.RIFT_SPAWNER.get());
         dropSelf(WotrBlocks.DITTO_BLOCK.get());
         dropSelf(WotrBlocks.TRAP_BLOCK.get());
         dropSelf(WotrBlocks.PLAYER_TRAP_BLOCK.get());
@@ -35,6 +34,7 @@ public class WotrBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(WotrBlocks.QUEST_HUB.get());
         add(WotrBlocks.RIFT_MOB_SPAWNER.get(), noDrop());
         add(WotrBlocks.ANOMALY.get(), noDrop());
+        add(WotrBlocks.RIFT_SPAWNER.get(), this.createDoorTable(WotrBlocks.RIFT_SPAWNER.get()));
 
     }
 

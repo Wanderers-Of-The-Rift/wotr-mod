@@ -43,6 +43,13 @@ import java.util.Optional;
 
 /**
  * A Rift Spawner block is a usable block for generating rift entrances.
+ * <p>
+ * Rift Spawner is a multi-block structure. The lower half-block controls the structure. If any block is removed then
+ * all the blocks are removed.
+ * </p>
+ * <p>
+ * If there is an active portal when the spawner is removed, then the portal is destroyed.
+ * </p>
  */
 public class RiftSpawnerBlock extends BaseEntityBlock {
     public static final MapCodec<RiftSpawnerBlock> CODEC = simpleCodec(RiftSpawnerBlock::new);
@@ -91,6 +98,18 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
     }
 
     @Override
+    protected void onRemove(
+            @NotNull BlockState state,
+            @NotNull Level level,
+            @NotNull BlockPos pos,
+            @NotNull BlockState newState,
+            boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        getSpawnLocation(level, pos, state).ifPresent(loc -> getExistingRifts(level, loc.position().add(0, 0.1, 0))
+                .forEach(rift -> rift.remove(Entity.RemovalReason.KILLED)));
+    }
+
+    @Override
     protected @NotNull BlockState updateShape(
             BlockState state,
             @NotNull LevelReader level,
@@ -109,18 +128,6 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
             }
         }
         return state;
-    }
-
-    @Override
-    protected void onRemove(
-            @NotNull BlockState state,
-            @NotNull Level level,
-            @NotNull BlockPos pos,
-            @NotNull BlockState newState,
-            boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
-        getSpawnLocation(level, pos, state).ifPresent(loc -> getExistingRifts(level, loc.position().add(0, 0.1, 0))
-                .forEach(rift -> rift.remove(Entity.RemovalReason.KILLED)));
     }
 
     public static List<RiftPortalEntranceEntity> getExistingRifts(Level level, Vec3 pos) {
@@ -169,17 +176,6 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
             }
         }
         return super.playerWillDestroy(level, pos, state, player);
-    }
-
-    @Override
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        BlockPos blockpos = pos.below();
-        BlockState blockstate = level.getBlockState(blockpos);
-        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            return blockstate.isFaceSturdy(level, blockpos, Direction.UP);
-        } else {
-            return blockstate.is(this);
-        }
     }
 
     /**
