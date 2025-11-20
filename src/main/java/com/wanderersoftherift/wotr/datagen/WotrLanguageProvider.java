@@ -249,6 +249,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "gear.implicit.invalid"),
                 "No item held or does not support implicits");
         add(WanderersOfTheRift.translationId("command", "generic.success"), "Done.");
+        add(WanderersOfTheRift.translationId("command", "quest.log.print"), "Quest completion counts:");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
