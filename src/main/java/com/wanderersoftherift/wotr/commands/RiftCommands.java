@@ -12,16 +12,23 @@ import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterInstance;
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.Holder;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import oshi.util.tuples.Pair;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -39,6 +46,8 @@ public class RiftCommands extends BaseCommand {
             + ".rift_parameter.get";
     private static final String PARAMETER_MISSING_TRANSLATION_KEY = "command." + WanderersOfTheRift.MODID
             + ".rift_parameter.missing";
+    private static final Component VOID_ROOM = Component
+            .translatable(WanderersOfTheRift.translationId("command", "rift.roominfo.void"));
 
     public RiftCommands() {
         super("rift", Commands.LEVEL_GAMEMASTERS);
@@ -46,33 +55,74 @@ public class RiftCommands extends BaseCommand {
 
     @Override
     protected void buildCommand(LiteralArgumentBuilder<CommandSourceStack> builder, CommandBuildContext context) {
-        var parameterName = "parameterArg";
-        builder.then(Commands.literal("exit").executes(this::exitRift))
-                .then(Commands.literal("parameter")
-                        .then(Commands
-                                .argument(parameterName,
-                                        ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS))
-                                .executes(ctx -> getParameter(ctx, ResourceKeyArgument.resolveKey(ctx, parameterName,
+        String parameterNameArg = "parameter";
+        String playersArg = "players";
+        String playerArg = "player";
+        builder.then(Commands.literal("exit")
+                .executes(ctx -> exitRift(ctx, List.of(ctx.getSource().getPlayerOrException())))
+                .then(
+                        Commands.argument(playersArg, EntityArgument.players())
+                                .executes(ctx -> exitRift(ctx, EntityArgument.getPlayers(ctx, playersArg)))));
+        builder.then(Commands.literal("parameter")
+                .then(Commands
+                        .argument(parameterNameArg, ResourceKeyArgument.key(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS))
+                        .executes(ctx -> getParameter(ctx,
+                                ResourceKeyArgument.resolveKey(ctx, parameterNameArg,
                                         WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, ERROR_INVALID_RIFT_PARAMETER)))
-                                .then(buildParameterComponent("base", RiftParameterInstance::getBase,
-                                        new Pair<>("set", (param, oldValue, cmdValue) -> param.setBase(cmdValue)),
-                                        new Pair<>("add", (param, oldValue, cmdValue) -> param.addBase(cmdValue))))
-                                .then(buildParameterComponent("accumulated_multiplier",
-                                        RiftParameterInstance::getAccumulatedMultiplier,
-                                        new Pair<>("set",
-                                                (param, oldValue, cmdValue) -> param
-                                                        .setAccumulatedMultiplier(cmdValue)),
-                                        new Pair<>("add",
-                                                (param, oldValue, cmdValue) -> param
-                                                        .addAccumulatedMultiplier(cmdValue))))
-                                .then(buildParameterComponent("total_multiplier",
-                                        RiftParameterInstance::getTotalMultiplier,
-                                        new Pair<>("set",
-                                                (param, oldValue, cmdValue) -> param.setTotalMultiplier(cmdValue)),
-                                        new Pair<>("multiply",
-                                                (param, oldValue, cmdValue) -> param.multiplyTotal(cmdValue))))));
+                        .then(buildParameterComponent("base", RiftParameterInstance::getBase,
+                                new Pair<>("set", (param, oldValue, cmdValue) -> param.setBase(cmdValue)),
+                                new Pair<>("add", (param, oldValue, cmdValue) -> param.addBase(cmdValue))))
+                        .then(buildParameterComponent("accumulated_multiplier",
+                                RiftParameterInstance::getAccumulatedMultiplier,
+                                new Pair<>("set",
+                                        (param, oldValue, cmdValue) -> param.setAccumulatedMultiplier(cmdValue)),
+                                new Pair<>("add",
+                                        (param, oldValue, cmdValue) -> param.addAccumulatedMultiplier(cmdValue))))
+                        .then(buildParameterComponent("total_multiplier", RiftParameterInstance::getTotalMultiplier,
+                                new Pair<>("set", (param, oldValue, cmdValue) -> param.setTotalMultiplier(cmdValue)),
+                                new Pair<>("multiply",
+                                        (param, oldValue, cmdValue) -> param.multiplyTotal(cmdValue))))));
         builder.then(Commands.literal("list").executes(this::listRifts));
         builder.then(Commands.literal("close").then(Commands.literal("all").executes(this::closeRifts)));
+        builder.then(
+                Commands.literal("roominfo")
+                        .executes(ctx -> printRoomInfo(ctx, ctx.getSource().getPlayerOrException()))
+                        .then(
+                                Commands.argument(playerArg, EntityArgument.player())
+                                        .executes(ctx -> printRoomInfo(ctx, EntityArgument.getPlayer(ctx, playerArg)))
+                        ));
+    }
+
+    private int printRoomInfo(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
+        if (RiftLevelManager.isRift(player.serverLevel()) && player.serverLevel()
+                .getChunkSource()
+                .getGenerator() instanceof FastRiftGenerator fastRiftGenerator) {
+            RiftSpace chunkSpace = fastRiftGenerator.getOrCreateLayout(player.server)
+                    .getChunkSpace(SectionPos.of(player.blockPosition()));
+            if (chunkSpace instanceof VoidRiftSpace) {
+                ctx.getSource().sendSystemMessage(VOID_ROOM);
+            } else {
+                ctx.getSource()
+                        .sendSystemMessage(Component.translatable(
+                                WanderersOfTheRift.translationId("command", "rift.roominfo.origin"),
+                                chunkSpace.origin().getX(), chunkSpace.origin().getY(), chunkSpace.origin().getZ()));
+                ctx.getSource()
+                        .sendSystemMessage(Component.translatable(
+                                WanderersOfTheRift.translationId("command", "rift.roominfo.size"),
+                                chunkSpace.size().getX(), chunkSpace.size().getY(), chunkSpace.size().getZ()));
+                ctx.getSource()
+                        .sendSystemMessage(Component.translatable(
+                                WanderersOfTheRift.translationId("command", "rift.roominfo.transform"),
+                                chunkSpace.templateTransform().x(), chunkSpace.templateTransform().z(),
+                                chunkSpace.templateTransform().diagonal()));
+                ctx.getSource()
+                        .sendSystemMessage(Component.translatable(
+                                WanderersOfTheRift.translationId("command", "rift.roominfo.room"),
+                                chunkSpace.template().identifier()));
+            }
+            return Command.SINGLE_SUCCESS;
+        }
+        return 0;
     }
 
     private int closeRifts(CommandContext<CommandSourceStack> context) {
@@ -156,15 +206,14 @@ public class RiftCommands extends BaseCommand {
                 PARAMETER_GET_TRANSLATION_KEY);
     }
 
-    private int exitRift(CommandContext<CommandSourceStack> ctx) {
-        ServerPlayer player = ctx.getSource().getPlayer();
-        ServerLevel level = ctx.getSource().getLevel();
-
-        if (player != null && RiftLevelManager.isRift(level)) {
-            RiftLevelManager.returnPlayerFromRift(player);
-            return 1;
+    private int exitRift(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> players) {
+        int result = 0;
+        for (ServerPlayer player : players) {
+            if (RiftLevelManager.isRift(player.serverLevel())) {
+                RiftLevelManager.returnPlayerFromRift(player);
+                result++;
+            }
         }
-
-        return 0;
+        return result;
     }
 }
