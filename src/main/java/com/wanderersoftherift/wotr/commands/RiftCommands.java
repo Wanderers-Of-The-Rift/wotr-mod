@@ -48,6 +48,8 @@ public class RiftCommands extends BaseCommand {
             + ".rift_parameter.missing";
     private static final Component VOID_ROOM = Component
             .translatable(WanderersOfTheRift.translationId("command", "rift.roominfo.void"));
+    private static final Component INVALID_LEVEL = Component
+            .translatable(WanderersOfTheRift.translationId("command", "rift.roominfo.invalid"));
 
     public RiftCommands() {
         super("rift", Commands.LEVEL_GAMEMASTERS);
@@ -122,6 +124,7 @@ public class RiftCommands extends BaseCommand {
             }
             return Command.SINGLE_SUCCESS;
         }
+        ctx.getSource().sendSystemMessage(INVALID_LEVEL);
         return 0;
     }
 
