@@ -238,6 +238,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
         add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
         add(WanderersOfTheRift.translationId("command", "place.processor.invalid"), "Invalid processor %s");
+        add(WanderersOfTheRift.translationId("command", "generic.success"), "Done.");
+        add(WanderersOfTheRift.translationId("command", "quest.log.print"), "Quest completion counts:");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
