@@ -42,4 +42,8 @@ public class AvailableQuests {
     public void removeQuest(QuestState state) {
         availableNpcQuests.remove(state.getQuestGiver(), state);
     }
+
+    public void clearQuests(Holder<NpcIdentity> npc) {
+        availableNpcQuests.removeAll(npc);
+    }
 }
