@@ -35,7 +35,7 @@ public class MerchantCommands extends BaseCommand {
 
         builder.then(
                 Commands.literal("reset")
-                        .then(Commands.literal("all")
+                        .then(Commands.literal("@all")
                                 .executes(ctx -> resetAll(ctx, ctx.getSource().getPlayerOrException()))
                                 .then(Commands.argument(playerArg, EntityArgument.player())
                                         .executes(ctx -> resetAll(ctx, EntityArgument.getPlayer(ctx, playerArg)))))
