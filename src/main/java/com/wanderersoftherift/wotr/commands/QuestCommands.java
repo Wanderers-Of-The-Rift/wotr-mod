@@ -64,7 +64,7 @@ public class QuestCommands extends BaseCommand {
                                 .executes(ctx -> resetLog(ctx, EntityArgument.getPlayer(ctx, playerArg))))));
         builder.then(Commands.literal("available")
                 .then(Commands.literal("reset")
-                        .then(Commands.literal("all")
+                        .then(Commands.literal("@all")
                                 .executes(ctx -> resetAllAvailable(ctx, ctx.getSource().getPlayerOrException()))
                                 .then(Commands.argument(playerArg, EntityArgument.player())
                                         .executes(ctx -> resetAllAvailable(ctx,
