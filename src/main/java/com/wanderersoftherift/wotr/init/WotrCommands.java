@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.commands.ExportCommands;
 import com.wanderersoftherift.wotr.commands.GuildCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
 import com.wanderersoftherift.wotr.commands.LootCommands;
+import com.wanderersoftherift.wotr.commands.MerchantCommands;
 import com.wanderersoftherift.wotr.commands.NPCCommands;
 import com.wanderersoftherift.wotr.commands.QuestCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
@@ -40,6 +41,7 @@ public final class WotrCommands {
         new GuildCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new QuestCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new LootCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new MerchantCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent
