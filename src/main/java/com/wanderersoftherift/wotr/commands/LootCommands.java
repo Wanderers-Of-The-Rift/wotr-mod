@@ -76,12 +76,10 @@ public class LootCommands extends BaseCommand {
             Holder<LootTable> lootTable,
             int riftTier) {
         BoundingBox area = BoundingBox.fromCorners(from, to);
-        int result = 0;
-        for (BlockPos pos : BlockPos.betweenClosed(area.minX(), area.minY(), area.minZ(), area.maxX(), area.maxY(),
-                area.maxZ())) {
-            result += createChest(ctx, pos, lootTable, riftTier);
-        }
-        return result;
+        return BlockPos
+                .betweenClosedStream(area.minX(), area.minY(), area.minZ(), area.maxX(), area.maxY(), area.maxZ())
+                .mapToInt(pos -> createChest(ctx, pos, lootTable, riftTier))
+                .sum();
     }
 
     private int createChest(
