@@ -34,19 +34,20 @@ public class MerchantCommands extends BaseCommand {
         String npcArg = "merchant";
 
         builder.then(
-                Commands.literal("resetAll")
-                        .executes(ctx -> resetAll(ctx, ctx.getSource().getPlayerOrException()))
-                        .then(Commands.argument(playerArg, EntityArgument.player())
-                                .executes(ctx -> resetAll(ctx, EntityArgument.getPlayer(ctx, playerArg)))));
-        builder.then(Commands.literal("reset")
-                .then(Commands.argument(npcArg, ResourceArgument.resource(context, WotrRegistries.Keys.NPCS))
-                        .executes(
-                                ctx -> reset(ctx, ResourceArgument.getResource(ctx, npcArg, WotrRegistries.Keys.NPCS),
-                                        ctx.getSource().getPlayerOrException()))
-                        .then(Commands.argument(playerArg, EntityArgument.player())
-                                .executes(ctx -> reset(ctx,
-                                        ResourceArgument.getResource(ctx, npcArg, WotrRegistries.Keys.NPCS),
-                                        EntityArgument.getPlayer(ctx, playerArg))))));
+                Commands.literal("reset")
+                        .then(Commands.literal("all")
+                                .executes(ctx -> resetAll(ctx, ctx.getSource().getPlayerOrException()))
+                                .then(Commands.argument(playerArg, EntityArgument.player())
+                                        .executes(ctx -> resetAll(ctx, EntityArgument.getPlayer(ctx, playerArg)))))
+                        .then(Commands.argument(npcArg, ResourceArgument.resource(context, WotrRegistries.Keys.NPCS))
+                                .executes(
+                                        ctx -> reset(ctx,
+                                                ResourceArgument.getResource(ctx, npcArg, WotrRegistries.Keys.NPCS),
+                                                ctx.getSource().getPlayerOrException()))
+                                .then(Commands.argument(playerArg, EntityArgument.player())
+                                        .executes(ctx -> reset(ctx,
+                                                ResourceArgument.getResource(ctx, npcArg, WotrRegistries.Keys.NPCS),
+                                                EntityArgument.getPlayer(ctx, playerArg))))));
     }
 
     private int reset(CommandContext<CommandSourceStack> ctx, Holder.Reference<NpcIdentity> npc, ServerPlayer player) {
