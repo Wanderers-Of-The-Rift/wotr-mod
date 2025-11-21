@@ -2,17 +2,24 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
+import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
+import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.entity.player.LivingAttributeChangedEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
@@ -27,6 +34,21 @@ import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class AbilityEventHandler {
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void overrideAttack(InputEvent.InteractionKeyMappingTriggered event) {
+        var minecraft = Minecraft.getInstance();
+        if (event.getKeyMapping() == minecraft.options.keyAttack) {
+            var triggers = TriggerTracker.forEntity(minecraft.player);
+            if (triggers.hasListenersOnTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
+                if (triggers.trigger(MainAttackTrigger.INSTANCE)) {
+                    // minecraft.player.swing(InteractionHand.MAIN_HAND);
+                }
+                event.setCanceled(true);
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void collectAbilitySlots(CollectEquipmentSlotsEvent event) {
