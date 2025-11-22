@@ -51,7 +51,8 @@ public class GearSocketsFunction extends LootItemConditionalFunction {
     }
 
     private @NotNull ItemStack generateItemStack(ItemStack itemStack, RandomSource random) {
-        itemStack.set(WotrDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
+        itemStack.set(WotrDataComponentType.GEAR_SOCKETS,
+                GearSockets.generateWithRange(minSockets, maxSockets, random));
         return itemStack;
     }
 

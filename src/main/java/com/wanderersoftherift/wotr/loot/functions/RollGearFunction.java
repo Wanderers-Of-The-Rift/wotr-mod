@@ -60,7 +60,8 @@ public class RollGearFunction extends LootItemConditionalFunction {
         RandomSource random = lootContext.getRandom();
 
         itemStack = ItemTagUtil.getRandomItemStackFromTag(itemStack, tagLocation, random);
-        itemStack.set(WotrDataComponentType.GEAR_SOCKETS, GearSockets.randomSockets(minSockets, maxSockets, random));
+        itemStack.set(WotrDataComponentType.GEAR_SOCKETS,
+                GearSockets.generateWithRange(minSockets, maxSockets, random));
         GearImplicits implicits = itemStack.get(WotrDataComponentType.GEAR_IMPLICITS);
         if (implicits != null) {
             implicits.modifierInstances(itemStack, lootContext.getLevel());
