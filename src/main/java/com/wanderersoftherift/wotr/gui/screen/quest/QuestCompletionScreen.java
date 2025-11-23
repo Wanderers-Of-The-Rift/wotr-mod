@@ -98,9 +98,7 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
             return;
         }
         questInfo = new ScrollContainerWidget<>(leftPos + 5, topPos + 32, 149, 160);
-        for (int i = 0; i < currentQuest.goalCount(); i++) {
-            questInfo.addChild(new GoalStateWidget(currentQuest, i));
-        }
+        currentQuest.getGoalStates().stream().map(GoalStateWidget::new).forEach(questInfo::addChild);
         questInfo.addChild(new SpacerEntry(6)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
         List<RewardWidget> rewards = currentQuest.getRewards()
                 .stream()
