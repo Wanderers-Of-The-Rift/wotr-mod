@@ -1,0 +1,88 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+    {
+      "type": "wotr:simple_projectile",
+      "config": {
+        "gravity_affected": false,
+        "render": {
+          "animations": "wotr:animations/ability/fireball.animations.json",
+          "model": "wotr:geo/ability/fireball.geo.json",
+          "texture": "wotr:textures/ability/fireball.png"
+        },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
+        },
+        "velocity": 1.6
+      },
+      "effects": [
+        {
+          "type": "wotr:targeting",
+          "targeting": {
+            "type": "wotr:area",
+            "shape": {
+              "type": "wotr:cube",
+              "range": 4.0
+            },
+            "entities": {
+              "sentiment": "not_friend"
+            }
+          },
+          "effects": [
+            {
+              "type": "wotr:attach",
+              "effects": [
+                {
+                  "type": "wotr:targeting",
+                  "targeting": {
+                    "type": "wotr:caster"
+                  },
+                  "effects": [
+                    {
+                      "type": "wotr:movement",
+                      "velocity": [0, 0, 0.2],
+                      "relative_frame": "source_from_target"
+                    },
+                    {
+                      "type": "wotr:targeting",
+                      "targeting": {
+                        "type": "wotr:source"
+                      },
+                      "effects": [
+                        {
+                          "type": "wotr:movement",
+                          "velocity": [0, 0, 0.2],
+                          "relative_frame": "source_from_target"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "continue": {
+                "duration": 200
+              },
+              "trigger": {
+                "frequency": 1,
+                "initial_delay": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "wotr:particle",
+          "particle": {
+            "type": "minecraft:explosion"
+          }
+        }
+      ]
+    },
+    {
+      "type": "wotr:particle",
+      "particle": {
+        "type": "minecraft:bubble"
+      }
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/fireball.png"
+}
