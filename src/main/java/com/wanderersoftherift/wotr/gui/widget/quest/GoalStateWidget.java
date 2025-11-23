@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.widget.quest;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.core.goal.GoalState;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import net.minecraft.ChatFormatting;
@@ -27,20 +27,18 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     private static final int STATE_BOX_VERT_OFFSET = 4;
     private static final int STATE_BOX_HORIZ_OFFSET = 4;
 
-    private final QuestState quest;
-    private final int goalIndex;
+    private final GoalState state;
     private final GoalDisplay goalWidget;
 
-    public GoalStateWidget(QuestState quest, int goalIndex) {
-        this(quest, goalIndex, Style.EMPTY.withColor(ChatFormatting.DARK_GRAY));
+    public GoalStateWidget(GoalState state) {
+        this(state, Style.EMPTY.withColor(ChatFormatting.DARK_GRAY));
     }
 
-    public GoalStateWidget(QuestState quest, int goalIndex, Style textStyle) {
+    public GoalStateWidget(GoalState state, Style textStyle) {
         super(0, 0, 0, 0, Component.empty());
-        this.quest = quest;
-        this.goalIndex = goalIndex;
+        this.state = state;
 
-        this.goalWidget = GoalDisplays.createFor(quest.getGoal(goalIndex)).orElse(null);
+        this.goalWidget = GoalDisplays.createFor(state.getGoal()).orElse(null);
         if (goalWidget != null) {
             goalWidget.setTextStyle(textStyle);
         }
@@ -60,7 +58,7 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
         int x = getX();
         int y = getY();
         ResourceLocation texture;
-        if (quest.isGoalComplete(goalIndex)) {
+        if (state.isComplete()) {
             texture = COMPLETE_BOX;
         } else {
             texture = INCOMPLETE_BOX;
@@ -70,7 +68,7 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
         x += STATE_BOX_SIZE + STATE_BOX_HORIZ_OFFSET;
 
         if (goalWidget != null) {
-            goalWidget.setProgress(quest.getGoalProgress(goalIndex));
+            goalWidget.setProgress(state.getProgress());
             goalWidget.setWidth(getWidth() - STATE_BOX_SIZE - STATE_BOX_HORIZ_OFFSET);
             goalWidget.setHeight(getHeight());
             goalWidget.setX(x);

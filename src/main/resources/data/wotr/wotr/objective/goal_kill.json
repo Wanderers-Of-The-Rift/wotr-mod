@@ -1,0 +1,11 @@
+{
+  "type": "wotr:goal",
+  "goals": [
+    {
+      "type": "wotr:kill_mob",
+      "mob": "#minecraft:skeletons",
+      "mob_label": "mobgroup.minecraft.skeletons",
+      "count": 4
+    }
+  ]
+}

@@ -24,7 +24,7 @@ public class QuestGoalCompleteToast extends SimpleToast {
     public QuestGoalCompleteToast(QuestState quest, int goalIndex) {
         super(false);
         this.quest = quest;
-        this.goal = new GoalStateWidget(quest, goalIndex, Style.EMPTY.withColor(ChatFormatting.GRAY));
+        this.goal = new GoalStateWidget(quest.getGoalState(goalIndex), Style.EMPTY.withColor(ChatFormatting.GRAY));
         goal.setX(PADDING);
         goal.setY(13);
         goal.setHeight(16);
