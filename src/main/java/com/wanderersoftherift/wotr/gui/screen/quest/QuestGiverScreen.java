@@ -100,9 +100,7 @@ public class QuestGiverScreen extends EnhancedContainerScreen<QuestGiverMenu> {
                 .addChild(new WrappedTextEntry(font, Quest.description(quest.getOrigin())))
                 .addChild(new SpacerEntry(4))
                 .addChild(new LabelEntry(font, GOAL_LABEL, 0));
-        for (int i = 0; i < quest.goalCount(); i++) {
-            questInfo.addChild(new GoalStateWidget(quest, i));
-        }
+        quest.getGoalStates().stream().map(GoalStateWidget::new).forEach(questInfo::addChild);
         questInfo.addChild(new SpacerEntry(2)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
         List<RewardWidget> rewards = quest.getRewards()
                 .stream()

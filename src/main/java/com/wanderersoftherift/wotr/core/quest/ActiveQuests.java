@@ -4,10 +4,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalTracking;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
@@ -28,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * Player attachment for holding the active quests of the player
  */
-public final class ActiveQuests {
+public final class ActiveQuests implements GoalTracking {
 
     private final @NotNull IAttachmentHolder holder;
     private final @NotNull Data data;
@@ -52,7 +55,8 @@ public final class ActiveQuests {
         return new AttachmentSerializerFromDataCodec<>(Data.CODEC, ActiveQuests::new, x -> x.data);
     }
 
-    public <T extends Goal> void progressGoals(Class<T> type, Function<T, Integer> amount) {
+    @Override
+    public <T extends Goal> void progressGoals(Class<T> type, Function<T, Integer> amount, ServerLevel level) {
         for (var goalInstance : goalLookup.get(type)) {
             int progress = goalInstance.quest.getGoalProgress(goalInstance.index);
             T goal = type.cast(goalInstance.quest.getGoal(goalInstance.index));

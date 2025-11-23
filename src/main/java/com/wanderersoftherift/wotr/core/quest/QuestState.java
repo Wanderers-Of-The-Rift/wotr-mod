@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalState;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
@@ -20,6 +22,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 /**
  * The state if an active quest that a player has accepted.
@@ -168,6 +171,27 @@ public class QuestState {
             if (holder instanceof ServerPlayer player) {
                 PacketDistributor.sendToPlayer(player, new QuestGoalUpdatePayload(id, index, amount));
             }
+        }
+    }
+
+    public GoalState getGoalState(int goalIndex) {
+        return new QuestGoalState(this, goalIndex);
+    }
+
+    public List<? extends GoalState> getGoalStates() {
+        return IntStream.range(0, goals.size()).mapToObj(index -> new QuestGoalState(this, index)).toList();
+    }
+
+    private record QuestGoalState(QuestState quest, int index) implements GoalState {
+
+        @Override
+        public Goal getGoal() {
+            return quest.getGoal(index);
+        }
+
+        @Override
+        public int getProgress() {
+            return quest.getGoalProgress(index);
         }
     }
 }

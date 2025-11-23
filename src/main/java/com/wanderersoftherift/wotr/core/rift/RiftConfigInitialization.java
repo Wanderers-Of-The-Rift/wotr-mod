@@ -1,10 +1,10 @@
 package com.wanderersoftherift.wotr.core.rift;
 
 import com.google.common.collect.ImmutableMap;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
-import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;

@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr.core.quest;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
