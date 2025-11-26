@@ -26,6 +26,7 @@ import com.wanderersoftherift.wotr.init.WotrMobEffects;
 import com.wanderersoftherift.wotr.init.WotrMobInteractions;
 import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
 import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
+import com.wanderersoftherift.wotr.init.WotrNumberProviders;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
@@ -109,6 +110,7 @@ public class WanderersOfTheRift {
         WotrLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         WotrLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
         WotrLootItemConditionTypes.LOOT_ITEM_CONDITION_TYPES.register(modEventBus);
+        WotrNumberProviders.NUMBER_PROVIDERS.register(modEventBus);
 
         WotrAnomalyTaskTypes.ANOMALY_TASK_TYPES.register(modEventBus);
 

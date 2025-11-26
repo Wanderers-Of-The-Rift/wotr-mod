@@ -17,7 +17,7 @@ public class WotrOngoingObjectiveTypes {
             .create(WotrRegistries.Keys.ONGOING_OBJECTIVE_TYPES, WanderersOfTheRift.MODID);
 
     public static final Supplier<MapCodec<? extends OngoingObjective>> GOAL_BASED = ONGOING_OBJECTIVE_TYPES
-            .register("goal", () -> GoalBasedOngoingObjective.CODEC);
+            .register("goal_based", () -> GoalBasedOngoingObjective.CODEC);
 
     public static final Supplier<MapCodec<? extends OngoingObjective>> STEALTH = ONGOING_OBJECTIVE_TYPES
             .register("stealth", () -> StealthOngoingObjective.CODEC);

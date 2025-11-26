@@ -22,7 +22,7 @@ public class ObjectiveRenderers {
             GeneralObjectiveBarRenderer::create);
 
     public static final Function<OngoingObjective, ObjectiveRenderer> GOAL_BASED = register(
-            WanderersOfTheRift.id("goal"), GoalBasedObjectiveStatusRenderer::create);
+            WanderersOfTheRift.id("goal_based"), GoalBasedObjectiveStatusRenderer::create);
 
     public static Function<OngoingObjective, ObjectiveRenderer> register(
             ResourceLocation id,
