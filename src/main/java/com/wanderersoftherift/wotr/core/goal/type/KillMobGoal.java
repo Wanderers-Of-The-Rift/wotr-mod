@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.core.goal.type;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
@@ -11,6 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
+import java.util.Optional;
+
 /**
  * A goal to kill mobs
  * 
@@ -18,12 +21,13 @@ import net.minecraft.network.codec.StreamCodec;
  * @param rawLabel A translation string for displaying the type of mob
  * @param count    The number of mobs that need to be killed
  */
-public record KillMobGoal(EntityTypePredicate mob, String rawLabel, int count) implements Goal {
+public record KillMobGoal(Optional<EntityTypePredicate> mob, String rawLabel, int count) implements Goal {
 
     public static final MapCodec<KillMobGoal> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    EntityTypePredicate.CODEC.fieldOf("mob").forGetter(KillMobGoal::mob),
-                    Codec.STRING.fieldOf("mob_label").forGetter(KillMobGoal::rawLabel),
+                    EntityTypePredicate.CODEC.optionalFieldOf("mob").forGetter(KillMobGoal::mob),
+                    Codec.STRING.optionalFieldOf("mob_label", WanderersOfTheRift.translationId("goal", "mobs"))
+                            .forGetter(KillMobGoal::rawLabel),
                     Codec.INT.optionalFieldOf("count", 1).forGetter(KillMobGoal::count)
             ).apply(instance, KillMobGoal::new));
 

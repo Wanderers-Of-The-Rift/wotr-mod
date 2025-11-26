@@ -66,7 +66,7 @@ public class GoalEventHandler {
             return;
         }
         updateGoal(player, KillMobGoal.class, (goal) -> {
-            if (goal.mob().matches(event.getEntity().getType())) {
+            if (goal.mob().map(predicate -> predicate.matches(event.getEntity().getType())).orElse(true)) {
                 return 1;
             }
             return 0;

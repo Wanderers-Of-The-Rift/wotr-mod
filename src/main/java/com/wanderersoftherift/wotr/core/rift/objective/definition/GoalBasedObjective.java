@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.objective.ongoing.GoalBasedOngoingObjective;
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -28,7 +29,9 @@ public record GoalBasedObjective(List<GoalProvider> goals) implements ObjectiveT
     @Override
     public OngoingObjective generate(ServerLevelAccessor level, RiftConfig config) {
         LootParams params = new LootParams.Builder(level.getLevel())
-                .withParameter(WotrLootContextParams.RIFT_CONFIG, config)
+                .withParameter(WotrLootContextParams.RIFT_TIER, config.tier())
+                .withParameter(WotrLootContextParams.RIFT_PARAMETERS,
+                        config.getCustomData(WotrRiftConfigDataTypes.INITIAL_RIFT_PARAMETERS))
                 .create(LootContextParamSets.EMPTY);
         List<Goal> generatedGoals = goals.stream().flatMap(goal -> goal.generateGoal(params).stream()).toList();
         return new GoalBasedOngoingObjective(generatedGoals);

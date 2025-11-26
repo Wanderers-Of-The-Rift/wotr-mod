@@ -548,6 +548,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("goal", "rift.complete"), "Complete");
         add(WanderersOfTheRift.translationId("goal", "rift.tier"), "tier %s");
         add(WanderersOfTheRift.translationId("goal", "any"), "any");
+        add(WanderersOfTheRift.translationId("goal", "mobs"), "mobs");
 
         add(WanderersOfTheRift.translationId("quest", "fetch_quest.title"), "Fetch Quest");
         add(WanderersOfTheRift.translationId("quest", "fetch_quest.description"),
