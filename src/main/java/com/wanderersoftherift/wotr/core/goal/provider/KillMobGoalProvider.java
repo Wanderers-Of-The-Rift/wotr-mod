@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.core.goal.provider;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
@@ -16,13 +17,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public record KillMobGoalProvider(EntityTypePredicate mob, String rawLabel, NumberProvider count)
+public record KillMobGoalProvider(Optional<EntityTypePredicate> mob, String rawLabel, NumberProvider count)
         implements GoalProvider {
 
     public static final MapCodec<KillMobGoalProvider> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    EntityTypePredicate.CODEC.fieldOf("mob").forGetter(KillMobGoalProvider::mob),
-                    Codec.STRING.fieldOf("mob_label").forGetter(KillMobGoalProvider::rawLabel),
+                    EntityTypePredicate.CODEC.optionalFieldOf("mob").forGetter(KillMobGoalProvider::mob),
+                    Codec.STRING.optionalFieldOf("mob_label", WanderersOfTheRift.translationId("goal", "mobs"))
+                            .forGetter(KillMobGoalProvider::rawLabel),
                     NumberProviders.CODEC.fieldOf("count").forGetter(KillMobGoalProvider::count)
             ).apply(instance, KillMobGoalProvider::new));
 
