@@ -260,7 +260,7 @@ public class WotrRecipeProvider extends RecipeProvider {
         // Add recipes for the mod's objectives
         KeyForgeRecipe
                 .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
-                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("goal_kill")))
                 .setPriority(-1)
                 .save(output, WanderersOfTheRift.id("rift_objective_kill"));
 
