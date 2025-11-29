@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
-import com.wanderersoftherift.wotr.core.goal.GoalTracking;
+import com.wanderersoftherift.wotr.core.goal.GoalTracker;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.objective.ongoing.GoalBasedOngoingObjective;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -38,7 +38,7 @@ import java.util.function.Function;
 // TODO: Split out objective as level attachment
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RiftData extends SavedData implements GoalTracking {
+public class RiftData extends SavedData implements GoalTracker {
     public static final MapCodec<RiftData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceKey.codec(Registries.DIMENSION).fieldOf("portal_dimension").forGetter(RiftData::getPortalDimension),
             BlockPos.CODEC.fieldOf("portal_pos").forGetter(RiftData::getPortalPos),

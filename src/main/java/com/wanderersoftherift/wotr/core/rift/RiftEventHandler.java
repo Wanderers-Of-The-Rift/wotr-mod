@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.core.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.goal.GoalEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,15 @@ import static com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation.DEFA
 
 @EventBusSubscriber
 public class RiftEventHandler {
+
+    @SubscribeEvent
+    public static void onGoalUpdate(GoalEvent.Update<?> event) {
+        if (event.isCancelled() || !(event.getPlayer().level() instanceof ServerLevel level)
+                || !RiftLevelManager.isRift(level)) {
+            return;
+        }
+        event.progressGoals(RiftData.get(level));
+    }
 
     @SubscribeEvent
     public static void onPlaceBlock(PlayerInteractEvent.RightClickBlock event) {

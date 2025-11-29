@@ -5,7 +5,7 @@ import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
-import com.wanderersoftherift.wotr.core.goal.GoalTracking;
+import com.wanderersoftherift.wotr.core.goal.GoalTracker;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * Player attachment for holding the active quests of the player
  */
-public final class ActiveQuests implements GoalTracking {
+public final class ActiveQuests implements GoalTracker {
 
     private final @NotNull IAttachmentHolder holder;
     private final @NotNull Data data;
