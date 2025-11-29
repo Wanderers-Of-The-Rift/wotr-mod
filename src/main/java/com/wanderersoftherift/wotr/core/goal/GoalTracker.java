@@ -7,6 +7,6 @@ import java.util.function.Function;
 /**
  * Interface for objects (primarily attachments) that track goal progress
  */
-public interface GoalTracking {
+public interface GoalTracker {
     <T extends Goal> void progressGoals(Class<T> type, Function<T, Integer> amount, ServerLevel level);
 }
