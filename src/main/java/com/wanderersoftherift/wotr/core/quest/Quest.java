@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootParams;
-import oshi.util.tuples.Pair;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +36,7 @@ public record Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, L
             GoalProvider.DIRECT_CODEC.listOf().optionalFieldOf("goals", List.of()).forGetter(Quest::goals),
             RewardProvider.DIRECT_CODEC.listOf().optionalFieldOf("rewards", List.of()).forGetter(Quest::rewards),
             EntitySubPredicate.CODEC.optionalFieldOf("prerequisite").forGetter(Quest::prerequisite),
-            Codec.withAlternative(FastWeightedList.codec(NpcIdentity.CODEC), NpcIdentity.CODEC,
-                    single -> FastWeightedList.of(new Pair<>(1f, single)))
+            FastWeightedList.codecWithSingleAlternative(NpcIdentity.CODEC)
                     .optionalFieldOf("hand_in_to", FastWeightedList.of())
                     .forGetter(Quest::handInTo)
     ).apply(instance, Quest::new));
