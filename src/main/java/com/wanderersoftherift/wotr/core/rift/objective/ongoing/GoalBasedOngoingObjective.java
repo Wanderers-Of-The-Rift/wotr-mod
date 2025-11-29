@@ -75,7 +75,7 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
 
     @Override
     public Component getObjectiveStartMessage() {
-        // TODO: Need to make a setup to generate status component for goals
+        // TODO: Need to make a setup to generate status component for goals?
         return Component.empty();
     }
 
