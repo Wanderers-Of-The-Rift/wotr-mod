@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.block.blockentity;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyEvent;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -113,6 +115,8 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
     }
 
     public void closeAndReward(Player player) {
+        NeoForge.EVENT_BUS
+                .post(new AnomalyEvent.Closed(getLevel(), getBlockPos(), state.task().value().type(), player));
         setAnomalyState(null);
         if (reward != null && reward.isBound()) {
             reward.value().grantReward(player);
