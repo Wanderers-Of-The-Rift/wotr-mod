@@ -176,6 +176,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
         add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly"), "Close anomalies (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly.typed"), "Close %s anomalies (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
@@ -666,6 +668,10 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
         add(WanderersOfTheRift.translationId("toast", "guild.rank"), "Guild Rank Up");
+
+        add(WanderersOfTheRift.translationId("anomaly", "needle"), "Needle");
+        add(WanderersOfTheRift.translationId("anomaly", "battle"), "Battle");
+        add(WanderersOfTheRift.translationId("anomaly", "bundle"), "Bundle");
     }
 
     private void addRunegems() {
