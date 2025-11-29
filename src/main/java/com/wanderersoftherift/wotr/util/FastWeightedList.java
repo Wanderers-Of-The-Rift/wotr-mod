@@ -51,6 +51,11 @@ public class FastWeightedList<T> {
                 .xmap(it -> of(it.<Pair<Float, T>>toArray(Pair[]::new)), it -> it.entries().toList());
     }
 
+    public static <T> Codec<FastWeightedList<T>> codecWithSingleAlternative(Codec<T> valueCodec) {
+        return Codec.withAlternative(FastWeightedList.codec(valueCodec), valueCodec,
+                single -> FastWeightedList.of(new Pair<>(1f, single)));
+    }
+
     public static <T> FastWeightedList<T> of(Pair<Float, T>... entries) {
         var sortedEntries = Arrays.stream(entries)
                 .sorted(Comparator.comparingDouble(Pair<Float, T>::getA).reversed())

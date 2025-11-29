@@ -1,0 +1,24 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:close_anomaly",
+      "count": {
+        "type": "wotr:sum",
+        "values": [
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              1
+            ]
+          },
+          1
+        ]
+      }
+    }
+  ]
+}
