@@ -6,6 +6,8 @@ import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
 import com.wanderersoftherift.wotr.item.WotrArmor;
 import com.wanderersoftherift.wotr.item.ability.AbilityHolder;
+import com.wanderersoftherift.wotr.item.essence.EssenceItem;
+import com.wanderersoftherift.wotr.item.essence.EssenceType;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -106,6 +108,65 @@ public class WotrItems {
 
     public static final DeferredItem<Item> COLOR_HELMET = ITEMS.register("color_helmet",
             () -> new WotrArmor(EquipmentSlot.HEAD, "color_helmet", 165));
+
+    // Essence
+    public static final DeferredItem<Item> EARTH_ESSENCE = registerEssence(
+            EssenceType.EARTH.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> WATER_ESSENCE = registerEssence(
+            EssenceType.WATER.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> PLANT_ESSENCE = registerEssence(
+            EssenceType.PLANT.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> DEATH_ESSENCE = registerEssence(
+            EssenceType.DEATH.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> LIGHT_ESSENCE = registerEssence(
+            EssenceType.LIGHT.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> NETHER_ESSENCE = registerEssence(
+            EssenceType.NETHER.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> LIFE_ESSENCE = registerEssence(
+            EssenceType.LIFE.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> HONEY_ESSENCE = registerEssence(
+            EssenceType.HONEY.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> MUSHROOM_ESSENCE = registerEssence(
+            EssenceType.MUSHROOM.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> FABRIC_ESSENCE = registerEssence(
+            EssenceType.FABRIC.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> DARK_ESSENCE = registerEssence(
+            EssenceType.DARK.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> FIRE_ESSENCE = registerEssence(
+            EssenceType.FIRE.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> AIR_ESSENCE = registerEssence(
+            EssenceType.AIR.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> ENERGY_ESSENCE = registerEssence(
+            EssenceType.ENERGY.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> ANIMAL_ESSENCE = registerEssence(
+            EssenceType.ANIMAL.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> CRYSTAL_ESSENCE = registerEssence(
+            EssenceType.CRYSTAL.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> METAL_ESSENCE = registerEssence(
+            EssenceType.METAL.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> FOOD_ESSENCE = registerEssence(
+            EssenceType.FOOD.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> SLIME_ESSENCE = registerEssence(
+            EssenceType.SLIME.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> MIND_ESSENCE = registerEssence(
+            EssenceType.MIND.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> MECHA_ESSENCE = registerEssence(
+            EssenceType.MECHA.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> END_ESSENCE = registerEssence(
+            EssenceType.END.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> FLOW_ESSENCE = registerEssence(
+            EssenceType.FLOW.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> FORM_ESSENCE = registerEssence(
+            EssenceType.FORM.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> ORDER_ESSENCE = registerEssence(
+            EssenceType.ORDER.getName().toLowerCase() + "_essence");
+    public static final DeferredItem<Item> CHAOS_ESSENCE = registerEssence(
+            EssenceType.CHAOS.getName().toLowerCase() + "_essence");
+
+    public static final DeferredItem<Item> registerEssence(String essenceName) {
+        return ITEMS.register(essenceName, registryName -> new EssenceItem(
+                new Item.Properties().setId(ResourceKey.create(Registries.ITEM, WanderersOfTheRift.id(essenceName)))));
+    }
 
     private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
         return ITEMS.register(idString, registryName -> new Item(new Item.Properties()

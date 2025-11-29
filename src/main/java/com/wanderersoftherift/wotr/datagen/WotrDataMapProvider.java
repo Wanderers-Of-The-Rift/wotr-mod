@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrDataMaps;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -64,6 +65,33 @@ public class WotrDataMapProvider extends DataMapProvider {
         ResourceLocation end = WanderersOfTheRift.id("end");
 
         ResourceLocation processor = WanderersOfTheRift.id("processor");
+
+        // Essence items
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.EARTH_ESSENCE, new EssenceValue(earth, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.WATER_ESSENCE, new EssenceValue(water, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.PLANT_ESSENCE, new EssenceValue(plant, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.DEATH_ESSENCE, new EssenceValue(death, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.LIFE_ESSENCE, new EssenceValue(life, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.NETHER_ESSENCE, new EssenceValue(nether, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.LIGHT_ESSENCE, new EssenceValue(light, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.MUSHROOM_ESSENCE, new EssenceValue(mushroom, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.FABRIC_ESSENCE, new EssenceValue(fabric, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.DARK_ESSENCE, new EssenceValue(dark, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.FIRE_ESSENCE, new EssenceValue(fire, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.AIR_ESSENCE, new EssenceValue(air, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.ENERGY_ESSENCE, new EssenceValue(energy, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.ANIMAL_ESSENCE, new EssenceValue(animal, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.CRYSTAL_ESSENCE, new EssenceValue(crystal, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.METAL_ESSENCE, new EssenceValue(metal, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.FOOD_ESSENCE, new EssenceValue(food, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.SLIME_ESSENCE, new EssenceValue(slime, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.MIND_ESSENCE, new EssenceValue(mind, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.MECHA_ESSENCE, new EssenceValue(mechanical, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.END_ESSENCE, new EssenceValue(end, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.FLOW_ESSENCE, new EssenceValue(flow, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.FORM_ESSENCE, new EssenceValue(form, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.ORDER_ESSENCE, new EssenceValue(order, 10), false);
+        this.builder(WotrDataMaps.ESSENCE_VALUE_DATA).add(WotrItems.CHAOS_ESSENCE, new EssenceValue(chaos, 10), false);
 
         // Bee stuff
         this.builder(WotrDataMaps.ESSENCE_VALUE_DATA)

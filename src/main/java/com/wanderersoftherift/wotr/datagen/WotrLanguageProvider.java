@@ -6,6 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
+import com.wanderersoftherift.wotr.item.essence.EssenceType;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import com.wanderersoftherift.wotr.util.listedit.Append;
 import com.wanderersoftherift.wotr.util.listedit.Clear;
@@ -69,6 +70,34 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         addItem(WotrItems.NOIR_HELMET, "Fedora");
         addItem(WotrItems.COLOR_HELMET, "Clown");
+
+        // Essence items
+        addItem(WotrItems.EARTH_ESSENCE, EssenceType.EARTH.getName() + " Essence");
+        addItem(WotrItems.WATER_ESSENCE, EssenceType.WATER.getName() + " Essence");
+        addItem(WotrItems.PLANT_ESSENCE, EssenceType.PLANT.getName() + " Essence");
+        addItem(WotrItems.DEATH_ESSENCE, EssenceType.DEATH.getName() + " Essence");
+        addItem(WotrItems.LIFE_ESSENCE, EssenceType.LIFE.getName() + " Essence");
+        addItem(WotrItems.NETHER_ESSENCE, EssenceType.NETHER.getName() + " Essence");
+        addItem(WotrItems.LIGHT_ESSENCE, EssenceType.LIGHT.getName() + " Essence");
+        addItem(WotrItems.HONEY_ESSENCE, EssenceType.HONEY.getName() + " Essence");
+        addItem(WotrItems.MUSHROOM_ESSENCE, EssenceType.MUSHROOM.getName() + " Essence");
+        addItem(WotrItems.FABRIC_ESSENCE, EssenceType.FABRIC.getName() + " Essence");
+        addItem(WotrItems.DARK_ESSENCE, EssenceType.DARK.getName() + " Essence");
+        addItem(WotrItems.FIRE_ESSENCE, EssenceType.FIRE.getName() + " Essence");
+        addItem(WotrItems.AIR_ESSENCE, EssenceType.AIR.getName() + " Essence");
+        addItem(WotrItems.ENERGY_ESSENCE, EssenceType.ENERGY.getName() + " Essence");
+        addItem(WotrItems.ANIMAL_ESSENCE, EssenceType.ANIMAL.getName() + " Essence");
+        addItem(WotrItems.CRYSTAL_ESSENCE, EssenceType.CRYSTAL.getName() + " Essence");
+        addItem(WotrItems.METAL_ESSENCE, EssenceType.METAL.getName() + " Essence");
+        addItem(WotrItems.FOOD_ESSENCE, EssenceType.FOOD.getName() + " Essence");
+        addItem(WotrItems.SLIME_ESSENCE, EssenceType.SLIME.getName() + " Essence");
+        addItem(WotrItems.MIND_ESSENCE, EssenceType.MIND.getName() + " Essence");
+        addItem(WotrItems.MECHA_ESSENCE, EssenceType.MECHA.getName() + " Essence");
+        addItem(WotrItems.END_ESSENCE, EssenceType.END.getName() + " Essence");
+        addItem(WotrItems.FLOW_ESSENCE, EssenceType.FLOW.getName() + " Essence");
+        addItem(WotrItems.FORM_ESSENCE, EssenceType.FORM.getName() + " Essence");
+        addItem(WotrItems.ORDER_ESSENCE, EssenceType.ORDER.getName() + " Essence");
+        addItem(WotrItems.CHAOS_ESSENCE, EssenceType.CHAOS.getName() + " Essence");
 
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
