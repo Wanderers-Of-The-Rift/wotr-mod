@@ -55,8 +55,7 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_tools"))
                                         .setWeight(5))
-                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/essences"))
-                                        .setWeight(5))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/essences")).setWeight(5))
                                 .add(LootItem.lootTableItem(Items.EMERALD).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.POTION)
                                         .when(riftTier().max(1))
@@ -445,6 +444,11 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                 ));
     }
 
+    /**
+     * Generate a loot table for essence items
+     *
+     * @param consumer
+     */
     private void generateEssenceItemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
         consumer.accept(getResourceKey("rift/essences"), LootTable.lootTable()
                 .withPool(

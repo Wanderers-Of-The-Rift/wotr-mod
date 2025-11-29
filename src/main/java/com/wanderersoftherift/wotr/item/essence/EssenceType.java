@@ -5,17 +5,17 @@ import java.util.Arrays;
 public enum EssenceType {
 
     // USED ESSENCE TYPES
-    EARTH(0,"Earth"),
-    WATER(1,"Water"),
-    PLANT(2,"Plant"),
-    DEATH(3,"Death"),
-    LIGHT(4,"Light"),
-    NETHER(5,"Nether"),
-    LIFE(6,"Life"),
-    HONEY(7,"Honey"),
-    MUSHROOM(8,"Mushroom"),
-    FABRIC(9,"Fabric"),
-    DARK(10,"Dark"),
+    EARTH(0, "Earth"),
+    WATER(1, "Water"),
+    PLANT(2, "Plant"),
+    DEATH(3, "Death"),
+    LIGHT(4, "Light"),
+    NETHER(5, "Nether"),
+    LIFE(6, "Life"),
+    HONEY(7, "Honey"),
+    MUSHROOM(8, "Mushroom"),
+    FABRIC(9, "Fabric"),
+    DARK(10, "Dark"),
 
     // SECONDARY ESSENCE TYPES
     FIRE(11, "Fire"),
@@ -45,15 +45,13 @@ public enum EssenceType {
     public String getName() {
         return name;
     }
+
     public int getId() {
         return id;
     }
 
     public static EssenceType get(int id) {
-        return Arrays.stream(EssenceType.values())
-                .filter(e -> e.id == id)
-                .findFirst()
-                .orElse(null);
+        return Arrays.stream(EssenceType.values()).filter(e -> e.id == id).findFirst().orElse(null);
     }
 
 }

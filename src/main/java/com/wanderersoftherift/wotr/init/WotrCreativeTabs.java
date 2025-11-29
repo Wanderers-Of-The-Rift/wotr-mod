@@ -57,7 +57,6 @@ public class WotrCreativeTabs {
                         output.accept(WotrItems.ORDER_ESSENCE);
                         output.accept(WotrItems.CHAOS_ESSENCE);
 
-
                         WotrItems.BLOCK_ITEMS.stream()
                                 .filter(x -> x.get().getBlock() != WotrBlocks.NPC.get())
                                 .forEach(item -> output.accept(item.get()));
