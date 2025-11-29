@@ -1,5 +1,7 @@
 package com.wanderersoftherift.wotr.core.goal;
 
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyEvent;
+import com.wanderersoftherift.wotr.core.goal.type.CloseAnomalyGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
 import com.wanderersoftherift.wotr.core.goal.type.RiftCompletionLevel;
@@ -22,7 +24,9 @@ import java.util.function.Function;
 @EventBusSubscriber
 public class GoalEventHandler {
 
-    private static <T extends Goal> void updateGoal(
+    // TODO: Find a better home?
+    // TODO: Change to an event supporting extension.
+    public static <T extends Goal> void updateGoal(
             Player player,
             Class<T> goalType,
             Function<T, Integer> progressFunction) {
@@ -67,6 +71,16 @@ public class GoalEventHandler {
         }
         updateGoal(player, KillMobGoal.class, (goal) -> {
             if (goal.mob().map(predicate -> predicate.matches(event.getEntity().getType())).orElse(true)) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    @SubscribeEvent
+    public static void onAnomalyClosed(AnomalyEvent.Closed event) {
+        updateGoal(event.getClosingPlayer(), CloseAnomalyGoal.class, (goal) -> {
+            if (goal.anomalyType().map(type -> type.value().equals(event.getTaskType())).orElse(true)) {
                 return 1;
             }
             return 0;
