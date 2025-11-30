@@ -48,6 +48,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
+        addBlock(WotrBlocks.ANOMALY, "Anomaly");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
