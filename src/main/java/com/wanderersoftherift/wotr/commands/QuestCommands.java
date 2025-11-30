@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
+import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.QuestLog;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
@@ -28,6 +29,8 @@ public class QuestCommands extends BaseCommand {
             .translatable(WanderersOfTheRift.translationId("command", "generic.success"));
     private static final Component PRINT_LOG = Component
             .translatable(WanderersOfTheRift.translationId("command", "quest.log.print"));
+    private static final Component ACTIVE_QUESTS = Component
+            .translatable(WanderersOfTheRift.translationId("command", "quest.active"));
 
     public QuestCommands() {
         super("quest", Commands.LEVEL_GAMEMASTERS);
@@ -77,6 +80,21 @@ public class QuestCommands extends BaseCommand {
                                         .executes(ctx -> resetAvailable(ctx,
                                                 ResourceArgument.getResource(ctx, npcArg, WotrRegistries.Keys.NPCS),
                                                 EntityArgument.getPlayer(ctx, playerArg)))))));
+        builder.then(Commands.literal("active")
+                .then(Commands.literal("list")
+                        .executes(ctx -> listActive(ctx, ctx.getSource().getPlayerOrException()))
+                        .then(Commands.argument(playerArg, EntityArgument.player())
+                                .executes(ctx -> listActive(ctx, EntityArgument.getPlayer(ctx, playerArg))))
+                ));
+    }
+
+    private int listActive(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
+        ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
+        ctx.getSource().sendSystemMessage(ACTIVE_QUESTS);
+        activeQuests.getQuestList()
+                .forEach(quest -> ctx.getSource()
+                        .sendSystemMessage(Component.literal(quest.getOrigin().getRegisteredName())));
+        return Command.SINGLE_SUCCESS;
     }
 
     private int setLog(CommandContext<CommandSourceStack> ctx, Holder<Quest> quest, int amount, ServerPlayer player) {
