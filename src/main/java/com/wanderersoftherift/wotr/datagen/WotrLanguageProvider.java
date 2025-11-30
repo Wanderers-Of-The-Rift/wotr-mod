@@ -244,6 +244,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "rift.roominfo.size"), "Size: %s %s %s");
         add(WanderersOfTheRift.translationId("command", "rift.roominfo.transform"), "Transform: %s %s %s");
         add(WanderersOfTheRift.translationId("command", "rift.roominfo.invalid"), "Invalid level");
+        add(WanderersOfTheRift.translationId("command", "generic.success"), "Done.");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
