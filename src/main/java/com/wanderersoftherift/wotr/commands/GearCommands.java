@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrTags;
+import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.implicit.UnrolledGearImplicits;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
 import net.minecraft.commands.CommandBuildContext;
@@ -16,6 +17,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class GearCommands extends BaseCommand {
 
@@ -58,7 +60,7 @@ public class GearCommands extends BaseCommand {
             return 0;
         }
 
-        if (!rerollImplicits(item)) {
+        if (!rerollImplicits(item, player.level())) {
             ctx.getSource().sendSystemMessage(INVALID_FOR_IMPLICITS);
             return 0;
         }
@@ -82,7 +84,7 @@ public class GearCommands extends BaseCommand {
     private int rerollImplicits(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         ItemStack item = player.getInventory().getSelected();
-        if (rerollImplicits(item)) {
+        if (rerollImplicits(item, player.level())) {
             return Command.SINGLE_SUCCESS;
         }
         ctx.getSource().sendSystemMessage(INVALID_FOR_IMPLICITS);
@@ -100,11 +102,15 @@ public class GearCommands extends BaseCommand {
         return true;
     }
 
-    private static boolean rerollImplicits(ItemStack item) {
+    private static boolean rerollImplicits(ItemStack item, Level level) {
         if (item.isEmpty()) {
             return false;
         }
-        item.set(WotrDataComponentType.GEAR_IMPLICITS, new UnrolledGearImplicits());
+        GearImplicits implicits = item.set(WotrDataComponentType.GEAR_IMPLICITS, new UnrolledGearImplicits());
+        if (implicits != null) {
+            implicits.modifierInstances(item, level);
+        }
+
         return item.has(WotrDataComponentType.GEAR_IMPLICITS);
     }
 
