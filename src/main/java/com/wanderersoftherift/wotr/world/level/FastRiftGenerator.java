@@ -108,7 +108,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         return layout.get();
     }
 
-    private RiftRoomGenerator getRoomGenerator() {
+    public RiftRoomGenerator getRoomGenerator() {
         return roomGenerator;
     }
 
