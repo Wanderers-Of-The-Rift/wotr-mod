@@ -244,6 +244,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "rift.roominfo.size"), "Size: %s %s %s");
         add(WanderersOfTheRift.translationId("command", "rift.roominfo.transform"), "Transform: %s %s %s");
         add(WanderersOfTheRift.translationId("command", "rift.roominfo.invalid"), "Invalid level");
+        add(WanderersOfTheRift.translationId("command", "gear.socket.invalid"),
+                "No item held or does not support sockets");
+        add(WanderersOfTheRift.translationId("command", "gear.implicit.invalid"),
+                "No item held or does not support implicits");
         add(WanderersOfTheRift.translationId("command", "generic.success"), "Done.");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
