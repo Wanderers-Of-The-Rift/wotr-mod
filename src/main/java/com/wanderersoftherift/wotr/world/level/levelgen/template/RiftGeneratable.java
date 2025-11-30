@@ -12,6 +12,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,20 +32,18 @@ public interface RiftGeneratable {
 
     String identifier();
 
-    static void generate(
+    static void applyGeneratable(
             RiftGeneratable generatable,
-            RiftProcessedRoom destination,
-            ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror,
             MinecraftServer server,
             RandomSource random,
             long[] mask,
-            List<JigsawListProcessor> jigsawProcessors) {
+            List<JigsawListProcessor> jigsawProcessors,
+            TriConsumer<RiftGeneratable, Vec3i, TripleMirror> applyFunc) {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
-        destination.clearNewFlags();
         if (mask == null) {
             mask = new long[16 * 16 * 16];
         }
@@ -108,11 +107,29 @@ public interface RiftGeneratable {
                             .applyToPosition(childJigsaw.info().pos(), next.size().getX() - 1, next.size().getZ() - 1)
                             .multiply(-1));
 
-            generate(next, destination, world, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server,
-                    random, mask, jigsawProcessors);
+            applyGeneratable(next, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server, random, mask,
+                    jigsawProcessors, applyFunc);
         }
         writeCollisionMask(generatable, mask, placementShift, mirror);
-        generatable.processAndPlace(destination, world, placementShift, mirror);
+
+        applyFunc.accept(generatable, placementShift, mirror);
+    }
+
+    static void generate(
+            RiftGeneratable generatable,
+            RiftProcessedRoom destination,
+            ServerLevelAccessor world,
+            Vec3i placementShift,
+            TripleMirror mirror,
+            MinecraftServer server,
+            RandomSource random,
+            long[] mask,
+            List<JigsawListProcessor> jigsawProcessors) {
+        applyGeneratable(generatable, placementShift, mirror, server, random, mask, jigsawProcessors,
+                (subGeneratable, pos, transformation) -> {
+                    destination.clearNewFlags();
+                    subGeneratable.processAndPlace(destination, world, pos, transformation);
+                });
     }
 
     static boolean collidesWithMask(
