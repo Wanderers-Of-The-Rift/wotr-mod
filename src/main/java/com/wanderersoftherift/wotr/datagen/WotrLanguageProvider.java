@@ -238,6 +238,12 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
         add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
         add(WanderersOfTheRift.translationId("command", "place.processor.invalid"), "Invalid processor %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.void"), "Room: none");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.room"), "Room: %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.origin"), "Origin: %s %s %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.size"), "Size: %s %s %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.transform"), "Transform: %s %s %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.invalid"), "Invalid level");
         add(WanderersOfTheRift.translationId("command", "generic.success"), "Done.");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
