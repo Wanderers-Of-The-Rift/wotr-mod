@@ -64,6 +64,9 @@ public class DataGenerators {
 
         event.createProvider(WotrRunegemDataTagsProvider::new);
 
+        // Localizations
+
         event.createProvider(WotrLanguageProvider::new);
+        event.createProvider(WotrLanguageProviderEs_Es::new);
     }
 }
