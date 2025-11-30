@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -30,6 +31,11 @@ public interface RiftRoomGenerator {
     }
 
     CompletableFuture<RiftProcessedRoom> getOrCreateFutureProcessedRoom(
+            RoomRiftSpace space,
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory);
+
+    Object2IntMap<String> getJigsawCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory);

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -73,6 +74,15 @@ public record CachedRiftRoomGenerator(
             }
         });
         return newResult;
+    }
+
+    @Override
+    public Object2IntMap<String> getJigsawCounts(
+            RoomRiftSpace space,
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory) {
+        // TODO: cache
+        return baseGenerator.getJigsawCounts(space, world, randomFactory);
     }
 
     public record Factory(RiftRoomGenerator.Factory baseFactory) implements RiftRoomGenerator.Factory {
