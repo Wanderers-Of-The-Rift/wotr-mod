@@ -72,7 +72,10 @@
               "type": "wotr:particle",
               "particle": {
                 "type": "minecraft:explosion"
-              }
+              },
+              "count": 10,
+              "distribution": [ 1, 1, 1],
+              "speed": 2
             }
           ]
         }

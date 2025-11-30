@@ -27,6 +27,7 @@
     "MixinLootTable",
     "MixinMob",
     "MixinOctahedralGroup",
+    "MixinPlayer",
     "MixinProtoChunk",
     "MixinRegionFileVersion",
     "MixinSetItemDamageFunction",

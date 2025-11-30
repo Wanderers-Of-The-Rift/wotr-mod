@@ -13,9 +13,13 @@ import com.wanderersoftherift.wotr.util.LongRange;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implements Ability {
 
@@ -65,7 +69,11 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
     public boolean canActivate(AbilityContext context) {
         int index = currentIndex(context.caster(), context.source());
         ChainAbilitySource subSource = new ChainAbilitySource(context.source(), index);
-        Holder<Ability> subAbility = abilities.get(index).ability();
+        var subAbilityEntry = abilities.get(index);
+        if (!subAbilityEntry.requirements().stream().allMatch(x -> x.check(context))) {
+            return false;
+        }
+        Holder<Ability> subAbility = subAbilityEntry.ability();
         return subAbility.value().canActivate(context.forSubAbility(subAbility, subSource));
     }
 
@@ -76,7 +84,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
 
     private boolean progressChain(AbilityContext context, int index) {
         boolean childComplete = activateChild(context, index);
-        while (childComplete && ++index < abilities.size() && abilities.get(index).autoActivate) {
+        while (childComplete && (index = nextIndex(index)) < abilities.size() && abilities.get(index).autoActivate) {
             childComplete = activateChild(context, index);
         }
         if (childComplete && index >= abilities.size()) {
@@ -85,6 +93,10 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         }
         updateState(context, index, !childComplete);
         return false;
+    }
+
+    private int nextIndex(int index) {
+        return this.abilities.get(index).next.map(it -> it.sample(RandomSource.create())).orElse(index + 1);
     }
 
     private void updateState(AbilityContext context, int index, boolean active) {
@@ -104,7 +116,9 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
      */
     private boolean activateChild(AbilityContext context, int index) {
         ChainAbilitySource childSource = new ChainAbilitySource(context.source(), index);
-        Holder<Ability> childAbility = abilities.get(index).ability();
+        var subAbilityEntry = abilities.get(index);
+        Holder<Ability> childAbility = subAbilityEntry.ability();
+        subAbilityEntry.requirements().forEach(it -> it.pay(context));
         if (context.caster()
                 .getData(WotrAttachments.ONGOING_ABILITIES)
                 .activate(childSource, childAbility, (childContext) -> childContext
@@ -138,7 +152,7 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         if (context.caster().getData(WotrAttachments.ABILITY_STATES).isActive(currentSubabilitySource)) {
             return false;
         }
-        index++;
+        index = nextIndex(index);
         if (index >= abilities.size()) {
             deactivate(context);
             return true;
@@ -178,11 +192,16 @@ public record ChainAbility(boolean inCreativeMenu, List<Entry> abilities) implem
         return owner.getData(WotrAttachments.ABILITY_STATES).getState(source);
     }
 
-    public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate) {
+    public record Entry(Holder<Ability> ability, int ticksToReset, boolean autoActivate,
+            List<AbilityRequirement> requirements, Optional<IntProvider> next) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Ability.CODEC.fieldOf("ability").forGetter(Entry::ability),
                 Codec.INT.optionalFieldOf("ticks_to_reset", 100).forGetter(Entry::ticksToReset),
-                Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(Entry::autoActivate)
+                Codec.BOOL.optionalFieldOf("auto_activate", false).forGetter(Entry::autoActivate),
+                AbilityRequirement.CODEC.listOf()
+                        .optionalFieldOf("requirements", Collections.emptyList())
+                        .forGetter(Entry::requirements),
+                IntProvider.CODEC.optionalFieldOf("next").forGetter(Entry::next)
         ).apply(instance, Entry::new));
     }
 }
