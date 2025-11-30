@@ -65,7 +65,7 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
         blockModels.createTrivialCube(WotrBlocks.NPC.get());
 
-        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly");
+        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly_block");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.ANOMALY.get(),
                         Variant.variant().with(VariantProperties.MODEL, baseAnomalyBaseModel))
