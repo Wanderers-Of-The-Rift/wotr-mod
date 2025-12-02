@@ -18,6 +18,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Provider for close anomaly goals
+ *
+ * @param anomalyType A weighted list of possible types. If empty no type is required.
+ * @param count       A provider for the number of anomalies that must be closed
+ */
 public record CloseAnomalyGoalProvider(FastWeightedList<Holder<AnomalyTask.AnomalyTaskType<?>>> anomalyType,
         NumberProvider count) implements GoalProvider {
 

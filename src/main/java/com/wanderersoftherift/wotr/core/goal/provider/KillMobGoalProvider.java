@@ -17,6 +17,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A provider for kill mob goals.
+ *
+ * @param mob      The type of mob. If empty, any mob.
+ * @param rawLabel The translation string for the type of mob.
+ * @param count    A number provider for the amount of mobs that must be killed
+ */
 public record KillMobGoalProvider(Optional<EntityTypePredicate> mob, String rawLabel, NumberProvider count)
         implements GoalProvider {
 
