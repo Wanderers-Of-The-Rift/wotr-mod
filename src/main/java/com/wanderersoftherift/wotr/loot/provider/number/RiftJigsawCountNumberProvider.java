@@ -13,8 +13,10 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,13 +24,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public record RiftJigsawCountNumberProvider(String jigsawPrefix, int roomDistance) implements NumberProvider {
+public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider roomDistance)
+        implements NumberProvider {
 
     public static final MapCodec<RiftJigsawCountNumberProvider> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     Codec.STRING.fieldOf("jigsaw_prefix").forGetter(RiftJigsawCountNumberProvider::jigsawPrefix),
-                    Codec.intRange(1, Integer.MAX_VALUE)
-                            .optionalFieldOf("room_distance", 5)
+                    NumberProviders.CODEC.optionalFieldOf("room_distance", ConstantValue.exactly(5))
                             .forGetter(RiftJigsawCountNumberProvider::roomDistance)
             ).apply(instance, RiftJigsawCountNumberProvider::new));
 
@@ -46,8 +48,9 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, int roomDistanc
         List<Vec3i> layerRooms = new ArrayList<>();
         layerRooms.add(start);
 
+        int distance = Math.max(1, roomDistance().getInt(lootContext));
         int result = 0;
-        for (int layer = 0; !layerRooms.isEmpty() && layer < roomDistance - 1; layer++) {
+        for (int layer = 0; !layerRooms.isEmpty() && layer < distance - 1; layer++) {
             List<Vec3i> nextLayerRooms = new ArrayList<>(layerRooms.size());
             for (Vec3i roomPos : layerRooms) {
                 if (layout.getChunkSpace(roomPos) instanceof RoomRiftSpace room) {
