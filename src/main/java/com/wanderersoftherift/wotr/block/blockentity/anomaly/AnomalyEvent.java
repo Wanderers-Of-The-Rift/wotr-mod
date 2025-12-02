@@ -5,6 +5,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.Event;
 
+/**
+ * Events relating to anomalies
+ */
 public abstract class AnomalyEvent extends Event {
     private final Level level;
     private final BlockPos pos;

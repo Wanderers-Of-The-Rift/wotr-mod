@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+/**
+ * An objective requiring completion of a number of goals.
+ */
 public class GoalBasedOngoingObjective implements OngoingObjective {
     public static final MapCodec<GoalBasedOngoingObjective> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
