@@ -6,7 +6,16 @@ import net.neoforged.bus.api.Event;
 
 import java.util.function.Function;
 
+/**
+ * Events relating to goals
+ */
 public abstract class GoalEvent extends Event {
+
+    /**
+     * Event when an update occurs relating to a goal type
+     * 
+     * @param <T>
+     */
     public static class Update<T extends Goal> extends GoalEvent {
         private final Player player;
         private final Class<T> goalType;

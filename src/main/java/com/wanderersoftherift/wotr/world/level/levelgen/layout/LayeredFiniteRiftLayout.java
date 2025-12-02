@@ -3,31 +3,25 @@ package com.wanderersoftherift.wotr.world.level.levelgen.layout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
-import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.BoxedRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.FiniteRiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.shape.RiftShape;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
-import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -95,33 +89,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         for (var layer : layers) {
             layer.generateSection(this, randomSource, allSpaces);
         }
-        cullDisconnected(allSpaces);
         generationCompletion.complete(Unit.INSTANCE);
-    }
-
-    private void cullDisconnected(List<RiftSpace> spaces) {
-        BlockPos start = PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION;
-        Set<RiftSpace> connected = new HashSet<>();
-        Deque<RiftSpace> checkFrom = new ArrayDeque<>();
-        RiftSpace startSpace = getSpaceAt(SectionPos.of(start));
-
-        connected.add(startSpace);
-        checkFrom.add(startSpace);
-        while (!checkFrom.isEmpty()) {
-            RiftSpace space = checkFrom.pop();
-            space.corridors().forEach(corridor -> {
-                RiftSpace next = getSpaceAt(corridor.getConnectingPos(space));
-                if (next instanceof RoomRiftSpace && connected.add(next)) {
-                    checkFrom.add(next);
-                }
-            });
-        }
-
-        List<RiftSpace> toCull = spaces.stream().filter(x -> !connected.contains(x)).toList();
-        WanderersOfTheRift.LOGGER.info("Culling {} unconnected rooms", toCull.size());
-        for (RiftSpace space : toCull) {
-            removeSpace(space);
-        }
     }
 
     public RiftSpace getSpaceAt(Vec3i pos) {
@@ -136,22 +104,6 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         var size = riftShape.getBoxSize();
         return spaces[(x - origin.getX()) + (z - origin.getZ()) * size.getX()
                 + (y - origin.getY()) * size.getX() * size.getZ()];
-    }
-
-    private void removeSpace(RiftSpace space) {
-        for (int x = 0; x < space.size().getX(); x++) {
-            for (int y = 0; y < space.size().getY(); y++) {
-                for (int z = 0; z < space.size().getZ(); z++) {
-                    var positionX = space.origin().getX() + x;
-                    var positionY = space.origin().getY() + y;
-                    var positionZ = space.origin().getZ() + z;
-                    // TODO: Probably a better way, can set to null and update empty space if I can work out that jumble
-                    // of math
-                    setSpaceAt(positionX, positionY, positionZ,
-                            new VoidRiftSpace(new Vec3i(positionX, positionY, positionZ)));
-                }
-            }
-        }
     }
 
     public void setSpaceAt(int x, int y, int z, RiftSpace space) {
@@ -170,13 +122,7 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         var rand = ProcessorUtil.createRandom(
                 ProcessorUtil.getRandomSeed(new BlockPos(origin.getX(), 0, origin.getZ()), seed));
         tryGenerate(rand);
-        List<RiftSpace> result = new ArrayList<>();
-        for (RiftSpace space : spaces) {
-            if (space != null) {
-                result.add(space);
-            }
-        }
-        return result;
+        return Arrays.stream(spaces).filter(Objects::nonNull).toList();
     }
 
     private boolean canPlaceSpace(RiftSpace space) {

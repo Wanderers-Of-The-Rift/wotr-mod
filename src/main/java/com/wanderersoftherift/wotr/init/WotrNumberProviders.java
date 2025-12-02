@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.loot.provider.number.MultiplyNumberProvider;
+import com.wanderersoftherift.wotr.loot.provider.number.RiftJigsawCountNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.RiftParameterNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.SumNumberProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,6 +18,8 @@ public class WotrNumberProviders {
 
     public static final Supplier<LootNumberProviderType> RIFT_PARAMETER = NUMBER_PROVIDERS.register("rift_parameter",
             () -> new LootNumberProviderType(RiftParameterNumberProvider.CODEC));
+    public static final Supplier<LootNumberProviderType> RIFT_JIGSAW_COUNT = NUMBER_PROVIDERS
+            .register("rift_jigsaw_count", () -> new LootNumberProviderType(RiftJigsawCountNumberProvider.CODEC));
     public static final Supplier<LootNumberProviderType> MULTIPLY = NUMBER_PROVIDERS.register("multiply",
             () -> new LootNumberProviderType(MultiplyNumberProvider.CODEC));
     public static final Supplier<LootNumberProviderType> SUM = NUMBER_PROVIDERS.register("sum",

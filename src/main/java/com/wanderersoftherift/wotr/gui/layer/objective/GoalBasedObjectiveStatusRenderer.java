@@ -14,15 +14,16 @@ import org.joml.Vector2i;
 
 import java.util.List;
 
+/**
+ * Renderer for the goal based objective. Just lists the goals and their progress
+ */
 public class GoalBasedObjectiveStatusRenderer extends ObjectiveRenderer {
 
     private static final int WIDTH = 120;
 
-    private final GoalBasedOngoingObjective objective;
     private final List<GoalStateWidget> goalWidgets;
 
     public GoalBasedObjectiveStatusRenderer(GoalBasedOngoingObjective objective) {
-        this.objective = objective;
         this.goalWidgets = objective.getGoalStates()
                 .stream()
                 .map(state -> new GoalStateWidget(state,
