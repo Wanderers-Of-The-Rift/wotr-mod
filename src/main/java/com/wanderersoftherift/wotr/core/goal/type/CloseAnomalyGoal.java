@@ -14,6 +14,12 @@ import net.minecraft.util.ExtraCodecs;
 
 import java.util.Optional;
 
+/**
+ * A goal to close a number of anomalies, optionally of a required type
+ * 
+ * @param count
+ * @param anomalyType
+ */
 public record CloseAnomalyGoal(int count, Optional<Holder<AnomalyTask.AnomalyTaskType<?>>> anomalyType)
         implements Goal {
     public static final MapCodec<CloseAnomalyGoal> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

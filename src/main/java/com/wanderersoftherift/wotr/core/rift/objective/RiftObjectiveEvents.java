@@ -69,7 +69,7 @@ public class RiftObjectiveEvents {
             return;
         }
         Component objectiveStartMessage = objective.get().getObjectiveStartMessage();
-        if (objectiveStartMessage != null) {
+        if (objectiveStartMessage != null && !objectiveStartMessage.getString().isEmpty()) {
             player.displayClientMessage(objectiveStartMessage, false);
         }
     }

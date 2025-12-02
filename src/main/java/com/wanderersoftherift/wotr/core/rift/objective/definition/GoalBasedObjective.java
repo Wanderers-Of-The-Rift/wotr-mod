@@ -16,9 +16,16 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
 
+/**
+ * An objective build on one or more goals that must be completed
+ *
+ * @param goals
+ */
 public record GoalBasedObjective(List<GoalProvider> goals) implements ObjectiveType {
     public static final MapCodec<GoalBasedObjective> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            GoalProvider.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(GoalBasedObjective::goals))
+            GoalProvider.DIRECT_CODEC.listOf(1, Integer.MAX_VALUE)
+                    .fieldOf("goals")
+                    .forGetter(GoalBasedObjective::goals))
             .apply(inst, GoalBasedObjective::new));
 
     @Override
