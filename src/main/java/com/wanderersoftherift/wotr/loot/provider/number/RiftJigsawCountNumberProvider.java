@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.init.WotrNumberProviders;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.SectionPos;
@@ -42,18 +43,18 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
         }
         RiftLayout layout = generator.getOrCreateLayout(level.getServer());
 
-        Vec3i start = SectionPos.of(PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION);
+        RiftSpace startRoom = layout.getChunkSpace(SectionPos.of(PortalSpawnLocation.DEFAULT_RIFT_EXIT_POSITION));
         Set<Vec3i> connected = new HashSet<>();
-        connected.add(start);
-        List<Vec3i> layerRooms = new ArrayList<>();
-        layerRooms.add(start);
+        connected.add(startRoom.origin());
+        List<RiftSpace> layerRooms = new ArrayList<>();
+        layerRooms.add(startRoom);
 
         int distance = Math.max(1, roomDistance().getInt(lootContext));
         int result = 0;
         for (int layer = 0; !layerRooms.isEmpty() && layer < distance - 1; layer++) {
-            List<Vec3i> nextLayerRooms = new ArrayList<>(layerRooms.size());
-            for (Vec3i roomPos : layerRooms) {
-                if (layout.getChunkSpace(roomPos) instanceof RoomRiftSpace room) {
+            List<RiftSpace> nextLayerRooms = new ArrayList<>(layerRooms.size());
+            for (RiftSpace space : layerRooms) {
+                if (space instanceof RoomRiftSpace room) {
                     Object2IntMap<String> jigsawCounts = generator.getJigsawCounts(room, level);
                     result += jigsawCounts.object2IntEntrySet()
                             .stream()
@@ -61,9 +62,9 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
                             .mapToInt(Object2IntMap.Entry::getIntValue)
                             .sum();
                     room.corridors().forEach(corridor -> {
-                        Vec3i adjRoom = corridor.getConnectingPos(room);
-                        if (connected.add(adjRoom)) {
-                            nextLayerRooms.add(adjRoom);
+                        RiftSpace adjSpace = layout.getChunkSpace(corridor.getConnectingPos(room));
+                        if (connected.add(adjSpace.origin())) {
+                            nextLayerRooms.add(adjSpace);
                         }
                     });
                 }
@@ -71,8 +72,8 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
             layerRooms = nextLayerRooms;
         }
         // Unrolled the last loop to skip corridor processing
-        for (Vec3i roomPos : layerRooms) {
-            if (layout.getChunkSpace(roomPos) instanceof RoomRiftSpace room) {
+        for (RiftSpace space : layerRooms) {
+            if (space instanceof RoomRiftSpace room) {
                 Object2IntMap<String> jigsawCounts = generator.getJigsawCounts(room, level);
                 result += jigsawCounts.object2IntEntrySet()
                         .stream()
