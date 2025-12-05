@@ -4,18 +4,30 @@
     {
       "type": "wotr:close_anomaly",
       "count": {
-        "type": "wotr:sum",
-        "values": [
+        "type": "wotr:max",
+        "values" : [
           {
-            "type": "wotr:multiply",
-            "values": [
-              {
-                "type": "wotr:rift_jigsaw_count",
-                "jigsaw_prefix" : "wotr:rift/anomaly/",
-                "room_distance" : 3
-              },
-              0.5
-            ]
+            "type": "wotr:ceil",
+            "value" : {
+              "type": "wotr:multiply",
+              "values": [
+                {
+                  "type": "wotr:rift_jigsaw_count",
+                  "jigsaw_prefix" : "wotr:rift/anomaly/",
+                  "room_distance" : {
+                    "type": "wotr:multiply",
+                    "values" : [
+                      {
+                        "type": "wotr:rift_parameter",
+                        "parameter": "wotr:objective/difficulty"
+                      },
+                      0.5
+                    ]
+                  }
+                },
+                0.25
+              ]
+            }
           },
           1
         ]

@@ -178,6 +178,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly"), "Close anomalies (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly.typed"), "Close %s anomalies (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.visit_room"), "Explore rift rooms (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
@@ -456,6 +457,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
         add(WanderersOfTheRift.translationId("objective", "nothing.name"), "Nothing");
+        add(WanderersOfTheRift.translationId("objective", "anomaly.name"), "Close anomalies");
+        add(WanderersOfTheRift.translationId("objective", "explore.name"), "Explore");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");
         add(WanderersOfTheRift.translationId("objective", "stealth.description"), "Defeat monsters stealthily");
         add(WanderersOfTheRift.translationId("objective", "nothing.description"), "Do nothing");

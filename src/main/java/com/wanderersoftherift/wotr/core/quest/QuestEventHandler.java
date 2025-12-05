@@ -21,7 +21,7 @@ public class QuestEventHandler {
 
     @SubscribeEvent
     public static void onGoalUpdate(GoalEvent.Update<?> event) {
-        if (event.isCancelled()) {
+        if (event.isCanceled()) {
             return;
         }
 
