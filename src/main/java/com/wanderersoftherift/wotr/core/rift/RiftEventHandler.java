@@ -26,7 +26,7 @@ public class RiftEventHandler {
 
     @SubscribeEvent
     public static void onGoalUpdate(GoalEvent.Update<?> event) {
-        if (event.isCancelled() || !(event.getPlayer().level() instanceof ServerLevel level)
+        if (event.isCanceled() || !(event.getPlayer().level() instanceof ServerLevel level)
                 || !RiftLevelManager.isRift(level)) {
             return;
         }
