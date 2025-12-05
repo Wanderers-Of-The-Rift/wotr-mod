@@ -5,7 +5,9 @@ import com.wanderersoftherift.wotr.core.goal.type.CloseAnomalyGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
 import com.wanderersoftherift.wotr.core.goal.type.RiftCompletionLevel;
+import com.wanderersoftherift.wotr.core.goal.type.VisitRoomGoal;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
+import com.wanderersoftherift.wotr.core.rift.map.RiftMapEvent;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -63,6 +65,14 @@ public class GoalEventHandler {
             }
             return 0;
         }));
+    }
+
+    @SubscribeEvent
+    public static void onRoomFirstVisited(RiftMapEvent.RoomFirstVisited event) {
+        if (event.getRoom().template().identifier().startsWith("wotr:rift/room/portal")) {
+            return;
+        }
+        NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(event.getPlayer(), VisitRoomGoal.class, (goal) -> 1));
     }
 
 }

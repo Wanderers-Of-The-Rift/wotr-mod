@@ -26,6 +26,7 @@ public interface GoalProvider {
      * @param params Parameters that may affect generation
      * @return A list of the generated goals.
      */
+    // TODO: change LootParams to LootContext?
     @NotNull List<Goal> generateGoal(LootParams params);
 
 }

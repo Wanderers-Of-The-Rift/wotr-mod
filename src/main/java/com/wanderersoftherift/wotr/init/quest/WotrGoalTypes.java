@@ -10,10 +10,12 @@ import com.wanderersoftherift.wotr.core.goal.provider.FixedGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.GiveItemGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.KillMobGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.PoolGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.VisitRoomGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.type.CloseAnomalyGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
 import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
+import com.wanderersoftherift.wotr.core.goal.type.VisitRoomGoal;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -50,6 +52,12 @@ public class WotrGoalTypes {
 
     public static final Supplier<MapCodec<? extends GoalProvider>> CLOSE_ANOMALY = GOAL_PROVIDER_TYPES
             .register("close_anomaly", () -> CloseAnomalyGoalProvider.CODEC);
+
+    public static final Supplier<DualCodec<? extends Goal>> FIXED_VISIT_ROOM = register("fixed_visit_room",
+            () -> VisitRoomGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> VISIT_ROOM = GOAL_PROVIDER_TYPES
+            .register("visit_room", () -> VisitRoomGoalProvider.CODEC);
 
     public static final Supplier<MapCodec<? extends GoalProvider>> POOL = GOAL_PROVIDER_TYPES.register("pool",
             () -> PoolGoalProvider.CODEC);
