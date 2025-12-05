@@ -39,7 +39,7 @@ public class AbilityCooldowns {
         this.holder = holder;
         cooldowns = new LinkedHashMap<>();
         if (data != null && holder instanceof Entity entity) {
-            long gameTime = entity.level().getGameTime();
+            long gameTime = getGameTime() * 1000;
             for (var entry : data.cooldowns) {
                 cooldowns.put(entry.source, entry.range.offset(gameTime));
             }
@@ -57,7 +57,7 @@ public class AbilityCooldowns {
             return new Data(List.of());
         }
 
-        long gameTime = entity.level().getGameTime();
+        long gameTime = getGameTime() * 1000;
         List<CooldownInfo> cooldownData = cooldowns.entrySet()
                 .stream()
                 .filter(x -> x.getValue().contains(gameTime))
@@ -82,7 +82,7 @@ public class AbilityCooldowns {
     public Stream<CooldownInfo> getCooldowns() {
         return cooldowns.entrySet()
                 .stream()
-                .filter(x -> x.getValue().to() > getGameTime())
+                .filter(x -> x.getValue().to() > getGameTime() * 1000)
                 .map(x -> new CooldownInfo(x.getKey(), x.getValue()));
     }
 
@@ -91,13 +91,30 @@ public class AbilityCooldowns {
      * @return Whether the given slot is on cooldown
      */
     public boolean isOnCooldown(AbilitySource source) {
-        return cooldowns.getOrDefault(source, LongRange.EMPTY).to() > getGameTime();
+        return isOnCooldown(source, 1000);
     }
 
     /**
      * @param source
-     * @param from   In ticks, in terms of gameTime
-     * @param until  In ticks, in terms of gameTime
+     * @param margin how far in advance is the ability allowed to activate
+     * @return Whether the given slot is on cooldown
+     */
+    public boolean isOnCooldown(AbilitySource source, int margin) {
+        return remainingCooldown(source) > margin;
+    }
+
+    public long remainingCooldown(AbilitySource source) {
+        var range = cooldowns.getOrDefault(source, LongRange.EMPTY);
+        if (range.to() == range.from() || range.to() < 0) {
+            return 0;
+        }
+        return Math.max(0, range.to() - getGameTime() * 1000);
+    }
+
+    /**
+     * @param source
+     * @param from   In milliticks, in terms of gameTime
+     * @param until  In milliticks, in terms of gameTime
      */
     public void setCooldown(AbilitySource source, long from, long until) {
         cooldowns.put(source, new LongRange(from, until));
@@ -109,10 +126,10 @@ public class AbilityCooldowns {
     /**
      *
      * @param source
-     * @param length In ticks
+     * @param length In milliticks
      */
     public void setCooldown(AbilitySource source, int length) {
-        long gameTime = getGameTime();
+        long gameTime = getGameTime() * 1000;
         setCooldown(source, gameTime, gameTime + length);
     }
 
@@ -133,7 +150,7 @@ public class AbilityCooldowns {
     /**
      *
      * @param source
-     * @param range  The range of the cooldown, in ticks (comparable with gametime)
+     * @param range  The range of the cooldown, in milliticks (comparable with gametime)
      */
     public record CooldownInfo(AbilitySource source, LongRange range) {
         private static final Codec<CooldownInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(
