@@ -38,11 +38,10 @@ public class WotrBlockEntities {
             "rift_mob_spawner",
             () -> new BlockEntityType<>(RiftMobSpawnerBlockEntity::new, WotrBlocks.RIFT_MOB_SPAWNER.get()));
 
-    public static final Supplier<BlockEntityType<AbilityBenchBlockEntity>> ABILITY_BENCH_BLOCK_ENTITY = BLOCK_ENTITIES
-            .register("ability_bench_block_entity",
-                    // The block entity type.
-                    () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
-
+    public static final Supplier<BlockEntityType<AbilityBenchBlockEntity>> ABILITY_BENCH = BLOCK_ENTITIES.register(
+            "ability_bench_block_entity",
+            // The block entity type.
+            () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
     public static final Supplier<BlockEntityType<AnomalyBlockEntity>> ANOMALY_BLOCK_ENTITY = BLOCK_ENTITIES.register(
             "anomaly_block_entity",
             // The block entity type.

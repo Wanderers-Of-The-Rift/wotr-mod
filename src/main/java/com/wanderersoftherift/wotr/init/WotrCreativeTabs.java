@@ -30,6 +30,7 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
+                        output.accept(WotrItems.ABILITY_BENCH);
                         WotrItems.BLOCK_ITEMS.stream()
                                 .filter(x -> x.get().getBlock() != WotrBlocks.NPC.get())
                                 .forEach(item -> output.accept(item.get()));
