@@ -30,32 +30,9 @@ public class WotrCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(WotrItems.RIFT_KEY);
                         output.accept(WotrItems.SKILL_THREAD);
-                        output.accept(WotrItems.EARTH_ESSENCE);
-                        output.accept(WotrItems.WATER_ESSENCE);
-                        output.accept(WotrItems.PLANT_ESSENCE);
-                        output.accept(WotrItems.DEATH_ESSENCE);
-                        output.accept(WotrItems.LIFE_ESSENCE);
-                        output.accept(WotrItems.NETHER_ESSENCE);
-                        output.accept(WotrItems.LIGHT_ESSENCE);
-                        output.accept(WotrItems.HONEY_ESSENCE);
-                        output.accept(WotrItems.MUSHROOM_ESSENCE);
-                        output.accept(WotrItems.FABRIC_ESSENCE);
-                        output.accept(WotrItems.DARK_ESSENCE);
-                        output.accept(WotrItems.FIRE_ESSENCE);
-                        output.accept(WotrItems.AIR_ESSENCE);
-                        output.accept(WotrItems.ENERGY_ESSENCE);
-                        output.accept(WotrItems.ANIMAL_ESSENCE);
-                        output.accept(WotrItems.CRYSTAL_ESSENCE);
-                        output.accept(WotrItems.METAL_ESSENCE);
-                        output.accept(WotrItems.FOOD_ESSENCE);
-                        output.accept(WotrItems.SLIME_ESSENCE);
-                        output.accept(WotrItems.MIND_ESSENCE);
-                        output.accept(WotrItems.MECHA_ESSENCE);
-                        output.accept(WotrItems.END_ESSENCE);
-                        output.accept(WotrItems.FLOW_ESSENCE);
-                        output.accept(WotrItems.FORM_ESSENCE);
-                        output.accept(WotrItems.ORDER_ESSENCE);
-                        output.accept(WotrItems.CHAOS_ESSENCE);
+                        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+                            output.accept(essenceItem);
+                        });
 
                         WotrItems.BLOCK_ITEMS.stream()
                                 .filter(x -> x.get().getBlock() != WotrBlocks.NPC.get())

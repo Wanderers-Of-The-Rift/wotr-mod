@@ -150,33 +150,10 @@ public class WotrModelProvider extends ModelProvider {
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels));
 
-        // CREATE ESSENCE ITEMS
-        itemModels.generateFlatItem(WotrItems.EARTH_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.WATER_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.PLANT_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.DEATH_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.LIFE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.NETHER_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.LIGHT_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.HONEY_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.MUSHROOM_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.FABRIC_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.DARK_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.FIRE_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.AIR_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.ENERGY_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.ANIMAL_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.CRYSTAL_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.METAL_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.FOOD_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.SLIME_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.MIND_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.MECHA_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.END_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.FLOW_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.FORM_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.ORDER_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(WotrItems.CHAOS_ESSENCE.get(), ModelTemplates.FLAT_ITEM);
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            itemModels.generateFlatItem(essenceItem.get(), ModelTemplates.FLAT_ITEM);
+        });
     }
 
     private void createBlockStatesForTrapBlock(

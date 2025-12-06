@@ -6,9 +6,11 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -171,32 +173,7 @@ public class WotrItemTagProvider extends ItemTagsProvider {
                 .add(Items.GOLDEN_AXE);
 
         tag(WotrTags.Items.ESSENCE_ITEM)
-                .add(WotrItems.EARTH_ESSENCE.get())
-                .add(WotrItems.WATER_ESSENCE.get())
-                .add(WotrItems.PLANT_ESSENCE.get())
-                .add(WotrItems.DEATH_ESSENCE.get())
-                .add(WotrItems.LIGHT_ESSENCE.get())
-                .add(WotrItems.NETHER_ESSENCE.get())
-                .add(WotrItems.LIFE_ESSENCE.get())
-                .add(WotrItems.HONEY_ESSENCE.get())
-                .add(WotrItems.MUSHROOM_ESSENCE.get())
-                .add(WotrItems.FABRIC_ESSENCE.get())
-                .add(WotrItems.DARK_ESSENCE.get())
-                .add(WotrItems.FIRE_ESSENCE.get())
-                .add(WotrItems.AIR_ESSENCE.get())
-                .add(WotrItems.ENERGY_ESSENCE.get())
-                .add(WotrItems.ANIMAL_ESSENCE.get())
-                .add(WotrItems.CRYSTAL_ESSENCE.get())
-                .add(WotrItems.METAL_ESSENCE.get())
-                .add(WotrItems.FOOD_ESSENCE.get())
-                .add(WotrItems.SLIME_ESSENCE.get())
-                .add(WotrItems.MIND_ESSENCE.get())
-                .add(WotrItems.MECHA_ESSENCE.get())
-                .add(WotrItems.END_ESSENCE.get())
-                .add(WotrItems.FLOW_ESSENCE.get())
-                .add(WotrItems.FORM_ESSENCE.get())
-                .add(WotrItems.ORDER_ESSENCE.get())
-                .add(WotrItems.CHAOS_ESSENCE.get());
+                .add(WotrItems.ESSENCE_ITEMS.values().stream().map(DeferredItem::get).toArray(Item[]::new));
 
         // spotless:on
     }
