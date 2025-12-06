@@ -113,7 +113,7 @@ public class WotrItems {
             () -> new WotrArmor(EquipmentSlot.HEAD, "color_helmet", 165));
 
     // Essence items
-    public static Map<EssenceType, DeferredItem<Item>> ESSENCE_ITEMS = Arrays.stream(EssenceType.values())
+    public static final Map<EssenceType, DeferredItem<Item>> ESSENCE_ITEMS = Arrays.stream(EssenceType.values())
             .collect(Collectors.toMap(
                     essenceItem -> essenceItem,
                     essenceItem -> ITEMS.register(essenceItem.name().toLowerCase(Locale.ROOT) + "_essence",
