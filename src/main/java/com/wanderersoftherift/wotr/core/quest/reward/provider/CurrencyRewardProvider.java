@@ -8,13 +8,11 @@ import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.quest.reward.CurrencyReward;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Generates a potentially randomised currency reward
@@ -36,8 +34,8 @@ public record CurrencyRewardProvider(Holder<Currency> currency, NumberProvider a
     }
 
     @Override
-    public @NotNull List<Reward> generateReward(LootParams params) {
+    public @NotNull List<Reward> generateReward(LootContext context) {
         return List.of(
-                new CurrencyReward(currency, amount.getInt(new LootContext.Builder(params).create(Optional.empty()))));
+                new CurrencyReward(currency, amount.getInt(context)));
     }
 }
