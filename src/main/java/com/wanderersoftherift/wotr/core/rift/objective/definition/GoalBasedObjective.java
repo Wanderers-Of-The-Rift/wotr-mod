@@ -11,10 +11,12 @@ import com.wanderersoftherift.wotr.core.rift.objective.ongoing.GoalBasedOngoingO
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * An objective build on one or more goals that must be completed
@@ -40,7 +42,8 @@ public record GoalBasedObjective(List<GoalProvider> goals) implements ObjectiveT
                 .withParameter(WotrLootContextParams.RIFT_PARAMETERS,
                         config.getCustomData(WotrRiftConfigDataTypes.INITIAL_RIFT_PARAMETERS))
                 .create(LootContextParamSets.EMPTY);
-        List<Goal> generatedGoals = goals.stream().flatMap(goal -> goal.generateGoal(params).stream()).toList();
+        LootContext context = new LootContext.Builder(params).create(Optional.empty());
+        List<Goal> generatedGoals = goals.stream().flatMap(goal -> goal.generateGoal(context).stream()).toList();
         return new GoalBasedOngoingObjective(generatedGoals);
     }
 }

@@ -10,7 +10,6 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
@@ -41,14 +40,12 @@ public record CloseAnomalyGoalProvider(FastWeightedList<Holder<AnomalyTask.Anoma
     }
 
     @Override
-    public @NotNull List<Goal> generateGoal(LootParams params) {
+    public @NotNull List<Goal> generateGoal(LootContext context) {
         if (anomalyType.isEmpty()) {
-            return List.of(new CloseAnomalyGoal(count.getInt(new LootContext.Builder(params).create(Optional.empty())),
-                    Optional.empty()));
+            return List.of(new CloseAnomalyGoal(count.getInt(context), Optional.empty()));
         }
         return List.of(
-                new CloseAnomalyGoal(count.getInt(new LootContext.Builder(params).create(Optional.empty())),
-                        Optional.of(anomalyType.random(params.getLevel().getRandom())))
+                new CloseAnomalyGoal(count.getInt(context), Optional.of(anomalyType.random(context.getRandom())))
         );
     }
 }

@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,8 +25,8 @@ public record PoolGoalProvider(List<GoalProvider> entries) implements GoalProvid
     }
 
     @Override
-    public @NotNull List<Goal> generateGoal(LootParams params) {
-        int index = params.getLevel().getRandom().nextInt(entries.size());
-        return entries.get(index).generateGoal(params);
+    public @NotNull List<Goal> generateGoal(LootContext context) {
+        int index = context.getRandom().nextInt(entries.size());
+        return entries.get(index).generateGoal(context);
     }
 }

@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.core.goal;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,10 +23,9 @@ public interface GoalProvider {
     MapCodec<? extends GoalProvider> getCodec();
 
     /**
-     * @param params Parameters that may affect generation
+     * @param context Context for generation
      * @return A list of the generated goals.
      */
-    // TODO: change LootParams to LootContext?
-    @NotNull List<Goal> generateGoal(LootParams params);
+    @NotNull List<Goal> generateGoal(LootContext context);
 
 }
