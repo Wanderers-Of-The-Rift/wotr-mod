@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
@@ -41,8 +40,8 @@ public record KillMobGoalProvider(Optional<EntityTypePredicate> mob, String rawL
     }
 
     @Override
-    public @NotNull List<Goal> generateGoal(LootParams params) {
+    public @NotNull List<Goal> generateGoal(LootContext context) {
         return List.of(
-                new KillMobGoal(mob, rawLabel, count.getInt(new LootContext.Builder(params).create(Optional.empty()))));
+                new KillMobGoal(mob, rawLabel, count.getInt(context)));
     }
 }

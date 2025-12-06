@@ -16,6 +16,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 
 import java.util.List;
@@ -45,12 +46,12 @@ public record Quest(Optional<ResourceLocation> icon, List<GoalProvider> goals, L
     public static final Codec<HolderSet<Quest>> SET_CODEC = HolderSetCodec.create(WotrRegistries.Keys.QUESTS, CODEC,
             false);
 
-    public List<Goal> generateGoals(LootParams params) {
-        return goals.stream().flatMap(x -> x.generateGoal(params).stream()).toList();
+    public List<Goal> generateGoals(LootContext context) {
+        return goals.stream().flatMap(x -> x.generateGoal(context).stream()).toList();
     }
 
-    public List<Reward> generateRewards(LootParams params) {
-        return rewards.stream().flatMap(x -> x.generateReward(params).stream()).toList();
+    public List<Reward> generateRewards(LootContext context) {
+        return rewards.stream().flatMap(x -> x.generateReward(context).stream()).toList();
     }
 
     public Holder<NpcIdentity> generateHandInTarget(LootParams params, Holder<NpcIdentity> questGiver) {
