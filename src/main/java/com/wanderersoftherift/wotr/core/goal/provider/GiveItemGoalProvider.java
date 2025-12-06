@@ -7,13 +7,11 @@ import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * A goal provider for generating GiveItem goals
@@ -34,7 +32,7 @@ public record GiveItemGoalProvider(Ingredient item, NumberProvider count) implem
     }
 
     @Override
-    public @NotNull List<Goal> generateGoal(LootParams params) {
-        return List.of(new GiveItemGoal(item, count.getInt(new LootContext.Builder(params).create(Optional.empty()))));
+    public @NotNull List<Goal> generateGoal(LootContext context) {
+        return List.of(new GiveItemGoal(item, count.getInt(context)));
     }
 }

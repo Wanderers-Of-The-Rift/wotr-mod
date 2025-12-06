@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.core.goal.provider;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public record FixedGoalProvider<T extends Goal>(T goal) implements GoalProvider 
     }
 
     @Override
-    public @NotNull List<Goal> generateGoal(LootParams params) {
+    public @NotNull List<Goal> generateGoal(LootContext context) {
         return List.of(goal);
     }
 

@@ -14,7 +14,6 @@ import com.wanderersoftherift.wotr.core.rift.predicate.RiftTierPredicate;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
@@ -55,8 +54,7 @@ public record CompleteRiftGoalProvider(RiftCompletionLevel completionLevel, Opti
     }
 
     @Override
-    public @NotNull List<Goal> generateGoal(LootParams params) {
-        LootContext context = new LootContext.Builder(params).create(Optional.empty());
+    public @NotNull List<Goal> generateGoal(LootContext context) {
         Optional<RiftTierPredicate> finalTier = tier.map(provider -> new RiftTierPredicate(provider.getInt(context)));
         Optional<RiftThemePredicate> theme;
         if (themes.isEmpty()) {

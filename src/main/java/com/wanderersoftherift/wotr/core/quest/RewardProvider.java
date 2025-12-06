@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.core.quest;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,8 +23,8 @@ public interface RewardProvider {
     MapCodec<? extends RewardProvider> getCodec();
 
     /**
-     * @param params Parameters that may affect generation
+     * @param context Context that may affect generation
      * @return A list of rewards produced to be produced by the quest
      */
-    @NotNull List<Reward> generateReward(LootParams params);
+    @NotNull List<Reward> generateReward(LootContext context);
 }

@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Attachment for tracking guild rank up rewards that are available to be claimed
@@ -72,9 +74,10 @@ public class UnclaimedGuildRewards {
             return;
         }
         LootParams params = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
+        LootContext context = new LootContext.Builder(params).create(Optional.empty());
         List<Reward> rewards = ranks.stream()
                 .flatMap(rank -> guild.value().getRank(rank).rewards().stream())
-                .flatMap(provider -> provider.generateReward(params).stream())
+                .flatMap(provider -> provider.generateReward(context).stream())
                 .toList();
         if (!rewards.isEmpty()) {
             RewardMenu.openRewardMenu(player, rewards,
