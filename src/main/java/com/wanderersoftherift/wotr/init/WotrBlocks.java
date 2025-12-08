@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.block.DittoBlock;
 import com.wanderersoftherift.wotr.block.KeyForgeBlock;
 import com.wanderersoftherift.wotr.block.MobTrapBlock;
 import com.wanderersoftherift.wotr.block.NpcBlock;
+import com.wanderersoftherift.wotr.block.ObjectiveBlock;
 import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
 import com.wanderersoftherift.wotr.block.RiftChestBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
@@ -21,6 +22,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
@@ -144,6 +146,19 @@ public class WotrBlocks {
                             .sound(SoundType.STONE)
                             .noOcclusion()
                             .strength(-1f, 3_600_000f)));
+
+    public static final DeferredBlock<ObjectiveBlock> OBJECTIVE = registerBlock("objective_block",
+            () -> new ObjectiveBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(blockId("objective_block"))
+                            .sound(SoundType.STONE)
+                            .strength(-1.0F, 3_600_000.0F)
+                            .noLootTable()
+                            .lightLevel(
+                                    state -> 15
+                            )
+                            .isValidSpawn(Blocks::never)
+            ));
 
     public static final BlockFamilyHelper PROCESSOR_BLOCK_1 = registerBuildingBlock("processor_block_1",
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_1"))));

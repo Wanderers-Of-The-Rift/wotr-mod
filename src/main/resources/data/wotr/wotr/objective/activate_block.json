@@ -1,0 +1,12 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:activate_objective_block",
+      "count": {
+        "type": "wotr:rift_parameter",
+        "parameter": "wotr:objective/difficulty"
+      }
+    }
+  ]
+}

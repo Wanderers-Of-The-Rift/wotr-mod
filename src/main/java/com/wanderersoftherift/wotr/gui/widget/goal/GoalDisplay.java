@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.gui.widget.quest;
+package com.wanderersoftherift.wotr.gui.widget.goal;
 
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import net.minecraft.network.chat.Style;

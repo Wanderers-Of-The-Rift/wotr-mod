@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.gui.layer.objective;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.objective.ongoing.GoalBasedOngoingObjective;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
-import com.wanderersoftherift.wotr.gui.widget.quest.GoalStateWidget;
+import com.wanderersoftherift.wotr.gui.widget.goal.GoalStateWidget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
