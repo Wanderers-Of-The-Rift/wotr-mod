@@ -49,6 +49,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
         addBlock(WotrBlocks.ANOMALY, "Anomaly");
+        addBlock(WotrBlocks.OBJECTIVE, "Objective");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
@@ -184,6 +185,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
         add(WanderersOfTheRift.translationId("container", "guild_rank_up"), "Guild Rank Up!");
         add(WanderersOfTheRift.translationId("container", "guilds.claim_reward"), "Claim rank up reward");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.objective_block"),
+                "Activate objective blocks (%s/%s)");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
