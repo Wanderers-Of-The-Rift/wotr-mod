@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.gui.widget.lookup;
 
 import com.google.common.collect.Maps;
 import com.wanderersoftherift.wotr.core.goal.Goal;
-import com.wanderersoftherift.wotr.gui.widget.quest.GoalDisplay;
+import com.wanderersoftherift.wotr.gui.widget.goal.GoalDisplay;
 import net.neoforged.fml.ModLoader;
 
 import java.util.Map;

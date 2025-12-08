@@ -1,7 +1,7 @@
-package com.wanderersoftherift.wotr.gui.widget.quest;
+package com.wanderersoftherift.wotr.gui.widget.goal;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
+import com.wanderersoftherift.wotr.core.goal.type.VisitRoomGoal;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -13,17 +13,17 @@ import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Display widget for the {@link KillMobGoal}
+ * Display widget for the {@link VisitRoomGoal}
  */
-public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
-    private static final String GOAL_MESSAGE = WanderersOfTheRift.translationId("container", "quest.goal.kill");
+public class VisitRoomGoalWidget extends AbstractWidget implements GoalDisplay {
+    private static final String GOAL_MESSAGE = WanderersOfTheRift.translationId("container", "quest.goal.visit_room");
     private final Font font;
-    private final KillMobGoal goal;
+    private final VisitRoomGoal goal;
 
     private Style textStyle = Style.EMPTY.withColor(ColorUtil.OFF_BLACK);
     private int progress;
 
-    public KillMobGoalWidget(KillMobGoal goal) {
+    public VisitRoomGoalWidget(VisitRoomGoal goal) {
         super(0, 0, 100, 18, Component.empty());
         this.font = Minecraft.getInstance().font;
         this.goal = goal;
@@ -46,10 +46,8 @@ public class KillMobGoalWidget extends AbstractWidget implements GoalDisplay {
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        Component name = goal.mobLabel();
-        guiGraphics.drawString(font,
-                Component.translatable(GOAL_MESSAGE, name, progress, goal.count()).withStyle(textStyle), getX(),
-                getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
+        guiGraphics.drawString(font, Component.translatable(GOAL_MESSAGE, progress, goal.count()).withStyle(textStyle),
+                getX(), getY() + 9 - font.lineHeight / 2, ColorUtil.OFF_BLACK, false);
     }
 
     @Override

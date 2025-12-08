@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.ActivateObjectiveGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.CloseAnomalyGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.CompleteRiftGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.FixedGoalProvider;
@@ -11,6 +12,7 @@ import com.wanderersoftherift.wotr.core.goal.provider.GiveItemGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.KillMobGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.PoolGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.VisitRoomGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.type.ActivateObjectiveGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CloseAnomalyGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
@@ -58,6 +60,12 @@ public class WotrGoalTypes {
 
     public static final Supplier<MapCodec<? extends GoalProvider>> VISIT_ROOM = GOAL_PROVIDER_TYPES
             .register("visit_room", () -> VisitRoomGoalProvider.CODEC);
+
+    public static final Supplier<DualCodec<? extends Goal>> FIXED_ACTIVATE_OBJECTIVE = register(
+            "fixed_activate_objective_block", () -> ActivateObjectiveGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> ACTIVATE_OBJECTIVE = GOAL_PROVIDER_TYPES
+            .register("activate_objective_block", () -> ActivateObjectiveGoalProvider.CODEC);
 
     public static final Supplier<MapCodec<? extends GoalProvider>> POOL = GOAL_PROVIDER_TYPES.register("pool",
             () -> PoolGoalProvider.CODEC);
