@@ -55,7 +55,7 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_tools"))
                                         .setWeight(5))
-                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/essences")).setWeight(5))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/essences")).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.EMERALD).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.POTION)
                                         .when(riftTier().max(1))
