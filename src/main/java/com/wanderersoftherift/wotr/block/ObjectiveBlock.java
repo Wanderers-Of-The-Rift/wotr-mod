@@ -3,6 +3,8 @@ package com.wanderersoftherift.wotr.block;
 import com.wanderersoftherift.wotr.core.goal.GoalEvent;
 import com.wanderersoftherift.wotr.core.goal.type.ActivateObjectiveGoal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -41,7 +43,7 @@ public class ObjectiveBlock extends Block {
             NeoForge.EVENT_BUS.post(event);
             if (!event.isCanceled()) {
                 level.setBlock(pos, state.cycle(ACTIVATED), Block.UPDATE_ALL);
-                // playSound(player, level, pos, state);
+                level.playSound(null, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS);
             } else {
                 return InteractionResult.FAIL;
             }
