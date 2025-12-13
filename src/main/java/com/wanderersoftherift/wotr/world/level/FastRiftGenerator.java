@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -109,7 +110,7 @@ public class FastRiftGenerator extends ChunkGenerator {
         return layout.get();
     }
 
-    public Object2IntMap<String> getJigsawCounts(RoomRiftSpace space, ServerLevelAccessor level) {
+    public Object2IntMap<RiftGeneratableId> getJigsawCounts(RoomRiftSpace space, ServerLevelAccessor level) {
         return roomGenerator.getJigsawCounts(space, level, roomGeneratorRNG);
     }
 
