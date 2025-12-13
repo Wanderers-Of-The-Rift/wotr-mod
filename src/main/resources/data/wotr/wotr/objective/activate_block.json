@@ -8,7 +8,7 @@
         "values": [
           {
             "type": "wotr:rift_jigsaw_count",
-            "jigsaw_prefix" : "wotr:rift/objective/",
+            "jigsaw_prefix" : "rift/objective/",
             "room_distance" : 10
           },
           {

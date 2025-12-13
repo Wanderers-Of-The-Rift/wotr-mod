@@ -12,7 +12,7 @@
               0.5,
               {
                 "type": "wotr:rift_jigsaw_count",
-                "jigsaw_prefix": "wotr:rift/anomaly/",
+                "jigsaw_prefix": "rift/anomaly/",
                 "room_distance": {
                   "type": "wotr:multiply",
                   "values": [

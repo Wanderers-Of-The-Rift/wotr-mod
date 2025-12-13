@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.corridor.RiftSpaceCorridor;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
@@ -108,7 +109,7 @@ public class RoomRandomizerImpl implements RoomRandomizer {
                 .toList();
     }
 
-    record RoomKey(String identifier, TripleMirror t) implements Comparable<RoomKey> {
+    record RoomKey(RiftGeneratableId identifier, TripleMirror t) implements Comparable<RoomKey> {
 
         @Override
         public int compareTo(@NotNull RoomRandomizerImpl.RoomKey o) {

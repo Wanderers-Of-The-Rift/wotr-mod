@@ -30,7 +30,7 @@ public interface RiftGeneratable {
 
     Vec3i size();
 
-    String identifier();
+    RiftGeneratableId identifier();
 
     static void applyGeneratable(
             RiftGeneratable generatable,
