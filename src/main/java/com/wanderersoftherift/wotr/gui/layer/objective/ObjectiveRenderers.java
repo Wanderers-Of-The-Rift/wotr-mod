@@ -24,6 +24,9 @@ public class ObjectiveRenderers {
     public static final Function<OngoingObjective, ObjectiveRenderer> GOAL_BASED = register(
             WanderersOfTheRift.id("goal_based"), GoalBasedObjectiveStatusRenderer::create);
 
+    public static final Function<OngoingObjective, ObjectiveRenderer> NONE = register(
+            WanderersOfTheRift.id("none"), NoObjectiveStatusRenderer::create);
+
     public static Function<OngoingObjective, ObjectiveRenderer> register(
             ResourceLocation id,
             Function<OngoingObjective, ObjectiveRenderer> renderer) {
