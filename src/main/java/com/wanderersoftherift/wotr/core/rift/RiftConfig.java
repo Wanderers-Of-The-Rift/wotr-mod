@@ -65,7 +65,11 @@ public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType
             DeferredHolder<RiftConfigDataType<?>, RiftConfigDataType<T>> typeHolder,
             T newValue) {
         var newDataMap = ImmutableMap.<Holder<RiftConfigDataType<?>>, Object>builder();
-        newDataMap.putAll(customData);
+        for (var entry : customData.entrySet()) {
+            if (!typeHolder.equals(entry.getKey())) {
+                newDataMap.put(entry.getKey(), entry.getValue());
+            }
+        }
         newDataMap.put(typeHolder.getDelegate(), newValue);
 
         return new RiftConfig(tier, theme, objective, seed, newDataMap.build());

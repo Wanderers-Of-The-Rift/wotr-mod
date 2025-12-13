@@ -31,6 +31,10 @@ public record VisitRoomGoalProvider(NumberProvider count) implements GoalProvide
 
     @Override
     public @NotNull List<Goal> generateGoal(LootContext context) {
+        int target = count.getInt(context);
+        if (target <= 0) {
+            return List.of();
+        }
         return List.of(new VisitRoomGoal(count.getInt(context)));
     }
 }

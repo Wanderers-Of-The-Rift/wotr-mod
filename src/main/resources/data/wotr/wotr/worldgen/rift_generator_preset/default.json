@@ -79,6 +79,17 @@
             "type": "wotr:shuffle"
         },
         {
+            "type": "wotr:replace_single",
+            "replace_pools": {
+                "wotr:rift/poi/free/3": "wotr:rift/exit/free/3",
+                "wotr:rift/poi/free/5": "wotr:rift/exit/free/3",
+                "wotr:rift/poi/free/7": "wotr:rift/exit/free/3",
+                "wotr:rift/poi/free/9": "wotr:rift/exit/free/3",
+                "wotr:rift/poi/free/11": "wotr:rift/exit/free/3"
+            },
+            "chance": 0.2
+        },
+        {
             "type": "wotr:replace_bulk",
             "values": {
                 "wotr:rift/poi/free/3": {

@@ -8,8 +8,11 @@ import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.objective.ongoing.StealthOngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.ServerLevelAccessor;
+
+import java.util.List;
 
 /**
  * An objective to be stealthy
@@ -33,5 +36,10 @@ public record StealthObjective(Holder<RiftParameter> stealthTicks) implements Ob
             return new StealthOngoingObjective(key, 0);
         }
         return new StealthOngoingObjective(key, (int) param.get());
+    }
+
+    @Override
+    public List<JigsawListProcessor> processors() {
+        return List.of();
     }
 }

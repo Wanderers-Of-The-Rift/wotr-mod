@@ -41,11 +41,15 @@ public record CloseAnomalyGoalProvider(FastWeightedList<Holder<AnomalyTask.Anoma
 
     @Override
     public @NotNull List<Goal> generateGoal(LootContext context) {
+        int target = count.getInt(context);
+        if (target <= 0) {
+            return List.of();
+        }
         if (anomalyType.isEmpty()) {
-            return List.of(new CloseAnomalyGoal(count.getInt(context), Optional.empty()));
+            return List.of(new CloseAnomalyGoal(target, Optional.empty()));
         }
         return List.of(
-                new CloseAnomalyGoal(count.getInt(context), Optional.of(anomalyType.random(context.getRandom())))
+                new CloseAnomalyGoal(target, Optional.of(anomalyType.random(context.getRandom())))
         );
     }
 }

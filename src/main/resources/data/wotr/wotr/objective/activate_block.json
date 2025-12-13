@@ -4,8 +4,36 @@
     {
       "type": "wotr:activate_objective_block",
       "count": {
-        "type": "wotr:rift_parameter",
-        "parameter": "wotr:objective/difficulty"
+        "type": "wotr:rift_jigsaw_count",
+        "jigsaw_prefix" : "wotr:rift/objective/",
+        "room_distance" : 99
+      }
+    }
+  ],
+  "jigsaw_processors": [
+    {
+      "type": "wotr:replace_single",
+      "replace_pools" : {
+        "wotr:rift/poi/free/3": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/5": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/7": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/9": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/11": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/ceiling/3": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/5": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/7": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/9": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/11": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/inwall/3": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/5": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/7": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/9": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/11": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/halfway/3": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/5": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/7": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/9": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/11": "wotr:rift/objective/halfway/3"
       }
     }
   ]

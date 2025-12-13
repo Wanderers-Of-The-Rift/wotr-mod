@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.core.rift.objective;
 
+import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
@@ -9,7 +10,9 @@ import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
+import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -22,6 +25,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
@@ -146,5 +150,20 @@ public class RiftObjectiveEvents {
                 .withParameter(WotrLootContextParams.RIFT_TIER, riftTier)
                 .create(LootContextParamSets.EMPTY);
         lootTable.getRandomItems(lootParams).forEach(item -> menu.addReward(item, player));
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    private static void addObjectiveJigsawProcessors(RiftEvent.Created.Pre event) {
+        var config = event.getConfig();
+        if (config.objective().value().processors().isEmpty()) {
+            return;
+        }
+        var riftGenConfig = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG);
+        var newJigsawProcessors = ImmutableList.<JigsawListProcessor>builder()
+                .addAll(riftGenConfig.jigsawProcessors())
+                .addAll(config.objective().value().processors())
+                .build();
+        riftGenConfig = riftGenConfig.withJigsawProcessors(newJigsawProcessors);
+        event.setConfig(config.withCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG, riftGenConfig));
     }
 }

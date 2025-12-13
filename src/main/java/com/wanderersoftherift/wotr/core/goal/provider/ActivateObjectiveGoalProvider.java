@@ -31,6 +31,11 @@ public record ActivateObjectiveGoalProvider(NumberProvider count) implements Goa
 
     @Override
     public @NotNull List<Goal> generateGoal(LootContext context) {
-        return List.of(new ActivateObjectiveGoal(count.getInt(context)));
+        int target = count.getInt(context);
+        if (target > 0) {
+            return List.of(new ActivateObjectiveGoal(target));
+        } else {
+            return List.of();
+        }
     }
 }
