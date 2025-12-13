@@ -114,7 +114,7 @@ public class RiftCommands extends BaseCommand {
                 int result = fastRiftGenerator.getJigsawCounts(room, ctx.getSource().getLevel())
                         .object2IntEntrySet()
                         .stream()
-                        .filter(entry -> entry.getKey().startsWith("wotr:rift/anomaly/"))
+                        .filter(entry -> entry.getKey().path().startsWith("rift/anomaly/"))
                         .mapToInt(Object2IntMap.Entry::getIntValue)
                         .sum();
                 ctx.getSource().sendSystemMessage(Component.literal(Integer.toString(result)));

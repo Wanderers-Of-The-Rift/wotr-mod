@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -77,7 +78,7 @@ public record CachedRiftRoomGenerator(
     }
 
     @Override
-    public Object2IntMap<String> getJigsawCounts(
+    public Object2IntMap<RiftGeneratableId> getJigsawCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {

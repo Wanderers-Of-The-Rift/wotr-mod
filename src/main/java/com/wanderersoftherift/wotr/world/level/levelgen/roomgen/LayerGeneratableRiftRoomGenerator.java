@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
@@ -37,7 +38,7 @@ public record LayerGeneratableRiftRoomGenerator(RiftGeneratable generatable, Rif
     }
 
     @Override
-    public Object2IntMap<String> getJigsawCounts(
+    public Object2IntMap<RiftGeneratableId> getJigsawCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {

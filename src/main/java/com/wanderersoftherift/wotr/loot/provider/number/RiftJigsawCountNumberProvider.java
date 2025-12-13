@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
@@ -55,10 +56,10 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
             List<RiftSpace> nextLayerRooms = new ArrayList<>(layerRooms.size());
             for (RiftSpace space : layerRooms) {
                 if (space instanceof RoomRiftSpace room) {
-                    Object2IntMap<String> jigsawCounts = generator.getJigsawCounts(room, level);
+                    Object2IntMap<RiftGeneratableId> jigsawCounts = generator.getJigsawCounts(room, level);
                     result += jigsawCounts.object2IntEntrySet()
                             .stream()
-                            .filter(entry -> entry.getKey().startsWith(jigsawPrefix))
+                            .filter(entry -> entry.getKey().path().startsWith(jigsawPrefix))
                             .mapToInt(Object2IntMap.Entry::getIntValue)
                             .sum();
                     room.corridors().forEach(corridor -> {
@@ -74,10 +75,10 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
         // Unrolled the last loop to skip corridor processing
         for (RiftSpace space : layerRooms) {
             if (space instanceof RoomRiftSpace room) {
-                Object2IntMap<String> jigsawCounts = generator.getJigsawCounts(room, level);
+                Object2IntMap<RiftGeneratableId> jigsawCounts = generator.getJigsawCounts(room, level);
                 result += jigsawCounts.object2IntEntrySet()
                         .stream()
-                        .filter(entry -> entry.getKey().startsWith(jigsawPrefix))
+                        .filter(entry -> entry.getKey().path().startsWith(jigsawPrefix))
                         .mapToInt(Object2IntMap.Entry::getIntValue)
                         .sum();
             }

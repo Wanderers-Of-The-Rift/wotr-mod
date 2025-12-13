@@ -32,11 +32,11 @@ public class PayloadRiftTemplate implements RiftGeneratable {
     private final List<RiftAdjacencyProcessor<?>> adjacencyProcessors;
     private final List<RiftTemplateProcessor> templateProcessors;
     private final List<StructureTemplate.JigsawBlockInfo> jigsaws;
-    private final String identifier;
+    private final RiftGeneratableId identifier;
     private final TemplatePayload payload;
 
     public PayloadRiftTemplate(Vec3i size, StructureProcessorList baseProcessors,
-            List<StructureTemplate.JigsawBlockInfo> jigsaws, String identifier, TemplatePayload payload) {
+            List<StructureTemplate.JigsawBlockInfo> jigsaws, RiftGeneratableId identifier, TemplatePayload payload) {
         this.payload = payload;
         this.size = size;
         var templateProcessors = new ArrayList<RiftTemplateProcessor>();
@@ -111,7 +111,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
     }
 
     @Override
-    public String identifier() {
+    public RiftGeneratableId identifier() {
         return identifier;
     }
 

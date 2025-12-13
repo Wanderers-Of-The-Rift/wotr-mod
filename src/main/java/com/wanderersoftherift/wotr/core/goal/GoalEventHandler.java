@@ -69,7 +69,7 @@ public class GoalEventHandler {
 
     @SubscribeEvent
     public static void onRoomFirstVisited(RiftMapEvent.RoomFirstVisited event) {
-        if (event.getRoom().template().identifier().startsWith("wotr:rift/room/portal")) {
+        if (event.getRoom().template().identifier().path().startsWith("rift/room/portal")) {
             return;
         }
         NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(event.getPlayer(), VisitRoomGoal.class, (goal) -> 1));
