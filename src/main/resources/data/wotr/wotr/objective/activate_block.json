@@ -4,9 +4,24 @@
     {
       "type": "wotr:activate_objective_block",
       "count": {
-        "type": "wotr:rift_jigsaw_count",
-        "jigsaw_prefix" : "wotr:rift/objective/",
-        "room_distance" : 99
+        "type": "wotr:min",
+        "values": [
+          {
+            "type": "wotr:rift_jigsaw_count",
+            "jigsaw_prefix" : "wotr:rift/objective/",
+            "room_distance" : 10
+          },
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              2
+            ]
+          }
+        ]
       }
     }
   ],
