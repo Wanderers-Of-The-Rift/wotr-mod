@@ -46,11 +46,9 @@ public record RiftRoomCountNumberProvider(NumberProvider roomDistance) implement
         layerRooms.add(startRoom);
 
         int distance = Math.max(1, roomDistance().getInt(lootContext));
-        long result = 0;
         for (int layer = 0; !layerRooms.isEmpty() && layer < distance - 1; layer++) {
             List<RiftSpace> nextLayerRooms = new ArrayList<>(layerRooms.size());
             for (RiftSpace space : layerRooms) {
-                result++;
                 if (space instanceof RoomRiftSpace room) {
                     room.corridors().forEach(corridor -> {
                         RiftSpace adjSpace = layout.getChunkSpace(corridor.getConnectingPos(room));
@@ -60,10 +58,9 @@ public record RiftRoomCountNumberProvider(NumberProvider roomDistance) implement
                     });
                 }
             }
-            result += nextLayerRooms.size();
             layerRooms = nextLayerRooms;
         }
-        return result;
+        return connected.size() - 1; // Excluding the portal room
     }
 
     @Override

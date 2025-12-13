@@ -4,32 +4,38 @@
     {
       "type": "wotr:close_anomaly",
       "count": {
-        "type": "wotr:max",
-        "values" : [
+        "type": "wotr:min",
+        "values": [
           {
-            "type": "wotr:ceil",
-            "value" : {
-              "type": "wotr:multiply",
-              "values": [
-                {
-                  "type": "wotr:rift_jigsaw_count",
-                  "jigsaw_prefix" : "wotr:rift/anomaly/",
-                  "room_distance" : {
-                    "type": "wotr:multiply",
-                    "values" : [
-                      {
-                        "type": "wotr:rift_parameter",
-                        "parameter": "wotr:objective/difficulty"
-                      },
-                      0.5
-                    ]
-                  }
-                },
-                0.25
-              ]
-            }
+            "type": "wotr:multiply",
+            "values": [
+              0.5,
+              {
+                "type": "wotr:rift_jigsaw_count",
+                "jigsaw_prefix": "wotr:rift/anomaly/",
+                "room_distance": {
+                  "type": "wotr:multiply",
+                  "values": [
+                    {
+                      "type": "wotr:rift_parameter",
+                      "parameter": "wotr:tier"
+                    },
+                    0.5
+                  ]
+                }
+              }
+            ]
           },
-          1
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              2
+            ]
+          }
         ]
       }
     }
