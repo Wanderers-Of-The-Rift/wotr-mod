@@ -7,8 +7,8 @@
         "type": "wotr:min",
         "values": [
           {
-            "type": "wotr:rift_jigsaw_count",
-            "jigsaw_prefix" : "rift/objective/",
+            "type": "wotr:rift_structure_count",
+            "structure_prefix" : "rift/objective/",
             "room_distance" : 10
           },
           {
@@ -25,7 +25,7 @@
       }
     }
   ],
-  "jigsaw_processors": [
+  "jigsaw_list_processors": [
     {
       "type": "wotr:replace_single",
       "replace_pools" : {

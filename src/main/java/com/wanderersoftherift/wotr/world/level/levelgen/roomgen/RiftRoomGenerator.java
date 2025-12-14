@@ -36,7 +36,7 @@ public interface RiftRoomGenerator {
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory);
 
-    Object2IntMap<RiftGeneratableId> getJigsawCounts(
+    Object2IntMap<RiftGeneratableId> getGeneratableCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory);

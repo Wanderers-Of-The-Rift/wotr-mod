@@ -31,7 +31,7 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
 
     public static final MapCodec<RiftJigsawCountNumberProvider> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
-                    Codec.STRING.fieldOf("jigsaw_prefix").forGetter(RiftJigsawCountNumberProvider::jigsawPrefix),
+                    Codec.STRING.fieldOf("structure_prefix").forGetter(RiftJigsawCountNumberProvider::jigsawPrefix),
                     NumberProviders.CODEC.optionalFieldOf("room_distance", ConstantValue.exactly(5))
                             .forGetter(RiftJigsawCountNumberProvider::roomDistance)
             ).apply(instance, RiftJigsawCountNumberProvider::new));
@@ -56,7 +56,7 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
             List<RiftSpace> nextLayerRooms = new ArrayList<>(layerRooms.size());
             for (RiftSpace space : layerRooms) {
                 if (space instanceof RoomRiftSpace room) {
-                    Object2IntMap<RiftGeneratableId> jigsawCounts = generator.getJigsawCounts(room, level);
+                    Object2IntMap<RiftGeneratableId> jigsawCounts = generator.getGeneratableCounts(room, level);
                     result += jigsawCounts.object2IntEntrySet()
                             .stream()
                             .filter(entry -> entry.getKey().path().startsWith(jigsawPrefix))
@@ -75,7 +75,7 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
         // Unrolled the last loop to skip corridor processing
         for (RiftSpace space : layerRooms) {
             if (space instanceof RoomRiftSpace room) {
-                Object2IntMap<RiftGeneratableId> jigsawCounts = generator.getJigsawCounts(room, level);
+                Object2IntMap<RiftGeneratableId> jigsawCounts = generator.getGeneratableCounts(room, level);
                 result += jigsawCounts.object2IntEntrySet()
                         .stream()
                         .filter(entry -> entry.getKey().path().startsWith(jigsawPrefix))
@@ -89,6 +89,6 @@ public record RiftJigsawCountNumberProvider(String jigsawPrefix, NumberProvider 
 
     @Override
     public @NotNull LootNumberProviderType getType() {
-        return WotrNumberProviders.RIFT_JIGSAW_COUNT.get();
+        return WotrNumberProviders.RIFT_STRUCTURE_COUNT.get();
     }
 }
