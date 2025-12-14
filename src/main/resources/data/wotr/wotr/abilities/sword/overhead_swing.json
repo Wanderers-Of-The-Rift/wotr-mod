@@ -37,6 +37,7 @@
                 {
                     "type": "wotr:damage",
                     "amount": 6.5,
+                    "damage_attribute": "minecraft:attack_damage",
                     "damage_type": "player_attack"
                 }
             ]

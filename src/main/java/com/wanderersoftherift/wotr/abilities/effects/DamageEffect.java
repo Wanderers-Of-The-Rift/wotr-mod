@@ -14,13 +14,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 
 /**
  * Effect that applies damage to target entities
  */
-public record DamageEffect(float damageAmount, Holder<DamageType> damageTypeKey) implements AbilityEffect {
+public record DamageEffect(float damageAmount, Holder<Attribute> damageAttribute, Holder<DamageType> damageTypeKey)
+        implements AbilityEffect {
+
     public static final MapCodec<DamageEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(Codec.FLOAT.fieldOf("amount").forGetter(DamageEffect::damageAmount),
+                    Attribute.CODEC.optionalFieldOf("damage_attribute", WotrAttributes.ABILITY_DAMAGE)
+                            .forGetter(DamageEffect::damageAttribute),
                     DamageType.CODEC.fieldOf("damage_type").forGetter(DamageEffect::damageTypeKey))
             .apply(instance, DamageEffect::new));
 
@@ -40,7 +45,7 @@ public record DamageEffect(float damageAmount, Holder<DamageType> damageTypeKey)
 
         // for now its ABILITY_DAMAGE but needs to be considered how multiple types are going to be implemented ie AP or
         // AD
-        float finalDamage = context.getAbilityAttribute(WotrAttributes.ABILITY_DAMAGE, damageAmount);
+        float finalDamage = context.getAbilityAttribute(damageAttribute, damageAmount);
 
         targetInfo.targetEntities()
                 .filter(LivingEntity.class::isInstance)

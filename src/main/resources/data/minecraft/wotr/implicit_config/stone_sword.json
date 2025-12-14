@@ -1,5 +1,5 @@
 {
   "modifiers": [
-      "wotr:sword", "wotr:sword_damage/stone"
+      "wotr:sword", "wotr:weapon_damage/stone_damage"
   ]
 }
