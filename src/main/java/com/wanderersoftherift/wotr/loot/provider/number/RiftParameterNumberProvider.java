@@ -13,6 +13,11 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Provides the value of a specific RiftParameter
+ * 
+ * @param parameter
+ */
 public record RiftParameterNumberProvider(ResourceKey<RiftParameter> parameter) implements NumberProvider {
 
     public static final MapCodec<RiftParameterNumberProvider> CODEC = RecordCodecBuilder

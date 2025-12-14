@@ -18,9 +18,7 @@ import net.minecraft.util.Unit;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -115,14 +113,6 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
         emptySpaces[(x - origin.getX()) + (z - origin.getZ()) * size.getX()] &= ~(1L << (y - origin.getY()));
         spaces[(x - origin.getX()) + (z - origin.getZ()) * size.getX()
                 + (y - origin.getY()) * size.getX() * size.getZ()] = space;
-    }
-
-    public List<RiftSpace> getSpaces() {
-        var origin = riftShape.getBoxStart();
-        var rand = ProcessorUtil.createRandom(
-                ProcessorUtil.getRandomSeed(new BlockPos(origin.getX(), 0, origin.getZ()), seed));
-        tryGenerate(rand);
-        return Arrays.stream(spaces).filter(Objects::nonNull).toList();
     }
 
     private boolean canPlaceSpace(RiftSpace space) {
