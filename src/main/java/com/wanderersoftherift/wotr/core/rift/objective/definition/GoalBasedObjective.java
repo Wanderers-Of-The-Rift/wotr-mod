@@ -21,7 +21,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * An objective build on one or more goals that must be completed
+ * An objective composed of one or more goals that must be completed
+ * <p>
+ * In the situation that no goals are generated, the objective will generate a {@link NoOngoingObjective}
+ * </p>
  *
  * @param goals
  * @param processors

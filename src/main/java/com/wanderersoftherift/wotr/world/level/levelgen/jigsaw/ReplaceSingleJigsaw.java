@@ -45,6 +45,7 @@ public record ReplaceSingleJigsaw(Map<ResourceLocation, ResourceLocation> replac
         if (indices.length > 0) {
             int index = indices[random.nextInt(indices.length)];
             StructureTemplate.JigsawBlockInfo previous = jigsaws.get(index);
+            // Moves the replaced jigsaw to the front to prioritise its placement.
             jigsaws.set(index, jigsaws.getFirst());
             jigsaws.set(0,
                     new StructureTemplate.JigsawBlockInfo(previous.info(), previous.jointType(), previous.name(),
