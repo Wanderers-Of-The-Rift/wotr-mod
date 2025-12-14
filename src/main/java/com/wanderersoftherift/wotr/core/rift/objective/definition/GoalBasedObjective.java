@@ -33,7 +33,7 @@ public record GoalBasedObjective(List<GoalProvider> goals, List<JigsawListProces
                     .fieldOf("goals")
                     .forGetter(GoalBasedObjective::goals),
             JigsawListProcessor.CODEC.listOf()
-                    .optionalFieldOf("jigsaw_processors", List.of())
+                    .optionalFieldOf("jigsaw_list_processors", List.of())
                     .forGetter(GoalBasedObjective::processors))
             .apply(inst, GoalBasedObjective::new));
 

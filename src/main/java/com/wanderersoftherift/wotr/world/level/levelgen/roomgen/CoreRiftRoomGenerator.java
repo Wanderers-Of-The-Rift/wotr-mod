@@ -55,7 +55,7 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
     }
 
     @Override
-    public Object2IntMap<RiftGeneratableId> getJigsawCounts(
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {

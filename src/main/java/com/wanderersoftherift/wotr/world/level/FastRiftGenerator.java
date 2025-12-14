@@ -110,8 +110,8 @@ public class FastRiftGenerator extends ChunkGenerator {
         return layout.get();
     }
 
-    public Object2IntMap<RiftGeneratableId> getJigsawCounts(RoomRiftSpace space, ServerLevelAccessor level) {
-        return roomGenerator.getJigsawCounts(space, level, roomGeneratorRNG);
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(RoomRiftSpace space, ServerLevelAccessor level) {
+        return roomGenerator.getGeneratableCounts(space, level, roomGeneratorRNG);
     }
 
     private RiftRoomGenerator getRoomGenerator() {

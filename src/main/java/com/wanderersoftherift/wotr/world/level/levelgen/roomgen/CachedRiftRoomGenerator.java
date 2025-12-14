@@ -78,12 +78,12 @@ public record CachedRiftRoomGenerator(
     }
 
     @Override
-    public Object2IntMap<RiftGeneratableId> getJigsawCounts(
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {
         // TODO: cache
-        return baseGenerator.getJigsawCounts(space, world, randomFactory);
+        return baseGenerator.getGeneratableCounts(space, world, randomFactory);
     }
 
     public record Factory(RiftRoomGenerator.Factory baseFactory) implements RiftRoomGenerator.Factory {
