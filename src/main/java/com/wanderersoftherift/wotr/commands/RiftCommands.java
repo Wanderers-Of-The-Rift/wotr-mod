@@ -111,7 +111,7 @@ public class RiftCommands extends BaseCommand {
             RiftSpace chunkSpace = fastRiftGenerator.getOrCreateLayout(player.server)
                     .getChunkSpace(SectionPos.of(player.blockPosition()));
             if (chunkSpace instanceof RoomRiftSpace room) {
-                int result = fastRiftGenerator.getJigsawCounts(room, ctx.getSource().getLevel())
+                int result = fastRiftGenerator.getGeneratableCounts(room, ctx.getSource().getLevel())
                         .object2IntEntrySet()
                         .stream()
                         .filter(entry -> entry.getKey().path().startsWith("rift/anomaly/"))

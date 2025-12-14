@@ -38,11 +38,11 @@ public record LayerGeneratableRiftRoomGenerator(RiftGeneratable generatable, Rif
     }
 
     @Override
-    public Object2IntMap<RiftGeneratableId> getJigsawCounts(
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {
-        return baseGenerator().getJigsawCounts(space, world, randomFactory);
+        return baseGenerator().getGeneratableCounts(space, world, randomFactory);
     }
 
     public record Factory(SerializableRiftGeneratable generatable, RiftRoomGenerator.Factory baseFactory)

@@ -22,8 +22,8 @@ public class WotrNumberProviders {
 
     public static final Supplier<LootNumberProviderType> RIFT_PARAMETER = NUMBER_PROVIDERS.register("rift_parameter",
             () -> new LootNumberProviderType(RiftParameterNumberProvider.CODEC));
-    public static final Supplier<LootNumberProviderType> RIFT_JIGSAW_COUNT = NUMBER_PROVIDERS
-            .register("rift_jigsaw_count", () -> new LootNumberProviderType(RiftJigsawCountNumberProvider.CODEC));
+    public static final Supplier<LootNumberProviderType> RIFT_STRUCTURE_COUNT = NUMBER_PROVIDERS
+            .register("rift_structure_count", () -> new LootNumberProviderType(RiftJigsawCountNumberProvider.CODEC));
     public static final Supplier<LootNumberProviderType> RIFT_ROOM_COUNT = NUMBER_PROVIDERS.register("rift_room_count",
             () -> new LootNumberProviderType(RiftRoomCountNumberProvider.CODEC));
 
