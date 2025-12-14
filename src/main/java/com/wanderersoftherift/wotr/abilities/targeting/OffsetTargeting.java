@@ -8,7 +8,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Math;
 
 import java.util.List;
 
@@ -17,9 +16,7 @@ import static net.minecraft.core.Direction.Axis;
 /**
  * Moves {@link HitResult#getLocation()} for existing target
  *
- * @param x
- * @param y
- * @param z
+ * @param offset
  * @param isXZViewRelative whether X and Z are relative to view direction (equivalent to using ^x ^y ^z in commands) or
  *                         not (equivalent to using ~x ~y ~z in commands) (see
  *                         <a href="https://minecraft.wiki/w/Coordinates#Commands">command coordinates</a> for more
@@ -57,7 +54,7 @@ public record OffsetTargeting(Vec3 offset, boolean isXZViewRelative, boolean isY
             case EntityHitResult entityHit -> new EntityHitResult(entityHit.getEntity(),
                     mapPosition(entityHit.getLocation(), entityHit.getEntity().getViewVector(0),
                             entityHit.getEntity()
-                                    .calculateViewVector(entityHit.getEntity().getXRot(0) + Math.PI_OVER_2_f,
+                                    .calculateViewVector(entityHit.getEntity().getXRot(0) - 90,
                                             entityHit.getEntity().getYRot(0))));
             case null, default -> {
                 yield hitResult;
