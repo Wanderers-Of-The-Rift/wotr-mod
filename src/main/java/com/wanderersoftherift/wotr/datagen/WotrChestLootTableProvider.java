@@ -56,10 +56,12 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(5))
                                 .add(LootItem.lootTableItem(Items.EMERALD).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.POTION)
-                                        .setWeight(20)
+                                        .when(riftTier().max(1))
+                                        .setWeight(10)
                                         .apply(SetPotionFunction.setPotion(Potions.HEALING)))
-                                .add(LootItem.lootTableItem(Items.BREAD).setWeight(20))
-                                .add(LootItem.lootTableItem(Items.EXPERIENCE_BOTTLE).setWeight(10))
+                                .add(LootItem.lootTableItem(Items.BREAD)
+                                        .setWeight(20)
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                                 .add(LootItem.lootTableItem(WotrItems.SKILL_THREAD)
                                         .when(riftTier().max(2))
                                         .setWeight(20)
@@ -72,7 +74,9 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .when(riftTier().min(5))
                                         .setWeight(20)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))))
-
+                                .add(LootItem.lootTableItem(Items.STRING).setWeight(20))
+                                .add(LootItem.lootTableItem(Items.LEATHER).setWeight(20))
+                                .add(LootItem.lootTableItem(Items.SHULKER_SHELL).setWeight(5))
                 ));
         consumer.accept(getResourceKey("chests/rift_spawner/default"), LootTable.lootTable()
                 .withPool(
@@ -91,12 +95,6 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_tools"))
                                         .setWeight(5))
                                 .add(LootItem.lootTableItem(Items.DIAMOND).setWeight(20))
-                                .add(LootItem.lootTableItem(Items.POTION)
-                                        .setWeight(20)
-                                        .apply(SetPotionFunction.setPotion(Potions.HEALING)))
-                                .add(LootItem.lootTableItem(Items.COOKED_BEEF).setWeight(20))
-                                .add(LootItem.lootTableItem(Items.EXPERIENCE_BOTTLE).setWeight(10))
-
                 ));
     }
 

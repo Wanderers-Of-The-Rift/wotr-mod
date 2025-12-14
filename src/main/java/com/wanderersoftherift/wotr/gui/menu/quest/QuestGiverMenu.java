@@ -5,6 +5,9 @@ import com.wanderersoftherift.wotr.core.quest.QuestState;
 import com.wanderersoftherift.wotr.gui.menu.ValidatingLevelAccess;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +15,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,12 +22,14 @@ import java.util.List;
  * menu.
  */
 public class QuestGiverMenu extends AbstractContainerMenu {
+    public static final StreamCodec<RegistryFriendlyByteBuf, List<QuestState>> QUEST_LIST_CODEC = QuestState.STREAM_CODEC
+            .apply(ByteBufCodecs.list());
+
     private final ValidatingLevelAccess access;
     private final List<QuestState> availableQuests;
-    private boolean availableQuestsDirty = false;
 
-    public QuestGiverMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ValidatingLevelAccess.NULL, new ArrayList<>());
+    public QuestGiverMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf data) {
+        this(containerId, playerInventory, ValidatingLevelAccess.NULL, QUEST_LIST_CODEC.decode(data));
     }
 
     public QuestGiverMenu(int containerId, Inventory playerInventory, ValidatingLevelAccess access,
@@ -52,29 +56,9 @@ public class QuestGiverMenu extends AbstractContainerMenu {
 
     public void acceptQuest(ServerPlayer player, int index) {
         ActiveQuests activeQuests = player.getData(WotrAttachments.ACTIVE_QUESTS);
-        if (activeQuests.isEmpty() && index >= 0 && index < availableQuests.size()) {
+        if (index >= 0 && index < availableQuests.size()) {
             activeQuests.add(availableQuests.get(index));
             player.closeContainer();
         }
-    }
-
-    public void setAvailableQuests(List<QuestState> quests) {
-        this.availableQuests.clear();
-        this.availableQuests.addAll(quests);
-        availableQuestsDirty = true;
-    }
-
-    /**
-     * @return Whether the available quests have changed and the screen should update
-     */
-    public boolean isDirty() {
-        return availableQuestsDirty;
-    }
-
-    /**
-     * Removes the dirty marker
-     */
-    public void clearDirty() {
-        availableQuestsDirty = false;
     }
 }

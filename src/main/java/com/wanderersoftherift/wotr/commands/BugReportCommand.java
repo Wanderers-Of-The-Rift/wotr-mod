@@ -19,7 +19,7 @@ public class BugReportCommand extends BaseCommand {
     }
 
     public int openBugReportLink(CommandContext<CommandSourceStack> cmd) {
-        Util.getPlatform().openUri("https://github.com/Dimension-Delvers/submit-feedback/issues");
+        Util.getPlatform().openUri("https://github.com/Wanderers-Of-The-Rift/submit-feedback/issues");
         return 1;
     }
 }

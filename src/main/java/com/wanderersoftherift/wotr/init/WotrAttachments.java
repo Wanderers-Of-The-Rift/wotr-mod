@@ -18,13 +18,15 @@ import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
 import com.wanderersoftherift.wotr.core.guild.GuildStatus;
 import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
-import com.wanderersoftherift.wotr.core.guild.trading.AvailableTrades;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
+import com.wanderersoftherift.wotr.core.npc.interaction.NoInteract;
+import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
+import com.wanderersoftherift.wotr.core.npc.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
-import com.wanderersoftherift.wotr.core.quest.QuestState;
+import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
+import com.wanderersoftherift.wotr.core.quest.QuestLog;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
-import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
-import com.wanderersoftherift.wotr.entity.npc.NoInteract;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
 import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
@@ -38,6 +40,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class WotrAttachments {
@@ -129,18 +132,19 @@ public class WotrAttachments {
             "available_trades",
             () -> AttachmentType.builder(AvailableTrades::new).serialize(AvailableTrades.CODEC).copyOnDeath().build()
     );
-    public static final Supplier<AttachmentType<List<QuestState>>> AVAILABLE_QUESTS = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<AvailableQuests>> AVAILABLE_QUESTS = ATTACHMENT_TYPES.register(
             "available_quests",
-            () -> AttachmentType.<List<QuestState>>builder(() -> new ArrayList<>())
-                    .serialize(MutableListCodec.of(QuestState.CODEC))
-                    .copyOnDeath()
-                    .build());
+            () -> AttachmentType.builder(AvailableQuests::new).serialize(AvailableQuests.CODEC).copyOnDeath().build());
     public static final Supplier<AttachmentType<ActiveQuests>> ACTIVE_QUESTS = ATTACHMENT_TYPES.register(
             "active_quests",
             () -> AttachmentType.builder(ActiveQuests::new)
                     .serialize(ActiveQuests.getSerializer())
                     .copyOnDeath()
                     .build());
+    public static final Supplier<AttachmentType<QuestLog>> QUEST_LOG = ATTACHMENT_TYPES.register(
+            "quest_log",
+            () -> AttachmentType.builder(() -> new QuestLog()).serialize(QuestLog.CODEC).copyOnDeath().build()
+    );
     public static final Supplier<AttachmentType<GuildStatus>> GUILD_STATUS = ATTACHMENT_TYPES.register(
             "guild_status",
             () -> AttachmentType.builder(GuildStatus::new)
@@ -155,10 +159,16 @@ public class WotrAttachments {
                             .copyOnDeath()
                             .build());
 
-    public static final Supplier<AttachmentType<MobInteraction>> MOB_INTERACT = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<NpcInteraction>> NPC_INTERACT = ATTACHMENT_TYPES.register(
             "mob_interact",
-            () -> AttachmentType.<MobInteraction>builder(() -> NoInteract.INSTANCE)
-                    .serialize(MobInteraction.DIRECT_CODEC)
+            () -> AttachmentType.<NpcInteraction>builder(() -> NoInteract.INSTANCE)
+                    .serialize(NpcInteraction.DIRECT_CODEC)
+                    .build()
+    );
+    public static final Supplier<AttachmentType<NpcIdentity.Attachment>> NPC_IDENTITY = ATTACHMENT_TYPES.register(
+            "npc_identity",
+            () -> AttachmentType.builder(() -> new NpcIdentity.Attachment(Optional.empty()))
+                    .serialize(NpcIdentity.Attachment.CODEC)
                     .build()
     );
 

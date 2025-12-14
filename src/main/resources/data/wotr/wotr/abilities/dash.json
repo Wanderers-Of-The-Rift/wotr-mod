@@ -2,9 +2,8 @@
   "type": "wotr:instant",
   "requirements": [
     {
-      "type": "wotr:ability_resource",
-      "resource_type": "wotr:mana",
-      "amount": 10
+      "type": "wotr:food_level",
+      "amount": 2
     },
     {
       "type": "wotr:cooldown",
@@ -34,6 +33,35 @@
       "sound": {
         "sound_id": "minecraft:entity.breeze.charge"
       }
+    },
+    {
+      "type": "wotr:conditional",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "present": [
+        {
+          "type": "wotr:attach",
+          "continue": {
+            "duration": 100
+          },
+          "id": "wotr:speed_effect",
+          "modifiers": [
+            {
+              "modifier": "wotr:movement_speed",
+              "tier": 3,
+              "roll": 2
+            }
+          ]
+        },
+        {
+          "type": "wotr:sound",
+          "sound": {
+            "sound_id": "minecraft:entity.enderman.stare"
+          }
+        }
+      ],
+      "condition_name": "wotr:fast_dash"
     }
   ],
   "icon": "wotr:textures/ability/icon/dash.png"

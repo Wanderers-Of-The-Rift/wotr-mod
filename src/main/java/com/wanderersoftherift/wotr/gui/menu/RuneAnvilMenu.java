@@ -20,9 +20,11 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RuneAnvilMenu extends AbstractContainerMenu {
@@ -234,5 +236,15 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
 
     public @NotNull ItemStack getGearSlotItem() {
         return this.gearSlot.getItem().copy();
+    }
+
+    @VisibleForTesting
+    public Slot getGearSlot() {
+        return gearSlot;
+    }
+
+    @VisibleForTesting
+    public List<Slot> getSocketSlots() {
+        return Collections.unmodifiableList(socketSlots);
     }
 }

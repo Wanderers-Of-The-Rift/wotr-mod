@@ -6,9 +6,13 @@ import com.wanderersoftherift.wotr.commands.BugReportCommand;
 import com.wanderersoftherift.wotr.commands.CurrencyCommands;
 import com.wanderersoftherift.wotr.commands.DebugCommands;
 import com.wanderersoftherift.wotr.commands.ExportCommands;
+import com.wanderersoftherift.wotr.commands.GearCommands;
 import com.wanderersoftherift.wotr.commands.GuildCommands;
 import com.wanderersoftherift.wotr.commands.HudCommands;
+import com.wanderersoftherift.wotr.commands.LootCommands;
+import com.wanderersoftherift.wotr.commands.MerchantCommands;
 import com.wanderersoftherift.wotr.commands.NPCCommands;
+import com.wanderersoftherift.wotr.commands.QuestCommands;
 import com.wanderersoftherift.wotr.commands.RiftCommands;
 import com.wanderersoftherift.wotr.commands.RiftKeyCommands;
 import com.wanderersoftherift.wotr.commands.RiftMapCommands;
@@ -36,6 +40,10 @@ public final class WotrCommands {
         new StatCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new AbilityResourceCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
         new GuildCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new QuestCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new LootCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new GearCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
+        new MerchantCommands().registerCommand(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent

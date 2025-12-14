@@ -110,7 +110,7 @@ public class RiftPortalRenderer extends EntityRenderer<RiftPortalEntity, RiftPor
                 .setUv((float) u, (float) v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
-                .setNormal(pose, 0.0F, 1.0F, 0.0F);
+                .setNormal(pose, 0.0F, 0.0F, 1.0F);
     }
 
     @Override

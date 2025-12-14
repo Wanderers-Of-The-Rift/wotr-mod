@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public interface GearImplicits extends ModifierProvider {
 
     @Override
     default void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
-        List<ModifierInstance> modifierInstances = modifierInstances(stack, entity.level());
+        List<ModifierInstance> modifierInstances = modifierInstances(stack, entity == null ? null : entity.level());
         for (int i = 0; i < modifierInstances.size(); i++) {
             ModifierInstance modifier = modifierInstances.get(i);
             ModifierSource source = new GearImplicitModifierSource(slot, i);
@@ -48,7 +47,7 @@ public interface GearImplicits extends ModifierProvider {
         }
     }
 
-    default Collection<Either<FormattedText, TooltipComponent>> tooltips(ItemStack stack) {
+    default List<Either<FormattedText, TooltipComponent>> tooltips(int maxWidth) {
         if (modifierInstances().isEmpty()) {
             return Collections.emptyList();
         }

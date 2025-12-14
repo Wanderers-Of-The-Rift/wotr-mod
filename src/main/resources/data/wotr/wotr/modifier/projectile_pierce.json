@@ -1,0 +1,27 @@
+{
+  "style": {
+    "color": "#DAA520"
+  },
+  "tiers": [
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:projectile_pierce",
+        "id": "wotr:projectile_pierce",
+        "max_roll": 1.0,
+        "min_roll": 1.0,
+        "operation": "add_value"
+      }
+    ],
+    [
+      {
+        "type": "wotr:attribute",
+        "attribute": "wotr:projectile_pierce",
+        "id": "wotr:projectile_pierce",
+        "max_roll": 2.0,
+        "min_roll": 2.0,
+        "operation": "add_value"
+      }
+    ]
+  ]
+}

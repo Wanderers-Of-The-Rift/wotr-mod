@@ -9,7 +9,6 @@ import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -52,7 +51,7 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
         super(WotrBlockEntities.ANOMALY_BLOCK_ENTITY.get(), pos, state);
     }
 
-    public void clientTick(ClientLevel clientLevel, BlockPos pos, BlockState state1) {
+    public void clientTick(BlockPos pos) {
         if (state != null) {
             double centerX = pos.getX() + 0.5;
             double centerY = pos.getY();
@@ -103,7 +102,7 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
     }
 
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (getLevel() instanceof ClientLevel) {
+        if (getLevel().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (state == null) {

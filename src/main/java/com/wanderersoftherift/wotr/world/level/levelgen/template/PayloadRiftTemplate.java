@@ -135,7 +135,7 @@ public class PayloadRiftTemplate implements RiftGeneratable {
         var y = mutablePosition.getY();
         var z = mutablePosition.getZ();
         var processors = templateProcessors;
-        var entityRef = new Ref<BlockEntity>(entity);
+        var entityRef = new Ref<>(entity);
         blockState = ((RiftTemplateProcessor) JigsawReplacementProcessor.INSTANCE).processBlockState(
                 blockState, x, y, z, world, offset, entityRef, isVisible);
         if (blockState == null) {

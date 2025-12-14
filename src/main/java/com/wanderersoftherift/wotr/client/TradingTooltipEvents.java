@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.client;
 
 import com.mojang.datafixers.util.Either;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.trading.Price;
+import com.wanderersoftherift.wotr.core.npc.trading.Price;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;

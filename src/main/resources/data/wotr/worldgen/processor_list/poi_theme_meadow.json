@@ -1420,13 +1420,14 @@
         {
             "processor_type": "wotr:rift_chests",
             "base_loot_table": "wotr:chests/",
-            "rarity": 0.6,
-            "chest_types": [
-                {
-                    "chest_type": "wooden",
-                    "weight": 1
-                }
-            ]
+            "count": {
+                "type": "uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 3
+            },
+            "chest_types": {
+                "wooden": 1
+            }
         },
         {
             "processor_type": "wotr:trial_spawner"

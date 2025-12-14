@@ -24,6 +24,10 @@
     "type": "wotr:and",
     "predicates": [
       {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:bring_big_fish"
+      },
+      {
         "type": "wotr:guild_rank",
         "guild": "wotr:cats_cradle",
         "max": 2

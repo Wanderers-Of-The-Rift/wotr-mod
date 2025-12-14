@@ -77,8 +77,9 @@
   "icon": "wotr:textures/ability/icon/fireball.png",
   "requirements": [
     {
-      "type": "wotr:food_level",
-      "amount": 2
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 10
     },
     {
       "type": "wotr:cooldown",

@@ -29,7 +29,7 @@ public class DataGenerators {
                     bootstrap.register(
                             WotrDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
                     bootstrap.register(
-                            WotrDamageTypes.THORNS_DAMAGE, new DamageType("wort:thorns", DamageScaling.NEVER, 0.0F));
+                            WotrDamageTypes.THORNS_DAMAGE, new DamageType("wotr.thorns", DamageScaling.NEVER, 0.0F));
                 })
                         .add(WotrRegistries.Keys.ABILITIES, WotrAbilityProvider::bootstrapAbilities)
                         .add(WotrRegistries.Keys.MODIFIERS, WotrModifierProvider::bootstrapModifiers)
@@ -38,6 +38,7 @@ public class DataGenerators {
                         .add(WotrRegistries.Keys.RIFT_THEMES, context -> {
                         })
                         .add(WotrRegistries.Keys.RUNEGEM_DATA, WotrRuneGemDataProvider::bootstrapRuneGems)
+                        .add(WotrRegistries.Keys.NPCS, WotrNpcsProvider::bootstrapNpcs)
 
         );
         event.createProvider(WotrModelProvider::new);

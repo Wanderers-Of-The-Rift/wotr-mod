@@ -31,7 +31,6 @@ import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
 import com.wanderersoftherift.wotr.network.quest.AcceptQuestPayload;
 import com.wanderersoftherift.wotr.network.quest.ActiveQuestsReplicationPayload;
-import com.wanderersoftherift.wotr.network.quest.AvailableQuestsPayload;
 import com.wanderersoftherift.wotr.network.quest.CompleteQuestPayload;
 import com.wanderersoftherift.wotr.network.quest.HandInQuestItemPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
@@ -138,8 +137,6 @@ public class WotrPayloadHandlers {
                 CompleteQuestPayload::handleOnServer);
         registrar.playToServer(AbandonQuestPayload.TYPE, AbandonQuestPayload.STREAM_CODEC,
                 AbandonQuestPayload::handleOnServer);
-        registrar.playToClient(AvailableQuestsPayload.TYPE, AvailableQuestsPayload.STREAM_CODEC,
-                AvailableQuestsPayload::handleOnClient);
 
         // Rewards
         registrar.playToClient(RewardsPayload.TYPE, RewardsPayload.STREAM_CODEC, RewardsPayload::handleOnClient);
