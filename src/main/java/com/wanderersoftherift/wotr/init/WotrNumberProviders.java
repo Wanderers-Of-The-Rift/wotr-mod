@@ -5,9 +5,9 @@ import com.wanderersoftherift.wotr.loot.provider.number.CeilNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.MaxNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.MinNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.MultiplyNumberProvider;
-import com.wanderersoftherift.wotr.loot.provider.number.RiftJigsawCountNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.RiftParameterNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.RiftRoomCountNumberProvider;
+import com.wanderersoftherift.wotr.loot.provider.number.RiftStructureCountNumberProvider;
 import com.wanderersoftherift.wotr.loot.provider.number.SumNumberProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
@@ -23,7 +23,7 @@ public class WotrNumberProviders {
     public static final Supplier<LootNumberProviderType> RIFT_PARAMETER = NUMBER_PROVIDERS.register("rift_parameter",
             () -> new LootNumberProviderType(RiftParameterNumberProvider.CODEC));
     public static final Supplier<LootNumberProviderType> RIFT_STRUCTURE_COUNT = NUMBER_PROVIDERS
-            .register("rift_structure_count", () -> new LootNumberProviderType(RiftJigsawCountNumberProvider.CODEC));
+            .register("rift_structure_count", () -> new LootNumberProviderType(RiftStructureCountNumberProvider.CODEC));
     public static final Supplier<LootNumberProviderType> RIFT_ROOM_COUNT = NUMBER_PROVIDERS.register("rift_room_count",
             () -> new LootNumberProviderType(RiftRoomCountNumberProvider.CODEC));
 

@@ -18,6 +18,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
+import org.apache.commons.lang3.function.TriConsumer;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -29,29 +30,14 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {
-        var processedRoom2 = new RiftProcessedRoom(space);
-        var origin = processedRoom2.space.origin();
-        var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
-        var mirror = space.templateTransform();
-        if (mirror == null) {
-            mirror = TripleMirror.random(randomSource);
+        var destination = new RiftProcessedRoom(space);
+        processRoom(space, world, randomFactory, (subGeneratable, pos, transform) -> {
+            destination.clearNewFlags();
+            subGeneratable.processAndPlace(destination, world, pos, transform);
         }
-        var template = space.template();
-        if (template == null) {
-            throw new IllegalStateException("template should not be null");
-        }
-        var border = new Vec3i(
-                LevelChunkSection.SECTION_WIDTH - 1
-                        - ((template.size().getX() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK),
-                LevelChunkSection.SECTION_HEIGHT - 1
-                        - ((template.size().getY() - 1) & RiftProcessedChunk.CHUNK_HEIGHT_MASK),
-                LevelChunkSection.SECTION_WIDTH - 1
-                        - ((template.size().getZ() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK)
         );
-        RiftGeneratable.generate(template, processedRoom2, world, border, mirror, world.getServer(), randomSource, null,
-                jigsawProcessors);
-        processedRoom2.markAsComplete();
-        return CompletableFuture.completedFuture(processedRoom2);
+        destination.markAsComplete();
+        return CompletableFuture.completedFuture(destination);
     }
 
     @Override
@@ -59,6 +45,18 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {
+        Object2IntMap<RiftGeneratableId> result = new Object2IntArrayMap<>();
+        processRoom(space, world, randomFactory, (subGeneratable, pos, transform) -> {
+            result.mergeInt(subGeneratable.identifier(), 1, Integer::sum);
+        });
+        return result;
+    }
+
+    private void processRoom(
+            RoomRiftSpace space,
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory,
+            TriConsumer<RiftGeneratable, Vec3i, TripleMirror> processor) {
         var origin = space.origin();
         var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
         var mirror = space.templateTransform();
@@ -77,11 +75,8 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
                 LevelChunkSection.SECTION_WIDTH - 1
                         - ((template.size().getZ() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK)
         );
-        Object2IntMap<RiftGeneratableId> result = new Object2IntArrayMap<>();
-        RiftGeneratable.applyGeneratable(template, border, mirror, world.getServer(), randomSource, null,
-                jigsawProcessors, (riftGeneratable, vec3i, tripleMirror) -> result
-                        .mergeInt(riftGeneratable.identifier(), 1, Integer::sum));
-        return result;
+        RiftGeneratable.processGeneratable(template, border, mirror, world.getServer(), randomSource, null,
+                jigsawProcessors, processor);
     }
 
     public record Factory() implements RiftRoomGenerator.Factory {

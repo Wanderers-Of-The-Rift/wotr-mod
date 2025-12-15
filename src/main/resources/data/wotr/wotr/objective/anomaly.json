@@ -13,7 +13,7 @@
               {
                 "type": "wotr:rift_structure_count",
                 "structure_prefix": "rift/anomaly/",
-                "room_distance": {
+                "room_depth": {
                   "type": "wotr:multiply",
                   "values": [
                     {

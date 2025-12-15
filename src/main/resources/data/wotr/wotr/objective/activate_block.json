@@ -9,7 +9,7 @@
           {
             "type": "wotr:rift_structure_count",
             "structure_prefix" : "rift/objective/",
-            "room_distance" : 10
+            "room_depth" : 10
           },
           {
             "type": "wotr:multiply",
