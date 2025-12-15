@@ -12,7 +12,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.apache.logging.log4j.util.TriConsumer;
+import org.apache.commons.lang3.function.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +32,7 @@ public interface RiftGeneratable {
 
     RiftGeneratableId identifier();
 
-    static void applyGeneratable(
+    static void processGeneratable(
             RiftGeneratable generatable,
             Vec3i placementShift,
             TripleMirror mirror,
@@ -40,7 +40,7 @@ public interface RiftGeneratable {
             RandomSource random,
             long[] mask,
             List<JigsawListProcessor> jigsawProcessors,
-            TriConsumer<RiftGeneratable, Vec3i, TripleMirror> applyFunc) {
+            TriConsumer<RiftGeneratable, Vec3i, TripleMirror> processFunc) {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
@@ -107,29 +107,12 @@ public interface RiftGeneratable {
                             .applyToPosition(childJigsaw.info().pos(), next.size().getX() - 1, next.size().getZ() - 1)
                             .multiply(-1));
 
-            applyGeneratable(next, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server, random, mask,
-                    jigsawProcessors, applyFunc);
+            processGeneratable(next, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server, random,
+                    mask, jigsawProcessors, processFunc);
         }
         writeCollisionMask(generatable, mask, placementShift, mirror);
 
-        applyFunc.accept(generatable, placementShift, mirror);
-    }
-
-    static void generate(
-            RiftGeneratable generatable,
-            RiftProcessedRoom destination,
-            ServerLevelAccessor world,
-            Vec3i placementShift,
-            TripleMirror mirror,
-            MinecraftServer server,
-            RandomSource random,
-            long[] mask,
-            List<JigsawListProcessor> jigsawProcessors) {
-        applyGeneratable(generatable, placementShift, mirror, server, random, mask, jigsawProcessors,
-                (subGeneratable, pos, transformation) -> {
-                    destination.clearNewFlags();
-                    subGeneratable.processAndPlace(destination, world, pos, transformation);
-                });
+        processFunc.accept(generatable, placementShift, mirror);
     }
 
     static boolean collidesWithMask(
