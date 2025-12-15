@@ -14,6 +14,7 @@
         "AccessorStructureTemplate",
         "InvokerAbstractContainerMenu",
         "InvokerBlockBehaviour",
+        "MixinAttributes",
         "MixinBlockAgeProcessor",
         "MixinChunkAccess",
         "MixinChunkMap",

@@ -8,7 +8,9 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 12
+                    "ticks": 30,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed"
                 }
             ]
         },
@@ -18,7 +20,9 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 9,
+                    "ticks": 16,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
                 }
             ]
@@ -29,7 +33,9 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 9,
+                    "ticks": 16,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
                 }
             ],

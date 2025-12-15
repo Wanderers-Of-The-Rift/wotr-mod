@@ -45,9 +45,5 @@
     ],
     "icon": "minecraft:textures/item/iron_pickaxe.png",
     "requirements": [
-        {
-            "type": "wotr:cooldown",
-            "ticks": 18
-        }
     ]
 }

@@ -47,7 +47,9 @@
     "requirements": [
         {
             "type": "wotr:cooldown",
-            "ticks": 27
+            "ticks": -77,
+            "mode": "inverted",
+            "cooldown_attribute": "minecraft:attack_speed"
         }
     ]
 }

@@ -8,8 +8,10 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 5,
-                    "milliticks": 900,
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
                 }
             ]
@@ -20,8 +22,10 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 5,
-                    "milliticks": 900,
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
                 }
             ]
@@ -32,8 +36,10 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 5,
-                    "milliticks": 900,
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
 
                 }
@@ -45,8 +51,10 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 5,
-                    "milliticks": 900,
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
                 }
             ]
@@ -57,7 +65,10 @@
             "requirements": [
                 {
                     "type": "wotr:cooldown",
-                    "ticks": 9,
+                    "ticks": 16,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
                     "margin_milliticks": 3000
                 }
             ]
