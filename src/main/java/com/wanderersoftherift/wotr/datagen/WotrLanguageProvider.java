@@ -76,6 +76,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
         addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
         addEntityType(WotrEntities.RIFT_SKELETON, "Rift Skeleton");
+        addEntityType(WotrEntities.DRONE_BEE, "Drone");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");

@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.client.render.blockentity.RiftMobSpawnerBlock
 import com.wanderersoftherift.wotr.client.render.entity.AltSpiderRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.RiftPortalRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.SimpleEffectProjectileRenderer;
+import com.wanderersoftherift.wotr.client.render.entity.animal.DroneBeeRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.mob.RiftSkeletonRenderer;
 import com.wanderersoftherift.wotr.client.render.entity.mob.RiftZombieRenderer;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
@@ -39,5 +40,6 @@ public class WotrEntityRenderers {
                 AnomalyBlockEntityRenderer::new);
         event.registerEntityRenderer(WotrEntities.RIFT_ZOMBIE.get(), RiftZombieRenderer::new);
         event.registerEntityRenderer(WotrEntities.RIFT_SKELETON.get(), RiftSkeletonRenderer::new);
+        event.registerEntityRenderer(WotrEntities.DRONE_BEE.get(), DroneBeeRenderer::new);
     }
 }

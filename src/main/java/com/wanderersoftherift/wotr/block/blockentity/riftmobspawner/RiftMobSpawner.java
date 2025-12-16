@@ -30,6 +30,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentTable;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.ItemStack;
@@ -274,6 +275,9 @@ public final class RiftMobSpawner implements IOwnedSpawner {
                                 Optional<EquipmentTable> equipment = spawndata.getEquipment();
                                 Objects.requireNonNull(mob);
                                 equipment.ifPresent(mob::equip);
+                                if (mob instanceof NeutralMob neutralMob) {
+                                    neutralMob.setRemainingPersistentAngerTime(Integer.MAX_VALUE);
+                                }
                             }
 
                             if (!level.tryAddFreshEntityWithPassengers(entity)) {

@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.entity.animal.DroneBee;
 import com.wanderersoftherift.wotr.entity.mob.RiftSkeleton;
 import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
@@ -31,5 +32,8 @@ public class WotrEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<RiftSkeleton>> RIFT_SKELETON = ENTITIES
             .registerEntityType(
                     "rift_skeleton", RiftSkeleton::new, MobCategory.MONSTER, builder -> builder.sized(0.6F, 1.99F));
+    public static final DeferredHolder<EntityType<?>, EntityType<DroneBee>> DRONE_BEE = ENTITIES.registerEntityType(
+            "drone_bee", DroneBee::new, MobCategory.CREATURE,
+            builder -> builder.sized(1.2F, 1.0F).eyeHeight(0.3F).clientTrackingRange(8));
 
 }
