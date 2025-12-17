@@ -57,8 +57,17 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
     private static final VoxelShape BASE_LOWER_SHAPE = VoxelShapeUtils.combine(
-            Block.box(0, 0, 1, 16, 2, 15), Block.box(0, 2, 6, 16, 16, 10));
-    private static final VoxelShape BASE_UPPER_SHAPE = Block.box(0, 0, 6, 16, 13, 10);
+            Block.box(0, 0, 1.5, 16, 2, 14.5), Block.box(2, 2, 3.5, 14, 4, 12.5), Block.box(6, 4, 5.5, 10, 6, 10.5),
+            Block.box(4, 6, 5, 12, 9, 10), Block.box(1.25, 8.25, 6, 4, 11.25, 9),
+            Block.box(12, 8.25, 6, 14.75, 11.25, 9), Block.box(-1.5, 10.25, 6, 1.25, 13.25, 9),
+            Block.box(14.75, 10.25, 6, 17.5, 13.25, 9), Block.box(-3, 13.25, 5.25, 1, 16, 10.25),
+            Block.box(15, 13.25, 5.25, 19, 16, 10.25));
+    private static final VoxelShape BASE_UPPER_SHAPE = VoxelShapeUtils.combine(
+            Block.box(-3, 0, 5.25, 1, 5.25, 10.25), Block.box(15, 0, 5.25, 19, 5.25, 10.25),
+            Block.box(-1.5, 5.25, 6, 1.25, 8.25, 9), Block.box(14.75, 5.25, 6, 17.5, 8.25, 9),
+            Block.box(1.25, 7.25, 6, 4, 10.25, 9), Block.box(12, 7.25, 6, 14.75, 10.25, 9),
+            Block.box(4, 10, 5.5, 12, 13, 9.5)
+    );
     private static final Table<DoubleBlockHalf, Direction.Axis, VoxelShape> SHAPES;
 
     static {
@@ -180,7 +189,7 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
 
     /**
      * Provides the location to create the rift, if a valid location exists
-     * 
+     *
      * @param level
      * @param pos
      * @return A valid spawn location, or Optional#empty
