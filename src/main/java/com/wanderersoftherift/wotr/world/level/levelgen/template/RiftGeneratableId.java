@@ -1,40 +1,50 @@
 package com.wanderersoftherift.wotr.world.level.levelgen.template;
 
+import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.OptionalInt;
 
 /**
  * Identifier for a {@link RiftGeneratable}. This is composed of a resource location which is either a pool or the
  * identifier of a built-in generatable, followed by the index of the item in the pool or "builtin" for built-in
  * generatables.
  */
-public final class RiftGeneratableId implements Comparable<RiftGeneratableId> {
+public class RiftGeneratableId implements Comparable<RiftGeneratableId> {
 
-    public static final Codec<RiftGeneratableId> CODEC = Codec.STRING.xmap(s -> {
-        int indexStart = s.indexOf('[');
-        if (indexStart == -1 || !s.endsWith("]") || indexStart + 1 > s.length() - 1) {
-            throw new RuntimeException("Invalid RiftElementId: " + s);
-        }
-        ResourceLocation location = ResourceLocation.tryParse(s.substring(0, indexStart));
-        if (location == null) {
-            throw new RuntimeException("Invalid RiftElementId: " + s);
-        }
-        String index = s.substring(indexStart + 1, s.length() - 1);
-        return new RiftGeneratableId(location, index);
-    }, RiftGeneratableId::toString);
+    public static final Codec<RiftGeneratableId> CODEC = Codec.STRING.xmap(RiftGeneratableId::parse,
+            RiftGeneratableId::toString);
 
     private final ResourceLocation resourceLocation;
-    private final String index;
+    private final OptionalInt index;
     // Precalcuated for performance
     private final transient String identifierString;
 
-    public RiftGeneratableId(ResourceLocation resourceLocation, String index) {
+    public RiftGeneratableId(ResourceLocation resourceLocation) {
+        Preconditions.checkNotNull(resourceLocation);
         this.resourceLocation = resourceLocation;
-        this.index = index;
-        this.identifierString = resourceLocation.toString() + "[" + index + "]";
+        this.index = OptionalInt.empty();
+        this.identifierString = resourceLocation.toString();
+    }
+
+    public RiftGeneratableId(ResourceLocation resourceLocation, int index) {
+        Preconditions.checkNotNull(resourceLocation);
+        this.resourceLocation = resourceLocation;
+        this.index = OptionalInt.of(index);
+        this.identifierString = resourceLocation + "[" + index + "]";
+    }
+
+    public static RiftGeneratableId parse(String s) {
+        int indexStart = s.indexOf('[');
+        if (indexStart == -1) {
+            return new RiftGeneratableId(ResourceLocation.tryParse(s));
+        } else {
+            int index = Integer.parseInt(s.substring(indexStart + 1, s.length() - 1));
+            return new RiftGeneratableId(ResourceLocation.tryParse(s.substring(0, indexStart)), index);
+        }
     }
 
     public String namespace() {
@@ -54,7 +64,7 @@ public final class RiftGeneratableId implements Comparable<RiftGeneratableId> {
         return resourceLocation;
     }
 
-    public String index() {
+    public OptionalInt index() {
         return index;
     }
 

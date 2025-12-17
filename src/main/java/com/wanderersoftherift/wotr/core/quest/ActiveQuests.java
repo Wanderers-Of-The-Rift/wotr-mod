@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.SequencedMap;
 import java.util.UUID;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -56,12 +56,12 @@ public final class ActiveQuests implements GoalTracker {
     }
 
     @Override
-    public <T extends Goal> void progressGoals(Class<T> type, Function<T, Integer> amount, ServerLevel level) {
+    public <T extends Goal> void progressGoals(Class<T> type, ToIntFunction<T> amount, ServerLevel level) {
         for (var goalInstance : goalLookup.get(type)) {
             int progress = goalInstance.quest.getGoalProgress(goalInstance.index);
             T goal = type.cast(goalInstance.quest.getGoal(goalInstance.index));
             if (progress < goal.count()) {
-                progress = Math.clamp(progress + amount.apply(goal), 0, goal.count());
+                progress = Math.clamp(progress + amount.applyAsInt(goal), 0, goal.count());
                 goalInstance.quest.setGoalProgress(goalInstance.index, progress);
             }
         }

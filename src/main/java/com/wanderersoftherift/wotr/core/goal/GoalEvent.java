@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 /**
  * Events relating to goals
@@ -20,9 +20,9 @@ public abstract class GoalEvent extends Event {
     public static class Update<T extends Goal> extends GoalEvent implements ICancellableEvent {
         private final Player player;
         private final Class<T> goalType;
-        private final Function<T, Integer> progressFunction;
+        private final ToIntFunction<T> progressFunction;
 
-        public Update(Player player, Class<T> goalType, Function<T, Integer> progressFunction) {
+        public Update(Player player, Class<T> goalType, ToIntFunction<T> progressFunction) {
             this.player = player;
             this.goalType = goalType;
             this.progressFunction = progressFunction;
@@ -36,7 +36,7 @@ public abstract class GoalEvent extends Event {
             return goalType;
         }
 
-        public Function<T, Integer> getProgressFunction() {
+        public ToIntFunction<T> getProgressFunction() {
             return progressFunction;
         }
 

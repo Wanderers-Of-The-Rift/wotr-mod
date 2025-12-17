@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
 /**
@@ -87,12 +87,12 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
 
     }
 
-    public <T extends Goal> boolean progressGoals(Class<T> type, Function<T, Integer> amount) {
+    public <T extends Goal> boolean progressGoals(Class<T> type, ToIntFunction<T> amount) {
         for (var goalInstance : goalLookup.get(type)) {
             int progress = goalInstance.getProgress();
             T goal = type.cast(goalInstance.getGoal());
             if (progress < goal.count()) {
-                progress = Math.clamp(progress + amount.apply(goal), 0, goal.count());
+                progress = Math.clamp(progress + amount.applyAsInt(goal), 0, goal.count());
                 goalInstance.setProgress(progress);
                 return true;
             }
