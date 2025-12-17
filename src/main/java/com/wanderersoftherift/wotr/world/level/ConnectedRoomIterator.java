@@ -103,7 +103,7 @@ public class ConnectedRoomIterator implements Iterator<RoomRiftSpace> {
 
     @Override
     public boolean hasNext() {
-        return !currentLayer.isEmpty() || !nextLayer.isEmpty();
+        return !currentLayer.isEmpty();
     }
 
     @Override

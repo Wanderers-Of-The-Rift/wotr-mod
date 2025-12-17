@@ -103,6 +103,6 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
     @Override
     public RiftGeneratableId identifier() {
         return new RiftGeneratableId(ResourceLocation.fromNamespaceAndPath("wotr",
-                "placeholder_" + size.getX() + "x" + size.getY() + "x" + size.getZ()), "builtin");
+                "placeholder_" + size.getX() + "x" + size.getY() + "x" + size.getZ()));
     }
 }

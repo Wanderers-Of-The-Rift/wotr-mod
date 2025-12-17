@@ -26,7 +26,7 @@ public record PerimeterGeneratable(BlockState perimeterBlock) implements Seriali
                     .apply(instance, PerimeterGeneratable::new));
 
     private static final RiftGeneratableId IDENTIFIER = new RiftGeneratableId(
-            WotrRiftBuiltinGeneratables.PERIMETER_GENERATABLE.getId(), "builtin");
+            WotrRiftBuiltinGeneratables.PERIMETER_GENERATABLE.getId());
 
     @Override
     public MapCodec<? extends SerializableRiftGeneratable> codec() {
