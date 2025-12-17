@@ -24,7 +24,7 @@ public record SingleBlockChunkGeneratable(BlockState block) implements Serializa
             .apply(instance, SingleBlockChunkGeneratable::new));
 
     private static final RiftGeneratableId IDENTIFIER = new RiftGeneratableId(
-            WotrRiftBuiltinGeneratables.SINGLE_BLOCK_CHUNK_GENERATABLE.getId(), "builtin");
+            WotrRiftBuiltinGeneratables.SINGLE_BLOCK_CHUNK_GENERATABLE.getId());
 
     @Override
     public MapCodec<? extends SerializableRiftGeneratable> codec() {

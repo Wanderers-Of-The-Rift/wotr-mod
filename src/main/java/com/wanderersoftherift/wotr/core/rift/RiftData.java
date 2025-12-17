@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 // TODO: Split out objective as level attachment
 @ParametersAreNonnullByDefault
@@ -201,7 +201,7 @@ public class RiftData extends SavedData implements GoalTracker {
     }
 
     @Override
-    public <T extends Goal> void progressGoals(Class<T> type, Function<T, Integer> amount, ServerLevel level) {
+    public <T extends Goal> void progressGoals(Class<T> type, ToIntFunction<T> amount, ServerLevel level) {
         getObjective().ifPresent(objective -> {
             if (objective instanceof GoalBasedOngoingObjective goalBasedObjective) {
                 if (goalBasedObjective.progressGoals(type, amount)) {
