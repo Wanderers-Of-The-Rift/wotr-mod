@@ -27,7 +27,7 @@ public class RiftEntryTests {
     public static void riftTest(GameTestHelper helper) {
         BlockPos portalBlockPos = new BlockPos(2, 2, 1);
         MockPlayer player = MockPlayer.create(helper, GameType.SURVIVAL);
-        player.setPos(helper.absoluteVec(new BlockPos(1, 1, 1).getCenter()));
+        player.setPos(helper.absoluteVec(new BlockPos(1, 1, 1).getCenter().add(0.5, 0, 0)));
         helper.getLevel().addFreshEntity(player);
 
         ItemStack key = WotrItems.RIFT_KEY.toStack(1);
