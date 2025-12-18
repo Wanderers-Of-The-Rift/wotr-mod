@@ -98,4 +98,17 @@ public class AbilityBenchBlock extends BaseEntityBlock {
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new AbilityBenchBlockEntity(pos, state);
     }
+
+    @Override
+    protected void onRemove(
+            @NotNull BlockState state,
+            @NotNull Level level,
+            @NotNull BlockPos pos,
+            @NotNull BlockState newState,
+            boolean isMoving) {
+        if (!newState.is(state.getBlock()) && level.getBlockEntity(pos) instanceof AbilityBenchBlockEntity entity) {
+            entity.dropContents();
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
 }

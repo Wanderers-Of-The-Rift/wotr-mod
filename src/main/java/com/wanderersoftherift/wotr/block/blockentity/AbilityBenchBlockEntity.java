@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
 import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
+import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -59,6 +60,12 @@ public class AbilityBenchBlockEntity extends BlockEntity {
             }
         };
         return new AbilityBenchMenu(containerId, playerInventory, threadStorage,
-                ContainerLevelAccess.create(level, getBlockPos()), replicatedSlots);
+                ContainerLevelAccess.create(player.level(), getBlockPos()), replicatedSlots);
+    }
+
+    public void dropContents() {
+        if (hasLevel()) {
+            ItemStackHandlerUtil.dropContents(getLevel(), getBlockPos(), threadStorage);
+        }
     }
 }
