@@ -6,9 +6,10 @@
         [
             {
                 "type": "wotr:ability",
-                "provided_ability": "wotr:veinminer",
+                "provided_ability": "wotr:minor_heal",
                 "trigger": {
-                    "type": "wotr:break_block"
+                    "type": "wotr:deal_damage",
+                    "min": 2.0
                 }
             }
         ]

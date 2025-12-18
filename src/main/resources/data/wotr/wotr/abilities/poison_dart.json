@@ -1,0 +1,87 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+    {
+      "type": "wotr:simple_projectile",
+      "config": {
+        "gravity_affected": false,
+        "render": {
+          "animations": "wotr:animations/ability/icicle.animations.json",
+          "model": "wotr:geo/ability/icicle.geo.json",
+          "texture": "wotr:textures/ability/poison_dart.png"
+        },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
+        },
+        "velocity": 1.6
+      },
+      "effects": [
+        {
+          "type": "wotr:damage",
+          "amount": 3.0,
+          "damage_type": "wotr:poison"
+        },
+        {
+          "type": "wotr:attach",
+          "id": "wotr:infect",
+          "continue": {
+            "duration": 80
+          },
+          "effects": [
+            {
+              "type": "wotr:targeting",
+              "targeting": [
+                {
+                  "type": "wotr:self",
+                  "entities": {
+                    "filter": {
+                      "effects": {
+                        "minecraft:glowing": {
+                          "amplifier": 102
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "effects": [
+                {
+                  "type": "wotr:detach_own",
+                  "id": "wotr:infect"
+                }
+              ]
+            },
+            {
+              "type": "wotr:status",
+              "status_effect": {
+                "id": "minecraft:poison",
+                "amplifier": 0,
+                "duration": 20
+              }
+            }
+
+          ],
+          "modifiers": [
+            {
+              "modifier": "wotr:provide_infect",
+              "tier": 1,
+              "roll": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 20
+    },
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 2
+    }
+  ]
+}

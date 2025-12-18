@@ -1,0 +1,68 @@
+{
+  "type": "wotr:instant",
+  "icon": "minecraft:textures/item/leather_chestplate.png",
+  "effects": [
+    {
+      "type": "wotr:simple_projectile",
+      "config": {
+        "gravity_affected": true,
+        "render": {
+          "animations": "wotr:animations/ability/fireball.animations.json",
+          "model": "wotr:geo/ability/fireball.geo.json",
+          "texture": "wotr:textures/ability/poison_dart.png"
+        },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
+        },
+        "velocity": 1,
+        "ground_persist_ticks": 20
+      },
+      "effects": [
+        {
+          "type": "wotr:targeting",
+          "targeting": {
+            "type": "wotr:area",
+            "shape": {
+                "type": "wotr:sphere",
+                "range": 3.5
+            },
+            "entities": {
+              "sentiment": "not_friend",
+              "exclude_caster": true
+            }
+          },
+          "effects": [
+            {
+              "type": "wotr:targeting",
+              "targeting": {
+                "type": "wotr:source"
+              },
+              "effects": [
+                {
+                  "type": "wotr:teleport",
+                  "tele_info": {
+                    "teleport_target": "user",
+                    "position": [0, 1, 0],
+                    "relative": true
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
+      ]
+    }
+  ],
+    "requirements": [
+      {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 8
+      },
+      {
+        "type": "wotr:cooldown",
+        "ticks": 100
+      }
+    ]
+}

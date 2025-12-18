@@ -88,7 +88,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 1,
                   "max": 2
                 }
@@ -125,7 +125,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 3,
                   "max": 4
                 }
@@ -162,7 +162,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 5
                 }
               }
@@ -187,9 +187,11 @@
             }
           ]
         },
+
+
         {
           "type": "minecraft:item",
-          "name": "wotr:color_helmet",
+          "name": "wotr:ability_holder",
           "weight": 5,
           "conditions": [
             {
@@ -198,7 +200,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:quest_completion",
-                  "quest": "wotr:complete_color"
+                  "quest": "wotr:parrot_ability_1"
                 }
               }
             }
@@ -209,16 +211,22 @@
               "amounts": {
                 "wotr:coin": {
                   "type": "minecraft:uniform",
-                  "max": 20.0,
-                  "min": 15.0
+                  "max": 5.0,
+                  "min": 1.0
                 }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:ability" : "wotr:feather_fall"
               }
             }
           ]
         },
         {
           "type": "minecraft:item",
-          "name": "wotr:noir_helmet",
+          "name": "wotr:ability_holder",
           "weight": 5,
           "conditions": [
             {
@@ -227,7 +235,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:quest_completion",
-                  "quest": "wotr:complete_noir"
+                  "quest": "wotr:parrot_ability_2"
                 }
               }
             }
@@ -238,13 +246,56 @@
               "amounts": {
                 "wotr:coin": {
                   "type": "minecraft:uniform",
-                  "max": 20.0,
-                  "min": 15.0
+                  "max": 5.0,
+                  "min": 1.0
                 }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:ability" : "wotr:levitate"
               }
             }
           ]
         },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:ability_holder",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:quest_completion",
+                  "quest": "wotr:parrot_ability_3"
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 5.0,
+                  "min": 1.0
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:ability" : "wotr:squawk_strike"
+              }
+            }
+          ]
+        },
+
+
         {
           "type": "minecraft:item",
           "name": "minecraft:potato",
@@ -256,7 +307,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 0,
                   "max": 0
                 }
@@ -278,7 +329,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:chicken",
+          "name": "minecraft:melon_slice",
           "weight": 20,
           "conditions": [
             {
@@ -287,7 +338,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 1,
                   "max": 1
                 }
@@ -309,7 +360,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:rabbit",
+          "name": "minecraft:carrot",
           "weight": 20,
           "conditions": [
             {
@@ -318,7 +369,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 2,
                   "max": 2
                 }
@@ -340,7 +391,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:cooked_rabbit",
+          "name": "minecraft:baked_potato",
           "weight": 20,
           "conditions": [
             {
@@ -349,7 +400,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 3,
                   "max": 3
                 }
@@ -371,7 +422,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:cooked_chicken",
+          "name": "minecraft:honey_bottle",
           "weight": 20,
           "conditions": [
             {
@@ -380,7 +431,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 4,
                   "max": 4
                 }
@@ -402,7 +453,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:cooked_beef",
+          "name": "minecraft:pumpkin_pie",
           "weight": 20,
           "conditions": [
             {
@@ -411,7 +462,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 5,
                   "max": 5
                 }
@@ -433,7 +484,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:rabbit_stew",
+          "name": "minecraft:cake",
           "weight": 20,
           "conditions": [
             {
@@ -442,7 +493,7 @@
               "predicate": {
                 "type_specific":  {
                   "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "guild": "wotr:parrots_perch",
                   "min": 6
                 }
               }
@@ -456,76 +507,6 @@
                   "type": "minecraft:uniform",
                   "max": 2.0,
                   "min": 1.0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "wotr:ability_holder",
-          "weight": 5,
-          "conditions": [
-            {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "nbt": "{\"neoforge:attachments\":{\"wotr:ability_resources\":{\"wotr:mana\":50.0f}}}"
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "wotr:set_price",
-              "amounts": {
-                "wotr:coin": {
-                  "type": "minecraft:uniform",
-                  "max": 5.0,
-                  "min": 1.0
-                }
-              }
-            },
-            {
-              "function": "minecraft:set_components",
-              "components":{
-                "wotr:ability" : "wotr:mana_cat"
-              }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "wotr:skill_thread",
-          "weight": 20,
-          "conditions": [
-            {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "equipment": {
-                  "mainhand": {
-                    "items": ["minecraft:milk_bucket", "minecraft:cod", "minecraft:salmon"]
-                  }
-                }
-              }
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 20.0,
-                "min": 10.0
-              }
-            },
-            {
-              "function": "wotr:set_price",
-              "amounts": {
-                "wotr:coin": {
-                  "type": "minecraft:uniform",
-                  "max": 3.0,
-                  "min": 0.0
                 }
               }
             }

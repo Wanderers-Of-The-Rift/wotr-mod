@@ -1,0 +1,45 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/encumber-earth",
+            "trigger": {
+                "type": "wotr:take_damage",
+                "min": 1.0,
+                "types": "wotr:earth"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/effective_damage",
+            "trigger": {
+                "type": "wotr:take_damage",
+                "min": 1.0,
+                "types": "wotr:poison"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/encumber-ice",
+            "trigger": {
+              "type": "wotr:take_damage",
+              "min": 1.0,
+              "types": "wotr:ice"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/encumber-detach",
+            "trigger": {
+              "type": "wotr:take_damage",
+              "min": 1.0,
+              "types": "wotr:fire"
+            }
+          }
+        ]
+    ]
+}

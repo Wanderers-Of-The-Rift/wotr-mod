@@ -1,0 +1,49 @@
+{
+  "goals": [
+    {
+      "type": "wotr:fixed_give_item",
+      "item": "minecraft:iron_block",
+      "count": 2
+    },
+    {
+      "type": "wotr:fixed_give_item",
+      "item": "minecraft:ender_pearl",
+      "count": 4
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item" : {
+        "id": "wotr:rune_anvil",
+        "count": 1
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_1",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_2",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 1
+      }
+    ]
+  }
+}

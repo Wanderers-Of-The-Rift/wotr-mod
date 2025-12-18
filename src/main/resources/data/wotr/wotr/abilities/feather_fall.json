@@ -1,0 +1,120 @@
+{
+  "type": "wotr:persistent",
+  "activation_effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": {
+        "type": "wotr:self"
+      },
+      "effects": [
+        {
+          "type": "wotr:attach",
+          "id": "wotr:feather_fall",
+          "continue": {
+            "duration": 60
+          },
+          "effects": [
+            {
+              "type": "wotr:particle",
+              "particle": {
+                "type": "minecraft:snowflake"
+              }
+            },
+            {
+              "type": "wotr:status",
+              "status_effect": {
+                "id": "minecraft:slow_falling",
+                "amplifier": 0,
+                "duration": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ongoing_requirements": [
+    {
+      "type": "wotr:own_attached_effect",
+      "id": "wotr:feather_fall"
+    }
+  ],
+  "on_deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "id": "wotr:feather_fall"
+    },
+    {
+      "type": "wotr:targeting",
+      "targeting": [
+        {
+          "type": "wotr:raycast",
+          "blocks": "all",
+          "range": 70
+        }
+      ],
+      "effects": [
+        {
+          "type": "wotr:summon",
+          "entity_type": "minecraft:parrot",
+          "effects": [
+            {
+              "type": "wotr:attach",
+              "id": "wotr:kill_feather_fall",
+              "continue": {
+                "duration": 21
+              },
+              "trigger": {
+                "initial_delay": 20
+              },
+              "effects": [
+                {
+                  "type": "wotr:targeting",
+                  "targeting": [
+                    {
+                      "type": "wotr:area",
+                      "shape": {
+                        "type": "wotr:sphere",
+                        "range": 3
+                      },
+                      "entities": {
+                        "exclude_caster": true
+                      }
+                    }
+                  ],
+                  "effects":[
+                    {
+                      "type": "wotr:damage",
+                      "damage_type": "wotr:fire",
+                      "amount": 6
+                    }
+                  ]
+                },
+                {
+                  "type": "wotr:particle",
+                  "particle": {
+                    "type": "minecraft:explosion"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "icon": "minecraft:textures/item/feather.png",
+  "on_deactivation_costs": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 120
+    }
+  ],
+  "requirements": [
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 6
+    }
+  ]
+}
