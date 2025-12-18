@@ -11,7 +11,6 @@ import com.wanderersoftherift.wotr.core.rift.map.RiftMapEvent;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 /**
@@ -22,26 +21,25 @@ public class GoalEventHandler {
 
     @SubscribeEvent
     public static void onDiedInRift(RiftEvent.PlayerDied event) {
-        // TODO: Rather than sending an event, have a registry of GoalTracking providers? Pros, cons
-        NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(event.getPlayer(), CompleteRiftGoal.class, (goal) -> {
+        GoalManager.getGoalStates(event.getPlayer(), CompleteRiftGoal.class).forEach(goalState -> {
+            CompleteRiftGoal goal = goalState.getGoal();
             if (goal.completionLevel() == RiftCompletionLevel.ATTEMPT && goal.predicate().matches(event.getConfig())) {
-                return 1;
+                goalState.incrementProgress();
             }
-            return 0;
-        }));
+        });
     }
 
     @SubscribeEvent
     public static void onCompletedRift(RiftEvent.PlayerCompletedRift event) {
-        NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(event.getPlayer(), CompleteRiftGoal.class, (goal) -> {
+        GoalManager.getGoalStates(event.getPlayer(), CompleteRiftGoal.class).forEach(state -> {
+            CompleteRiftGoal goal = state.getGoal();
             if (!event.isObjectiveComplete() && goal.completionLevel() == RiftCompletionLevel.COMPLETE) {
-                return 0;
+                return;
             }
             if (goal.predicate().matches(event.getConfig())) {
-                return 1;
+                state.incrementProgress();
             }
-            return 0;
-        }));
+        });
     }
 
     @SubscribeEvent
@@ -49,22 +47,20 @@ public class GoalEventHandler {
         if (!(event.getSource().getEntity() instanceof Player player)) {
             return;
         }
-        NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(player, KillMobGoal.class, (goal) -> {
-            if (goal.mob().map(predicate -> predicate.matches(event.getEntity().getType())).orElse(true)) {
-                return 1;
+        GoalManager.getGoalStates(player, KillMobGoal.class).forEach(state -> {
+            if (state.getGoal().mob().map(predicate -> predicate.matches(event.getEntity().getType())).orElse(true)) {
+                state.incrementProgress();
             }
-            return 0;
-        }));
+        });
     }
 
     @SubscribeEvent
     public static void onAnomalyClosed(AnomalyEvent.Closed event) {
-        NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(event.getClosingPlayer(), CloseAnomalyGoal.class, (goal) -> {
-            if (goal.anomalyType().map(type -> type.value().equals(event.getTaskType())).orElse(true)) {
-                return 1;
+        GoalManager.getGoalStates(event.getClosingPlayer(), CloseAnomalyGoal.class).forEach(state -> {
+            if (state.getGoal().anomalyType().map(type -> type.value().equals(event.getTaskType())).orElse(true)) {
+                state.incrementProgress();
             }
-            return 0;
-        }));
+        });
     }
 
     @SubscribeEvent
@@ -72,7 +68,7 @@ public class GoalEventHandler {
         if (event.getRoom().template().identifier().path().startsWith("rift/room/portal")) {
             return;
         }
-        NeoForge.EVENT_BUS.post(new GoalEvent.Update<>(event.getPlayer(), VisitRoomGoal.class, (goal) -> 1));
+        GoalManager.getGoalStates(event.getPlayer(), VisitRoomGoal.class).forEach(GoalState::incrementProgress);
     }
 
 }

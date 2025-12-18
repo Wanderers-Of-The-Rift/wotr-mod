@@ -21,6 +21,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -174,24 +175,49 @@ public class QuestState {
         }
     }
 
-    public GoalState getGoalState(int goalIndex) {
-        return new QuestGoalState(this, goalIndex);
+    public GoalState<?> getGoalState(int goalIndex) {
+        return new QuestGoalState<>(this, goalIndex);
     }
 
-    public List<? extends GoalState> getGoalStates() {
-        return IntStream.range(0, goals.size()).mapToObj(index -> new QuestGoalState(this, index)).toList();
+    public List<? extends GoalState<?>> getGoalStates() {
+        return IntStream.range(0, goals.size()).mapToObj(index -> new QuestGoalState<>(this, index)).toList();
     }
 
-    private record QuestGoalState(QuestState quest, int index) implements GoalState {
+    private record QuestGoalState<T extends Goal>(QuestState quest, int index) implements GoalState<T> {
 
+        @SuppressWarnings("unchecked")
         @Override
-        public Goal getGoal() {
-            return quest.getGoal(index);
+        public T getGoal() {
+            return (T) quest.getGoal(index);
         }
 
         @Override
         public int getProgress() {
             return quest.getGoalProgress(index);
+        }
+
+        @Override
+        public void setProgress(int amount) {
+            int clampedAmount = Math.clamp(amount, 0, getGoal().count());
+            if (clampedAmount != getProgress()) {
+                quest.setGoalProgress(index, amount);
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj instanceof QuestGoalState<?>(QuestState otherQuest, int otherIndex)) {
+                return Objects.equals(otherQuest, quest) && otherIndex == index;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(quest, index);
         }
     }
 }
