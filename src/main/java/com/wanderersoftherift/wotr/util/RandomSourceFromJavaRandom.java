@@ -3,15 +3,11 @@ package com.wanderersoftherift.wotr.util;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
-import java.util.List;
 import java.util.random.RandomGenerator;
 import java.util.random.RandomGeneratorFactory;
 
 public class RandomSourceFromJavaRandom implements RandomSource {
 
-    private static final List<RandomGeneratorFactory<RandomGenerator>> GENERATORS = RandomGeneratorFactory.all()
-            .filter((it) -> !it.isDeprecated())
-            .toList();
     private RandomGenerator javaRandom;
     private final RandomGeneratorFactory javaRandomProvider;
 
@@ -61,8 +57,8 @@ public class RandomSourceFromJavaRandom implements RandomSource {
         };
     }
 
-    public static RandomGeneratorFactory get(int i) {
-        return GENERATORS.get(i);
+    public static RandomGeneratorFactory get(RandomFactoryType Factory) {
+        return Factory.get();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -126,7 +127,7 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
 
     public <T> void setAnomalyState(AnomalyState<T> state) {
         if (state != null && state.state().isEmpty()) {
-            var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0), seed);
+            var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT), seed);
             state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState(rng)));
         }
         this.state = state;

@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.wanderersoftherift.wotr.mixin.InvokerBlockBehaviour;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import net.minecraft.Util;
@@ -71,7 +72,7 @@ public class ProcessorUtil {
     }
 
     public static PositionalRandomFactory getRiftRandomFactory(LevelAccessor level, long salt) {
-        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(6), getRiftSeed(level) + salt);
+        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.XOSHIRO), getRiftSeed(level) + salt);
     }
 
     public static RandomSource getRandom(
@@ -81,7 +82,7 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
-        RandomSource randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+        RandomSource randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
         return randomSource;
     }

@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKeyParameterData;
 import com.wanderersoftherift.wotr.item.riftkey.RiftParameterModifierProvider;
 import com.wanderersoftherift.wotr.serialization.MutableMapCodec;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -43,7 +44,7 @@ public record RiftParameterData(Map<ResourceKey<RiftParameter>, RiftParameterIns
         var params = ImmutableMap.<ResourceKey<RiftParameter>, RiftParameterInstance>builder();
         var tierOptional = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_TIER);
         var tier = Objects.requireNonNullElse(tierOptional, 0);
-        var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0), seed + SALT);
+        var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT), seed + SALT);
         var riftKeyParameters = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
         var modifierProviders = itemStack.getAllOfType(RiftParameterModifierProvider.class)
                 .flatMap(RiftParameterModifierProvider::getModifiers)
