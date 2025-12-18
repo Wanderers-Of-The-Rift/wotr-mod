@@ -1,6 +1,5 @@
 package com.wanderersoftherift.wotr.core.quest;
 
-import com.wanderersoftherift.wotr.core.goal.GoalEvent;
 import com.wanderersoftherift.wotr.core.npc.NpcEvent;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
@@ -18,15 +17,6 @@ import java.util.Optional;
  */
 @EventBusSubscriber
 public class QuestEventHandler {
-
-    @SubscribeEvent
-    public static void onGoalUpdate(GoalEvent.Update<?> event) {
-        if (event.isCanceled()) {
-            return;
-        }
-
-        event.progressGoals(event.getPlayer().getData(WotrAttachments.ACTIVE_QUESTS.get()));
-    }
 
     @SubscribeEvent
     public static void onDiedInRift(RiftEvent.PlayerDied event) {

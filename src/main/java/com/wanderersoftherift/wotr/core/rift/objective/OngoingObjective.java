@@ -25,14 +25,19 @@ public interface OngoingObjective {
     MapCodec<? extends OngoingObjective> getCodec();
 
     /**
+     * @param level The level which the objective is for
+     */
+    default void setLevel(ServerLevel level) {
+    }
+
+    /**
      * Event handler for a living entity death
-     * 
+     *
      * @param event       The event
      * @param serverLevel The level
-     * @param data        The rift objective data
      * @return Whether the objective's data has changed (and should be dirty/replicated)
      */
-    default boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, RiftData data) {
+    default boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel) {
         return false;
     }
 
@@ -47,7 +52,7 @@ public interface OngoingObjective {
     Component getObjectiveStartMessage();
 
     /**
-     * todo this javadoc
+     * TODO: javadoc
      * 
      * @param data
      */

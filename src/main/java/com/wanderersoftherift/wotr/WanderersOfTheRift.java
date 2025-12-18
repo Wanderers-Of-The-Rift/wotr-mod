@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.config.ClientConfig;
+import com.wanderersoftherift.wotr.core.goal.RegisterGoalTrackerEvent;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
 import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
@@ -76,6 +77,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -181,11 +183,16 @@ public class WanderersOfTheRift {
 
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);
+        modEventBus.addListener(this::registerGoalTrackers);
         modEventBus.addListener(WotrPayloadHandlers::registerPayloadHandlers);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    private void registerGoalTrackers(FMLCommonSetupEvent event) {
+        ModLoader.postEvent(new RegisterGoalTrackerEvent());
     }
 
     /**

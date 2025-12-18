@@ -1,12 +1,16 @@
 package com.wanderersoftherift.wotr.core.goal;
 
-import net.minecraft.server.level.ServerLevel;
-
-import java.util.function.ToIntFunction;
+import java.util.stream.Stream;
 
 /**
  * Interface for objects (primarily attachments) that track goal progress
  */
 public interface GoalTracker {
-    <T extends Goal> void progressGoals(Class<T> type, ToIntFunction<T> amount, ServerLevel level);
+
+    /**
+     * @param goalType
+     * @return a stream of goals of the provided type that are being tracked by this GoalTracker
+     * @param <T>
+     */
+    <T extends Goal> Stream<? extends GoalState<T>> streamGoals(Class<T> goalType);
 }
