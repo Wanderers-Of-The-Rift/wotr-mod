@@ -37,8 +37,8 @@ public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, Target
                     TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.ALL)
                             .forGetter(FieldOfViewTargeting::blockPredicate),
                     Codec.DOUBLE.fieldOf("range").forGetter(FieldOfViewTargeting::range),
-                    Codec.DOUBLE.fieldOf("angle_cosine").forGetter(FieldOfViewTargeting::cosine)
-            ).apply(instance, FieldOfViewTargeting::new));
+                    Codec.DOUBLE.fieldOf("angle_degrees").forGetter(FieldOfViewTargeting::degrees)
+            ).apply(instance, FieldOfViewTargeting::fromAngleDegrees));
 
     @Override
     public MapCodec<? extends AbilityTargeting> getCodec() {
@@ -111,10 +111,23 @@ public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, Target
 
     }
 
+    private double degrees() {
+        return Math.toDegrees(Math.acos(cosine)) * 2;
+    }
+
     private static Vec3 closestTo(AABB boundingBox, Vec3 otherPos) {
         return new Vec3(Math.max(boundingBox.minX, Math.min(otherPos.x, boundingBox.maxX)),
                 Math.max(boundingBox.minY, Math.min(otherPos.y, boundingBox.maxY)),
                 Math.max(boundingBox.minZ, Math.min(otherPos.z, boundingBox.maxZ)));
+    }
+
+    private static FieldOfViewTargeting fromAngleDegrees(
+            TargetEntityPredicate entityPredicate,
+            TargetBlockPredicate blockPredicate,
+            double range,
+            double angleDegrees) {
+        return new FieldOfViewTargeting(entityPredicate, blockPredicate, range,
+                Math.cos(Math.toRadians(angleDegrees * 0.5)));
     }
 
     private static Vec3 closestTo(Ray ray, Vec3 otherPos) {

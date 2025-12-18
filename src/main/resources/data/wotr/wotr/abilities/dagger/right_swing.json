@@ -26,7 +26,7 @@
                 {
                     "type": "wotr:field_of_view",
                     "range": 2.25,
-                    "angle_cosine": 0.875,
+                    "angle_degrees": 60.0,
                     "entities":{
                         "exclude_caster": true,
                         "exclude_source": true
