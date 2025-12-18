@@ -42,6 +42,7 @@ public class AbilityEventHandler {
         if (event.getKeyMapping() == minecraft.options.keyAttack) {
             var triggers = TriggerTracker.forEntity(minecraft.player);
             if (triggers.hasListenersOnTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
+                event.setSwingHand(false);
                 if (triggers.trigger(MainAttackTrigger.INSTANCE)) {
                     // minecraft.player.swing(InteractionHand.MAIN_HAND);
                 }

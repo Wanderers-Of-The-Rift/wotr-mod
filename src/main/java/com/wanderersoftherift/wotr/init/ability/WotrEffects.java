@@ -18,6 +18,7 @@ import com.wanderersoftherift.wotr.abilities.effects.SetBlockEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SimpleProjectileEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SoundEffect;
 import com.wanderersoftherift.wotr.abilities.effects.SummonEffect;
+import com.wanderersoftherift.wotr.abilities.effects.SwingHandAnimation;
 import com.wanderersoftherift.wotr.abilities.effects.TargetingEffect;
 import com.wanderersoftherift.wotr.abilities.effects.TeleportEffect;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -64,4 +65,6 @@ public class WotrEffects {
             () -> ParticleEffect.CODEC);
     public static final Supplier<MapCodec<? extends AbilityEffect>> SET_BLOCK = EFFECTS.register("set_block",
             () -> SetBlockEffect.CODEC);
+    public static final Supplier<MapCodec<? extends AbilityEffect>> SWING_HAND_ANIMATION = EFFECTS
+            .register("swing_hand_animation", () -> SwingHandAnimation.CODEC);
 }
