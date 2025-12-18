@@ -44,7 +44,8 @@ public record RiftParameterData(Map<ResourceKey<RiftParameter>, RiftParameterIns
         var params = ImmutableMap.<ResourceKey<RiftParameter>, RiftParameterInstance>builder();
         var tierOptional = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_TIER);
         var tier = Objects.requireNonNullElse(tierOptional, 0);
-        var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT), seed + SALT);
+        var rng = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
+                seed + SALT);
         var riftKeyParameters = itemStack.get(WotrDataComponentType.RiftKeyData.RIFT_PARAMETERS);
         var modifierProviders = itemStack.getAllOfType(RiftParameterModifierProvider.class)
                 .flatMap(RiftParameterModifierProvider::getModifiers)

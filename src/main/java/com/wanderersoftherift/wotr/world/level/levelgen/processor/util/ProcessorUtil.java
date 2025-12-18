@@ -72,7 +72,8 @@ public class ProcessorUtil {
     }
 
     public static PositionalRandomFactory getRiftRandomFactory(LevelAccessor level, long salt) {
-        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.XOSHIRO), getRiftSeed(level) + salt);
+        return RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.XOSHIRO),
+                getRiftSeed(level) + salt);
     }
 
     public static RandomSource getRandom(
@@ -82,7 +83,8 @@ public class ProcessorUtil {
             BlockPos structurePos,
             LevelReader world,
             long processorSeed) {
-        RandomSource randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
+        RandomSource randomSource = new RandomSourceFromJavaRandom(
+                RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 getRandomSeed(type, blockPos, piecePos, structurePos, world, processorSeed));
         return randomSource;
     }
