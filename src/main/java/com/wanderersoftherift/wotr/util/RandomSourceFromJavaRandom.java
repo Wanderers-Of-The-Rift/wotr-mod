@@ -57,8 +57,8 @@ public class RandomSourceFromJavaRandom implements RandomSource {
         };
     }
 
-    public static RandomGeneratorFactory get(RandomFactoryType Factory) {
-        return Factory.get();
+    public static RandomGeneratorFactory get(RandomFactoryType factoryType) {
+        return factoryType.get();
     }
 
     @Override
