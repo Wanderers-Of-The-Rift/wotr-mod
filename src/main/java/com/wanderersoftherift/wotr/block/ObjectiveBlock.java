@@ -1,6 +1,7 @@
 package com.wanderersoftherift.wotr.block;
 
-import com.wanderersoftherift.wotr.core.goal.GoalEvent;
+import com.wanderersoftherift.wotr.core.goal.GoalManager;
+import com.wanderersoftherift.wotr.core.goal.GoalState;
 import com.wanderersoftherift.wotr.core.goal.type.ActivateObjectiveGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 
 public class ObjectiveBlock extends Block {
@@ -38,15 +38,9 @@ public class ObjectiveBlock extends Block {
             @NotNull Player player,
             @NotNull BlockHitResult hitResult) {
         if (!level.isClientSide && !state.getValue(ACTIVATED)) {
-            GoalEvent.Update<ActivateObjectiveGoal> event = new GoalEvent.Update<>(player, ActivateObjectiveGoal.class,
-                    goal -> 1);
-            NeoForge.EVENT_BUS.post(event);
-            if (!event.isCanceled()) {
-                level.setBlock(pos, state.cycle(ACTIVATED), Block.UPDATE_ALL);
-                level.playSound(null, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS);
-            } else {
-                return InteractionResult.FAIL;
-            }
+            GoalManager.getGoalStates(player, ActivateObjectiveGoal.class).forEach(GoalState::incrementProgress);
+            level.setBlock(pos, state.cycle(ACTIVATED), Block.UPDATE_ALL);
+            level.playSound(null, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS);
         }
 
         return InteractionResult.SUCCESS;

@@ -60,7 +60,7 @@ public class StealthOngoingObjective implements OngoingObjective {
     }
 
     @Override
-    public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel, RiftData data) {
+    public boolean onLivingDeath(LivingDeathEvent event, ServerLevel serverLevel) {
         if (isComplete()) {
             return false;
         }

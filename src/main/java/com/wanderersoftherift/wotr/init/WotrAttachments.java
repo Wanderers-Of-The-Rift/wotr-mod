@@ -27,6 +27,7 @@ import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestLog;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.map.RiftMapData;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
 import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
@@ -208,6 +209,11 @@ public final class WotrAttachments {
     public static final Supplier<AttachmentType<RiftMapData>> RIFT_MAP_DATA = ATTACHMENT_TYPES.register(
             "rift_map_data",
             () -> AttachmentType.builder(RiftMapData::new).serialize(RiftMapData.getSerializer()).build()
+    );
+
+    public static final Supplier<AttachmentType<ObjectiveData>> OBJECTIVE_DATA = ATTACHMENT_TYPES.register(
+            "objective_data",
+            () -> AttachmentType.builder(ObjectiveData::new).serialize(ObjectiveData.getSerializer()).build()
     );
 
     private WotrAttachments() {

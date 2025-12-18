@@ -1,29 +1,33 @@
 package com.wanderersoftherift.wotr.core.rift.objective.ongoing;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.ListMultimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalState;
+import com.wanderersoftherift.wotr.core.goal.GoalTracker;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
+import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.ToIntFunction;
+import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * An objective requiring completion of a number of goals.
  */
-public class GoalBasedOngoingObjective implements OngoingObjective {
+public class GoalBasedOngoingObjective implements OngoingObjective, GoalTracker {
     public static final MapCodec<GoalBasedOngoingObjective> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     Goal.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(GoalBasedOngoingObjective::getGoals),
@@ -32,7 +36,8 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
 
     private final List<Goal> goals;
     private final int[] goalProgress;
-    private final Multimap<Class<? extends Goal>, ObjectiveGoalState> goalLookup = ArrayListMultimap.create();
+    private final ListMultimap<Class<? extends Goal>, ObjectiveGoalState<?>> goalLookup = ArrayListMultimap.create();
+    private ServerLevel level;
 
     public GoalBasedOngoingObjective(List<Goal> goals) {
         this(goals, List.of());
@@ -45,7 +50,7 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
             this.goalProgress[i] = goalProgress.get(i);
         }
         for (int i = 0; i < goals.size(); i++) {
-            goalLookup.put(goals.get(i).getClass(), new ObjectiveGoalState(this, i));
+            goalLookup.put(goals.get(i).getClass(), new ObjectiveGoalState<>(this, i));
         }
     }
 
@@ -57,8 +62,13 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
         return IntList.of(goalProgress);
     }
 
-    public List<? extends GoalState> getGoalStates() {
-        return IntStream.range(0, goals.size()).mapToObj(index -> new ObjectiveGoalState(this, index)).toList();
+    public List<? extends GoalState<?>> getGoalStates() {
+        return IntStream.range(0, goals.size()).mapToObj(index -> new ObjectiveGoalState<>(this, index)).toList();
+    }
+
+    @Override
+    public void setLevel(ServerLevel level) {
+        this.level = level;
     }
 
     @Override
@@ -78,7 +88,6 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
 
     @Override
     public Component getObjectiveStartMessage() {
-        // TODO: Need to make a setup to generate status component for goals?
         return Component.empty();
     }
 
@@ -87,24 +96,19 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
 
     }
 
-    public <T extends Goal> boolean progressGoals(Class<T> type, ToIntFunction<T> amount) {
-        for (var goalInstance : goalLookup.get(type)) {
-            int progress = goalInstance.getProgress();
-            T goal = type.cast(goalInstance.getGoal());
-            if (progress < goal.count()) {
-                progress = Math.clamp(progress + amount.applyAsInt(goal), 0, goal.count());
-                goalInstance.setProgress(progress);
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public <T extends Goal> Stream<GoalState<T>> streamGoals(Class<T> goalType) {
+        // noinspection unchecked
+        return goalLookup.get(goalType).stream().map(state -> (GoalState<T>) state);
     }
 
-    private record ObjectiveGoalState(GoalBasedOngoingObjective objective, int index) implements GoalState {
+    private record ObjectiveGoalState<T extends Goal>(GoalBasedOngoingObjective objective, int index)
+            implements GoalState<T> {
 
+        @SuppressWarnings("unchecked")
         @Override
-        public Goal getGoal() {
-            return objective.getGoals().get(index);
+        public T getGoal() {
+            return (T) objective.getGoals().get(index);
         }
 
         @Override
@@ -113,7 +117,12 @@ public class GoalBasedOngoingObjective implements OngoingObjective {
         }
 
         public void setProgress(int amount) {
-            objective.goalProgress[index] = amount;
+            int clampedAmount = Math.clamp(amount, 0, getGoal().count());
+            if (clampedAmount != objective.goalProgress[index]) {
+                objective.goalProgress[index] = clampedAmount;
+                PacketDistributor.sendToPlayersInDimension(objective.level,
+                        new S2CRiftObjectiveStatusPacket(Optional.of(objective)));
+            }
         }
     }
 }

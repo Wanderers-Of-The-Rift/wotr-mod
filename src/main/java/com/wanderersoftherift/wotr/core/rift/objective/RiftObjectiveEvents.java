@@ -34,6 +34,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.Optional;
+
 /**
  * Event subscriber for objective handling
  */
@@ -56,10 +58,13 @@ public class RiftObjectiveEvents {
         if (!RiftLevelManager.isRift(level)) {
             return;
         }
-        var riftData = RiftData.get(level);
-        var parameterData = RiftParameterData.forLevel(level);
-        riftData.getObjective()
-                .ifPresent(ongoingObjective -> ongoingObjective.registerUpdaters(parameterData, riftData, level));
+        Optional<OngoingObjective> ongoingObjective = level.getExistingData(WotrAttachments.OBJECTIVE_DATA)
+                .flatMap(ObjectiveData::getObjective);
+        ongoingObjective.ifPresent(objective -> {
+            var riftData = RiftData.get(level);
+            var parameterData = RiftParameterData.forLevel(level);
+            objective.registerUpdaters(parameterData, riftData, level);
+        });
     }
 
     @SubscribeEvent
@@ -67,7 +72,9 @@ public class RiftObjectiveEvents {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        var objective = RiftData.get(player.serverLevel()).getObjective();
+        var objective = player.serverLevel()
+                .getExistingData(WotrAttachments.OBJECTIVE_DATA)
+                .flatMap(ObjectiveData::getObjective);
         PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(objective));
         if (objective.isEmpty()) {
             return;
@@ -117,7 +124,9 @@ public class RiftObjectiveEvents {
             return;
         }
 
-        var objective = riftData.getObjective();
+        var objective = player.serverLevel()
+                .getExistingData(WotrAttachments.OBJECTIVE_DATA)
+                .flatMap(ObjectiveData::getObjective);
         boolean success = objective.isPresent() && objective.get().isComplete();
 
         NeoForge.EVENT_BUS.post(new RiftEvent.PlayerCompletedRift(player, success, riftLevel, riftData.getConfig()));
