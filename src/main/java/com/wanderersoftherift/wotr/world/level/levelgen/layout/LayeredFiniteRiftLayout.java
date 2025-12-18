@@ -11,7 +11,6 @@ import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.Processor
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
@@ -88,10 +87,6 @@ public final class LayeredFiniteRiftLayout implements LayeredRiftLayout, Layered
             layer.generateSection(this, randomSource, allSpaces);
         }
         generationCompletion.complete(Unit.INSTANCE);
-    }
-
-    public RiftSpace getSpaceAt(Vec3i pos) {
-        return getSpaceAt(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public RiftSpace getSpaceAt(int x, int y, int z) {
