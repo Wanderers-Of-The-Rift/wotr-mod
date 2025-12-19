@@ -140,7 +140,7 @@ public class RiftObjectiveEvents {
                                                             */),
                 Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
 
-        if (player.containerMenu instanceof RiftCompleteMenu menu) {
+        if (player.containerMenu instanceof RiftCompleteMenu menu && riftData.getConfig() != null) {
             generateObjectiveLoot(menu, player, success ? SUCCESS_TABLE : SURVIVE_TABLE, riftData.getConfig().tier());
         }
         player.setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
