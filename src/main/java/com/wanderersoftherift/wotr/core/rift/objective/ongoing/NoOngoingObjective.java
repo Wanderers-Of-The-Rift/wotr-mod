@@ -18,12 +18,12 @@ public record NoOngoingObjective() implements OngoingObjective {
 
     @Override
     public boolean isComplete() {
-        return false;
+        return true;
     }
 
     @Override
     public Component getObjectiveStartMessage() {
-        return null;
+        return Component.empty();
     }
 
     @Override

@@ -124,9 +124,7 @@ public class RiftObjectiveEvents {
             return;
         }
 
-        var objective = player.serverLevel()
-                .getExistingData(WotrAttachments.OBJECTIVE_DATA)
-                .flatMap(ObjectiveData::getObjective);
+        var objective = riftLevel.getExistingData(WotrAttachments.OBJECTIVE_DATA).flatMap(ObjectiveData::getObjective);
         boolean success = objective.isPresent() && objective.get().isComplete();
 
         NeoForge.EVENT_BUS.post(new RiftEvent.PlayerCompletedRift(player, success, riftLevel, riftData.getConfig()));
