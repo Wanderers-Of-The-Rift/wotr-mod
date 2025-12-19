@@ -72,7 +72,7 @@ public class RiftObjectiveEvents {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        var objective = player.serverLevel()
+        var objective = event.getLevel()
                 .getExistingData(WotrAttachments.OBJECTIVE_DATA)
                 .flatMap(ObjectiveData::getObjective);
         PacketDistributor.sendToPlayer(player, new S2CRiftObjectiveStatusPacket(objective));
