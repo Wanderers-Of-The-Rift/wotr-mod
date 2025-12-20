@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.block.blockentity.anomaly;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
