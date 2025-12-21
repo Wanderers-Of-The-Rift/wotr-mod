@@ -253,6 +253,28 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "quest.log.print"), "Quest completion counts:");
         add(WanderersOfTheRift.translationId("command", "quest.active"), "Active Quests:");
 
+        add("death.attack.wotr.fire.item", "%1$s was scorched by %2$s");
+        add("death.attack.wotr.fire.player", "%1$s was burned alive by %2$s");
+        add("death.attack.wotr.fire", "%1$s died in flames");
+        add("death.attack.wotr.fire_burn.item", "%1$s was set ablaze by %2$s");
+        add("death.attack.wotr.fire_burn.player", "%1$s was burned alive by %2$s");
+        add("death.attack.wotr.fire_burn", "%1$s burned to a crisp");
+        add("death.attack.wotr.ice.item", "%1$s was cooled below zero by %2$s");
+        add("death.attack.wotr.ice.player", "%1$s was frozen solid by %2$s");
+        add("death.attack.wotr.ice", "%1$s froze to death");
+        add("death.attack.wotr.poison.item", "%1$s was overwhelmed by the poison of %2$s");
+        add("death.attack.wotr.poison.player", "%1$s succumbed to poison from %2$s");
+        add("death.attack.wotr.poison", "%1$s did not cure their infection");
+        add("death.attack.wotr.lightning.item", "%1$s was struck by lightning from %2$s");
+        add("death.attack.wotr.lightning.player", "%1$s did not recover from the shock %2$s caused");
+        add("death.attack.wotr.lightning", "%1$s was shocked to death");
+        add("death.attack.wotr.earth.item", "%1$s was crushed by %2$s");
+        add("death.attack.wotr.earth.player", "%1$s got pinned down by %2$s");
+        add("death.attack.wotr.earth", "%1$s was buried alive");
+        add("death.attack.wotr.thorns.item", "%1$s was killed by the thorns of %2$s");
+        add("death.attack.wotr.thorns.player", "%1$s was killed by attacking %2$s");
+        add("death.attack.wotr.thorns", "%1$s was killed by thorns");
+
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
         add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
