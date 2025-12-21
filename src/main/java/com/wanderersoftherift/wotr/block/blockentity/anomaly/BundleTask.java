@@ -107,20 +107,17 @@ public record BundleTask(Map<HolderSet<Item>, IntProvider> rolls) implements Ano
             }
             if (remaining == consumed) {
                 requirements.removeInt(item);
-                if (requirements.isEmpty()) {
-                    entity.closeAndReward(player);
-                    return InteractionResult.SUCCESS;
-                }
             } else if (consumed > 0) {
                 requirements.put(item, remaining - consumed);
             }
         }
         if (resultIfIncomplete != InteractionResult.PASS) {
             handItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(newContent));
-            entity.updateTask(new BundleTaskState(requirements));
+            if (requirements.isEmpty()) {
+                entity.closeAndReward(player);
+            }
+            else entity.updateTask(new BundleTaskState(requirements));
         }
-
         return resultIfIncomplete;
     }
-
 }
