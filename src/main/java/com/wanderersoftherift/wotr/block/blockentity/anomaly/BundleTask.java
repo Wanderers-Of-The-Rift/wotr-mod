@@ -24,7 +24,8 @@ import java.util.function.BiConsumer;
 
 public record BundleTask(Map<HolderSet<Item>, IntProvider> rolls) implements AnomalyTask<BundleTaskState> {
     public static final AnomalyTaskType<BundleTaskState> TYPE = new AnomalyTaskType<>(
-            Codec.unboundedMap(Codec.withAlternative(HolderSetCodec.create(Registries.ITEM, Item.CODEC, true), BuiltInRegistries.ITEM.holderByNameCodec(), HolderSet::direct), IntProvider.CODEC)
+            Codec.unboundedMap(Codec.withAlternative(HolderSetCodec.create(Registries.ITEM, Item.CODEC, true),
+                    BuiltInRegistries.ITEM.holderByNameCodec(), HolderSet::direct), IntProvider.CODEC)
                     .xmap(BundleTask::new, BundleTask::rolls)
                     .fieldOf("items"),
             BundleTaskState.CODEC);
@@ -115,8 +116,8 @@ public record BundleTask(Map<HolderSet<Item>, IntProvider> rolls) implements Ano
             handItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(newContent));
             if (requirements.isEmpty()) {
                 entity.closeAndReward(player);
-            }
-            else entity.updateTask(new BundleTaskState(requirements));
+            } else
+                entity.updateTask(new BundleTaskState(requirements));
         }
         return resultIfIncomplete;
     }
