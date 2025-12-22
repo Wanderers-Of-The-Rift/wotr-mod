@@ -1,0 +1,45 @@
+{
+  "goals": [
+    {
+      "type": "wotr:give_item",
+      "item" : "minecraft:string",
+      "count": 1
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 1,
+        "id": "minecraft:diamond"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 50
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:choose_bird",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:choose_cat",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 5
+      }
+    ]
+  }
+}

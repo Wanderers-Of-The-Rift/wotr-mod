@@ -1,0 +1,44 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "count" : 1,
+      "tier" : {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+      },
+      "themes" : [
+        "wotr:buzzy_bees"
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
+      "amount": 15
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 5
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:lost_brother_3",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:lost_brother_4",
+        "min": 0,
+        "max": 0
+      }
+    ]
+  }
+}

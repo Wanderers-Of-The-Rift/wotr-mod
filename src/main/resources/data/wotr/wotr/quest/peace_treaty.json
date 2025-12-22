@@ -1,0 +1,22 @@
+{
+  "goals": [
+    {
+      "type": "wotr:give_item",
+      "item" : "minecraft:gold_nugget",
+      "count": 1
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 10
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 10
+    }
+  ],
+  "hand_in_to": "wotr:cats_cradle_quest_giver"
+}

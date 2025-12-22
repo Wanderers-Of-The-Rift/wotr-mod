@@ -7,6 +7,14 @@
     "wotr:fetch_quest",
     "wotr:gold_and_iron",
     "wotr:kill_skeletons",
-    "wotr:skillthread"
+    "wotr:skillthread",
+    "wotr:complete_noir",
+    "wotr:complete_color",
+    "wotr:lost_brother_1",
+    "wotr:lost_brother_2",
+    "wotr:lost_brother_3",
+    "wotr:lost_brother_4",
+    "wotr:lost_brother_5",
+    "wotr:choose_cat"
   ]
 }

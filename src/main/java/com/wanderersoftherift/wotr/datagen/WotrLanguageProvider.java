@@ -254,6 +254,28 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "quest.log.print"), "Quest completion counts:");
         add(WanderersOfTheRift.translationId("command", "quest.active"), "Active Quests:");
 
+        add("death.attack.wotr.fire.item", "%1$s was scorched by %2$s");
+        add("death.attack.wotr.fire.player", "%1$s was burned alive by %2$s");
+        add("death.attack.wotr.fire", "%1$s died in flames");
+        add("death.attack.wotr.fire_burn.item", "%1$s was set ablaze by %2$s");
+        add("death.attack.wotr.fire_burn.player", "%1$s was burned alive by %2$s");
+        add("death.attack.wotr.fire_burn", "%1$s burned to a crisp");
+        add("death.attack.wotr.ice.item", "%1$s was cooled below zero by %2$s");
+        add("death.attack.wotr.ice.player", "%1$s was frozen solid by %2$s");
+        add("death.attack.wotr.ice", "%1$s froze to death");
+        add("death.attack.wotr.poison.item", "%1$s was overwhelmed by the poison of %2$s");
+        add("death.attack.wotr.poison.player", "%1$s succumbed to poison from %2$s");
+        add("death.attack.wotr.poison", "%1$s did not cure their infection");
+        add("death.attack.wotr.lightning.item", "%1$s was struck by lightning from %2$s");
+        add("death.attack.wotr.lightning.player", "%1$s did not recover from the shock %2$s caused");
+        add("death.attack.wotr.lightning", "%1$s was shocked to death");
+        add("death.attack.wotr.earth.item", "%1$s was crushed by %2$s");
+        add("death.attack.wotr.earth.player", "%1$s got pinned down by %2$s");
+        add("death.attack.wotr.earth", "%1$s was buried alive");
+        add("death.attack.wotr.thorns.item", "%1$s was killed by the thorns of %2$s");
+        add("death.attack.wotr.thorns.player", "%1$s was killed by attacking %2$s");
+        add("death.attack.wotr.thorns", "%1$s was killed by thorns");
+
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
         add("ability." + WanderersOfTheRift.MODID + ".fireball", "Fireball");
@@ -271,6 +293,31 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
         add("ability." + WanderersOfTheRift.MODID + ".veinminer", "Veinmine");
+
+        add("ability." + WanderersOfTheRift.MODID + ".fire_breath", "Fire Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".poison_breath", "Poison Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".earth_breath", "Earth Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".lightning_breath", "Lightning Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".ice_breath", "Ice Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".fire_dart", "Fire Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".poison_dart", "Poison Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".earth_dart", "Earth Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".lightning_dart", "Lightning Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".ice_dart", "Ice Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".exploding_kittens", "Exploding Kittens");
+        add("ability." + WanderersOfTheRift.MODID + ".feather_fall", "Feather Fall");
+        add("ability." + WanderersOfTheRift.MODID + ".filthy_aura", "Filthy Aura");
+        add("ability." + WanderersOfTheRift.MODID + ".group_hug", "Group Hug");
+        add("ability." + WanderersOfTheRift.MODID + ".hookshot", "Hookshot");
+        add("ability." + WanderersOfTheRift.MODID + ".levitate", "Levitate");
+        add("ability." + WanderersOfTheRift.MODID + ".lifesteal", "Lifesteal");
+        add("ability." + WanderersOfTheRift.MODID + ".mana_cat", "Mana Cat");
+        add("ability." + WanderersOfTheRift.MODID + ".slime_wall", "Slime Wall");
+        add("ability." + WanderersOfTheRift.MODID + ".squawk_strike", "Squawk Strike");
+        add("ability." + WanderersOfTheRift.MODID + ".stab-stab-slash", "Stab-Stab-Slash");
+        add("ability." + WanderersOfTheRift.MODID + ".teleport", "Teleport");
+        add("ability." + WanderersOfTheRift.MODID + ".painful_sneak", "Painful Sneak");
+
         add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
         add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
@@ -476,9 +523,20 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.5"), "Meowster");
         add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.6"), "Gwand Meowster");
 
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch"), "Parrots Perch");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.0"), "Blue Egg");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.1"), "Beakginner");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.2"), "Pollyficient");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.3"), "Wingcredible");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.4"), "Featheran");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.5"), "Talonted");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.6"), "Feathery Talonted");
+
         add(WanderersOfTheRift.translationId("npc", "default"), "Bailey");
         add(WanderersOfTheRift.translationId("npc", "cats_cradle_merchant"), "Cats Cradle Merchant");
         add(WanderersOfTheRift.translationId("npc", "cats_cradle_quest_giver"), "Cats Cradle Quest Giver");
+        add(WanderersOfTheRift.translationId("npc", "parrots_perch_merchant"), "Parrots Perch Merchant");
+        add(WanderersOfTheRift.translationId("npc", "parrots_perch_quest_giver"), "Parrots Perch Quest Giver");
 
         add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
         add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
@@ -507,8 +565,81 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "deliver_fish.title"), "A special delivery");
         add(WanderersOfTheRift.translationId("quest", "deliver_fish.description"),
                 "The Cats Cradle merchant has been working very hard lately, I worry they're skipping lunch. Could you bring them a fish for me?");
+        add(WanderersOfTheRift.translationId("quest", "complete_noir.title"), "A stitch through time");
+        add(WanderersOfTheRift.translationId("quest", "complete_noir.description"),
+                "Please help find the fedora I lost in that black-and-white rift. It is of purrticular sentimental value.");
+        add(WanderersOfTheRift.translationId("quest", "complete_color.title"), "Inspire the Hatter");
+        add(WanderersOfTheRift.translationId("quest", "complete_color.description"),
+                "The hatter is feeling uninspired. Show them the beauty of colors found in the rifts.");
+
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_1.title"), "Lost Brother 1");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_1.description"),
+                "I can't find my brother anywhere! He went into a rift a while ago and never came back. Could you help me find him?");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_2.title"), "Lost Brother 2");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_2.description"),
+                "Maybe he went into a different rift? He likes to play in the sand. Could you check a sandy rift for me?");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_3.title"), "Lost Brother 3");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_3.description"),
+                "You have not found him there either? Perhaps try a warmer rift, he always loved the heat.");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_4.title"), "Lost Brother 4");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_4.description"),
+                "Not there either? Oh dear. He always loved flowers, maybe he wandered into a flowery rift and ran into some bees. Could you check there?");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_5.title"), "Lost Brother 5");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_5.description"),
+                "Ohh silly me, I don't even have a brother! Well, after all that rift exploring, I think we've earned a good rest, don't you?");
+
+        add(WanderersOfTheRift.translationId("quest", "choose_cat.title"), "Meow or never");
+        add(WanderersOfTheRift.translationId("quest", "choose_cat.description"),
+                "Show that you are one of us, and not a filthy flyer. Bring me a feather to show your loyalty, and I shall reward you generously.");
+        add(WanderersOfTheRift.translationId("quest", "choose_bird.title"), "Parrots Pact");
+        add(WanderersOfTheRift.translationId("quest", "choose_bird.description"),
+                "Show ye’ve got the wings for the skies, not the paws for the alleys! Fetch me a string from those whiskered land-lubbers, and I’ll reward ye with treasures!");
+
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest_parrot.title"), "Fetch Quest");
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest_parrot.description"),
+                "Arr! Bring me what I need and I'll shower ye with riches.");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron_parrot.title"), "Sample the Wares");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron_parrot.description"),
+                "Psst! Got an aye for treasure? Fetch me some glitterin' metals from the rifts, and I'll trade ye some shiny baubles!");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons_parrot.title"), "Defeat Skeletons");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons_parrot.description"),
+                "Eek! Ah, it's you. Help me fend off these bony fiends!");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift_parrot.title"), "Complete Rifts");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift_parrot.description"),
+                "Chart a course through the rift and claim the spoils! Show ye’ve got the courage to sail where few dare!");
+
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_1.title"), "Hidden Treasure 1");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_1.description"),
+                "Ahoy matey! See this red cross on me map? Aye, this here marks the spot of treasure! Go sail to the rift and come back with what ye find!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_2.title"), "Hidden Treasure 2");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_2.description"),
+                "Back for more, eh? Ye be a persistent one! This place might be hot, but the treasure be worth it. Set sail again and bring me back another bounty!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_3.title"), "Hidden Treasure 3");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_3.description"),
+                "Ye be on a roll, matey! This next spot be teeming with riches, but we aint the first to arrive. Snatch the loot before them bees do!");
+
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_1.title"), "Join the crew");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_1.description"),
+                "Ahoy there! Fancy joining the Parrots Perch, do ye? Step into a rift and let the skies judge yer courage");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_2.title"), "Forge your fortune");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_2.description"),
+                "Time to toughen yer talons, matey! Fetch me an anvil, and I’ll craft ye a bench fit for a wanderer to sharpen their steel!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_3.title"), "Wings of war");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_3.description"),
+                "Aye, now yer ready for battle. Prove yer mettle by defeating 20 foes in the rifts. Show 'em the might of the Parrots Perch!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_4.title"), "Keys to the skies");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_4.description"),
+                "Well done, matey! Now, to truly soar, ye need a better rift key. Bring me a gilded key, and I’ll upgrade yer own to unlock grander adventures!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_5.title"), "Aspiring Admiral");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_5.description"),
+                "Now ye be a true Parrots Perch member! Show yer dedication by completing 3 rifts. The skies await yer legend!");
+
+        add(WanderersOfTheRift.translationId("quest", "peace_treaty.title"), "Peace tweety");
+        add(WanderersOfTheRift.translationId("quest", "peace_treaty.description"),
+                "Arr! Seems we got off on the wrong claw.. paw.. whatever ye call it!. Them four-legged furballs and us feathered friends should be allies, not enemies. Show em we mean well");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("mobgroup.wotr.rift_monsters", "Rift Monsters");
         add("modifier.wotr.projectile_count", "Projectile Count");
         add("modifier.wotr.projectile_pierce", "Projectile Pierce");
         add("modifier_effect.wotr.ability", "Cast %s when %s");

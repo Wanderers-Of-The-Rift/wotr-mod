@@ -1,0 +1,8 @@
+{
+  "guild": "wotr:parrots_perch",
+  "interaction": {
+    "type": "wotr:merchant",
+    "loot_table": "wotr:merchant/parrot_merchant"
+  },
+  "entity_type": "parrot"
+}
