@@ -147,7 +147,7 @@ public class WotrBlocks {
                             .noOcclusion()
                             .strength(-1f, 3_600_000f)));
 
-    public static final DeferredBlock<ObjectiveBlock> OBJECTIVE = registerBlock("objective_block",
+    public static final DeferredBlock<ObjectiveBlock> OBJECTIVE = registerBlockAndItem("objective_block",
             () -> new ObjectiveBlock(
                     BlockBehaviour.Properties.of()
                             .setId(blockId("objective_block"))
