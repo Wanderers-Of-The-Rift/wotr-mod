@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.screen.character;
 
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Wallet;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;

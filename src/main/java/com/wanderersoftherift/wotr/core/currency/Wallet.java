@@ -1,4 +1,4 @@
-package com.wanderersoftherift.wotr.core.guild.currency;
+package com.wanderersoftherift.wotr.core.currency;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

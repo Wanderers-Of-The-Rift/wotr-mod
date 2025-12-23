@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.item.currency;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
