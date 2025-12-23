@@ -1,8 +1,7 @@
 package com.wanderersoftherift.wotr.client.toast;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.Guild;
-import com.wanderersoftherift.wotr.core.guild.GuildRank;
+import com.google.common.base.Preconditions;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -15,34 +14,38 @@ import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
 
 /**
- * Toast when the player increases their guild rank
+ * Toast when the player increases a rank in a progression track
  */
-public class GuildRankToast extends SimpleToast {
+public class ProgressionTrackRankToast extends SimpleToast {
     private static final int TEXT_X_PADDING = 4;
     private static final int TEXT_Y_PADDING = 7;
     private static final int ICON_X_PADDING = 8;
     private static final int ICON_Y_PADDING = 7;
     private static final int ICON_SIZE = 16;
-    private static final Component TITLE = Component
-            .translatable(WanderersOfTheRift.translationId("toast", "guild.rank"));
 
-    private final Holder<Guild> guild;
+    private final Holder<ProgressionTrack> track;
+    private final Component title;
+    private final Component rankTitle;
     private final int rank;
 
-    public GuildRankToast(Holder<Guild> guild, int rank) {
+    public ProgressionTrackRankToast(Holder<ProgressionTrack> track, int rank) {
         super(true);
-        this.guild = guild;
+        Preconditions.checkArgument(rank >= 0 && rank < track.value().ranks().size());
+        this.track = track;
         this.rank = rank;
+        this.title = Component.translatable(track.value().toastTitleId(), ProgressionTrack.getDisplayName(track));
+        this.rankTitle = ProgressionTrack.getRankTitle(track, rank);
     }
 
     @Override
     public void renderMessage(GuiGraphics guiGraphics, Font font, long visibilityTime) {
-        GuildRank guildRank = guild.value().getRank(rank);
-        List<FormattedCharSequence> list = font.split(Guild.getRankTitle(guild, rank),
+        List<FormattedCharSequence> list = font.split(rankTitle,
                 width() - ICON_SIZE - 2 * TEXT_X_PADDING - ICON_X_PADDING);
-        guiGraphics.blit(RenderType.GUI_TEXTURED, guildRank.icon(), ICON_X_PADDING, ICON_Y_PADDING, 0, 0, ICON_SIZE,
-                ICON_SIZE, ICON_SIZE, ICON_SIZE);
-        guiGraphics.drawString(font, TITLE, ICON_X_PADDING + ICON_SIZE + TEXT_X_PADDING, TEXT_Y_PADDING,
+        track.value().ranks().get(rank).icon().ifPresent(icon -> {
+            guiGraphics.blit(RenderType.GUI_TEXTURED, icon, ICON_X_PADDING, ICON_Y_PADDING, 0, 0, ICON_SIZE, ICON_SIZE,
+                    ICON_SIZE, ICON_SIZE);
+        });
+        guiGraphics.drawString(font, title, ICON_X_PADDING + ICON_SIZE + TEXT_X_PADDING, TEXT_Y_PADDING,
                 ColorUtil.LIGHT_GREEN, false);
         guiGraphics.drawString(font, list.getFirst(), ICON_X_PADDING + ICON_SIZE + TEXT_X_PADDING,
                 font.lineHeight + TEXT_Y_PADDING, ChatFormatting.WHITE.getColor(), false);

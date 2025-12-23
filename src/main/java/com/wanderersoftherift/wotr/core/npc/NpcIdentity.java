@@ -3,9 +3,9 @@ package com.wanderersoftherift.wotr.core.npc;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.npc.interaction.NoInteract;
 import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
@@ -36,14 +36,14 @@ import java.util.Optional;
  * @param entityType     The preferred entityType for this npc
  * @param npcInteraction Interaction behavior for the NPC
  */
-public record NpcIdentity(Optional<Holder<Guild>> guild, Optional<Holder<EntityType<?>>> entityType,
+public record NpcIdentity(Optional<Holder<ProgressionTrack>> guild, Optional<Holder<EntityType<?>>> entityType,
         NpcInteraction npcInteraction) {
 
     public static final ResourceKey<NpcIdentity> DEFAULT = ResourceKey.create(WotrRegistries.Keys.NPCS,
             WanderersOfTheRift.id("default"));
 
     public static final Codec<NpcIdentity> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Guild.CODEC.optionalFieldOf("guild").forGetter(NpcIdentity::guild),
+            ProgressionTrack.CODEC.optionalFieldOf("guild").forGetter(NpcIdentity::guild),
             RegistryFixedCodec.create(BuiltInRegistries.ENTITY_TYPE.key())
                     .optionalFieldOf("entity_type")
                     .forGetter(NpcIdentity::entityType),
