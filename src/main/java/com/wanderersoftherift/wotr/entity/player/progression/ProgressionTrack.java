@@ -19,22 +19,21 @@ import java.util.Optional;
  * 
  * @param ranks
  */
-public record ProgressionTrack(List<ProgressionRank> ranks, String toastTitleId, String toastRankFormatId,
-        String pointsId, boolean hasCustomRankTitles, ResourceLocation rewardIcon,
-        Optional<ResourceLocation> displayIcon) {
+public record ProgressionTrack(List<ProgressionRank> ranks, String toastTitleId, String rankFormatId, String pointsId,
+        boolean hasCustomRankTitles, ResourceLocation rewardIcon, Optional<ResourceLocation> displayIcon) {
 
     public static final Codec<ProgressionTrack> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.withAlternative(ProgressionRank.CODEC.listOf(), ProgressionRankGroupDefinition.CODEC.listOf(),
                     ProgressionRankGroupDefinition::toRanks).fieldOf("ranks").forGetter(ProgressionTrack::ranks),
             Codec.STRING.optionalFieldOf("toast_title_id", "toast.wotr.rank_up")
                     .forGetter(ProgressionTrack::toastTitleId),
-            Codec.STRING.optionalFieldOf("toast_rank_format_id", "toast.wotr.rank_format.default")
+            Codec.STRING.optionalFieldOf("rank_format_id", "toast.wotr.rank_format.default")
                     .forGetter(ProgressionTrack::toastTitleId),
             Codec.STRING.optionalFieldOf("points_id", "track.wotr.points.default")
                     .forGetter(ProgressionTrack::pointsId),
             Codec.BOOL.optionalFieldOf("custom_rank_titles", true).forGetter(ProgressionTrack::hasCustomRankTitles),
             ResourceLocation.CODEC.fieldOf("reward_icon").forGetter(ProgressionTrack::rewardIcon),
-            ResourceLocation.CODEC.optionalFieldOf("displayIcon").forGetter(ProgressionTrack::displayIcon)
+            ResourceLocation.CODEC.optionalFieldOf("display_icon").forGetter(ProgressionTrack::displayIcon)
     ).apply(instance, ProgressionTrack::new));
 
     public static final Codec<Holder<ProgressionTrack>> CODEC = RegistryFixedCodec
@@ -57,9 +56,9 @@ public record ProgressionTrack(List<ProgressionRank> ranks, String toastTitleId,
             return Component.empty();
         }
         if (!track.value().hasCustomRankTitles) {
-            return Component.translatable(track.value().toastRankFormatId, rank + 1);
+            return Component.translatable(track.value().rankFormatId, rank + 1);
         } else {
-            return Component.translatable(track.value().toastRankFormatId,
+            return Component.translatable(track.value().rankFormatId,
                     Component.translatable(track.getKey().location().toLanguageKey("track", "rank." + (rank + 1))));
         }
     }

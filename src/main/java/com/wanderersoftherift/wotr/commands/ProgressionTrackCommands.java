@@ -54,7 +54,7 @@ public class ProgressionTrackCommands extends BaseCommand {
                 .then(Commands.argument(targetArg, EntityArgument.entity())
                         .then(Commands
                                 .argument(trackArg, ResourceKeyArgument.key(WotrRegistries.Keys.PROGRESSION_TRACKS))
-                                .then(Commands.argument(amountArg, IntegerArgumentType.integer(0))
+                                .then(Commands.argument(amountArg, IntegerArgumentType.integer(1))
                                         .executes(
                                                 ctx -> setRank(
                                                         ctx, EntityArgument.getEntity(ctx, targetArg),
@@ -81,7 +81,7 @@ public class ProgressionTrackCommands extends BaseCommand {
             Holder<ProgressionTrack> track,
             int amount) {
         ProgressionTracker status = target.getData(WotrAttachments.PROGRESSION_TRACKER);
-        status.setRank(track, amount);
+        status.setRank(track, amount - 1);
         return Command.SINGLE_SUCCESS;
     }
 }
