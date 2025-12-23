@@ -13,8 +13,8 @@
       "loot_table" : "wotr:chests/wooden"
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:parrots_perch",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:parrots_perch",
       "amount": 20
     }
   ],
@@ -33,8 +33,8 @@
         "min": 0
       },
       {
-        "type": "wotr:guild_rank",
-        "guild": "wotr:parrots_perch",
+        "type": "wotr:progression_track_rank",
+        "track": "wotr:parrots_perch",
         "min": 1
       }
     ]

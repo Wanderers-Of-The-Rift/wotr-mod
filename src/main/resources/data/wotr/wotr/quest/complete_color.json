@@ -29,8 +29,8 @@
       }
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:cats_cradle",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:cats_cradle",
       "amount": 20
     }
   ],
@@ -38,8 +38,8 @@
     "type": "wotr:and",
     "predicates": [
       {
-        "type": "wotr:guild_rank",
-        "guild": "wotr:cats_cradle",
+        "type": "wotr:progression_track_rank",
+        "track": "wotr:cats_cradle",
         "min": 2
       },
       {

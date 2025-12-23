@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.menu;
 
-import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.currency.Wallet;
 import com.wanderersoftherift.wotr.core.npc.trading.AvailableTrades;
 import com.wanderersoftherift.wotr.core.npc.trading.Price;
 import com.wanderersoftherift.wotr.gui.menu.slot.TakeAllOnlyItemHandlerSlot;

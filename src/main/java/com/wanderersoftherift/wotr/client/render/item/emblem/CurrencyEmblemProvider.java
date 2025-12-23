@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.client.render.item.emblem;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import net.minecraft.resources.ResourceLocation;
