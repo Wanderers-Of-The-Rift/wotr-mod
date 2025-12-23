@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.entity.player.progression;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
 import com.wanderersoftherift.wotr.network.guild.ProgressionTrackerReplicationPayload;
@@ -136,7 +135,7 @@ public class ProgressionTracker {
         replicate(track);
         if (!rewards.isEmpty()) {
             RewardMenu.openRewardMenu(player, rewards,
-                    Component.translatable(WanderersOfTheRift.translationId("container", "rank_up")));
+                    Component.translatable(track.value().toastTitleId(), ProgressionTrack.getDisplayName(track)));
         }
     }
 

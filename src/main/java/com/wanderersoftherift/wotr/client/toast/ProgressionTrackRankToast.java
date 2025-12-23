@@ -9,9 +9,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Toast when the player increases a rank in a progression track
@@ -38,16 +41,19 @@ public class ProgressionTrackRankToast extends SimpleToast {
     }
 
     @Override
-    public void renderMessage(GuiGraphics guiGraphics, Font font, long visibilityTime) {
+    public void renderMessage(@NotNull GuiGraphics guiGraphics, Font font, long visibilityTime) {
         List<FormattedCharSequence> list = font.split(rankTitle,
                 width() - ICON_SIZE - 2 * TEXT_X_PADDING - ICON_X_PADDING);
-        track.value().ranks().get(rank).icon().ifPresent(icon -> {
-            guiGraphics.blit(RenderType.GUI_TEXTURED, icon, ICON_X_PADDING, ICON_Y_PADDING, 0, 0, ICON_SIZE, ICON_SIZE,
+        Optional<ResourceLocation> icon = track.value().ranks().get(rank).icon();
+        int xOffset = ICON_X_PADDING;
+        if (icon.isPresent()) {
+            guiGraphics.blit(RenderType.GUI_TEXTURED, icon.get(), xOffset, ICON_Y_PADDING, 0, 0, ICON_SIZE, ICON_SIZE,
                     ICON_SIZE, ICON_SIZE);
-        });
-        guiGraphics.drawString(font, title, ICON_X_PADDING + ICON_SIZE + TEXT_X_PADDING, TEXT_Y_PADDING,
-                ColorUtil.LIGHT_GREEN, false);
-        guiGraphics.drawString(font, list.getFirst(), ICON_X_PADDING + ICON_SIZE + TEXT_X_PADDING,
-                font.lineHeight + TEXT_Y_PADDING, ChatFormatting.WHITE.getColor(), false);
+            xOffset += ICON_SIZE;
+        }
+
+        guiGraphics.drawString(font, title, xOffset + TEXT_X_PADDING, TEXT_Y_PADDING, ColorUtil.LIGHT_GREEN, false);
+        guiGraphics.drawString(font, list.getFirst(), xOffset + TEXT_X_PADDING, font.lineHeight + TEXT_Y_PADDING,
+                ChatFormatting.WHITE.getColor(), false);
     }
 }
