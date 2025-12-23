@@ -1,8 +1,9 @@
 {
   "reward_icon": "wotr:textures/progression_track/xp.png",
   "toast_title_id": "toast.wotr.level_up",
-  "toast_rank_format_id": "toast.wotr.rank_format.level",
+  "rank_format_id": "track.wotr.level.rank_format",
   "points_id": "track.wotr.points.xp",
+  "custom_rank_titles": false,
   "ranks": [
     {
       "size": 100,
