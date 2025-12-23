@@ -198,6 +198,10 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
         add(WanderersOfTheRift.translationId("container", "rank_up"), "Rank Up!");
         add(WanderersOfTheRift.translationId("container", "guilds.claim_reward"), "Claim rank up reward");
+        add(WanderersOfTheRift.translationId("container", "character.claim_reward"), "Claim level up reward");
+        add(WanderersOfTheRift.translationId("container", "character.level"), "Level: %s");
+        add(WanderersOfTheRift.translationId("container", "character.xp"), "Experience: %s");
+        add(WanderersOfTheRift.translationId("container", "character.xp.next_level"), "Next Level: %s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.objective_block"),
                 "Activate objective blocks (%s/%s)");
 
@@ -206,6 +210,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "rift_complete"), "Rift Overview");
         add(WanderersOfTheRift.translationId("container", "rift_complete.reward"), "Rewards");
 
+        add(WanderersOfTheRift.translationId("container", "main_character"), "Character");
         add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
         add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
         add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
@@ -457,6 +462,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WotrKeyMappings.ACTIVATE_ABILITY_SCROLL.getName(), "Activate Ability Bar Scroll");
         add(WotrKeyMappings.SHOW_TOOLTIP_INFO.getName(), "Show Additional Tooltip Info");
         add(WotrKeyMappings.JIGSAW_NAME_TOGGLE_KEY.getName(), "Show Jigsaw Block Info");
+        add(WotrKeyMappings.MAIN_CHARACTER_MENU_KEY.getName(), "Open Character Menu");
         add(WotrKeyMappings.GUILD_MENU_KEY.getName(), "Open Guild Menu");
         add(WotrKeyMappings.QUEST_MENU_KEY.getName(), "Open Quest Menu");
         add(WotrKeyMappings.WALLET_MENU_KEY.getName(), "Open Wallet Menu");
@@ -556,6 +562,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("track", "cats_cradle.rank.6"), "Meowster");
         add(WanderersOfTheRift.translationId("track", "cats_cradle.rank.7"), "Gwand Meowster");
         add(WanderersOfTheRift.translationId("track", "level"), "Character Level");
+        add(WanderersOfTheRift.translationId("track", "level.rank_format"), "Level %s");
         add(WanderersOfTheRift.translationId("track", "points.default"), "Reputation");
         add(WanderersOfTheRift.translationId("track", "points.xp"), "Experience");
 
@@ -698,7 +705,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
         add(WanderersOfTheRift.translationId("toast", "rank_up"), "Rank Up: %s");
         add(WanderersOfTheRift.translationId("toast", "level_up"), "Level Up");
-        add(WanderersOfTheRift.translationId("toast", "rank_format.level"), "Level %s");
+
         add(WanderersOfTheRift.translationId("toast", "rank_format.default"), "%s");
 
         add(WanderersOfTheRift.translationId("anomaly", "needle"), "Needle");
