@@ -42,6 +42,7 @@ import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemp
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.renderer.GeckolibSpecialRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,9 @@ public class WotrModelProvider extends ModelProvider {
                 .multiVariant(WotrBlocks.ABILITY_BENCH.get(),
                         Variant.variant().with(VariantProperties.MODEL, abilityBenchModel))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        itemModels.itemModelOutput.accept(WotrBlocks.ABILITY_BENCH.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/ability_bench"), new GeckolibSpecialRenderer.Unbaked()));
 
         ResourceLocation keyForgeModel = WanderersOfTheRift.id("block/key_forge");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
