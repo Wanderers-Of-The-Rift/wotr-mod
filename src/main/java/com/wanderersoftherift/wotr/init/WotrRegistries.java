@@ -14,10 +14,9 @@ import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
-import com.wanderersoftherift.wotr.core.guild.Guild;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
@@ -33,6 +32,7 @@ import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RegisteredRif
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -179,8 +179,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_parameter_type"));
         public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
-        public static final ResourceKey<Registry<Guild>> GUILDS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<ProgressionTrack>> PROGRESSION_TRACKS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("progression_track"));
         public static final ResourceKey<Registry<NpcIdentity>> NPCS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("npc"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
@@ -323,7 +323,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MOB_VARIANTS, RiftMobVariantData.CODEC, RiftMobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.GUILDS, Guild.DIRECT_CODEC, Guild.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.PROGRESSION_TRACKS, ProgressionTrack.DIRECT_CODEC, ProgressionTrack.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);

@@ -12,8 +12,8 @@
       "loot_table" : "wotr:rift/socketed_vanilla_armor"
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:cats_cradle",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:cats_cradle",
       "amount": 100
     },
     {

@@ -15,8 +15,8 @@
       }
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:cats_cradle",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:cats_cradle",
       "amount": 50
     }
   ],
@@ -36,8 +36,8 @@
         "min": 0
       },
       {
-        "type": "wotr:guild_rank",
-        "guild": "wotr:cats_cradle",
+        "type": "wotr:progression_track_rank",
+        "track": "wotr:cats_cradle",
         "min": 5
       }
     ]

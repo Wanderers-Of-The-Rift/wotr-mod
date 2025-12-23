@@ -15,8 +15,8 @@
       }
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:cats_cradle",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:cats_cradle",
       "amount": 10
     }
   ],
@@ -28,8 +28,8 @@
         "quest": "wotr:bring_big_fish"
       },
       {
-        "type": "wotr:guild_rank",
-        "guild": "wotr:cats_cradle",
+        "type": "wotr:progression_track_rank",
+        "track": "wotr:cats_cradle",
         "max": 2
       }
     ]
