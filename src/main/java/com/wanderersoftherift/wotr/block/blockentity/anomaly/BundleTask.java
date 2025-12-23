@@ -116,8 +116,9 @@ public record BundleTask(Map<HolderSet<Item>, IntProvider> rolls) implements Ano
             handItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(newContent));
             if (requirements.isEmpty()) {
                 entity.closeAndReward(player);
-            } else
+            } else {
                 entity.updateTask(new BundleTaskState(requirements));
+            }
         }
         return resultIfIncomplete;
     }
