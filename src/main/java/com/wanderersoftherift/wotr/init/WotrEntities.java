@@ -21,7 +21,7 @@ public class WotrEntities {
 
     public static final DeferredHolder<EntityType<?>, EntityType<RiftPortalEntranceEntity>> RIFT_ENTRANCE = ENTITIES
             .registerEntityType("rift_entrance", RiftPortalEntranceEntity::new, MobCategory.MISC,
-                    builder -> builder.sized(0.5f, 3f));
+                    builder -> builder.sized(0.5f, 1.1f));
     public static final DeferredHolder<EntityType<?>, EntityType<RiftPortalExitEntity>> RIFT_EXIT = ENTITIES
             .registerEntityType("rift_exit", RiftPortalExitEntity::new, MobCategory.MISC,
                     builder -> builder.sized(0.5f, 3f));

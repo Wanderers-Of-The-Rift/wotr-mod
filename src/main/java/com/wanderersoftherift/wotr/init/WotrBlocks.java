@@ -84,7 +84,7 @@ public class WotrBlocks {
                     .isViewBlocking((blockState, blockGetter, blockPos) -> false)
                     .noOcclusion()));
 
-    public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = registerBlockAndItem("rift_spawner",
+    public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = BLOCKS.register("rift_spawner",
             () -> new RiftSpawnerBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("rift_spawner"))
                     .strength(2.0f)
