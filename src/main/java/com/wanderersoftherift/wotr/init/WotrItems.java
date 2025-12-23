@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.item.SkillThread;
 import com.wanderersoftherift.wotr.item.WotrArmor;
 import com.wanderersoftherift.wotr.item.ability.AbilityHolder;
 import com.wanderersoftherift.wotr.item.essence.EssenceType;
+import com.wanderersoftherift.wotr.item.block.AbilityBenchItem;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -40,6 +41,10 @@ public class WotrItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(WanderersOfTheRift.MODID);
     public static final List<DeferredItem<BlockItem>> BLOCK_ITEMS = new ArrayList<>();
     public static final List<DeferredItem<BlockItem>> DEV_BLOCK_ITEMS = new ArrayList<>();
+
+    public static final DeferredItem<AbilityBenchItem> ABILITY_BENCH = ITEMS.register("ability_bench",
+            (key) -> new AbilityBenchItem(WotrBlocks.ABILITY_BENCH.get(),
+                    new Item.Properties().setId(ResourceKey.create(Registries.ITEM, key)).useBlockDescriptionPrefix()));
 
     public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register("builder_glasses",
             BuilderGlasses::new);

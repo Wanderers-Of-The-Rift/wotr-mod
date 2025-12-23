@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -117,8 +116,8 @@ public class AnomalyBlock extends BaseEntityBlock {
             BlockEntityType<T> blockEntityType) {
         if (level.isClientSide && blockEntityType == WotrBlockEntities.ANOMALY_BLOCK_ENTITY.get()) {
             return (level1, pos, state1, blockEntity) -> {
-                if (level1 instanceof ClientLevel clientLevel && blockEntity instanceof AnomalyBlockEntity anomaly) {
-                    anomaly.clientTick(clientLevel, pos, state1);
+                if (level1.isClientSide() && blockEntity instanceof AnomalyBlockEntity anomaly) {
+                    anomaly.clientTick(pos);
                 }
             };
         }

@@ -1,8 +1,10 @@
 package com.wanderersoftherift.wotr.block;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
+import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,6 +28,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 /**
  * Block for the workbench allowing ability assignment and upgrade
  */
@@ -36,10 +40,23 @@ public class AbilityBenchBlock extends BaseEntityBlock {
             .translatable("container." + WanderersOfTheRift.MODID + ".ability_bench");
     // spotless:off
     private static final VoxelShape SHAPE = VoxelShapeUtils.combine(
-            Block.box(1.0, 0.0, 1.0, 15.0, 2.0, 15.0),
-            Block.box(2.0, 2.0, 2.0, 14.0, 12.0, 14.0),
-            Block.box(0.0, 12.0, 0.0, 16.0, 15.0, 16.0));
+            Block.box(4.0, 0.75, 5.0, 11.0, 1.75, 10.0),
+            Block.box(3.0, 1.75, 4.0, 11.0, 5.0, 12.0),
+            Block.box(5.0, 1.75, 5.0, 15.0, 5.5, 11.0),
+            Block.box(0.0, 4.75, 1.0, 12.0, 9, 15.0),
+            Block.box(12.0, 5.28, 3.2, 16.0, 11, 13),
+            Block.box(2.0, 11.5, 7.0, 10.0, 17.5, 10.0)
+            );
     // spotless:on
+    private static final Map<Direction, VoxelShape> SHAPES;
+
+    static {
+        var builder = ImmutableMap.<Direction, VoxelShape>builder();
+        for (Direction dir : EnumEntries.DIRECTIONS_HORIZONTAL) {
+            builder.put(dir, VoxelShapeUtils.rotateHorizontal(SHAPE, dir));
+        }
+        SHAPES = builder.build();
+    }
 
     public AbilityBenchBlock(Properties properties) {
         super(properties);
@@ -58,11 +75,11 @@ public class AbilityBenchBlock extends BaseEntityBlock {
 
     @Override
     protected @NotNull VoxelShape getShape(
-            BlockState state,
+            @NotNull BlockState state,
             @NotNull BlockGetter level,
             @NotNull BlockPos pos,
             @NotNull CollisionContext context) {
-        return SHAPE;
+        return SHAPES.get(state.getValue(HorizontalDirectionalBlock.FACING));
     }
 
     @Override
@@ -97,5 +114,18 @@ public class AbilityBenchBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new AbilityBenchBlockEntity(pos, state);
+    }
+
+    @Override
+    protected void onRemove(
+            @NotNull BlockState state,
+            @NotNull Level level,
+            @NotNull BlockPos pos,
+            @NotNull BlockState newState,
+            boolean isMoving) {
+        if (!newState.is(state.getBlock()) && level.getBlockEntity(pos) instanceof AbilityBenchBlockEntity entity) {
+            entity.dropContents();
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 }

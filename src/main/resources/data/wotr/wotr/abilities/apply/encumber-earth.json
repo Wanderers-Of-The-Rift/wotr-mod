@@ -1,0 +1,43 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": [
+        {
+          "type": "wotr:area",
+          "shape": {
+              "type": "wotr:sphere",
+              "range": 2
+          },
+          "entities": "none",
+          "blocks": {
+              "filter": {
+                  "type": "all_of",
+                  "predicates": [
+                      {
+                          "type": "wotr:surface",
+                          "space": 1
+                      }
+                  ]
+              }
+          }
+        }
+      ],
+      "effects": [
+        {
+          "type": "wotr:break",
+          "drops": "collate"
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

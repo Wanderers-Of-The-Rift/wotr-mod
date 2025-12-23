@@ -52,4 +52,18 @@ public class QuestLog {
     public Object2IntMap<Holder<Quest>> getQuestCounts() {
         return Object2IntMaps.unmodifiable(questCounts);
     }
+
+    /**
+     * Sets the number of times a quest has been completed
+     * 
+     * @param quest
+     * @param amount
+     */
+    public void setCompletionCount(Holder<Quest> quest, int amount) {
+        if (amount == 0) {
+            questCounts.removeInt(quest);
+        } else {
+            questCounts.put(quest, amount);
+        }
+    }
 }

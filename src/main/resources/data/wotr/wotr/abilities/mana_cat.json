@@ -1,0 +1,93 @@
+{
+  "type": "wotr:instant",
+  "icon": "minecraft:textures/item/salmon.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 400
+    }
+  ],
+  "effects": [
+    {
+      "type": "wotr:summon",
+      "entity_type": "minecraft:cat",
+      "effects": [
+        {
+          "type": "wotr:attach",
+          "id": "wotr:mana_cat",
+          "trigger": {
+            "frequency": 30
+          },
+          "effects": [
+            {
+              "type": "wotr:particle",
+              "particle": {
+                "type": "minecraft:heart"
+              }
+            },
+            {
+              "type": "wotr:targeting",
+              "targeting": {
+                "type": "wotr:area",
+                "shape": {
+                  "type": "wotr:sphere",
+                  "range": 2
+                },
+                "entities": {
+                  "filter": {
+                    "type": "minecraft:player"
+                  }
+                }
+              },
+              "effects": [
+                {
+                  "type": "wotr:attach",
+                  "id": "wotr:cat_regen_buff",
+                  "continue": {
+                    "max_trigger_count": 4
+                  },
+                  "modifiers": [
+                    {
+                      "modifier": "wotr:ability/mana_regen",
+                      "tier": 1,
+                      "roll": 0.7
+                    }
+                  ]
+                },
+                {
+                  "type": "wotr:particle",
+                  "particle": {
+                    "type": "minecraft:bubble_pop"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "wotr:attach",
+          "id": "wotr:kill_cat",
+          "trigger": {
+            "initial_delay": 150
+          },
+          "continue": {
+            "max_trigger_count": 1
+          },
+          "effects": [
+            {
+              "type": "wotr:damage",
+              "amount": 1000.0,
+              "damage_type": "wotr:ice"
+            },
+            {
+              "type": "wotr:particle",
+              "particle": {
+                "type": "minecraft:cloud"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

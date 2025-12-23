@@ -1,0 +1,42 @@
+{
+  "goals": [
+    {
+      "type": "wotr:fixed_kill_mob",
+      "mob": "#wotr:undead",
+      "mob_label": "mobgroup.wotr.rift_monsters",
+      "count": 20
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:chests/wooden"
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_2",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_3",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": {
+        "type": "wotr:area",
+        "shape": {
+          "type": "wotr:sphere",
+          "range": 3.5
+        },
+        "entities": {
+          "sentiment": "foe",
+          "exclude_caster": true,
+          "filter": {
+            "type": "#minecraft:undead"
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "wotr:status",
+          "status_effect": {
+            "id": "minecraft:poison",
+            "amplifier": 4,
+            "duration": 30
+          }
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:status",
+      "status_effect": {
+        "id": "minecraft:slowness",
+        "amplifier": 99,
+        "duration": 20
+      }
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/infect-poison",
+            "trigger": {
+                "type": "wotr:take_damage",
+                "min": 1.0,
+                "types": "wotr:poison"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/effective_damage",
+            "trigger": {
+                "type": "wotr:take_damage",
+                "min": 1.0,
+                "types": "wotr:fire"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/infect-lightning",
+            "trigger": {
+              "type": "wotr:take_damage",
+              "min": 1.0,
+              "types": "wotr:lightning"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/infect-detach",
+            "trigger": {
+              "type": "wotr:take_damage",
+              "min": 1.0,
+              "types": "wotr:ice"
+            }
+          }
+        ]
+    ]
+}

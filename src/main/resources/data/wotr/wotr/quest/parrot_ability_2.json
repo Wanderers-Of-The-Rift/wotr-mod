@@ -1,0 +1,48 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "completion_level": "complete",
+      "count" : 1,
+      "tier" : 4,
+      "themes" : [
+        "wotr:nether"
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 1,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_ability_1",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_ability_2",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 3
+      }
+    ]
+  }
+}
