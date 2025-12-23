@@ -7,7 +7,9 @@ import com.wanderersoftherift.wotr.util.TripleMirror;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -33,6 +35,14 @@ public record LayerGeneratableRiftRoomGenerator(RiftGeneratable generatable, Rif
             generatable.processAndPlace(room, world, Vec3i.ZERO, mirror);
             return room;
         });
+    }
+
+    @Override
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(
+            RoomRiftSpace space,
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory) {
+        return baseGenerator().getGeneratableCounts(space, world, randomFactory);
     }
 
     public record Factory(SerializableRiftGeneratable generatable, RiftRoomGenerator.Factory baseFactory)

@@ -7,8 +7,8 @@ import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
 import com.wanderersoftherift.wotr.gui.screen.EnhancedContainerScreen;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
+import com.wanderersoftherift.wotr.gui.widget.goal.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
-import com.wanderersoftherift.wotr.gui.widget.quest.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.reward.RewardWidget;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
@@ -98,9 +98,7 @@ public class QuestCompletionScreen extends EnhancedContainerScreen<QuestCompleti
             return;
         }
         questInfo = new ScrollContainerWidget<>(leftPos + 5, topPos + 32, 149, 160);
-        for (int i = 0; i < currentQuest.goalCount(); i++) {
-            questInfo.addChild(new GoalStateWidget(currentQuest, i));
-        }
+        currentQuest.getGoalStates().stream().map(GoalStateWidget::new).forEach(questInfo::addChild);
         questInfo.addChild(new SpacerEntry(6)).addChild(new LabelEntry(font, REWARDS_LABEL, 4));
         List<RewardWidget> rewards = currentQuest.getRewards()
                 .stream()

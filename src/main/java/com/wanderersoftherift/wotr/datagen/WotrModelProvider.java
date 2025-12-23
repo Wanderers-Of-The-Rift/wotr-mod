@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
+import com.wanderersoftherift.wotr.block.ObjectiveBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
 import com.wanderersoftherift.wotr.client.render.item.emblem.AbilityEmblemProvider;
@@ -114,6 +115,18 @@ public class WotrModelProvider extends ModelProvider {
                 .multiVariant(WotrBlocks.RIFT_SPAWNER.get(),
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
                 .with(createFacingDispatchFromUpModel()));
+
+        ResourceLocation baseObjectiveModel = TexturedModel.CUBE.create(WotrBlocks.OBJECTIVE.get(),
+                blockModels.modelOutput);
+        ResourceLocation baseActiveObjectiveModel = TexturedModel
+                .createDefault((block) -> new TextureMapping().put(TextureSlot.ALL,
+                        WanderersOfTheRift.id("block/objective_block_active")), ModelTemplates.CUBE_ALL)
+                .createWithSuffix(
+                        WotrBlocks.OBJECTIVE.get(), "_active", blockModels.modelOutput);
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(WotrBlocks.OBJECTIVE.get())
+                .with(PropertyDispatch.property(ObjectiveBlock.ACTIVATED)
+                        .select(false, Variant.variant().with(VariantProperties.MODEL, baseObjectiveModel))
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, baseActiveObjectiveModel))));
 
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));

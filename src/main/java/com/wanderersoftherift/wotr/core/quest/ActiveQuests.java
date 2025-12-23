@@ -4,6 +4,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalState;
+import com.wanderersoftherift.wotr.core.goal.GoalTracker;
 import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.serialization.AttachmentSerializerFromDataCodec;
@@ -22,18 +25,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.SequencedMap;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Player attachment for holding the active quests of the player
  */
-public final class ActiveQuests {
+public final class ActiveQuests implements GoalTracker {
 
     private final @NotNull IAttachmentHolder holder;
     private final @NotNull Data data;
 
-    private final Multimap<Class<? extends Goal>, GoalInstance> goalLookup = ArrayListMultimap.create();
+    private final Multimap<Class<? extends Goal>, GoalState<?>> goalLookup = ArrayListMultimap.create();
 
     public ActiveQuests(@NotNull IAttachmentHolder holder) {
         this(holder, null);
@@ -52,15 +55,10 @@ public final class ActiveQuests {
         return new AttachmentSerializerFromDataCodec<>(Data.CODEC, ActiveQuests::new, x -> x.data);
     }
 
-    public <T extends Goal> void progressGoals(Class<T> type, Function<T, Integer> amount) {
-        for (var goalInstance : goalLookup.get(type)) {
-            int progress = goalInstance.quest.getGoalProgress(goalInstance.index);
-            T goal = type.cast(goalInstance.quest.getGoal(goalInstance.index));
-            if (progress < goal.count()) {
-                progress = Math.clamp(progress + amount.apply(goal), 0, goal.count());
-                goalInstance.quest.setGoalProgress(goalInstance.index, progress);
-            }
-        }
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Goal> Stream<? extends GoalState<T>> streamGoals(Class<T> goalType) {
+        return goalLookup.get(goalType).stream().map(state -> (GoalState<T>) state);
     }
 
     /**
@@ -132,13 +130,13 @@ public final class ActiveQuests {
 
     private void registerGoals(QuestState quest) {
         for (int i = 0; i < quest.goalCount(); i++) {
-            goalLookup.put(quest.getGoal(i).getClass(), new GoalInstance(quest, i));
+            goalLookup.put(quest.getGoal(i).getClass(), quest.getGoalState(i));
         }
     }
 
     private void unregisterGoals(QuestState quest) {
         for (int i = 0; i < quest.goalCount(); i++) {
-            goalLookup.remove(quest.getGoal(i).getClass(), new GoalInstance(quest, i));
+            goalLookup.remove(quest.getGoal(i).getClass(), quest.getGoalState(i));
         }
     }
 
@@ -160,6 +158,4 @@ public final class ActiveQuests {
         }
     }
 
-    private record GoalInstance(QuestState quest, int index) {
-    }
 }

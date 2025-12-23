@@ -1,0 +1,55 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:activate_objective_block",
+      "count": {
+        "type": "wotr:min",
+        "values": [
+          {
+            "type": "wotr:rift_structure_count",
+            "structure_prefix" : "rift/objective/",
+            "room_depth" : 10
+          },
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              2
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "jigsaw_list_processors": [
+    {
+      "type": "wotr:replace_single",
+      "replace_pools" : {
+        "wotr:rift/poi/free/3": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/5": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/7": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/9": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/free/11": "wotr:rift/objective/free/3",
+        "wotr:rift/poi/ceiling/3": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/5": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/7": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/9": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/ceiling/11": "wotr:rift/objective/ceiling/3",
+        "wotr:rift/poi/inwall/3": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/5": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/7": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/9": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/inwall/11": "wotr:rift/objective/inwall/3",
+        "wotr:rift/poi/halfway/3": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/5": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/7": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/9": "wotr:rift/objective/halfway/3",
+        "wotr:rift/poi/halfway/11": "wotr:rift/objective/halfway/3"
+      }
+    }
+  ]
+}

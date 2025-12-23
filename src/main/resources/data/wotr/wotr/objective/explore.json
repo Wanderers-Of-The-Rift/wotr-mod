@@ -1,0 +1,32 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:visit_room",
+      "count": {
+        "type": "wotr:min",
+        "values": [
+          {
+            "type": "wotr:multiply",
+            "values" : [
+              0.5,
+              {
+                "type": "wotr:rift_room_count"
+              }
+            ]
+          },
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              3
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -8,8 +8,8 @@ import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.widget.ConfirmButton;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
+import com.wanderersoftherift.wotr.gui.widget.goal.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
-import com.wanderersoftherift.wotr.gui.widget.quest.GoalStateWidget;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.LabelEntry;
 import com.wanderersoftherift.wotr.gui.widget.scrollentry.PanelContainer;
@@ -80,9 +80,7 @@ public class QuestsScreen extends BaseCharacterScreen<QuestMenu> {
         rows.add(new SpacerEntry(4));
         rows.add(new LabelEntry(font, GOAL_LABEL, 0));
 
-        for (int i = 0; i < questState.goalCount(); i++) {
-            rows.add(new GoalStateWidget(questState, i));
-        }
+        questState.getGoalStates().stream().map(GoalStateWidget::new).forEach(rows::add);
         rows.add(new SpacerEntry(2));
         rows.add(new LabelEntry(font,
                 Component.translatable(HAND_IN_TO, NpcIdentity.getDisplayName(questState.getHandInTo())), 4));

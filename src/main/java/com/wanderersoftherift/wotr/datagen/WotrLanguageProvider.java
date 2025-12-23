@@ -49,6 +49,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
         addBlock(WotrBlocks.ANOMALY, "Anomaly");
+        addBlock(WotrBlocks.OBJECTIVE, "Objective");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
@@ -176,11 +177,16 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
         add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly"), "Close anomalies (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly.typed"), "Close %s anomalies (%s/%s)");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.visit_room"), "Explore rift rooms (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
         add(WanderersOfTheRift.translationId("container", "guild_rank_up"), "Guild Rank Up!");
         add(WanderersOfTheRift.translationId("container", "guilds.claim_reward"), "Claim rank up reward");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.objective_block"),
+                "Activate objective blocks (%s/%s)");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
@@ -454,9 +460,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("objective", "kill.name"), "Kill mobs");
         add(WanderersOfTheRift.translationId("objective", "stealth.name"), "Stealth");
         add(WanderersOfTheRift.translationId("objective", "nothing.name"), "Nothing");
+        add(WanderersOfTheRift.translationId("objective", "anomaly.name"), "Anomalies");
+        add(WanderersOfTheRift.translationId("objective", "activate_block.name"), "Objective Blocks");
+        add(WanderersOfTheRift.translationId("objective", "explore.name"), "Explore");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");
         add(WanderersOfTheRift.translationId("objective", "stealth.description"), "Defeat monsters stealthily");
         add(WanderersOfTheRift.translationId("objective", "nothing.description"), "Do nothing");
+        add(WanderersOfTheRift.translationId("objective", "nothing.message"), "Survive and Escape");
         add(WanderersOfTheRift.translationId("gui", "objective_status.complete"), "Objective Complete");
 
         add(WanderersOfTheRift.translationId("button", "reset"), "Reset");
@@ -548,6 +558,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("goal", "rift.complete"), "Complete");
         add(WanderersOfTheRift.translationId("goal", "rift.tier"), "tier %s");
         add(WanderersOfTheRift.translationId("goal", "any"), "any");
+        add(WanderersOfTheRift.translationId("goal", "mobs"), "mobs");
 
         add(WanderersOfTheRift.translationId("quest", "fetch_quest.title"), "Fetch Quest");
         add(WanderersOfTheRift.translationId("quest", "fetch_quest.description"),
@@ -665,6 +676,10 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
         add(WanderersOfTheRift.translationId("toast", "guild.rank"), "Guild Rank Up");
+
+        add(WanderersOfTheRift.translationId("anomaly", "needle"), "Needle");
+        add(WanderersOfTheRift.translationId("anomaly", "battle"), "Battle");
+        add(WanderersOfTheRift.translationId("anomaly", "bundle"), "Bundle");
     }
 
     private void addRunegems() {

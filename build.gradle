@@ -140,6 +140,7 @@ dependencies {
     runtimeOnly "curse.maven:terrablender-940057:${terrablender_version}"
     runtimeOnly "curse.maven:cryonic-config-1208896:${cryonic_config_version}"
     runtimeOnly "curse.maven:puzzles-lib-495476:${puzzles_lib_version}"
+    runtimeOnly "curse.maven:fast-item-frames-1210171:${fast_item_frames_version}"
 
     /*Rest:
     runtimeOnly "curse.maven:balm-531761:${balm_version}"
@@ -147,7 +148,6 @@ dependencies {
     runtimeOnly "curse.maven:controlling-250398:${controlling_version}"
     runtimeOnly "curse.maven:dusty-decorations-843344:${dusty_decorations_version}"
     runtimeOnly "curse.maven:dynamic-fps-335493:${dynamic_fps_version}"
-    runtimeOnly "curse.maven:fast-item-frames-1210171:${fast_item_frames_version}"
     runtimeOnly "curse.maven:ferrite-core-429235:${ferrite_core_version}"
     runtimeOnly "curse.maven:fusion-854949:${fusion_version}"
     runtimeOnly "curse.maven:glassential-renewed-945149:${glassential_version}"

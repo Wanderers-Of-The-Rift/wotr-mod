@@ -1,0 +1,33 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:close_anomaly",
+      "count": {
+        "type": "wotr:min",
+        "values": [
+          {
+            "type": "wotr:multiply",
+            "values": [
+              0.5,
+              {
+                "type": "wotr:rift_structure_count",
+                "structure_prefix": "rift/anomaly/"
+              }
+            ]
+          },
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              1
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

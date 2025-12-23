@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalState;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
@@ -19,7 +21,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 /**
  * The state if an active quest that a player has accepted.
@@ -168,6 +172,52 @@ public class QuestState {
             if (holder instanceof ServerPlayer player) {
                 PacketDistributor.sendToPlayer(player, new QuestGoalUpdatePayload(id, index, amount));
             }
+        }
+    }
+
+    public GoalState<?> getGoalState(int goalIndex) {
+        return new QuestGoalState<>(this, goalIndex);
+    }
+
+    public List<? extends GoalState<?>> getGoalStates() {
+        return IntStream.range(0, goals.size()).mapToObj(index -> new QuestGoalState<>(this, index)).toList();
+    }
+
+    private record QuestGoalState<T extends Goal>(QuestState quest, int index) implements GoalState<T> {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public T getGoal() {
+            return (T) quest.getGoal(index);
+        }
+
+        @Override
+        public int getProgress() {
+            return quest.getGoalProgress(index);
+        }
+
+        @Override
+        public void setProgress(int amount) {
+            int clampedAmount = Math.clamp(amount, 0, getGoal().count());
+            if (clampedAmount != getProgress()) {
+                quest.setGoalProgress(index, amount);
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj instanceof QuestGoalState<?>(QuestState otherQuest, int otherIndex)) {
+                return Objects.equals(otherQuest, quest) && otherIndex == index;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(quest, index);
         }
     }
 }

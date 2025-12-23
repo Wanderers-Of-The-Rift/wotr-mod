@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.core.rift;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -65,7 +65,11 @@ public record RiftConfig(int tier, Holder<RiftTheme> theme, Holder<ObjectiveType
             DeferredHolder<RiftConfigDataType<?>, RiftConfigDataType<T>> typeHolder,
             T newValue) {
         var newDataMap = ImmutableMap.<Holder<RiftConfigDataType<?>>, Object>builder();
-        newDataMap.putAll(customData);
+        for (var entry : customData.entrySet()) {
+            if (!typeHolder.equals(entry.getKey())) {
+                newDataMap.put(entry.getKey(), entry.getValue());
+            }
+        }
         newDataMap.put(typeHolder.getDelegate(), newValue);
 
         return new RiftConfig(tier, theme, objective, seed, newDataMap.build());

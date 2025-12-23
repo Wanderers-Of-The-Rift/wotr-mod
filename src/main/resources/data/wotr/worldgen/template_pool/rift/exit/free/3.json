@@ -1,0 +1,14 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "wotr:rift/exit/free/3/exit-0-div0",
+        "processors": "wotr:poi_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

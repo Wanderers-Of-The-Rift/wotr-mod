@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
-import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;

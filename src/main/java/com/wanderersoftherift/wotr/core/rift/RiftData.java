@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.core.rift;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -29,6 +28,7 @@ import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
 
+// TODO: Split out objective as level attachment
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class RiftData extends SavedData {
@@ -37,7 +37,6 @@ public class RiftData extends SavedData {
             BlockPos.CODEC.fieldOf("portal_pos").forGetter(RiftData::getPortalPos),
             UUIDUtil.STRING_CODEC.listOf().fieldOf("players").forGetter(RiftData::getPlayerList),
             UUIDUtil.STRING_CODEC.listOf().fieldOf("banned_players").forGetter(RiftData::getBannedPlayerList),
-            OngoingObjective.DIRECT_CODEC.optionalFieldOf("objective").forGetter(RiftData::getObjective),
             RiftConfig.CODEC.optionalFieldOf("config").forGetter(RiftData::getOptionalConfig)
     ).apply(instance, RiftData::new));
 
@@ -45,16 +44,14 @@ public class RiftData extends SavedData {
     private BlockPos portalPos;
     private final Set<UUID> players;
     private final Set<UUID> bannedPlayers;
-    private Optional<OngoingObjective> objective;
     private RiftConfig config;
 
     private RiftData(ResourceKey<Level> portalDimension, BlockPos portalPos, List<UUID> players,
-            List<UUID> bannedPlayers, Optional<OngoingObjective> objective, Optional<RiftConfig> config) {
+            List<UUID> bannedPlayers, Optional<RiftConfig> config) {
         this.portalDimension = Objects.requireNonNull(portalDimension);
         this.portalPos = Objects.requireNonNull(portalPos);
         this.players = new HashSet<>(Objects.requireNonNull(players));
         this.bannedPlayers = new HashSet<>(Objects.requireNonNull(bannedPlayers));
-        this.objective = objective;
         this.config = config.orElse(null);
     }
 
@@ -72,9 +69,7 @@ public class RiftData extends SavedData {
 
     private static SavedData.Factory<RiftData> factory(ResourceKey<Level> portalDimension, BlockPos portalPos) {
         return new SavedData.Factory<>(
-                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty(),
-                        Optional.empty()),
-                RiftData::load);
+                () -> new RiftData(portalDimension, portalPos, List.of(), List.of(), Optional.empty()), RiftData::load);
     }
 
     private static RiftData load(CompoundTag tag, HolderLookup.Provider registries) {
@@ -176,20 +171,8 @@ public class RiftData extends SavedData {
         }
     }
 
-    public void setObjective(Optional<OngoingObjective> objective) {
-        this.objective = objective;
-        this.setDirty();
-    }
-
-    public void setObjective(OngoingObjective objective) {
-        setObjective(Optional.of(objective));
-    }
-
     public boolean isRiftEmpty() {
         return players.isEmpty();
     }
 
-    public Optional<OngoingObjective> getObjective() {
-        return objective;
-    }
 }

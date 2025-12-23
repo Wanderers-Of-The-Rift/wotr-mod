@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.gui.layer.objective;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
-import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -20,6 +20,12 @@ public class ObjectiveRenderers {
 
     public static final Function<OngoingObjective, ObjectiveRenderer> KILL = register(WanderersOfTheRift.id("kill"),
             GeneralObjectiveBarRenderer::create);
+
+    public static final Function<OngoingObjective, ObjectiveRenderer> GOAL_BASED = register(
+            WanderersOfTheRift.id("goal_based"), GoalBasedObjectiveStatusRenderer::create);
+
+    public static final Function<OngoingObjective, ObjectiveRenderer> NONE = register(
+            WanderersOfTheRift.id("none"), NoObjectiveStatusRenderer::create);
 
     public static Function<OngoingObjective, ObjectiveRenderer> register(
             ResourceLocation id,

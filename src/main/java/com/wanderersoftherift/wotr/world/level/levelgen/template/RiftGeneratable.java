@@ -12,6 +12,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.apache.commons.lang3.function.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,22 +30,20 @@ public interface RiftGeneratable {
 
     Vec3i size();
 
-    String identifier();
+    RiftGeneratableId identifier();
 
-    static void generate(
+    static void processGeneratable(
             RiftGeneratable generatable,
-            RiftProcessedRoom destination,
-            ServerLevelAccessor world,
             Vec3i placementShift,
             TripleMirror mirror,
             MinecraftServer server,
             RandomSource random,
             long[] mask,
-            List<JigsawListProcessor> jigsawProcessors) {
+            List<JigsawListProcessor> jigsawProcessors,
+            TriConsumer<RiftGeneratable, Vec3i, TripleMirror> processFunc) {
         if (collidesWithMask(generatable, mask, placementShift, mirror)) {
             return;
         }
-        destination.clearNewFlags();
         if (mask == null) {
             mask = new long[16 * 16 * 16];
         }
@@ -108,11 +107,12 @@ public interface RiftGeneratable {
                             .applyToPosition(childJigsaw.info().pos(), next.size().getX() - 1, next.size().getZ() - 1)
                             .multiply(-1));
 
-            generate(next, destination, world, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server,
-                    random, mask, jigsawProcessors);
+            processGeneratable(next, newPlacementShift.relative(parentPrimaryDirection), nextMirror, server, random,
+                    mask, jigsawProcessors, processFunc);
         }
         writeCollisionMask(generatable, mask, placementShift, mirror);
-        generatable.processAndPlace(destination, world, placementShift, mirror);
+
+        processFunc.accept(generatable, placementShift, mirror);
     }
 
     static boolean collidesWithMask(
