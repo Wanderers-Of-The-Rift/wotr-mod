@@ -20,13 +20,13 @@ public enum EssenceType {
     HONEY("Honey"),
     MUSHROOM("Mushroom"),
     FABRIC("Fabric"),
-    DARK("Dark");
+    DARK("Dark"),
+    ENERGY("Energy");
 
    // SECONDARY ESSENCE TYPES commented out temporarily for testing,
     // add in each as they get a use and or icon
    // FIRE("Fire"),
    // AIR("Air"),
-   // ENERGY("Energy"),
    // ANIMAL("Animal"),
    // CRYSTAL("Crystal"),
    // METAL("Metal"),
