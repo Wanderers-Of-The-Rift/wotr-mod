@@ -153,6 +153,11 @@ public class WotrModelProvider extends ModelProvider {
         this.generateRunegemItem(WotrItems.RUNEGEM.get(), itemModels);
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels));
+
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            itemModels.generateFlatItem(essenceItem.get(), ModelTemplates.FLAT_ITEM);
+        });
     }
 
     private void createBlockStatesForTrapBlock(

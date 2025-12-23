@@ -23,6 +23,8 @@ public class WotrTags {
     }
 
     public static class Items {
+        public static final TagKey<Item> ESSENCE_ITEM = createTag("essences");
+
         public static final TagKey<Item> BANNED_IN_RIFT = createTag("banned_in_rift");
 
         public static final TagKey<Item> UNBREAKABLE_EXCLUSIONS = createTag("unbreakable_exclusions");

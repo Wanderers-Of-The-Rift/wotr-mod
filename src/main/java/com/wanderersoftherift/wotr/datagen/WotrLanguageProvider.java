@@ -71,6 +71,11 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.NOIR_HELMET, "Fedora");
         addItem(WotrItems.COLOR_HELMET, "Clown");
 
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            addItem(essenceItem, essenceType.name + " Essence");
+        });
+
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");

@@ -38,6 +38,7 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
         generateSocketedVanillaArmorLootTable(consumer);
         generateSocketedVanillaWeaponLootTable(consumer);
         generateSocketedVanillaToolLootTable(consumer);
+        generateEssenceItemLootTable(consumer);
         consumer.accept(getResourceKey("chests/wooden"), LootTable.lootTable()
                 .withPool(
                         LootPool.lootPool()
@@ -54,6 +55,7 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(5))
                                 .add(NestedLootTable.lootTableReference(getResourceKey("rift/socketed_vanilla_tools"))
                                         .setWeight(5))
+                                .add(NestedLootTable.lootTableReference(getResourceKey("rift/essences")).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.EMERALD).setWeight(20))
                                 .add(LootItem.lootTableItem(Items.POTION)
                                         .when(riftTier().max(1))
@@ -992,6 +994,25 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                         .setWeight(2)
                                         .apply(GearSocketsFunction.setGearSockets(6, 6)))
                 ));
+    }
+
+    /**
+     * Generate a loot table for essence items
+     *
+     * @param consumer
+     */
+    private void generateEssenceItemLootTable(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        LootPool.Builder pool = LootPool.lootPool().setRolls(UniformGenerator.between(1.0F, 2.0F));
+
+        WotrItems.ESSENCE_ITEMS.values()
+                .forEach(
+                        deferred -> pool.add(LootItem.lootTableItem(deferred.get())
+                                .setWeight(20)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+                );
+
+        consumer.accept(getResourceKey("rift/essences"), LootTable.lootTable().withPool(pool)
+        );
     }
 
     private static @NotNull ResourceKey<LootTable> getResourceKey(String path) {

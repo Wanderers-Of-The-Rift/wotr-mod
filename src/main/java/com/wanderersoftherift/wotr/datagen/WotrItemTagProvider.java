@@ -6,9 +6,11 @@ import com.wanderersoftherift.wotr.init.WotrTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -169,6 +171,9 @@ public class WotrItemTagProvider extends ItemTagsProvider {
         tag(WotrTags.Items.GOLD_TYPE_WEAPON)
                 .add(Items.GOLDEN_SWORD)
                 .add(Items.GOLDEN_AXE);
+
+        tag(WotrTags.Items.ESSENCE_ITEM)
+                .add(WotrItems.ESSENCE_ITEMS.values().stream().map(DeferredItem::get).toArray(Item[]::new));
 
         // spotless:on
     }
