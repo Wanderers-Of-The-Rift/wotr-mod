@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.core.Holder;
@@ -49,7 +50,7 @@ public final class RiftConfigInitialization {
 
     private static Holder<RiftTheme> getRandomTheme(RegistryAccess registries, long seed) {
 
-        var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+        var themeRandom = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 seed * 5624397638181617163L);
 
         Registry<RiftTheme> registry = registries.lookupOrThrow(WotrRegistries.Keys.RIFT_THEMES);

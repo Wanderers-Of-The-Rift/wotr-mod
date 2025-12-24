@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -52,7 +53,7 @@ public record BattleTask(SpawnData spawnData) implements AnomalyTask<BattleTaskS
         if (!state.isPreparing()) {
             return InteractionResult.PASS;
         }
-        var randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+        var randomSource = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 System.currentTimeMillis());
         var count = spawnData.count.sample(randomSource);
         var mobUUIDs = new HashSet<UUID>();
