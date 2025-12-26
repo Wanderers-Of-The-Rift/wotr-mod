@@ -2,14 +2,12 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
-import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
-import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
+import com.wanderersoftherift.wotr.client.MainAttackHandler;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.entity.player.LivingAttributeChangedEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
-import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
@@ -39,15 +37,9 @@ public class AbilityEventHandler {
     @OnlyIn(Dist.CLIENT)
     public static void overrideAttack(InputEvent.InteractionKeyMappingTriggered event) {
         var minecraft = Minecraft.getInstance();
-        if (event.getKeyMapping() == minecraft.options.keyAttack) {
-            var triggers = TriggerTracker.forEntity(minecraft.player);
-            if (triggers.hasListenersOnTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
-                event.setSwingHand(false);
-                if (triggers.trigger(MainAttackTrigger.INSTANCE)) {
-                    // minecraft.player.swing(InteractionHand.MAIN_HAND);
-                }
-                event.setCanceled(true);
-            }
+        if (event.getKeyMapping() == minecraft.options.keyAttack && MainAttackHandler.doAttack(minecraft.player)) {
+            event.setCanceled(true);
+            event.setSwingHand(false);
         }
     }
 
@@ -77,6 +69,7 @@ public class AbilityEventHandler {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             tickAttachedEffects(level);
             tickActiveAbilities(level);
+            tickRepeatAbilities(level);
         }
     }
 
@@ -147,6 +140,15 @@ public class AbilityEventHandler {
 
     public static void tickActiveAbilities(ServerLevel level) {
         level.getData(WotrAttachments.ONGOING_ABILITY_ENTITY_REGISTRY).forEach((entity, data) -> {
+            data.tick();
+            if (data.isEmpty()) {
+                entity.removeData(WotrAttachments.ONGOING_ABILITIES);
+            }
+        });
+    }
+
+    public static void tickRepeatAbilities(ServerLevel level) {
+        level.getData(WotrAttachments.ABILITY_REPEATER_REGISTRY).forEach((entity, data) -> {
             data.tick();
             if (data.isEmpty()) {
                 entity.removeData(WotrAttachments.ONGOING_ABILITIES);

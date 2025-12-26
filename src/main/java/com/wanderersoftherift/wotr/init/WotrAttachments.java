@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityConditions;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityRepeater;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityResourceData;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
@@ -111,6 +112,9 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<OngoingAbilities>> ONGOING_ABILITIES = ATTACHMENT_TYPES.register(
             "ongoing_abilities",
             () -> AttachmentType.builder(OngoingAbilities::new).serialize(OngoingAbilities.getSerializer()).build());
+    public static final Supplier<AttachmentType<AbilityRepeater>> ABILITY_REPEATER = ATTACHMENT_TYPES.register(
+            "ability_repeater",
+            () -> AttachmentType.builder(AbilityRepeater::new).serialize(AbilityRepeater.getSerializer()).build());
     public static final Supplier<AttachmentType<AbilityStates>> ABILITY_STATES = ATTACHMENT_TYPES.register(
             "ability_states",
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
@@ -191,6 +195,11 @@ public class WotrAttachments {
             .register(
                     "ongoing_ability_entity_registry",
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
+            );
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<AbilityRepeater>>> ABILITY_REPEATER_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "ability_repeater_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ABILITY_REPEATER)).build()
             );
 
     public static final Supplier<AttachmentType<TriggerRegistry<TickTrigger>>> TICK_TRIGGER_REGISTRY = ATTACHMENT_TYPES

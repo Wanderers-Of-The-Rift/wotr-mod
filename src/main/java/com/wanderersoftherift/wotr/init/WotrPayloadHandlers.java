@@ -11,10 +11,9 @@ import com.wanderersoftherift.wotr.network.ability.AbilitySlotsContentPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityStateReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityToggleStatePayload;
-import com.wanderersoftherift.wotr.network.ability.AbilityTriggerablePayload;
 import com.wanderersoftherift.wotr.network.ability.AddEffectMarkerPayload;
-import com.wanderersoftherift.wotr.network.ability.ClientTriggerTriggerPayload;
 import com.wanderersoftherift.wotr.network.ability.LevelUpAbilityPayload;
+import com.wanderersoftherift.wotr.network.ability.MainAttackPayload;
 import com.wanderersoftherift.wotr.network.ability.RemoveEffectMarkerPayload;
 import com.wanderersoftherift.wotr.network.ability.ResourceRechargeTriggerablePayload;
 import com.wanderersoftherift.wotr.network.ability.SelectAbilitySlotPayload;
@@ -90,10 +89,8 @@ public class WotrPayloadHandlers {
                 AbilityStateReplicationPayload::handleOnClient);
         registrar.playToClient(ResourceRechargeTriggerablePayload.TYPE, ResourceRechargeTriggerablePayload.STREAM_CODEC,
                 ResourceRechargeTriggerablePayload::handleOnClient);
-        registrar.playToClient(AbilityTriggerablePayload.TYPE, AbilityTriggerablePayload.STREAM_CODEC,
-                AbilityTriggerablePayload::handleOnClient);
-        registrar.playToServer(ClientTriggerTriggerPayload.TYPE, ClientTriggerTriggerPayload.STREAM_CODEC,
-                ClientTriggerTriggerPayload::handleOnServer);
+        registrar.playToServer(MainAttackPayload.TYPE, MainAttackPayload.STREAM_CODEC,
+                MainAttackPayload::handleOnServer);
 
         // Rift
         registrar.playToClient(BannedFromRiftPayload.TYPE, BannedFromRiftPayload.STREAM_CODEC,

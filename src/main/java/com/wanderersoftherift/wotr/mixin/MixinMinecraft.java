@@ -1,9 +1,7 @@
 package com.wanderersoftherift.wotr.mixin;
 
-import com.wanderersoftherift.wotr.abilities.attachment.TriggerTracker;
-import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
+import com.wanderersoftherift.wotr.client.MainAttackHandler;
 import com.wanderersoftherift.wotr.gui.screen.settings.AccessibilityOptionsScreen;
-import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -34,10 +32,7 @@ public class MixinMinecraft {
     // custom combat
     @Inject(method = "continueAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;"), cancellable = true)
     private void wotrContinueAttack(boolean leftClick, CallbackInfo ci) {
-        var triggers = TriggerTracker.forEntity(player);
-        if (triggers.hasListenersOnTrigger(WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
-            if (triggers.trigger(MainAttackTrigger.INSTANCE)) {
-            }
+        if (MainAttackHandler.doAttack(player)) {
             ci.cancel();
         }
     }
