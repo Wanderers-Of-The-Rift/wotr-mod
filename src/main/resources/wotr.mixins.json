@@ -37,11 +37,9 @@
         "MixinStructureTemplateManager",
         "MixinSummonCommand",
         "MixinToolMaterial",
-        "MixinWorldDimensions",
-        "MuteFastItemFrame"
+        "MixinWorldDimensions"
     ],
     "client": [
-        "CancelDistantSounds",
         "MixinAbstractContainerScreen",
         "MixinAccessibilityOptionsScreen",
         "MixinGuiGraphics",
