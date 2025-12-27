@@ -12,7 +12,7 @@
                     "milliticks": 350,
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         },
@@ -26,7 +26,7 @@
                     "milliticks": 350,
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         },
@@ -40,7 +40,7 @@
                     "milliticks": 350,
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
 
                 }
             ]
@@ -55,7 +55,7 @@
                     "milliticks": 350,
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         },
@@ -69,7 +69,7 @@
                     "milliticks": 350,
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         }

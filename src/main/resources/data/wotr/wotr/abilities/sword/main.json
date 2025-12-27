@@ -11,7 +11,7 @@
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
                     "ticks": 16,
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         },
@@ -24,7 +24,7 @@
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
                     "ticks": 30,
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         },
@@ -37,7 +37,7 @@
                     "mode": "inverted",
                     "cooldown_attribute": "minecraft:attack_speed",
                     "ticks": 80,
-                    "margin_milliticks": 3000
+                    "margin_milliticks": 1000
                 }
             ]
         }

@@ -52,6 +52,7 @@
             "type": "wotr:cooldown",
             "ticks": -90,
             "mode": "inverted",
+            "margin_milliticks": 1000,
             "cooldown_attribute": "minecraft:attack_speed"
         }
     ]
