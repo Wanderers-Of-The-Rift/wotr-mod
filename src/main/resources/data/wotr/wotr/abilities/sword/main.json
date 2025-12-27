@@ -1,0 +1,45 @@
+{
+    "type": "wotr:chain",
+    "icon": "minecraft:textures/mob_effect/strength.png",
+    "abilities": [
+        {
+            "ability": "wotr:sword/left_swing",
+            "ticks_to_reset": 20,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "ticks": 16,
+                    "margin_milliticks": 1000
+                }
+            ]
+        },
+        {
+            "ability": "wotr:sword/right_swing",
+            "ticks_to_reset": 20,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "ticks": 30,
+                    "margin_milliticks": 1000
+                }
+            ]
+        },
+        {
+            "ability": "wotr:sword/overhead_swing",
+            "ticks_to_reset": 20,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "ticks": 80,
+                    "margin_milliticks": 1000
+                }
+            ]
+        }
+    ]
+}

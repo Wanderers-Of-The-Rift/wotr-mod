@@ -40,6 +40,11 @@ public record SphereShape(float baseRange, boolean alignToBlock) implements Targ
 
     @Override
     public Predicate<Entity> getEntityPredicate(Vec3 location, Vec3 direction, @Nullable AbilityContext context) {
+        var basePredicate = getBoundingBoxPredicate(location, direction, context);
+        return (entity) -> basePredicate.test(entity.getBoundingBox());
+    }
+
+    private Predicate<AABB> getBoundingBoxPredicate(Vec3 location, Vec3 direction, @Nullable AbilityContext context) {
         float range = getRange(context);
         float rangeSqrd = range * range;
         Vec3 center;
@@ -48,20 +53,20 @@ public record SphereShape(float baseRange, boolean alignToBlock) implements Targ
         } else {
             center = location;
         }
-        return (pos) -> pos.distanceToSqr(center) < rangeSqrd;
+        return (box) -> closestTo(box, center).distanceToSqr(center) < rangeSqrd;
+    }
+
+    private Vec3 closestTo(AABB boundingBox, Vec3 otherPos) {
+        return new Vec3(Math.max(boundingBox.minX, Math.min(otherPos.x, boundingBox.maxX)),
+                Math.max(boundingBox.minY, Math.min(otherPos.y, boundingBox.maxY)),
+                Math.max(boundingBox.minZ, Math.min(otherPos.z, boundingBox.maxZ)));
     }
 
     @Override
     public Predicate<BlockPos> getBlockPredicate(Vec3 location, Vec3 direction, @Nullable AbilityContext context) {
-        float range = getRange(context);
-        float rangeSqrd = range * range;
-        Vec3 center;
-        if (alignToBlock) {
-            center = BlockPos.containing(location).getCenter();
-        } else {
-            center = location;
-        }
-        return (pos) -> pos.distToCenterSqr(center) < rangeSqrd;
+        var basePredicate = getBoundingBoxPredicate(location, direction, context);
+        return (block) -> basePredicate.test(new AABB(block.getX(), block.getY(), block.getZ(), block.getX() + 1,
+                block.getY() + 1, block.getZ() + 1));
     }
 
     @Override

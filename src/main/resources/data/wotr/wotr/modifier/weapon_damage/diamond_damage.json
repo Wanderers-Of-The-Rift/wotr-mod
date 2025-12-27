@@ -1,0 +1,17 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:attribute",
+                "id": "wotr:wooden_melee",
+                "attribute": "minecraft:attack_damage",
+                "min_roll": 0.3,
+                "max_roll": 0.6,
+                "operation": "add_multiplied_total"
+            }
+        ]
+    ]
+}

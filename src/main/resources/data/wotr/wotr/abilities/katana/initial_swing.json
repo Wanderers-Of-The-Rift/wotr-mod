@@ -1,0 +1,56 @@
+{
+    "type": "wotr:instant",
+    "effects": [
+        {
+            "type": "wotr:targeting",
+            "targeting": {
+                "type": "wotr:offset",
+                "offset": [ 0, 1.65, 0.5 ]
+            },
+            "effects": [
+                {
+                    "type": "wotr:particle",
+                    "particle": {
+                        "type": "wotr:sweep_attack_overhead"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "wotr:sound",
+            "sound": "entity.player.attack.sweep"
+        },
+        {
+            "type": "wotr:targeting",
+            "targeting": [
+                {
+                    "type": "wotr:field_of_view",
+                    "range": 4.0,
+                    "angle_degrees": 75.0,
+                    "entities":{
+                        "exclude_caster": true,
+                        "exclude_source": true
+                    }
+                }
+            ],
+            "effects": [
+                {
+                    "type": "wotr:damage",
+                    "amount": 10.0,
+                    "damage_attribute": "minecraft:attack_damage",
+                    "damage_type": "player_attack"
+                }
+            ]
+        },
+        {
+            "type": "wotr:swing_hand_animation"
+        }
+    ],
+    "icon": "minecraft:textures/item/iron_pickaxe.png",
+    "requirements": [
+        {
+            "type": "wotr:cooldown",
+            "ticks": 18
+        }
+    ]
+}

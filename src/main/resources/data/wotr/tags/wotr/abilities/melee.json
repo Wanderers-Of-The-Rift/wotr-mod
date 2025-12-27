@@ -1,0 +1,14 @@
+{
+    "values": [
+        "wotr:sword/left_swing",
+        "wotr:sword/right_swing",
+        "wotr:sword/overhead_swing",
+        "wotr:katana/left_swing",
+        "wotr:katana/right_swing",
+        "wotr:katana/initial_swing",
+        "wotr:dagger/left_swing",
+        "wotr:dagger/right_swing",
+        "wotr:dagger/stab",
+        "wotr:spear/main"
+    ]
+}
