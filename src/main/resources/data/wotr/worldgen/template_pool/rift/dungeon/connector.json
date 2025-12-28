@@ -1,0 +1,293 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+  "elements": [
+    {
+      "weight": 36,
+      "element": {
+        "location": "wotr:rift/room/chaos/221/twist-1-wout",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 36,
+      "element": {
+        "location": "wotr:rift/room/chaos/212/fountain-1-pat",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 12,
+      "element": {
+        "location": "wotr:rift/room/chaos/111/tavern-1-warren",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 12,
+      "element": {
+        "location": "wotr:rift/room/chaos/111/filler-1-pat",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 44,
+      "element": {
+        "location": "wotr:rift/room/chaos/131/spiraling_snake-1-warren",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 68,
+      "element": {
+        "location": "wotr:rift/room/chaos/232/stalactite-1-pat-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 44,
+      "element": {
+        "location": "wotr:rift/room/chaos/311/twisting_hallway-1-warren",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 76,
+      "element": {
+        "location": "wotr:rift/room/chaos/331/girder_and_barrel-1-warren",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 56,
+      "element": {
+        "location": "wotr:rift/room/chaos/321/fallingfoor-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 68,
+      "element": {
+        "location": "wotr:rift/room/chaos/322/tree-1-ada",
+        "processors": "wotr:room_12_to_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 48,
+      "element": {
+        "location": "wotr:rift/room/chaos/222/main_jump-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 56,
+      "element": {
+        "location": "wotr:rift/room/chaos/231/staircase-1-ada",
+        "processors": "wotr:room_12_to_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 56,
+      "element": {
+        "location": "wotr:rift/room/chaos/231/caveychaos-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 24,
+      "element": {
+        "location": "wotr:rift/room/chaos/211/lava_path-1-rev",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 12,
+      "element": {
+        "location": "wotr:rift/room/chaos/111/lavapassage-1-jj",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 24,
+      "element": {
+        "location": "wotr:rift/room/chaos/121/stair_spiral-1-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 36,
+      "element": {
+        "location": "wotr:rift/room/chaos/212/bakery-1-rsh",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 56,
+      "element": {
+        "location": "wotr:rift/room/chaos/312/water_cave-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 88,
+      "element": {
+        "location": "wotr:rift/room/chaos/332/city_stair-3-mal",
+        "processors": "wotr:room_multiple_ruins_and_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 24,
+      "element": {
+        "location": "wotr:rift/room/chaos/211/two_caves-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 24,
+      "element": {
+        "location": "wotr:rift/room/chaos/211/sneaky_caves-1-mal",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 48,
+      "element": {
+        "location": "wotr:rift/room/chaos/222/fish-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 44,
+      "element": {
+        "location": "wotr:rift/room/chaos/311/void_cracks-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 56,
+      "element": {
+        "location": "wotr:rift/room/chaos/321/plumbers_nightmare-1-wh4i3",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 12,
+      "element": {
+        "location": "wotr:rift/room/chaos/111/upside_down_passage-1-wh4i3",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 24,
+      "element": {
+        "location": "wotr:rift/room/chaos/121/tears-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 48,
+      "element": {
+        "location": "wotr:rift/room/chaos/222/thingy-1-kiara",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 36,
+      "element": {
+        "location": "wotr:rift/room/chaos/221/twolayercave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 12,
+      "element": {
+        "location": "wotr:rift/room/chaos/111/greebles-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 48,
+      "element": {
+        "location": "wotr:rift/room/chaos/222/chicken-2-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 56,
+      "element": {
+        "location": "wotr:rift/room/chaos/312/brickhall-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 24,
+      "element": {
+        "location": "wotr:rift/room/chaos/121/tallhallway-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
