@@ -1,11 +1,14 @@
 package com.wanderersoftherift.wotr.core.rift.objective.ongoing;
 
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+
+import java.util.List;
 
 public record NoOngoingObjective() implements OngoingObjective {
     public static final NoOngoingObjective INSTANCE = new NoOngoingObjective();
@@ -28,5 +31,10 @@ public record NoOngoingObjective() implements OngoingObjective {
 
     @Override
     public void registerUpdaters(RiftParameterData data, RiftData riftData, ServerLevel serverLevel) {
+    }
+
+    @Override
+    public List<Reward> getRewards() {
+        return List.of();
     }
 }

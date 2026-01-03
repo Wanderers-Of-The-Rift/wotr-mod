@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalState;
 import com.wanderersoftherift.wotr.core.goal.GoalTracker;
+import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
@@ -31,20 +32,23 @@ public class GoalBasedOngoingObjective implements OngoingObjective, GoalTracker 
     public static final MapCodec<GoalBasedOngoingObjective> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     Goal.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(GoalBasedOngoingObjective::getGoals),
+                    Reward.DIRECT_CODEC.listOf().fieldOf("rewards").forGetter(GoalBasedOngoingObjective::getRewards),
                     Codec.INT.listOf().fieldOf("goal_progress").forGetter(GoalBasedOngoingObjective::getGoalProgress)
             ).apply(instance, GoalBasedOngoingObjective::new));
 
     private final List<Goal> goals;
+    private final List<Reward> rewards;
     private final int[] goalProgress;
     private final ListMultimap<Class<? extends Goal>, ObjectiveGoalState<?>> goalLookup = ArrayListMultimap.create();
     private ServerLevel level;
 
-    public GoalBasedOngoingObjective(List<Goal> goals) {
-        this(goals, List.of());
+    public GoalBasedOngoingObjective(List<Goal> goals, List<Reward> rewards) {
+        this(goals, rewards, List.of());
     }
 
-    public GoalBasedOngoingObjective(List<Goal> goals, List<Integer> goalProgress) {
+    public GoalBasedOngoingObjective(List<Goal> goals, List<Reward> rewards, List<Integer> goalProgress) {
         this.goals = new ArrayList<>(goals);
+        this.rewards = new ArrayList<>(rewards);
         this.goalProgress = new int[goals.size()];
         for (int i = 0; i < goals.size() && i < goalProgress.size(); i++) {
             this.goalProgress[i] = goalProgress.get(i);
@@ -56,6 +60,11 @@ public class GoalBasedOngoingObjective implements OngoingObjective, GoalTracker 
 
     public List<Goal> getGoals() {
         return Collections.unmodifiableList(goals);
+    }
+
+    @Override
+    public List<Reward> getRewards() {
+        return Collections.unmodifiableList(rewards);
     }
 
     public IntList getGoalProgress() {

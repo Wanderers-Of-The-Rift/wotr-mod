@@ -22,5 +22,11 @@
         ]
       }
     }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table": "wotr:rift_objective/success"
+    }
   ]
 }
