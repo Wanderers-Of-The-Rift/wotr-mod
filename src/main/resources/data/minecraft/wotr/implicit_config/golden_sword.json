@@ -1,5 +1,5 @@
 {
   "modifiers": [
-    "wotr:ability_damage_flat"
+      "wotr:sword", "wotr:weapon_damage/golden_damage"
   ]
 }
