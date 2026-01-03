@@ -2,12 +2,14 @@ package com.wanderersoftherift.wotr.core.rift.objective;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static com.wanderersoftherift.wotr.init.WotrRegistries.ONGOING_OBJECTIVE_TYPES;
@@ -23,6 +25,8 @@ public interface OngoingObjective {
      * @return The codec for this OngoingObjective
      */
     MapCodec<? extends OngoingObjective> getCodec();
+
+    List<Reward> getRewards();
 
     /**
      * @param level The level which the objective is for
