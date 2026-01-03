@@ -409,7 +409,7 @@ public final class RiftLevelManager {
         riftData.setConfig(config);
 
         riftLevel.getData(WotrAttachments.OBJECTIVE_DATA)
-                .setObjective(config.objective().value().generate(riftLevel, config));
+                .setObjective(config.objective().value().generateObjective(riftLevel, config));
 
         return riftLevel;
     }
