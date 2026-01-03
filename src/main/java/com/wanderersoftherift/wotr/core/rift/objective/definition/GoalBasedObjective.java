@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
+import com.wanderersoftherift.wotr.core.quest.Reward;
+import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
@@ -29,12 +31,16 @@ import java.util.Optional;
  * @param goals
  * @param processors
  */
-public record GoalBasedObjective(List<GoalProvider> goals, List<JigsawListProcessor> processors)
-        implements ObjectiveType {
+public record GoalBasedObjective(List<GoalProvider> goals, List<RewardProvider> rewardProviders,
+        List<JigsawListProcessor> processors) implements ObjectiveType {
+
     public static final MapCodec<GoalBasedObjective> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             GoalProvider.DIRECT_CODEC.listOf(1, Integer.MAX_VALUE)
                     .fieldOf("goals")
                     .forGetter(GoalBasedObjective::goals),
+            RewardProvider.DIRECT_CODEC.listOf()
+                    .optionalFieldOf("rewards", List.of())
+                    .forGetter(GoalBasedObjective::rewardProviders),
             JigsawListProcessor.CODEC.listOf()
                     .optionalFieldOf("jigsaw_list_processors", List.of())
                     .forGetter(GoalBasedObjective::processors))
@@ -46,7 +52,7 @@ public record GoalBasedObjective(List<GoalProvider> goals, List<JigsawListProces
     }
 
     @Override
-    public OngoingObjective generate(ServerLevelAccessor level, RiftConfig config) {
+    public OngoingObjective generateObjective(ServerLevelAccessor level, RiftConfig config) {
         LootParams params = new LootParams.Builder(level.getLevel())
                 .withParameter(WotrLootContextParams.RIFT_TIER, config.tier())
                 .withParameter(WotrLootContextParams.RIFT_PARAMETERS,
@@ -57,6 +63,9 @@ public record GoalBasedObjective(List<GoalProvider> goals, List<JigsawListProces
         if (generatedGoals.isEmpty()) {
             return new NoOngoingObjective();
         }
-        return new GoalBasedOngoingObjective(generatedGoals);
+        List<Reward> rewards = rewardProviders.stream()
+                .flatMap(provider -> provider.generateReward(context).stream())
+                .toList();
+        return new GoalBasedOngoingObjective(generatedGoals, rewards);
     }
 }
