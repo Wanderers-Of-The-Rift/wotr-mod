@@ -1,0 +1,329 @@
+{
+  "fallback": "wotr:rift/room_terminator",
+  "elements": [
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/cave_pillar-1-wout",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/lakey_cave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/waterfall_cave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/open_cave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/cavey_cave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/caves-1-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/caves-2-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/caves-3-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/caves-4-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/caves-5-grimm",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/cave_mine-1-jj",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/tree-1-kammy",
+        "processors": "wotr:room_12_to_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/waterfall-1-kammy",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/cave-1-kammy",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/open_cave-1-kammy",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/waterfall_cave-1-kammy",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/forst-1-rachael",
+        "processors": "wotr:room_12_to_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/false_idols-1-wh4i3_kiara",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/stable/333/openopencave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/323/ruins-1-wout",
+        "processors": "wotr:room_multiple_ruins",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/333/winding_flower_tree-1-mal",
+        "processors": "wotr:room_12_to_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/313/turning_trails-1-warren",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/323/hub_hub_bub-4-mal",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/333/ruined_bridge-1-wh4i3",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/323/tallcave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/313/flatcave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/323/village-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/323/village-2-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/323/village-3-rachaelrose",
+        "processors": "wotr:room_12_to_wood",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 100,
+      "element": {
+        "location": "wotr:rift/room/unstable/333/hall-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 88,
+      "element": {
+        "location": "wotr:rift/room/chaos/323/stablechaoscave-1-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 76,
+      "element": {
+        "location": "wotr:rift/room/chaos/313/twocaves-2-jyu",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 108,
+      "element": {
+        "location": "wotr:rift/room/chaos/333/menger_sponge-1-wh4i3",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 88,
+      "element": {
+        "location": "wotr:rift/room/chaos/323/overlapping_hallways-1-warren",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 76,
+      "element": {
+        "location": "wotr:rift/room/chaos/313/thin_cave-1-rachaelrose",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 108,
+      "element": {
+        "location": "wotr:rift/room/chaos/333/winding_path-1-mal",
+        "processors": "wotr:room_theme_default",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
