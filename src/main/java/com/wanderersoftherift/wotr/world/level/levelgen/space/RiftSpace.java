@@ -11,14 +11,18 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * This describes volume allocated for room to generate in
- *
- * size units are in chunks
+ * This describes volume allocated for room to generate in size units are in chunk sections
  */
 public interface RiftSpace {
 
+    /**
+     * @return Origin (lower corner) in chunk sections
+     */
     Vec3i origin();
 
+    /**
+     * @return Size in chunk sections
+     */
     Vec3i size();
 
     List<RiftSpaceCorridor> corridors();
@@ -27,6 +31,11 @@ public interface RiftSpace {
 
     @Nullable RiftGeneratable template();
 
+    /**
+     * Applies the provided consumer to all sections composing the space
+     * 
+     * @param consumer
+     */
     default void forEachSection(Consumer<Vec3i> consumer) {
         for (int z = 0; z < size().getZ(); z++) {
             for (int y = 0; y < size().getY(); y++) {
@@ -37,15 +46,12 @@ public interface RiftSpace {
         }
     }
 
+    /**
+     * @return A list of all sections composing the space
+     */
     default List<Vec3i> sections() {
         List<Vec3i> result = new ArrayList<>();
-        for (int z = 0; z < size().getZ(); z++) {
-            for (int y = 0; y < size().getY(); y++) {
-                for (int x = 0; x < size().getX(); x++) {
-                    result.add(origin().offset(x, y, z));
-                }
-            }
-        }
+        forEachSection(result::add);
         return result;
     }
 }
