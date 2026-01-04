@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
@@ -38,6 +39,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * A rift layout that grows branches of rooms out from the origin
+ */
 public class DungeonLayout implements RiftLayout {
     private static final ResourceKey<RiftParameter> BRANCH_RATE_PARAM = ResourceKey
             .create(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("dungeon_rift/branch_rate"));
@@ -45,6 +49,8 @@ public class DungeonLayout implements RiftLayout {
             WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("dungeon_rift/main_room_interval"));
     private static final ResourceKey<RiftParameter> MAX_DEPTH_PARAM = ResourceKey
             .create(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS, WanderersOfTheRift.id("dungeon_rift/max_depth"));
+
+    private static final Vec3i MAX_ROOM_SIZE = new Vec3i(3, 3, 3);
 
     private final long seed;
     private final int maxDepth;
@@ -93,13 +99,13 @@ public class DungeonLayout implements RiftLayout {
     }
 
     private void generate(RandomSource random) {
-        RoomRiftSpace originRoom = portalRoomRandomizer.randomSpace(random, new Vec3i(3, 3, 3)).offset(-1, -1, -1);
+        RoomRiftSpace originRoom = portalRoomRandomizer.randomSpace(random, MAX_ROOM_SIZE).offset(-1, -1, -1);
         originRoom.forEachSection((pos) -> spaces.put(pos, originRoom));
 
         Deque<Branch> openBranches = new ArrayDeque<>();
         openBranches.add((new Branch(originRoom, 4, 0)));
 
-        int mainBranches = (int) Math.floor(branchRate);
+        int baseBranchCount = (int) Math.floor(branchRate);
         float additionalBranchChance = branchRate % 1;
 
         while (!openBranches.isEmpty()) {
@@ -113,23 +119,11 @@ public class DungeonLayout implements RiftLayout {
                 randomizer = connectingRoomRandomizer;
             }
             for (int i = 0; i < branch.count; i++) {
-                RoomRiftSpace unpositionedRoom = randomizer.randomSpace(random, new Vec3i(3, 3, 3));
-                List<RoomRiftSpace> possibleRoomPlacements = branch.origin.corridors()
-                        .stream()
-                        .filter(corridor -> !spaces.containsKey(corridor.getConnectingPos(branch.origin)))
-                        .flatMap(outCorridor -> {
-                            Direction connectingDir = outCorridor.direction().getOpposite();
-                            Vec3i connectingPos = outCorridor.getConnectingPos(branch.origin);
-                            return unpositionedRoom.corridors()
-                                    .stream()
-                                    .filter(inCorridor -> inCorridor.direction() == connectingDir)
-                                    .map(inCorridor -> unpositionedRoom
-                                            .offset(connectingPos.subtract(inCorridor.position())));
-                        })
-                        .filter(this::canPlace)
-                        .toList();
+                RoomRiftSpace unpositionedRoom = randomizer.randomSpace(random, MAX_ROOM_SIZE);
+                List<RoomRiftSpace> possibleRoomPlacements = findPossibleRoomPlacements(branch, unpositionedRoom);
                 if (possibleRoomPlacements.isEmpty()) {
                     // No way to connect room
+                    // TODO: Remove logging if satisfied this is rare enough
                     WanderersOfTheRift.LOGGER.info("Unable to find possible room location");
                     continue;
                 }
@@ -141,7 +135,7 @@ public class DungeonLayout implements RiftLayout {
 
                 int newBranches;
                 if (mainRoom) {
-                    newBranches = mainBranches + ((random.nextFloat() < additionalBranchChance) ? 1 : 0);
+                    newBranches = baseBranchCount + ((random.nextFloat() < additionalBranchChance) ? 1 : 0);
                 } else {
                     newBranches = 1;
                 }
@@ -153,6 +147,34 @@ public class DungeonLayout implements RiftLayout {
         generationCompletion.complete(Unit.INSTANCE);
     }
 
+    /**
+     * Finds possible placements a new room off of a branch, by linking opposing corridors and checking for available
+     * space
+     * 
+     * @param branch
+     * @param unpositionedRoom
+     * @return A list of possible placements for the new room off of the given branch
+     */
+    private @NotNull List<RoomRiftSpace> findPossibleRoomPlacements(Branch branch, RoomRiftSpace unpositionedRoom) {
+        return branch.origin.corridors()
+                .stream()
+                .filter(corridor -> !spaces.containsKey(corridor.getConnectingPos(branch.origin)))
+                .flatMap(outCorridor -> {
+                    Direction connectingDir = outCorridor.direction().getOpposite();
+                    Vec3i connectingPos = outCorridor.getConnectingPos(branch.origin);
+                    return unpositionedRoom.corridors()
+                            .stream()
+                            .filter(inCorridor -> inCorridor.direction() == connectingDir)
+                            .map(inCorridor -> unpositionedRoom.offset(connectingPos.subtract(inCorridor.position())));
+                })
+                .filter(this::canPlace)
+                .toList();
+    }
+
+    /**
+     * @param room
+     * @return Whether the chunk sections occupied by the room are currently empty
+     */
     private boolean canPlace(RoomRiftSpace room) {
         for (Vec3i loc : room.sections()) {
             if (spaces.containsKey(loc)) {
