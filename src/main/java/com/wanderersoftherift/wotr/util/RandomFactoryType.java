@@ -14,7 +14,6 @@ public enum RandomFactoryType {
         @Override
         RandomGeneratorFactory get() {
             return RandomGeneratorFactory.all()
-                    .filter((it) -> !it.isDeprecated())
                     .filter(f -> "Xoshiro256PlusPlus".equals(f.name()))
                     .findFirst()
                     .orElse(RandomGeneratorFactory.getDefault());
