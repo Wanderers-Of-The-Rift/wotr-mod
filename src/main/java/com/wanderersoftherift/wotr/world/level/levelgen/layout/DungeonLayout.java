@@ -62,10 +62,13 @@ public class DungeonLayout implements RiftLayout {
     private final RoomRandomizer portalRoomRandomizer;
     private final RoomRandomizer mainRoomRandomizer;
     private final RoomRandomizer connectingRoomRandomizer;
+    private final RiftShape shape;
 
-    public DungeonLayout(long seed, RoomRandomizer portalRoomRandomizer, RoomRandomizer mainRoomRandomizer,
-            RoomRandomizer connectingRoomRandomizer, int maxDepth, float branchRate, int mainRoomInterval) {
+    public DungeonLayout(long seed, RiftShape shape, RoomRandomizer portalRoomRandomizer,
+            RoomRandomizer mainRoomRandomizer, RoomRandomizer connectingRoomRandomizer, int maxDepth, float branchRate,
+            int mainRoomInterval) {
         this.seed = seed;
+        this.shape = shape;
         this.portalRoomRandomizer = portalRoomRandomizer;
         this.mainRoomRandomizer = mainRoomRandomizer;
         this.connectingRoomRandomizer = connectingRoomRandomizer;
@@ -176,8 +179,9 @@ public class DungeonLayout implements RiftLayout {
      * @return Whether the chunk sections occupied by the room are currently empty
      */
     private boolean canPlace(RoomRiftSpace room) {
+
         for (Vec3i loc : room.sections()) {
-            if (spaces.containsKey(loc)) {
+            if (!shape.isPositionValid(loc.getX(), loc.getY(), loc.getZ()) || spaces.containsKey(loc)) {
                 return false;
             }
         }
@@ -226,8 +230,8 @@ public class DungeonLayout implements RiftLayout {
                             .getParameter(MAIN_ROOM_INTERVAL_PARAM)
                             .get());
 
-            return new DungeonLayout(this.seed.orElse(riftConfig.seed()), portalRandomizer, mainRandomizer,
-                    connectorRandomizer, maxDepth, branchRate, mainRoomInterval);
+            return new DungeonLayout(this.seed.orElse(riftConfig.seed()), riftShape(riftConfig), portalRandomizer,
+                    mainRandomizer, connectorRandomizer, maxDepth, branchRate, mainRoomInterval);
         }
 
         @Override
