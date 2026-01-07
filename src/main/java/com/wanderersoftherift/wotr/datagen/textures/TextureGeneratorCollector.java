@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.datagen.textures;
 import com.google.common.hash.Hashing;
 import com.google.common.hash.HashingOutputStream;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import net.minecraft.Util;
@@ -77,10 +78,11 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
             ImageIO.write(out, "png", imageOutputStream);
 
             if (textureMeta != null) {
-                WanderersOfTheRift.LOGGER.info("{} has metadata", resourceLocation);
-                JsonElement json = AnimationMetadataSection.CODEC.encodeStart(JsonOps.INSTANCE, textureMeta)
+                JsonElement animation = AnimationMetadataSection.CODEC.encodeStart(JsonOps.INSTANCE, textureMeta)
                         .getOrThrow();
-                DataProvider.saveStable(output, json, pathProvider.file(transform.destinationPath, "mcmeta"));
+                JsonObject json = new JsonObject();
+                json.add("animation", animation);
+                DataProvider.saveStable(output, json, pathProvider.file(transform.destinationPath, "png.mcmeta"));
             }
 
             output.writeIfNeeded(pathOut, bytearrayoutputstream.toByteArray(), hashingoutputstream.hash());
