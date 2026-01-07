@@ -4,33 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
-import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
-import com.wanderersoftherift.wotr.init.WotrAnomalyTaskTypes;
-import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.init.WotrAttributes;
-import com.wanderersoftherift.wotr.init.WotrBlockEntities;
-import com.wanderersoftherift.wotr.init.WotrBlockPredicates;
-import com.wanderersoftherift.wotr.init.WotrBlocks;
-import com.wanderersoftherift.wotr.init.WotrCharacterMenuItems;
-import com.wanderersoftherift.wotr.init.WotrContainerTypes;
-import com.wanderersoftherift.wotr.init.WotrCreativeTabs;
-import com.wanderersoftherift.wotr.init.WotrDataComponentType;
-import com.wanderersoftherift.wotr.init.WotrEditTypes;
-import com.wanderersoftherift.wotr.init.WotrEntities;
-import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
-import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
-import com.wanderersoftherift.wotr.init.WotrItems;
-import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.init.WotrMobEffects;
-import com.wanderersoftherift.wotr.init.WotrMobInteractions;
-import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
-import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
-import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
-import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
-import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
-import com.wanderersoftherift.wotr.init.WotrRiftParameterTypes;
-import com.wanderersoftherift.wotr.init.WotrSoundEvents;
-import com.wanderersoftherift.wotr.init.WotrSpawnFunctionTypes;
+import com.wanderersoftherift.wotr.init.*;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityRequirementTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrAbilityTypes;
 import com.wanderersoftherift.wotr.init.ability.WotrEffects;
@@ -66,6 +40,8 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrThemeSources;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -82,6 +58,8 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
+
+import static com.wanderersoftherift.wotr.init.WotrFluids.fluidMap;
 
 @Mod(WanderersOfTheRift.MODID)
 public class WanderersOfTheRift {
@@ -102,6 +80,10 @@ public class WanderersOfTheRift {
         WotrMenuTypes.MENUS.register(modEventBus);
         WotrMobEffects.MOB_EFFECTS.register(modEventBus);
         WotrSoundEvents.SOUND_EVENTS.register(modEventBus);
+        WotrFluids.FLUID_TYPES.register(modEventBus);
+        WotrFluids.FLUIDS.register(modEventBus);
+        WotrFluids.BLOCKS.register(modEventBus);
+        WotrFluids.ITEMS.register(modEventBus);
 
         // Loot
         WotrLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
@@ -247,6 +229,11 @@ public class WanderersOfTheRift {
     private void registerWidgetLookups(final FMLClientSetupEvent event) {
         RewardDisplays.init();
         GoalDisplays.init();
+
+        fluidMap.values().forEach(fluid -> {
+            ItemBlockRenderTypes.setRenderLayer(fluid.FLUID_SOURCE.get(), RenderType.TRANSLUCENT);
+            ItemBlockRenderTypes.setRenderLayer(fluid.FLUID_FLOWING.get(), RenderType.TRANSLUCENT);
+        });
     }
 
 }
