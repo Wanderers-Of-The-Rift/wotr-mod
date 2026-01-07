@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
@@ -81,7 +82,8 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         var riftGenerationConfig = this.getRiftGenerationConfig();
 
-        this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+        this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(
+                RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 config.seed() + SEED_ADJUSTMENT_ROOM_GENERATOR);
         this.roomGenerator = riftGenerationConfig.roomGenerator().create(config);
     }
@@ -114,8 +116,10 @@ public class FastRiftGenerator extends ChunkGenerator {
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         var stepsOptional = getRiftGenerationConfig().postProcessingSteps();
         for (var step : stepsOptional) {
-            step.runPostProcessing(this, chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                    this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
+            step.runPostProcessing(this, chunk,
+                    RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
+                            this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
+                    level);
         }
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
