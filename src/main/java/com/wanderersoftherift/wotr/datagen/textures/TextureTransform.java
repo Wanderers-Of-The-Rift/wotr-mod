@@ -6,7 +6,7 @@ public abstract class TextureTransform {
     public ResourceLocation sourcePath;
     public ResourceLocation destinationPath;
 
-    TextureTransform(ResourceLocation sourcePath, ResourceLocation destinationPath) {
+    public TextureTransform(ResourceLocation sourcePath, ResourceLocation destinationPath) {
         this.sourcePath = sourcePath;
         this.destinationPath = destinationPath;
     }

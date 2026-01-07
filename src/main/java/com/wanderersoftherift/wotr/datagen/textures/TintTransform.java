@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.awt.Color;
 
 public class TintTransform extends TextureTransform {
-    Color tint;
+    private final Color tint;
 
     public TintTransform(ResourceLocation sourcePath, ResourceLocation destinationPath, int color) {
         super(sourcePath, destinationPath);

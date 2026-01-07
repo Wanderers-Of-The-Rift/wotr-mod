@@ -12,11 +12,11 @@ public class TextureGenerator {
         this.textureOutput = textureOutput;
     }
 
-    public void tintGenerator(ResourceLocation sourcePath, ResourceLocation destinationPath, int color) {
+    public void createTinted(ResourceLocation sourcePath, ResourceLocation destinationPath, int color) {
         this.textureOutput.accept(new TintTransform(sourcePath, destinationPath, color));
     }
 
-    public void tintGenerator(ResourceLocation sourcePath, ResourceLocation destinationPath, Color color) {
+    public void createTinted(ResourceLocation sourcePath, ResourceLocation destinationPath, Color color) {
         this.textureOutput.accept(new TintTransform(sourcePath, destinationPath, color));
     }
 }

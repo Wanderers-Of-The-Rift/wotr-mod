@@ -77,7 +77,7 @@ public class WotrTextureProvider implements DataProvider, IModelProviderExtensio
     public void registerTextures(TextureGenerator textureGenerator) {
         processorBlockColorMap.forEach((number, color) -> {
             // Make all processor blocks textures
-            Arrays.stream(TextureVariant.values()).toList().forEach((variant) -> {
+            Arrays.stream(TextureVariant.values()).forEach((variant) -> {
                 String sourcePath;
                 if (!Objects.equals(variant.getSuffix(), "")) {
                     sourcePath = "block/processor_block/processor_block_template_" + variant.getSuffix();
@@ -85,7 +85,7 @@ public class WotrTextureProvider implements DataProvider, IModelProviderExtensio
                     sourcePath = "block/processor_block/processor_block_template";
                 }
 
-                textureGenerator.tintGenerator(
+                textureGenerator.createTinted(
                         ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, sourcePath),
                         ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID,
                                 sourcePath.replace("template", String.valueOf(number)).replace("processor_block/", "")),
@@ -94,14 +94,15 @@ public class WotrTextureProvider implements DataProvider, IModelProviderExtensio
             });
 
             // Make all fluid block textures
-            textureGenerator.tintGenerator(
+            textureGenerator.createTinted(
                     ResourceLocation.withDefaultNamespace("block/water_flow"),
-                    ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "block/water_flow_" + number), color
+                    ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "block/fluid_" + number + "_flow"),
+                    color
             );
 
-            textureGenerator.tintGenerator(
+            textureGenerator.createTinted(
                     ResourceLocation.withDefaultNamespace("block/water_still"),
-                    ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "block/water_still_" + number),
+                    ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "block/fluid_" + number + "_still"),
                     color
             );
 
