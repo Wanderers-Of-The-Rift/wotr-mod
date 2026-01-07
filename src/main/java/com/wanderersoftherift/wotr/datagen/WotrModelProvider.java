@@ -30,13 +30,15 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.renderer.GeckolibSpecialRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +65,9 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.createTrivialBlock(WotrBlocks.DITTO_BLOCK.get(),
                 TexturedModel.CUBE.updateTemplate(template -> template.extend().renderType("cutout").build()));
         blockModels.createTrivialCube(WotrBlocks.SPRING_BLOCK.get());
-        blockModels.createTrivialCube(WotrBlocks.QUEST_HUB.get());
+        blockModels.createTrivialCube(WotrBlocks.NPC.get());
 
-        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly");
+        ResourceLocation baseAnomalyBaseModel = WanderersOfTheRift.id("block/anomaly_block");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.ANOMALY.get(),
                         Variant.variant().with(VariantProperties.MODEL, baseAnomalyBaseModel))
@@ -83,6 +85,9 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, abilityBenchModel))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
+        itemModels.itemModelOutput.accept(WotrBlocks.ABILITY_BENCH.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/ability_bench"), new GeckolibSpecialRenderer.Unbaked()));
+
         ResourceLocation keyForgeModel = WanderersOfTheRift.id("block/key_forge");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.KEY_FORGE.get(),
@@ -96,9 +101,13 @@ public class WotrModelProvider extends ModelProvider {
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
         ResourceLocation baseChestModel = WanderersOfTheRift.id("block/rift_chest");
-        blockModels.blockStateOutput.accept(MultiVariantGenerator
-                .multiVariant(WotrBlocks.RIFT_CHEST.get(),
-                        Variant.variant().with(VariantProperties.MODEL, baseChestModel))
+        ResourceLocation baseLeftChestModel = WanderersOfTheRift.id("block/rift_chest_left");
+        ResourceLocation baseRightChestModel = WanderersOfTheRift.id("block/rift_chest_right");
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(WotrBlocks.RIFT_CHEST.get())
+                .with(PropertyDispatch.property(ChestBlock.TYPE)
+                        .select(ChestType.SINGLE, Variant.variant().with(VariantProperties.MODEL, baseChestModel))
+                        .select(ChestType.LEFT, Variant.variant().with(VariantProperties.MODEL, baseLeftChestModel))
+                        .select(ChestType.RIGHT, Variant.variant().with(VariantProperties.MODEL, baseRightChestModel)))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
         ResourceLocation baseRiftSpawnerModel = WanderersOfTheRift.id("block/rift_spawner");
@@ -135,7 +144,7 @@ public class WotrModelProvider extends ModelProvider {
         itemModels.itemModelOutput.accept(WotrItems.ABILITY_HOLDER.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_ability_holder"),
                         new EmblemSpecialRenderer.Unbaked(WotrItems.BASE_ABILITY_HOLDER, new AbilityEmblemProvider(),
-                                0.5f, 0f, 0f, 0f)));
+                                1f, 0f, 0f, -0.033f)));
 
         itemModels.itemModelOutput.accept(WotrItems.CURRENCY_BAG.get(),
                 new SpecialModelWrapper.Unbaked(WanderersOfTheRift.id("item/base_currency_bag"),
@@ -145,6 +154,11 @@ public class WotrModelProvider extends ModelProvider {
         this.generateRunegemItem(WotrItems.RUNEGEM.get(), itemModels);
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels));
+
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            itemModels.generateFlatItem(essenceItem.get(), ModelTemplates.FLAT_ITEM);
+        });
 
         fluidMap.values().forEach(fluid -> createModelForFluid(blockModels, itemModels, fluid));
     }

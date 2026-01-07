@@ -1,0 +1,28 @@
+{
+  "type": "wotr:instant",
+  "icon": "minecraft:textures/mob_effect/invisibility.png",
+  "effects": [
+    {
+      "type": "wotr:status",
+      "status_effect": {
+        "id": "minecraft:invisibility",
+        "amplifier": 10,
+        "duration": 120
+      }
+    },
+    {
+      "type": "wotr:sound",
+      "sound": "minecraft:entity.wandering_trader.drink_potion"
+    }
+  ],
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 200
+    },
+    {
+      "type": "wotr:life",
+      "amount": 6
+    }
+  ]
+}

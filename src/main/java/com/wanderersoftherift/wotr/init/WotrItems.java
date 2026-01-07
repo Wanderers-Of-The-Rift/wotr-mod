@@ -6,6 +6,8 @@ import com.wanderersoftherift.wotr.item.LootBox;
 import com.wanderersoftherift.wotr.item.SkillThread;
 import com.wanderersoftherift.wotr.item.WotrArmor;
 import com.wanderersoftherift.wotr.item.ability.AbilityHolder;
+import com.wanderersoftherift.wotr.item.block.AbilityBenchItem;
+import com.wanderersoftherift.wotr.item.essence.EssenceType;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKey;
 import com.wanderersoftherift.wotr.item.runegem.Runegem;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -29,12 +31,20 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class WotrItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(WanderersOfTheRift.MODID);
     public static final List<DeferredItem<BlockItem>> BLOCK_ITEMS = new ArrayList<>();
     public static final List<DeferredItem<BlockItem>> DEV_BLOCK_ITEMS = new ArrayList<>();
+
+    public static final DeferredItem<AbilityBenchItem> ABILITY_BENCH = ITEMS.register("ability_bench",
+            (key) -> new AbilityBenchItem(WotrBlocks.ABILITY_BENCH.get(),
+                    new Item.Properties().setId(ResourceKey.create(Registries.ITEM, key)).useBlockDescriptionPrefix()));
 
     public static final DeferredItem<BuilderGlasses> BUILDER_GLASSES = ITEMS.register("builder_glasses",
             BuilderGlasses::new);
@@ -106,6 +116,20 @@ public class WotrItems {
 
     public static final DeferredItem<Item> COLOR_HELMET = ITEMS.register("color_helmet",
             () -> new WotrArmor(EquipmentSlot.HEAD, "color_helmet", 165));
+
+    // Essence items
+    public static final Map<EssenceType, DeferredItem<Item>> ESSENCE_ITEMS = Arrays.stream(EssenceType.values())
+            .collect(Collectors.toMap(
+                    essenceItem -> essenceItem,
+                    essenceItem -> ITEMS.register(essenceItem.name().toLowerCase(Locale.ROOT) + "_essence",
+                            registryName -> new Item(
+                                    new Item.Properties().setId(ResourceKey.create(
+                                            Registries.ITEM,
+                                            WanderersOfTheRift
+                                                    .id(essenceItem.name().toLowerCase(Locale.ROOT) + "_essence"))
+                                    ))
+                    ))
+            );
 
     private static @NotNull DeferredItem<Item> registerLootBox(String idString) {
         return ITEMS.register(idString, registryName -> new Item(new Item.Properties()

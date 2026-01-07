@@ -24,6 +24,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.RandomSequences;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -60,6 +61,7 @@ public final class RiftLevelManager {
     /**
      * @param id
      * @return Whether a level with the given id exists
+     * @throws NullPointerException if called from client when connected to a server
      */
     public static boolean levelExists(ResourceKey<Level> id) {
         return levelExists(id.location());
@@ -139,8 +141,10 @@ public final class RiftLevelManager {
      * @param player The player to remove from a rift level
      * @return Whether the player was successfully removed from a rift
      */
-    public static boolean returnPlayerFromRift(ServerPlayer player) {
-        ServerLevel playerLevel = player.serverLevel();
+    public static boolean returnPlayerFromRift(Player player) {
+        if (!(player.level() instanceof ServerLevel playerLevel)) {
+            return false;
+        }
 
         var riftEntryStates = player.getData(WotrAttachments.RIFT_ENTRY_STATES);
         if (riftEntryStates.isEmpty()) {
@@ -174,8 +178,12 @@ public final class RiftLevelManager {
         var respawnPos = riftEntryStata.previousPosition();
         player.setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, riftEntryStata);
         riftData.removePlayer(player);
-        player.teleportTo(respawnDimension, respawnPos.x(), respawnPos.y(), respawnPos.z(), Set.of(),
-                player.getRespawnAngle(), 0, true);
+        float respawnAngle = 0;
+        if (player instanceof ServerPlayer serverPlayer) {
+            respawnAngle = serverPlayer.getRespawnAngle();
+        }
+        player.teleportTo(respawnDimension, respawnPos.x(), respawnPos.y(), respawnPos.z(), Set.of(), respawnAngle, 0,
+                true);
         if (riftData.isRiftEmpty()) {
             RiftLevelManager.unregisterAndDeleteLevel(playerLevel);
         }
@@ -189,7 +197,7 @@ public final class RiftLevelManager {
             ResourceKey<Level> portalDimension,
             Vec3i portalPos,
             RiftConfig config,
-            ServerPlayer firstPlayer) {
+            Player firstPlayer) {
         var server = ServerLifecycleHooks.getCurrentServer();
         var overworld = server.overworld();
 
@@ -293,7 +301,6 @@ public final class RiftLevelManager {
         return stem;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     private static void unregisterAndDeleteLevel(ServerLevel level) {
         if (!isRift(level)) {
             return;
@@ -303,7 +310,12 @@ public final class RiftLevelManager {
             // multiplayer - delete after all players leave
             return;
         }
+        forceUnregisterAndDeleteLevel(level);
+    }
 
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    private static void forceUnregisterAndDeleteLevel(ServerLevel level) {
+        RiftData riftData = RiftData.get(level);
         NeoForge.EVENT_BUS.post(new RiftEvent.Closing(level, riftData.getConfig()));
         // unload the level
         level.save(null, true, false);
@@ -399,5 +411,15 @@ public final class RiftLevelManager {
         riftData.setObjective(config.objective().value().generate(riftLevel, config));
 
         return riftLevel;
+    }
+
+    public static void forceClose(ServerLevel level) {
+        if (!isRift(level)) {
+            return;
+        }
+        for (ServerPlayer player : List.copyOf(level.players())) {
+            returnPlayerFromRift(player);
+        }
+        forceUnregisterAndDeleteLevel(level);
     }
 }

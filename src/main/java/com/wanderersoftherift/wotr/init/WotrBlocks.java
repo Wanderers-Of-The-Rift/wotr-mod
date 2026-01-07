@@ -7,12 +7,12 @@ import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
 import com.wanderersoftherift.wotr.block.DittoBlock;
 import com.wanderersoftherift.wotr.block.KeyForgeBlock;
 import com.wanderersoftherift.wotr.block.MobTrapBlock;
+import com.wanderersoftherift.wotr.block.NpcBlock;
 import com.wanderersoftherift.wotr.block.PlayerTrapBlock;
-import com.wanderersoftherift.wotr.block.QuestHubBlock;
-import com.wanderersoftherift.wotr.block.RiftChestEntityBlock;
+import com.wanderersoftherift.wotr.block.RiftChestBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.RiftSpawnerBlock;
-import com.wanderersoftherift.wotr.block.RuneAnvilEntityBlock;
+import com.wanderersoftherift.wotr.block.RuneAnvilBlock;
 import com.wanderersoftherift.wotr.block.SpringBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
 import com.wanderersoftherift.wotr.item.RiftChestType;
@@ -27,7 +27,9 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.wanderersoftherift.wotr.block.BlockFamilyHelper.BUTTON_SUFFIX;
@@ -45,19 +47,20 @@ import static net.minecraft.world.level.block.state.properties.WoodType.OAK;
 
 public class WotrBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(WanderersOfTheRift.MODID);
-    public static final Map<RiftChestType, DeferredBlock<Block>> CHEST_TYPES = new HashMap<>();
+    public static final EnumMap<RiftChestType, DeferredBlock<? extends RiftChestBlock>> CHEST_TYPES = new EnumMap<>(
+            RiftChestType.class);
     public static final List<BlockFamilyHelper> BLOCK_FAMILY_HELPERS = new ArrayList<>();
 
-    public static final DeferredBlock<RuneAnvilEntityBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlock("rune_anvil",
-            () -> new RuneAnvilEntityBlock(
+    public static final DeferredBlock<RuneAnvilBlock> RUNE_ANVIL_ENTITY_BLOCK = registerBlockAndItem("rune_anvil",
+            () -> new RuneAnvilBlock(
                     BlockBehaviour.Properties.of().setId(blockId("rune_anvil")).strength(2.5F).sound(SoundType.METAL)));
 
-    public static final DeferredBlock<RiftChestEntityBlock> RIFT_CHEST = registerChestBlock("rift_chest",
-            () -> new RiftChestEntityBlock(WotrBlockEntities.RIFT_CHEST::get,
+    public static final DeferredBlock<RiftChestBlock> RIFT_CHEST = registerChestBlock("rift_chest",
+            () -> new RiftChestBlock(WotrBlockEntities.RIFT_CHEST::get,
                     BlockBehaviour.Properties.of().setId(blockId("rift_chest")).strength(1.5F).sound(SoundType.WOOD)),
             RiftChestType.WOODEN);
 
-    public static final DeferredBlock<RiftMobSpawnerBlock> RIFT_MOB_SPAWNER = registerBlock("rift_mob_spawner",
+    public static final DeferredBlock<RiftMobSpawnerBlock> RIFT_MOB_SPAWNER = registerBlockAndItem("rift_mob_spawner",
             () -> new RiftMobSpawnerBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("rift_mob_spawner"))
                     .mapColor(MapColor.STONE)
@@ -68,64 +71,66 @@ public class WotrBlocks {
                     .isViewBlocking((blockState, blockGetter, blockPos) -> false)
                     .noOcclusion()));
 
-    public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = registerBlock("rift_spawner",
+    public static final DeferredBlock<RiftSpawnerBlock> RIFT_SPAWNER = registerBlockAndItem("rift_spawner",
             () -> new RiftSpawnerBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("rift_spawner"))
                     .strength(2.0f)
                     .sound(SoundType.STONE)));
 
-    public static final DeferredBlock<KeyForgeBlock> KEY_FORGE = registerBlock("key_forge", () -> new KeyForgeBlock(
-            BlockBehaviour.Properties.of().setId(blockId("key_forge")).strength(2.0f).sound(SoundType.STONE)));
+    public static final DeferredBlock<KeyForgeBlock> KEY_FORGE = registerBlockAndItem("key_forge",
+            () -> new KeyForgeBlock(
+                    BlockBehaviour.Properties.of().setId(blockId("key_forge")).strength(2.0f).sound(SoundType.STONE)));
 
-    public static final DeferredBlock<AbilityBenchBlock> ABILITY_BENCH = registerBlock("ability_bench",
+    public static final DeferredBlock<AbilityBenchBlock> ABILITY_BENCH = BLOCKS.register("ability_bench",
             () -> new AbilityBenchBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("ability_bench"))
                     .strength(2.0f)
                     .sound(SoundType.WOOD)));
 
-    public static final DeferredBlock<QuestHubBlock> QUEST_HUB = registerBlock("quest_hub",
-            () -> new QuestHubBlock(BlockBehaviour.Properties.of().setId(blockId("quest_hub")).strength(2.0f)));
+    public static final DeferredBlock<NpcBlock> NPC = registerBlockAndItem("npc",
+            () -> new NpcBlock(BlockBehaviour.Properties.of().setId(blockId("npc")).strength(2.0f)));
 
-    public static final DeferredBlock<DittoBlock> DITTO_BLOCK = registerBlock("ditto_block",
+    public static final DeferredBlock<DittoBlock> DITTO_BLOCK = registerBlockAndItem("ditto_block",
             () -> new DittoBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("ditto_block"))
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<TrapBlock> TRAP_BLOCK = registerBlock("trap_block",
+    public static final DeferredBlock<TrapBlock> TRAP_BLOCK = registerBlockAndItem("trap_block",
             () -> new TrapBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("trap_block"))
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<PlayerTrapBlock> PLAYER_TRAP_BLOCK = registerBlock("player_trap_block",
+    public static final DeferredBlock<PlayerTrapBlock> PLAYER_TRAP_BLOCK = registerBlockAndItem("player_trap_block",
             () -> new PlayerTrapBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("player_trap_block"))
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<MobTrapBlock> MOB_TRAP_BLOCK = registerBlock("mob_trap_block",
+    public static final DeferredBlock<MobTrapBlock> MOB_TRAP_BLOCK = registerBlockAndItem("mob_trap_block",
             () -> new MobTrapBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("mob_trap_block"))
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    public static final DeferredBlock<SpringBlock> SPRING_BLOCK = registerBlock("spring_block",
+    public static final DeferredBlock<SpringBlock> SPRING_BLOCK = registerBlockAndItem("spring_block",
             () -> new SpringBlock(BlockBehaviour.Properties.of()
                     .setId(blockId("spring_block"))
                     .strength(1.5F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
-    public static final DeferredBlock<AnomalyBlock> ANOMALY = registerBlock("anomaly_block", () -> new AnomalyBlock(
-            BlockBehaviour.Properties.of()
-                    .setId(blockId("anomaly_block"))
-                    .sound(SoundType.STONE)
-                    .noOcclusion()
-                    .strength(-1f, 3_600_000f)));
+    public static final DeferredBlock<AnomalyBlock> ANOMALY = registerBlockAndItem("anomaly_block",
+            () -> new AnomalyBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(blockId("anomaly_block"))
+                            .sound(SoundType.STONE)
+                            .noOcclusion()
+                            .strength(-1f, 3_600_000f)));
 
     public static final BlockFamilyHelper PROCESSOR_BLOCK_1 = registerBuildingBlock("processor_block_1",
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_1"))));
@@ -159,54 +164,54 @@ public class WotrBlocks {
             () -> new Block(BlockBehaviour.Properties.of().setId(blockId("processor_block_15"))));
 
     private static BlockFamilyHelper registerBuildingBlock(String id, Supplier<Block> sup) {
-        DeferredBlock<Block> block = registerDevBlock(id, sup);
+        DeferredBlock<Block> block = registerDevBlockAndItem(id, sup);
         BlockFamilyHelper buildingBlockHelper = new BlockFamilyHelper.Builder().withBlockId(id)
                 .withBlock(block)
-                .withSlab(registerDevBlock(id + SLAB_SUFFIX, () -> new SlabBlock(
+                .withSlab(registerDevBlockAndItem(id + SLAB_SUFFIX, () -> new SlabBlock(
                         BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + SLAB_SUFFIX)))))
-                .withStairs(registerDevBlock(id + STAIRS_SUFFIX,
+                .withStairs(registerDevBlockAndItem(id + STAIRS_SUFFIX,
                         () -> new StairBlock(block.get().defaultBlockState(),
                                 BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + STAIRS_SUFFIX)))))
-                .withButton(registerDevBlock(id + BUTTON_SUFFIX,
+                .withButton(registerDevBlockAndItem(id + BUTTON_SUFFIX,
                         () -> new ButtonBlock(BlockSetType.STONE, 30,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .noCollission()
                                         .strength(0.5F)
                                         .setId(blockId(id + BUTTON_SUFFIX)))))
-                .withPressurePlate(registerDevBlock(id + PLATE_SUFFIX,
+                .withPressurePlate(registerDevBlockAndItem(id + PLATE_SUFFIX,
                         () -> new PressurePlateBlock(BlockSetType.STONE,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .noCollission()
                                         .strength(0.5F)
                                         .setId(blockId(id + PLATE_SUFFIX)))))
-                .withWall(registerDevBlock(id + WALL_SUFFIX, () -> new WallBlock(
+                .withWall(registerDevBlockAndItem(id + WALL_SUFFIX, () -> new WallBlock(
                         BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + WALL_SUFFIX)))))
-                .withFence(registerDevBlock(id + FENCE_SUFFIX, () -> new FenceBlock(
+                .withFence(registerDevBlockAndItem(id + FENCE_SUFFIX, () -> new FenceBlock(
                         BlockBehaviour.Properties.ofFullCopy(block.get()).setId(blockId(id + FENCE_SUFFIX)))))
-                .withFenceGate(registerDevBlock(id + FENCE_GATE_SUFFIX,
+                .withFenceGate(registerDevBlockAndItem(id + FENCE_GATE_SUFFIX,
                         () -> new FenceGateBlock(OAK,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .setId(blockId(id + FENCE_GATE_SUFFIX)))))
-                .withTrapdoor(registerDevBlock(id + TRAPDOOR_SUFFIX,
+                .withTrapdoor(registerDevBlockAndItem(id + TRAPDOOR_SUFFIX,
                         () -> new TrapDoorBlock(BlockSetType.STONE,
                                 BlockBehaviour.Properties.ofFullCopy(block.get())
                                         .setId(blockId(id + TRAPDOOR_SUFFIX)))))
                 .withPane(
-                        registerDevBlock(id + GLASS_BLOCK_SUFFIX,
+                        registerDevBlockAndItem(id + GLASS_BLOCK_SUFFIX,
                                 () -> new StainedGlassBlock(DyeColor.WHITE,
                                         BlockBehaviour.Properties.ofFullCopy(block.get())
                                                 .noOcclusion()
                                                 .lightLevel((state) -> 0)
                                                 .sound(SoundType.GLASS)
                                                 .setId(blockId(id + GLASS_BLOCK_SUFFIX)))),
-                        registerDevBlock(id + PANE_SUFFIX,
+                        registerDevBlockAndItem(id + PANE_SUFFIX,
                                 () -> new StainedGlassPaneBlock(DyeColor.WHITE,
                                         BlockBehaviour.Properties.ofFullCopy(block.get())
                                                 .noOcclusion()
                                                 .lightLevel((state) -> 0)
                                                 .sound(SoundType.GLASS)
                                                 .setId(blockId(id + PANE_SUFFIX)))))
-                .withDirectionalPillar(registerDevBlock(id + DIRECTIONAL_PILLAR_SUFFIX,
+                .withDirectionalPillar(registerDevBlockAndItem(id + DIRECTIONAL_PILLAR_SUFFIX,
                         () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(block.get())
                                 .setId(blockId(id + DIRECTIONAL_PILLAR_SUFFIX))) {
                         }))
@@ -215,22 +220,22 @@ public class WotrBlocks {
         return buildingBlockHelper;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerChestBlock(
+    private static <T extends RiftChestBlock> DeferredBlock<T> registerChestBlock(
             String riftChest,
             Supplier<T> supplier,
             RiftChestType riftChestType) {
-        DeferredBlock<T> register = registerBlock(riftChest, supplier);
-        CHEST_TYPES.put(riftChestType, (DeferredBlock<Block>) register);
+        DeferredBlock<T> register = registerBlockAndItem(riftChest, supplier);
+        CHEST_TYPES.put(riftChestType, register);
         return register;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerBlock(String key, Supplier<T> sup) {
+    private static <T extends Block> DeferredBlock<T> registerBlockAndItem(String key, Supplier<T> sup) {
         DeferredBlock<T> register = BLOCKS.register(key, sup);
         WotrItems.registerSimpleBlockItem(key, register);
         return register;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerDevBlock(String key, Supplier<T> sup) {
+    private static <T extends Block> DeferredBlock<T> registerDevBlockAndItem(String key, Supplier<T> sup) {
         DeferredBlock<T> register = BLOCKS.register(key, sup);
         WotrItems.registerSimpleDevBlockItem(key, register);
         return register;

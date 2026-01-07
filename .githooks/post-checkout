@@ -1,0 +1,14 @@
+#!/bin/sh
+
+fileCheckout=$3
+if [ "$fileCheckout" -eq 0 ]; then
+  exit 0
+fi
+
+if ! ./gradlew runData --quiet; then
+    echo "Failed to generate data."
+    exit 1
+fi
+
+echo "✓ Post-checkout update complete."
+

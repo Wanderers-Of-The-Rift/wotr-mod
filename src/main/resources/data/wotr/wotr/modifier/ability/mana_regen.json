@@ -1,0 +1,17 @@
+{
+  "style": {
+    "color": "#aa1111"
+  },
+  "tiers": [
+    [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:mana_regen",
+        "attribute": "wotr:mana_regen_rate",
+        "min_roll": 0.0,
+        "max_roll": 1.0,
+        "operation": "add_value"
+      }
+    ]
+  ]
+}

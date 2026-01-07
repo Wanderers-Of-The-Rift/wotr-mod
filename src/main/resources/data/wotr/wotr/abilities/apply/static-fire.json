@@ -1,0 +1,34 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": {
+        "type": "wotr:trigger_target"
+      },
+      "effects": [
+        {
+          "type": "wotr:targeting",
+          "targeting": {
+            "type": "wotr:source"
+          },
+          "effects": [
+            {
+              "type": "wotr:movement",
+              "velocity": [0, 0, -1.2],
+              "relative_frame": "source_from_target"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

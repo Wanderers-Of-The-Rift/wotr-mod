@@ -15,10 +15,12 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
-import com.wanderersoftherift.wotr.core.guild.GuildInfo;
+import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
+import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
+import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
 import com.wanderersoftherift.wotr.core.quest.Goal;
 import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.Quest;
@@ -29,7 +31,6 @@ import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RegisteredRiftParameter;
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
-import com.wanderersoftherift.wotr.entity.npc.MobInteraction;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
@@ -99,7 +100,7 @@ public class WotrRegistries {
     public static final Registry<DualCodec<? extends Reward>> REWARD_TYPES = new RegistryBuilder<>(Keys.REWARD_TYPES)
             .sync(true)
             .create();
-    public static final Registry<MapCodec<? extends MobInteraction>> MOB_INTERACTIONS = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends NpcInteraction>> MOB_INTERACTIONS = new RegistryBuilder<>(
             Keys.MOB_INTERACTIONS).create();
     public static final Registry<MapCodec<? extends RiftLayout.Factory>> LAYOUT_TYPES = new RegistryBuilder<>(
             Keys.LAYOUT_TYPES).create();
@@ -178,9 +179,10 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_parameter_type"));
         public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
-
-        public static final ResourceKey<Registry<GuildInfo>> GUILDS = ResourceKey
+        public static final ResourceKey<Registry<Guild>> GUILDS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<NpcIdentity>> NPCS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("npc"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
 
@@ -215,6 +217,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("reward_provider_type"));
         public static final ResourceKey<Registry<DualCodec<? extends Reward>>> REWARD_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("reward_type"));
+
         public static final ResourceKey<Registry<MapCodec<? extends RiftLayout.Factory>>> LAYOUT_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("worldgen/layout"));
         public static final ResourceKey<Registry<MapCodec<? extends LayeredRiftLayout.LayoutLayer.Factory>>> LAYOUT_LAYER_TYPES = ResourceKey
@@ -247,7 +250,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_resources"));
 
         // Mobs
-        public static final ResourceKey<Registry<MapCodec<? extends MobInteraction>>> MOB_INTERACTIONS = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends NpcInteraction>>> MOB_INTERACTIONS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
         public static final ResourceKey<Registry<MapCodec<? extends BattleTask.SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("spawn_function_type"));
@@ -318,12 +321,13 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MOB_VARIANTS, RiftMobVariantData.CODEC, RiftMobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.GUILDS, GuildInfo.DIRECT_CODEC, GuildInfo.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.GUILDS, Guild.DIRECT_CODEC, Guild.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
         event.dataPackRegistry(Keys.ANOMALY_TASK, AnomalyTask.DIRECT_CODEC, AnomalyTask.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ANOMALY_REWARD, AnomalyReward.DIRECT_CODEC, AnomalyReward.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.NPCS, NpcIdentity.DIRECT_CODEC, NpcIdentity.DIRECT_CODEC);
     }
 }

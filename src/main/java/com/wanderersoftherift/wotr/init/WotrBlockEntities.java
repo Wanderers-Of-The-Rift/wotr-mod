@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.blockentity.AbilityBenchBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.DittoBlockEntity;
+import com.wanderersoftherift.wotr.block.blockentity.NpcBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftChestBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RiftMobSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.block.blockentity.RuneAnvilBlockEntity;
@@ -37,13 +38,17 @@ public class WotrBlockEntities {
             "rift_mob_spawner",
             () -> new BlockEntityType<>(RiftMobSpawnerBlockEntity::new, WotrBlocks.RIFT_MOB_SPAWNER.get()));
 
-    public static final Supplier<BlockEntityType<AbilityBenchBlockEntity>> ABILITY_BENCH_BLOCK_ENTITY = BLOCK_ENTITIES
-            .register("ability_bench_block_entity",
-                    // The block entity type.
-                    () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
+    public static final Supplier<BlockEntityType<AbilityBenchBlockEntity>> ABILITY_BENCH = BLOCK_ENTITIES.register(
+            "ability_bench_block_entity",
+            // The block entity type.
+            () -> new BlockEntityType<>(AbilityBenchBlockEntity::new, WotrBlocks.ABILITY_BENCH.get()));
     public static final Supplier<BlockEntityType<AnomalyBlockEntity>> ANOMALY_BLOCK_ENTITY = BLOCK_ENTITIES.register(
             "anomaly_block_entity",
             // The block entity type.
             () -> new BlockEntityType<>(AnomalyBlockEntity::new, WotrBlocks.ANOMALY.get()));
+
+    public static final Supplier<BlockEntityType<NpcBlockEntity>> NPC_BLOCK_ENTITY = BLOCK_ENTITIES.register(
+            "npc_block_entity", () -> new BlockEntityType<>(NpcBlockEntity::new, WotrBlocks.NPC.get())
+    );
 
 }

@@ -1,0 +1,32 @@
+name: On Comment Created
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  send_api_request:
+    if: ${{ !github.event.issue.pull_request && github.event.comment.user.login != 'wotr-bot'}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v4.0.3
+        with:
+          # Your Tailscale OAuth Client ID.
+          oauth-client-id: ${{ secrets.TS_OAUTH_ID }}# optional
+          # Your Tailscale OAuth Client Secret.
+          oauth-secret: ${{ secrets.TS_OAUTH_CLIENT_SECRET }} # optional
+          # Comma separated list of Tags to be applied to nodes. The OAuth client must have permission to apply these tags.
+          tags: tag:gh-runner # optional
+      - name: HTTP Request Action
+        uses: fjogeleit/http-request-action@v1.16.5
+        with:
+          # Request URL
+          url: 'http://attack8-pc-2.elf-tyrannosaurus.ts.net:8000/comment_on_issue'
+          # Request Method
+          method: 'POST'
+          # Request Body as JSON String
+          data: '{"issue": "${{ github.event.issue.number }}", "token": "${{ secrets.GH_TOKEN_SECRET }}", "comment": "${{ github.event.comment.id }}", "user": "${{ github.event.comment.user.login }}", "repo": "${{ github.event.issue.repository_url }}"}'
+          # Custom HTTP Headers
+          customHeaders: '{"Content-Type": "application/json", "Accept": "application/json"}'
+          ignoreSsl: true

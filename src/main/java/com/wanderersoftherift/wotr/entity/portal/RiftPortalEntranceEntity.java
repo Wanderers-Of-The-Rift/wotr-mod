@@ -5,8 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -44,7 +44,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
 
     @Override
     public void tick() {
-        if (entrance().generated() && !levelExists(entrance().target())) {
+        if (!level().isClientSide && entrance().generated() && !levelExists(entrance().target())) {
             this.remove(RemovalReason.DISCARDED);
             return;
         }
@@ -52,7 +52,7 @@ public class RiftPortalEntranceEntity extends RiftPortalEntity {
     }
 
     @Override
-    protected void onPlayerInPortal(ServerPlayer player, ServerLevel level) {
+    protected void onPlayerInPortal(Player player, ServerLevel level) {
         var entrance = entrance();
         var generated = entrance.teleportPlayer(player, level, blockPosition());
         if (generated != entrance.generated()) {

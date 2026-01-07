@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -38,7 +38,7 @@ public record ItemReward(ItemStack item) implements Reward {
     }
 
     @Override
-    public void apply(ServerPlayer player) {
+    public void apply(Player player) {
     }
 
     @Override

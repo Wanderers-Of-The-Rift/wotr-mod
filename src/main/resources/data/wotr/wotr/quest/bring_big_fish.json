@@ -1,0 +1,35 @@
+{
+  "limit": 1,
+  "goals": [
+    {
+      "type": "wotr:give_item",
+      "item" : "#c:foods/raw_fish",
+      "count": 10
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 10,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:bring_big_fish",
+        "min": 0,
+        "max": 0
+      }
+    ]
+  }
+}

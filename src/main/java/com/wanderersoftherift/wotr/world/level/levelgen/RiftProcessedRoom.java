@@ -7,6 +7,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
@@ -151,6 +152,37 @@ public class RiftProcessedRoom {
         }
     }
 
+    public List<List<BlockEntity>> getBlockEntities() {
+        List<List<BlockEntity>> result = new ArrayList<>();
+        for (AtomicReference<RiftProcessedChunk> chunk : chunkArray) {
+            if (chunk == null) {
+                continue;
+            }
+            RiftProcessedChunk processedChunk = chunk.get();
+            if (processedChunk != null) {
+                result.add(processedChunk.blockEntities);
+            }
+        }
+        return result;
+    }
+
+    public void setBlockEntity(BlockEntity entity) {
+        var entityPos = entity.getBlockPos();
+        var chunkX = entityPos.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = entityPos.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = entityPos.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        chunk.setBlockEntity(entity);
+    }
+
+    public void removeBlockEntity(BlockPos pos) {
+        var chunkX = pos.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = pos.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = pos.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        chunk.removeBlockEntity(pos);
+    }
+
     public BlockState getBlock(int x, int y, int z) {
         var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
@@ -217,4 +249,5 @@ public class RiftProcessedRoom {
         }
         return result;
     }
+
 }

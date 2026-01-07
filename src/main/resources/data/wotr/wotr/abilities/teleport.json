@@ -1,0 +1,81 @@
+{
+  "type": "wotr:persistent",
+  "icon": "minecraft:textures/item/ender_pearl.png",
+  "channelled": true,
+  "requirements": [
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 10
+    }
+  ],
+  "ongoing_requirements": [
+    {
+      "type": "wotr:own_attached_effect",
+      "id": "wotr:teleport_channel"
+    }
+  ],
+  "on_deactivation_costs": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 100
+    }
+  ],
+  "activation_effects": [
+    {
+      "type": "wotr:attach",
+      "id": "wotr:teleport_channel",
+      "effects": [
+        {
+          "type": "wotr:status",
+          "status_effect": {
+            "id": "minecraft:slowness",
+            "amplifier": 4,
+            "duration": 5
+          }
+        }
+      ]
+    },
+    {
+      "type": "wotr:attach",
+      "id": "wotr:teleport_tp",
+      "trigger": {
+        "initial_delay": 50
+      },
+      "effects": [
+        {
+          "type": "wotr:targeting",
+          "targeting": [
+            {
+              "type": "wotr:raycast",
+              "range": 30
+            }
+          ],
+          "effects": [
+            {
+              "type": "wotr:teleport",
+              "tele_info": {
+                "teleport_target": "user",
+                "position": [0, 1, 0]
+              }
+            }
+          ]
+        },
+        {
+          "type": "wotr:detach_own",
+          "id": "wotr:teleport_channel"
+        }
+      ]
+    }
+  ],
+  "on_deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "id": "wotr:teleport_channel"
+    },
+    {
+      "type": "wotr:detach_own",
+      "id": "wotr:teleport_tp"
+    }
+  ]
+}

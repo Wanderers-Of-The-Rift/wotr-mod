@@ -93,12 +93,19 @@ public class FastWeightedList<T> {
     }
 
     public T random(RandomSource rng) {
+        if (weights.isEmpty()) {
+            return null;
+        }
         if (weights.size() == 1) {
             return values.getFirst();
         }
         return forRoll(rng.nextFloat());
     }
 
+    /**
+     * @param roll A random number between 0 and 1
+     * @return
+     */
     public T forRoll(float roll) {
         var selected = roll * totalWeight;
         for (int i = 0; i < weights.size(); i++) {

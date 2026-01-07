@@ -12,6 +12,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 
@@ -33,14 +34,17 @@ public class StatSnapshot {
         customStats.defaultReturnValue(0);
     }
 
-    public StatSnapshot(ServerPlayer player) {
+    public StatSnapshot(Player player) {
         customStats = new Object2IntArrayMap<>();
         customStats.defaultReturnValue(0);
         Registry<ResourceLocation> customStatRegistry = player.getServer()
                 .registryAccess()
                 .lookupOrThrow(Registries.CUSTOM_STAT);
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
         customStatRegistry.forEach(stat -> {
-            int value = player.getStats().getValue(Stats.CUSTOM, stat);
+            int value = serverPlayer.getStats().getValue(Stats.CUSTOM, stat);
             if (value != 0) {
                 customStats.put(customStatRegistry.wrapAsHolder(stat), value);
             }

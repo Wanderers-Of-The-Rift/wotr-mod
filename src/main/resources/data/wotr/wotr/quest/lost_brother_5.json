@@ -1,0 +1,36 @@
+{
+  "goals": [
+    {
+      "type": "wotr:give_item",
+      "item" : "minecraft:milk_bucket",
+      "count": 2
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:rift/socketed_vanilla_armor"
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 100
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:lost_brother_4",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:lost_brother_5",
+        "min": 0,
+        "max": 0
+      }
+    ]
+  }
+}

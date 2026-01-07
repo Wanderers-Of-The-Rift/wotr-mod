@@ -13,3 +13,5 @@ gradlew         text eol=lf
 *.jar           binary
 *.png           binary
 *.ogg           binary
+
+/.gitignore     text diff

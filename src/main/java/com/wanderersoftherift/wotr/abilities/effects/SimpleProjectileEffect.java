@@ -104,9 +104,10 @@ public record SimpleProjectileEffect(List<AbilityEffect> effects, SimpleProjecti
     public boolean isRelevant(ModifierEffect modifierEffect) {
         if (modifierEffect instanceof AttributeModifierEffect attributeModifier) {
             Holder<Attribute> attribute = attributeModifier.attribute();
-            return WotrAttributes.PROJECTILE_SPREAD.equals(attribute)
-                    || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
-                    || WotrAttributes.PROJECTILE_SPEED.equals(attribute);
+            if (WotrAttributes.PROJECTILE_SPREAD.equals(attribute) || WotrAttributes.PROJECTILE_COUNT.equals(attribute)
+                    || WotrAttributes.PROJECTILE_SPEED.equals(attribute)) {
+                return true;
+            }
         }
         for (AbilityEffect effect : effects) {
             if (effect.isRelevant(modifierEffect)) {

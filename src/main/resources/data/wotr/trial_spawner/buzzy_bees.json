@@ -11,7 +11,7 @@
     {
       "data": {
         "entity": {
-          "id": "minecraft:bee",
+          "id": "wotr:drone_bee",
           "Passengers": [
             {
               "id": "wotr:rift_zombie",
@@ -21,6 +21,14 @@
         }
       },
       "weight": 2
+    },
+    {
+      "data": {
+        "entity": {
+          "id": "wotr:drone_bee"
+        }
+      },
+      "weight": 5
     },
     {
       "data": {

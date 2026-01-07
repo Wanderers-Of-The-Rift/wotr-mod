@@ -1,0 +1,15 @@
+{
+  "type": "wotr:instant",
+  "icon": "wotr:textures/ability/icon/ice_dart.png",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:status",
+      "status_effect": {
+        "id": "minecraft:glowing",
+        "amplifier": 102,
+        "duration": 5
+      }
+    }
+  ]
+}

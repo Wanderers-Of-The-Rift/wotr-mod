@@ -1,0 +1,18 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:damage",
+      "amount": 2.0,
+      "damage_type": "wotr:thorns"
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

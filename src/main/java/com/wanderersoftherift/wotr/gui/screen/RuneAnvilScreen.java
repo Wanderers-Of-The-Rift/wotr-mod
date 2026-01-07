@@ -8,26 +8,36 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import com.wanderersoftherift.wotr.item.runegem.RunegemTier;
-import com.wanderersoftherift.wotr.mixinextension.WotrGuiGraphics;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.ClientHooks;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2i;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
             .id("textures/gui/container/rune_anvil/background.png");
     private static final ResourceLocation SLOTS = WanderersOfTheRift.id("textures/gui/container/rune_anvil/slots.png");
+
+    private static final int TEXTURE_WIDTH = 256;
+    private static final int TEXTURE_HEIGHT = 256;
+    private static final int TOOLTIP_BORDER = 8;
+    private static final int TOOLTIP_WIDTH_HINT = 230;
+
+    // If the screen width is too small, remove a preview window
+    private boolean fullDisplay = false;
 
     // TODO: Make sure blit is passed correct texture size for all calls.
     public RuneAnvilScreen(RuneAnvilMenu menu, Inventory playerInventory, Component title) {
@@ -39,6 +49,11 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
     @Override
     protected void init() {
         super.init();
+
+        fullDisplay = minecraft.screen.width > imageWidth + 2 * TOOLTIP_WIDTH_HINT + 4 * TOOLTIP_BORDER;
+        if (!fullDisplay) {
+            leftPos = Math.max(16, minecraft.screen.width - imageWidth - TOOLTIP_WIDTH_HINT - 2 * TOOLTIP_BORDER);
+        }
 
         Button applyButtonWidget = Button
                 .builder(Component.translatable("container.wotr.rune_anvil.apply"), (button) -> this.menu.apply())
@@ -55,27 +70,73 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
 
         ItemStack itemstack = this.menu.getGearSlotItem();
         if (!itemstack.isEmpty()) {
-            List<Component> tooltip = this.getTooltipFromContainerItem(itemstack);
+            List<ClientTooltipComponent> tooltipLines = ClientHooks.gatherTooltipComponents(itemstack,
+                    getTooltipFromContainerItem(itemstack), itemstack.getTooltipImage(), 0, TOOLTIP_WIDTH_HINT, height,
+                    font);
+            Vector2i size = getTooltipsSize(tooltipLines);
 
-            int tooltipWidth = tooltip.stream().map(this.font::width).max(Comparator.naturalOrder()).orElse(0) + 8;
-            int height = tooltip.size() * this.font.lineHeight + (tooltip.size() - 1) + 8;
-
-            int leftX = this.leftPos - tooltipWidth - 25;
-            int rightX = leftX + this.imageWidth + tooltipWidth + 25;
-            int y = this.topPos + this.imageHeight / 2 - height / 2;
-            ((WotrGuiGraphics) guiGraphics).wotr$RenderTooltipLeft(this.font, tooltip, itemstack.getTooltipImage(),
-                    itemstack, this.leftPos, y, itemstack.get(DataComponents.TOOLTIP_STYLE)
-            );
-            // TODO: right tooltip shifting to the left on smaller screens for bigger tooltips.
-            guiGraphics.renderTooltip(this.font, tooltip, itemstack.getTooltipImage(), itemstack, rightX, y,
-                    itemstack.get(DataComponents.TOOLTIP_STYLE)); // TODO: show the edited item tooltip
+//            if (false) {
+//                renderItemPane(guiGraphics, tooltipLines, this.leftPos - size.x - TOOLTIP_BORDER,
+//                        topPos + 2 * TOOLTIP_BORDER, size, partialTick);
+//            }
+            renderItemPane(guiGraphics, tooltipLines, this.leftPos + imageWidth + TOOLTIP_BORDER,
+                    topPos + 2 * TOOLTIP_BORDER, size, partialTick);
         }
+    }
+
+    private Vector2i getTooltipsSize(List<ClientTooltipComponent> tooltips) {
+        Vector2i result = new Vector2i();
+        for (var line : tooltips) {
+            result.set(Math.max(line.getWidth(font), result.x), result.y + line.getHeight(font));
+        }
+        return result;
+    }
+
+    protected void renderItemPane(
+            @NotNull GuiGraphics guiGraphics,
+            List<ClientTooltipComponent> tooltips,
+            int posX,
+            int posY,
+            Vector2i size,
+            float partialTick) {
+        if (tooltips.isEmpty()) {
+            return;
+        }
+        int renderWidth = size.x;
+        int renderHeight = size.y;
+        if (tooltips.size() == 1) {
+            renderHeight -= 2;
+        }
+
+        guiGraphics.pose().pushPose();
+        TooltipRenderUtil.renderTooltipBackground(guiGraphics, posX, posY, renderWidth, renderHeight, 400, null);
+        guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
+
+        int currentY = posY;
+        for (int index = 0; index < tooltips.size(); index++) {
+            ClientTooltipComponent tooltip = tooltips.get(index);
+            final int drawY = currentY;
+            guiGraphics.drawSpecial(buffer -> {
+                tooltip.renderText(font, posX, drawY, guiGraphics.pose().last().pose(),
+                        (MultiBufferSource.BufferSource) buffer);
+            });
+            currentY += tooltip.getHeight(font) + (index == 0 ? 2 : 0);
+        }
+
+        currentY = posY;
+        for (int index = 0; index < tooltips.size(); index++) {
+            ClientTooltipComponent tooltip = tooltips.get(index);
+            tooltip.renderImage(font, posX, currentY, renderWidth, renderHeight, guiGraphics);
+            currentY += tooltip.getHeight(font) + (index == 0 ? 2 : 0);
+        }
+
+        guiGraphics.pose().popPose();
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth,
-                this.imageHeight, 256, 256);
+                this.imageHeight, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override
@@ -88,9 +149,10 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
             }
             RunegemShape shape = runegemSlot.getShape();
 
-            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape, false), 0, 18, 18, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, getSlotOffset(shape, false), 0, 18, 18,
+                    TEXTURE_WIDTH, TEXTURE_HEIGHT);
         } else {
-            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 0, 0, 18, 18, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, SLOTS, x, y, 0, 0, 18, 18, TEXTURE_WIDTH, TEXTURE_HEIGHT);
         }
 
         if (!slot.hasItem() && slot instanceof RunegemSlot runegemSlot && runegemSlot.getLockedSocket() != null
@@ -101,8 +163,8 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
                     new RunegemData(Component.empty(), shape, List.of(), RunegemTier.RAW));
 
             super.renderSlotContents(guiGraphics, stack, slot, null);
-            guiGraphics.blit(RenderType::guiTexturedOverlay, SLOTS, x, y, getSlotOffset(shape, true), 18, 18, 18, 256,
-                    256);
+            guiGraphics.blit(RenderType::guiTexturedOverlay, SLOTS, x, y, getSlotOffset(shape, true), 18, 18, 18,
+                    TEXTURE_WIDTH, TEXTURE_HEIGHT);
         } else {
             super.renderSlot(guiGraphics, slot);
         }
@@ -113,8 +175,8 @@ public class RuneAnvilScreen extends AbstractContainerScreen<RuneAnvilMenu> {
         }
 
         RunegemShape shape = runegemSlot.getShape();
-        guiGraphics.blit(RenderType::guiTexturedOverlay, SLOTS, x, y, getSlotOffset(shape, false), 18, 18, 18, 256,
-                256);
+        guiGraphics.blit(RenderType::guiTexturedOverlay, SLOTS, x, y, getSlotOffset(shape, false), 18, 18, 18,
+                TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     private int getSlotOffset(RunegemShape shape, boolean darkOffset) {

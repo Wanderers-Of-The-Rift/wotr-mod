@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface for data components that provide modifiers
@@ -18,7 +18,7 @@ public interface ModifierProvider {
 
     void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action);
 
-    Collection<Either<FormattedText, TooltipComponent>> tooltips(ItemStack stack);
+    List<Either<FormattedText, TooltipComponent>> tooltips(int maxWidth);
 
     @FunctionalInterface
     interface Action {

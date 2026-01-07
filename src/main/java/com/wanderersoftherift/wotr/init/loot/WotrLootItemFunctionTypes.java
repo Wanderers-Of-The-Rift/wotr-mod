@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.loot.functions.AbilityHolderFunction;
 import com.wanderersoftherift.wotr.loot.functions.GearSocketsFunction;
 import com.wanderersoftherift.wotr.loot.functions.RollGearFunction;
 import com.wanderersoftherift.wotr.loot.functions.RunegemsFunction;
+import com.wanderersoftherift.wotr.loot.functions.SetPriceFunction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -22,4 +23,8 @@ public class WotrLootItemFunctionTypes {
             .register("runegems", () -> new LootItemFunctionType<>(RunegemsFunction.CODEC));
     public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<AbilityHolderFunction>> ABILITY_HOLDER_FUNCTION = LOOT_ITEM_FUNCTION_TYPES
             .register("ability_holder", () -> new LootItemFunctionType<>(AbilityHolderFunction.CODEC));
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SetPriceFunction>> SET_PRICE_FUNCTION = LOOT_ITEM_FUNCTION_TYPES
+            .register(
+                    "set_price", () -> new LootItemFunctionType<>(SetPriceFunction.CODEC)
+            );
 }

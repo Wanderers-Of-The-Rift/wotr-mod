@@ -1,0 +1,37 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "completion_level": "attempt",
+      "count" : 1,
+      "tier" : 2
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:rift/geode_runegem"
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_1",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 0
+      }
+    ]
+  }
+}

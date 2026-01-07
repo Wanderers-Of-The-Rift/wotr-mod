@@ -39,7 +39,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.RUNE_ANVIL_ENTITY_BLOCK, "Rune Anvil");
         addBlock(WotrBlocks.RIFT_CHEST, "Rift Chest");
         addBlock(WotrBlocks.RIFT_SPAWNER, "Rift Spawner");
-        addBlock(WotrBlocks.QUEST_HUB, "Quest Hub");
+        addBlock(WotrBlocks.NPC, "NPC Block");
         addBlock(WotrBlocks.KEY_FORGE, "Key Forge");
         addBlock(WotrBlocks.DITTO_BLOCK, "Ditto Block");
         addBlock(WotrBlocks.SPRING_BLOCK, "Spring Block");
@@ -48,6 +48,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         addBlock(WotrBlocks.MOB_TRAP_BLOCK, "Mob Trap Block");
         addBlock(WotrBlocks.ABILITY_BENCH, "Ability Bench");
         addBlock(WotrBlocks.RIFT_MOB_SPAWNER, "Rift Mob Spawner");
+        addBlock(WotrBlocks.ANOMALY, "Anomaly");
 
         // Adds an item translation.
         addItem(WotrItems.BUILDER_GLASSES, "Builder Glasses");
@@ -70,11 +71,17 @@ public class WotrLanguageProvider extends LanguageProvider {
         addItem(WotrItems.NOIR_HELMET, "Fedora");
         addItem(WotrItems.COLOR_HELMET, "Clown");
 
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            addItem(essenceItem, essenceType.name + " Essence");
+        });
+
         addEntityType(WotrEntities.RIFT_ENTRANCE, "Rift Entrance");
         addEntityType(WotrEntities.RIFT_EXIT, "Rift Egress");
         addEntityType(WotrEntities.SIMPLE_EFFECT_PROJECTILE, "Projectile");
         addEntityType(WotrEntities.RIFT_ZOMBIE, "Rift Zombie");
         addEntityType(WotrEntities.RIFT_SKELETON, "Rift Skeleton");
+        addEntityType(WotrEntities.DRONE_BEE, "Drone");
 
         addEssenceType("void", "Void");
         addEssenceType("flow", "Flow");
@@ -145,6 +152,7 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");
+        add(WanderersOfTheRift.translationId("itemGroup", "npc"), "NPCs");
         add(WanderersOfTheRift.translationId("itemGroup", "ability"), "Abilities");
         add(WanderersOfTheRift.translationId("itemGroup", "runegem"), "Runegems");
         add(WanderersOfTheRift.translationId("itemGroup", "dev"), "Builders of the Rift");
@@ -164,12 +172,15 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.rewards"), "Reward");
         add(WanderersOfTheRift.translationId("container", "quest.abandon"), "Abandon");
         add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
+        add(WanderersOfTheRift.translationId("container", "quest.hand_in_to"), "Hand in to: %s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
         add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.accept"), "Accept");
         add(WanderersOfTheRift.translationId("container", "quests"), "Quests");
         add(WanderersOfTheRift.translationId("container", "quest_complete"), "Quest Complete!");
+        add(WanderersOfTheRift.translationId("container", "guild_rank_up"), "Guild Rank Up!");
+        add(WanderersOfTheRift.translationId("container", "guilds.claim_reward"), "Claim rank up reward");
 
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.upgrade", "Upgrades");
         add("container." + WanderersOfTheRift.MODID + ".ability_bench.unlock", "Unlock next choice");
@@ -179,6 +190,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "guilds"), "Guilds");
         add(WanderersOfTheRift.translationId("container", "guild.rank"), "Rank: %s");
         add(WanderersOfTheRift.translationId("container", "guild.reputation"), "Reputation: %s/%s");
+        add(WanderersOfTheRift.translationId("container", "guild.reputation.max"), "Reputation: MAX");
 
         add(WanderersOfTheRift.translationId("container", "wallet"), "Wallet");
 
@@ -192,6 +204,7 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         add(WanderersOfTheRift.translationId("screen", "configure_hud"), "Configure HUD");
 
+        add(WanderersOfTheRift.translationId("command", "total"), "Total: %s");
         add("command." + WanderersOfTheRift.MODID + ".dev_world_set",
                 "Dev World settings applied:\n - %1$s: Disabled\n - %2$s: Disabled\n - %3$s: Disabled\n - %4$s: Disabled\n - %5$s: Disabled\n - %6$s: Disabled");
         add("command." + WanderersOfTheRift.MODID + ".invalid_item", "Held item is empty!");
@@ -232,6 +245,41 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("command", "show_attribute"), "%s: %s");
         add(WanderersOfTheRift.translationId("command", "set_attribute"), "%s set to %s");
         add(WanderersOfTheRift.translationId("command", "place.processor.invalid"), "Invalid processor %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.void"), "Room: none");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.room"), "Room: %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.origin"), "Origin: %s %s %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.size"), "Size: %s %s %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.transform"), "Transform: %s %s %s");
+        add(WanderersOfTheRift.translationId("command", "rift.roominfo.invalid"), "Invalid level");
+        add(WanderersOfTheRift.translationId("command", "gear.socket.invalid"),
+                "No item held or does not support sockets");
+        add(WanderersOfTheRift.translationId("command", "gear.implicit.invalid"),
+                "No item held or does not support implicits");
+        add(WanderersOfTheRift.translationId("command", "generic.success"), "Done.");
+        add(WanderersOfTheRift.translationId("command", "quest.log.print"), "Quest completion counts:");
+        add(WanderersOfTheRift.translationId("command", "quest.active"), "Active Quests:");
+
+        add("death.attack.wotr.fire.item", "%1$s was scorched by %2$s");
+        add("death.attack.wotr.fire.player", "%1$s was burned alive by %2$s");
+        add("death.attack.wotr.fire", "%1$s died in flames");
+        add("death.attack.wotr.fire_burn.item", "%1$s was set ablaze by %2$s");
+        add("death.attack.wotr.fire_burn.player", "%1$s was burned alive by %2$s");
+        add("death.attack.wotr.fire_burn", "%1$s burned to a crisp");
+        add("death.attack.wotr.ice.item", "%1$s was cooled below zero by %2$s");
+        add("death.attack.wotr.ice.player", "%1$s was frozen solid by %2$s");
+        add("death.attack.wotr.ice", "%1$s froze to death");
+        add("death.attack.wotr.poison.item", "%1$s was overwhelmed by the poison of %2$s");
+        add("death.attack.wotr.poison.player", "%1$s succumbed to poison from %2$s");
+        add("death.attack.wotr.poison", "%1$s did not cure their infection");
+        add("death.attack.wotr.lightning.item", "%1$s was struck by lightning from %2$s");
+        add("death.attack.wotr.lightning.player", "%1$s did not recover from the shock %2$s caused");
+        add("death.attack.wotr.lightning", "%1$s was shocked to death");
+        add("death.attack.wotr.earth.item", "%1$s was crushed by %2$s");
+        add("death.attack.wotr.earth.player", "%1$s got pinned down by %2$s");
+        add("death.attack.wotr.earth", "%1$s was buried alive");
+        add("death.attack.wotr.thorns.item", "%1$s was killed by the thorns of %2$s");
+        add("death.attack.wotr.thorns.player", "%1$s was killed by attacking %2$s");
+        add("death.attack.wotr.thorns", "%1$s was killed by thorns");
 
         add("ability." + WanderersOfTheRift.MODID + ".cannot_unlock",
                 "You must unlock the following to get this boost: ");
@@ -250,10 +298,36 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".heal", "Heal");
         add("ability." + WanderersOfTheRift.MODID + ".firetouch", "Nonsense Experimental Ability");
         add("ability." + WanderersOfTheRift.MODID + ".veinminer", "Veinmine");
+
+        add("ability." + WanderersOfTheRift.MODID + ".fire_breath", "Fire Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".poison_breath", "Poison Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".earth_breath", "Earth Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".lightning_breath", "Lightning Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".ice_breath", "Ice Breath");
+        add("ability." + WanderersOfTheRift.MODID + ".fire_dart", "Fire Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".poison_dart", "Poison Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".earth_dart", "Earth Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".lightning_dart", "Lightning Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".ice_dart", "Ice Dart");
+        add("ability." + WanderersOfTheRift.MODID + ".exploding_kittens", "Exploding Kittens");
+        add("ability." + WanderersOfTheRift.MODID + ".feather_fall", "Feather Fall");
+        add("ability." + WanderersOfTheRift.MODID + ".filthy_aura", "Filthy Aura");
+        add("ability." + WanderersOfTheRift.MODID + ".group_hug", "Group Hug");
+        add("ability." + WanderersOfTheRift.MODID + ".hookshot", "Hookshot");
+        add("ability." + WanderersOfTheRift.MODID + ".levitate", "Levitate");
+        add("ability." + WanderersOfTheRift.MODID + ".lifesteal", "Lifesteal");
+        add("ability." + WanderersOfTheRift.MODID + ".mana_cat", "Mana Cat");
+        add("ability." + WanderersOfTheRift.MODID + ".slime_wall", "Slime Wall");
+        add("ability." + WanderersOfTheRift.MODID + ".squawk_strike", "Squawk Strike");
+        add("ability." + WanderersOfTheRift.MODID + ".stab-stab-slash", "Stab-Stab-Slash");
+        add("ability." + WanderersOfTheRift.MODID + ".teleport", "Teleport");
+        add("ability." + WanderersOfTheRift.MODID + ".painful_sneak", "Painful Sneak");
+
         add("trigger." + WanderersOfTheRift.MODID + ".tick", "Tick");
         add("trigger." + WanderersOfTheRift.MODID + ".take_damage", "Take Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".deal_damage", "Deal Damage");
         add("trigger." + WanderersOfTheRift.MODID + ".break_block", "Break Block");
+        add("ability_conditions." + WanderersOfTheRift.MODID + ".fast_dash", "Fast Dash");
 
         add(WanderersOfTheRift.translationId("effect_marker", "fireshield"), "Fire Shield");
 
@@ -292,12 +366,14 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("tooltip." + WanderersOfTheRift.MODID + ".socket", "Sockets: ");
         add("tooltip." + WanderersOfTheRift.MODID + ".implicit", "Implicit: ");
         add("tooltip." + WanderersOfTheRift.MODID + ".empty_socket", "(Empty Slot)");
-        add("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", "Hold [%s] for additional information");
+        add("tooltip." + WanderersOfTheRift.MODID + ".show_extra_info", "Hold [%s] for more info");
         add(WanderersOfTheRift.translationId("tooltip", "mana_bar"), "Mana: %s/%s");
         add(WanderersOfTheRift.translationId("tooltip", "rift_key_seed"), "Seed: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.shape"), "Shape: %s");
         add(WanderersOfTheRift.translationId("tooltip", "runegem.modifiers"), "Modifiers:");
+        add(WanderersOfTheRift.translationId("tooltip", "tier"), "T%s");
         add(WanderersOfTheRift.translationId("tooltip", "currency_bag"), "Gain %s when consumed");
+        add(WanderersOfTheRift.translationId("tooltip", "reward.reputation"), "%s Reputation");
 
         add(WanderersOfTheRift.translationId("itemname", "consolation1"), "Whomp whomp");
         add(WanderersOfTheRift.translationId("itemname", "consolation2"), "Tissue");
@@ -317,7 +393,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("ability_upgrade", "aoe.description"),
                 "Increases Area of Effect by 1 block");
         add(WanderersOfTheRift.translationId("ability_upgrade", "cooldown.name"), "Decrease Cooldown");
-        add(WanderersOfTheRift.translationId("ability_upgrade", "cooldown.description"), "Decreases Cooldown by 10%");
+        add(WanderersOfTheRift.translationId("ability_upgrade", "cooldown.description"), "Decreases Cooldown by 3%");
         add(WanderersOfTheRift.translationId("ability_upgrade", "damage.name"), "Damage Up");
         add(WanderersOfTheRift.translationId("ability_upgrade", "damage.description"), "Increases Damage by 10%");
         add(WanderersOfTheRift.translationId("ability_upgrade", "drain_life.name"), "Drain Life");
@@ -433,19 +509,39 @@ public class WotrLanguageProvider extends LanguageProvider {
 
         addRunegems();
         addModifiers();
+        add(WanderersOfTheRift.translationId("modifier", "silk_touch_enchant"), "Silk Touch");
+        add(WanderersOfTheRift.translationId("modifier", "fast_dash_condition"), "Fast Dash");
 
         add(WanderersOfTheRift.translationId("message", "disabled_in_rifts"), "Disabled in rifts");
         add(WanderersOfTheRift.translationId("message", "currency_obtained"), "Added %s %s to your wallet");
+        add(WanderersOfTheRift.translationId("message", "quest_already_active"),
+                "You must complete your existing quest before taking on another");
 
-        add(WanderersOfTheRift.translationId("currency", "boondongle"), "Boondongle");
-        add(WanderersOfTheRift.translationId("currency", "notorized_fish"), "Notorized Fish");
+        add(WanderersOfTheRift.translationId("currency", "coin"), "Coin");
 
-        add(WanderersOfTheRift.translationId("guild", "cat"), "Whiskers of the Rift");
-        add(WanderersOfTheRift.translationId("guild", "cat.rank.0"), "Damp Kitten");
-        add(WanderersOfTheRift.translationId("guild", "stick"), "Figures of the Stick");
-        add(WanderersOfTheRift.translationId("guild", "stick.rank.0"), "Twigling");
-        add(WanderersOfTheRift.translationId("guild", "wotr"), "Waterers of the Rifts");
-        add(WanderersOfTheRift.translationId("guild", "wotr.rank.0"), "Glass half full");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle"), "Cats Cradle");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.0"), "Damp Kitten");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.1"), "Pawprentis");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.2"), "Purrfessional");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.3"), "Journeynyan");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.4"), "Furrmidable");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.5"), "Meowster");
+        add(WanderersOfTheRift.translationId("guild", "cats_cradle.rank.6"), "Gwand Meowster");
+
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch"), "Parrots Perch");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.0"), "Blue Egg");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.1"), "Beakginner");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.2"), "Pollyficient");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.3"), "Wingcredible");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.4"), "Featheran");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.5"), "Talonted");
+        add(WanderersOfTheRift.translationId("guild", "parrots_perch.rank.6"), "Feathery Talonted");
+
+        add(WanderersOfTheRift.translationId("npc", "default"), "Bailey");
+        add(WanderersOfTheRift.translationId("npc", "cats_cradle_merchant"), "Cats Cradle Merchant");
+        add(WanderersOfTheRift.translationId("npc", "cats_cradle_quest_giver"), "Cats Cradle Quest Giver");
+        add(WanderersOfTheRift.translationId("npc", "parrots_perch_merchant"), "Parrots Perch Merchant");
+        add(WanderersOfTheRift.translationId("npc", "parrots_perch_quest_giver"), "Parrots Perch Quest Giver");
 
         add(WanderersOfTheRift.translationId("goal", "rift.attempt"), "Attempt");
         add(WanderersOfTheRift.translationId("goal", "rift.survive"), "Survive");
@@ -466,11 +562,91 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("quest", "kill_skeletons.description"), "Bones scare me! Save me!");
         add(WanderersOfTheRift.translationId("quest", "complete_rift.title"), "Complete Rifts");
         add(WanderersOfTheRift.translationId("quest", "complete_rift.description"), "Prove your mettle.");
+        add(WanderersOfTheRift.translationId("quest", "bring_big_fish.title"), "Prove your value");
+        add(WanderersOfTheRift.translationId("quest", "bring_big_fish.description"),
+                "I'm starving. Could you purlease bring me some fish?");
         add(WanderersOfTheRift.translationId("quest", "bring_fish.title"), "Fish of the day");
-        add(WanderersOfTheRift.translationId("quest", "bring_fish.description"),
-                "I'm starving. Could you purlease bring me a fish?");
+        add(WanderersOfTheRift.translationId("quest", "bring_fish.description"), "Purlease could I have another fish?");
+        add(WanderersOfTheRift.translationId("quest", "deliver_fish.title"), "A special delivery");
+        add(WanderersOfTheRift.translationId("quest", "deliver_fish.description"),
+                "The Cats Cradle merchant has been working very hard lately, I worry they're skipping lunch. Could you bring them a fish for me?");
+        add(WanderersOfTheRift.translationId("quest", "complete_noir.title"), "A stitch through time");
+        add(WanderersOfTheRift.translationId("quest", "complete_noir.description"),
+                "Please help find the fedora I lost in that black-and-white rift. It is of purrticular sentimental value.");
+        add(WanderersOfTheRift.translationId("quest", "complete_color.title"), "Inspire the Hatter");
+        add(WanderersOfTheRift.translationId("quest", "complete_color.description"),
+                "The hatter is feeling uninspired. Show them the beauty of colors found in the rifts.");
+
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_1.title"), "Lost Brother 1");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_1.description"),
+                "I can't find my brother anywhere! He went into a rift a while ago and never came back. Could you help me find him?");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_2.title"), "Lost Brother 2");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_2.description"),
+                "Maybe he went into a different rift? He likes to play in the sand. Could you check a sandy rift for me?");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_3.title"), "Lost Brother 3");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_3.description"),
+                "You have not found him there either? Perhaps try a warmer rift, he always loved the heat.");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_4.title"), "Lost Brother 4");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_4.description"),
+                "Not there either? Oh dear. He always loved flowers, maybe he wandered into a flowery rift and ran into some bees. Could you check there?");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_5.title"), "Lost Brother 5");
+        add(WanderersOfTheRift.translationId("quest", "lost_brother_5.description"),
+                "Ohh silly me, I don't even have a brother! Well, after all that rift exploring, I think we've earned a good rest, don't you?");
+
+        add(WanderersOfTheRift.translationId("quest", "choose_cat.title"), "Meow or never");
+        add(WanderersOfTheRift.translationId("quest", "choose_cat.description"),
+                "Show that you are one of us, and not a filthy flyer. Bring me a feather to show your loyalty, and I shall reward you generously.");
+        add(WanderersOfTheRift.translationId("quest", "choose_bird.title"), "Parrots Pact");
+        add(WanderersOfTheRift.translationId("quest", "choose_bird.description"),
+                "Show ye’ve got the wings for the skies, not the paws for the alleys! Fetch me a string from those whiskered land-lubbers, and I’ll reward ye with treasures!");
+
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest_parrot.title"), "Fetch Quest");
+        add(WanderersOfTheRift.translationId("quest", "fetch_quest_parrot.description"),
+                "Arr! Bring me what I need and I'll shower ye with riches.");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron_parrot.title"), "Sample the Wares");
+        add(WanderersOfTheRift.translationId("quest", "gold_and_iron_parrot.description"),
+                "Psst! Got an aye for treasure? Fetch me some glitterin' metals from the rifts, and I'll trade ye some shiny baubles!");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons_parrot.title"), "Defeat Skeletons");
+        add(WanderersOfTheRift.translationId("quest", "kill_skeletons_parrot.description"),
+                "Eek! Ah, it's you. Help me fend off these bony fiends!");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift_parrot.title"), "Complete Rifts");
+        add(WanderersOfTheRift.translationId("quest", "complete_rift_parrot.description"),
+                "Chart a course through the rift and claim the spoils! Show ye’ve got the courage to sail where few dare!");
+
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_1.title"), "Hidden Treasure 1");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_1.description"),
+                "Ahoy matey! See this red cross on me map? Aye, this here marks the spot of treasure! Go sail to the rift and come back with what ye find!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_2.title"), "Hidden Treasure 2");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_2.description"),
+                "Back for more, eh? Ye be a persistent one! This place might be hot, but the treasure be worth it. Set sail again and bring me back another bounty!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_3.title"), "Hidden Treasure 3");
+        add(WanderersOfTheRift.translationId("quest", "parrot_ability_3.description"),
+                "Ye be on a roll, matey! This next spot be teeming with riches, but we aint the first to arrive. Snatch the loot before them bees do!");
+
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_1.title"), "Join the crew");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_1.description"),
+                "Ahoy there! Fancy joining the Parrots Perch, do ye? Step into a rift and let the skies judge yer courage");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_2.title"), "Forge your fortune");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_2.description"),
+                "Time to toughen yer talons, matey! Fetch me an anvil, and I’ll craft ye a bench fit for a wanderer to sharpen their steel!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_3.title"), "Wings of war");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_3.description"),
+                "Aye, now yer ready for battle. Prove yer mettle by defeating 20 foes in the rifts. Show 'em the might of the Parrots Perch!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_4.title"), "Keys to the skies");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_4.description"),
+                "Well done, matey! Now, to truly soar, ye need a better rift key. Bring me a gilded key, and I’ll upgrade yer own to unlock grander adventures!");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_5.title"), "Aspiring Admiral");
+        add(WanderersOfTheRift.translationId("quest", "parrot_main_5.description"),
+                "Now ye be a true Parrots Perch member! Show yer dedication by completing 3 rifts. The skies await yer legend!");
+
+        add(WanderersOfTheRift.translationId("quest", "peace_treaty.title"), "Peace tweety");
+        add(WanderersOfTheRift.translationId("quest", "peace_treaty.description"),
+                "Arr! Seems we got off on the wrong claw.. paw.. whatever ye call it!. Them four-legged furballs and us feathered friends should be allies, not enemies. Show em we mean well");
 
         add("mobgroup.minecraft.skeletons", "Skeletons");
+        add("mobgroup.wotr.rift_monsters", "Rift Monsters");
+        add("modifier.wotr.projectile_count", "Projectile Count");
+        add("modifier.wotr.projectile_pierce", "Projectile Pierce");
         add("modifier_effect.wotr.ability", "Cast %s when %s");
 
         add(Append.TYPE.translationKey(), "Add %s");
@@ -486,6 +662,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("template_pool.wotr.rift.room_stable", "Stable");
         add("template_pool.wotr.rift.room_unstable", "Unstable");
         add("template_pool.wotr.rift.room_chaos", "Chaos");
+
+        add(WanderersOfTheRift.translationId("toast", "quest.complete"), "Quest Complete");
+        add(WanderersOfTheRift.translationId("toast", "guild.rank"), "Guild Rank Up");
     }
 
     private void addRunegems() {

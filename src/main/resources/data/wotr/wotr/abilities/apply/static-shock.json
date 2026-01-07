@@ -1,0 +1,41 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": [
+        {
+          "type": "wotr:area",
+          "shape": {
+            "type": "wotr:sphere",
+            "range": 3.5
+          },
+          "entities": {
+            "sentiment": "foe",
+            "exclude_caster": true,
+            "exclude_source": true
+          }
+        },
+        {
+          "type": "wotr:random_subset",
+          "count": 1
+        }
+      ],
+      "effects": [
+        {
+          "type": "wotr:damage",
+          "amount": 3.0,
+          "damage_type": "wotr:lightning"
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 20
+    }
+  ]
+}

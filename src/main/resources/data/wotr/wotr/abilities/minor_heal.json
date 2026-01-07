@@ -1,0 +1,27 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+    {
+      "type": "wotr:heal",
+      "amount": 1.0
+    },
+    {
+      "type": "wotr:sound",
+      "sound": {
+        "sound_id": "minecraft:entity.splash_potion.break"
+      }
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/heal.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 10
+    },
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 2
+    }
+  ]
+}

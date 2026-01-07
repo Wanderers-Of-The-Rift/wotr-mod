@@ -1,0 +1,537 @@
+{
+  "type": "minecraft:barter",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 10.0,
+        "min": 5
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/ability",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 10.0,
+                  "min": 5.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_armor",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_weapons",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wotr:rift/socketed_vanilla_tools",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 4.0,
+                  "min": 2.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:rift_key",
+          "weight": 10,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 1,
+                  "max": 2
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 5.0,
+                  "min": 1.0
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:rift_config/tier" : 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:rift_key",
+          "weight": 10,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 3,
+                  "max": 4
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 5.0,
+                  "min": 1.0
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:rift_config/tier" : 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:rift_key",
+          "weight": 10,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 5
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 5.0,
+                  "min": 1.0
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:rift_config/tier" : 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:color_helmet",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:quest_completion",
+                  "quest": "wotr:complete_color"
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 20.0,
+                  "min": 15.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:noir_helmet",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:quest_completion",
+                  "quest": "wotr:complete_noir"
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 20.0,
+                  "min": 15.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potato",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 0,
+                  "max": 0
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:chicken",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 1,
+                  "max": 1
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:rabbit",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 2,
+                  "max": 2
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cooked_rabbit",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 3,
+                  "max": 3
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cooked_chicken",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 4,
+                  "max": 4
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cooked_beef",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 5,
+                  "max": 5
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:rabbit_stew",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific":  {
+                  "type": "wotr:guild_rank",
+                  "guild": "wotr:cats_cradle",
+                  "min": 6
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 2.0,
+                  "min": 1.0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:ability_holder",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "nbt": "{\"neoforge:attachments\":{\"wotr:ability_resources\":{\"wotr:mana\":50.0f}}}"
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 5.0,
+                  "min": 1.0
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "components":{
+                "wotr:ability" : "wotr:mana_cat"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wotr:skill_thread",
+          "weight": 20,
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "equipment": {
+                  "mainhand": {
+                    "items": ["minecraft:milk_bucket", "minecraft:cod", "minecraft:salmon"]
+                  }
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 20.0,
+                "min": 10.0
+              }
+            },
+            {
+              "function": "wotr:set_price",
+              "amounts": {
+                "wotr:coin": {
+                  "type": "minecraft:uniform",
+                  "max": 3.0,
+                  "min": 0.0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

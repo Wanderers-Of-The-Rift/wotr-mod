@@ -1,0 +1,8 @@
+{
+  "guild": "wotr:parrots_perch",
+  "interaction": {
+    "type": "wotr:quest_giver",
+    "quests": "#wotr:avian"
+  },
+  "entity_type": "parrot"
+}
