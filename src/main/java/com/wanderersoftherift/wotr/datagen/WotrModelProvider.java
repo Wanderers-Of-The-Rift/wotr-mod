@@ -30,6 +30,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
@@ -44,9 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wanderersoftherift.wotr.init.WotrFluids.fluidMap;
 import static com.wanderersoftherift.wotr.init.WotrFluids.WotrFluid;
-
+import static com.wanderersoftherift.wotr.init.WotrFluids.fluidMap;
 
 public class WotrModelProvider extends ModelProvider {
     public WotrModelProvider(PackOutput output) {
@@ -405,7 +405,10 @@ public class WotrModelProvider extends ModelProvider {
         );
     }
 
-    public void createModelForFluid(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels, WotrFluid fluid) {
+    public void createModelForFluid(
+            BlockModelGenerators blockModels,
+            @NotNull ItemModelGenerators itemModels,
+            WotrFluid fluid) {
         ResourceLocation resourcelocation = ModelLocationUtils.getModelLocation(Blocks.WATER);
         blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(fluid.FLUID_BLOCK.value(),
                 Variant.variant().with(VariantProperties.MODEL, resourcelocation)));
@@ -414,15 +417,11 @@ public class WotrModelProvider extends ModelProvider {
                 fluid.FLUID_BUCKET.get(), new DynamicFluidContainerModel.Unbaked(
                         new DynamicFluidContainerModel.Textures(
                                 Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")),
-                                Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")),
-                                Optional.of(ResourceLocation.fromNamespaceAndPath("neoforge",
-                                        "item/mask/bucket_fluid")),
+                                Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")), Optional.of(
+                                        ResourceLocation.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid")),
                                 Optional.of(ResourceLocation.fromNamespaceAndPath("neoforge",
                                         "item/mask/bucket_fluid_cover"))
-                        ), fluid.FLUID_SOURCE.get(),
-                        true,
-                        true,
-                        false
+                        ), fluid.FLUID_SOURCE.get(), true, true, false
                 )
         );
     }
