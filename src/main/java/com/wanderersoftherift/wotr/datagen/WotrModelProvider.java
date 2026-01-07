@@ -14,12 +14,7 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.blockstates.Condition;
-import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
-import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
+import net.minecraft.client.data.models.blockstates.*;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplate;
@@ -35,14 +30,21 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
+import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.wanderersoftherift.wotr.init.WotrFluids.fluidMap;
+import static com.wanderersoftherift.wotr.init.WotrFluids.WotrFluid;
+
 
 public class WotrModelProvider extends ModelProvider {
     public WotrModelProvider(PackOutput output) {
@@ -143,6 +145,8 @@ public class WotrModelProvider extends ModelProvider {
         this.generateRunegemItem(WotrItems.RUNEGEM.get(), itemModels);
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels));
+
+        fluidMap.values().forEach(fluid -> createModelForFluid(blockModels, itemModels, fluid));
     }
 
     private void createBlockStatesForTrapBlock(
@@ -384,6 +388,28 @@ public class WotrModelProvider extends ModelProvider {
                                                 }
                                         )
                         )
+        );
+    }
+
+    public void createModelForFluid(BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels, WotrFluid fluid) {
+        ResourceLocation resourcelocation = ModelLocationUtils.getModelLocation(Blocks.WATER);
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(fluid.FLUID_BLOCK.value(),
+                Variant.variant().with(VariantProperties.MODEL, resourcelocation)));
+
+        itemModels.itemModelOutput.accept(
+                fluid.FLUID_BUCKET.get(), new DynamicFluidContainerModel.Unbaked(
+                        new DynamicFluidContainerModel.Textures(
+                                Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")),
+                                Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")),
+                                Optional.of(ResourceLocation.fromNamespaceAndPath("neoforge",
+                                        "item/mask/bucket_fluid")),
+                                Optional.of(ResourceLocation.fromNamespaceAndPath("neoforge",
+                                        "item/mask/bucket_fluid_cover"))
+                        ), fluid.FLUID_SOURCE.get(),
+                        true,
+                        true,
+                        false
+                )
         );
     }
 }
