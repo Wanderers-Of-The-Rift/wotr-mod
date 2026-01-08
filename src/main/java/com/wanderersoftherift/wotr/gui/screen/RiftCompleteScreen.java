@@ -2,6 +2,10 @@ package com.wanderersoftherift.wotr.gui.screen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardSlot;
+import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
+import com.wanderersoftherift.wotr.gui.widget.reward.RewardWidget;
+import com.wanderersoftherift.wotr.gui.widget.scrollentry.FlowContainer;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,6 +17,10 @@ import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class RiftCompleteScreen extends AbstractContainerScreen<RiftCompleteMenu> {
     private static final ResourceLocation BACKGROUND = WanderersOfTheRift
@@ -37,6 +45,25 @@ public class RiftCompleteScreen extends AbstractContainerScreen<RiftCompleteMenu
     }
 
     @Override
+    protected void init() {
+        clearWidgets();
+        super.init();
+        List<RewardWidget> rewardWidgets = new ArrayList<>();
+        for (RewardSlot rewardSlot : menu.getNonItemRewards()) {
+            Optional<RewardWidget> widget = RewardDisplays.createFor(rewardSlot.reward());
+            if (widget.isPresent()) {
+                widget.get().setClickListener(reward -> menu.clientClaimReward(rewardSlot));
+                rewardWidgets.add(widget.get());
+            }
+        }
+        FlowContainer rewardContainer = new FlowContainer(rewardWidgets, 2);
+        rewardContainer.setRectangle(128, 16, leftPos + 106, topPos + 123);
+
+        addRenderableWidget(rewardContainer);
+        menu.clearRewardsChangedFlag();
+    }
+
+    @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderStats(guiGraphics, mouseX, mouseY, partialTick);
@@ -44,7 +71,10 @@ public class RiftCompleteScreen extends AbstractContainerScreen<RiftCompleteMenu
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        if (menu.isRewardsChanged()) {
+            init();
+        }
         guiGraphics.blit(RenderType::guiTextured, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth,
                 this.imageHeight, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
         guiGraphics.drawString(font, REWARDS_LABEL, REWARD_LABEL_X + leftPos, REWARD_LABEL_Y + topPos,

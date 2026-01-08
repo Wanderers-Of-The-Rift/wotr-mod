@@ -35,7 +35,7 @@ public class WotrMenuTypes {
             () -> new MenuType<>(AbilityBenchMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     public static final Supplier<MenuType<RiftCompleteMenu>> RIFT_COMPLETE_MENU = MENUS.register("rift_complete_menu",
-            () -> new MenuType<>(RiftCompleteMenu::new, FeatureFlags.DEFAULT_FLAGS));
+            () -> IMenuTypeExtension.create(RiftCompleteMenu::new));
 
     public static final Supplier<MenuType<TradingMenu>> TRADING_MENU = MENUS.register("trading_menu",
             () -> new MenuType<>(TradingMenu::new, FeatureFlags.DEFAULT_FLAGS));
