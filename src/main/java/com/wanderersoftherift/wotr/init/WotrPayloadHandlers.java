@@ -34,7 +34,6 @@ import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
-import com.wanderersoftherift.wotr.network.reward.RewardsPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -132,7 +131,6 @@ public class WotrPayloadHandlers {
                 AbandonQuestPayload::handleOnServer);
 
         // Rewards
-        registrar.playToClient(RewardsPayload.TYPE, RewardsPayload.STREAM_CODEC, RewardsPayload::handleOnClient);
         registrar.playToServer(ClaimRewardPayload.TYPE, ClaimRewardPayload.STREAM_CODEC,
                 ClaimRewardPayload::handleOnServer);
 

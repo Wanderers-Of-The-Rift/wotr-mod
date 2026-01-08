@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -56,7 +57,7 @@ public final class ItemStackHandlerUtil {
      * @param handler
      * @param player
      */
-    public static void addOrGiveToPlayerOrDrop(ItemStack item, IItemHandler handler, ServerPlayer player) {
+    public static void addOrGiveToPlayerOrDrop(ItemStack item, IItemHandler handler, Player player) {
         ItemStack residual = item;
         for (int i = 0; i < handler.getSlots(); i++) {
             if (handler.getStackInSlot(i).isEmpty()) {
@@ -67,7 +68,7 @@ public final class ItemStackHandlerUtil {
             }
         }
         if (!residual.isEmpty()) {
-            if (player.isRemoved() || player.hasDisconnected()) {
+            if (player.isRemoved() || (player instanceof ServerPlayer serverPlayer && serverPlayer.hasDisconnected())) {
                 player.drop(item, false);
             } else {
                 player.getInventory().placeItemBackInInventory(item);
