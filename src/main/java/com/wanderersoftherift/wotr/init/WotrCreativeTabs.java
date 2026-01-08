@@ -108,7 +108,7 @@ public class WotrCreativeTabs {
                         output.accept(WotrItems.NOIR_HELMET);
                         output.accept(WotrItems.COLOR_HELMET);
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
-                        WotrFluids.fluidMap.values().forEach(wotrFluid -> output.accept(wotrFluid.FLUID_BUCKET));
+                        WotrFluids.FLUID_MAP.values().forEach(wotrFluid -> output.accept(wotrFluid.fluidBucket));
                     })
                     .build());
 

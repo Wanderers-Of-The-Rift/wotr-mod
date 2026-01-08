@@ -10,10 +10,16 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.*;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.*;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.HashMap;
 
@@ -25,11 +31,11 @@ public class WotrFluids {
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID,
             WanderersOfTheRift.MODID);
 
-    public static final HashMap<String, WotrFluid> fluidMap = new HashMap<>();
+    public static final HashMap<String, WotrFluid> FLUID_MAP = new HashMap<>();
 
     static {
         for (int i = 1; i < 16; i++) {
-            fluidMap.put(String.valueOf(i), new WotrFluid("fluid_" + i));
+            FLUID_MAP.put(String.valueOf(i), new WotrFluid("fluid_" + i));
         }
     }
 
@@ -42,31 +48,31 @@ public class WotrFluids {
     }
 
     public static class WotrFluid {
-        public ResourceLocation FLUID_STILL_ID;
-        public ResourceLocation FLUID_FLOWING_ID;
-        public ResourceLocation FLUID_OVERLAY_ID;
+        public ResourceLocation fluidStillId;
+        public ResourceLocation fluidFlowingId;
+        public ResourceLocation fluidOverlayId;
 
-        public DeferredHolder<FluidType, FluidType> FLUID_TYPE;
-        public DeferredHolder<Fluid, FlowingFluid> FLUID_SOURCE;
-        public DeferredHolder<Fluid, FlowingFluid> FLUID_FLOWING;
+        public DeferredHolder<FluidType, FluidType> fluidType;
+        public DeferredHolder<Fluid, FlowingFluid> fluidSource;
+        public DeferredHolder<Fluid, FlowingFluid> fluidFlowing;
 
-        public DeferredBlock<LiquidBlock> FLUID_BLOCK;
-        public DeferredItem<Item> FLUID_BUCKET;
+        public DeferredBlock<LiquidBlock> fluidBlock;
+        public DeferredItem<Item> fluidBucket;
 
         WotrFluid(String name) {
-            FLUID_STILL_ID = createResourceLocation(String.format("block/%s_still", name));
-            FLUID_FLOWING_ID = createResourceLocation(String.format("block/%s_flow", name));
-            FLUID_OVERLAY_ID = createResourceLocation(String.format("block/water_overlay", name));
+            fluidStillId = createResourceLocation(String.format("block/%s_still", name));
+            fluidFlowingId = createResourceLocation(String.format("block/%s_flow", name));
+            fluidOverlayId = createResourceLocation(String.format("block/water_overlay", name));
 
-            FLUID_TYPE = FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create()));
+            fluidType = FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create()));
 
-            FLUID_SOURCE = FLUIDS.register(name, () -> new BaseFlowingFluid.Source(makeProperties()));
-            FLUID_FLOWING = FLUIDS.register(String.format("%s_flowing", name),
+            fluidSource = FLUIDS.register(name, () -> new BaseFlowingFluid.Source(makeProperties()));
+            fluidFlowing = FLUIDS.register(String.format("%s_flowing", name),
                     () -> new BaseFlowingFluid.Flowing(makeProperties()));
 
-            FLUID_BLOCK = BLOCKS
+            fluidBlock = BLOCKS
                     .register(String.format("%s_block", name),
-                            () -> new LiquidBlock(FLUID_SOURCE.value(), LiquidBlock.Properties.of()
+                            () -> new LiquidBlock(fluidSource.value(), LiquidBlock.Properties.of()
                                     .replaceable()
                                     .noCollission()
                                     .strength(100.0F)
@@ -74,16 +80,16 @@ public class WotrFluids {
                                     .liquid()
                                     .noLootTable()
                                     .setId(createResourceKey(Registries.BLOCK, String.format("%s_block", name)))));
-            FLUID_BUCKET = ITEMS.register(String.format("%s_bucket", name),
-                    () -> new BucketItem(FLUID_SOURCE.value(),
-                            new Item.Properties().craftRemainder(Items.BUCKET)
+            fluidBucket = ITEMS
+                    .register(String.format("%s_bucket", name),
+                            () -> new BucketItem(fluidSource.value(), new Item.Properties().craftRemainder(Items.BUCKET)
                                     .stacksTo(1)
                                     .setId(createResourceKey(Registries.ITEM, String.format("%s_bucket", name)))));
         }
 
         private BaseFlowingFluid.Properties makeProperties() {
-            return new BaseFlowingFluid.Properties(FLUID_TYPE::value, FLUID_SOURCE, FLUID_FLOWING).bucket(FLUID_BUCKET)
-                    .block(FLUID_BLOCK);
+            return new BaseFlowingFluid.Properties(fluidType::value, fluidSource, fluidFlowing).bucket(fluidBucket)
+                    .block(fluidBlock);
         }
     }
 }
