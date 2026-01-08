@@ -101,6 +101,7 @@ public class WotrKeyMappings {
         event.register(ACTIVATE_ABILITY_SCROLL);
         event.register(SHOW_TOOLTIP_INFO);
         event.register(JIGSAW_NAME_TOGGLE_KEY);
+        event.register(MAIN_CHARACTER_MENU_KEY);
         event.register(GUILD_MENU_KEY);
         event.register(WALLET_MENU_KEY);
         event.register(QUEST_MENU_KEY);
