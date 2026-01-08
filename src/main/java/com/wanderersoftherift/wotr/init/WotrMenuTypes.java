@@ -49,7 +49,7 @@ public class WotrMenuTypes {
             "quest_completion_menu", () -> new MenuType<>(QuestCompletionMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     public static final Supplier<MenuType<RewardMenu>> REWARD_MENU = MENUS.register(
-            "reward_menu", () -> new MenuType<>(RewardMenu::new, FeatureFlags.DEFAULT_FLAGS));
+            "reward_menu", () -> IMenuTypeExtension.create(RewardMenu::new));
 
     /// Character Menus
 

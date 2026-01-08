@@ -4,9 +4,11 @@ import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
-import com.wanderersoftherift.wotr.network.reward.RewardsPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -33,6 +35,9 @@ import java.util.Optional;
  */
 public class RewardMenu extends AbstractContainerMenu {
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, List<RewardSlot>> REWARD_MENU_CODEC = RewardSlot.STREAM_CODEC
+            .apply(ByteBufCodecs.list());
+
     private static final int NUM_REWARD_SLOTS = 9;
     private static final QuickMover MOVER = QuickMover.create()
             .forPlayerSlots(NUM_REWARD_SLOTS)
@@ -42,20 +47,22 @@ public class RewardMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final ItemStackHandler itemRewards;
-    private final List<RewardSlot> nonItemRewards = new ArrayList<>();
-    private int nextId = 0;
+    private final List<RewardSlot> nonItemRewards;
 
     private boolean dirty = true;
 
-    public RewardMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL);
+    public RewardMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf data) {
+        this(containerId, playerInventory, new ItemStackHandler(NUM_REWARD_SLOTS), ContainerLevelAccess.NULL,
+                REWARD_MENU_CODEC.decode(data));
     }
 
-    public RewardMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
+    public RewardMenu(int containerId, Inventory playerInventory, ItemStackHandler itemRewards,
+            ContainerLevelAccess access, List<RewardSlot> nonItemRewards) {
         super(WotrMenuTypes.REWARD_MENU.get(), containerId);
 
         this.access = access;
-        this.itemRewards = new ItemStackHandler(NUM_REWARD_SLOTS);
+        this.itemRewards = itemRewards;
+        this.nonItemRewards = new ArrayList<>(nonItemRewards);
 
         for (int i = 0; i < NUM_REWARD_SLOTS; i++) {
             this.addSlot(new SlotItemHandler(itemRewards, i, 8 + 18 * i, 49));
@@ -71,19 +78,22 @@ public class RewardMenu extends AbstractContainerMenu {
      * @param title   The title of the menu (if there is an existing open menu the title doesn't change)
      */
     public static void openRewardMenu(Player player, List<Reward> rewards, Component title) {
-        if (player.containerMenu instanceof RewardMenu existingMenu) {
-            existingMenu.addRewards(player, rewards);
-        } else {
-            player.openMenu(new SimpleMenuProvider((containerId, playerInventory, p) -> {
-                var menu = new RewardMenu(containerId, playerInventory,
-                        ContainerLevelAccess.create(p.level(), p.getOnPos()));
-                menu.addRewards(p, rewards);
-                return menu;
-            }, title));
+        ItemStackHandler itemRewards = new ItemStackHandler(NUM_REWARD_SLOTS);
+        List<RewardSlot> nonItemRewards = new ArrayList<>();
+
+        int nextId = 0;
+        for (Reward reward : rewards) {
+            if (reward.isItem()) {
+                ItemStack item = reward.generateItem();
+                ItemStackHandlerUtil.addOrGiveToPlayerOrDrop(item, itemRewards, player);
+            } else {
+                nonItemRewards.add(new RewardSlot(nextId++, reward));
+            }
         }
-        if (player instanceof ServerPlayer serverPlayer && player.containerMenu instanceof RewardMenu menu) {
-            PacketDistributor.sendToPlayer(serverPlayer, new RewardsPayload(List.copyOf(menu.nonItemRewards)));
-        }
+        player.openMenu(
+                new SimpleMenuProvider((containerId, playerInventory, p) -> new RewardMenu(containerId, playerInventory,
+                        itemRewards, ContainerLevelAccess.create(p.level(), p.getOnPos()), nonItemRewards), title),
+                registryFriendlyByteBuf -> REWARD_MENU_CODEC.encode(registryFriendlyByteBuf, nonItemRewards));
     }
 
     @Override
@@ -112,35 +122,6 @@ public class RewardMenu extends AbstractContainerMenu {
                 rewardSlot.reward().apply(serverPlayer);
             }
         }
-    }
-
-    /**
-     * Adds rewards to the reward menu. If they don't fit in the menu they are directly given to the player or dropped
-     * at their location.
-     * 
-     * @param player
-     * @param rewards
-     */
-    public void addRewards(Player player, List<Reward> rewards) {
-        access.execute((level, pos) -> {
-            nonItemRewards
-                    .addAll(rewards.stream().filter(x -> !x.isItem()).map(x -> new RewardSlot(nextId++, x)).toList());
-            if (!(player instanceof ServerPlayer serverPlayer)) {
-                return;
-            }
-            for (Reward reward : rewards) {
-                ItemStack rewardItem = reward.generateItem();
-                if (!rewardItem.isEmpty()) {
-                    ItemStackHandlerUtil.addOrGiveToPlayerOrDrop(rewardItem, itemRewards, serverPlayer);
-                }
-            }
-        });
-    }
-
-    public void setClientRewards(List<RewardSlot> rewards) {
-        nonItemRewards.clear();
-        nonItemRewards.addAll(rewards);
-        dirty = true;
     }
 
     /**
