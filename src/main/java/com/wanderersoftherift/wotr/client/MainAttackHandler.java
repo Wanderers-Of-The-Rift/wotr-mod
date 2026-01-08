@@ -5,7 +5,6 @@ import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.item.ability.TriggerableAbilityModifier;
 import com.wanderersoftherift.wotr.modifier.ModifierProvider;
 import com.wanderersoftherift.wotr.network.ability.MainAttackPayload;
-import com.wanderersoftherift.wotr.util.Ref;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +21,7 @@ public class MainAttackHandler {
     private static boolean hasAttacked = false;
 
     public static boolean doAttack(Player player) {
-        if (shouldUseOverrideAttackNew(player)) {
+        if (shouldUseOverrideAttack(player)) {
             hasAttacked = true;
             return true;
         }
@@ -41,23 +40,21 @@ public class MainAttackHandler {
         hasAttacked = false;
     }
 
-    private static boolean shouldUseOverrideAttackNew(Player player) {
-        var result = new Ref<>(false);
-        Arrays.stream(EquipmentSlot.values()).forEach(slot -> {
+    private static boolean shouldUseOverrideAttack(Player player) {
+        // should other slots also be checked?
+        return Arrays.stream(EquipmentSlot.values()).anyMatch(slot -> {
+            var wotrSlot = WotrEquipmentSlotFromMC.fromVanillaSlot(slot);
             var stack = player.getItemBySlot(slot);
-            var modifierProviders = stack.getAllOfType(ModifierProvider.class);
-            modifierProviders.forEach(it -> it.forEachModifier(stack, WotrEquipmentSlotFromMC.fromVanillaSlot(slot),
-                    player, (modifierHolder, tier, roll, item) -> {
-                        if (modifierHolder.value()
-                                .getModifierTier(tier)
-                                .stream()
-                                .anyMatch(effect -> effect instanceof TriggerableAbilityModifier tam
-                                        && tam.trigger().type() == WotrTrackedAbilityTriggers.MAIN_ATTACK)) {
-                            result.setValue(true);
-                        }
-                    }));
+            return stack.getAllOfType(ModifierProvider.class)
+                    .anyMatch(it -> it.modifiers(stack, wotrSlot, player)
+                            .anyMatch(entry -> entry.instance()
+                                    .modifier()
+                                    .value()
+                                    .getModifierTier(entry.instance().tier())
+                                    .stream()
+                                    .anyMatch(effect -> effect instanceof TriggerableAbilityModifier tam
+                                            && tam.trigger().type() == WotrTrackedAbilityTriggers.MAIN_ATTACK)));
         });
-        return result.getValue();
     }
 
     private static void handleEndAttack() {

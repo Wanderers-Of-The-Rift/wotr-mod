@@ -21,6 +21,9 @@ import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.wanderersoftherift.wotr.init.WotrTags.Items.SOCKETABLE;
 
@@ -63,21 +66,21 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
     }
 
     @Override
-    public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
+    public Stream<ModifierEntry> modifiers(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity) {
         List<GearSocket> sockets = sockets();
-        for (int i = 0; i < sockets.size(); i++) {
-            GearSocket socket = sockets.get(i);
+        return IntStream.range(0, sockets.size()).mapToObj(idx -> {
+            GearSocket socket = sockets.get(idx);
             if (socket.isEmpty()) {
-                continue;
+                return null;
             }
             ModifierInstance modifierInstance = socket.modifier().get();
             Holder<Modifier> modifier = modifierInstance.modifier();
-            if (modifier != null) {
-                ModifierSource source = new GearSocketModifierSource(slot, i);
-                action.accept(modifier, modifierInstance.tier(), modifierInstance.roll(), source);
+            if (modifier == null) {
+                return null;
             }
-        }
-
+            ModifierSource source = new GearSocketModifierSource(slot, idx);
+            return new ModifierEntry(modifierInstance, source);
+        }).filter(Objects::nonNull);
     }
 
     @Override
