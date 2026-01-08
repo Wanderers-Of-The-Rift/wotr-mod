@@ -61,7 +61,6 @@ public class AbilityRepeater {
             tracker.trigger(triggerType.value().clientTriggerInstance());
             return !tracker.hasListenersOnTrigger(triggerType);
         });
-        triggersToRepeat.forEach(triggerType -> tracker.trigger(triggerType.value().clientTriggerInstance()));
     }
 
     public boolean isEmpty() {
