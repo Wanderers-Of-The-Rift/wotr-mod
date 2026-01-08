@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.gui.menu.reward;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.gui.menu.QuickMover;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
-import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
 import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -13,17 +12,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This menu provides rewards to the player after they complete a quest (or otherwise earn a reward).
@@ -33,7 +29,7 @@ import java.util.Optional;
  * closed.
  * </p>
  */
-public class RewardMenu extends AbstractContainerMenu {
+public class RewardMenu extends AbstractRewardMenu {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, List<RewardSlot>> REWARD_MENU_CODEC = RewardSlot.STREAM_CODEC
             .apply(ByteBufCodecs.list());
@@ -45,11 +41,8 @@ public class RewardMenu extends AbstractContainerMenu {
             .tryMoveToPlayer()
             .build();
 
-    private final ContainerLevelAccess access;
     private final ItemStackHandler itemRewards;
-    private final List<RewardSlot> nonItemRewards;
-
-    private boolean dirty = true;
+    private final ContainerLevelAccess access;
 
     public RewardMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf data) {
         this(containerId, playerInventory, new ItemStackHandler(NUM_REWARD_SLOTS), ContainerLevelAccess.NULL,
@@ -58,11 +51,10 @@ public class RewardMenu extends AbstractContainerMenu {
 
     public RewardMenu(int containerId, Inventory playerInventory, ItemStackHandler itemRewards,
             ContainerLevelAccess access, List<RewardSlot> nonItemRewards) {
-        super(WotrMenuTypes.REWARD_MENU.get(), containerId);
+        super(WotrMenuTypes.REWARD_MENU.get(), containerId, nonItemRewards, access);
 
         this.access = access;
         this.itemRewards = itemRewards;
-        this.nonItemRewards = new ArrayList<>(nonItemRewards);
 
         for (int i = 0; i < NUM_REWARD_SLOTS; i++) {
             this.addSlot(new SlotItemHandler(itemRewards, i, 8 + 18 * i, 49));
@@ -81,13 +73,12 @@ public class RewardMenu extends AbstractContainerMenu {
         ItemStackHandler itemRewards = new ItemStackHandler(NUM_REWARD_SLOTS);
         List<RewardSlot> nonItemRewards = new ArrayList<>();
 
-        int nextId = 0;
         for (Reward reward : rewards) {
             if (reward.isItem()) {
                 ItemStack item = reward.generateItem();
                 ItemStackHandlerUtil.addOrGiveToPlayerOrDrop(item, itemRewards, player);
             } else {
-                nonItemRewards.add(new RewardSlot(nextId++, reward));
+                nonItemRewards.add(new RewardSlot(nonItemRewards.size(), reward));
             }
         }
         player.openMenu(
@@ -106,60 +97,12 @@ public class RewardMenu extends AbstractContainerMenu {
         return true;
     }
 
-    /**
-     * @return A list of unclaimed non-item rewards
-     */
-    public List<RewardSlot> getNonItemRewards() {
-        return nonItemRewards;
-    }
-
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
-        if (player instanceof ServerPlayer serverPlayer) {
+        this.access.execute((world, pos) -> {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
             ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, itemRewards);
-            for (RewardSlot rewardSlot : nonItemRewards) {
-                rewardSlot.reward().apply(serverPlayer);
-            }
-        }
-    }
-
-    /**
-     * Client-side request to claim a non-item reward
-     * 
-     * @param reward
-     */
-    public void clientClaimReward(RewardSlot reward) {
-        if (nonItemRewards.removeIf(x -> x.id() == reward.id())) {
-            PacketDistributor.sendToServer(new ClaimRewardPayload(reward.id()));
-            dirty = true;
-        }
-    }
-
-    /**
-     * Server-side handling of claiming a non-item reward
-     * 
-     * @param player
-     * @param rewardId
-     */
-    public void claimReward(Player player, int rewardId) {
-        access.execute((level, pos) -> {
-            Optional<RewardSlot> rewardSlot = nonItemRewards.stream().filter(x -> x.id() == rewardId).findFirst();
-            if (rewardSlot.isPresent()) {
-                rewardSlot.get().reward().apply(player);
-                nonItemRewards.remove(rewardSlot.get());
-            }
         });
-    }
-
-    /**
-     * @return Whether the non-item rewards list has changed
-     */
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    public void clearDirty() {
-        dirty = false;
     }
 }
