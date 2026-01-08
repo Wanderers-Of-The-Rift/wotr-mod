@@ -61,7 +61,15 @@ public record CooldownCost(int ticks, int milliticks, int margin, Holder<Attribu
     }
 
     public enum CooldownMode implements StringRepresentable {
+        /**
+         * in this mode the cooldown attribute is interpreted as time between casts cooldownFinal = cooldownAttribute +
+         * abilityCooldown
+         */
         NORMAL("normal"),
+        /**
+         * in this mode the cooldown attribute is interpreted as casting speed - increasing it reduces cooldown
+         * cooldownFinal = 1 / (cooldownAttribute + 1/abilityCooldown)
+         */
         INVERTED("inverted");
 
         private static final Map<String, CooldownMode> ENTRIES = Arrays.stream(values())
