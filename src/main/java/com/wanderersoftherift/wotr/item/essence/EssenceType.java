@@ -23,22 +23,22 @@ public enum EssenceType {
     DARK("Dark"),
     ENERGY("Energy");
 
-   // SECONDARY ESSENCE TYPES commented out temporarily for testing,
+    // SECONDARY ESSENCE TYPES commented out temporarily for testing,
     // add in each as they get a use and or icon
-   // FIRE("Fire"),
-   // AIR("Air"),
-   // ANIMAL("Animal"),
-   // CRYSTAL("Crystal"),
-   // METAL("Metal"),
-   // FOOD("Food"),
-   // SLIME("Slime"),
-   // MIND("Mind"),
-   // MECHA("Mecha"),
-   // END("End"),
-   // FLOW("Flow"),
-   // FORM("Form"),
-   // ORDER("Order"),
-   // CHAOS("Chaos");
+    // FIRE("Fire"),
+    // AIR("Air"),
+    // ANIMAL("Animal"),
+    // CRYSTAL("Crystal"),
+    // METAL("Metal"),
+    // FOOD("Food"),
+    // SLIME("Slime"),
+    // MIND("Mind"),
+    // MECHA("Mecha"),
+    // END("End"),
+    // FLOW("Flow"),
+    // FORM("Form"),
+    // ORDER("Order"),
+    // CHAOS("Chaos");
 
     public final String name;
 
