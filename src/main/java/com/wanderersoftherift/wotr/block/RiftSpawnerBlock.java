@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.block.blockentity.RiftSpawnerBlockEntity;
 import com.wanderersoftherift.wotr.entity.portal.PortalSpawnLocation;
 import com.wanderersoftherift.wotr.entity.portal.RiftPortalEntranceEntity;
 import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -35,9 +36,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,8 @@ import java.util.Optional;
  * If there is an active portal when the spawner is removed, then the portal is destroyed.
  * </p>
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class RiftSpawnerBlock extends BaseEntityBlock {
     public static final MapCodec<RiftSpawnerBlock> CODEC = simpleCodec(RiftSpawnerBlock::new);
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
@@ -87,16 +90,12 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
                 stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
-    public @NotNull MapCodec<RiftSpawnerBlock> codec() {
+    public MapCodec<RiftSpawnerBlock> codec() {
         return CODEC;
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(
-            BlockState state,
-            @NotNull BlockGetter level,
-            @NotNull BlockPos pos,
-            @NotNull CollisionContext context) {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPES.get(state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF),
                 state.getValue(HorizontalDirectionalBlock.FACING).getAxis());
     }
@@ -107,27 +106,22 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected void onRemove(
-            @NotNull BlockState state,
-            @NotNull Level level,
-            @NotNull BlockPos pos,
-            @NotNull BlockState newState,
-            boolean movedByPiston) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         super.onRemove(state, level, pos, newState, movedByPiston);
         getSpawnLocation(level, pos, state).ifPresent(loc -> getExistingRifts(level, loc.position().add(0, 0.1, 0))
                 .forEach(rift -> rift.remove(Entity.RemovalReason.KILLED)));
     }
 
     @Override
-    protected @NotNull BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
-            @NotNull LevelReader level,
-            @NotNull ScheduledTickAccess scheduler,
-            @NotNull BlockPos pos,
+            LevelReader level,
+            ScheduledTickAccess scheduler,
+            BlockPos pos,
             Direction dir,
-            @NotNull BlockPos adjPos,
-            @NotNull BlockState adjState,
-            @NotNull RandomSource random) {
+            BlockPos adjPos,
+            BlockState adjState,
+            RandomSource random) {
         DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
         if (dir.getAxis() == Direction.Axis.Y && (doubleBlockHalf == DoubleBlockHalf.LOWER) == (dir == Direction.UP)) {
             if (adjState.getBlock() instanceof RiftSpawnerBlock && adjState.getValue(HALF) != doubleBlockHalf) {
@@ -161,17 +155,13 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
             Level level,
             BlockPos pos,
             BlockState state,
-            LivingEntity placer,
-            @NotNull ItemStack stack) {
+            @Nullable LivingEntity player,
+            ItemStack stack) {
         level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
     }
 
     @Override
-    public @NotNull BlockState playerWillDestroy(
-            Level level,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            @NotNull Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && (player.isCreative() || !player.hasCorrectToolForDrops(state, level, pos))) {
             DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
             if (doubleblockhalf == DoubleBlockHalf.UPPER) {
@@ -207,7 +197,7 @@ public class RiftSpawnerBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new RiftSpawnerBlockEntity(pos, state);
     }
 }
