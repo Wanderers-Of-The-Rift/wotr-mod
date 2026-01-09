@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.network.rift;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.gui.layer.objective.ObjectiveRenderers;
-import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -18,9 +18,10 @@ public record S2CRiftObjectiveStatusPacket(Optional<OngoingObjective> objective)
     public static final CustomPacketPayload.Type<S2CRiftObjectiveStatusPacket> TYPE = new CustomPacketPayload.Type<>(
             (WanderersOfTheRift.id("s2c_rift_objective_status")));
 
-    public static final StreamCodec<ByteBuf, S2CRiftObjectiveStatusPacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.optional(ByteBufCodecs.fromCodec(OngoingObjective.DIRECT_CODEC)),
-            S2CRiftObjectiveStatusPacket::objective, S2CRiftObjectiveStatusPacket::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, S2CRiftObjectiveStatusPacket> STREAM_CODEC = StreamCodec
+            .composite(
+                    ByteBufCodecs.optional(ByteBufCodecs.fromCodecWithRegistries(OngoingObjective.DIRECT_CODEC)),
+                    S2CRiftObjectiveStatusPacket::objective, S2CRiftObjectiveStatusPacket::new);
 
     @Override
     public CustomPacketPayload.@NotNull Type<? extends CustomPacketPayload> type() {

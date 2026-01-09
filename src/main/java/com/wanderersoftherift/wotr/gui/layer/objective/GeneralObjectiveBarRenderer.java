@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.gui.layer.objective;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.core.rift.objective.ProgressObjective;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
-import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
-import com.wanderersoftherift.wotr.rift.objective.ProgressObjective;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;

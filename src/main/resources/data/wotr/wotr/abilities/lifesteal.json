@@ -1,0 +1,37 @@
+{
+  "type": "wotr:persistent",
+  "icon": "minecraft:textures/item/iron_sword.png",
+  "activation_effects": [
+    {
+      "type": "wotr:attach",
+      "id": "wotr:lifesteal",
+      "modifiers": [
+        {
+          "modifier": "wotr:provide_minor_heal",
+          "tier": 1,
+          "roll": 0
+        }
+      ]
+
+    }
+  ],
+  "on_deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "id": "wotr:lifesteal"
+    }
+  ],
+  "on_deactivation_costs": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 100
+    }
+  ],
+  "ongoing_requirements": [
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 1
+    }
+  ]
+}

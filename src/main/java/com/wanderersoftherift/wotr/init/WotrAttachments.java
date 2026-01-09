@@ -4,6 +4,7 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityConditions;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityCooldowns;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityEnhancements;
+import com.wanderersoftherift.wotr.abilities.attachment.AbilityRepeater;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityResourceData;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilityStates;
@@ -26,6 +27,8 @@ import com.wanderersoftherift.wotr.core.quest.ActiveQuests;
 import com.wanderersoftherift.wotr.core.quest.AvailableQuests;
 import com.wanderersoftherift.wotr.core.quest.QuestLog;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
+import com.wanderersoftherift.wotr.core.rift.map.RiftMapData;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
 import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
@@ -43,7 +46,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class WotrAttachments {
+public final class WotrAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
             .create(NeoForgeRegistries.ATTACHMENT_TYPES, WanderersOfTheRift.MODID);
 
@@ -111,6 +114,9 @@ public class WotrAttachments {
     public static final Supplier<AttachmentType<OngoingAbilities>> ONGOING_ABILITIES = ATTACHMENT_TYPES.register(
             "ongoing_abilities",
             () -> AttachmentType.builder(OngoingAbilities::new).serialize(OngoingAbilities.getSerializer()).build());
+    public static final Supplier<AttachmentType<AbilityRepeater>> ABILITY_REPEATER = ATTACHMENT_TYPES.register(
+            "ability_repeater",
+            () -> AttachmentType.builder(AbilityRepeater::new).serialize(AbilityRepeater.getSerializer()).build());
     public static final Supplier<AttachmentType<AbilityStates>> ABILITY_STATES = ATTACHMENT_TYPES.register(
             "ability_states",
             () -> AttachmentType.builder(AbilityStates::new).serialize(AbilityStates.getSerializer()).build());
@@ -192,6 +198,11 @@ public class WotrAttachments {
                     "ongoing_ability_entity_registry",
                     () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ONGOING_ABILITIES)).build()
             );
+    public static final Supplier<AttachmentType<EntityAttachmentRegistry<AbilityRepeater>>> ABILITY_REPEATER_REGISTRY = ATTACHMENT_TYPES
+            .register(
+                    "ability_repeater_entity_registry",
+                    () -> AttachmentType.builder(() -> new EntityAttachmentRegistry<>(ABILITY_REPEATER)).build()
+            );
 
     public static final Supplier<AttachmentType<TriggerRegistry<TickTrigger>>> TICK_TRIGGER_REGISTRY = ATTACHMENT_TYPES
             .register(
@@ -203,4 +214,17 @@ public class WotrAttachments {
             "rift_parameters",
             () -> AttachmentType.builder(() -> new RiftParameterData()).serialize(RiftParameterData.CODEC).build()
     );
+
+    public static final Supplier<AttachmentType<RiftMapData>> RIFT_MAP_DATA = ATTACHMENT_TYPES.register(
+            "rift_map_data",
+            () -> AttachmentType.builder(RiftMapData::new).serialize(RiftMapData.getSerializer()).build()
+    );
+
+    public static final Supplier<AttachmentType<ObjectiveData>> OBJECTIVE_DATA = ATTACHMENT_TYPES.register(
+            "objective_data",
+            () -> AttachmentType.builder(ObjectiveData::new).serialize(ObjectiveData.getSerializer()).build()
+    );
+
+    private WotrAttachments() {
+    }
 }

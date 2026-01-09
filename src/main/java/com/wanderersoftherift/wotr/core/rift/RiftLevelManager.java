@@ -408,7 +408,8 @@ public final class RiftLevelManager {
         riftData.setPortalPos(new BlockPos(portalPos));
         riftData.setConfig(config);
 
-        riftData.setObjective(config.objective().value().generate(riftLevel, config));
+        riftLevel.getData(WotrAttachments.OBJECTIVE_DATA)
+                .setObjective(config.objective().value().generate(riftLevel, config));
 
         return riftLevel;
     }

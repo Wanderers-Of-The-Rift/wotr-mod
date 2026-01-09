@@ -49,6 +49,10 @@ public class AvailableTrades {
         return stock;
     }
 
+    public void clear(Holder<NpcIdentity> merchantId) {
+        merchantStock.remove(merchantId);
+    }
+
     private static class StockInventory implements IItemHandlerModifiable {
 
         public static final Codec<StockInventory> CODEC = NonNullList.codecOf(ItemStack.OPTIONAL_CODEC)

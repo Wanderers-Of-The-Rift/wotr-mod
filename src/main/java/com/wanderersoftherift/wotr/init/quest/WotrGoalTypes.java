@@ -2,15 +2,22 @@ package com.wanderersoftherift.wotr.init.quest;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.quest.Goal;
-import com.wanderersoftherift.wotr.core.quest.GoalProvider;
-import com.wanderersoftherift.wotr.core.quest.goal.CompleteRiftGoal;
-import com.wanderersoftherift.wotr.core.quest.goal.GiveItemGoal;
-import com.wanderersoftherift.wotr.core.quest.goal.KillMobGoal;
-import com.wanderersoftherift.wotr.core.quest.goal.provider.CompleteRiftGoalProvider;
-import com.wanderersoftherift.wotr.core.quest.goal.provider.FixedGoalProvider;
-import com.wanderersoftherift.wotr.core.quest.goal.provider.GiveItemGoalProvider;
-import com.wanderersoftherift.wotr.core.quest.goal.provider.PoolGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.ActivateObjectiveGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.CloseAnomalyGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.CompleteRiftGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.FixedGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.GiveItemGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.KillMobGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.PoolGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.VisitRoomGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.type.ActivateObjectiveGoal;
+import com.wanderersoftherift.wotr.core.goal.type.CloseAnomalyGoal;
+import com.wanderersoftherift.wotr.core.goal.type.CompleteRiftGoal;
+import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
+import com.wanderersoftherift.wotr.core.goal.type.VisitRoomGoal;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -27,17 +34,38 @@ public class WotrGoalTypes {
     public static final Supplier<DualCodec<? extends Goal>> FIXED_GIVE_ITEM = register("fixed_give_item",
             () -> GiveItemGoal.TYPE);
 
+    public static final Supplier<MapCodec<? extends GoalProvider>> GIVE_ITEM = GOAL_PROVIDER_TYPES.register("give_item",
+            () -> GiveItemGoalProvider.CODEC);
+
     public static final Supplier<DualCodec<? extends Goal>> FIXED_KILL_MOB = register("fixed_kill_mob",
             () -> KillMobGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> KILL_MOB = GOAL_PROVIDER_TYPES.register("kill_mob",
+            () -> KillMobGoalProvider.CODEC);
 
     public static final Supplier<DualCodec<? extends Goal>> FIXED_COMPLETE_RIFT = register("fixed_complete_rift",
             () -> CompleteRiftGoal.TYPE);
 
-    public static final Supplier<MapCodec<? extends GoalProvider>> GIVE_ITEM = GOAL_PROVIDER_TYPES.register("give_item",
-            () -> GiveItemGoalProvider.CODEC);
-
     public static final Supplier<MapCodec<? extends GoalProvider>> COMPLETE_RIFT = GOAL_PROVIDER_TYPES
             .register("complete_rift", () -> CompleteRiftGoalProvider.CODEC);
+
+    public static final Supplier<DualCodec<? extends Goal>> FIXED_CLOSE_ANOMALY = register("fixed_close_anomaly",
+            () -> CloseAnomalyGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> CLOSE_ANOMALY = GOAL_PROVIDER_TYPES
+            .register("close_anomaly", () -> CloseAnomalyGoalProvider.CODEC);
+
+    public static final Supplier<DualCodec<? extends Goal>> FIXED_VISIT_ROOM = register("fixed_visit_room",
+            () -> VisitRoomGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> VISIT_ROOM = GOAL_PROVIDER_TYPES
+            .register("visit_room", () -> VisitRoomGoalProvider.CODEC);
+
+    public static final Supplier<DualCodec<? extends Goal>> FIXED_ACTIVATE_OBJECTIVE = register(
+            "fixed_activate_objective_block", () -> ActivateObjectiveGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> ACTIVATE_OBJECTIVE = GOAL_PROVIDER_TYPES
+            .register("activate_objective_block", () -> ActivateObjectiveGoalProvider.CODEC);
 
     public static final Supplier<MapCodec<? extends GoalProvider>> POOL = GOAL_PROVIDER_TYPES.register("pool",
             () -> PoolGoalProvider.CODEC);

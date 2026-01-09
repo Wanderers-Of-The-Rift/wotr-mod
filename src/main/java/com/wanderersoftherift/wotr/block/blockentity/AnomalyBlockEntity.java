@@ -3,13 +3,14 @@ package com.wanderersoftherift.wotr.block.blockentity;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyEvent;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -52,7 +54,7 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
         super(WotrBlockEntities.ANOMALY_BLOCK_ENTITY.get(), pos, state);
     }
 
-    public void clientTick(ClientLevel clientLevel, BlockPos pos, BlockState state1) {
+    public void clientTick(BlockPos pos) {
         if (state != null) {
             double centerX = pos.getX() + 0.5;
             double centerY = pos.getY();
@@ -103,7 +105,7 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
     }
 
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (getLevel() instanceof ClientLevel) {
+        if (getLevel().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (state == null) {
@@ -113,6 +115,8 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
     }
 
     public void closeAndReward(Player player) {
+        NeoForge.EVENT_BUS
+                .post(new AnomalyEvent.Closed(getLevel(), getBlockPos(), state.task().value().type(), player));
         setAnomalyState(null);
         if (reward != null && reward.isBound()) {
             reward.value().grantReward(player);
@@ -127,7 +131,7 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
 
     public <T> void setAnomalyState(AnomalyState<T> state) {
         if (state != null && state.state().isEmpty()) {
-            var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0), seed);
+            var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT), seed);
             state = new AnomalyState<T>(state.task(), Optional.of(state.task().value().createState(rng)));
         }
         this.state = state;

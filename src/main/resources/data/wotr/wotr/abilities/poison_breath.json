@@ -1,0 +1,104 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": {
+        "type": "wotr:area",
+        "shape": {
+          "type": "wotr:sphere",
+          "range": 2
+        },
+        "entities": {
+          "sentiment": "not_friend",
+          "exclude_caster": true
+        },
+        "blocks": {
+          "filter": {
+            "type": "all_of",
+            "predicates": [
+              {
+                "type": "wotr:surface",
+                "space": 2
+              }
+            ]
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "wotr:particle",
+          "particle": {
+            "type": "minecraft:entity_effect",
+            "color": [0.5, 0.7, 0.4, 1.0]
+          }
+        },
+        {
+          "type": "wotr:damage",
+          "amount": 2.0,
+          "damage_type": "wotr:poison"
+        },
+        {
+          "type": "wotr:attach",
+          "id": "wotr:infect",
+          "continue": {
+            "duration": 80
+          },
+          "effects": [
+            {
+              "type": "wotr:targeting",
+              "targeting": [
+                {
+                  "type": "wotr:self",
+                  "entities": {
+                    "filter": {
+                      "effects": {
+                        "minecraft:glowing": {
+                          "amplifier": 102
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "effects": [
+                {
+                  "type": "wotr:detach_own",
+                  "id": "wotr:infect"
+                }
+              ]
+            },
+            {
+              "type": "wotr:status",
+              "status_effect": {
+                "id": "minecraft:poison",
+                "amplifier": 0,
+                "duration": 20
+              }
+            }
+
+          ],
+          "modifiers": [
+            {
+              "modifier": "wotr:provide_infect",
+              "tier": 1,
+              "roll": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_breath.png",
+  "requirements": [
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 6
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

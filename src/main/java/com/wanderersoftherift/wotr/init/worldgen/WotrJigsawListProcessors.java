@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.FilterJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsaws;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceJigsawsBulk;
+import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ReplaceSingleJigsaw;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.ShuffleJigsaws;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -26,5 +27,8 @@ public class WotrJigsawListProcessors {
             .register("filter_remove", () -> FilterJigsaws.CODEC);
     public static final Supplier<MapCodec<ReplaceJigsawsBulk>> FILTER_JIGSAWS_BOLK = JIGSAW_LIST_PROCESSORS
             .register("replace_bulk", () -> ReplaceJigsawsBulk.CODEC);
+
+    public static final Supplier<MapCodec<ReplaceSingleJigsaw>> REPLACE_SINGLE_JIGSAW = JIGSAW_LIST_PROCESSORS
+            .register("replace_single", () -> ReplaceSingleJigsaw.CODEC);
 
 }

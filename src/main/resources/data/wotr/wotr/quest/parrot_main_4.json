@@ -1,0 +1,52 @@
+{
+  "goals": [
+    {
+      "type": "wotr:fixed_give_item",
+      "item": "wotr:rift_key",
+      "count": 1
+    },
+    {
+      "type": "wotr:fixed_give_item",
+      "item": "minecraft:gold_ingot",
+      "count": 1
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "components": {
+          "wotr:rift_config/tier" : 6
+        },
+        "count": 1,
+        "id": "wotr:rift_key"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_3",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_4",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 2
+      }
+    ]
+  }
+}

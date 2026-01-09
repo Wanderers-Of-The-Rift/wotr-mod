@@ -11,6 +11,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -100,7 +101,8 @@ public class PlaceholderRiftTemplate implements RiftGeneratable {
     }
 
     @Override
-    public String identifier() {
-        return "wotr:placeholder_" + size.getX() + "x" + size.getY() + "x" + size.getZ() + "[builtin]";
+    public RiftGeneratableId identifier() {
+        return new RiftGeneratableId(ResourceLocation.fromNamespaceAndPath("wotr",
+                "placeholder_" + size.getX() + "x" + size.getY() + "x" + size.getZ()));
     }
 }

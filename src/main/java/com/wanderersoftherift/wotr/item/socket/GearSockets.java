@@ -21,6 +21,9 @@ import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.wanderersoftherift.wotr.init.WotrTags.Items.SOCKETABLE;
 
@@ -33,25 +36,17 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
         return sockets.isEmpty();
     }
 
-    public static GearSockets randomSockets(int maxSockets, RandomSource random) {
+    public static GearSockets generate(int socketCount, RandomSource random) {
         List<GearSocket> sockets = new ArrayList<>();
-        int actualSockets = random.nextInt(maxSockets) + 1;
-        for (int i = 0; i < actualSockets; i++) {
+        for (int i = 0; i < socketCount; i++) {
             GearSocket socket = GearSocket.getRandomSocket(random);
             sockets.add(socket);
         }
         return new GearSockets(sockets);
     }
 
-    public static GearSockets randomSockets(int minSockets, int maxSockets, RandomSource random) {
-        List<GearSocket> sockets = new ArrayList<>();
-        // sort of pulling in random.nextIntBetweenInclusive, but it didn't work exactly the way I needed it to
-        int actualSockets = random.nextIntBetweenInclusive(minSockets, maxSockets);
-        for (int i = 0; i < actualSockets; i++) {
-            GearSocket socket = GearSocket.getRandomSocket(random);
-            sockets.add(socket);
-        }
-        return new GearSockets(sockets);
+    public static GearSockets generateWithRange(int minSockets, int maxSockets, RandomSource random) {
+        return generate(random.nextIntBetweenInclusive(minSockets, maxSockets), random);
     }
 
     public static GearSockets emptySockets() {
@@ -66,26 +61,26 @@ public record GearSockets(List<GearSocket> sockets) implements ModifierProvider 
         if (itemStack.get(WotrDataComponentType.GEAR_SOCKETS) != null) {
             return;
         }
-        GearSockets sockets = GearSockets.randomSockets(minSockets, maxSockets, level.random);
+        GearSockets sockets = GearSockets.generateWithRange(minSockets, maxSockets, level.random);
         itemStack.set(WotrDataComponentType.GEAR_SOCKETS, sockets);
     }
 
     @Override
-    public void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
+    public Stream<ModifierEntry> modifiers(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity) {
         List<GearSocket> sockets = sockets();
-        for (int i = 0; i < sockets.size(); i++) {
-            GearSocket socket = sockets.get(i);
+        return IntStream.range(0, sockets.size()).mapToObj(idx -> {
+            GearSocket socket = sockets.get(idx);
             if (socket.isEmpty()) {
-                continue;
+                return null;
             }
             ModifierInstance modifierInstance = socket.modifier().get();
             Holder<Modifier> modifier = modifierInstance.modifier();
-            if (modifier != null) {
-                ModifierSource source = new GearSocketModifierSource(slot, i);
-                action.accept(modifier, modifierInstance.tier(), modifierInstance.roll(), source);
+            if (modifier == null) {
+                return null;
             }
-        }
-
+            ModifierSource source = new GearSocketModifierSource(slot, idx);
+            return new ModifierEntry(modifierInstance, source);
+        }).filter(Objects::nonNull);
     }
 
     @Override

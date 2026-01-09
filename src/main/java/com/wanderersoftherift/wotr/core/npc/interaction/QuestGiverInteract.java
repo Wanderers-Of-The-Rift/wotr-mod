@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
@@ -102,12 +103,13 @@ public final class QuestGiverInteract extends MenuInteraction {
             HolderSet<Quest> choices,
             int choiceCount) {
         LootParams params = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
+        LootContext context = new LootContext.Builder(params).create(Optional.empty());
         return RandomUtil.randomSubset(
                 choices.stream().filter(quest -> quest.value().isAvailable(player, level)).toList(), choiceCount,
                 level.getRandom())
                 .stream()
                 .map(quest -> new QuestState(quest, npc, quest.value().generateHandInTarget(params, npc),
-                        quest.value().generateGoals(params), quest.value().generateRewards(params)))
+                        quest.value().generateGoals(context), quest.value().generateRewards(context)))
                 .collect(Collectors.toList());
     }
 

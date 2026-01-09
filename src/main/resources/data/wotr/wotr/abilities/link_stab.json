@@ -1,0 +1,39 @@
+{
+  "type": "wotr:instant",
+  "icon": "minecraft:textures/item/wooden_sword.png",
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": [
+        {
+          "type": "wotr:raycast",
+          "range": 2
+        }
+      ],
+      "effects": [
+        {
+          "type": "wotr:damage",
+          "amount": 6.0,
+          "damage_type": "wotr:ice"
+        },
+        {
+          "type": "wotr:particle",
+          "particle": {
+            "type": "minecraft:crit"
+          }
+        }
+      ]
+    }
+  ],
+    "requirements": [
+      {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 4
+      },
+      {
+        "type": "wotr:cooldown",
+        "ticks": 12
+      }
+    ]
+}

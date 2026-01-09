@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.handler.ChangeAwareItemHandler;
 import com.wanderersoftherift.wotr.item.handler.LargeCountItemHandler;
 import com.wanderersoftherift.wotr.network.ability.AbilitySlotsUpdatePayload;
+import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,18 +23,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * Entity for the ability bench block, to store skill thread
  */
-public class AbilityBenchBlockEntity extends BlockEntity {
+public class AbilityBenchBlockEntity extends BlockEntity implements GeoBlockEntity {
 
     public static final int THREAD_STORAGE = 256;
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final LargeCountItemHandler threadStorage = new LargeCountItemHandler(WotrItems.SKILL_THREAD.toStack(1),
             THREAD_STORAGE);
 
     public AbilityBenchBlockEntity(BlockPos pos, BlockState blockState) {
-        super(WotrBlockEntities.ABILITY_BENCH_BLOCK_ENTITY.get(), pos, blockState);
+        super(WotrBlockEntities.ABILITY_BENCH.get(), pos, blockState);
         threadStorage.registerChangeListener(this::setChanged);
     }
 
@@ -59,6 +65,22 @@ public class AbilityBenchBlockEntity extends BlockEntity {
             }
         };
         return new AbilityBenchMenu(containerId, playerInventory, threadStorage,
-                ContainerLevelAccess.create(level, getBlockPos()), replicatedSlots);
+                ContainerLevelAccess.create(player.level(), getBlockPos()), replicatedSlots);
+    }
+
+    public void dropContents() {
+        if (hasLevel()) {
+            ItemStackHandlerUtil.dropContents(getLevel(), getBlockPos(), threadStorage);
+        }
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        // No animations currently
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 }

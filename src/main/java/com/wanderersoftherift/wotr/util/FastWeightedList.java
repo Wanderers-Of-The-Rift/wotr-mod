@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -51,6 +52,11 @@ public class FastWeightedList<T> {
                 .xmap(it -> of(it.<Pair<Float, T>>toArray(Pair[]::new)), it -> it.entries().toList());
     }
 
+    public static <T> Codec<FastWeightedList<T>> codecWithSingleAlternative(Codec<T> valueCodec) {
+        return Codec.withAlternative(FastWeightedList.codec(valueCodec), valueCodec,
+                single -> FastWeightedList.of(new Pair<>(1f, single)));
+    }
+
     public static <T> FastWeightedList<T> of(Pair<Float, T>... entries) {
         var sortedEntries = Arrays.stream(entries)
                 .sorted(Comparator.comparingDouble(Pair<Float, T>::getA).reversed())
@@ -74,7 +80,7 @@ public class FastWeightedList<T> {
             List<T> entries,
             Function<T, K> keyComputation) {
 
-        var counted = new HashMap<Object, Pair<T, Integer>>();
+        var counted = new HashMap<K, Pair<T, Integer>>();
         for (var entry : entries) {
             var key = keyComputation.apply(entry);
             if (key != null) {
@@ -83,8 +89,8 @@ public class FastWeightedList<T> {
         }
         return FastWeightedList.of(counted.entrySet()
                 .stream()
-                .sorted((a, b) -> ((Comparable) a.getKey()).compareTo(b.getKey()))
-                .map(entry -> new Pair((float) (int) entry.getValue().getB(), entry.getValue().getA()))
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> new Pair<>((float) (int) entry.getValue().getB(), entry.getValue().getA()))
                 .toArray((size) -> new Pair[size]));
     }
 

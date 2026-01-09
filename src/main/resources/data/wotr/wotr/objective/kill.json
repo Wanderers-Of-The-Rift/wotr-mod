@@ -1,4 +1,24 @@
 {
-  "type": "wotr:kill",
-  "quantity" : "wotr:objective/kill"
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:kill_mob",
+      "count": {
+        "type": "wotr:sum",
+        "values": [
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              5
+            ]
+          },
+          10
+        ]
+      }
+    }
+  ]
 }

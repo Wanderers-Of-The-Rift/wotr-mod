@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.core.quest.reward.provider;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public record FixedRewardProvider<T extends Reward>(T reward) implements RewardP
     }
 
     @Override
-    public @NotNull List<Reward> generateReward(LootParams params) {
+    public @NotNull List<Reward> generateReward(LootContext context) {
         return List.of(reward);
     }
 

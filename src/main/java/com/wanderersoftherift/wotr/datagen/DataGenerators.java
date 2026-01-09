@@ -29,6 +29,13 @@ public class DataGenerators {
                     bootstrap.register(
                             WotrDamageTypes.ICE_DAMAGE, new DamageType("wotr.ice", DamageScaling.NEVER, 0.0F));
                     bootstrap.register(
+                            WotrDamageTypes.POISON_DAMAGE, new DamageType("wotr.poison", DamageScaling.NEVER, 0.0F));
+                    bootstrap.register(
+                            WotrDamageTypes.LIGHTNING_DAMAGE,
+                            new DamageType("wotr.lightning", DamageScaling.NEVER, 0.0F));
+                    bootstrap.register(
+                            WotrDamageTypes.EARTH_DAMAGE, new DamageType("wotr.earth", DamageScaling.NEVER, 0.0F));
+                    bootstrap.register(
                             WotrDamageTypes.THORNS_DAMAGE, new DamageType("wotr.thorns", DamageScaling.NEVER, 0.0F));
                 })
                         .add(WotrRegistries.Keys.ABILITIES, WotrAbilityProvider::bootstrapAbilities)

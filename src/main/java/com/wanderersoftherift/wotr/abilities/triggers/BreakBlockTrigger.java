@@ -24,7 +24,7 @@ public record BreakBlockTrigger(BlockState state, BlockPos pos, Direction dir) i
             Direction.CODEC.fieldOf("direction").forGetter(BreakBlockTrigger::dir)
     ).apply(instance, BreakBlockTrigger::new));
 
-    public static final TriggerType<BreakBlockTrigger> TYPE = new TriggerType<>(BreakBlockPredicate.CODEC, null);
+    public static final TriggerType<BreakBlockTrigger> TYPE = new TriggerType<>(BreakBlockPredicate.CODEC, null, null);
 
     @Override
     public TriggerType<BreakBlockTrigger> type() {

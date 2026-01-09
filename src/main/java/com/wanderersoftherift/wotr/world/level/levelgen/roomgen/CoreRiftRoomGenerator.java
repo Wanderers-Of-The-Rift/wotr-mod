@@ -11,10 +11,14 @@ import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedRoom;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
+import org.apache.commons.lang3.function.TriConsumer;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -26,8 +30,34 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {
-        var processedRoom2 = new RiftProcessedRoom(space);
-        var origin = processedRoom2.space.origin();
+        var destination = new RiftProcessedRoom(space);
+        processRoom(space, world, randomFactory, (subGeneratable, pos, transform) -> {
+            destination.clearNewFlags();
+            subGeneratable.processAndPlace(destination, world, pos, transform);
+        }
+        );
+        destination.markAsComplete();
+        return CompletableFuture.completedFuture(destination);
+    }
+
+    @Override
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(
+            RoomRiftSpace space,
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory) {
+        Object2IntMap<RiftGeneratableId> result = new Object2IntArrayMap<>();
+        processRoom(space, world, randomFactory, (subGeneratable, pos, transform) -> {
+            result.mergeInt(subGeneratable.identifier(), 1, Integer::sum);
+        });
+        return result;
+    }
+
+    private void processRoom(
+            RoomRiftSpace space,
+            ServerLevelAccessor world,
+            PositionalRandomFactory randomFactory,
+            TriConsumer<RiftGeneratable, Vec3i, TripleMirror> processor) {
+        var origin = space.origin();
         var randomSource = randomFactory.at(origin.getX(), origin.getY(), origin.getZ());
         var mirror = space.templateTransform();
         if (mirror == null) {
@@ -45,10 +75,8 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
                 LevelChunkSection.SECTION_WIDTH - 1
                         - ((template.size().getZ() - 1) & RiftProcessedChunk.CHUNK_WIDTH_MASK)
         );
-        RiftGeneratable.generate(template, processedRoom2, world, border, mirror, world.getServer(), randomSource, null,
-                jigsawProcessors);
-        processedRoom2.markAsComplete();
-        return CompletableFuture.completedFuture(processedRoom2);
+        RiftGeneratable.processGeneratable(template, border, mirror, world.getServer(), randomSource, null,
+                jigsawProcessors, processor);
     }
 
     public record Factory() implements RiftRoomGenerator.Factory {

@@ -1,0 +1,77 @@
+{
+    "type": "wotr:chain",
+    "icon": "minecraft:textures/mob_effect/strength.png",
+    "abilities": [
+        {
+            "ability": "wotr:dagger/right_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "margin_milliticks": 1000
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/left_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "margin_milliticks": 1000
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/right_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "margin_milliticks": 1000
+
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/left_swing",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 8,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "margin_milliticks": 1000
+                }
+            ]
+        },
+        {
+            "ability": "wotr:dagger/stab",
+            "ticks_to_reset": 40,
+            "requirements": [
+                {
+                    "type": "wotr:cooldown",
+                    "ticks": 16,
+                    "milliticks": 350,
+                    "mode": "inverted",
+                    "cooldown_attribute": "minecraft:attack_speed",
+                    "margin_milliticks": 1000
+                }
+            ]
+        }
+    ]
+}

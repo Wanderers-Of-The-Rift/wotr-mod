@@ -19,7 +19,7 @@ public class RiftParameterInstance {
     private double baseValue = 0.0;
     private double accumulatedMultiplierValue = 1.0;
     private double totalMultiplierValue = 1.0;
-    private List<Consumer<Double>> listeners = new ArrayList<>();
+    private final List<Consumer<Double>> listeners = new ArrayList<>();
 
     public RiftParameterInstance() {
 

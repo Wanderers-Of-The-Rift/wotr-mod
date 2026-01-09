@@ -1,0 +1,61 @@
+{
+  "type": "wotr:instant",
+  "in_creative_menu": false,
+  "effects": [
+    {
+      "type": "wotr:attach",
+      "id": "wotr:burn-fire",
+      "trigger": {
+        "initial_delay": 20,
+        "frequency": 60
+      },
+      "continue": {
+        "duration": 60
+      },
+      "effects": [
+        {
+          "type": "wotr:damage",
+          "amount": 4.0,
+          "damage_type": "wotr:fire"
+        }
+      ],
+        "modifiers": [
+            {
+            "modifier": "wotr:provide_burn",
+            "tier": 1,
+            "roll": 0
+            }
+        ]
+    },
+    {
+      "type": "wotr:attach",
+      "id": "wotr:burn-fire-detach",
+      "trigger": {
+        "caster": {
+          "effects": {
+            "minecraft:glowing": {
+              "amplifier": 101
+            }
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "wotr:detach_own",
+          "id": "wotr:burn-fire"
+        },
+        {
+          "type": "wotr:detach_own",
+          "id": "wotr:burn-fire-detach"
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/poison_dart.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

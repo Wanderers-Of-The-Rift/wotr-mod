@@ -18,7 +18,7 @@ public record TakeDamageTrigger(SerializableDamageSource source, float amount) i
     ).apply(instance, TakeDamageTrigger::new));
 
     public static final TriggerType<TakeDamageTrigger> TRIGGER_TYPE = new TriggerType<>(
-            TakeDamagePredicate.CODEC, null);
+            TakeDamagePredicate.CODEC, null, null);
 
     @Override
     public TriggerType<?> type() {

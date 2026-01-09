@@ -8,10 +8,12 @@ import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
 import com.wanderersoftherift.wotr.util.ItemUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,8 +35,10 @@ public record LootTableRewardProvider(ResourceKey<LootTable> lootTable) implemen
     }
 
     @Override
-    public @NotNull List<Reward> generateReward(LootParams params) {
-        LootTable table = params.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
-        return ItemUtil.condense(table.getRandomItems(params)).stream().<Reward>map(ItemReward::new).toList();
+    public @NotNull List<Reward> generateReward(LootContext context) {
+        LootTable table = context.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
+        List<ItemStack> output = new ArrayList<>();
+        table.getRandomItems(context, output::add);
+        return ItemUtil.condense(output).stream().<Reward>map(ItemReward::new).toList();
     }
 }

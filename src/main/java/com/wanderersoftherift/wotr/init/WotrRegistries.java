@@ -15,19 +15,21 @@ import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
+import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.guild.Guild;
 import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
-import com.wanderersoftherift.wotr.core.quest.Goal;
-import com.wanderersoftherift.wotr.core.quest.GoalProvider;
 import com.wanderersoftherift.wotr.core.quest.Quest;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.rift.RiftConfigDataType;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RegisteredRiftParameter;
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
@@ -38,8 +40,6 @@ import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
-import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
-import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import com.wanderersoftherift.wotr.util.listedit.EditType;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
@@ -127,7 +127,7 @@ public class WotrRegistries {
     public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
     public static final Registry<TrackableTrigger.TriggerType<?>> TRACKABLE_TRIGGERS = new RegistryBuilder<>(
-            Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
+            Keys.TRACKABLE_TRIGGERS).sync(true).create();
     public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
             Keys.ABILITY_SOURCES).sync(true).create();
     public static final Registry<DualCodec<? extends ModifierSource>> MODIFIER_SOURCES = new RegistryBuilder<>(
@@ -193,7 +193,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_types"));
         public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
-        public static final ResourceKey<Registry<TrackableTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+        public static final ResourceKey<Registry<TrackableTrigger.TriggerType<?>>> TRACKABLE_TRIGGERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("trackable_trigger"));
         public static final ResourceKey<Registry<MapCodec<? extends AbilityTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_targeting"));

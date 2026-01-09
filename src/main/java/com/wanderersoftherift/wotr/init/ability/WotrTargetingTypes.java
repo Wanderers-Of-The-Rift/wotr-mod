@@ -6,7 +6,9 @@ import com.wanderersoftherift.wotr.abilities.targeting.AbilityTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.AreaTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.CasterTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.ConnectedBlockTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.FieldOfViewTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.FilterTargeting;
+import com.wanderersoftherift.wotr.abilities.targeting.OffsetTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RandomChanceTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RandomSubsetTargeting;
 import com.wanderersoftherift.wotr.abilities.targeting.RaycastTargeting;
@@ -26,6 +28,8 @@ public class WotrTargetingTypes {
             () -> FilterTargeting.CODEC);
     public static final Supplier<MapCodec<RaycastTargeting>> RAYCAST = TARGETING_TYPES.register("raycast",
             () -> RaycastTargeting.CODEC);
+    public static final Supplier<MapCodec<FieldOfViewTargeting>> FIELD_OF_VIEW = TARGETING_TYPES
+            .register("field_of_view", () -> FieldOfViewTargeting.CODEC);
     public static final Supplier<MapCodec<AreaTargeting>> AREA = TARGETING_TYPES.register("area",
             () -> AreaTargeting.CODEC);
     public static final Supplier<MapCodec<CasterTargeting>> CASTER = TARGETING_TYPES.register("caster",
@@ -40,5 +44,7 @@ public class WotrTargetingTypes {
             .register("connected_block", () -> ConnectedBlockTargeting.CODEC);
     public static final Supplier<MapCodec<RandomChanceTargeting>> RANDOM_CHANCE = TARGETING_TYPES
             .register("random_chance", () -> RandomChanceTargeting.CODEC);
+    public static final Supplier<MapCodec<OffsetTargeting>> OFFSET = TARGETING_TYPES.register("offset",
+            () -> OffsetTargeting.CODEC);
 
 }

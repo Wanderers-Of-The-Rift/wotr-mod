@@ -1,0 +1,102 @@
+{
+  "type": "wotr:instant",
+  "effects": [
+    {
+      "type": "wotr:targeting",
+      "targeting": {
+        "type": "wotr:area",
+        "shape": {
+          "type": "wotr:sphere",
+          "range": 2
+        },
+        "entities": {
+          "sentiment": "not_friend",
+          "exclude_caster": true
+        },
+        "blocks": {
+          "filter": {
+            "type": "all_of",
+            "predicates": [
+              {
+                "type": "wotr:surface",
+                "space": 2
+              }
+            ]
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "wotr:particle",
+          "particle": {
+            "type": "minecraft:dust",
+            "color": [0.26, 0.15, 0.12],
+            "scale": 0.9
+          }
+        },
+        {
+          "type": "wotr:damage",
+          "amount": 2.0,
+          "damage_type": "wotr:earth"
+        },
+        {
+          "type": "wotr:attach",
+          "id": "wotr:encumber",
+          "continue": {
+            "duration": 80
+          },
+          "effects": [
+            {
+              "type": "wotr:targeting",
+              "targeting": [
+                {
+                  "type": "wotr:self",
+                  "entities": {
+                    "filter": {
+                      "effects": {
+                        "minecraft:glowing": {
+                          "amplifier": 103
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "effects": [
+                {
+                  "type": "wotr:detach_own",
+                  "id": "wotr:encumber"
+                }
+              ]
+            }
+
+          ],
+          "modifiers": [
+            {
+              "modifier": "wotr:provide_encumber",
+              "tier": 1,
+              "roll": 0
+            },
+            {
+              "modifier": "wotr:overencumber",
+              "tier": 1,
+              "roll": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "icon": "wotr:textures/ability/icon/earth_breath.png",
+  "requirements": [
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 6
+    },
+    {
+      "type": "wotr:cooldown",
+      "ticks": 40
+    }
+  ]
+}

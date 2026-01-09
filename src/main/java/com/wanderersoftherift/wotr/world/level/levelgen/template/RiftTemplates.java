@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.lang.ref.PhantomReference;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,7 +85,7 @@ public class RiftTemplates {
         var result = new ArrayList<RiftGeneratable>();
         for (int idx = 0; idx < palettes.size(); idx++) {
             result.add(fromPalette(palettes.get(idx), template.getSize(), processorsHolder.value(), entities,
-                    MessageFormat.format("{0}:{1}[{2}]", id.getNamespace(), id.getPath(), idx)));
+                    new RiftGeneratableId(id, idx)));
         }
         return result;
     }
@@ -96,7 +95,7 @@ public class RiftTemplates {
             Vec3i size,
             StructureProcessorList processors,
             List<StructureTemplate.StructureEntityInfo> entities,
-            String identifier) {
+            RiftGeneratableId identifier) {
         return new PayloadRiftTemplate(size, processors, palette.jigsaws(), identifier,
                 new LazyPayload(() -> BasicPayload.of(palette, size, entities)));
     }

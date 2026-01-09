@@ -1,0 +1,43 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "completion_level": "complete",
+      "count" : 1,
+      "tier" : 3,
+      "themes" : [
+        "wotr:swamp"
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 1,
+        "id": "minecraft:copper_ingot"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_ability_1",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 2
+      }
+    ]
+  }
+}
