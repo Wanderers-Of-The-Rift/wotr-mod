@@ -199,6 +199,8 @@ public class RuneAnvilMenu extends AbstractContainerMenu {
                 if (i >= this.activeSocketSlots) {
                     slot.set(ItemStack.EMPTY);
                     slot.setSocket(null);
+                    slot.setLockedSocket(null);
+                    slot.setShape(null);
                     continue;
                 }
 
