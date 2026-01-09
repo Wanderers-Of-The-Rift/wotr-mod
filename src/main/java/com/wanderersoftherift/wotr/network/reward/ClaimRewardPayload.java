@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.network.reward;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.gui.menu.reward.RewardMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardProvidingMenu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -28,7 +28,8 @@ public record ClaimRewardPayload(int rewardId) implements CustomPacketPayload {
     }
 
     public void handleOnServer(final IPayloadContext context) {
-        if (context.player().containerMenu instanceof RewardMenu menu && menu.stillValid(context.player())) {
+        if (context.player().containerMenu instanceof RewardProvidingMenu menu
+                && context.player().containerMenu.stillValid(context.player())) {
             menu.claimReward(context.player(), rewardId);
         }
     }
