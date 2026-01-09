@@ -1,0 +1,72 @@
+{
+    "layout": {
+        "type": "wotr:dungeon"
+    },
+    "room_generator": {
+        "type": "wotr:cached",
+        "base": {
+            "type": "wotr:layer_generatable",
+            "layered_generatable": {
+                "type": "wotr:perimeter",
+                "perimeter_block": "minecraft:bedrock"
+            },
+            "base": {
+                "type": "wotr:core"
+            }
+        }
+    },
+    "post_processing_steps": [
+        {
+            "type": "wotr:corridor_blender",
+            "validator": {
+                "type": "wotr:or",
+                "values": [
+                    {
+                        "type": "wotr:by_generator_layout"
+                    },
+                    {
+                        "type": "wotr:opposite",
+                        "base": {
+                            "type": "wotr:by_generator_layout"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "jigsaw_processors": [
+        {
+            "type": "wotr:filter_remove",
+            "namespace": "wotr",
+            "path_pattern": "rift/ring_"
+        },
+        {
+            "type": "wotr:shuffle"
+        },
+        {
+            "type": "wotr:replace_bulk",
+            "values": {
+                "wotr:rift/poi/free/3": {
+                    "new_pool": "wotr:rift/anomaly/free/3",
+                    "chance": 0.15
+                },
+                "wotr:rift/poi/ceiling/3": {
+                    "new_pool": "wotr:rift/anomaly/ceiling/3",
+                    "chance": 0.15
+                },
+                "wotr:rift/poi/halfway/3": {
+                    "new_pool": "wotr:rift/anomaly/halfway/3",
+                    "chance": 0.15
+                },
+                "wotr:rift/poi/inwall/3": {
+                    "new_pool": "wotr:rift/anomaly/inwall/3",
+                    "chance": 0.15
+                }
+            }
+        }
+    ],
+    "empty_chunk_generatable": {
+        "type": "wotr:single_block_chunk",
+        "block": "minecraft:bedrock"
+    }
+}
