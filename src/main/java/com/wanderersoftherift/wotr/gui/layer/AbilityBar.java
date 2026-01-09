@@ -114,7 +114,7 @@ public final class AbilityBar implements ConfigurableLayer {
             var ability = abilitySource.getAbility(player);
             float cooldown = 1f - ability.value()
                     .getCooldown(player, abilitySource)
-                    .fractionalPosition(gameTime, deltaTracker.getGameTimeDeltaTicks());
+                    .fractionalPosition(gameTime * 1000, deltaTracker.getGameTimeDeltaTicks() * 1000);
             boolean isActive = ability.value().isActive(player, abilitySource);
             renderAbility(graphics, player, abilitySource, pos.x + ICON_OFFSET + i * slotOffset.x(),
                     pos.y + ICON_OFFSET + i * slotOffset.y(), ability, isActive, cooldown);

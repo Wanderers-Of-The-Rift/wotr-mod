@@ -127,7 +127,7 @@ public class WotrRegistries {
     public static final Registry<EditType<?>> EDIT_TYPES = new RegistryBuilder<>(
             Keys.EDIT_TYPES).create();
     public static final Registry<TrackableTrigger.TriggerType<?>> TRACKABLE_TRIGGERS = new RegistryBuilder<>(
-            Keys.TRACKED_ABILITY_TRIGGERS).sync(true).create();
+            Keys.TRACKABLE_TRIGGERS).sync(true).create();
     public static final Registry<DualCodec<? extends AbilitySource>> ABILITY_SOURCES = new RegistryBuilder<>(
             Keys.ABILITY_SOURCES).sync(true).create();
     public static final Registry<DualCodec<? extends ModifierSource>> MODIFIER_SOURCES = new RegistryBuilder<>(
@@ -193,7 +193,7 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("ability_types"));
         public static final ResourceKey<Registry<AbilityUpgrade>> ABILITY_UPGRADES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("ability_upgrade"));
-        public static final ResourceKey<Registry<TrackableTrigger.TriggerType<?>>> TRACKED_ABILITY_TRIGGERS = ResourceKey
+        public static final ResourceKey<Registry<TrackableTrigger.TriggerType<?>>> TRACKABLE_TRIGGERS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("trackable_trigger"));
         public static final ResourceKey<Registry<MapCodec<? extends AbilityTargeting>>> EFFECT_TARGETING_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("effect_targeting"));

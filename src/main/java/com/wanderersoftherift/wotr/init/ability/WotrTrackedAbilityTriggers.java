@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.abilities.triggers.BreakBlockTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.DealDamageTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.KillTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.LootTrigger;
+import com.wanderersoftherift.wotr.abilities.triggers.MainAttackTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TakeDamageTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
@@ -14,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class WotrTrackedAbilityTriggers {
     public static final DeferredRegister<TrackableTrigger.TriggerType<?>> TRIGGERS = DeferredRegister
-            .create(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS, WanderersOfTheRift.MODID);
+            .create(WotrRegistries.Keys.TRACKABLE_TRIGGERS, WanderersOfTheRift.MODID);
 
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<TickTrigger>> TICK_TRIGGER = TRIGGERS
             .register("tick", () -> TickTrigger.TRIGGER_TYPE);
@@ -22,6 +23,8 @@ public class WotrTrackedAbilityTriggers {
             .register("take_damage", () -> TakeDamageTrigger.TRIGGER_TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<DealDamageTrigger>> DEAL_DAMAGE = TRIGGERS
             .register("deal_damage", () -> DealDamageTrigger.TRIGGER_TYPE);
+    public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<MainAttackTrigger>> MAIN_ATTACK = TRIGGERS
+            .register("main_attack", () -> MainAttackTrigger.TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<BreakBlockTrigger>> BREAK_BLOCK = TRIGGERS
             .register("break_block", () -> BreakBlockTrigger.TYPE);
     public static final DeferredHolder<TrackableTrigger.TriggerType<?>, TrackableTrigger.TriggerType<LootTrigger>> LOOT = TRIGGERS

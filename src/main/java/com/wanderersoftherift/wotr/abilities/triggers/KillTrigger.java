@@ -20,7 +20,7 @@ public record KillTrigger(SerializableDamageSource source, UUID victim) implemen
             UUIDUtil.CODEC.fieldOf("victim").forGetter(KillTrigger::victim)
     ).apply(instance, KillTrigger::new));
 
-    public static final TriggerType<KillTrigger> TRIGGER_TYPE = new TriggerType<>(KillPredicate.CODEC, null);
+    public static final TriggerType<KillTrigger> TRIGGER_TYPE = new TriggerType<>(KillPredicate.CODEC, null, null);
 
     @Override
     public TriggerType<?> type() {

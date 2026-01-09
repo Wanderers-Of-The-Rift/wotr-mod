@@ -1,5 +1,5 @@
 {
   "modifiers": [
-    "wotr:attack_speed"
+      "wotr:sword", "wotr:weapon_damage/diamond_damage"
   ]
 }

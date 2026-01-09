@@ -2,17 +2,22 @@ package com.wanderersoftherift.wotr.abilities;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.OngoingAbilities;
+import com.wanderersoftherift.wotr.client.MainAttackHandler;
 import com.wanderersoftherift.wotr.core.inventory.slot.AbilityEquipmentSlot;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlotEvent;
 import com.wanderersoftherift.wotr.entity.player.LivingAttributeChangedEvent;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.modifier.CollectEquipmentSlotsEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
@@ -27,6 +32,16 @@ import static com.wanderersoftherift.wotr.init.WotrRegistries.Keys.ABILITIES;
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class AbilityEventHandler {
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void overrideAttack(InputEvent.InteractionKeyMappingTriggered event) {
+        var minecraft = Minecraft.getInstance();
+        if (event.getKeyMapping() == minecraft.options.keyAttack && MainAttackHandler.doAttack(minecraft.player)) {
+            event.setCanceled(true);
+            event.setSwingHand(false);
+        }
+    }
 
     @SubscribeEvent
     public static void collectAbilitySlots(CollectEquipmentSlotsEvent event) {
@@ -54,6 +69,7 @@ public class AbilityEventHandler {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             tickAttachedEffects(level);
             tickActiveAbilities(level);
+            tickRepeatAbilities(level);
         }
     }
 
@@ -124,6 +140,15 @@ public class AbilityEventHandler {
 
     public static void tickActiveAbilities(ServerLevel level) {
         level.getData(WotrAttachments.ONGOING_ABILITY_ENTITY_REGISTRY).forEach((entity, data) -> {
+            data.tick();
+            if (data.isEmpty()) {
+                entity.removeData(WotrAttachments.ONGOING_ABILITIES);
+            }
+        });
+    }
+
+    public static void tickRepeatAbilities(ServerLevel level) {
+        level.getData(WotrAttachments.ABILITY_REPEATER_REGISTRY).forEach((entity, data) -> {
             data.tick();
             if (data.isEmpty()) {
                 entity.removeData(WotrAttachments.ONGOING_ABILITIES);
