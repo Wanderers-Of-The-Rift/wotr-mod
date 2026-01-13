@@ -37,7 +37,7 @@ public interface ObjectiveType {
      * @param config
      * @return An ongoing objective instance from this objective definition
      */
-    OngoingObjective generate(ServerLevelAccessor level, RiftConfig config);
+    OngoingObjective generateObjective(ServerLevelAccessor level, RiftConfig config);
 
     /**
      * @return A list of all jigsaw processors that should be applied to the rift when this objective is applied

@@ -3,8 +3,8 @@ package com.wanderersoftherift.wotr.init;
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.entity.predicate.AndPredicate;
-import com.wanderersoftherift.wotr.entity.predicate.GuildRankPredicate;
 import com.wanderersoftherift.wotr.entity.predicate.OrPredicate;
+import com.wanderersoftherift.wotr.entity.predicate.ProgressionTrackRankPredicate;
 import com.wanderersoftherift.wotr.entity.predicate.QuestCompletionPredicate;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,8 +20,8 @@ public class WotrEntitySubPredicates {
             () -> AndPredicate.CODEC);
     public static final Supplier<MapCodec<? extends EntitySubPredicate>> OR = ENTITY_SUBPREDICATES.register("or",
             () -> OrPredicate.CODEC);
-    public static final Supplier<MapCodec<? extends EntitySubPredicate>> GUILD_RANK = ENTITY_SUBPREDICATES
-            .register("guild_rank", () -> GuildRankPredicate.CODEC);
+    public static final Supplier<MapCodec<? extends EntitySubPredicate>> PROGRESSION_TRACK_RANK = ENTITY_SUBPREDICATES
+            .register("progression_track_rank", () -> ProgressionTrackRankPredicate.CODEC);
     public static final Supplier<MapCodec<? extends EntitySubPredicate>> QUEST_COMPLETION = ENTITY_SUBPREDICATES
             .register("quest_completion", () -> QuestCompletionPredicate.CODEC);
 

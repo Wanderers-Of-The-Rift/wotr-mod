@@ -1,6 +1,6 @@
 package com.wanderersoftherift.wotr.gui.widget.reward;
 
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.core.quest.reward.CurrencyReward;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

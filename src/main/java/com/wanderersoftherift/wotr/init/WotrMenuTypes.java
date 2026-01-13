@@ -7,6 +7,7 @@ import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
 import com.wanderersoftherift.wotr.gui.menu.RuneAnvilMenu;
 import com.wanderersoftherift.wotr.gui.menu.TradingMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.MainCharacterMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.WalletMenu;
 import com.wanderersoftherift.wotr.gui.menu.quest.QuestCompletionMenu;
@@ -34,7 +35,7 @@ public class WotrMenuTypes {
             () -> new MenuType<>(AbilityBenchMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     public static final Supplier<MenuType<RiftCompleteMenu>> RIFT_COMPLETE_MENU = MENUS.register("rift_complete_menu",
-            () -> new MenuType<>(RiftCompleteMenu::new, FeatureFlags.DEFAULT_FLAGS));
+            () -> IMenuTypeExtension.create(RiftCompleteMenu::new));
 
     public static final Supplier<MenuType<TradingMenu>> TRADING_MENU = MENUS.register("trading_menu",
             () -> new MenuType<>(TradingMenu::new, FeatureFlags.DEFAULT_FLAGS));
@@ -48,9 +49,12 @@ public class WotrMenuTypes {
             "quest_completion_menu", () -> new MenuType<>(QuestCompletionMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     public static final Supplier<MenuType<RewardMenu>> REWARD_MENU = MENUS.register(
-            "reward_menu", () -> new MenuType<>(RewardMenu::new, FeatureFlags.DEFAULT_FLAGS));
+            "reward_menu", () -> IMenuTypeExtension.create(RewardMenu::new));
 
     /// Character Menus
+
+    public static final Supplier<MenuType<MainCharacterMenu>> MAIN_CHARACTER_MENU = MENUS.register("character_menu",
+            () -> new MenuType<>(MainCharacterMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     public static final Supplier<MenuType<GuildMenu>> GUILDS_MENU = MENUS.register("guilds_menu",
             () -> new MenuType<>(GuildMenu::new, FeatureFlags.DEFAULT_FLAGS));

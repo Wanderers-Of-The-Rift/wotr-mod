@@ -16,9 +16,7 @@ import com.wanderersoftherift.wotr.abilities.triggers.TickTrigger;
 import com.wanderersoftherift.wotr.abilities.triggers.TriggerRegistry;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.DeathNotifierAttachment;
 import com.wanderersoftherift.wotr.client.rift.BannedRiftList;
-import com.wanderersoftherift.wotr.core.guild.GuildStatus;
-import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
-import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.currency.Wallet;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
 import com.wanderersoftherift.wotr.core.npc.interaction.NoInteract;
 import com.wanderersoftherift.wotr.core.npc.interaction.NpcInteraction;
@@ -31,6 +29,7 @@ import com.wanderersoftherift.wotr.core.rift.map.RiftMapData;
 import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveData;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistics;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTracker;
 import com.wanderersoftherift.wotr.entity.portal.RiftEntrance;
 import com.wanderersoftherift.wotr.init.ability.WotrTrackedAbilityTriggers;
 import com.wanderersoftherift.wotr.serialization.MutableListCodec;
@@ -151,19 +150,12 @@ public final class WotrAttachments {
             "quest_log",
             () -> AttachmentType.builder(() -> new QuestLog()).serialize(QuestLog.CODEC).copyOnDeath().build()
     );
-    public static final Supplier<AttachmentType<GuildStatus>> GUILD_STATUS = ATTACHMENT_TYPES.register(
-            "guild_status",
-            () -> AttachmentType.builder(GuildStatus::new)
-                    .serialize(GuildStatus.getSerializer())
+    public static final Supplier<AttachmentType<ProgressionTracker>> PROGRESSION_TRACKER = ATTACHMENT_TYPES.register(
+            "progression_tracker",
+            () -> AttachmentType.builder(ProgressionTracker::new)
+                    .serialize(ProgressionTracker.getSerializer())
                     .copyOnDeath()
                     .build());
-    public static final Supplier<AttachmentType<UnclaimedGuildRewards>> UNCLAIMED_GUILD_REWARDS = ATTACHMENT_TYPES
-            .register(
-                    "unclaimed_guild_rewards",
-                    () -> AttachmentType.builder(UnclaimedGuildRewards::new)
-                            .serialize(UnclaimedGuildRewards.getSerializer())
-                            .copyOnDeath()
-                            .build());
 
     public static final Supplier<AttachmentType<NpcInteraction>> NPC_INTERACT = ATTACHMENT_TYPES.register(
             "mob_interact",

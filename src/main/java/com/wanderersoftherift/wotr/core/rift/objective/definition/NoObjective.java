@@ -20,7 +20,7 @@ public record NoObjective() implements ObjectiveType {
     }
 
     @Override
-    public OngoingObjective generate(ServerLevelAccessor level, RiftConfig config) {
+    public OngoingObjective generateObjective(ServerLevelAccessor level, RiftConfig config) {
         return NoOngoingObjective.INSTANCE;
     }
 
