@@ -22,10 +22,15 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterSelectItemModelPropertyEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+
+import static com.wanderersoftherift.wotr.init.WotrFluids.FLUID_MAP;
 
 // TODO: Most things in here should have other homes
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -84,4 +89,30 @@ public final class ClientInitEvents {
         event.addListener(WanderersOfTheRift.id("hud_preset"), HudPresetManager.getInstance());
     }
 
+    @SubscribeEvent
+    private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        FLUID_MAP.values().forEach(fluid -> {
+            event.registerFluidType(new IClientFluidTypeExtensions() {
+                @Override
+                public @NotNull ResourceLocation getStillTexture() {
+                    return fluid.fluidStillId;
+                }
+
+                @Override
+                public @NotNull ResourceLocation getFlowingTexture() {
+                    return fluid.fluidFlowingId;
+                }
+
+                @Override
+                public ResourceLocation getOverlayTexture() {
+                    return fluid.fluidOverlayId;
+                }
+
+                @Override
+                public int getTintColor() {
+                    return 0xFFFFFFFF;
+                }
+            }, fluid.fluidType.value());
+        });
+    }
 }
