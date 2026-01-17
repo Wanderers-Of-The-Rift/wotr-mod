@@ -8,7 +8,9 @@ import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -24,6 +26,11 @@ public record FixedThemeSource(Holder<RiftTheme> theme) implements ThemeSource {
             BlockPos structurePos,
             ThemePieceType themePieceType) {
         return theme.value().getProcessors(themePieceType);
+    }
+
+    @Override
+    public @Nullable Holder<Biome> getThemeBiome(ServerLevel level) {
+        return theme.value().biome().orElse(null);
     }
 
     @Override

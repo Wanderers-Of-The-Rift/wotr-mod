@@ -14,6 +14,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratable
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 import java.util.concurrent.CompletableFuture;
@@ -42,7 +43,8 @@ public interface RiftRoomGenerator {
             PositionalRandomFactory randomFactory);
 
     static Future<RiftProcessedChunk> chunkOf(RiftGeneratable filler, ServerLevelAccessor world, Vec3i i) {
-        var tmpRoom = new RiftProcessedRoom(new VoidRiftSpace(i));
+        var tmpRoom = new RiftProcessedRoom(new VoidRiftSpace(i),
+                world.registryAccess().holderOrThrow(Biomes.THE_VOID));
         filler.processAndPlace(tmpRoom, world, Vec3i.ZERO, TripleMirror.NONE);
         tmpRoom.markAsComplete();
         return CompletableFuture.completedFuture(tmpRoom.getAndRemoveChunk(tmpRoom.space.origin()));
