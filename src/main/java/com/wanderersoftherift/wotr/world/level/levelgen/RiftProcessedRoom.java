@@ -3,10 +3,12 @@ package com.wanderersoftherift.wotr.world.level.levelgen;
 import com.wanderersoftherift.wotr.util.ShiftMath;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -32,9 +34,11 @@ public class RiftProcessedRoom {
     private final int shiftYZ;
     private final int xMask;
     private final int zMask;
+    private final Holder<Biome> defaultBiome;
 
-    public RiftProcessedRoom(RiftSpace space) {
+    public RiftProcessedRoom(RiftSpace space, Holder<Biome> defaultBiome) {
         this.space = space;
+        this.defaultBiome = defaultBiome;
         origin = space.origin();
         shiftZ = ShiftMath.shiftForCeilPow2(space.size().getX());
         shiftY = ShiftMath.shiftForCeilPow2(space.size().getZ());
@@ -97,7 +101,7 @@ public class RiftProcessedRoom {
             return value;
         }
         value = new RiftProcessedChunk(origin.offset(index & xMask, (index >> shiftYZ), (index >> shiftZ) & zMask),
-                this);
+                this, defaultBiome);
         if (ref.compareAndSet(null, value)) {
             return value;
         }
@@ -195,6 +199,18 @@ public class RiftProcessedRoom {
                 y & RiftProcessedChunk.CHUNK_HEIGHT_MASK, z & RiftProcessedChunk.CHUNK_WIDTH_MASK);
     }
 
+    public Holder<Biome> getBiome(int x, int y, int z) {
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunk = getChunk(chunkX, chunkY, chunkZ);
+        if (chunk == null) {
+            return null;
+        }
+        return chunk.getBiomeWithinSection(x & RiftProcessedChunk.CHUNK_WIDTH_MASK,
+                y & RiftProcessedChunk.CHUNK_HEIGHT_MASK, z & RiftProcessedChunk.CHUNK_WIDTH_MASK);
+    }
+
     public boolean getMerged(int x, int y, int z) {
         var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
@@ -226,17 +242,45 @@ public class RiftProcessedRoom {
         return getBlock(pos.getX(), pos.getY(), pos.getZ());
     }
 
+    public Holder<Biome> getBiome(Vec3i pos) {
+        return getBiome(pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public void setBlock(int x, int y, int z, BlockState state) {
         var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
         var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
         var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
-        chunk.setBlockStatePure(x & RiftProcessedChunk.CHUNK_WIDTH_MASK, y & RiftProcessedChunk.CHUNK_HEIGHT_MASK,
-                z & RiftProcessedChunk.CHUNK_WIDTH_MASK, state);
+        if (chunk != null) {
+            chunk.setBlockStatePure(x & RiftProcessedChunk.CHUNK_WIDTH_MASK, y & RiftProcessedChunk.CHUNK_HEIGHT_MASK,
+                    z & RiftProcessedChunk.CHUNK_WIDTH_MASK, state);
+        }
     }
 
     public void setBlock(Vec3i basePos, BlockState blockState) {
         setBlock(basePos.getX(), basePos.getY(), basePos.getZ(), blockState);
+    }
+
+    public void setBiome(int x, int y, int z, Holder<Biome> biome) {
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        if (chunk != null) {
+            chunk.setBiomeWithinSection(x & RiftProcessedChunk.CHUNK_WIDTH_MASK,
+                    y & RiftProcessedChunk.CHUNK_HEIGHT_MASK, z & RiftProcessedChunk.CHUNK_WIDTH_MASK, biome);
+        }
+    }
+
+    public void setBiome(Vec3i basePos, Holder<Biome> biome) {
+        setBiome(basePos.getX(), basePos.getY(), basePos.getZ(), biome);
+    }
+
+    public void setDefaultBiome(Holder<Biome> biome) {
+        for (RiftProcessedChunk chunk : getOrCreateAllChunks()) {
+            chunk.setDefaultBiome(biome);
+        }
+
     }
 
     public List<RiftProcessedChunk> getOrCreateAllChunks() {

@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import org.apache.commons.lang3.function.TriConsumer;
@@ -30,7 +31,7 @@ public record CoreRiftRoomGenerator(List<JigsawListProcessor> jigsawProcessors) 
             RoomRiftSpace space,
             ServerLevelAccessor world,
             PositionalRandomFactory randomFactory) {
-        var destination = new RiftProcessedRoom(space);
+        var destination = new RiftProcessedRoom(space, world.registryAccess().holderOrThrow(Biomes.THE_VOID));
         processRoom(space, world, randomFactory, (subGeneratable, pos, transform) -> {
             destination.clearNewFlags();
             subGeneratable.processAndPlace(destination, world, pos, transform);

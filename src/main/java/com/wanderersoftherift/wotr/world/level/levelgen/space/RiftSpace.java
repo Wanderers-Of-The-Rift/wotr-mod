@@ -33,7 +33,7 @@ public interface RiftSpace {
 
     /**
      * Applies the provided consumer to all sections composing the space
-     * 
+     *
      * @param consumer
      */
     default void forEachSection(Consumer<Vec3i> consumer) {

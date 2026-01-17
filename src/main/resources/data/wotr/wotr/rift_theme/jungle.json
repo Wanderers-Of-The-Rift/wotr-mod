@@ -26,5 +26,6 @@
       "piece_type": "room",
       "processors": "wotr:room_theme_jungle"
     }
-  ]
+  ],
+  "default_biome": "wotr:green"
 }
