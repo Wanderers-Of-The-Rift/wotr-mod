@@ -1,13 +1,13 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
 import com.wanderersoftherift.wotr.mixin.AccessorPalettedContainer;
+import com.wanderersoftherift.wotr.util.FastIdMapper;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
 import com.wanderersoftherift.wotr.util.ShiftMath;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.IdMap;
-import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 /**
  * temporary storage for blocks before they are placed in the world
@@ -159,7 +158,7 @@ public class RiftProcessedChunk {
     }
 
     private @NotNull PalettedContainer<Holder<Biome>> buildBiomeContainer(LevelChunkSection oldSection) {
-        IdMapper<Holder<Biome>> idMapper = new IdMapper<>();
+        FastIdMapper<Holder<Biome>> idMapper = new FastIdMapper<>();
         var registry = ((AccessorPalettedContainer) oldSection.getBiomes()).getRegistry();
         for (Holder<Biome> biome : this.biomes) {
             var actualBiome = biome == null ? defaultBiome : biome;
@@ -215,8 +214,7 @@ public class RiftProcessedChunk {
         }
         // }
 
-        return new PalettedContainer<Holder<Biome>>(registry, strategy, config, storage,
-                StreamSupport.stream(idMap.spliterator(), false).toList());
+        return new PalettedContainer<Holder<Biome>>(registry, strategy, config, storage, idMapper.getItems());
     }
 
     private @Nullable PalettedContainer<BlockState> buildBlockStateContainer(LevelChunkSection oldSection) {
