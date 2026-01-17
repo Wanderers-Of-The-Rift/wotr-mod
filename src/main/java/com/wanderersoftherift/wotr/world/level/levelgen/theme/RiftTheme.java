@@ -9,15 +9,17 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> processors) {
+public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> processors, Optional<Holder<Biome>> biome) {
     public static final Codec<RiftTheme> DIRECT_CODEC = RecordCodecBuilder.create(builder -> builder.group(
             Codec.mapPair(ThemePieceType.CODEC.fieldOf("piece_type"),
                     StructureProcessorType.LIST_CODEC.fieldOf("processors"))
@@ -25,7 +27,8 @@ public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> proc
                     .listOf()
                     .xmap(RiftTheme::fromPairList, RiftTheme::fromMap)
                     .fieldOf("processors")
-                    .forGetter(RiftTheme::processors)
+                    .forGetter(RiftTheme::processors),
+            Biome.CODEC.optionalFieldOf("default_biome").forGetter(RiftTheme::biome)
     ).apply(builder, RiftTheme::new));
 
     public static final Codec<RiftTheme> DIRECT_SYNC_CODEC = Codec.unit(RiftTheme::new);
@@ -36,7 +39,7 @@ public record RiftTheme(Map<ThemePieceType, Holder<StructureProcessorList>> proc
             .holderRegistry(WotrRegistries.Keys.RIFT_THEMES);
 
     public RiftTheme() {
-        this(Map.of());
+        this(Map.of(), Optional.empty());
     }
 
     public List<StructureProcessor> getProcessors(ThemePieceType pieceType) {

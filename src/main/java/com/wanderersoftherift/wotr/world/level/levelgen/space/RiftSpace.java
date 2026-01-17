@@ -24,4 +24,5 @@ public interface RiftSpace {
     TripleMirror templateTransform();
 
     @Nullable RiftGeneratable template();
+
 }

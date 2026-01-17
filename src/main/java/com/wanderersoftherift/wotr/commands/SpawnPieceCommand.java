@@ -339,7 +339,8 @@ public class SpawnPieceCommand extends BaseCommand {
         Map<ThemePieceType, Holder<StructureProcessorList>> themeMap = Map.of(ThemePieceType.ROOM, room,
                 ThemePieceType.POI, poi);
 
-        placeStructure(path, pos.mutable(), new Holder.Direct<>(new RiftTheme(themeMap)), includeTerminators, seed, cs);
+        placeStructure(path, pos.mutable(), new Holder.Direct<>(new RiftTheme(themeMap, Optional.empty())),
+                includeTerminators, seed, cs);
     }
 
     private static void generateStructurePiece(

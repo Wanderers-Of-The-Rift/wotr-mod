@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.Collections;
@@ -26,6 +28,15 @@ public record LevelThemeSource() implements ThemeSource {
             return riftData.getTheme().get().value().getProcessors(themePieceType);
         }
         return ThemeSource.defaultThemeProcessors(serverLevel, themePieceType);
+    }
+
+    @Override
+    public Holder<Biome> getThemeBiome(ServerLevel serverLevel) {
+        if (serverLevel == null) {
+            return null;
+        }
+        var riftData = RiftData.get(serverLevel);
+        return riftData.getTheme().flatMap(theme -> theme.value().biome()).orElse(null);
     }
 
     @Override

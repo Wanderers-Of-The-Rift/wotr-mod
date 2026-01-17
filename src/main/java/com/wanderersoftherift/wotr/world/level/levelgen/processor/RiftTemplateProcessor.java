@@ -11,9 +11,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import javax.annotation.Nullable;
 
-/*
-* well... i was told nut to, but i really could't not-do this
-* */
 public interface RiftTemplateProcessor {
     BlockState processBlockState(
             BlockState currentState,
