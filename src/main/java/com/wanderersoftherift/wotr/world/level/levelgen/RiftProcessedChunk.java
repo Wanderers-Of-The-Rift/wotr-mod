@@ -138,12 +138,16 @@ public class RiftProcessedChunk {
     }
 
     public Holder<Biome> getBiome(int x, int y, int z) {
-        return getBiome(x, y - (origin.getY() << SECTION_BIOME_SHIFT), z);
+        return getBiomeWithinSection(x, y - (origin.getY() << SECTION_BIOME_SHIFT), z);
     }
 
     public Holder<Biome> getBiomeWithinSection(int x, int y, int z) {
         var index = (x >> 2) + ((z >> 2) << SECTION_BIOME_SHIFT) + ((y >> 2) << SECTION_BIOME_SHIFT_2);
-        return biomes[index];
+        if (biomes[index] != null) {
+            return biomes[index];
+        } else {
+            return defaultBiome;
+        }
     }
 
     /**
