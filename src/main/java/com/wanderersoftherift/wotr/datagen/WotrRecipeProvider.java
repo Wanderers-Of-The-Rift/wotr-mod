@@ -21,6 +21,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
@@ -293,6 +294,21 @@ public class WotrRecipeProvider extends RecipeProvider {
                 .save(output, WanderersOfTheRift.id("rift_objective_stealth"));
         // </editor-fold>
 
+        // <editor-fold desc="WotR Key Forge Generator">
+        // Add recipes for the mod's generators
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("default")))
+                .setPriority(-1)
+                .save(output, WanderersOfTheRift.id("rift_generator_default"));
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.GENERATOR_PRESETS, WanderersOfTheRift.id("dungeon")))
+                .setPriority(1)
+                .withItemReq(Ingredient.of(Items.COMPASS))
+                .save(output, WanderersOfTheRift.id("rift_generator_dungeon"));
+
+        // </editor-fold>
     }
 
     // The runner to add to the data generator

@@ -130,6 +130,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         addTheme("processor", "Processor");
         addTheme("swamp", "Swamp");
 
+        add(WanderersOfTheRift.translationId("rift_generator_preset", "default"), "Default");
+        add(WanderersOfTheRift.translationId("rift_generator_preset", "dungeon"), "Dungeon");
+
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> {
             // addBlock(helper.getBlock(), getTranslationString(helper.getBlock().get()));
             helper.getVariants().forEach((variant, block) -> addBlock(block, getTranslationString(block.get())));
