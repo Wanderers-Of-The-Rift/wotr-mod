@@ -141,28 +141,38 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                 .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
                                         .when(riftTier().max(2))
                                         .setWeight(16)
-                                        .apply(AbilityHolderFunction.setAbilityOptions(1, 1,
-                                                reg.getOrThrow(WotrTags.Abilities.RIFT_DROPS))))
-                                .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
-                                        .when(riftTier(1, 3))
-                                        .setWeight(8)
                                         .apply(AbilityHolderFunction.setAbilityOptions(1, 3,
-                                                reg.getOrThrow(WotrTags.Abilities.RIFT_DROPS))))
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_LOW))))
+                                .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
+                                        .when(riftTier(3, 4))
+                                        .setWeight(8)
+                                        .apply(AbilityHolderFunction.setAbilityOptions(3, 5,
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_MEDIUM))))
                                 .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
                                         .when(riftTier(3, 5))
                                         .setWeight(4)
-                                        .apply(AbilityHolderFunction.setAbilityOptions(3, 6,
-                                                reg.getOrThrow(WotrTags.Abilities.RIFT_DROPS))))
+                                        .apply(AbilityHolderFunction.setAbilityOptions(6, 8,
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_MEDIUM))))
                                 .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
-                                        .when(riftTier().min(4))
+                                        .when(riftTier(6, 7))
                                         .setWeight(2)
-                                        .apply(AbilityHolderFunction.setAbilityOptions(5, 7,
-                                                reg.getOrThrow(WotrTags.Abilities.RIFT_DROPS))))
+                                        .apply(AbilityHolderFunction.setAbilityOptions(9, 12,
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_HIGH))))
                                 .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
-                                        .when(riftTier().min(5))
+                                        .when(riftTier().min(7))
+                                        .setWeight(2)
+                                        .apply(AbilityHolderFunction.setAbilityOptions(10, 15,
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_HIGH))))
+                                .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
+                                        .when(riftTier().min(7))
                                         .setWeight(1)
-                                        .apply(AbilityHolderFunction.setAbilityOptions(7, 10,
-                                                reg.getOrThrow(WotrTags.Abilities.RIFT_DROPS))))
+                                        .apply(AbilityHolderFunction.setAbilityOptions(10, 15,
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_LOW))))
+                                .add(LootItem.lootTableItem(WotrItems.ABILITY_HOLDER)
+                                        .when(riftTier().min(7))
+                                        .setWeight(1)
+                                        .apply(AbilityHolderFunction.setAbilityOptions(10, 15,
+                                                reg.getOrThrow(WotrTags.Abilities.ABILITY_DROPS_MEDIUM))))
                 ));
     }
 
