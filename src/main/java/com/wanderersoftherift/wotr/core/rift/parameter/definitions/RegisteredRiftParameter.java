@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 
 import java.util.function.Function;
 
-public interface RegisteredRiftParameter extends RiftParameter {
+public interface RegisteredRiftParameter extends RiftParameterDefinition {
     Codec<RegisteredRiftParameter> CODEC = WotrRegistries.RIFT_PARAMETER_TYPES.byNameCodec()
             .dispatch(RegisteredRiftParameter::getCodec, Function.identity());
 
