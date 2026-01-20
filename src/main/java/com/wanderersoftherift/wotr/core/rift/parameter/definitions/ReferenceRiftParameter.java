@@ -7,7 +7,7 @@ import net.minecraft.util.RandomSource;
 
 import java.util.function.Function;
 
-public record ReferenceRiftParameter(Holder<RiftParameter> value) implements RiftParameter {
+public record ReferenceRiftParameter(Holder<RiftParameter> value) implements RiftParameterDefinition {
     public static final Codec<ReferenceRiftParameter> CODEC = RiftParameter.HOLDER_CODEC
             .xmap(ReferenceRiftParameter::new, ReferenceRiftParameter::value);
 
