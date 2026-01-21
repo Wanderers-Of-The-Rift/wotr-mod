@@ -319,9 +319,9 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".feather_fall", "Feather Fall");
         add("ability." + WanderersOfTheRift.MODID + ".filthy_aura", "Filthy Aura");
         add("ability." + WanderersOfTheRift.MODID + ".group_hug", "Group Hug");
-        add("ability." + WanderersOfTheRift.MODID + ".hookshot", "Hookshot");
+        add("ability." + WanderersOfTheRift.MODID + ".hook_shot", "Hook Shot");
         add("ability." + WanderersOfTheRift.MODID + ".levitate", "Levitate");
-        add("ability." + WanderersOfTheRift.MODID + ".lifesteal", "Lifesteal");
+        add("ability." + WanderersOfTheRift.MODID + ".life_steal", "Life Steal");
         add("ability." + WanderersOfTheRift.MODID + ".mana_cat", "Mana Cat");
         add("ability." + WanderersOfTheRift.MODID + ".slime_wall", "Slime Wall");
         add("ability." + WanderersOfTheRift.MODID + ".squawk_strike", "Squawk Strike");
