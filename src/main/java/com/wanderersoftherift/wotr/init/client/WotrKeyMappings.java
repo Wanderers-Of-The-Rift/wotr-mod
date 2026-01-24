@@ -103,7 +103,6 @@ public class WotrKeyMappings {
         event.register(JIGSAW_NAME_TOGGLE_KEY);
         event.register(MAIN_CHARACTER_MENU_KEY);
         event.register(GUILD_MENU_KEY);
-        event.register(WALLET_MENU_KEY);
         event.register(QUEST_MENU_KEY);
     }
 
