@@ -49,7 +49,7 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
                 .lookupOrThrow(WotrRegistries.Keys.PROGRESSION_TRACKS)
                 .getTagOrEmpty(WotrTags.ProgressionTracks.GUILDS)
                 .forEach(guild -> {
-                    if (progressionTracker.getPoints(guild) > 0) {
+                    if (progressionTracker.getPoints(guild) > 0 || progressionTracker.getRank(guild) > 0) {
                         displays.add(new GuildDisplay(font, guild, progressionTracker,
                                 progressionTracker.hasUnclaimedRewards(guild)));
                     }
