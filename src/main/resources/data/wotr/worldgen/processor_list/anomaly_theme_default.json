@@ -8,7 +8,7 @@
       "processor_type": "wotr:anomaly",
       "replace_with_anomaly": "minecraft:end_rod",
       "tasks": {
-        "wotr:zombie_horde": 3.0,
+        "wotr:battle/generic_horde": 3.0,
         "wotr:slice_anomaly": 1.0,
         "wotr:essences": 1.0
       },

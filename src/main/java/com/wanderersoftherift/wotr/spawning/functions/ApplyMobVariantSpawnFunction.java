@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.spawning.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
-import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
+import com.wanderersoftherift.wotr.entity.mob.VariedRiftMob;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +20,7 @@ public record ApplyMobVariantSpawnFunction(Holder<RiftMobVariantData> variant) i
 
     @Override
     public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        if (mob instanceof RiftZombie zombie) {
+        if (mob instanceof VariedRiftMob zombie) {
             zombie.setVariant(variant);
         }
     }

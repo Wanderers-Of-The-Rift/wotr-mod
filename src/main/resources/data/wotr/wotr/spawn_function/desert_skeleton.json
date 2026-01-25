@@ -1,0 +1,10 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:apply_mob_variant",
+            "variant": "wotr:skeleton/desert_skeleton"
+        },
+        "wotr:simple_spawn"
+    ]
+}

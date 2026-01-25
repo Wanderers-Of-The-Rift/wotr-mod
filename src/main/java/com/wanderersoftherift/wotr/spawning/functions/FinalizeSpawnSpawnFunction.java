@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.spawning.functions;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -22,7 +23,7 @@ public record FinalizeSpawnSpawnFunction() implements SpawnFunction {
         if (!(spawner.getLevel() instanceof ServerLevel serverLevel)) {
             return;
         }
-        EventHooks.finalizeMobSpawn(mob, serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()),
-                EntitySpawnReason.SPAWNER, null);
+        EventHooks.finalizeMobSpawnSpawner(mob, serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()),
+                EntitySpawnReason.SPAWNER, null, () -> Either.left(spawner), false);
     }
 }

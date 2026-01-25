@@ -1,0 +1,21 @@
+{
+    "type": "wotr:battle",
+    "spawns": {
+        "mobs": [
+            {
+                "weight": 1.0,
+                "value": {
+                    "entity_type": "wotr:rift_skeleton",
+                    "spawn_functions": [
+                        "wotr:desert_skeleton", "wotr:positioning"
+                    ]
+                }
+            }
+        ],
+        "count": {
+            "type": "uniform",
+            "min_inclusive": 5,
+            "max_inclusive": 20
+        }
+    }
+}

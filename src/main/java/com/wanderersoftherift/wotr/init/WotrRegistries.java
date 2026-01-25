@@ -252,6 +252,9 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
         public static final ResourceKey<Registry<MapCodec<? extends SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("spawn_function_type"));
+        public static final ResourceKey<Registry<SpawnFunction>> SPAWN_FUNCTIONS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("spawn_function"));
+
         public static final ResourceKey<Registry<AnomalyTask<?>>> ANOMALY_TASK = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("anomaly_task"));
         public static final ResourceKey<Registry<AnomalyTask.AnomalyTaskType<?>>> ANOMALY_TASK_TYPE = ResourceKey
@@ -327,5 +330,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ANOMALY_REWARD, AnomalyReward.DIRECT_CODEC, AnomalyReward.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
         event.dataPackRegistry(Keys.NPCS, NpcIdentity.DIRECT_CODEC, NpcIdentity.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.SPAWN_FUNCTIONS, SpawnFunction.CODEC, SpawnFunction.CODEC);
     }
 }

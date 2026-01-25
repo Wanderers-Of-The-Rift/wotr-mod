@@ -5,7 +5,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -14,7 +14,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -23,7 +23,338 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/altar-1-wout",
+                "processors": "wotr:anomaly_theme_swamp",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/pile-3-jyu",
+                "processors": "wotr:anomaly_theme_swamp",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/halfway/3/books-1-wout",
+                "processors": "wotr:anomaly_theme_swamp",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }

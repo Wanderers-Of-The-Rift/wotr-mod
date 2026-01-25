@@ -1,0 +1,1434 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "block_variants"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "biomeswevegone"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "stoneworks"
+        }
+    ],
+	"processors": [
+        {
+            "processor_type": "wotr:spot_gradient",
+            "noise_scale_x": 0.075,
+            "noise_scale_y": 0.075,
+            "noise_scale_z": 0.075,
+            "replacements": [
+                {
+                    "input_state": "wotr:processor_block_1",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:calcite",
+                            "step_size": 0.15
+                        },
+                        {
+                            "output_state": "minecraft:diorite",
+                            "step_size": 0.15
+                        },
+                        {
+                            "output_state": "minecraft:moss_block",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:tuff",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:oak_log",
+                            "step_size": 0.125
+                        },
+                        {
+                            "output_state": "minecraft:birch_log",
+                            "step_size": 0.125
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:stripped_oak_log",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:stripped_birch_log",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:oak_log_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "block_variants:birch_log_slab",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "block_variants:calcite_slab",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:oak_log_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "block_variants:birch_log_stairs",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "block_variants:calcite_stairs",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:oak_wood_wall",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "block_variants:birch_wood_wall",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "block_variants:calcite_wall",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_button",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_button",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_pressure_plate",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_pressure_plate",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_fence_gate",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence_gate",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_trapdoor",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:birch_trapdoor",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:lush_dirt",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "biomeswevegone:lush_grass_block",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:lush_dirt_path",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:coarse_dirt",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_slab",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_slab",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_stairs",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_stairs",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:stripped_oak_wood_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:stripped_birch_wood_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_button",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_button",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_button",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_pressure_plate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_pressure_plate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_pressure_plate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence_gate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence_gate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence_gate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_leaves",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_leaves",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_trapdoor",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_trapdoor",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_trapdoor",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:moss_block",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "biomeswevegone:lush_grass_block",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_planks",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:oak_planks",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:birch_planks",
+                            "step_size": 0.2
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:oak_wood",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_wood",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_wood",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:birch_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:oak_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_slab",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:birch_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:oak_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_stairs",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:oak_wood_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:birch_wood_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:birch_button",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:oak_button",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_button",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:birch_pressure_plate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:oak_pressure_plate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_pressure_plate",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence_gate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence_gate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence_gate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:stripped_aspen_wood",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:stripped_oak_wood",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:stripped_birch_wood",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_leaves",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_trapdoor",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_trapdoor",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_trapdoor",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:dirt",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:rooted_dirt",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "biomeswevegone:aspen_log",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:polished_diorite",
+                            "step_size": 0.25
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:stripped_aspen_log",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:diorite_pillar",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:polished_diorite_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:polished_diorite_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:polished_diorite_wall",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_wood",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:stripped_aspen_wood",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:lush_dirt",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "biomeswevegone:peat",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:rooted_dirt",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:diorite",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:calcite",
+                            "step_size": 0.2
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:diorite_pillar",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:calcite_pillar",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:diorite_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:calcite_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:diorite_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:calcite_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:diorite_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:calcite_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:chiseled_diorite",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:chiseled_calcite",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_glass_pane",
+                    "output_steps": []
+                },
+                {
+                    "input_state": "wotr:processor_block_5_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_planks",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_planks",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_planks",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_log",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_log",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_log",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_slab",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_slab",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_stairs",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_stairs",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:oak_wood_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:birch_wood_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_button",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_button",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_button",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_pressure_plate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_pressure_plate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_pressure_plate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence_gate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence_gate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence_gate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_leaves",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_leaves",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_leaves",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_leaves",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_trapdoor",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_trapdoor",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_trapdoor",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:pale_mud_bricks",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:diorite_bricks",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:packed_pale_mud",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:diorite_pillar",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:pale_mud_bricks_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:diorite_brick_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:pale_mud_bricks_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:diorite_brick_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:pale_mud_bricks_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:diorite_brick_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:pale_mud",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:diorite",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:pale_mud",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:diorite",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:pale_oak_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_planks",
+                            "step_size": 0.375
+                        },
+                        {
+                            "output_state": "minecraft:oak_planks",
+                            "step_size": 0.175
+                        },
+                        {
+                            "output_state": "minecraft:birch_planks",
+                            "step_size": 0.175
+                        },
+                        {
+                            "output_state": "minecraft:moss_block",
+                            "step_size": 0.225
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:stripped_aspen_log",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:stripped_oak_log",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:stripped_birch_log",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_slab",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_slab",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_stairs",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_stairs",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:stripped_oak_wood_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:stripped_birch_wood_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_button",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_button",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_button",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_pressure_plate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_pressure_plate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_pressure_plate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_fence_gate",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_fence_gate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_fence_gate",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_wood",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_wood",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_wood",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:stripped_aspen_wood",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:stripped_oak_wood",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:stripped_birch_wood",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:aspen_trapdoor",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:oak_trapdoor",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:birch_trapdoor",
+                            "step_size": 0.333
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "processor_type": "wotr:anomaly",
+            "replace_with_anomaly": "minecraft:end_rod",
+            "tasks": {
+                "wotr:battle/generic_horde": 3.0,
+                "wotr:slice_anomaly": 1.0,
+                "wotr:essences": 1.0
+            },
+            "rewards": {
+                "wotr:strength5": 10.0,
+                "wotr:ender_pearl": 10.0
+            }
+        }
+    ]
+}

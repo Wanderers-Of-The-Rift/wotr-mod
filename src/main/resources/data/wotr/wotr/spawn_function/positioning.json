@@ -1,0 +1,12 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:move_to_spawner"
+        },
+        {
+            "type": "wotr:move",
+            "movement": [0,1,0]
+        }
+    ]
+}

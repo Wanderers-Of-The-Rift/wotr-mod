@@ -1,0 +1,33 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:equip",
+            "equipment": {
+                "chest": {
+                    "id": "minecraft:leather_chestplate",
+                    "count": 1,
+                    "tag": {
+                        "display": {
+                            "color": 5197647
+                        }
+                    }
+                },
+                "legs": {
+                    "id": "minecraft:leather_leggings",
+                    "count": 1,
+                    "tag": {
+                        "display": {
+                            "color": 5197647
+                        }
+                    }
+                },
+                "head": {
+                    "id": "minecraft:azalea_leaves",
+                    "count": 1
+                }
+            }
+        },
+        "wotr:simple_spawn"
+    ]
+}
