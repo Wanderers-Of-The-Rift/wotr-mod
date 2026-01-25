@@ -1,0 +1,7 @@
+{
+  "type": "wotr:bundle",
+  "items": {
+    "wotr:fabric_essence": 2,
+    "wotr:water_essence": 2
+  }
+}
