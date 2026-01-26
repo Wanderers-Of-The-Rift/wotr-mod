@@ -95,7 +95,7 @@ public class RiftKey extends Item {
         if (stack.has(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET)) {
             var preset = stack.get(WotrDataComponentType.RiftKeyData.GENERATOR_PRESET);
             var presetString = preset.unwrapKey()
-                    .map(it -> Component.literal(it.location().toString()).withStyle())
+                    .map(it -> Component.translatable(it.location().toLanguageKey("rift_generator_preset")).withStyle())
                     .orElse(Component.literal("Custom")
                             .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(true)));
             components.add(Component

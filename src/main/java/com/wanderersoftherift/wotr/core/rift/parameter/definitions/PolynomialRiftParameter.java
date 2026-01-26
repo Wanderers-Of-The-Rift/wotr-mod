@@ -8,11 +8,13 @@ import net.minecraft.util.RandomSource;
 import java.util.List;
 import java.util.function.Function;
 
-public record PolynomialRiftParameter(List<RiftParameter> orderParameters, RiftParameter position)
+public record PolynomialRiftParameter(List<RiftParameterDefinition> orderParameters, RiftParameterDefinition position)
         implements RegisteredRiftParameter {
     public static final MapCodec<PolynomialRiftParameter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-            .group(RiftParameter.CODEC.listOf().fieldOf("orders").forGetter(PolynomialRiftParameter::orderParameters),
-                    RiftParameter.CODEC.optionalFieldOf("position", TierRiftParameter.INSTANCE)
+            .group(RiftParameterDefinition.CODEC.listOf()
+                    .fieldOf("orders")
+                    .forGetter(PolynomialRiftParameter::orderParameters),
+                    RiftParameterDefinition.CODEC.optionalFieldOf("position", TierRiftParameter.INSTANCE)
                             .forGetter(PolynomialRiftParameter::position))
             .apply(instance, PolynomialRiftParameter::new));
 

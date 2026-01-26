@@ -6,7 +6,7 @@ import net.minecraft.util.RandomSource;
 
 import java.util.function.Function;
 
-public record ConstantRiftParameter(double value) implements RiftParameter {
+public record ConstantRiftParameter(double value) implements RiftParameterDefinition {
     public static final Codec<ConstantRiftParameter> CODEC = Codec.DOUBLE.xmap(ConstantRiftParameter::new,
             ConstantRiftParameter::value);
 

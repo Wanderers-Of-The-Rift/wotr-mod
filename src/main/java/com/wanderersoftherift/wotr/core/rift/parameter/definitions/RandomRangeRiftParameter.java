@@ -7,12 +7,13 @@ import net.minecraft.util.RandomSource;
 
 import java.util.function.Function;
 
-public record RandomRangeRiftParameter(RiftParameter min, RiftParameter max) implements RegisteredRiftParameter {
+public record RandomRangeRiftParameter(RiftParameterDefinition min, RiftParameterDefinition max)
+        implements RegisteredRiftParameter {
     public static final MapCodec<RandomRangeRiftParameter> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
-                    RiftParameter.CODEC.optionalFieldOf("min", TierRiftParameter.INSTANCE)
+                    RiftParameterDefinition.CODEC.optionalFieldOf("min", TierRiftParameter.INSTANCE)
                             .forGetter(RandomRangeRiftParameter::min),
-                    RiftParameter.CODEC.optionalFieldOf("max", TierRiftParameter.INSTANCE)
+                    RiftParameterDefinition.CODEC.optionalFieldOf("max", TierRiftParameter.INSTANCE)
                             .forGetter(RandomRangeRiftParameter::max))
                     .apply(instance, RandomRangeRiftParameter::new));
 
