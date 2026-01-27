@@ -51,12 +51,12 @@ public class RewardScreen extends EnhancedContainerScreen<RewardMenu> {
         rewardContainer.setRectangle(162, 16, leftPos + 7, topPos + 28);
 
         addRenderableWidget(rewardContainer);
-        menu.clearDirty();
+        menu.clearRewardsChangedFlag();
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (menu.isDirty()) {
+        if (menu.isRewardsChanged()) {
             init();
         }
         super.render(guiGraphics, mouseX, mouseY, partialTick);

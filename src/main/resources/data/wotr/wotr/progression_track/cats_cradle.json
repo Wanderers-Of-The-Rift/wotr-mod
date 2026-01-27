@@ -1,10 +1,15 @@
 {
-  "icon32": "wotr:textures/guild/cat.png",
-  "icon16": "wotr:textures/guild/cat_sm.png",
+  "display_icon": "wotr:textures/progression_track/cat.png",
+  "reward_icon": "wotr:textures/progression_track/cat_sm.png",
+  "custom_rank_titles": true,
   "ranks": [
     {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 100,
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 0
+    },
+    {
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 100,
       "rewards": [
         {
           "type": "wotr:loot_table",
@@ -13,8 +18,8 @@
       ]
     },
     {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 200,
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 200,
       "rewards": [
         {
           "type": "wotr:loot_table",
@@ -23,8 +28,8 @@
       ]
     },
     {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 400,
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 400,
       "rewards": [
         {
           "type": "wotr:loot_table",
@@ -33,8 +38,8 @@
       ]
     },
     {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 1000,
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 1000,
       "rewards": [
         {
           "type": "wotr:loot_table",
@@ -43,8 +48,8 @@
       ]
     },
     {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 2000,
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 2000,
       "rewards": [
         {
           "type": "wotr:loot_table",
@@ -53,8 +58,8 @@
       ]
     },
     {
-      "icon": "wotr:textures/guild/cat_sm.png",
-      "reputation_requirement": 5000,
+      "icon": "wotr:textures/progression_track/cat_sm.png",
+      "requirement": 5000,
       "rewards": [
         {
           "type": "wotr:loot_table",

@@ -2,7 +2,6 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.attachment.AbilitySlots;
-import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
 import com.wanderersoftherift.wotr.network.C2SRuneAnvilApplyPacket;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownReplicationPayload;
 import com.wanderersoftherift.wotr.network.ability.AbilityCooldownUpdatePayload;
@@ -21,10 +20,9 @@ import com.wanderersoftherift.wotr.network.ability.SelectAbilityUpgradePayload;
 import com.wanderersoftherift.wotr.network.ability.UpdateSlotAbilityStatePayload;
 import com.wanderersoftherift.wotr.network.ability.UseAbilityPayload;
 import com.wanderersoftherift.wotr.network.charactermenu.OpenCharacterMenuPayload;
-import com.wanderersoftherift.wotr.network.guild.ClaimGuildRewardPayload;
-import com.wanderersoftherift.wotr.network.guild.GuildStatusReplicationPayload;
-import com.wanderersoftherift.wotr.network.guild.GuildStatusUpdatePayload;
-import com.wanderersoftherift.wotr.network.guild.UnclaimedGuildRewardsReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.ClaimTrackRewardPayload;
+import com.wanderersoftherift.wotr.network.guild.ProgressionTrackerReplicationPayload;
+import com.wanderersoftherift.wotr.network.guild.ProgressionTrackerUpdatePayload;
 import com.wanderersoftherift.wotr.network.guild.WalletReplicationPayload;
 import com.wanderersoftherift.wotr.network.guild.WalletUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.AbandonQuestPayload;
@@ -36,7 +34,6 @@ import com.wanderersoftherift.wotr.network.quest.QuestAcceptedPayload;
 import com.wanderersoftherift.wotr.network.quest.QuestGoalUpdatePayload;
 import com.wanderersoftherift.wotr.network.quest.QuestRemovedPayload;
 import com.wanderersoftherift.wotr.network.reward.ClaimRewardPayload;
-import com.wanderersoftherift.wotr.network.reward.RewardsPayload;
 import com.wanderersoftherift.wotr.network.rift.BannedFromRiftPayload;
 import com.wanderersoftherift.wotr.network.rift.S2CLevelListUpdatePacket;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
@@ -107,15 +104,13 @@ public class WotrPayloadHandlers {
                 WalletReplicationPayload::handleOnClient);
         registrar.playToClient(WalletUpdatePayload.TYPE, WalletUpdatePayload.STREAM_CODEC,
                 WalletUpdatePayload::handleOnClient);
-        registrar.playToClient(GuildStatusReplicationPayload.TYPE, GuildStatusReplicationPayload.STREAM_CODEC,
-                GuildStatusReplicationPayload::handleOnClient);
-        registrar.playToClient(GuildStatusUpdatePayload.TYPE, GuildStatusUpdatePayload.STREAM_CODEC,
-                GuildStatusUpdatePayload::handleOnClient);
-        registrar.playToClient(UnclaimedGuildRewardsReplicationPayload.TYPE,
-                UnclaimedGuildRewardsReplicationPayload.STREAM_CODEC,
-                UnclaimedGuildRewardsReplicationPayload::handleOnClient);
-        registrar.playToServer(ClaimGuildRewardPayload.TYPE, ClaimGuildRewardPayload.STREAM_CODEC,
-                ClaimGuildRewardPayload::handleOnServer);
+        registrar.playToClient(ProgressionTrackerReplicationPayload.TYPE,
+                ProgressionTrackerReplicationPayload.STREAM_CODEC,
+                ProgressionTrackerReplicationPayload::handleOnClient);
+        registrar.playToClient(ProgressionTrackerUpdatePayload.TYPE, ProgressionTrackerUpdatePayload.STREAM_CODEC,
+                ProgressionTrackerUpdatePayload::handleOnClient);
+        registrar.playToServer(ClaimTrackRewardPayload.TYPE, ClaimTrackRewardPayload.STREAM_CODEC,
+                ClaimTrackRewardPayload::handleOnServer);
 
         // Quest
         registrar.playToServer(AcceptQuestPayload.TYPE, AcceptQuestPayload.STREAM_CODEC,
@@ -136,7 +131,6 @@ public class WotrPayloadHandlers {
                 AbandonQuestPayload::handleOnServer);
 
         // Rewards
-        registrar.playToClient(RewardsPayload.TYPE, RewardsPayload.STREAM_CODEC, RewardsPayload::handleOnClient);
         registrar.playToServer(ClaimRewardPayload.TYPE, ClaimRewardPayload.STREAM_CODEC,
                 ClaimRewardPayload::handleOnServer);
 
@@ -159,8 +153,7 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new AbilityStateReplicationPayload(player.getData(WotrAttachments.ABILITY_STATES)));
             player.getData(WotrAttachments.ATTACHED_EFFECTS).replicateEffects();
-            player.getData(WotrAttachments.GUILD_STATUS).replicate();
-            player.getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(UnclaimedGuildRewards::replicate);
+            player.getData(WotrAttachments.PROGRESSION_TRACKER).replicate();
         }
     }
 
@@ -174,8 +167,7 @@ public class WotrPayloadHandlers {
             BannedFromRiftPayload.sendTo(player);
             PacketDistributor.sendToPlayer(player,
                     new ActiveQuestsReplicationPayload(player.getData(WotrAttachments.ACTIVE_QUESTS)));
-            player.getData(WotrAttachments.GUILD_STATUS).replicate();
-            player.getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(UnclaimedGuildRewards::replicate);
+            player.getData(WotrAttachments.PROGRESSION_TRACKER).replicate();
         }
     }
 
@@ -193,8 +185,7 @@ public class WotrPayloadHandlers {
             PacketDistributor.sendToPlayer(player,
                     new AbilityStateReplicationPayload(player.getData(WotrAttachments.ABILITY_STATES)));
             player.getData(WotrAttachments.ATTACHED_EFFECTS).replicateEffects();
-            player.getData(WotrAttachments.GUILD_STATUS).replicate();
-            player.getExistingData(WotrAttachments.UNCLAIMED_GUILD_REWARDS).ifPresent(UnclaimedGuildRewards::replicate);
+            player.getData(WotrAttachments.PROGRESSION_TRACKER).replicate();
         }
     }
 

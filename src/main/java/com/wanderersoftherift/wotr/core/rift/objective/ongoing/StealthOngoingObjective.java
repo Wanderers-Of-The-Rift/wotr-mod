@@ -1,9 +1,11 @@
 package com.wanderersoftherift.wotr.core.rift.objective.ongoing;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
@@ -16,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,21 +31,25 @@ public class StealthOngoingObjective implements OngoingObjective {
                     ResourceKey.codec(WotrRegistries.Keys.RIFT_PARAMETER_CONFIGS)
                             .fieldOf("target_parameter_key")
                             .forGetter(StealthOngoingObjective::getTargetParameterKey),
+                    Reward.DIRECT_CODEC.listOf().fieldOf("rewards").forGetter(StealthOngoingObjective::getRewards),
                     Codec.INT.fieldOf("target_progress").forGetter(StealthOngoingObjective::getTargetProgress),
                     Codec.INT.fieldOf("alarm_progress").forGetter(StealthOngoingObjective::getAlarmProgress)
             ).apply(inst, StealthOngoingObjective::new));
 
+    private final List<Reward> rewards;
     private final ResourceKey<RiftParameter> targetParameterKey;
     private int targetProgress;
     private int alarmProgress;
 
-    public StealthOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, int targetProgress) {
-        this(targetParameterKey, targetProgress, 0);
+    public StealthOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, List<Reward> rewards,
+            int targetProgress) {
+        this(targetParameterKey, rewards, targetProgress, 0);
     }
 
-    public StealthOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, int targetProgress,
-            int alarmProgress) {
+    public StealthOngoingObjective(ResourceKey<RiftParameter> targetParameterKey, List<Reward> rewards,
+            int targetProgress, int alarmProgress) {
         this.targetParameterKey = targetParameterKey;
+        this.rewards = ImmutableList.copyOf(rewards);
         this.targetProgress = targetProgress;
         this.alarmProgress = alarmProgress;
     }
@@ -71,6 +78,11 @@ public class StealthOngoingObjective implements OngoingObjective {
     @Override
     public MapCodec<? extends OngoingObjective> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public List<Reward> getRewards() {
+        return rewards;
     }
 
     public void setTargetProgress(int target) {
