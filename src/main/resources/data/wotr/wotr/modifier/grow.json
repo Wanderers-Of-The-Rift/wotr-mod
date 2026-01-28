@@ -1,0 +1,17 @@
+{
+  "style": {
+    "color": "#aa1111"
+  },
+  "tiers": [
+    [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:grow",
+        "attribute": "minecraft:scale",
+        "min_roll": 0.4,
+        "max_roll": 0.4,
+        "operation": "add_multiplied_base"
+      }
+    ]
+  ]
+}

@@ -32,7 +32,8 @@ public class WotrAbilityTagsProvider extends TagsProvider<Ability> {
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("fire_dart")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("lightning_dart")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("ice_dart")))
-                .add(TagEntry.optionalElement(WanderersOfTheRift.id("poison_dart")));
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("poison_dart")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("step_up")));
         tag(WotrTags.Abilities.ABILITY_DROPS_MEDIUM)
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("icicles")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("hook_shot")))
@@ -43,7 +44,8 @@ public class WotrAbilityTagsProvider extends TagsProvider<Ability> {
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("fire_breath")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("lightning_breath")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("ice_breath")))
-                .add(TagEntry.optionalElement(WanderersOfTheRift.id("poison_breath")));
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("poison_breath")))
+                .add(TagEntry.optionalElement(WanderersOfTheRift.id("grow")));
         tag(WotrTags.Abilities.ABILITY_DROPS_HIGH)
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("fireball")))
                 .add(TagEntry.optionalElement(WanderersOfTheRift.id("group_hug")))

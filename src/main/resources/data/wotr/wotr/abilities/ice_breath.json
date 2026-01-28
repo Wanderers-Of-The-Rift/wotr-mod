@@ -3,34 +3,32 @@
   "effects": [
     {
       "type": "wotr:targeting",
-      "targeting": {
-        "type": "wotr:area",
-        "shape": {
-          "type": "wotr:sphere",
-          "range": 2
+      "targeting": [
+        {
+          "type": "wotr:offset",
+          "offset": [0, 0, 2]
         },
-        "entities": {
-          "sentiment": "not_friend",
-          "exclude_caster": true
-        },
-        "blocks": {
-          "filter": {
-            "type": "all_of",
-            "predicates": [
-              {
-                "type": "wotr:surface",
-                "space": 2
-              }
-            ]
-          }
+        {
+          "type": "wotr:area",
+          "shape": {
+            "type": "wotr:sphere",
+            "range": 2
+          },
+          "entities": {
+            "sentiment": "not_friend",
+            "exclude_caster": true
+          },
+          "blocks": "all"
         }
-      },
+      ],
       "effects": [
         {
           "type": "wotr:particle",
           "particle": {
             "type": "minecraft:snowflake"
-          }
+          },
+          "count": 3,
+          "distribution": [0.3, 0.2 , 0.3]
         },
         {
           "type": "wotr:damage",

@@ -1,0 +1,15 @@
+{
+  "name": "wotr:guild/town_centers",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+          "location": "wotr:guild/town_centers/fountain-1-wout",
+          "processors": "minecraft:empty",
+          "projection": "rigid",
+          "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

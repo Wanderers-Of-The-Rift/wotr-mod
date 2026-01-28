@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 16,
+    "separation": 6,
+    "salt": 14357617
+  },
+  "structures": [
+    {
+      "structure": "wotr:guild",
+      "weight": 1
+    }
+  ]
+}

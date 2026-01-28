@@ -1,0 +1,46 @@
+{
+  "type": "wotr:instant",
+  "icon": "wotr:textures/ability/icon/grow.png",
+  "requirements": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 200
+    },
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 5
+    }
+  ],
+  "effects": [
+    {
+      "type": "wotr:attach",
+      "id": "wotr:grow",
+      "modifiers": [
+        {
+          "modifier": "wotr:grow",
+          "tier": 1,
+          "roll": 0
+        },
+        {
+          "modifier": "wotr:ability/damage_up",
+          "tier": 1,
+          "roll": 4
+        }
+      ],
+      "continue": {
+        "duration": 100
+      },
+      "effects": [
+        {
+          "type": "wotr:particle",
+          "particle": {
+            "type": "minecraft:bubble_pop"
+          },
+          "count": 6,
+          "distribution": [0.6, 1.4 , 0.6]
+        }
+      ]
+    }
+  ]
+}

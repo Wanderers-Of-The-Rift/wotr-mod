@@ -3,42 +3,33 @@
   "effects": [
     {
       "type": "wotr:targeting",
-      "targeting": {
-        "type": "wotr:area",
-        "shape": {
-          "type": "wotr:sphere",
-          "range": 2
+      "targeting": [
+        {
+          "type": "wotr:offset",
+          "offset": [0, 0, 2]
         },
-        "entities": {
-          "sentiment": "not_friend",
-          "exclude_caster": true
-        },
-        "blocks": {
-          "filter": {
-            "type": "all_of",
-            "predicates": [
-              {
-                "type": "wotr:surface",
-                "space": 2
-              }
-            ]
-          }
+        {
+          "type": "wotr:area",
+          "shape": {
+            "type": "wotr:sphere",
+            "range": 2
+          },
+          "entities": {
+            "sentiment": "not_friend",
+            "exclude_caster": true
+          },
+          "blocks": "all"
         }
-      },
+      ],
       "effects": [
         {
           "type": "wotr:particle",
           "particle": {
-            "type": "minecraft:electric_spark",
-            "count": 1,
-            "offset": {
-              "x": 0.0,
-              "y": 0.0,
-              "z": 0.0
-            },
-            "speed": 0,
-            "force": false
-          }
+            "type": "minecraft:wax_off"
+          },
+          "count": 2,
+          "distribution": [0.3, 0.2 , 0.3],
+          "speed": 4
         },
         {
           "type": "wotr:damage",
@@ -78,16 +69,11 @@
             {
               "type": "wotr:particle",
               "particle": {
-                "type": "minecraft:electric_spark",
-                "count": 1,
-                "offset": {
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0.0
+                "type": "minecraft:electric_spark"
                 },
-                "speed": 0,
-                "force": false
-              }
+              "count": 2,
+              "distribution": [0.4, 0.3 , 0.4],
+              "speed": 0
             }
           ],
           "modifiers": [
