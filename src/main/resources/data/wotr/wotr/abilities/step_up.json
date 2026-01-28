@@ -10,6 +10,11 @@
           "modifier": "wotr:step_up",
           "tier": 1,
           "roll": 0
+        },
+        {
+          "modifier": "wotr:ability/mana_degen",
+          "tier": 1,
+          "roll": 0.05
         }
       ]
 
