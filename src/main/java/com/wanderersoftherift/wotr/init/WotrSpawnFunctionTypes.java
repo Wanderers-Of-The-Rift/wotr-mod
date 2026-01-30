@@ -8,6 +8,7 @@ import com.wanderersoftherift.wotr.spawning.functions.ApplyMobVariantSpawnFuncti
 import com.wanderersoftherift.wotr.spawning.functions.ChanceSpawnFunction;
 import com.wanderersoftherift.wotr.spawning.functions.EquipmentSpawnFunction;
 import com.wanderersoftherift.wotr.spawning.functions.FinalizeSpawnSpawnFunction;
+import com.wanderersoftherift.wotr.spawning.functions.FindSuitableSpawnLocationSpawnFunction;
 import com.wanderersoftherift.wotr.spawning.functions.ListSpawnFunction;
 import com.wanderersoftherift.wotr.spawning.functions.MoveSpawnFunction;
 import com.wanderersoftherift.wotr.spawning.functions.MoveToSpawnerSpawnFunction;
@@ -40,8 +41,7 @@ public class WotrSpawnFunctionTypes {
             .register("move_to_spawner", () -> MoveToSpawnerSpawnFunction.MAP_CODEC);
     public static final Supplier<MapCodec<? extends SpawnFunction>> MOVE = SPAWN_FUNCTION_TYPES.register("move",
             () -> MoveSpawnFunction.MAP_CODEC);
-    /*
-     * public static final Supplier<MapCodec<? extends SpawnFunction>> FIND_SPAWN_LOCATION = SPAWN_FUNCTION_TYPES
-     * .register("find_spawn_location", () -> FindSuitableSpawnLocationSpawnFunction.MAP_CODEC);
-     */
+    public static final Supplier<MapCodec<? extends SpawnFunction>> FIND_SPAWN_LOCATION = SPAWN_FUNCTION_TYPES
+            .register("find_spawn", () -> FindSuitableSpawnLocationSpawnFunction.MAP_CODEC);
+
 }
