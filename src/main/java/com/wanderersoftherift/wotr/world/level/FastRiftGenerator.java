@@ -141,7 +141,6 @@ public class FastRiftGenerator extends ChunkGenerator {
                             this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
                     level);
         }
-        super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
     @Override
