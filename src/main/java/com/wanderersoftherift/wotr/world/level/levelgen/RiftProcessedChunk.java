@@ -187,28 +187,7 @@ public class RiftProcessedChunk {
             idMap = idMapper;
         }
 
-        // var valuesPerLong = Math.floorDiv(64, bits);
-        // var longs = new long[Math.ceilDiv(LevelChunkSection.SECTION_SIZE, valuesPerLong)];
         var storage = new SimpleBitStorage(bits, SECTION_BIOME_SIZE);
-//        if (Integer.bitCount(bits) == 1) {
-//            for (int i = 0; i < longs.length; i++) {
-//                var value = 0L;
-//                for (int j = valuesPerLong - 1; j >= 0; j--) {
-//                    value <<= bits;
-//                    var idx = i * valuesPerLong + j;
-//                    var state = biomes[idx];
-//                    if (state == null) {
-//                        state = defaultBiome;
-//                    }
-//                    if (useRegistry) {
-//                        value |= registry.getId(state);
-//                    } else {
-//                        value |= idLookup.get(state);
-//                    }
-//                }
-//                longs[i] = value;
-//            }
-//        } else {
         for (int i = 0; i < SECTION_BIOME_SIZE; i++) {
             var state = biomes[i];
             if (state == null) {
@@ -216,7 +195,6 @@ public class RiftProcessedChunk {
             }
             storage.set(i, idMap.getId(state));
         }
-        // }
 
         return new PalettedContainer<Holder<Biome>>(registry, strategy, config, storage, idMapper.getItems());
     }
@@ -226,7 +204,7 @@ public class RiftProcessedChunk {
         var size = 0;
         // var uniqueStatesList = new BlockState[LevelChunkSection.SECTION_SIZE];
         var uniqueStatesList = new BlockState[257]; // no need to check more than that, if there is so many unique
-        // states, blockStateRegistry is used
+        // states, registry is used
         var uniqueStatesHashTable = new BlockState[64];
         var uniqueStatesIndexHashTable = new int[64];
         var uniqueStatesFallback = new Reference2IntOpenHashMap<BlockState>();
@@ -251,24 +229,23 @@ public class RiftProcessedChunk {
 
         var bits = ShiftMath.shiftForCeilPow2(size);
 
-        var blockStateRegistry = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
+        var registry = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
         var strat = PalettedContainer.Strategy.SECTION_STATES;
         if (bits == 0) {
-            var config = strat.<BlockState>getConfiguration(blockStateRegistry, bits);
+            var config = strat.<BlockState>getConfiguration(registry, bits);
             var storage = new ZeroBitStorage(LevelChunkSection.SECTION_SIZE);
-            return new PalettedContainer<BlockState>(blockStateRegistry, strat, config, storage,
-                    List.of(uniqueStatesList[0]));
+            return new PalettedContainer<BlockState>(registry, strat, config, storage, List.of(uniqueStatesList[0]));
         }
 
         var useRegistry = bits > 8;
         if (useRegistry) {
-            bits = Mth.ceillog2(blockStateRegistry.size());
+            bits = Mth.ceillog2(registry.size());
         } else {
             var shiftBitsPow2 = Integer.max(ShiftMath.shiftForCeilPow2(bits), 2);
             bits = 1 << shiftBitsPow2;
         }
 
-        var config = strat.<BlockState>getConfiguration(blockStateRegistry, bits);
+        var config = strat.<BlockState>getConfiguration(registry, bits);
         var valuesPerLong = Math.floorDiv(64, bits);
         var longs = new long[Math.ceilDiv(LevelChunkSection.SECTION_SIZE, valuesPerLong)];
         var storage = new SimpleBitStorage(bits, LevelChunkSection.SECTION_SIZE, longs);
@@ -284,7 +261,7 @@ public class RiftProcessedChunk {
                         state = air;
                     }
                     if (useRegistry) {
-                        value |= blockStateRegistry.getId(state);
+                        value |= registry.getId(state);
                         continue;
                     }
                     var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
@@ -308,7 +285,7 @@ public class RiftProcessedChunk {
                 }
                 int value;
                 if (useRegistry) {
-                    value = blockStateRegistry.getId(state);
+                    value = registry.getId(state);
                 } else {
                     var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
                     var state2 = uniqueStatesHashTable[uniqueIdx];
@@ -331,7 +308,7 @@ public class RiftProcessedChunk {
             }
         }
 
-        return new PalettedContainer<BlockState>(blockStateRegistry, strat, config, storage, stateList);
+        return new PalettedContainer<BlockState>(registry, strat, config, storage, stateList);
     }
 
     public void setBlockEntity(BlockEntity entity) {

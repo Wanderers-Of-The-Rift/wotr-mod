@@ -27,5 +27,5 @@
       "processors": "wotr:room_theme_jungle"
     }
   ],
-  "default_biome": "wotr:green"
+  "default_biome": "jungle"
 }
