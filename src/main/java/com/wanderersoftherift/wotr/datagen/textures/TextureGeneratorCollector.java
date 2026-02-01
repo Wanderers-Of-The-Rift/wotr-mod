@@ -51,7 +51,7 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
         Path pathOut = pathProvider.file(transform.destinationPath, "png");
 
         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-        HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha1(), bytearrayoutputstream);
+        HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha256(), bytearrayoutputstream);
 
         try {
             Resource input = resourceManager.getResource(resourceLocation).orElseThrow();
@@ -82,6 +82,9 @@ public class TextureGeneratorCollector implements Consumer<TextureTransform> {
                         .getOrThrow();
                 JsonObject json = new JsonObject();
                 json.add("animation", animation);
+
+                WanderersOfTheRift.LOGGER.info("{}", transform.destinationPath);
+
                 DataProvider.saveStable(output, json, pathProvider.file(transform.destinationPath, "png.mcmeta"));
             }
 
