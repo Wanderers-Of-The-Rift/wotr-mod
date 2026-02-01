@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.client.render.item.emblem.CurrencyEmblemProvi
 import com.wanderersoftherift.wotr.client.render.item.emblem.EmblemSpecialRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrFluids;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -166,6 +167,7 @@ public class WotrModelProvider extends ModelProvider {
         });
 
         FLUID_MAP.values().forEach(fluid -> createModelForFluid(blockModels, itemModels, fluid));
+        createModelForFluid(blockModels, itemModels, WotrFluids.FAKE_LAVA);
     }
 
     private void createBlockStatesForTrapBlock(

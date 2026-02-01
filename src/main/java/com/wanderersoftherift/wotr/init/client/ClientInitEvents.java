@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.client.tooltip.ImageTooltipRenderer;
 import com.wanderersoftherift.wotr.client.tooltip.RunegemTooltipRenderer;
 import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
+import com.wanderersoftherift.wotr.init.WotrFluids;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionSpecialEffects;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +30,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.function.Consumer;
 
 import static com.wanderersoftherift.wotr.init.WotrFluids.FLUID_MAP;
 
@@ -89,10 +91,8 @@ public final class ClientInitEvents {
         event.addListener(WanderersOfTheRift.id("hud_preset"), HudPresetManager.getInstance());
     }
 
-    @SubscribeEvent
-    private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
-        FLUID_MAP.values().forEach(fluid -> {
-            event.registerFluidType(new IClientFluidTypeExtensions() {
+    private static Consumer<WotrFluids.WotrFluid> getFluidExtensionFactory(RegisterClientExtensionsEvent event) {
+        return (WotrFluids.WotrFluid fluid) -> event.registerFluidType(new IClientFluidTypeExtensions() {
                 @Override
                 public @NotNull ResourceLocation getStillTexture() {
                     return fluid.fluidStillId;
@@ -112,7 +112,14 @@ public final class ClientInitEvents {
                 public int getTintColor() {
                     return 0xFFFFFFFF;
                 }
-            }, fluid.fluidType.value());
-        });
+            }, fluid.fluidType);
+    }
+
+    @SubscribeEvent
+    private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        Consumer<WotrFluids.WotrFluid> fluidFactory = getFluidExtensionFactory(event);
+
+        FLUID_MAP.values().forEach(fluidFactory);
+        fluidFactory.accept(WotrFluids.FAKE_LAVA);
     }
 }

@@ -40,6 +40,35 @@ public class WotrTextureProvider implements DataProvider, IModelProviderExtensio
         processorBlockColorMap.put(1, 0x888F9C);
     }
 
+    enum ColorNames {
+        NONE("none"),
+        LIGHT_GRAY("Light Gray"),
+        ORANGE("Orange"),
+        GREEN("Green"),
+        PURPLE("Purple"),
+        BLUE("Blue"),
+        YELLOW("Yellow"),
+        GRAY("Gray"),
+        CYAN("Cyan"),
+        LIGHT_BLUE("Light Blue"),
+        MAGENTA("Magenta"),
+        PINK("Pink"),
+        WHITE("White"),
+        LIME("Lime"),
+        RED("Red"),
+        TEAL("Teal");
+
+        private final String name;
+
+        ColorNames(String name) {
+            this.name = name;
+        }
+
+        String getName() {
+            return this.name;
+        }
+    }
+
     enum TextureVariant {
         Block(""),
         DirectionPillar("directional_pillar"),
@@ -107,6 +136,16 @@ public class WotrTextureProvider implements DataProvider, IModelProviderExtensio
             );
 
         });
+
+        textureGenerator.copy(
+                ResourceLocation.withDefaultNamespace("block/lava_flow"),
+                ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "block/fake_lava_flow")
+        );
+
+        textureGenerator.copy(
+                ResourceLocation.withDefaultNamespace("block/lava_still"),
+                ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "block/fake_lava_still")
+        );
     }
 
     @Override

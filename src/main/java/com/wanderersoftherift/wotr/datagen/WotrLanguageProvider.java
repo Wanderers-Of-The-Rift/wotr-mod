@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.datagen;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.WotrEntities;
+import com.wanderersoftherift.wotr.init.WotrFluids;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.client.WotrKeyMappings;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftLayoutLayers;
@@ -149,6 +150,14 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("block." + WanderersOfTheRift.MODID + ".processor_block_12", "Processor Block 12");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_13", "Processor Block 13");
         add("block." + WanderersOfTheRift.MODID + ".processor_block_14", "Processor Block 14");
+
+        for (int i = 1; i < 16; i++) {
+            add("block." + WanderersOfTheRift.MODID + ".fluid_" + i + "_block", WotrTextureProvider.ColorNames.values()[i].getName() + " Fluid");
+            add("item." + WanderersOfTheRift.MODID + ".fluid_" + i + "_bucket", WotrTextureProvider.ColorNames.values()[i].getName() + " Bucket");
+        }
+
+        add("block." + WanderersOfTheRift.MODID + ".fake_lava_block", "Fake Lava Fluid");
+        add("item." + WanderersOfTheRift.MODID + ".fake_lava_bucket", "Fake Lava Bucket");
 
         // Adds a generic translation
         add("itemGroup." + WanderersOfTheRift.MODID, "Wanderers of the Rift");

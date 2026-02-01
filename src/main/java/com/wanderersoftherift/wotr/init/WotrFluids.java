@@ -32,6 +32,7 @@ public class WotrFluids {
             WanderersOfTheRift.MODID);
 
     public static final HashMap<String, WotrFluid> FLUID_MAP = new HashMap<>();
+    public static final WotrFluid FAKE_LAVA = new WotrFluid("fake_lava");
 
     static {
         for (int i = 1; i < 16; i++) {
@@ -62,7 +63,7 @@ public class WotrFluids {
         WotrFluid(String name) {
             fluidStillId = createResourceLocation(String.format("block/%s_still", name));
             fluidFlowingId = createResourceLocation(String.format("block/%s_flow", name));
-            fluidOverlayId = createResourceLocation(String.format("block/water_overlay", name));
+            fluidOverlayId = createResourceLocation(String.format("block/%s_overlay", name));
 
             fluidType = FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create()));
 

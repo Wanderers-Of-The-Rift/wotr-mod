@@ -12,6 +12,10 @@ public class TextureGenerator {
         this.textureOutput = textureOutput;
     }
 
+    public void copy(ResourceLocation sourcePath, ResourceLocation destinationPath) {
+        this.createTinted(sourcePath, destinationPath, 0xFFFFFF);
+    }
+
     public void createTinted(ResourceLocation sourcePath, ResourceLocation destinationPath, int color) {
         this.textureOutput.accept(new TintTransform(sourcePath, destinationPath, color));
     }
