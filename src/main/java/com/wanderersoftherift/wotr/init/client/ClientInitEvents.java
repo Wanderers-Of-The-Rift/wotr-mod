@@ -93,26 +93,26 @@ public final class ClientInitEvents {
 
     private static Consumer<WotrFluids.WotrFluid> getFluidExtensionFactory(RegisterClientExtensionsEvent event) {
         return (WotrFluids.WotrFluid fluid) -> event.registerFluidType(new IClientFluidTypeExtensions() {
-                @Override
-                public @NotNull ResourceLocation getStillTexture() {
-                    return fluid.fluidStillId;
-                }
+            @Override
+            public @NotNull ResourceLocation getStillTexture() {
+                return fluid.fluidStillId;
+            }
 
-                @Override
-                public @NotNull ResourceLocation getFlowingTexture() {
-                    return fluid.fluidFlowingId;
-                }
+            @Override
+            public @NotNull ResourceLocation getFlowingTexture() {
+                return fluid.fluidFlowingId;
+            }
 
-                @Override
-                public ResourceLocation getOverlayTexture() {
-                    return fluid.fluidOverlayId;
-                }
+            @Override
+            public ResourceLocation getOverlayTexture() {
+                return fluid.fluidOverlayId;
+            }
 
-                @Override
-                public int getTintColor() {
-                    return 0xFFFFFFFF;
-                }
-            }, fluid.fluidType);
+            @Override
+            public int getTintColor() {
+                return 0xFFFFFFFF;
+            }
+        }, fluid.fluidType);
     }
 
     @SubscribeEvent
