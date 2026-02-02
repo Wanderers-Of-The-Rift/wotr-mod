@@ -1,7 +1,6 @@
 package com.wanderersoftherift.wotr.block;
 
 import com.wanderersoftherift.wotr.core.goal.GoalManager;
-import com.wanderersoftherift.wotr.core.goal.GoalState;
 import com.wanderersoftherift.wotr.core.goal.type.ActivateObjectiveGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +37,8 @@ public class ObjectiveBlock extends Block {
             @NotNull Player player,
             @NotNull BlockHitResult hitResult) {
         if (!level.isClientSide && !state.getValue(ACTIVATED)) {
-            GoalManager.getGoalStates(player, ActivateObjectiveGoal.class).forEach(GoalState::incrementProgress);
+            GoalManager.getGoalStates(player, ActivateObjectiveGoal.class)
+                    .forEach(goalState -> goalState.incrementProgress(player));
             level.setBlock(pos, state.cycle(ACTIVATED), Block.UPDATE_ALL);
             level.playSound(null, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS);
         }

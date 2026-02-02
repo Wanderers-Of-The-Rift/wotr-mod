@@ -1,12 +1,12 @@
 {
   "goals": [
     {
-      "type": "wotr:fixed_give_item",
+      "type": "wotr:give_item",
       "item": "minecraft:iron_block",
       "count": 2
     },
     {
-      "type": "wotr:fixed_give_item",
+      "type": "wotr:give_item",
       "item": "minecraft:ender_pearl",
       "count": 4
     }

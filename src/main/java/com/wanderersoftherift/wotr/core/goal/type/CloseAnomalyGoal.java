@@ -2,8 +2,10 @@ package com.wanderersoftherift.wotr.core.goal.type;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyEvent;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalManager;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.core.Holder;
@@ -11,6 +13,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Optional;
 
@@ -20,6 +24,7 @@ import java.util.Optional;
  * @param count
  * @param anomalyType
  */
+@EventBusSubscriber
 public record CloseAnomalyGoal(int count, Optional<Holder<AnomalyTask.AnomalyTaskType<?>>> anomalyType)
         implements Goal {
     public static final MapCodec<CloseAnomalyGoal> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -40,5 +45,14 @@ public record CloseAnomalyGoal(int count, Optional<Holder<AnomalyTask.AnomalyTas
     @Override
     public DualCodec<? extends Goal> getType() {
         return TYPE;
+    }
+
+    @SubscribeEvent
+    public static void onAnomalyClosed(AnomalyEvent.Closed event) {
+        GoalManager.getGoalStates(event.getClosingPlayer(), CloseAnomalyGoal.class).forEach(state -> {
+            if (state.getGoal().anomalyType().map(type -> type.value().equals(event.getTaskType())).orElse(true)) {
+                state.incrementProgress(event.getClosingPlayer());
+            }
+        });
     }
 }

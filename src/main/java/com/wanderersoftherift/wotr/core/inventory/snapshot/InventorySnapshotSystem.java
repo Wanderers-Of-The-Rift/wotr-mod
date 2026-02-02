@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.core.inventory.snapshot;
 
-import com.wanderersoftherift.wotr.core.inventory.containers.ContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
-import com.wanderersoftherift.wotr.core.inventory.containers.DirectContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.DirectItemAccessor;
 import com.wanderersoftherift.wotr.core.inventory.containers.NonContainerWrapper;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
@@ -135,19 +135,19 @@ public final class InventorySnapshotSystem {
         public InventorySnapshotBuilder(Player player) {
             containerTypes = player.level().registryAccess().lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
             for (ItemStack item : player.getInventory().items) {
-                captureItem(new DirectContainerItemWrapper(item));
+                captureItem(new DirectItemAccessor(item));
             }
             for (ItemStack item : player.getInventory().armor) {
-                captureItem(new DirectContainerItemWrapper(item));
+                captureItem(new DirectItemAccessor(item));
             }
-            captureItem(new DirectContainerItemWrapper(player.getOffhandItem()));
+            captureItem(new DirectItemAccessor(player.getOffhandItem()));
         }
 
         public InventorySnapshot build() {
             return new InventorySnapshot(snapshotId, items);
         }
 
-        private void captureItem(ContainerItemWrapper containerItem) {
+        private void captureItem(ItemAccessor containerItem) {
             ItemStack item = containerItem.getReadOnlyItemStack();
             if (item.isEmpty()) {
                 return;
@@ -160,7 +160,7 @@ public final class InventorySnapshotSystem {
                 containerItem.applyComponents(addSnapshotIdPatch);
             }
 
-            for (ContainerItemWrapper content : getContents(containerTypes, item)) {
+            for (ItemAccessor content : getContents(containerTypes, item)) {
                 captureItem(content);
             }
         }
@@ -203,7 +203,7 @@ public final class InventorySnapshotSystem {
                     boolean retainItem = shouldRetainNonStackable(item);
 
                     ContainerWrapper contents = getContents(containerTypes, item);
-                    for (ContainerItemWrapper content : contents) {
+                    for (ItemAccessor content : contents) {
                         processContainerItem(content, retainItem);
                     }
                     contents.recordChanges();
@@ -229,7 +229,7 @@ public final class InventorySnapshotSystem {
         // If we're not retaining the container
         // - Any item that should be retained copy and clear and put the copy in retain
         // - Any item that we don't want, keep in container
-        private void processContainerItem(ContainerItemWrapper containerItem, boolean retainingContainer) {
+        private void processContainerItem(ItemAccessor containerItem, boolean retainingContainer) {
             ItemStack item = containerItem.getReadOnlyItemStack();
             if (item.isStackable()) {
                 int dropCount = calculateDropCount(item);
@@ -243,7 +243,7 @@ public final class InventorySnapshotSystem {
                 boolean retainItem = shouldRetainNonStackable(item);
 
                 ContainerWrapper contents = getContents(containerTypes, item);
-                for (ContainerItemWrapper content : contents) {
+                for (ItemAccessor content : contents) {
                     processContainerItem(content, retainItem);
                 }
                 contents.recordChanges();
@@ -301,26 +301,23 @@ public final class InventorySnapshotSystem {
                 .registryAccess()
                 .lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
         for (ItemStack item : player.getInventory().items) {
-            clearItemIds(containerTypes, new DirectContainerItemWrapper(item), keepIds);
+            clearItemIds(containerTypes, new DirectItemAccessor(item), keepIds);
         }
         for (ItemStack item : player.getInventory().armor) {
-            clearItemIds(containerTypes, new DirectContainerItemWrapper(item), keepIds);
+            clearItemIds(containerTypes, new DirectItemAccessor(item), keepIds);
         }
         for (ItemStack item : player.getInventory().offhand) {
-            clearItemIds(containerTypes, new DirectContainerItemWrapper(item), keepIds);
+            clearItemIds(containerTypes, new DirectItemAccessor(item), keepIds);
         }
     }
 
-    private static void clearItemIds(
-            Registry<ContainerType> containerTypes,
-            ContainerItemWrapper item,
-            Set<UUID> keepIds) {
+    private static void clearItemIds(Registry<ContainerType> containerTypes, ItemAccessor item, Set<UUID> keepIds) {
         var component = item.getReadOnlyItemStack().get(WotrDataComponentType.INVENTORY_SNAPSHOT_ID);
         if (component != null && !keepIds.contains(component)) {
             item.applyComponents(REMOVE_SNAPSHOT_ID_PATCH);
         }
         ContainerWrapper contents = getContents(containerTypes, item.getReadOnlyItemStack());
-        for (ContainerItemWrapper content : contents) {
+        for (ItemAccessor content : contents) {
             clearItemIds(containerTypes, content, keepIds);
         }
         contents.recordChanges();

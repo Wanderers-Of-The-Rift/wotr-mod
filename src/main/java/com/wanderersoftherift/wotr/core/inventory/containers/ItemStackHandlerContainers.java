@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.core.inventory.containers;
 
+import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -21,18 +22,18 @@ public final class ItemStackHandlerContainers {
     /**
      * @return An iterator over the non-empty contents of an ItemStackHandler
      */
-    public static Iterator<ContainerItemWrapper> iterateNonEmpty(ItemStackHandler handler) {
+    public static Iterator<ItemAccessor> iterateNonEmpty(ItemStackHandler handler) {
         return new ItemStackHandlerNonEmptyIterator(handler);
     }
 
     /**
      * Iterator over the non-empty contents of an ItemStackHandler
      */
-    public static class ItemStackHandlerNonEmptyIterator implements Iterator<ContainerItemWrapper> {
+    public static class ItemStackHandlerNonEmptyIterator implements Iterator<ItemAccessor> {
 
         private final ItemStackHandler handler;
         private int nextSlot = 0;
-        private ContainerItemWrapper next;
+        private ItemAccessor next;
 
         public ItemStackHandlerNonEmptyIterator(ItemStackHandler handler) {
             this.handler = handler;
@@ -46,7 +47,7 @@ public final class ItemStackHandlerContainers {
             if (nextSlot >= handler.getSlots()) {
                 next = null;
             } else {
-                next = new ItemStackHandlerContainerItemWrapper(handler, nextSlot);
+                next = new ItemStackHandlerItemAccessor(handler, nextSlot);
                 nextSlot++;
             }
         }
@@ -57,8 +58,8 @@ public final class ItemStackHandlerContainers {
         }
 
         @Override
-        public ContainerItemWrapper next() {
-            ContainerItemWrapper result = next;
+        public ItemAccessor next() {
+            ItemAccessor result = next;
             findNext();
             return result;
         }
@@ -67,11 +68,12 @@ public final class ItemStackHandlerContainers {
     /**
      * Container Item implementation for items linked to an ItemStackHandler
      */
-    public static class ItemStackHandlerContainerItemWrapper implements ContainerItemWrapper {
+    public static class ItemStackHandlerItemAccessor implements ItemAccessor {
         private final ItemStackHandler handler;
         private final int slot;
+        private boolean modified;
 
-        public ItemStackHandlerContainerItemWrapper(ItemStackHandler handler, int slot) {
+        public ItemStackHandlerItemAccessor(ItemStackHandler handler, int slot) {
             this.handler = handler;
             this.slot = slot;
         }
@@ -90,6 +92,7 @@ public final class ItemStackHandlerContainers {
                 amount -= existing.getMaxStackSize();
             }
             result.add(handler.extractItem(slot, amount, false));
+            modified = true;
             return result;
         }
 
@@ -103,12 +106,19 @@ public final class ItemStackHandlerContainers {
                 amount -= existing.getMaxStackSize();
             }
             result.add(handler.extractItem(slot, amount, false));
+            modified = true;
             return result;
         }
 
         @Override
+        public void replace(ItemStack stack) {
+            handler.setStackInSlot(slot, stack);
+            modified = true;
+        }
+
+        @Override
         public void applyComponents(DataComponentPatch patch) {
-            // Note: there can actually be multile of a non-stacking item within ItemStackHandler slot,
+            // Note: there can actually be multiple of a non-stacking item within ItemStackHandler slot,
             // so pull them out one by one and apply the component patch to them before adding them all back in
             int amount = handler.getStackInSlot(slot).getCount();
             List<ItemStack> tagged = new ArrayList<>(amount);
@@ -120,6 +130,12 @@ public final class ItemStackHandlerContainers {
             for (ItemStack item : tagged) {
                 handler.insertItem(slot, item, false);
             }
+            modified = true;
+        }
+
+        @Override
+        public boolean isModified() {
+            return modified;
         }
     }
 }

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
+import com.wanderersoftherift.wotr.util.FastWeightedList;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -19,10 +20,12 @@ import java.util.List;
  * @param item  The type of item required
  * @param count A number provider for the count of items required
  */
-public record GiveItemGoalProvider(Ingredient item, NumberProvider count) implements GoalProvider {
+public record GiveItemGoalProvider(FastWeightedList<Ingredient> item, NumberProvider count) implements GoalProvider {
 
     public static final MapCodec<GiveItemGoalProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Ingredient.CODEC.fieldOf("item").forGetter(GiveItemGoalProvider::item),
+            FastWeightedList.codecWithSingleAlternative(Ingredient.CODEC)
+                    .fieldOf("item")
+                    .forGetter(GiveItemGoalProvider::item),
             NumberProviders.CODEC.fieldOf("count").forGetter(GiveItemGoalProvider::count)
     ).apply(instance, GiveItemGoalProvider::new));
 
@@ -33,6 +36,6 @@ public record GiveItemGoalProvider(Ingredient item, NumberProvider count) implem
 
     @Override
     public @NotNull List<Goal> generateGoal(LootContext context) {
-        return List.of(new GiveItemGoal(item, count.getInt(context)));
+        return List.of(new GiveItemGoal(item.random(context.getRandom()), count.getInt(context)));
     }
 }

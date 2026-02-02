@@ -1,24 +1,23 @@
 {
   "goals": [
     {
-      "type": "wotr:kill_mob",
-      "mob": "#minecraft:skeletons",
-      "mob_label": "mobgroup.minecraft.skeletons",
-      "count": 4
+      "type": "wotr:collect_item",
+      "item" : "#c:foods/raw_fish",
+      "count": 20
     }
   ],
   "rewards": [
     {
       "type": "wotr:item",
       "item": {
-        "count": 8,
+        "count": 10,
         "id": "minecraft:gold_ingot"
       }
     },
     {
       "type": "wotr:reputation",
       "guilds": "wotr:cats_cradle",
-      "amount": 10
+      "amount": 20
     }
   ]
 }
