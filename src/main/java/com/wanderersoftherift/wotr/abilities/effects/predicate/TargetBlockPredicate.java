@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
+import com.wanderersoftherift.wotr.block.AttackableBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
@@ -66,14 +67,14 @@ public sealed interface TargetBlockPredicate {
 
     enum Trivial implements TargetBlockPredicate, StringRepresentable {
         ALL("all", true),
-        NONE("none",
-                false)/*
-                       * , ATTACKABLE("attackable", true){
-                       * 
-                       * @Override public boolean matches(BlockPos target, HitResult source, AbilityContext context) {
-                       * return AttackableBlock.isAttackableStatic(context.level().getBlockState(target),
-                       * context.level(), target); } }
-                       */;
+        NONE("none", false),
+        ATTACKABLE("attackable", true) {
+            @Override
+            public boolean matches(BlockPos target, HitResult source, AbilityContext context) {
+                return AttackableBlock.isAttackableStatic(context.level().getBlockState(target), context.level(),
+                        target);
+            }
+        };
 
         private String id;
         private boolean result;
