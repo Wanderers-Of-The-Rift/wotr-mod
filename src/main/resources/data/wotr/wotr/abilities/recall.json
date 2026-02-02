@@ -1,0 +1,91 @@
+{
+  "type": "wotr:instant",
+  "icon" : "minecraft:textures/item/clock_54.png",
+  "requirements" : [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 120
+    },
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 5
+    }
+  ],
+  "effects": [
+    {
+      "type": "wotr:summon",
+      "entity_type": "minecraft:armor_stand",
+      "nbt": {
+        "Marker": true,
+        "Invisible": true,
+        "attributes": [
+          {
+            "id": "minecraft:scale",
+            "base": 1.5
+          }
+        ],
+        "active_effects": [
+          {
+            "id": "wotr:kill",
+            "duration": 81
+          }
+        ],
+        "ArmorItems": [
+          {
+            "id": "minecraft:golden_boots",
+            "count": 1,
+            "components": {
+              "trim": {
+                "pattern": "minecraft:raiser",
+                "material": "minecraft:redstone"
+              },
+              "enchantments": {
+                "levels": {
+                  "minecraft:unbreaking": 1
+                }
+              }
+
+            }
+          },
+          {},
+          {},
+          {}
+        ]
+      },
+      "effects": [
+        {
+          "type": "wotr:attach",
+          "trigger": {
+            "initial_delay": 80
+          },
+          "continue": {
+            "max_trigger_count": 1
+          },
+          "effects": [
+            {
+              "type": "wotr:targeting",
+              "targeting":[
+                {
+                  "type": "wotr:caster"
+                },
+                {
+                  "type": "wotr:source"
+                }
+              ],
+              "effects": [
+                {
+                  "type": "wotr:teleport",
+                  "tele_info": {
+                    "teleport_target": "user",
+                    "position": [0, 0.1, 0]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
