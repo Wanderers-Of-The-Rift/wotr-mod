@@ -9,6 +9,7 @@ import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
 import com.wanderersoftherift.wotr.init.worldgen.WotrProcessors;
 import com.wanderersoftherift.wotr.util.FastWeightedList;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.util.Ref;
 import com.wanderersoftherift.wotr.world.level.levelgen.processor.util.ProcessorUtil;
@@ -96,7 +97,7 @@ public class AnomalyProcessor extends StructureProcessor implements RiftTemplate
         }
         currentState = newState;
         var blockEntity = new AnomalyBlockEntity(position, currentState);
-        var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(0),
+        var rng = new RandomSourceFromJavaRandom(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 ProcessorUtil.getRandomSeed(position, ((WorldGenLevel) world).getSeed() + 9996554987L));
         var task = tasks.random(rng);
         var reward = rewards.random(rng);

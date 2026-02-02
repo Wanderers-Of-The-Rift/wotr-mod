@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
-import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;

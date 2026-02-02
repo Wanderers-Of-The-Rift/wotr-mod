@@ -9,13 +9,11 @@ import com.wanderersoftherift.wotr.core.quest.RewardProvider;
 import com.wanderersoftherift.wotr.core.quest.reward.ReputationReward;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Generates a potentially randomised reputation reward
@@ -39,14 +37,13 @@ public record ReputationRewardProvider(List<Holder<Guild>> guilds, NumberProvide
     }
 
     @Override
-    public @NotNull List<Reward> generateReward(LootParams params) {
-        LootContext lootContext = new LootContext.Builder(params).create(Optional.empty());
+    public @NotNull List<Reward> generateReward(LootContext context) {
         Holder<Guild> guild;
         if (guilds.size() > 1) {
-            guild = guilds.get(lootContext.getRandom().nextInt(guilds.size()));
+            guild = guilds.get(context.getRandom().nextInt(guilds.size()));
         } else {
             guild = guilds.getFirst();
         }
-        return List.of(new ReputationReward(guild, amount.getInt(lootContext)));
+        return List.of(new ReputationReward(guild, amount.getInt(context)));
     }
 }

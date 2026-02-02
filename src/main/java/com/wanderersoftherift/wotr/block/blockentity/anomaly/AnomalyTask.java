@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.BiConsumer;
 
+// TODO: Rework the generics used here and in AnomalyState as they difficult to work with
 public interface AnomalyTask<T> {
 
     Codec<AnomalyTask<?>> DIRECT_CODEC = WotrRegistries.ANOMALY_TASK_TYPE.byNameCodec()

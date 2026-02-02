@@ -1,0 +1,15 @@
+{
+  "type": "wotr:chain",
+  "icon": "minecraft:textures/mob_effect/strength.png",
+  "abilities": [
+    {
+      "ability": "wotr:link_stab"
+    },
+    {
+      "ability": "wotr:link_stab"
+    },
+    {
+      "ability": "wotr:link_slash"
+    }
+  ]
+}

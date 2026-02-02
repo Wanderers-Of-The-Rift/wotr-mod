@@ -2,8 +2,8 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
-import com.wanderersoftherift.wotr.rift.objective.ObjectiveType;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -23,6 +23,8 @@ public class WotrTags {
     }
 
     public static class Items {
+        public static final TagKey<Item> ESSENCE_ITEM = createTag("essences");
+
         public static final TagKey<Item> BANNED_IN_RIFT = createTag("banned_in_rift");
 
         public static final TagKey<Item> UNBREAKABLE_EXCLUSIONS = createTag("unbreakable_exclusions");
@@ -87,7 +89,9 @@ public class WotrTags {
 
     public static class Abilities {
 
-        public static final TagKey<Ability> RIFT_DROPS = createTag("rift_drops");
+        public static final TagKey<Ability> ABILITY_DROPS_LOW = createTag("ability_drops_low");
+        public static final TagKey<Ability> ABILITY_DROPS_MEDIUM = createTag("ability_drops_medium");
+        public static final TagKey<Ability> ABILITY_DROPS_HIGH = createTag("ability_drops_high");
 
         private static TagKey<Ability> createTag(String name) {
             return TagKey.create(WotrRegistries.Keys.ABILITIES, ResourceLocation.fromNamespaceAndPath("wotr", name));

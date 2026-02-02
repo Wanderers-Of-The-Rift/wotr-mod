@@ -14,7 +14,9 @@ import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.FastRiftGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -87,12 +89,42 @@ public class RiftCommands extends BaseCommand {
         builder.then(Commands.literal("list").executes(this::listRifts));
         builder.then(Commands.literal("close").then(Commands.literal("all").executes(this::closeRifts)));
         builder.then(
-                Commands.literal("roominfo")
-                        .executes(ctx -> printRoomInfo(ctx, ctx.getSource().getPlayerOrException()))
-                        .then(
-                                Commands.argument(playerArg, EntityArgument.player())
-                                        .executes(ctx -> printRoomInfo(ctx, EntityArgument.getPlayer(ctx, playerArg)))
-                        ));
+                Commands.literal("room")
+                        .then(Commands.literal("info")
+                                .executes(ctx -> printRoomInfo(ctx, ctx.getSource().getPlayerOrException()))
+                                .then(
+                                        Commands.argument(playerArg, EntityArgument.player())
+                                                .executes(ctx -> printRoomInfo(ctx,
+                                                        EntityArgument.getPlayer(ctx, playerArg)))
+                                ))
+                        .then(Commands.literal("anomalyCount")
+                                .executes(ctx -> printRoomAnomalyCount(ctx, ctx.getSource().getPlayerOrException()))
+                                .then(Commands.argument(playerArg, EntityArgument.player())
+                                        .executes(ctx -> printRoomAnomalyCount(ctx,
+                                                EntityArgument.getPlayer(ctx, playerArg))))));
+    }
+
+    private int printRoomAnomalyCount(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
+        if (RiftLevelManager.isRift(player.serverLevel()) && player.serverLevel()
+                .getChunkSource()
+                .getGenerator() instanceof FastRiftGenerator fastRiftGenerator) {
+            RiftSpace chunkSpace = fastRiftGenerator.getOrCreateLayout(player.server)
+                    .getChunkSpace(SectionPos.of(player.blockPosition()));
+            if (chunkSpace instanceof RoomRiftSpace room) {
+                int result = fastRiftGenerator.getGeneratableCounts(room, ctx.getSource().getLevel())
+                        .object2IntEntrySet()
+                        .stream()
+                        .filter(entry -> entry.getKey().path().startsWith("rift/anomaly/"))
+                        .mapToInt(Object2IntMap.Entry::getIntValue)
+                        .sum();
+                ctx.getSource().sendSystemMessage(Component.literal(Integer.toString(result)));
+            } else {
+                ctx.getSource().sendSystemMessage(Component.literal("0"));
+            }
+            return Command.SINGLE_SUCCESS;
+        }
+        ctx.getSource().sendSystemMessage(INVALID_LEVEL);
+        return 0;
     }
 
     private int printRoomInfo(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {

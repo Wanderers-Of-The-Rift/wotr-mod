@@ -17,6 +17,8 @@ import net.minecraft.world.level.Level;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public interface GearImplicits extends ModifierProvider {
     Codec<GearImplicits> CODEC = RecordCodecBuilder.create(inst -> inst.group(
@@ -38,13 +40,14 @@ public interface GearImplicits extends ModifierProvider {
     List<ModifierInstance> modifierInstances();
 
     @Override
-    default void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
+    default Stream<ModifierEntry> modifiers(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity) {
         List<ModifierInstance> modifierInstances = modifierInstances(stack, entity == null ? null : entity.level());
-        for (int i = 0; i < modifierInstances.size(); i++) {
-            ModifierInstance modifier = modifierInstances.get(i);
-            ModifierSource source = new GearImplicitModifierSource(slot, i);
-            action.accept(modifier.modifier(), modifier.tier(), modifier.roll(), source);
-        }
+        return IntStream.range(0, modifierInstances.size()).mapToObj(idx -> {
+
+            ModifierInstance modifier = modifierInstances.get(idx);
+            ModifierSource source = new GearImplicitModifierSource(slot, idx);
+            return new ModifierEntry(modifier, source);
+        });
     }
 
     default List<Either<FormattedText, TooltipComponent>> tooltips(int maxWidth) {

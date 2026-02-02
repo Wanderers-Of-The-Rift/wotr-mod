@@ -1,7 +1,12 @@
 package com.wanderersoftherift.wotr.util;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
@@ -19,7 +24,7 @@ public final class ItemStackHandlerUtil {
      * @param player
      * @param handler
      */
-    public static void placeInPlayerInventoryOrDrop(ServerPlayer player, ItemStackHandler handler) {
+    public static void placeInPlayerInventoryOrDrop(ServerPlayer player, IItemHandler handler) {
         for (int i = 0; i < handler.getSlots(); i++) {
             // TODO: may need extra logic to handle oversized stacks
             placeInPlayerInventoryOrDrop(player, handler.getStackInSlot(i).copy());
@@ -51,7 +56,7 @@ public final class ItemStackHandlerUtil {
      * @param handler
      * @param player
      */
-    public static void addOrGiveToPlayerOrDrop(ItemStack item, ItemStackHandler handler, ServerPlayer player) {
+    public static void addOrGiveToPlayerOrDrop(ItemStack item, IItemHandler handler, ServerPlayer player) {
         ItemStack residual = item;
         for (int i = 0; i < handler.getSlots(); i++) {
             if (handler.getStackInSlot(i).isEmpty()) {
@@ -66,6 +71,35 @@ public final class ItemStackHandlerUtil {
                 player.drop(item, false);
             } else {
                 player.getInventory().placeItemBackInInventory(item);
+            }
+        }
+    }
+
+    /**
+     * Drops the contents of the IItemHandler
+     * 
+     * @param level       The level to drop the contents into
+     * @param pos         The position to drop the contents
+     * @param itemHandler The handler to empty
+     */
+    public static void dropContents(Level level, BlockPos pos, IItemHandler itemHandler) {
+        dropContents(level, pos.getCenter(), itemHandler);
+    }
+
+    /**
+     * Drops the contents of the IItemHandler
+     *
+     * @param level       The level to drop the contents into
+     * @param pos         The position to drop the contents
+     * @param itemHandler The handler to empty
+     */
+    public static void dropContents(Level level, Vec3 pos, IItemHandler itemHandler) {
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            int amount = itemHandler.getStackInSlot(slot).getCount();
+            while (amount > 0) {
+                ItemStack stack = itemHandler.extractItem(slot, amount, false);
+                Containers.dropItemStack(level, pos.x, pos.y, pos.z, stack);
+                amount = itemHandler.getStackInSlot(slot).getCount();
             }
         }
     }

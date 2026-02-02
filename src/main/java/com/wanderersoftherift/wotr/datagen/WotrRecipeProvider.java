@@ -260,9 +260,30 @@ public class WotrRecipeProvider extends RecipeProvider {
         // Add recipes for the mod's objectives
         KeyForgeRecipe
                 .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
-                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("activate_block")))
                 .setPriority(-1)
-                .save(output, WanderersOfTheRift.id("rift_objective_kill"));
+                .save(output, WanderersOfTheRift.id("rift_activate_block"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("kill")))
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("death")).setMinPercent(5f).build())
+                .setPriority(1)
+                .save(output, WanderersOfTheRift.id("rift_kill"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("explore")))
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("light")).setMinPercent(5f).build())
+                .setPriority(2)
+                .save(output, WanderersOfTheRift.id("rift_explore"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("anomaly")))
+                .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("energy")).setMinPercent(5f).build())
+                .setPriority(3)
+                .save(output, WanderersOfTheRift.id("rift_anomaly"));
 
         KeyForgeRecipe
                 .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),

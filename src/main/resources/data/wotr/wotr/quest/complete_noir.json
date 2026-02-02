@@ -1,0 +1,50 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "count" : {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 1
+      },
+      "tier" : {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 3
+      },
+      "themes" : [
+        "wotr:noir"
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 1,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 20
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:cats_cradle",
+        "min": 2
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:complete_noir",
+        "min": 0,
+        "max": 0
+      }
+    ]
+  }
+}

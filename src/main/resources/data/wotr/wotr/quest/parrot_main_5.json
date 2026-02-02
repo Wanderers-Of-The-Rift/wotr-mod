@@ -1,0 +1,42 @@
+{
+  "goals": [
+    {
+      "type": "wotr:complete_rift",
+      "completion_level": "complete",
+      "count" : 3,
+      "tier" : 4
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table" : "wotr:chests/wooden"
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:parrots_perch",
+      "amount": 50
+    }
+  ],
+  "prerequisite": {
+    "type": "wotr:and",
+    "predicates": [
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_4",
+        "min": 1
+      },
+      {
+        "type": "wotr:quest_completion",
+        "quest": "wotr:parrot_main_5",
+        "max": 0,
+        "min": 0
+      },
+      {
+        "type": "wotr:guild_rank",
+        "guild": "wotr:parrots_perch",
+        "min": 2
+      }
+    ]
+  }
+}

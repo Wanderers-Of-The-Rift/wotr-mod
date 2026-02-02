@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.init;
 
+import com.wanderersoftherift.wotr.entity.animal.DroneBee;
 import com.wanderersoftherift.wotr.entity.mob.RiftSkeleton;
 import com.wanderersoftherift.wotr.entity.mob.RiftZombie;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,5 +17,6 @@ public class WotrEntityAttributes {
     public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(WotrEntities.RIFT_ZOMBIE.get(), RiftZombie.createAttributes().build());
         event.put(WotrEntities.RIFT_SKELETON.get(), RiftSkeleton.createAttributes().build());
+        event.put(WotrEntities.DRONE_BEE.get(), DroneBee.createAttributes().build());
     }
 }

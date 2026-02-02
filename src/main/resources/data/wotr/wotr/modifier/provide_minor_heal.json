@@ -1,0 +1,17 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:ability",
+                "provided_ability": "wotr:minor_heal",
+                "trigger": {
+                    "type": "wotr:deal_damage",
+                    "min": 2.0
+                }
+            }
+        ]
+    ]
+}

@@ -1,27 +1,37 @@
 {
-  "type": "wotr:instant",
-  "effects": [
-     {
-      "type": "wotr:targeting",
-      "targeting": [
+  "type": "wotr:persistent",
+  "icon": "minecraft:textures/item/iron_pickaxe.png",
+  "activation_effects": [
+    {
+      "type": "wotr:attach",
+      "id": "wotr:veinminer",
+      "modifiers": [
         {
-          "type": "wotr:trigger_target"
-        },
-        {
-          "type": "wotr:connected_block",
-          "blocks": {
-            "match_source" : true
-          },
-          "count": 8
-        }
-      ],
-      "effects": [
-        {
-          "type": "wotr:break",
-          "as_tool": "ability_item"
+          "modifier": "wotr:provide_veinminer",
+          "tier": 1,
+          "roll": 0
         }
       ]
+
     }
   ],
-  "icon": "minecraft:textures/item/iron_pickaxe.png"
+  "on_deactivation_effects": [
+    {
+      "type": "wotr:detach_own",
+      "id": "wotr:veinminer"
+    }
+  ],
+  "on_deactivation_costs": [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 100
+    }
+  ],
+  "ongoing_requirements": [
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 1
+    }
+  ]
 }

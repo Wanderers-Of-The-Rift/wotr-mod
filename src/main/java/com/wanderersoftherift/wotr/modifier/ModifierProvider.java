@@ -10,18 +10,28 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface for data components that provide modifiers
  */
 public interface ModifierProvider {
 
-    void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action);
+    Stream<ModifierEntry> modifiers(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity);
+
+    default void forEachModifier(ItemStack stack, WotrEquipmentSlot slot, LivingEntity entity, Action action) {
+        modifiers(stack, slot, entity).forEach(entry -> {
+            action.accept(entry.instance.modifier(), entry.instance.tier(), entry.instance.roll(), entry.source);
+        });
+    }
 
     List<Either<FormattedText, TooltipComponent>> tooltips(int maxWidth);
 
     @FunctionalInterface
     interface Action {
         void accept(Holder<Modifier> modifierHolder, int tier, float roll, ModifierSource item);
+    }
+
+    record ModifierEntry(ModifierInstance instance, ModifierSource source) {
     }
 }

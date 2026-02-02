@@ -7,13 +7,16 @@ import com.wanderersoftherift.wotr.core.rift.RiftConfig;
 import com.wanderersoftherift.wotr.core.rift.RiftGenerationConfig;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.mixin.AccessorStructureManager;
+import com.wanderersoftherift.wotr.util.RandomFactoryType;
 import com.wanderersoftherift.wotr.util.RandomSourceFromJavaRandom;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftProcessedChunk;
 import com.wanderersoftherift.wotr.world.level.levelgen.layout.RiftLayout;
 import com.wanderersoftherift.wotr.world.level.levelgen.roomgen.RiftRoomGenerator;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.RoomRiftSpace;
 import com.wanderersoftherift.wotr.world.level.levelgen.space.VoidRiftSpace;
+import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftGeneratableId;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRiftGeneratable;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -81,7 +84,8 @@ public class FastRiftGenerator extends ChunkGenerator {
 
         var riftGenerationConfig = this.getRiftGenerationConfig();
 
-        this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
+        this.roomGeneratorRNG = RandomSourceFromJavaRandom.positional(
+                RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
                 config.seed() + SEED_ADJUSTMENT_ROOM_GENERATOR);
         this.roomGenerator = riftGenerationConfig.roomGenerator().create(config);
     }
@@ -106,6 +110,10 @@ public class FastRiftGenerator extends ChunkGenerator {
         return layout.get();
     }
 
+    public Object2IntMap<RiftGeneratableId> getGeneratableCounts(RoomRiftSpace space, ServerLevelAccessor level) {
+        return roomGenerator.getGeneratableCounts(space, level, roomGeneratorRNG);
+    }
+
     private RiftRoomGenerator getRoomGenerator() {
         return roomGenerator;
     }
@@ -114,8 +122,10 @@ public class FastRiftGenerator extends ChunkGenerator {
     public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
         var stepsOptional = getRiftGenerationConfig().postProcessingSteps();
         for (var step : stepsOptional) {
-            step.runPostProcessing(this, chunk, RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(0),
-                    this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER), level);
+            step.runPostProcessing(this, chunk,
+                    RandomSourceFromJavaRandom.positional(RandomSourceFromJavaRandom.get(RandomFactoryType.DEFAULT),
+                            this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
+                    level);
         }
         super.applyBiomeDecoration(level, chunk, structureManager);
     }

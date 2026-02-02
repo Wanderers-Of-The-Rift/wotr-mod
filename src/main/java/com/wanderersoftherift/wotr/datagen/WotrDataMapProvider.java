@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.init.WotrDataMaps;
+import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.essence.EssenceValue;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -12,6 +13,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -64,6 +66,14 @@ public class WotrDataMapProvider extends DataMapProvider {
         ResourceLocation end = WanderersOfTheRift.id("end");
 
         ResourceLocation processor = WanderersOfTheRift.id("processor");
+
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            this.builder(WotrDataMaps.ESSENCE_VALUE_DATA)
+                    .add(essenceItem, new EssenceValue(
+                            WanderersOfTheRift.id(essenceType.name.replace("_essence", "").toLowerCase(Locale.ROOT)), 5
+                    ), false);
+        });
 
         // Bee stuff
         this.builder(WotrDataMaps.ESSENCE_VALUE_DATA)

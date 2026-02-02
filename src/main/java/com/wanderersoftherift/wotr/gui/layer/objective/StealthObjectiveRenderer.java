@@ -1,9 +1,9 @@
 package com.wanderersoftherift.wotr.gui.layer.objective;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
+import com.wanderersoftherift.wotr.core.rift.objective.ongoing.StealthOngoingObjective;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
-import com.wanderersoftherift.wotr.rift.objective.OngoingObjective;
-import com.wanderersoftherift.wotr.rift.objective.ongoing.StealthOngoingObjective;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

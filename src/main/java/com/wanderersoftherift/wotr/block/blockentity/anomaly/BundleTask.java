@@ -3,9 +3,11 @@ package com.wanderersoftherift.wotr.block.blockentity.anomaly;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.HolderSetCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.InteractionHand;
@@ -20,9 +22,10 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements AnomalyTask<BundleTaskState> {
+public record BundleTask(Map<HolderSet<Item>, IntProvider> rolls) implements AnomalyTask<BundleTaskState> {
     public static final AnomalyTaskType<BundleTaskState> TYPE = new AnomalyTaskType<>(
-            Codec.unboundedMap(BuiltInRegistries.ITEM.holderByNameCodec(), IntProvider.CODEC)
+            Codec.unboundedMap(Codec.withAlternative(HolderSetCodec.create(Registries.ITEM, Item.CODEC, true),
+                    BuiltInRegistries.ITEM.holderByNameCodec(), HolderSet::direct), IntProvider.CODEC)
                     .xmap(BundleTask::new, BundleTask::rolls)
                     .fieldOf("items"),
             BundleTaskState.CODEC);
@@ -40,7 +43,7 @@ public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements Anomal
     @Override
     public BundleTaskState createState(RandomSource rng) {
         var task = new Object2IntOpenHashMap<Item>();
-        rolls.forEach((item, count) -> task.put(item.value(), count.sample(rng)));
+        rolls.forEach((item, count) -> task.put(item.getRandomElement(rng).get().value(), count.sample(rng)));
         return new BundleTaskState(task);
     }
 
@@ -105,20 +108,18 @@ public record BundleTask(Map<Holder<Item>, IntProvider> rolls) implements Anomal
             }
             if (remaining == consumed) {
                 requirements.removeInt(item);
-                if (requirements.isEmpty()) {
-                    entity.closeAndReward(player);
-                    return InteractionResult.SUCCESS;
-                }
             } else if (consumed > 0) {
                 requirements.put(item, remaining - consumed);
             }
         }
         if (resultIfIncomplete != InteractionResult.PASS) {
             handItem.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(newContent));
-            entity.updateTask(new BundleTaskState(requirements));
+            if (requirements.isEmpty()) {
+                entity.closeAndReward(player);
+            } else {
+                entity.updateTask(new BundleTaskState(requirements));
+            }
         }
-
         return resultIfIncomplete;
     }
-
 }

@@ -9,7 +9,7 @@ public record TickTrigger() implements TrackableTrigger {
     private static final MapCodec<TickTrigger> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.point(INSTANCE));
     public static final TriggerType<TickTrigger> TRIGGER_TYPE = new TriggerType<>(TickPredicate.CODEC,
-            WotrAttachments.TICK_TRIGGER_REGISTRY);
+            WotrAttachments.TICK_TRIGGER_REGISTRY, null);
 
     @Override
     public TriggerType<?> type() {

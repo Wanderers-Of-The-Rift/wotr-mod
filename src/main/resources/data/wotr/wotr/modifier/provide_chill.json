@@ -1,0 +1,45 @@
+{
+    "style": {
+        "color": "#7f8c8b"
+    },
+    "tiers": [
+        [
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/chill-ice",
+            "trigger": {
+                "type": "wotr:take_damage",
+                "min": 1.0,
+                "types": "wotr:ice"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/effective_damage",
+            "trigger": {
+                "type": "wotr:take_damage",
+                "min": 1.0,
+                "types": "wotr:lightning"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/chill-poison",
+            "trigger": {
+              "type": "wotr:take_damage",
+              "min": 1.0,
+              "types": "wotr:poison"
+            }
+          },
+          {
+            "type": "wotr:ability",
+            "provided_ability": "wotr:apply/chill-detach",
+            "trigger": {
+              "type": "wotr:take_damage",
+              "min": 1.0,
+              "types": "wotr:earth"
+            }
+          }
+        ]
+    ]
+}

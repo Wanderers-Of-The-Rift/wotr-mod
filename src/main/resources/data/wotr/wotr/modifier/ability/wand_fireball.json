@@ -1,0 +1,16 @@
+{
+    "style": {
+        "color": "#cc8811"
+    },
+    "tiers": [
+        [
+            {
+                "type": "wotr:ability",
+                "provided_ability": "wotr:fireball",
+                "trigger": {
+                    "type": "wotr:main_attack"
+                }
+            }
+        ]
+    ]
+}

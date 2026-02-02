@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr;
 
 import com.mojang.logging.LogUtils;
 import com.wanderersoftherift.wotr.config.ClientConfig;
+import com.wanderersoftherift.wotr.core.goal.RegisterGoalTrackerEvent;
 import com.wanderersoftherift.wotr.gui.widget.lookup.GoalDisplays;
 import com.wanderersoftherift.wotr.gui.widget.lookup.RewardDisplays;
 import com.wanderersoftherift.wotr.init.WotrAbilitySourceTypes;
@@ -26,8 +27,10 @@ import com.wanderersoftherift.wotr.init.WotrMobEffects;
 import com.wanderersoftherift.wotr.init.WotrMobInteractions;
 import com.wanderersoftherift.wotr.init.WotrModifierEffectTypes;
 import com.wanderersoftherift.wotr.init.WotrModifierSourceTypes;
+import com.wanderersoftherift.wotr.init.WotrNumberProviders;
 import com.wanderersoftherift.wotr.init.WotrObjectiveTypes;
 import com.wanderersoftherift.wotr.init.WotrOngoingObjectiveTypes;
+import com.wanderersoftherift.wotr.init.WotrParticleTypes;
 import com.wanderersoftherift.wotr.init.WotrPayloadHandlers;
 import com.wanderersoftherift.wotr.init.WotrRiftParameterTypes;
 import com.wanderersoftherift.wotr.init.WotrSoundEvents;
@@ -75,6 +78,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -109,6 +113,7 @@ public class WanderersOfTheRift {
         WotrLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         WotrLootItemFunctionTypes.LOOT_ITEM_FUNCTION_TYPES.register(modEventBus);
         WotrLootItemConditionTypes.LOOT_ITEM_CONDITION_TYPES.register(modEventBus);
+        WotrNumberProviders.NUMBER_PROVIDERS.register(modEventBus);
 
         WotrAnomalyTaskTypes.ANOMALY_TASK_TYPES.register(modEventBus);
 
@@ -167,6 +172,7 @@ public class WanderersOfTheRift {
         // Utilities
         WotrEditTypes.EDIT_TYPES.register(modEventBus);
         WotrSpawnFunctionTypes.SPAWN_FUNCTION_TYPES.register(modEventBus);
+        WotrParticleTypes.PARTICLE_TYPES.register(modEventBus);
 
         if (FMLEnvironment.dist.isClient()) {
             WotrConfigurableLayers.LAYERS.register(modEventBus);
@@ -179,11 +185,16 @@ public class WanderersOfTheRift {
 
         modEventBus.addListener(this::loadInterop);
         modEventBus.addListener(this::registerInterop);
+        modEventBus.addListener(this::registerGoalTrackers);
         modEventBus.addListener(WotrPayloadHandlers::registerPayloadHandlers);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    private void registerGoalTrackers(FMLCommonSetupEvent event) {
+        ModLoader.postEvent(new RegisterGoalTrackerEvent());
     }
 
     /**

@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.block.BlockFamilyHelper;
+import com.wanderersoftherift.wotr.block.ObjectiveBlock;
 import com.wanderersoftherift.wotr.block.RiftMobSpawnerBlock;
 import com.wanderersoftherift.wotr.block.TrapBlock;
 import com.wanderersoftherift.wotr.client.render.item.emblem.AbilityEmblemProvider;
@@ -42,6 +43,7 @@ import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemp
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.renderer.GeckolibSpecialRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +85,9 @@ public class WotrModelProvider extends ModelProvider {
                         Variant.variant().with(VariantProperties.MODEL, abilityBenchModel))
                 .with(BlockModelGenerators.createHorizontalFacingDispatch()));
 
+        itemModels.itemModelOutput.accept(WotrBlocks.ABILITY_BENCH.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/ability_bench"), new GeckolibSpecialRenderer.Unbaked()));
+
         ResourceLocation keyForgeModel = WanderersOfTheRift.id("block/key_forge");
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.KEY_FORGE.get(),
@@ -109,7 +114,22 @@ public class WotrModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(MultiVariantGenerator
                 .multiVariant(WotrBlocks.RIFT_SPAWNER.get(),
                         Variant.variant().with(VariantProperties.MODEL, baseRiftSpawnerModel))
-                .with(createFacingDispatchFromUpModel()));
+                .with(BlockModelGenerators.createHorizontalFacingDispatch()));
+
+        itemModels.itemModelOutput.accept(WotrBlocks.RIFT_SPAWNER.asItem(), new SpecialModelWrapper.Unbaked(
+                WanderersOfTheRift.id("item/rift_spawner"), new GeckolibSpecialRenderer.Unbaked()));
+
+        ResourceLocation baseObjectiveModel = TexturedModel.CUBE.create(WotrBlocks.OBJECTIVE.get(),
+                blockModels.modelOutput);
+        ResourceLocation baseActiveObjectiveModel = TexturedModel
+                .createDefault((block) -> new TextureMapping().put(TextureSlot.ALL,
+                        WanderersOfTheRift.id("block/objective_block_active")), ModelTemplates.CUBE_ALL)
+                .createWithSuffix(
+                        WotrBlocks.OBJECTIVE.get(), "_active", blockModels.modelOutput);
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(WotrBlocks.OBJECTIVE.get())
+                .with(PropertyDispatch.property(ObjectiveBlock.ACTIVATED)
+                        .select(false, Variant.variant().with(VariantProperties.MODEL, baseObjectiveModel))
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, baseActiveObjectiveModel))));
 
         itemModels.itemModelOutput.accept(WotrItems.BUILDER_GLASSES.get(),
                 ItemModelUtils.plainModel(WanderersOfTheRift.id("item/builder_glasses")));
@@ -149,6 +169,11 @@ public class WotrModelProvider extends ModelProvider {
         this.generateRunegemItem(WotrItems.RUNEGEM.get(), itemModels);
 
         WotrBlocks.BLOCK_FAMILY_HELPERS.forEach(helper -> createModelsForBuildBlock(helper, blockModels));
+
+        // Essence items
+        WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
+            itemModels.generateFlatItem(essenceItem.get(), ModelTemplates.FLAT_ITEM);
+        });
     }
 
     private void createBlockStatesForTrapBlock(

@@ -51,7 +51,7 @@ public class TriggerTracker {
         }
         var result = false;
         var typeHolder = getLevel().registryAccess()
-                .lookupOrThrow(WotrRegistries.Keys.TRACKED_ABILITY_TRIGGERS)
+                .lookupOrThrow(WotrRegistries.Keys.TRACKABLE_TRIGGERS)
                 .wrapAsHolder(activation.type());
         var triggerables = new ArrayList<>(this.triggerables.get(typeHolder));
         for (Triggerable tracked : triggerables) {
@@ -124,7 +124,7 @@ public class TriggerTracker {
             implements Triggerable {
         @Override
         public boolean trigger(LivingEntity holder, TrackableTrigger activation) {
-            if (predicate().type().value() != activation.type()) {
+            if (holder.getServer() == null || predicate().type().value() != activation.type()) {
                 return false;
             }
             return holder.getData(WotrAttachments.ONGOING_ABILITIES)
@@ -134,12 +134,10 @@ public class TriggerTracker {
         // todo https://github.com/Wanderers-Of-The-Rift/wotr-mod/issues/180
         @Override
         public void sendUnregister(ServerPlayer player) {
-
         }
 
         @Override
         public void sendRegister(ServerPlayer player) {
-
         }
 
     }

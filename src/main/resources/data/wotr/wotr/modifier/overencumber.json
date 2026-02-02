@@ -1,0 +1,17 @@
+{
+  "style": {
+    "color": "#aa1111"
+  },
+  "tiers": [
+    [
+      {
+        "type": "wotr:attribute",
+        "id": "wotr:overencumber",
+        "attribute": "minecraft:gravity",
+        "min_roll": 1,
+        "max_roll": 1,
+        "operation": "add_multiplied_total"
+      }
+    ]
+  ]
+}

@@ -16,7 +16,8 @@ public interface TrackableTrigger {
     }
 
     record TriggerType<T extends TrackableTrigger>(MapCodec<? extends TriggerPredicate<T>> predicateCodec,
-            @Nullable Supplier<AttachmentType<TriggerRegistry<T>>> registry) {
+            @Nullable Supplier<AttachmentType<TriggerRegistry<T>>> registry,
+            @Nullable TrackableTrigger clientTriggerInstance) {
     }
 
 }
