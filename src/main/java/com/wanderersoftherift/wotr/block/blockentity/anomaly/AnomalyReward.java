@@ -14,12 +14,29 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record AnomalyReward(MobEffectInstance effect/* potential alternative: it could cast an ability */,
-        ResourceKey<LootTable> lootKey) {
+import java.util.Optional;
+
+/**
+ *
+ * Represents a reward granted by an anomaly.
+ *
+ * <p>
+ * The reward can contain an effect or a loot table, both or none. NOTE: The item(s) obtained depend on how the loot table is set up and how it rolls.
+ * <p>
+ * Rewards are defined in "resources/data/wotr/wotr/anomaly_reward/"
+ * Anomaly rewards are loaded in anomalies and defined at de bottom of "resources/data/wotr/worldgen/processor_list/anomaly_theme_*.json"
+ *
+ * @param effect
+ * @param lootKey
+ */
+public record AnomalyReward(Optional<MobEffectInstance> effect/* potential alternative: it could cast an ability */,
+                            Optional<ResourceKey<LootTable>> lootKey) {
     public static final Codec<AnomalyReward> DIRECT_CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    MobEffectInstance.CODEC.fieldOf("effect").forGetter(AnomalyReward::effect),
-                    ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(AnomalyReward::lootKey)
+                    MobEffectInstance.CODEC.optionalFieldOf("effect").forGetter(AnomalyReward::effect),
+                    ResourceKey.codec(Registries.LOOT_TABLE)
+                            .optionalFieldOf("loot_table")
+                            .forGetter(AnomalyReward::lootKey)
             ).apply(instance, AnomalyReward::new)
     );
 
@@ -30,14 +47,16 @@ public record AnomalyReward(MobEffectInstance effect/* potential alternative: it
         if (!(player.level() instanceof ServerLevel serverLevel)) {
             return;
         }
+        if (effect.isPresent()) {
+            var newInstance = new MobEffectInstance(effect.get().getEffect());
+            newInstance.update(effect.get());
+            player.addEffect(newInstance);
+        }
 
-        var newInstance = new MobEffectInstance(effect.getEffect());
-        newInstance.update(effect);
-        player.addEffect(newInstance);
-
-        var loot = serverLevel.getServer().reloadableRegistries().getLootTable(lootKey);
-        var lootContent = loot.getRandomItems(new LootParams.Builder(serverLevel).create(ContextKeySet.EMPTY));
-        lootContent.forEach(player.getInventory()::placeItemBackInInventory);
-
+        if (lootKey.isPresent()) {
+            var loot = serverLevel.getServer().reloadableRegistries().getLootTable(lootKey.get());
+            var lootContent = loot.getRandomItems(new LootParams.Builder(serverLevel).create(ContextKeySet.EMPTY));
+            lootContent.forEach(player.getInventory()::placeItemBackInInventory);
+        }
     }
 }

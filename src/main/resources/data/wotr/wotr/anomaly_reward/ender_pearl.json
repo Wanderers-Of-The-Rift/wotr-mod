@@ -1,7 +1,7 @@
 {
     "loot_table": "entities/enderman",
     "effect": {
-        "id": "minecraft:absorption",
+        "id": "minecraft:strength",
         "duration": 2000,
         "amplifier": 4
     }
