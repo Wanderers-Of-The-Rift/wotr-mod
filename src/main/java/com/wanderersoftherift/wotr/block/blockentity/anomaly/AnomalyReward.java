@@ -21,16 +21,17 @@ import java.util.Optional;
  * Represents a reward granted by an anomaly.
  *
  * <p>
- * The reward can contain an effect or a loot table, both or none. NOTE: The item(s) obtained depend on how the loot table is set up and how it rolls.
+ * The reward can contain an effect or a loot table, both or none. NOTE: The item(s) obtained depend on how the loot
+ * table is set up and how it rolls.
  * <p>
- * Rewards are defined in "resources/data/wotr/wotr/anomaly_reward/"
- * Anomaly rewards are loaded in anomalies and defined at de bottom of "resources/data/wotr/worldgen/processor_list/anomaly_theme_*.json"
+ * Rewards are defined in "resources/data/wotr/wotr/anomaly_reward/" Anomaly rewards are loaded in anomalies and defined
+ * at de bottom of "resources/data/wotr/worldgen/processor_list/anomaly_theme_*.json"
  *
  * @param effect
  * @param lootKey
  */
 public record AnomalyReward(Optional<MobEffectInstance> effect/* potential alternative: it could cast an ability */,
-                            Optional<ResourceKey<LootTable>> lootKey) {
+        Optional<ResourceKey<LootTable>> lootKey) {
     public static final Codec<AnomalyReward> DIRECT_CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     MobEffectInstance.CODEC.optionalFieldOf("effect").forGetter(AnomalyReward::effect),
