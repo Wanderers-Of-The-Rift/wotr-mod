@@ -66,7 +66,14 @@ public sealed interface TargetBlockPredicate {
 
     enum Trivial implements TargetBlockPredicate, StringRepresentable {
         ALL("all", true),
-        NONE("none", false);
+        NONE("none",
+                false)/*
+                       * , ATTACKABLE("attackable", true){
+                       * 
+                       * @Override public boolean matches(BlockPos target, HitResult source, AbilityContext context) {
+                       * return AttackableBlock.isAttackableStatic(context.level().getBlockState(target),
+                       * context.level(), target); } }
+                       */;
 
         private String id;
         private boolean result;
