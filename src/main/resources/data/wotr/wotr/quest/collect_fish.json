@@ -1,0 +1,23 @@
+{
+  "goals": [
+    {
+      "type": "wotr:collect_item",
+      "item" : "#c:foods/raw_fish",
+      "count": 20
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:item",
+      "item": {
+        "count": 10,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "type": "wotr:reputation",
+      "guilds": "wotr:cats_cradle",
+      "amount": 20
+    }
+  ]
+}

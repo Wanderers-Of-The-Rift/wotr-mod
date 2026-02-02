@@ -1,6 +1,8 @@
 package com.wanderersoftherift.wotr.core.inventory.containers;
 
+import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,7 +21,12 @@ public final class NonContainerWrapper implements ContainerWrapper {
     }
 
     @Override
-    public @NotNull Iterator<ContainerItemWrapper> iterator() {
+    public @Nullable ItemAccessor containerItem() {
+        return null;
+    }
+
+    @Override
+    public @NotNull Iterator<ItemAccessor> iterator() {
         return Collections.emptyIterator();
     }
 }

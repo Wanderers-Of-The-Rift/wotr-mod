@@ -15,7 +15,7 @@ import org.joml.Vector2i;
 /**
  * Renderer for the no objective.
  */
-public class NoObjectiveStatusRenderer extends ObjectiveRenderer {
+public class NoObjectiveStatusRenderer implements ObjectiveRenderer {
 
     private static final Component MESSAGE = Component
             .translatable(WanderersOfTheRift.translationId("objective", "nothing.message"));

@@ -54,6 +54,11 @@ public class GoalStateWidget extends AbstractWidget implements ScrollContainerEn
     }
 
     @Override
+    public int getWidth() {
+        return goalWidget.getWidth() + STATE_BOX_SIZE + STATE_BOX_HORIZ_OFFSET;
+    }
+
+    @Override
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int x = getX();
         int y = getY();
