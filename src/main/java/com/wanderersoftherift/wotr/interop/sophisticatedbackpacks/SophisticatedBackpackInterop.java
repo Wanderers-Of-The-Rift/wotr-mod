@@ -2,9 +2,10 @@ package com.wanderersoftherift.wotr.interop.sophisticatedbackpacks;
 
 import com.google.common.collect.Iterators;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.inventory.containers.ContainerItemWrapper;
+import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerWrapper;
+import com.wanderersoftherift.wotr.core.inventory.containers.DirectItemAccessor;
 import com.wanderersoftherift.wotr.core.inventory.containers.ItemStackHandlerContainers;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,7 @@ import net.p3pp3rf1y.sophisticatedbackpacks.backpack.wrapper.IBackpackWrapper;
 import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandler;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -46,18 +48,29 @@ public final class SophisticatedBackpackInterop {
         private static class SophisticatedBackpackWrapper implements ContainerWrapper {
 
             private final IBackpackWrapper backpackWrapper;
+            private final ItemAccessor containerItem;
 
             public SophisticatedBackpackWrapper(ItemStack item) {
-                this.backpackWrapper = BackpackWrapper.fromStack(item);
+                this(new DirectItemAccessor(item));
+            }
+
+            public SophisticatedBackpackWrapper(ItemAccessor item) {
+                this.backpackWrapper = BackpackWrapper.fromStack(item.getReadOnlyItemStack());
+                this.containerItem = item;
             }
 
             @Override
             public void recordChanges() {
-                // NOOP
+
             }
 
             @Override
-            public @NotNull Iterator<ContainerItemWrapper> iterator() {
+            public @Nullable ItemAccessor containerItem() {
+                return containerItem;
+            }
+
+            @Override
+            public @NotNull Iterator<ItemAccessor> iterator() {
                 InventoryHandler inventory = backpackWrapper.getInventoryHandler();
                 UpgradeHandler upgrades = backpackWrapper.getUpgradeHandler();
                 return Iterators.concat(ItemStackHandlerContainers.iterateNonEmpty(inventory),

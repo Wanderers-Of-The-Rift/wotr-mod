@@ -16,6 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -197,7 +198,7 @@ public class QuestState {
         }
 
         @Override
-        public void setProgress(int amount) {
+        public void setProgress(Player player, int amount) {
             int clampedAmount = Math.clamp(amount, 0, getGoal().count());
             if (clampedAmount != getProgress()) {
                 quest.setGoalProgress(index, amount);

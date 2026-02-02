@@ -1,7 +1,7 @@
 package com.wanderersoftherift.wotr.gui.widget.goal;
 
-import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
+import com.wanderersoftherift.wotr.core.goal.type.ItemGoal;
 import com.wanderersoftherift.wotr.util.ColorUtil;
 import com.wanderersoftherift.wotr.util.ComponentUtil;
 import net.minecraft.ChatFormatting;
@@ -25,19 +25,20 @@ import java.util.List;
 /**
  * Display widget for the {@link GiveItemGoal}
  */
-public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
-    private static final String TEXT_ID = WanderersOfTheRift.translationId("container", "quest.goal.give");
+public class ItemGoalWidget extends AbstractWidget implements GoalDisplay {
     private static final int ICON_SIZE = 16;
     private static final float ITEM_DISPLAY_TIME = 30.0f;
     private final Font font;
-    private final GiveItemGoal goal;
+    private final ItemGoal goal;
 
+    private final String messageId;
     private int progress;
     private Style textStyle = Style.EMPTY.withColor(ChatFormatting.DARK_GRAY);
     private float time = 0;
 
-    public GiveItemGoalWidget(GiveItemGoal goal) {
+    public ItemGoalWidget(ItemGoal goal, String messageId) {
         super(0, 0, 100, ICON_SIZE, Component.empty());
+        this.messageId = messageId;
         this.font = Minecraft.getInstance().font;
         this.goal = goal;
         updateMessage();
@@ -97,6 +98,7 @@ public class GiveItemGoalWidget extends AbstractWidget implements GoalDisplay {
     }
 
     private void updateMessage() {
-        setMessage(Component.translatable(TEXT_ID, progress, goal.count()).withStyle(textStyle));
+        setMessage(Component.translatable(messageId, progress, goal.count()).withStyle(textStyle));
+        setWidth(font.width(getMessage()) + ICON_SIZE);
     }
 }

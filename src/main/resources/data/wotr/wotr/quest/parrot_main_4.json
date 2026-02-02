@@ -1,12 +1,12 @@
 {
   "goals": [
     {
-      "type": "wotr:fixed_give_item",
+      "type": "wotr:give_item",
       "item": "wotr:rift_key",
       "count": 1
     },
     {
-      "type": "wotr:fixed_give_item",
+      "type": "wotr:give_item",
       "item": "minecraft:gold_ingot",
       "count": 1
     }

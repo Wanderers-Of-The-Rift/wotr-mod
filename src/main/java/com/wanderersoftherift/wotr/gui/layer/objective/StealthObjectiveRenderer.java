@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2i;
 
-public class StealthObjectiveRenderer extends ObjectiveRenderer {
+public class StealthObjectiveRenderer implements ObjectiveRenderer {
     private static final ResourceLocation ALARM_SPRITE = WanderersOfTheRift.id("objective/stealth/alarm");
     private static final ResourceLocation ALERT_SPRITE = WanderersOfTheRift.id("objective/stealth/alert");
     private static final ResourceLocation BAR_BACKGROUND_SPRITE = WanderersOfTheRift

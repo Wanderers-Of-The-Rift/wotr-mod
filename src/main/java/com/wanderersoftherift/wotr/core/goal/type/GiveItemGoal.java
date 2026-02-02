@@ -3,7 +3,6 @@ package com.wanderersoftherift.wotr.core.goal.type;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -16,7 +15,7 @@ import net.minecraft.world.item.crafting.Ingredient;
  * @param item  The item (or set of items) that the quest requires
  * @param count How many total items need to be provided
  */
-public record GiveItemGoal(Ingredient item, int count) implements Goal {
+public record GiveItemGoal(Ingredient item, int count) implements ItemGoal {
 
     public static final MapCodec<GiveItemGoal> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(

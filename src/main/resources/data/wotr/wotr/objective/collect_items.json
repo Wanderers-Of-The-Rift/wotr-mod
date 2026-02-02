@@ -1,0 +1,26 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:collect_from_loot_table",
+      "loot_table": "wotr:chests/wooden",
+      "loot_rolls": {
+        "type": "wotr:sum",
+        "values": [
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              10
+            ]
+          },
+          1
+        ]
+      },
+      "item_types": 2
+    }
+  ]
+}
