@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.abilities.targeting;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
@@ -21,17 +22,19 @@ import java.util.List;
 /**
  * Base type for targeting an area. Subtypes provide logic for the broad AABB to target, and the more narrow targeting
  * within that area (e.g. for a sphere the AABB is the box that contains it, and the targets in the corners are
- * rejected).
+ * rejected). UseOriginDirection controls whether the direction used for orienting the area is taken from the origin
+ * source, prior to AreaTargeting.
  */
 public record AreaTargeting(TargetAreaShape shape, TargetEntityPredicate entityPredicate,
-        TargetBlockPredicate blockPredicate) implements AbilityTargeting {
+        TargetBlockPredicate blockPredicate, boolean useOriginDirection) implements AbilityTargeting {
 
     public static final MapCodec<AreaTargeting> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             TargetAreaShape.DIRECT_CODEC.fieldOf("shape").forGetter(AreaTargeting::shape),
             TargetEntityPredicate.CODEC.optionalFieldOf("entities", TargetEntityPredicate.Trivial.ALL)
                     .forGetter(AreaTargeting::entityPredicate),
             TargetBlockPredicate.CODEC.optionalFieldOf("blocks", TargetBlockPredicate.Trivial.NONE)
-                    .forGetter(AreaTargeting::blockPredicate)
+                    .forGetter(AreaTargeting::blockPredicate),
+            Codec.BOOL.optionalFieldOf("use_origin_direction", true).forGetter(AreaTargeting::useOriginDirection)
     ).apply(instance, AreaTargeting::new));
 
     private static final Vec3 FORWARDS = new Vec3(0, 0, -1);
@@ -54,7 +57,7 @@ public record AreaTargeting(TargetAreaShape shape, TargetEntityPredicate entityP
         List<TargetInfo> result = new ArrayList<>();
         for (HitResult source : origin.targets()) {
             Vec3 location = source.getLocation();
-            Vec3 direction = getDirection(source);
+            Vec3 direction = getDirection(useOriginDirection ? origin.source() : source);
             AABB aabb = shape.getAABB(location, direction, context);
 
             List<HitResult> hits = new ArrayList<>();
