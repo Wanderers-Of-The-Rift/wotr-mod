@@ -73,23 +73,17 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final int dimensionHeightBlocks;
     private final RiftGenerationPerformanceMetrics riftGenerationPerformanceMetrics = new RiftGenerationPerformanceMetrics();
     private final RiftConfig config;
-    private final AtomicReference<RiftLayout> layout;
+    private final AtomicReference<RiftLayout> layout = new AtomicReference<>();
     private final RiftRoomGenerator roomGenerator;
     private final PositionalRandomFactory roomGeneratorRNG;
     private final SerializableRiftGeneratable filler;
 
     public FastRiftGenerator(Holder<Biome> defaultBiome, int layerCount, int dimensionHeightBlocks, RiftConfig config) {
-        this(defaultBiome, layerCount, dimensionHeightBlocks, config, new AtomicReference<>());
-    }
-
-    private FastRiftGenerator(Holder<Biome> defaultBiome, int layerCount, int dimensionHeightBlocks, RiftConfig config,
-            AtomicReference<RiftLayout> layout) {
         super(new FixedBiomeSource(defaultBiome));
         this.defaultBiome = defaultBiome;
         this.layerCount = layerCount;
         this.dimensionHeightBlocks = dimensionHeightBlocks;
         this.config = config;
-        this.layout = layout;
         this.filler = config.getCustomData(WotrRiftConfigDataTypes.RIFT_GENERATOR_CONFIG).emptyChunkGeneratable();
 
         var riftGenerationConfig = this.getRiftGenerationConfig();
