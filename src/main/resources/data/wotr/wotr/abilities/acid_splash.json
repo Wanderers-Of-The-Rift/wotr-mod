@@ -1,0 +1,97 @@
+{
+  "type": "wotr:instant",
+  "icon" : "minecraft:textures/item/experience_bottle.png",
+  "requirements" : [
+    {
+      "type": "wotr:cooldown",
+      "ticks": 120
+    },
+    {
+      "type": "wotr:ability_resource",
+      "resource_type": "wotr:mana",
+      "amount": 1
+    }
+  ],
+  "effects": [
+    {
+      "type": "wotr:simple_projectile",
+      "config": {
+        "gravity_affected": true,
+        "persist_ticks": 60,
+        "render": {
+          "animations": "wotr:animations/ability/fireball.animations.json",
+          "model": "wotr:geo/ability/fireball.geo.json",
+          "texture": "wotr:textures/ability/fireball.png"
+        },
+        "sound": {
+          "collision": "minecraft:entity.generic.explode"
+        },
+        "velocity": 1
+      },
+      "effects": [
+        {
+          "type": "wotr:summon",
+          "entity_type": "minecraft:armor_stand",
+          "nbt": {
+            "Marker": true,
+            "Invisible": true
+          },
+          "effects": [
+            {
+              "type": "wotr:status",
+              "status_effect": {
+                "id": "wotr:kill",
+                "duration": 100
+              }
+            },
+            {
+              "type": "wotr:attach",
+              "trigger": {
+                "frequency": 20
+              },
+              "effects": [
+                {
+                  "type": "wotr:targeting",
+                  "targeting":
+                  {
+                    "type": "wotr:area",
+                    "shape": {
+                      "type": "wotr:sphere",
+                      "range": 2
+                    },
+                    "blocks": {
+                      "filter": {
+                        "type": "matching_blocks",
+                        "blocks": "minecraft:air"
+                      }
+                    },
+                    "entities": {
+                      "exclude_caster": true
+                    }
+                  },
+                  "effects": [
+                    {
+                      "type": "wotr:particle",
+                      "particle": {
+                        "type": "minecraft:entity_effect",
+                        "color": [0.1, 1.0, 0.1, 1.0]
+                      },
+                      "count": 3,
+                      "distribution": [ 0.2, 0.2, 0.2],
+                      "speed": 0
+                    },
+                    {
+                      "type": "wotr:damage",
+                      "amount": 4.0,
+                      "damage_type": "wotr:poison"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

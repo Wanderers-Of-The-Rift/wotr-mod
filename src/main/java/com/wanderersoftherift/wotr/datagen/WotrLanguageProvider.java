@@ -328,6 +328,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add("ability." + WanderersOfTheRift.MODID + ".stab-stab-slash", "Stab-Stab-Slash");
         add("ability." + WanderersOfTheRift.MODID + ".teleport", "Teleport");
         add("ability." + WanderersOfTheRift.MODID + ".painful_sneak", "Painful Sneak");
+        add("ability." + WanderersOfTheRift.MODID + ".recall", "Recall");
+        add("ability." + WanderersOfTheRift.MODID + ".acid_splash", "Acid Splash");
         add("ability." + WanderersOfTheRift.MODID + ".step_up", "Step Up");
         add("ability." + WanderersOfTheRift.MODID + ".grow", "Enlarge");
 
