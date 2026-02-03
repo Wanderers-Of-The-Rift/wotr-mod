@@ -10,7 +10,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Collections;
@@ -29,15 +28,11 @@ public record SpawnType(Holder<EntityType<?>> entityType, List<Holder<SpawnFunct
     );
 
     public Entity createSpawn(ServerLevel serverLevel, BlockEntity anomalyBlockEntity, RandomSource randomSource) {
-
-        var mob = entityType().value().create(serverLevel, EntitySpawnReason.SPAWNER);
-        if (mob == null) {
+        var entity = entityType().value().create(serverLevel, EntitySpawnReason.SPAWNER);
+        if (entity == null) {
             return null;
         }
-
-        if (mob instanceof Mob mob2) {
-            spawnFunctions.forEach(it -> it.value().applyToMob(mob2, anomalyBlockEntity, randomSource));
-        }
-        return mob;
+        spawnFunctions.forEach(it -> it.value().applyToMob(entity, anomalyBlockEntity, randomSource));
+        return entity;
     }
 }

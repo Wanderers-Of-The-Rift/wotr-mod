@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,11 +20,11 @@ public record FinalizeSpawnSpawnFunction() implements SpawnFunction {
     }
 
     @Override
-    public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        if (!(spawner.getLevel() instanceof ServerLevel serverLevel)) {
+    public void applyToMob(Entity entity, BlockEntity spawner, RandomSource random) {
+        if (!(spawner.getLevel() instanceof ServerLevel serverLevel && entity instanceof Mob mob)) {
             return;
         }
-        EventHooks.finalizeMobSpawnSpawner(mob, serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()),
+        EventHooks.finalizeMobSpawnSpawner(mob, serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()),
                 EntitySpawnReason.SPAWNER, null, () -> Either.left(spawner), false);
     }
 }

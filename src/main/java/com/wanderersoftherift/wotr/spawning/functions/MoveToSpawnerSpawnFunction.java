@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.spawning.functions;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record MoveToSpawnerSpawnFunction() implements SpawnFunction {
@@ -16,7 +16,7 @@ public record MoveToSpawnerSpawnFunction() implements SpawnFunction {
     }
 
     @Override
-    public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        mob.moveTo(spawner.getBlockPos(), 0, 0);
+    public void applyToMob(Entity entity, BlockEntity spawner, RandomSource random) {
+        entity.moveTo(spawner.getBlockPos(), 0, 0);
     }
 }

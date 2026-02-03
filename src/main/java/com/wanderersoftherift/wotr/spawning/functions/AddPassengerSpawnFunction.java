@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.spawning.SpawnType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record AddPassengerSpawnFunction(SpawnType spawn) implements SpawnFunction {
@@ -17,10 +17,10 @@ public record AddPassengerSpawnFunction(SpawnType spawn) implements SpawnFunctio
     }
 
     @Override
-    public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        var spawn = this.spawn.createSpawn((ServerLevel) mob.level(), spawner, random);
+    public void applyToMob(Entity entity, BlockEntity spawner, RandomSource random) {
+        var spawn = this.spawn.createSpawn((ServerLevel) entity.level(), spawner, random);
         if (spawn != null) {
-            spawn.startRiding(mob, true);
+            spawn.startRiding(entity, true);
         }
     }
 }

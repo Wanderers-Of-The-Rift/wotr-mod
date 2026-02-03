@@ -6,7 +6,7 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.LaxRegistryCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.function.Function;
@@ -19,5 +19,5 @@ public interface SpawnFunction {
 
     MapCodec<? extends SpawnFunction> codec();
 
-    void applyToMob(Mob mob, BlockEntity spawner, RandomSource random);
+    void applyToMob(Entity entity, BlockEntity spawner, RandomSource random);
 }

@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public record ListSpawnFunction(List<Holder<SpawnFunction>> functions) implement
     }
 
     @Override
-    public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        functions.forEach(it -> it.value().applyToMob(mob, spawner, random));
+    public void applyToMob(Entity entity, BlockEntity spawner, RandomSource random) {
+        functions.forEach(it -> it.value().applyToMob(entity, spawner, random));
     }
 }

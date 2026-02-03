@@ -5,7 +5,7 @@ import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.mob.VariedRiftMob;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record ApplyMobVariantSpawnFunction(Holder<RiftMobVariantData> variant) implements SpawnFunction {
@@ -19,9 +19,9 @@ public record ApplyMobVariantSpawnFunction(Holder<RiftMobVariantData> variant) i
     }
 
     @Override
-    public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        if (mob instanceof VariedRiftMob zombie) {
-            zombie.setVariant(variant);
+    public void applyToMob(Entity entity, BlockEntity spawner, RandomSource random) {
+        if (entity instanceof VariedRiftMob variedRiftMob) {
+            variedRiftMob.setVariant(variant);
         }
     }
 }

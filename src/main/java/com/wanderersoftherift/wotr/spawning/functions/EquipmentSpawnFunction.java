@@ -3,8 +3,9 @@ package com.wanderersoftherift.wotr.spawning.functions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -22,7 +23,9 @@ public record EquipmentSpawnFunction(Map<EquipmentSlot, ItemStack> equipment) im
     }
 
     @Override
-    public void applyToMob(Mob mob, BlockEntity spawner, RandomSource random) {
-        equipment.forEach(mob::setItemSlot);
+    public void applyToMob(Entity entity, BlockEntity spawner, RandomSource random) {
+        if (entity instanceof LivingEntity living) {
+            equipment.forEach(living::setItemSlot);
+        }
     }
 }
