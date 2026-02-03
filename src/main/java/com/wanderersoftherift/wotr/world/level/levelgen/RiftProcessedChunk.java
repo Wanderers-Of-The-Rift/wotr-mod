@@ -283,19 +283,7 @@ public class RiftProcessedChunk {
                 if (state == null) {
                     state = air;
                 }
-                int value;
-                if (useRegistry) {
-                    value = registry.getId(state);
-                } else {
-                    var uniqueIdx = System.identityHashCode(state) * FibonacciHashing.GOLDEN_RATIO_INT >>> 26;
-                    var state2 = uniqueStatesHashTable[uniqueIdx];
-                    if (state2 != state) {
-                        value = uniqueStatesFallback.get(state);
-                    } else {
-                        value = uniqueStatesIndexHashTable[uniqueIdx];
-                    }
-                }
-
+                int value = registry.getId(state);
                 storage.set(i, value);
             }
         }
