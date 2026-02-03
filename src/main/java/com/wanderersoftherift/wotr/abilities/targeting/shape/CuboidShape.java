@@ -37,11 +37,8 @@ public record CuboidShape(Vec3 area, boolean alignToBlock) implements TargetArea
         }
 
         boolean flip = Math.abs(direction.x) > Math.abs(direction.z);
-        AABB result = AABB.ofSize(
-                center, flip ? size.z : size.x, size.y, flip ? size.x : size.z
-        );
-        return result;
 
+        return AABB.ofSize(center, flip ? size.z : size.x, size.y, flip ? size.x : size.z);
     }
 
     @Override
