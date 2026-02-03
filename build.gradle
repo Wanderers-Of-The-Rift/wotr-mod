@@ -113,55 +113,61 @@ dependencies {
     implementation "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
+    compileOnly "maven.modrinth:sophisticated-core:${sophisticated_core_version}"
+    compileOnly "maven.modrinth:sophisticated-backpacks:${sophisticated_backpacks_version}"
+
+    implementation 'com.github.Wanderers-Of-The-Rift:motr:v0.0.2'
+
     runtimeOnly project(":totr")
 
-    runtimeOnly "curse.maven:sodium-394468:${sodium_version}"
-    runtimeOnly "curse.maven:spark-361579:${spark_version}"
-    runtimeOnly "curse.maven:jade-324717:${jade_version}"
-    runtimeOnly "curse.maven:resourceful-config-714059:${resourceful_config_version}"
-    runtimeOnly "curse.maven:structure-layout-optimizer-1087831:${structure_layout_optimizer_version}"
-    runtimeOnly "curse.maven:commandstructures-565119:${command_structures_version}"
-    runtimeOnly "curse.maven:huge-structure-blocks-474114:${huge_structure_blocks_version}"
-    runtimeOnly "curse.maven:building-wands-363392:${building_wands_version}"
-    runtimeOnly "curse.maven:worldedit-225608:${worldedit_version}"
+    runtimeOnly "maven.modrinth:Oh-The-Biomes-Weve-Gone:Nuou6SDX"
+    runtimeOnly "maven.modrinth:Oh-The-Trees-Youll-Grow:KomWyQ2L"
+    runtimeOnly "maven.modrinth:sodium-extra:fDDbhNOX"
+    runtimeOnly "maven.modrinth:sodium:XgEfENfn"
+    runtimeOnly "maven.modrinth:spark:2E68cgve"
+    runtimeOnly "maven.modrinth:lithium:lP2Expzz"
+    runtimeOnly "maven.modrinth:CorgiLib:rmLuzTFd"
+    runtimeOnly "maven.modrinth:terrablender:CmOWA4e9"
 
-    /* Builders Dependencies
-    For Themes: */
-    runtimeOnly "curse.maven:block-variants-481119:${block_variants_version}" // Breaks chunks, and more
-    runtimeOnly "curse.maven:chisel-reborn-551763:${chisel_reborn_version}"
-    runtimeOnly "curse.maven:oh-the-biomes-weve-gone-1070751:${otbwg_version}"
-    runtimeOnly "curse.maven:oh-the-trees-youll-grow-962544:${ottyg_version}"
-    runtimeOnly "curse.maven:stoneworks-852663:${stoneworks_version}"
-    runtimeOnly "curse.maven:ametrin-api-670599:${ametrin_api_version}"
-    runtimeOnly "curse.maven:corgilib-693313:${corgilib_version}"
-    runtimeOnly "curse.maven:terrablender-940057:${terrablender_version}"
-    runtimeOnly "curse.maven:cryonic-config-1208896:${cryonic_config_version}"
-    runtimeOnly "curse.maven:puzzles-lib-495476:${puzzles_lib_version}"
-    runtimeOnly "curse.maven:fast-item-frames-1210171:${fast_item_frames_version}"
+    if (pack_type == "public" || pack_type == "build") {
+        // Mods Included in public pack:
+        runtimeOnly "maven.modrinth:Glassential-Renewed:ZdmKqZ7M"
+        runtimeOnly "maven.modrinth:No-Chat-Reports:SbnUzNb3"
+        runtimeOnly "maven.modrinth:Puzzles-Lib:PI5mXUeA"
+        runtimeOnly "maven.modrinth:Stoneworks:lqIPkuUt"
+        runtimeOnly "maven.modrinth:ametrin:fidFn6Hy"
+        runtimeOnly "maven.modrinth:block-variants:G93aiil4"
+        runtimeOnly "maven.modrinth:chisel-reborn:CoRSKg1F"
+        runtimeOnly "maven.modrinth:cryonicconfig:Ti9cpWRD"
+        runtimeOnly "maven.modrinth:ferrite-core:gTYCIFFQ"
+        runtimeOnly "maven.modrinth:fusion-connected-textures:rqpLAn4u"
+        runtimeOnly "maven.modrinth:huge-structure-blocks:JdM7xwKB"
+        runtimeOnly "maven.modrinth:journeymap:HC1cUgpI"
+        runtimeOnly "maven.modrinth:kotlin-for-forge:NOhXtkYk"
+        runtimeOnly "maven.modrinth:modernfix:xbg7UvQT"
+        runtimeOnly "maven.modrinth:moreculling:ST43Fz5s"
+        runtimeOnly "maven.modrinth:supermartijn642s-config-lib:qKL9jM75"
+        runtimeOnly "maven.modrinth:supermartijn642s-core-lib:FFaduWoO"
+    }
 
-    /*Rest:
-    runtimeOnly "curse.maven:balm-531761:${balm_version}"
-    runtimeOnly "curse.maven:collective-342584:${collective_version}"
-    runtimeOnly "curse.maven:controlling-250398:${controlling_version}"
-    runtimeOnly "curse.maven:dusty-decorations-843344:${dusty_decorations_version}"
-    runtimeOnly "curse.maven:dynamic-fps-335493:${dynamic_fps_version}"
-    runtimeOnly "curse.maven:ferrite-core-429235:${ferrite_core_version}"
-    runtimeOnly "curse.maven:fusion-854949:${fusion_version}"
-    runtimeOnly "curse.maven:glassential-renewed-945149:${glassential_version}"
-    runtimeOnly "curse.maven:iris-455508:${iris_version}"
-    runtimeOnly "curse.maven:kotlin-for-forge-351264:${kotlin_for_forge_version}"
-    runtimeOnly "curse.maven:lithium-360438:${lithium_version}"
-    runtimeOnly "curse.maven:modernfix-790626:${modernfix_version}"
-    runtimeOnly "curse.maven:more-culling-630104:${more_culling_version}"
-    runtimeOnly "curse.maven:mouse-tweaks-60089:${mouse_tweaks_version}"
-    runtimeOnly "curse.maven:no-chat-reports-634062:${no_chat_reports_version}"
-    runtimeOnly "curse.maven:searchables-858542:${searchables_version}"
-    runtimeOnly "curse.maven:sodium-extra-447673:${sodium_extra_version}"
-    runtimeOnly "curse.maven:supermartijn642-config-lib-438332:${sm642_config_version}"
-    runtimeOnly "curse.maven:supermartijn642-core-lib-454372:${sm642_core_version}"
-    runtimeOnly "curse.maven:trashslot-235577:${trashslot_version}"
-    runtimeOnly "curse.maven:zume-927564:${zume_version}"
-    End Builders Dependencies */
+    if (pack_type == "build") {
+        // Mods only included in the build pack
+        runtimeOnly "maven.modrinth:Better-Ping-Display:8UnCF1Fh"
+        runtimeOnly "maven.modrinth:Build-Guide:tNEXeBfz"
+        runtimeOnly "maven.modrinth:Building-Wands:OXw0z8lN"
+        runtimeOnly "maven.modrinth:Controlling:12sYUzqU"
+        runtimeOnly "maven.modrinth:Fast-Item-Frames:JWQiCxYj"
+        runtimeOnly "maven.modrinth:Jade:Rpe14jmy"
+        runtimeOnly "maven.modrinth:Mouse-Tweaks:pctLmzqC"
+        runtimeOnly "maven.modrinth:Searchables:FdBkcWhC"
+        runtimeOnly "maven.modrinth:cloth-config:dWfheG9X"
+        runtimeOnly "maven.modrinth:collective:I5jY2gQ2"
+        runtimeOnly "maven.modrinth:dynamic-fps:dTO2S6pG"
+        runtimeOnly "maven.modrinth:fast-ip-ping:kiXzQdpL"
+        runtimeOnly "maven.modrinth:iris:FNc0XYTL"
+        runtimeOnly "maven.modrinth:worldedit:bxlboAan"
+        runtimeOnly "maven.modrinth:zume:5J6WsndO"
+    }
 
     runtimeOnly "maven.modrinth:shut-up-rei:1.0"
 }

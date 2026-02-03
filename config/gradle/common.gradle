@@ -11,6 +11,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url 'https://jitpack.io' }
     maven {
         name = 'GeckoLib'
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
