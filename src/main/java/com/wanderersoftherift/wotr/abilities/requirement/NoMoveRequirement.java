@@ -23,10 +23,10 @@ public record NoMoveRequirement(float maxSpeed, boolean includeY) implements Abi
         if (context.level().isClientSide()) {
             return true;
         }
-    
+
         double dY;
         dY = (!includeY) ? 0 : context.caster().yo - context.caster().yOld;
-    
+
         Vec3 delta = new Vec3(
                 context.caster().xo - context.caster().xOld, dY, context.caster().zo - context.caster().zOld
         );
