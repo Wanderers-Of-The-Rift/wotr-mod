@@ -50,7 +50,7 @@
                 {
                   "type": "wotr:self",
                   "entities": {
-                    "filter": {
+                    "predicate": {
                       "effects": {
                         "minecraft:glowing": {
                           "amplifier": 103

@@ -27,7 +27,7 @@
                 "range": 1.5
               },
               "blocks": {
-                "filter": {
+                "predicate": {
                   "type": "all_of",
                   "predicates": [
                     {

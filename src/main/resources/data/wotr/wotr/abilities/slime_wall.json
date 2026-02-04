@@ -19,7 +19,7 @@
                 "align_to_block": true
               },
               "blocks": {
-                "filter": {
+                "predicate": {
                   "type": "all_of",
                   "predicates": [
                     {
@@ -57,7 +57,7 @@
                 "align_to_block": true
               },
               "blocks": {
-                "filter": {
+                "predicate": {
                   "type": "all_of",
                   "predicates": [
                     {
@@ -91,7 +91,7 @@
                 "align_to_block": true
               },
               "blocks": {
-                "filter": {
+                "predicate": {
                   "type": "all_of",
                   "predicates": [
                     {
@@ -129,7 +129,7 @@
                 "align_to_block": true
               },
               "blocks": {
-                "filter": {
+                "predicate": {
                   "type": "all_of",
                   "predicates": [
                     {

@@ -13,7 +13,7 @@
         "entities": {
           "sentiment": "foe",
           "exclude_caster": true,
-          "filter": {
+          "predicate": {
             "type": "#minecraft:undead"
           }
         }
