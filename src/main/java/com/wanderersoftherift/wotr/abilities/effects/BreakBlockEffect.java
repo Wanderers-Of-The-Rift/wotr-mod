@@ -128,6 +128,12 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
             public ItemStack getTool(AbilityContext context) {
                 return context.abilityItem();
             }
+        },
+        HELD_ITEM("held_item") {
+            @Override
+            public ItemStack getTool(AbilityContext context) {
+                return context.caster().getMainHandItem();
+            }
         };
 
         private final String id;
