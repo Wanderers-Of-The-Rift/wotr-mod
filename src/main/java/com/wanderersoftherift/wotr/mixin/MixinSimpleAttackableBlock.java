@@ -7,12 +7,13 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BambooStalkBlock;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.DecoratedPotBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin({ BushBlock.class, WebBlock.class, LeavesBlock.class, BambooStalkBlock.class })
+@Mixin({ BushBlock.class, WebBlock.class, LeavesBlock.class, BambooStalkBlock.class, DecoratedPotBlock.class })
 public class MixinSimpleAttackableBlock implements AttackableBlock {
     @Override
     public boolean isAttackable(BlockState state, BlockGetter level, BlockPos position) {
