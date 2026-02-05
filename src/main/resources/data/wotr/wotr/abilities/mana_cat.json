@@ -34,7 +34,7 @@
                   "range": 2
                 },
                 "entities": {
-                  "predicate": {
+                  "filter": {
                     "type": "minecraft:player"
                   }
                 }

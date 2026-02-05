@@ -40,7 +40,7 @@ public sealed interface TargetBlockPredicate {
     record Filter(BlockPredicate blockPredicate, boolean matchSource) implements TargetBlockPredicate {
 
         public static final Codec<Filter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                BlockPredicate.CODEC.optionalFieldOf("predicate", BlockPredicate.alwaysTrue())
+                BlockPredicate.CODEC.optionalFieldOf("filter", BlockPredicate.alwaysTrue())
                         .forGetter(Filter::blockPredicate),
                 Codec.BOOL.optionalFieldOf("match_source", false).forGetter(Filter::matchSource)
         ).apply(instance, Filter::new));

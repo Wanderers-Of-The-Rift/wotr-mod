@@ -60,7 +60,7 @@
                       "range": 2
                     },
                     "blocks": {
-                      "predicate": {
+                      "filter": {
                         "type": "matching_blocks",
                         "blocks": "minecraft:air"
                       }

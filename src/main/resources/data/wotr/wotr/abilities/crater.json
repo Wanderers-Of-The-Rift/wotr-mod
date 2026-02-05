@@ -49,7 +49,7 @@
                 "align_to_block": true
               },
               "blocks": {
-                "predicate": {
+                "filter": {
                   "type": "solid"
                 }
               },

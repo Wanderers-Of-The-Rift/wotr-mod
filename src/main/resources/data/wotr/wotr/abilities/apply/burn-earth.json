@@ -13,7 +13,7 @@
           },
           "entities": "none",
           "blocks": {
-            "predicate": {
+            "filter": {
               "type": "all_of",
               "predicates": [
                 {
