@@ -1,0 +1,42 @@
+{
+    "type": "wotr:battle",
+    "spawns": {
+        "mobs": [
+            {
+                "weight": 1.0,
+                "value": {
+                    "entity_type": "minecraft:spider",
+                    "spawn_functions": [
+                        "wotr:simple_spawn",
+                        "wotr:positioning"
+                    ]
+                }
+            },
+            {
+                "weight": 1.0,
+                "value": {
+                    "entity_type": "minecraft:skeleton",
+                    "spawn_functions": [
+                        "wotr:simple_spawn",
+                        "wotr:positioning"
+                    ]
+                }
+            },
+            {
+                "weight": 5.0,
+                "value": {
+                    "entity_type": "minecraft:zombie",
+                    "spawn_functions": [
+                        "wotr:simple_spawn",
+                        "wotr:positioning"
+                    ]
+                }
+            }
+        ],
+        "count": {
+            "type": "uniform",
+            "min_inclusive": 5,
+            "max_inclusive": 20
+        }
+    }
+}

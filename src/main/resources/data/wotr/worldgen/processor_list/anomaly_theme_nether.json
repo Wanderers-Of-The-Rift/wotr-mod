@@ -900,9 +900,9 @@
       "processor_type": "wotr:anomaly",
       "replace_with_anomaly": "minecraft:end_rod",
       "tasks": {
-        "wotr:battle/generic_horde": 3.0,
+        "wotr:nether/battle": 3.0,
         "wotr:slice_anomaly": 1.0,
-        "wotr:essence/nether": 1.0
+        "wotr:nether/essence": 1.0
       },
       "rewards": {
         "wotr:strength5": 10.0,

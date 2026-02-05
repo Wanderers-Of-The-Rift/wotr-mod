@@ -1188,9 +1188,9 @@
             "processor_type": "wotr:anomaly",
             "replace_with_anomaly": "minecraft:end_rod",
             "tasks": {
-                "wotr:battle/mesa_skeleton_horde": 3.0,
+                "wotr:mesa/battle": 3.0,
                 "wotr:slice_anomaly": 1.0,
-                "wotr:essence/mesa": 1.0
+                "wotr:mesa/essence": 1.0
             },
             "rewards": {
                 "wotr:strength5": 10.0,
