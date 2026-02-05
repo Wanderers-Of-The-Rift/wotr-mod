@@ -30,6 +30,6 @@ public record NoMoveRequirement(float maxSpeed, boolean includeY) implements Abi
         Vec3 delta = new Vec3(
                 context.caster().xo - context.caster().xOld, dY, context.caster().zo - context.caster().zOld
         );
-        return delta.length() < this.maxSpeed;
+        return delta.lengthSqr() < (this.maxSpeed * this.maxSpeed);
     }
 }
