@@ -2,6 +2,8 @@ package com.wanderersoftherift.wotr.block.blockentity.anomaly;
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.block.blockentity.AnomalyBlockEntity;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.InteractionHand;
@@ -34,6 +36,9 @@ public record SliceAnomalyTask(IntProvider hitpoints) implements AnomalyTask<Sli
             DamageSource source,
             AnomalyBlockEntity anomalyBlockEntity,
             SliceAnomalyTaskState state) {
+        player.level()
+                .playSound(null, anomalyBlockEntity.getBlockPos(), SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS,
+                        1, 1);
         var hitpoints = state.hitpoints();
         if (hitpoints < damage) {
             anomalyBlockEntity.closeAndReward(player);
