@@ -1,0 +1,11 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:add_death_notifier"
+        },
+        {
+            "type": "wotr:finalize_spawn"
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:chance",
+            "chance": 0.25,
+            "functions": [
+                {
+                    "type": "wotr:add_passenger",
+                    "spawn": {
+                        "entity_type": "minecraft:zombie",
+                        "spawn_functions": [
+                            "wotr:forest_zombie"
+                        ]
+                    }
+                }
+            ]
+        },
+        "wotr:simple_spawn"
+    ]
+}

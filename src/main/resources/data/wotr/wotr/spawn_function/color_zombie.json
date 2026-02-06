@@ -1,0 +1,25 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:apply_mob_variant",
+            "variant": "wotr:zombie/color_zombie"
+        },
+        {
+            "type": "wotr:chance",
+            "chance": 0.8,
+            "functions": [
+                {
+                    "type": "wotr:equip",
+                    "equipment": {
+                        "head": {
+                            "id": "wotr:color_helmet",
+                            "count": 1
+                        }
+                    }
+                }
+            ]
+        },
+        "wotr:simple_spawn"
+    ]
+}

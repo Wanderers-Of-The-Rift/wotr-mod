@@ -5,7 +5,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -14,7 +14,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/free/3/second-1-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -23,7 +23,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -32,7 +32,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -41,7 +41,526 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
-                "processors": "wotr:anomaly_theme_default",
+                "processors": "wotr:anomaly_theme_buzzy_bees",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_cave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_deepfrost",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_desert",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_forest",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_jungle",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_meadow",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_mesa",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_mushroomcave",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_nether",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_noir",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+
+
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/first-1-rachaelrose",
+                "processors": "wotr:anomaly_theme_swamp",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/second-1-jyu",
+                "processors": "wotr:anomaly_theme_swamp",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-1-jyu",
+                "processors": "wotr:anomaly_theme_swamp",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/pile-2-jyu",
+                "processors": "wotr:anomaly_theme_swamp",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/anomaly/free/3/wood-1-jyu",
+                "processors": "wotr:anomaly_theme_swamp",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }

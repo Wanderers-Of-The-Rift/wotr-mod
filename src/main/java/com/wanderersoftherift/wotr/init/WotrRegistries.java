@@ -14,7 +14,6 @@ import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
-import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.guild.Guild;
@@ -41,6 +40,7 @@ import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
+import com.wanderersoftherift.wotr.spawning.functions.SpawnFunction;
 import com.wanderersoftherift.wotr.util.listedit.EditType;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
@@ -136,7 +136,7 @@ public class WotrRegistries {
             Keys.TARGET_AREA_SHAPES).create();
     public static final Registry<AnomalyTask.AnomalyTaskType<?>> ANOMALY_TASK_TYPE = new RegistryBuilder<>(
             Keys.ANOMALY_TASK_TYPE).sync(true).create();
-    public static final Registry<MapCodec<? extends BattleTask.SpawnFunction>> SPAWN_FUNCTION_TYPES = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends SpawnFunction>> SPAWN_FUNCTION_TYPES = new RegistryBuilder<>(
             Keys.SPAWN_FUNCTION_TYPES).sync(true).create();
 
     public static final class Keys {
@@ -250,8 +250,11 @@ public class WotrRegistries {
         // Mobs
         public static final ResourceKey<Registry<MapCodec<? extends NpcInteraction>>> MOB_INTERACTIONS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
-        public static final ResourceKey<Registry<MapCodec<? extends BattleTask.SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("spawn_function_type"));
+        public static final ResourceKey<Registry<SpawnFunction>> SPAWN_FUNCTIONS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("spawn_function"));
+
         public static final ResourceKey<Registry<AnomalyTask<?>>> ANOMALY_TASK = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("anomaly_task"));
         public static final ResourceKey<Registry<AnomalyTask.AnomalyTaskType<?>>> ANOMALY_TASK_TYPE = ResourceKey
@@ -326,5 +329,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ANOMALY_REWARD, AnomalyReward.DIRECT_CODEC, AnomalyReward.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
         event.dataPackRegistry(Keys.NPCS, NpcIdentity.DIRECT_CODEC, NpcIdentity.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.SPAWN_FUNCTIONS, SpawnFunction.CODEC, SpawnFunction.CODEC);
     }
 }

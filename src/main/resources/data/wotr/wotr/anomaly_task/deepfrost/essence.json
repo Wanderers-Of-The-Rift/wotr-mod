@@ -1,0 +1,8 @@
+{
+  "type": "wotr:bundle",
+  "items": {
+    "wotr:death_essence": 1,
+    "wotr:water_essence": 2,
+    "wotr:nether_essence": 1
+  }
+}
