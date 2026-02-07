@@ -18,7 +18,7 @@
       "effects": [
         {
           "type": "wotr:break",
-          "as_tool": "ability_item"
+          "as_tool": "caster_held_item"
         }
       ]
     }

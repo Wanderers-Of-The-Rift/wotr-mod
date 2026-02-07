@@ -11,11 +11,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
-        ItemStack tool = asTool.getTool(context);
+        ItemStack tool = asTool.getTool(context, targetInfo);
         List<ItemStack> dropsToCondense = new ArrayList<>();
         targetInfo.targetBlocks().forEach(pos -> {
             BlockState blockState = context.level().getBlockState(pos);
@@ -113,20 +116,39 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
     }
 
     public sealed interface ToolSource {
-        ItemStack getTool(AbilityContext context);
+        ItemStack getTool(AbilityContext context, TargetInfo targetInfo);
     }
 
     public enum SimpleToolSource implements ToolSource, StringRepresentable {
         NONE("none") {
             @Override
-            public ItemStack getTool(AbilityContext context) {
+            public ItemStack getTool(AbilityContext context, TargetInfo targetInfo) {
                 return ItemStack.EMPTY;
             }
         },
         ABILITY_ITEM("ability_item") {
             @Override
-            public ItemStack getTool(AbilityContext context) {
+            public ItemStack getTool(AbilityContext context, TargetInfo targetInfo) {
                 return context.abilityItem();
+            }
+        },
+        CASTER_HELD_ITEM("caster_held_item") {
+            @Override
+            public ItemStack getTool(AbilityContext context, TargetInfo targetInfo) {
+                return context.caster().getMainHandItem();
+            }
+        },
+        SOURCE_HELD_ITEM("source_held_item") {
+            ;
+            @Override
+            public ItemStack getTool(AbilityContext context, TargetInfo targetInfo) {
+                if (targetInfo.source() instanceof EntityHitResult hitResult) {
+                    Entity entity = hitResult.getEntity();
+                    if (entity instanceof LivingEntity livingEntity) {
+                        return livingEntity.getMainHandItem();
+                    }
+                }
+                return ItemStack.EMPTY;
             }
         };
 
@@ -144,7 +166,7 @@ public record BreakBlockEffect(DropMode dropMode, ToolSource asTool, boolean awa
 
     public record FixedToolSource(ItemStack tool) implements ToolSource {
         @Override
-        public ItemStack getTool(AbilityContext context) {
+        public ItemStack getTool(AbilityContext context, TargetInfo targetInfo) {
             return tool;
         }
     }
