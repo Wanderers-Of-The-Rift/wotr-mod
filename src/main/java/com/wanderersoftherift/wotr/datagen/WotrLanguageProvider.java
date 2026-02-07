@@ -189,6 +189,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.hand_in_to"), "Hand in to: %s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
         add(WanderersOfTheRift.translationId("container", "quest.goal.collect"), "Collect %s/%s");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.toss"), "Find and toss %s/%s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly"), "Close anomalies (%s/%s)");

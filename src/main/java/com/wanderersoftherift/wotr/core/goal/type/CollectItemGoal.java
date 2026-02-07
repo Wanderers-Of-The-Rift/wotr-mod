@@ -89,7 +89,8 @@ public record CollectItemGoal(Ingredient item, int count) implements ItemGoal {
     @SubscribeEvent
     public static void onTossItem(ItemTossEvent event) {
         GoalManager.getGoalStates(event.getPlayer(), CollectItemGoal.class).forEach(goalState -> {
-            if (!goalState.getGoal().item().acceptsItem(event.getEntity().getItem().getItemHolder())) {
+            if (!goalState.getGoal().item().acceptsItem(event.getEntity().getItem().getItemHolder())
+                    || event.isCanceled()) {
                 return;
             }
             // Count total items that match
