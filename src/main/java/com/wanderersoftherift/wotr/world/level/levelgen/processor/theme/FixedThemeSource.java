@@ -8,11 +8,10 @@ import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public record FixedThemeSource(Holder<RiftTheme> theme) implements ThemeSource {
     public static final MapCodec<FixedThemeSource> CODEC = LaxRegistryCodec
@@ -29,8 +28,8 @@ public record FixedThemeSource(Holder<RiftTheme> theme) implements ThemeSource {
     }
 
     @Override
-    public @Nullable Holder<Biome> getThemeBiome(ServerLevel level) {
-        return theme.value().biome().orElse(null);
+    public Optional<Holder<RiftTheme>> getTheme(ServerLevel level) {
+        return Optional.of(theme);
     }
 
     @Override

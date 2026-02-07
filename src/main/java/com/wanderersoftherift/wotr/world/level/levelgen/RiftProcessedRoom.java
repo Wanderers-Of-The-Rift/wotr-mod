@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,6 +124,20 @@ public class RiftProcessedRoom {
         return ref.get();
     }
 
+    private @Nullable RiftProcessedChunk getChunkAtBlockPos(int x, int y, int z) {
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        return getChunk(chunkX, chunkY, chunkZ);
+    }
+
+    private RiftProcessedChunk getOrCreateChunkAtBlockPos(int x, int y, int z) {
+        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
+        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
+        return getOrCreateChunk(chunkX, chunkY, chunkZ);
+    }
+
     public void markAsComplete() {
         isComplete.complete(Unit.INSTANCE);
     }
@@ -172,26 +187,17 @@ public class RiftProcessedRoom {
 
     public void setBlockEntity(BlockEntity entity) {
         var entityPos = entity.getBlockPos();
-        var chunkX = entityPos.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = entityPos.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = entityPos.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        var chunk = getOrCreateChunkAtBlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
         chunk.setBlockEntity(entity);
     }
 
     public void removeBlockEntity(BlockPos pos) {
-        var chunkX = pos.getX() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = pos.getY() >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = pos.getZ() >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        var chunk = getOrCreateChunkAtBlockPos(pos.getX(), pos.getY(), pos.getZ());
         chunk.removeBlockEntity(pos);
     }
 
-    public BlockState getBlock(int x, int y, int z) {
-        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getChunk(chunkX, chunkY, chunkZ);
+    public @Nullable BlockState getBlock(int x, int y, int z) {
+        var chunk = getChunkAtBlockPos(x, y, z);
         if (chunk == null) {
             return null;
         }
@@ -199,11 +205,8 @@ public class RiftProcessedRoom {
                 y & RiftProcessedChunk.CHUNK_HEIGHT_MASK, z & RiftProcessedChunk.CHUNK_WIDTH_MASK);
     }
 
-    public Holder<Biome> getBiome(int x, int y, int z) {
-        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getChunk(chunkX, chunkY, chunkZ);
+    public @Nullable Holder<Biome> getBiome(int x, int y, int z) {
+        var chunk = getChunkAtBlockPos(x, y, z);
         if (chunk == null) {
             return null;
         }
@@ -212,10 +215,7 @@ public class RiftProcessedRoom {
     }
 
     public boolean getMerged(int x, int y, int z) {
-        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getChunk(chunkX, chunkY, chunkZ);
+        var chunk = getChunkAtBlockPos(x, y, z);
         if (chunk == null) {
             return false;
         }
@@ -247,10 +247,7 @@ public class RiftProcessedRoom {
     }
 
     public void setBlock(int x, int y, int z, BlockState state) {
-        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        var chunk = getOrCreateChunkAtBlockPos(x, y, z);
         if (chunk != null) {
             chunk.setBlockStatePure(x & RiftProcessedChunk.CHUNK_WIDTH_MASK, y & RiftProcessedChunk.CHUNK_HEIGHT_MASK,
                     z & RiftProcessedChunk.CHUNK_WIDTH_MASK, state);
@@ -262,10 +259,7 @@ public class RiftProcessedRoom {
     }
 
     public void setBiome(int x, int y, int z, Holder<Biome> biome) {
-        var chunkX = x >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunkY = y >> RiftProcessedChunk.CHUNK_HEIGHT_SHIFT;
-        var chunkZ = z >> RiftProcessedChunk.CHUNK_WIDTH_SHIFT;
-        var chunk = getOrCreateChunk(chunkX, chunkY, chunkZ);
+        var chunk = getOrCreateChunkAtBlockPos(x, y, z);
         if (chunk != null) {
             chunk.setBiomeWithinSection(x & RiftProcessedChunk.CHUNK_WIDTH_MASK,
                     y & RiftProcessedChunk.CHUNK_HEIGHT_MASK, z & RiftProcessedChunk.CHUNK_WIDTH_MASK, biome);
@@ -280,7 +274,6 @@ public class RiftProcessedRoom {
         for (RiftProcessedChunk chunk : getOrCreateAllChunks()) {
             chunk.setDefaultBiome(biome);
         }
-
     }
 
     public List<RiftProcessedChunk> getOrCreateAllChunks() {

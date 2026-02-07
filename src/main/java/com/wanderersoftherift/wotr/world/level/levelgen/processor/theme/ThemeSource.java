@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +38,11 @@ public interface ThemeSource {
             BlockPos structurePos,
             ThemePieceType themePieceType);
 
-    @Nullable Holder<Biome> getThemeBiome(ServerLevel serverLevel);
+    Optional<Holder<RiftTheme>> getTheme(ServerLevel serverLevel);
+
+    default Optional<Holder<Biome>> getBiome(ServerLevel serverLevel) {
+        return getTheme(serverLevel).flatMap(theme -> theme.value().biome());
+    }
 
     ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos, ThemePieceType themePieceType);
 
