@@ -51,5 +51,16 @@
         "wotr:rift/poi/halfway/11": "wotr:rift/objective/halfway/3"
       }
     }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table": "wotr:rift_objective/success"
+    },
+    {
+      "type": "wotr:progression_track",
+      "tracks": "wotr:level",
+      "amount": 1000
+    }
   ]
 }
