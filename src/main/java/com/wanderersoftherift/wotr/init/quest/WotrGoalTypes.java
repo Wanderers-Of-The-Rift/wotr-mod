@@ -6,12 +6,13 @@ import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.ActivateObjectiveGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.CloseAnomalyGoalProvider;
-import com.wanderersoftherift.wotr.core.goal.provider.CollectFromLoottableGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.CollectItemGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.CompleteRiftGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.GiveItemGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.KillMobGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.PoolGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.TossFromLoottableGoalProvider;
+import com.wanderersoftherift.wotr.core.goal.provider.TossItemGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.provider.VisitRoomGoalProvider;
 import com.wanderersoftherift.wotr.core.goal.type.ActivateObjectiveGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CloseAnomalyGoal;
@@ -19,6 +20,7 @@ import com.wanderersoftherift.wotr.core.goal.type.CollectItemGoal;
 import com.wanderersoftherift.wotr.core.goal.type.CompleteRiftGoal;
 import com.wanderersoftherift.wotr.core.goal.type.GiveItemGoal;
 import com.wanderersoftherift.wotr.core.goal.type.KillMobGoal;
+import com.wanderersoftherift.wotr.core.goal.type.TossItemGoal;
 import com.wanderersoftherift.wotr.core.goal.type.VisitRoomGoal;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
@@ -76,8 +78,14 @@ public class WotrGoalTypes {
     public static final Supplier<MapCodec<? extends GoalProvider>> COLLECT_ITEM_PROVIDER = GOAL_PROVIDER_TYPES
             .register("collect_item", () -> CollectItemGoalProvider.CODEC);
 
-    public static final Supplier<MapCodec<? extends GoalProvider>> COLLECT_FROM_LOOT_TABLE_PROVIDER = GOAL_PROVIDER_TYPES
-            .register("collect_from_loot_table", () -> CollectFromLoottableGoalProvider.CODEC);
+    public static final Supplier<DualCodec<? extends Goal>> TOSS_ITEM = GOAL_TYPES.register("toss_item",
+            () -> TossItemGoal.TYPE);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> TOSS_ITEM_PROVIDER = GOAL_PROVIDER_TYPES
+            .register("toss_item", () -> TossItemGoalProvider.CODEC);
+
+    public static final Supplier<MapCodec<? extends GoalProvider>> TOSS_FROM_LOOT_TABLE_PROVIDER = GOAL_PROVIDER_TYPES
+            .register("toss_from_loot_table", () -> TossFromLoottableGoalProvider.CODEC);
 
     public static final Supplier<MapCodec<? extends GoalProvider>> POOL = GOAL_PROVIDER_TYPES.register("pool",
             () -> PoolGoalProvider.CODEC);
