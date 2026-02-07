@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
-import com.wanderersoftherift.wotr.core.goal.type.CollectItemGoal;
+import com.wanderersoftherift.wotr.core.goal.type.TossItemGoal;
 import com.wanderersoftherift.wotr.util.RandomUtil;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -24,18 +24,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record CollectFromLoottableGoalProvider(ResourceKey<LootTable> lootTable, NumberProvider lootRolls,
+/**
+ * Goal provider that generates TossItem goals from a loot table, by combining the results of a number of rolls and then
+ * picking items from the result
+ * 
+ * @param lootTable The loot table to generate from
+ * @param lootRolls The number of times to roll on the loot table
+ * @param itemTypes The number of distinct items to create goals for
+ */
+public record TossFromLoottableGoalProvider(ResourceKey<LootTable> lootTable, NumberProvider lootRolls,
         NumberProvider itemTypes) implements GoalProvider {
 
-    public static final MapCodec<CollectFromLoottableGoalProvider> CODEC = RecordCodecBuilder
+    public static final MapCodec<TossFromLoottableGoalProvider> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     ResourceKey.codec(Registries.LOOT_TABLE)
                             .fieldOf("loot_table")
-                            .forGetter(CollectFromLoottableGoalProvider::lootTable),
-                    NumberProviders.CODEC.fieldOf("loot_rolls").forGetter(CollectFromLoottableGoalProvider::lootRolls),
+                            .forGetter(TossFromLoottableGoalProvider::lootTable),
+                    NumberProviders.CODEC.fieldOf("loot_rolls").forGetter(TossFromLoottableGoalProvider::lootRolls),
                     NumberProviders.CODEC.optionalFieldOf("item_types", ConstantValue.exactly(1))
-                            .forGetter(CollectFromLoottableGoalProvider::itemTypes)
-            ).apply(instance, CollectFromLoottableGoalProvider::new));
+                            .forGetter(TossFromLoottableGoalProvider::itemTypes)
+            ).apply(instance, TossFromLoottableGoalProvider::new));
 
     @Override
     public MapCodec<? extends GoalProvider> getCodec() {
@@ -55,7 +63,7 @@ public record CollectFromLoottableGoalProvider(ResourceKey<LootTable> lootTable,
         }
         return RandomUtil.randomSubset(itemCounts.keySet(), itemTypes.getInt(context), context.getRandom())
                 .stream()
-                .map(itemType -> new CollectItemGoal(Ingredient.of(itemType), itemCounts.getInt(itemType)))
+                .map(itemType -> new TossItemGoal(Ingredient.of(itemType), itemCounts.getInt(itemType)))
                 .collect(Collectors.toList());
     }
 }
