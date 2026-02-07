@@ -152,7 +152,7 @@ public class ThemeProcessor extends StructureProcessor
             processors2.get(i).finalizeRoomProcessing(room, world, structurePos, pieceSize);
         }
 
-        room.setDefaultBiome(themeSource.getThemeBiome(world.getLevel()));
+        themeSource.getBiome(world.getLevel()).ifPresent(room::setDefaultBiome);
     }
 
     @Override
