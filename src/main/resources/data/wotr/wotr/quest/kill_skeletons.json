@@ -2,7 +2,7 @@
   "goals": [
     {
       "type": "wotr:fixed_kill_mob",
-      "mob": "#minecraft:skeletons",
+      "mob": "#wotr:skeletons",
       "mob_label": "mobgroup.minecraft.skeletons",
       "count": 4
     }
