@@ -4,8 +4,10 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
+import com.wanderersoftherift.wotr.gui.config.HorizontalAnchor;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
+import com.wanderersoftherift.wotr.gui.config.VerticalAnchor;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.client.DeltaTracker;
@@ -100,13 +102,16 @@ public class AbilityResourceBars implements ConfigurableLayer {
         var resources = getAbilityResources();
         resources.sort(Comparator.comparing(it -> it.getKey().toString()));
 
+        boolean isRightAnchored = getConfig().getAnchor().getHorizontal() == HorizontalAnchor.RIGHT;
+        boolean isBottomAnchored = getConfig().getAnchor().getVertical() == VerticalAnchor.BOTTOM;
+
         for (var resourceEntry : resources) {
             Vector2i offset;
 
             if (getConfig().getOrientation() == UIOrientation.HORIZONTAL) {
-                offset = new Vector2i(0, index * BAR_SPACING);
+                offset = new Vector2i(0, isBottomAnchored ? -index * BAR_SPACING : index * BAR_SPACING);
             } else {
-                offset = new Vector2i(-index * BAR_SPACING, 0);
+                offset = new Vector2i(isRightAnchored ? -index * BAR_SPACING : index * BAR_SPACING, 0);
             }
 
             var resource = Minecraft.getInstance().player.registryAccess().get(resourceEntry.getKey());
