@@ -15,6 +15,11 @@
       "type": "wotr:reputation",
       "guilds": "wotr:cats_cradle",
       "amount": 100
+    },
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
+      "amount": 50
     }
   ],
   "prerequisite": {

@@ -36,6 +36,11 @@
       "type": "wotr:reputation",
       "guilds": "wotr:parrots_perch",
       "amount": 10
+    },
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
+      "amount": 15
     }
   ]
 }
