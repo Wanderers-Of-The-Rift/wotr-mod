@@ -1,0 +1,9 @@
+{
+  "values": [
+    "wotr:rift_skeleton",
+    "wotr:rift_zombie",
+    "wotr:drone_bee",
+    "#minecraft:undead",
+    "#minecraft:arthropod"
+  ]
+}

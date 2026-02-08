@@ -3,6 +3,7 @@
   "goals": [
     {
       "type": "wotr:kill_mob",
+      "mob": "#wotr:rift_mobs",
       "count": {
         "type": "wotr:sum",
         "values": [
