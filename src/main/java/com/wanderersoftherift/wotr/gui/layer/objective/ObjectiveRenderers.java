@@ -44,12 +44,12 @@ public class ObjectiveRenderers {
             ResourceLocation key = ONGOING_OBJECTIVE_TYPES.getKey(objective.getCodec());
             Function<OngoingObjective, ObjectiveRenderer> renderer = get(key);
             if (renderer != null) {
-                ObjectiveRenderer.current = renderer.apply(objective);
+                ObjectiveLayer.setRenderer(renderer.apply(objective));
             } else {
-                ObjectiveRenderer.current = null;
+                ObjectiveLayer.setRenderer(null);
             }
         } else {
-            ObjectiveRenderer.current = null;
+            ObjectiveLayer.setRenderer(null);
         }
     }
 }

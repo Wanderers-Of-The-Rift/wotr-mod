@@ -1,10 +1,13 @@
 package com.wanderersoftherift.wotr.core.inventory.containers;
 
 import com.google.common.collect.Streams;
+import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -24,23 +27,33 @@ public class ComponentContainerType implements ContainerType {
     }
 
     private static class ContainerComponentContainerWrapper implements ContainerWrapper {
-        private final ItemStack containerItem;
+        private final ItemAccessor containerItem;
         private final ItemContainerContents component;
 
         public ContainerComponentContainerWrapper(ItemStack item) {
+            this(new DirectItemAccessor(item));
+        }
+
+        public ContainerComponentContainerWrapper(ItemAccessor item) {
             containerItem = item;
-            component = containerItem.get(DataComponents.CONTAINER);
+            component = item.getReadOnlyItemStack().get(DataComponents.CONTAINER);
+        }
+
+        @Override
+        public @Nullable ItemAccessor containerItem() {
+            return containerItem;
         }
 
         @Override
         public void recordChanges() {
-            containerItem.set(DataComponents.CONTAINER, component);
+            containerItem
+                    .applyComponents(DataComponentPatch.builder().set(DataComponents.CONTAINER, component).build());
         }
 
         @Override
-        public @NotNull Iterator<ContainerItemWrapper> iterator() {
+        public @NotNull Iterator<ItemAccessor> iterator() {
             return Streams.stream(component.nonEmptyItems())
-                    .<ContainerItemWrapper>map(DirectContainerItemWrapper::new)
+                    .<ItemAccessor>map(DirectItemAccessor::new)
                     .toList()
                     .iterator();
         }

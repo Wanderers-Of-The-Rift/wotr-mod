@@ -12,15 +12,21 @@ import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.objective.OngoingObjective;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -31,24 +37,38 @@ public class GoalBasedOngoingObjective implements OngoingObjective, GoalTracker 
     public static final MapCodec<GoalBasedOngoingObjective> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(
                     Goal.DIRECT_CODEC.listOf().fieldOf("goals").forGetter(GoalBasedOngoingObjective::getGoals),
-                    Codec.INT.listOf().fieldOf("goal_progress").forGetter(GoalBasedOngoingObjective::getGoalProgress)
+                    Codec.unboundedMap(UUIDUtil.STRING_CODEC,
+                            Codec.INT.listOf().<IntList>xmap(IntArrayList::new, x -> x))
+                            .fieldOf("per_player_progress")
+                            .forGetter(x -> x.perPlayerGoalProgress)
             ).apply(instance, GoalBasedOngoingObjective::new));
 
     private final List<Goal> goals;
     private final int[] goalProgress;
+    private final Map<UUID, IntList> perPlayerGoalProgress;
     private final ListMultimap<Class<? extends Goal>, ObjectiveGoalState<?>> goalLookup = ArrayListMultimap.create();
     private ServerLevel level;
 
     public GoalBasedOngoingObjective(List<Goal> goals) {
-        this(goals, List.of());
+        this(goals, Map.of());
     }
 
-    public GoalBasedOngoingObjective(List<Goal> goals, List<Integer> goalProgress) {
+    public GoalBasedOngoingObjective(List<Goal> goals, Map<UUID, IntList> perPlayerGoalProgress) {
         this.goals = new ArrayList<>(goals);
         this.goalProgress = new int[goals.size()];
-        for (int i = 0; i < goals.size() && i < goalProgress.size(); i++) {
-            this.goalProgress[i] = goalProgress.get(i);
+        this.perPlayerGoalProgress = new LinkedHashMap<>();
+        for (var entry : perPlayerGoalProgress.entrySet()) {
+            IntList values = new IntArrayList(entry.getValue());
+            while (values.size() < goals.size()) {
+                values.add(0);
+            }
+            this.perPlayerGoalProgress.put(entry.getKey(), values);
         }
+        this.perPlayerGoalProgress.values().forEach(values -> {
+            for (int i = 0; i < goals.size(); i++) {
+                goalProgress[i] += values.getInt(i);
+            }
+        });
         for (int i = 0; i < goals.size(); i++) {
             goalLookup.put(goals.get(i).getClass(), new ObjectiveGoalState<>(this, i));
         }
@@ -102,6 +122,10 @@ public class GoalBasedOngoingObjective implements OngoingObjective, GoalTracker 
         return goalLookup.get(goalType).stream().map(state -> (GoalState<T>) state);
     }
 
+    private int sumTotalProgress(int index) {
+        return perPlayerGoalProgress.values().stream().mapToInt(x -> x.getInt(index)).sum();
+    }
+
     private record ObjectiveGoalState<T extends Goal>(GoalBasedOngoingObjective objective, int index)
             implements GoalState<T> {
 
@@ -116,8 +140,15 @@ public class GoalBasedOngoingObjective implements OngoingObjective, GoalTracker 
             return objective.getGoalProgress().getInt(index);
         }
 
-        public void setProgress(int amount) {
-            int clampedAmount = Math.clamp(amount, 0, getGoal().count());
+        public void setProgress(Player player, int amount) {
+
+            IntList playerProgress = objective.perPlayerGoalProgress.computeIfAbsent(player.getUUID(),
+                    (uuid) -> new IntArrayList(new int[objective.goals.size()])
+            );
+            if (playerProgress.set(index, amount) == amount) {
+                return;
+            }
+            int clampedAmount = Math.clamp(objective.sumTotalProgress(index), 0, getGoal().count());
             if (clampedAmount != objective.goalProgress[index]) {
                 objective.goalProgress[index] = clampedAmount;
                 PacketDistributor.sendToPlayersInDimension(objective.level,

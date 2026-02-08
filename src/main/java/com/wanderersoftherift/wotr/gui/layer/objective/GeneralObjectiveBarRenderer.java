@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2i;
 
-public class GeneralObjectiveBarRenderer extends ObjectiveRenderer {
+public class GeneralObjectiveBarRenderer implements ObjectiveRenderer {
     private static final ResourceLocation BAR_BACKGROUND_SPRITE = WanderersOfTheRift
             .id("objective/general/bar_background");
     private static final ResourceLocation BAR_PROGRESS_SPRITE = WanderersOfTheRift.id("objective/general/bar_progress");
