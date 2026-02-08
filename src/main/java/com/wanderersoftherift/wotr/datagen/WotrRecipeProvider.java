@@ -288,10 +288,18 @@ public class WotrRecipeProvider extends RecipeProvider {
 
         KeyForgeRecipe
                 .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
+                        DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("collect_items")))
+                .setPriority(4)
+                .withItemReq(Ingredient.of(Items.BUCKET))
+                .save(output, WanderersOfTheRift.id("rift_collect_items"));
+
+        KeyForgeRecipe
+                .create(WotrDataComponentType.RiftKeyData.RIFT_OBJECTIVE.get(),
                         DeferredHolder.create(WotrRegistries.Keys.OBJECTIVES, WanderersOfTheRift.id("stealth")))
                 .setPriority(1)
                 .withEssenceReq(new EssencePredicate.Builder(WanderersOfTheRift.id("dark")).setMinPercent(5f).build())
                 .save(output, WanderersOfTheRift.id("rift_objective_stealth"));
+
         // </editor-fold>
 
         // <editor-fold desc="WotR Key Forge Generator">
