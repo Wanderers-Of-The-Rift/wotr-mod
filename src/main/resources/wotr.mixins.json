@@ -16,7 +16,7 @@
         "InvokerBlockBehaviour",
         "MixinAttributes",
         "MixinBlockAgeProcessor",
-        "MixinSimpleAttackableBlock",
+        "MixinBlock",
         "MixinChunkAccess",
         "MixinChunkMap",
         "MixinEnchantingTableBlock",
