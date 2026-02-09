@@ -32,6 +32,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+/**
+ * Tracks progression of ProgressionTracks for an entity
+ * <p>
+ * Note: ranks are tracked starting with 1, not 0.
+ * </p>
+ */
 public class ProgressionTracker {
 
     private final Map<Holder<ProgressionTrack>, ProgressionData> progressionLookup = new LinkedHashMap<>();
@@ -68,7 +74,7 @@ public class ProgressionTracker {
         data.setPoints(value);
         int newRank = data.getRank();
         int nextRank = newRank + 1;
-        while (nextRank < track.value().ranks().size() && value >= track.value().ranks().get(nextRank).requirement()) {
+        while (nextRank <= track.value().rankCount() && value >= track.value().getRank(nextRank).requirement()) {
             newRank = nextRank++;
         }
 
@@ -91,31 +97,42 @@ public class ProgressionTracker {
      * Sets the holder's rank for the given track
      *
      * @param track
-     * @param rank
+     * @param newRank
      */
-    public void setRank(Holder<ProgressionTrack> track, int rank) {
+    public void setRank(Holder<ProgressionTrack> track, int newRank) {
         ProgressionData data = getTrackData(track);
-        rank = Math.min(rank, track.value().ranks().size() - 1);
+        newRank = Math.clamp(newRank, 1, track.value().rankCount());
         int oldRank = data.getRank();
-        if (oldRank != rank) {
-            data.setRank(rank);
-            data.setClaimedRank(Math.min(rank, data.getClaimedRank()));
+        if (oldRank != newRank) {
+            data.setRank(newRank);
+            data.setClaimedRank(Math.min(newRank, data.getClaimedRank()));
             if (holder instanceof ServerPlayer player) {
                 PacketDistributor.sendToPlayer(player, new ProgressionTrackerUpdatePayload(track, data));
             }
         }
     }
 
+    /**
+     * @param track
+     * @return Whether the player has any unclaimed rewards.
+     */
     public boolean hasUnclaimedRewards(Holder<ProgressionTrack> track) {
         ProgressionData trackData = getTrackData(track);
+        // A player has unclaimed rewards if claimed rank < current rank and one of the unclaimed ranks
+        // has a reward
         for (int rank = trackData.claimedRank + 1; rank <= trackData.rank; rank++) {
-            if (!track.value().ranks().get(rank).rewards().isEmpty()) {
+            if (!track.value().getRank(rank).rewards().isEmpty()) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Claims all unclaimed rewards for the given track
+     * 
+     * @param track
+     */
     public void claimRewards(Holder<ProgressionTrack> track) {
         if (!(holder instanceof Player player) || !(player.level() instanceof ServerLevel level)) {
             return;
@@ -127,7 +144,7 @@ public class ProgressionTracker {
         LootParams params = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
         LootContext context = new LootContext.Builder(params).create(Optional.empty());
         List<Reward> rewards = IntStream.rangeClosed(trackData.claimedRank + 1, trackData.rank)
-                .mapToObj(i -> track.value().ranks().get(i))
+                .mapToObj(i -> track.value().getRank(i))
                 .flatMap(rank -> rank.rewards().stream())
                 .flatMap(rewardProvider -> rewardProvider.generateReward(context).stream())
                 .toList();
@@ -164,8 +181,8 @@ public class ProgressionTracker {
     public static class ProgressionData {
         public static final Codec<ProgressionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 ExtraCodecs.NON_NEGATIVE_INT.fieldOf("points").forGetter(ProgressionData::getPoints),
-                ExtraCodecs.NON_NEGATIVE_INT.fieldOf("rank").forGetter(ProgressionData::getRank),
-                ExtraCodecs.NON_NEGATIVE_INT.fieldOf("claimed_rank").forGetter(ProgressionData::getClaimedRank)
+                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("rank").forGetter(ProgressionData::getRank),
+                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("claimed_rank").forGetter(ProgressionData::getClaimedRank)
         ).apply(instance, ProgressionData::new));
 
         public static final StreamCodec<ByteBuf, ProgressionData> STREAM_CODEC = StreamCodec.composite(
@@ -174,8 +191,8 @@ public class ProgressionTracker {
         );
 
         private int points;
-        private int rank;
-        private int claimedRank;
+        private int rank = 1;
+        private int claimedRank = 1;
 
         public ProgressionData() {
 

@@ -33,7 +33,7 @@ public class ProgressionTrackRankToast extends SimpleToast {
 
     public ProgressionTrackRankToast(Holder<ProgressionTrack> track, int rank) {
         super(true);
-        Preconditions.checkArgument(rank >= 0 && rank < track.value().ranks().size());
+        Preconditions.checkArgument(rank >= 1 && rank <= track.value().rankCount());
         this.track = track;
         this.rank = rank;
         this.title = Component.translatable(track.value().toastTitleId(), ProgressionTrack.getDisplayName(track));
@@ -44,7 +44,7 @@ public class ProgressionTrackRankToast extends SimpleToast {
     public void renderMessage(@NotNull GuiGraphics guiGraphics, Font font, long visibilityTime) {
         List<FormattedCharSequence> list = font.split(rankTitle,
                 width() - ICON_SIZE - 2 * TEXT_X_PADDING - ICON_X_PADDING);
-        Optional<ResourceLocation> icon = track.value().ranks().get(rank).icon();
+        Optional<ResourceLocation> icon = track.value().getRank(rank).icon();
         int xOffset = ICON_X_PADDING;
         if (icon.isPresent()) {
             guiGraphics.blit(RenderType.GUI_TEXTURED, icon.get(), xOffset, ICON_Y_PADDING, 0, 0, ICON_SIZE, ICON_SIZE,

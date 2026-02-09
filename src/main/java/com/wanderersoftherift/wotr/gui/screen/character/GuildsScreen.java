@@ -125,10 +125,10 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
                     getX() + EMBLEM_SIZE + 8, getY() + 8 + 2 * font.lineHeight, ChatFormatting.WHITE.getColor(), false);
 
             Component reputationLabel;
-            if (rank + 1 < track.value().rankCount()) {
+            if (rank + 1 <= track.value().rankCount()) {
                 reputationLabel = Component.translatable(
                         WanderersOfTheRift.translationId("container", "guild.reputation"), status.getPoints(track),
-                        track.value().ranks().get(rank + 1).requirement());
+                        track.value().getRank(rank + 1).requirement());
 
             } else {
                 reputationLabel = Component

@@ -557,13 +557,13 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("track", "points.xp"), "Experience");
 
         add(WanderersOfTheRift.translationId("track", "parrots_perch"), "Parrots Perch");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.0"), "Blue Egg");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.1"), "Beakginner");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.2"), "Pollyficient");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.3"), "Wingcredible");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.4"), "Featheran");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.5"), "Talonted");
-        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.6"), "Feathery Talonted");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.1"), "Blue Egg");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.2"), "Beakginner");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.3"), "Pollyficient");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.4"), "Wingcredible");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.5"), "Featheran");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.6"), "Talonted");
+        add(WanderersOfTheRift.translationId("track", "parrots_perch.rank.7"), "Feathery Talonted");
 
         add(WanderersOfTheRift.translationId("npc", "default"), "Bailey");
         add(WanderersOfTheRift.translationId("npc", "cats_cradle_merchant"), "Cats Cradle Merchant");
