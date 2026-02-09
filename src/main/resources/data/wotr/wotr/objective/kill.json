@@ -4,6 +4,7 @@
     {
       "type": "wotr:kill_mob",
       "mob": "#wotr:rift_mobs",
+      "mob_label": "mobgroup.wotr.rift_monsters",
       "count": {
         "type": "wotr:sum",
         "values": [
