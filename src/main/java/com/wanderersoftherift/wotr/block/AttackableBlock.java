@@ -30,9 +30,6 @@ public interface AttackableBlock {
         if (state.getBlock() instanceof AttackableBlock ab && ab.isAttackable(state, level, position)) {
             return true;
         }
-        if (level.getBlockEntity(position) instanceof AttackableBlock ab && ab.isAttackable(state, level, position)) {
-            return true;
-        }
         return false;
     }
 
