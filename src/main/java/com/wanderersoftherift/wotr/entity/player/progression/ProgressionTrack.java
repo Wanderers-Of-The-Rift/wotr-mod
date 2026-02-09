@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.entity.player.progression;
 
+import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
@@ -46,20 +47,23 @@ public record ProgressionTrack(List<ProgressionRank> ranks, String toastTitleId,
         return !toastTitleId.isEmpty();
     }
 
+    public ProgressionRank getRank(int rank) {
+        Preconditions.checkArgument(rank > 0 && rank <= ranks.size());
+        return ranks.get(rank - 1);
+    }
+
     public static Component getDisplayName(Holder<ProgressionTrack> track) {
         ResourceLocation loc = track.getKey().location();
         return Component.translatable(loc.toLanguageKey("track"));
     }
 
     public static Component getRankTitle(Holder<ProgressionTrack> track, int rank) {
-        if (rank < 0 || rank > track.value().ranks.size()) {
-            return Component.empty();
-        }
+        rank = Math.clamp(rank, 1, track.value().ranks.size());
         if (!track.value().hasCustomRankTitles) {
-            return Component.translatable(track.value().rankFormatId, rank + 1);
+            return Component.translatable(track.value().rankFormatId, rank);
         } else {
             return Component.translatable(track.value().rankFormatId,
-                    Component.translatable(track.getKey().location().toLanguageKey("track", "rank." + (rank + 1))));
+                    Component.translatable(track.getKey().location().toLanguageKey("track", "rank." + rank)));
         }
     }
 

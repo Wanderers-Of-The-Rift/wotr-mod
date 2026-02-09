@@ -58,7 +58,7 @@ public class MainCharacterScreen extends BaseCharacterScreen<MainCharacterMenu> 
 
         int level = progressionTracker.getRank(levelTrack);
         guiGraphics.drawString(font,
-                Component.translatable(WanderersOfTheRift.translationId("container", "character.level"), level + 1),
+                Component.translatable(WanderersOfTheRift.translationId("container", "character.level"), level),
                 xOffset, yOffset, ChatFormatting.WHITE.getColor(), false);
         yOffset += font.lineHeight;
         int xp = progressionTracker.getPoints(levelTrack);
@@ -70,7 +70,7 @@ public class MainCharacterScreen extends BaseCharacterScreen<MainCharacterMenu> 
         if (level < levelTrack.value().rankCount() - 1) {
             guiGraphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("container", "character.xp.next_level"),
-                            levelTrack.value().ranks().get(level + 1).requirement()),
+                            levelTrack.value().getRank(level + 1).requirement()),
                     xOffset, yOffset, ChatFormatting.WHITE.getColor(), false);
             yOffset += font.lineHeight;
         }
