@@ -308,8 +308,8 @@
                 "type_specific":  {
                   "type": "wotr:progression_track_rank",
                   "track": "wotr:parrots_perch",
-                  "min": 0,
-                  "max": 0
+                  "min": 1,
+                  "max": 1
                 }
               }
             }
