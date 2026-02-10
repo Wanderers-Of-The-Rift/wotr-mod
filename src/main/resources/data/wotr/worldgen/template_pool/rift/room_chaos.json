@@ -319,7 +319,34 @@
         {
             "weight": 88,
             "element": {
+                "location": "wotr:rift/room/chaos/332/flower-1-rachaelrose",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 68,
+            "element": {
+                "location": "wotr:rift/room/chaos/322/chicken-1-rachaelrose",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 88,
+            "element": {
                 "location": "wotr:rift/room/chaos/323/stablechaoscave-1-jyu",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 68,
+            "element": {
+                "location": "wotr:rift/room/chaos/232/hall-1-rachaelrose",
                 "processors": "wotr:room_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -335,9 +362,27 @@
             }
         },
         {
+            "weight": 76,
+            "element": {
+                "location": "wotr:rift/room/chaos/331/talltallcave-1-jyu",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
             "weight": 24,
             "element": {
                 "location": "wotr:rift/room/chaos/121/tallhallway-1-jyu",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 44,
+            "element": {
+                "location": "wotr:rift/room/chaos/131/waterjump-1-rachaelrose",
                 "processors": "wotr:room_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

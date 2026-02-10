@@ -4,6 +4,15 @@
         {
             "weight": 100,
             "element": {
+                "location": "wotr:rift/poi/free/11/temple_pillars-1-mal",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
                 "location": "wotr:rift/poi/free/11/ocean_temple-1-jj",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
@@ -22,8 +31,8 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/11/sculk-1-jj",
-                "processors": "wotr:poi_theme_default",
+                "location": "wotr:rift/poi/free/11/trees-1-k",
+                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -31,8 +40,8 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/11/trees-1-k",
-                "processors": "wotr:poi_12_to_wood",
+                "location": "wotr:rift/poi/free/11/sculk-1-jj",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -121,142 +130,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/11/qblock-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/hobit-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/swan-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/tank-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/house-2-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/house-3-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/house-4-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/golem-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/parkour-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/appletree-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/coaster-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/drinkshack-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/totoro-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/lorry-1-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/golem-2-k",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/11/dino-1-k",
+                "location": "wotr:rift/poi/free/11/ocean_temple_pb-1-jj_jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -274,7 +148,88 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/11/temple_pillars-1-mal",
+                "location": "wotr:rift/poi/free/11/dino-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/golem-2-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/lorry-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/totoro-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/drinkshack-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/coaster-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/appletree-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/parkour-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/golem-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/house-4-k",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -292,7 +247,52 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/11/ocean_temple_pb-1-jj_jyu",
+                "location": "wotr:rift/poi/free/11/qblock-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/house-3-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/house-2-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/tank-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/swan-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/11/hobit-1-k",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
