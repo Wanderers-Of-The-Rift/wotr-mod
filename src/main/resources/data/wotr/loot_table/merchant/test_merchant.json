@@ -257,8 +257,8 @@
                 "type_specific":  {
                   "type": "wotr:progression_track_rank",
                   "track": "wotr:cats_cradle",
-                  "min": 0,
-                  "max": 0
+                  "min": 1,
+                  "max": 1
                 }
               }
             }

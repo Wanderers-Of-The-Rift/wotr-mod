@@ -81,7 +81,7 @@ public class ProgressionTrackCommands extends BaseCommand {
             Holder<ProgressionTrack> track,
             int amount) {
         ProgressionTracker status = target.getData(WotrAttachments.PROGRESSION_TRACKER);
-        status.setRank(track, amount - 1);
+        status.setRank(track, amount);
         return Command.SINGLE_SUCCESS;
     }
 }
