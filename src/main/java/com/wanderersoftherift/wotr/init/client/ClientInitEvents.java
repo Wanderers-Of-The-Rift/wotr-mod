@@ -105,7 +105,7 @@ public final class ClientInitEvents {
 
             @Override
             public ResourceLocation getOverlayTexture() {
-                return fluid.fluidOverlayId;
+                return null;
             }
 
             @Override
