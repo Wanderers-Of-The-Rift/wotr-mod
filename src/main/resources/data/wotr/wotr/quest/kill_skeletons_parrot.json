@@ -2,7 +2,7 @@
   "goals": [
     {
       "type": "wotr:fixed_kill_mob",
-      "mob": "#minecraft:skeletons",
+      "mob": "#wotr:skeletons",
       "mob_label": "mobgroup.minecraft.skeletons",
       "count": 4
     }
@@ -18,6 +18,11 @@
     {
       "type": "wotr:reputation",
       "guilds": "wotr:parrots_perch",
+      "amount": 10
+    },
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
       "amount": 10
     }
   ]

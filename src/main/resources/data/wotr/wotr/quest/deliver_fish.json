@@ -18,6 +18,11 @@
       "type": "wotr:reputation",
       "guilds": "wotr:cats_cradle",
       "amount": 10
+    },
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
+      "amount": 15
     }
   ],
   "hand_in_to": "wotr:cats_cradle_merchant"

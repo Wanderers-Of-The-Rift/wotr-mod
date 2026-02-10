@@ -16,6 +16,11 @@
       "type": "wotr:reputation",
       "guilds": "wotr:parrots_perch",
       "amount": 50
+    },
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
+      "amount": 50
     }
   ],
   "prerequisite": {
@@ -37,6 +42,7 @@
         "guild": "wotr:parrots_perch",
         "min": 2
       }
+
     ]
   }
 }
