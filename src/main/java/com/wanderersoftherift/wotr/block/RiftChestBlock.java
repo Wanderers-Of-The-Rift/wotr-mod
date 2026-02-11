@@ -9,7 +9,9 @@ import com.wanderersoftherift.wotr.util.EnumEntries;
 import com.wanderersoftherift.wotr.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
-public class RiftChestBlock extends ChestBlock {
+public class RiftChestBlock extends ChestBlock implements AttackableBlock {
     public static final MapCodec<RiftChestBlock> CODEC = simpleCodec(
             (properties) -> new RiftChestBlock(WotrBlockEntities.RIFT_CHEST::get, properties));
 
@@ -68,5 +70,18 @@ public class RiftChestBlock extends ChestBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new RiftChestBlockEntity(pos, state);
+    }
+
+    @Override
+    public boolean isAttackable(BlockState state, BlockGetter level, BlockPos position) {
+        return (level.getBlockEntity(position) instanceof AttackableBlock ab)
+                && ab.isAttackable(state, level, position);
+    }
+
+    @Override
+    public void attack(BlockState state, LevelAccessor level, BlockPos position, float damage, DamageSource source) {
+        if (level.getBlockEntity(position) instanceof AttackableBlock ab) {
+            ab.attack(state, level, position, damage, source);
+        }
     }
 }

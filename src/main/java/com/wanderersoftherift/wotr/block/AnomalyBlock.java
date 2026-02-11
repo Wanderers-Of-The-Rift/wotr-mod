@@ -11,10 +11,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class AnomalyBlock extends BaseEntityBlock {
+public class AnomalyBlock extends BaseEntityBlock implements AttackableBlock {
     public static final MapCodec<AnomalyBlock> CODEC = simpleCodec(AnomalyBlock::new);
     private static final Map<Direction, VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(
             Direction.UP, Block.box(6.0, 0.0, 6.0, 10.0, 1.0, 10.0), Direction.DOWN,
@@ -122,5 +124,18 @@ public class AnomalyBlock extends BaseEntityBlock {
             };
         }
         return null;
+    }
+
+    @Override
+    public boolean isAttackable(BlockState state, BlockGetter level, BlockPos position) {
+        return (level.getBlockEntity(position) instanceof AttackableBlock ab)
+                && ab.isAttackable(state, level, position);
+    }
+
+    @Override
+    public void attack(BlockState state, LevelAccessor level, BlockPos position, float damage, DamageSource source) {
+        if (level.getBlockEntity(position) instanceof AttackableBlock ab) {
+            ab.attack(state, level, position, damage, source);
+        }
     }
 }

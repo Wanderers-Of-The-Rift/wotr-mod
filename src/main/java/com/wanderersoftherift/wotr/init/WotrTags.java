@@ -16,6 +16,7 @@ public class WotrTags {
 
     public static class Blocks {
         public static final TagKey<Block> BANNED_IN_RIFT = createTag("banned_in_rift");
+        public static final TagKey<Block> ATTACKABLE = createTag("attackable");
 
         private static TagKey<Block> createTag(String name) {
             return BlockTags.create(WanderersOfTheRift.id(name));

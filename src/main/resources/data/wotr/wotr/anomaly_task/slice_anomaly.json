@@ -1,5 +1,4 @@
 {
-    "type": "wotr:needle",
-    "needle_item": "diamond_sword",
-    "stitch_count": 4
+    "type": "wotr:slice",
+    "hit_points": 100
 }

@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.targeting.TargetInfo;
+import com.wanderersoftherift.wotr.block.AttackableBlock;
 import com.wanderersoftherift.wotr.init.WotrAttributes;
 import com.wanderersoftherift.wotr.modifier.effect.AttributeModifierEffect;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
@@ -36,11 +37,9 @@ public record DamageEffect(float damageAmount, Holder<Attribute> damageAttribute
 
     @Override
     public void apply(AbilityContext context, TargetInfo targetInfo) {
+        var level = context.level();
         DamageSource damageSource = new DamageSource(
-                context.level()
-                        .registryAccess()
-                        .lookupOrThrow(Registries.DAMAGE_TYPE)
-                        .getOrThrow(this.damageTypeKey.getKey()),
+                level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(this.damageTypeKey.getKey()),
                 null, context.caster(), targetInfo.source().getLocation());
 
         // for now its ABILITY_DAMAGE but needs to be considered how multiple types are going to be implemented ie AP or
@@ -53,6 +52,17 @@ public record DamageEffect(float damageAmount, Holder<Attribute> damageAttribute
                 .forEach(target -> {
                     target.hurtServer((ServerLevel) target.level(), damageSource, finalDamage);
                 });
+        targetInfo.targetBlocks().forEach(blockPos -> {
+            var state = level.getBlockState(blockPos);
+            if (state.getBlock() instanceof AttackableBlock ab && ab.isAttackable(state, level, blockPos)) {
+                ab.attack(state, level, blockPos, finalDamage, damageSource);
+                return;
+            }
+            if (level.getBlockEntity(blockPos) instanceof AttackableBlock ab
+                    && ab.isAttackable(state, level, blockPos)) {
+                ab.attack(state, level, blockPos, finalDamage, damageSource);
+            }
+        });
     }
 
     @Override

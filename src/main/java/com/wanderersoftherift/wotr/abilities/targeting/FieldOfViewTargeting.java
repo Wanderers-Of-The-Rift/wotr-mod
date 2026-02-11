@@ -7,13 +7,12 @@ import com.wanderersoftherift.wotr.abilities.AbilityContext;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetBlockPredicate;
 import com.wanderersoftherift.wotr.abilities.effects.predicate.TargetEntityPredicate;
 import com.wanderersoftherift.wotr.abilities.targeting.shape.SphereShape;
-import net.minecraft.world.level.ClipContext;
+import com.wanderersoftherift.wotr.block.AttackableBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,9 +22,9 @@ import java.util.stream.Stream;
  * This targeting selects targets within range an angle of entity's viewing direction
  *
  * @param entityPredicate test whether an entity is allowed to be selected
- * @param blockPredicate  test whether a block is allowed to be selected (todo block selection currently not supported)
+ * @param blockPredicate  test whether a block is allowed to be selected
  * @param range           maximum distance of targets
- * @param cosine          of angle in which the targets are selected (todo change method of specifying angle)
+ * @param cosine          of angle in which the targets are selected
  */
 public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, TargetBlockPredicate blockPredicate,
         double range, double cosine) implements AbilityTargeting {
@@ -54,43 +53,73 @@ public record FieldOfViewTargeting(TargetEntityPredicate entityPredicate, Target
                 var dirLength = entitySource.getEntity()
                         .calculateViewVector(entity.getXRot(), entity.getYRot())
                         .scale(range);
-                return new TargetInfo(source,
-                        (List<HitResult>) getEntityTargets(context, start, dirLength, source).toList());
+                return new TargetInfo(source, (List<HitResult>) getTargets(context, start, dirLength, source).toList());
             } else if (source instanceof BlockHitResult blockSource) {
                 var start = source.getLocation();
                 var dirLength = blockSource.getDirection().getUnitVec3().scale(range);
-                return new TargetInfo(source,
-                        (List<HitResult>) getEntityTargets(context, start, dirLength, source).toList());
+                return new TargetInfo(source, (List<HitResult>) getTargets(context, start, dirLength, source).toList());
             }
             return null;
         }).filter(Objects::nonNull).toList();
     }
 
-    private Stream<? extends HitResult> getEntityTargets(
+    private Stream<? extends HitResult> getTargets(
             AbilityContext context,
             Vec3 start,
             Vec3 dirLength,
             HitResult source) {
 
         HitResult hit = context.level()
-                .clipIncludingBorder(new ClipContext(start, start.add(dirLength), ClipContext.Block.COLLIDER,
-                        ClipContext.Fluid.NONE, CollisionContext.empty()));
+                .clipIncludingBorder(AttackableBlock.createClipContext(start, start.add(dirLength)));
         if (hit.getType() != HitResult.Type.MISS) {
             dirLength = hit.getLocation().subtract(start);
         }
-        var dirLength2 = dirLength;
 
-        var shape = new SphereShape((float) dirLength2.length(), false);
-        var predicate = shape.getEntityPredicate(start, dirLength, context);
-        var allEntities = TargetingUtil.getEntitiesInArea(context.level(), shape.getAABB(start, dirLength, context),
+        var shape = new SphereShape((float) dirLength.length(), false);
+        return Stream.concat(getEntityTargets(context, start, dirLength, source, shape),
+                getBlockTargets(context, start, dirLength, source, shape));
+    }
+
+    private Stream<? extends HitResult> getEntityTargets(
+            AbilityContext context,
+            Vec3 start,
+            Vec3 dirLength,
+            HitResult source,
+            SphereShape rangeShape) {
+
+        var predicate = rangeShape.getEntityPredicate(start, dirLength, context);
+        var allEntities = TargetingUtil.getEntitiesInArea(context.level(),
+                rangeShape.getAABB(start, dirLength, context),
                 entity -> entityPredicate.matches(entity, source, context));
         return allEntities.stream().filter(entityHit -> predicate.test(entityHit.getEntity())).map(entityHitResult -> {
             var box = entityHitResult.getEntity().getBoundingBox();
-            var boxPoint = findClosestToRay(box, new Ray(start, dirLength2));
+            var boxPoint = findClosestToRay(box, new Ray(start, dirLength));
             return new EntityHitResult(entityHitResult.getEntity(), boxPoint);
         }).filter(entityHitResult -> {
             var entityHitDirection = entityHitResult.getLocation().subtract(start).normalize();
-            var angle = entityHitDirection.dot(dirLength2.normalize());
+            var angle = entityHitDirection.dot(dirLength.normalize());
+            return angle > this.cosine;
+        });
+    }
+
+    private Stream<? extends HitResult> getBlockTargets(
+            AbilityContext context,
+            Vec3 start,
+            Vec3 dirLength,
+            HitResult source,
+            SphereShape rangeShape) {
+
+        var predicate = rangeShape.getBlockPredicate(start, dirLength, context);
+        var allBlocks = TargetingUtil.getBlocksInArea(rangeShape.getAABB(start, dirLength, context),
+                pos -> blockPredicate.matches(pos, source, context));
+        return allBlocks.stream().filter(entityHit -> predicate.test(entityHit.getBlockPos())).map(blockHitResult -> {
+            var box = new AABB(blockHitResult.getBlockPos());
+            var boxPoint = findClosestToRay(box, new Ray(start, dirLength));
+            return new BlockHitResult(boxPoint, blockHitResult.getDirection(), blockHitResult.getBlockPos(),
+                    blockHitResult.isInside(), blockHitResult.isWorldBorderHit());
+        }).filter(blockHitResult -> {
+            var blockHitDirection = blockHitResult.getLocation().subtract(start).normalize();
+            var angle = blockHitDirection.dot(dirLength.normalize());
             return angle > this.cosine;
         });
     }

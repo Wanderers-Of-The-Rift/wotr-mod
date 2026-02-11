@@ -3,9 +3,12 @@ package com.wanderersoftherift.wotr.block.blockentity;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.block.AttackableBlock;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyEvent;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.SliceAnomalyTask;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.SliceAnomalyTaskState;
 import com.wanderersoftherift.wotr.init.WotrBlockEntities;
 import com.wanderersoftherift.wotr.serialization.DispatchedPairOptionalValue;
 import com.wanderersoftherift.wotr.util.RandomFactoryType;
@@ -24,8 +27,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
@@ -36,7 +42,7 @@ import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
 
-public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiable {
+public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiable, AttackableBlock {
 
     private static final float COMPLETED_STATE = 0.1f;
     private static final float INCOMPLETE_STATE = 1f;
@@ -224,6 +230,26 @@ public class AnomalyBlockEntity extends BlockEntity implements MobDeathNotifiabl
 
     public void setPanorama(ResourceLocation resourceLocation) {
         this.panorama = resourceLocation;
+    }
+
+    @Override
+    public boolean isAttackable(BlockState state, BlockGetter level, BlockPos position) {
+        var anomalyState = this.getAnomalyState();
+        return anomalyState != null && anomalyState.state.isPresent()
+                && anomalyState.task.value() instanceof SliceAnomalyTask;
+    }
+
+    @Override
+    public void attack(BlockState state, LevelAccessor level, BlockPos position, float damage, DamageSource source) {
+
+        var anomalyState = this.getAnomalyState();
+        if (anomalyState != null && anomalyState.task.value() instanceof SliceAnomalyTask sliceTask
+                && source.getEntity() instanceof Player player) {
+            var stateOptional = anomalyState.state;
+            if (stateOptional.isPresent()) {
+                sliceTask.attack(player, damage, source, this, (SliceAnomalyTaskState) stateOptional.get());
+            }
+        }
     }
 
     public record AnomalyState<T>(Holder<AnomalyTask<T>> task, Optional<T> state) {
