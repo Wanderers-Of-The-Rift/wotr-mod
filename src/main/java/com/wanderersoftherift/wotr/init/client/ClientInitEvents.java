@@ -12,6 +12,7 @@ import com.wanderersoftherift.wotr.client.tooltip.ImageComponent;
 import com.wanderersoftherift.wotr.client.tooltip.ImageTooltipRenderer;
 import com.wanderersoftherift.wotr.client.tooltip.RunegemTooltipRenderer;
 import com.wanderersoftherift.wotr.gui.config.preset.HudPresetManager;
+import com.wanderersoftherift.wotr.init.WotrFluids;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionSpecialEffects;
 import com.wanderersoftherift.wotr.world.level.RiftDimensionType;
 import net.minecraft.resources.ResourceLocation;
@@ -22,10 +23,16 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterSelectItemModelPropertyEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.function.Consumer;
+
+import static com.wanderersoftherift.wotr.init.WotrFluids.FLUID_MAP;
 
 // TODO: Most things in here should have other homes
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -84,4 +91,35 @@ public final class ClientInitEvents {
         event.addListener(WanderersOfTheRift.id("hud_preset"), HudPresetManager.getInstance());
     }
 
+    private static Consumer<WotrFluids.WotrFluid> getFluidExtensionFactory(RegisterClientExtensionsEvent event) {
+        return (WotrFluids.WotrFluid fluid) -> event.registerFluidType(new IClientFluidTypeExtensions() {
+            @Override
+            public @NotNull ResourceLocation getStillTexture() {
+                return fluid.fluidStillId;
+            }
+
+            @Override
+            public @NotNull ResourceLocation getFlowingTexture() {
+                return fluid.fluidFlowingId;
+            }
+
+            @Override
+            public ResourceLocation getOverlayTexture() {
+                return null;
+            }
+
+            @Override
+            public int getTintColor() {
+                return 0xFFFFFFFF;
+            }
+        }, fluid.fluidType);
+    }
+
+    @SubscribeEvent
+    private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        Consumer<WotrFluids.WotrFluid> fluidFactory = getFluidExtensionFactory(event);
+
+        FLUID_MAP.values().forEach(fluidFactory);
+        fluidFactory.accept(WotrFluids.FAKE_LAVA);
+    }
 }
