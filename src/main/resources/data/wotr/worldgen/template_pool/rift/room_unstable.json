@@ -94,7 +94,34 @@
         {
             "weight": 100,
             "element": {
+                "location": "wotr:rift/room/unstable/323/flour-1-rachaelrose",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
                 "location": "wotr:rift/room/unstable/333/hall-1-jyu",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/room/unstable/313/horse_1_rachaelrose",
+                "processors": "wotr:room_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/room/unstable/313/mine-1-rachaelroses",
                 "processors": "wotr:room_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

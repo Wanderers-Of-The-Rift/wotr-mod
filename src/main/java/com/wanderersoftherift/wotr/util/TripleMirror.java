@@ -136,11 +136,13 @@ public record TripleMirror(boolean x, boolean z, boolean diagonal) {
 
     public void applyToEntity(CompoundTag newNbt) {
         var rotationList = newNbt.getList("Rotation", CompoundTag.TAG_FLOAT);
-        rotationList.set(0, FloatTag.valueOf(applyToDegrees(((FloatTag) rotationList.get(0)).getAsFloat())));
+        if (!rotationList.isEmpty()) {
+            rotationList.set(0, FloatTag.valueOf(applyToDegrees(((FloatTag) rotationList.get(0)).getAsFloat())));
+            newNbt.put("Rotation", rotationList);
+        }
         if (newNbt.contains("Facing", CompoundTag.TAG_BYTE)) {
             newNbt.putByte("Facing", (byte) applyToDirection(Direction.values()[newNbt.getInt("Facing")]).ordinal());
         }
-        newNbt.put("Rotation", rotationList);
     }
 
     public int toInt() {

@@ -4,7 +4,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/arch-1-team",
+                "location": "wotr:rift/poi/halfway/3/rest_stop-5-mal",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -14,6 +14,15 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/halfway/3/shrine-1-team",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/halfway/3/arch-1-team",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -49,17 +58,8 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/rest_stop-5-mal",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
                 "location": "wotr:rift/poi/halfway/3/library-1-alex642",
-                "processors": "wotr:poi_12_to_wood",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -85,7 +85,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/brick-4-jyu",
+                "location": "wotr:rift/poi/halfway/3/2_8ths-1-team",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -94,7 +94,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/3/2_8ths-1-team",
+                "location": "wotr:rift/poi/halfway/3/brick-4-jyu",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
