@@ -1,0 +1,16 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:move_to_spawner"
+        },
+        {
+            "type": "wotr:find_spawn",
+            "player_distance_weight": 3,
+            "spawner_distance_weight": 3,
+            "player_distance_offset": 4,
+            "spawner_distance_offser": 2,
+            "target_mobs_to_player": true
+        }
+    ]
+}

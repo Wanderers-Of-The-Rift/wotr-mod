@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.List;
+import java.util.Optional;
 
 public record FixedThemeSource(Holder<RiftTheme> theme) implements ThemeSource {
     public static final MapCodec<FixedThemeSource> CODEC = LaxRegistryCodec
@@ -24,6 +25,11 @@ public record FixedThemeSource(Holder<RiftTheme> theme) implements ThemeSource {
             BlockPos structurePos,
             ThemePieceType themePieceType) {
         return theme.value().getProcessors(themePieceType);
+    }
+
+    @Override
+    public Optional<Holder<RiftTheme>> getTheme(ServerLevel level) {
+        return Optional.of(theme);
     }
 
     @Override

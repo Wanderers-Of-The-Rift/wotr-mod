@@ -26,7 +26,8 @@
             },
             "entities": {
               "sentiment": "not_friend"
-            }
+            },
+            "blocks": "attackable"
           },
           "effects": [
             {

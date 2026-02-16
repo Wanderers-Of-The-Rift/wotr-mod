@@ -1,0 +1,26 @@
+package com.wanderersoftherift.wotr.datagen.textures;
+
+import net.minecraft.resources.ResourceLocation;
+
+import java.awt.Color;
+import java.util.function.Consumer;
+
+public class TextureGenerator {
+    public final Consumer<TextureTransform> textureOutput;
+
+    public TextureGenerator(Consumer<TextureTransform> textureOutput) {
+        this.textureOutput = textureOutput;
+    }
+
+    public void copy(ResourceLocation sourcePath, ResourceLocation destinationPath) {
+        this.createTinted(sourcePath, destinationPath, 0xFFFFFF);
+    }
+
+    public void createTinted(ResourceLocation sourcePath, ResourceLocation destinationPath, int color) {
+        this.textureOutput.accept(new TintTransform(sourcePath, destinationPath, color));
+    }
+
+    public void createTinted(ResourceLocation sourcePath, ResourceLocation destinationPath, Color color) {
+        this.textureOutput.accept(new TintTransform(sourcePath, destinationPath, color));
+    }
+}

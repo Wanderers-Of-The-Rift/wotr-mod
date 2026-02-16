@@ -74,9 +74,13 @@ public class WotrKeyMappings {
             WanderersOfTheRift.translationId("key", "jigsaw_name_toggle"), KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, MISC_CATEGORY);
 
+    public static final KeyMapping MAIN_CHARACTER_MENU_KEY = new KeyMapping(
+            WanderersOfTheRift.translationId("key", "main_character_menu"), KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, MENU_CATEGORY);
+
     public static final KeyMapping GUILD_MENU_KEY = new KeyMapping(
             WanderersOfTheRift.translationId("key", "guild_menu"), KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, MENU_CATEGORY);
+            InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), MENU_CATEGORY);
 
     public static final KeyMapping QUEST_MENU_KEY = new KeyMapping(
             WanderersOfTheRift.translationId("key", "quest_menu"), KeyConflictContext.IN_GAME,
@@ -97,8 +101,8 @@ public class WotrKeyMappings {
         event.register(ACTIVATE_ABILITY_SCROLL);
         event.register(SHOW_TOOLTIP_INFO);
         event.register(JIGSAW_NAME_TOGGLE_KEY);
+        event.register(MAIN_CHARACTER_MENU_KEY);
         event.register(GUILD_MENU_KEY);
-        event.register(WALLET_MENU_KEY);
         event.register(QUEST_MENU_KEY);
     }
 

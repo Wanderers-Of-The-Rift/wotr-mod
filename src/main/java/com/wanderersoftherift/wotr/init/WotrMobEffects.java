@@ -2,6 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.effects.FireBurnEffect;
+import com.wanderersoftherift.wotr.effects.KillEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -13,4 +14,6 @@ public class WotrMobEffects {
 
     public static final DeferredHolder<MobEffect, FireBurnEffect> FIRE_BURN_EFFECT = MOB_EFFECTS.register("fire_burn",
             FireBurnEffect::new);
+    public static final DeferredHolder<MobEffect, KillEffect> KILL_EFFECT = MOB_EFFECTS.register("kill",
+            KillEffect::new);
 }

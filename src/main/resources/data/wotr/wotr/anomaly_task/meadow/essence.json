@@ -1,0 +1,8 @@
+{
+  "type": "wotr:bundle",
+  "items": {
+    "wotr:earth_essence": 1,
+    "wotr:light_essence": 1,
+    "wotr:plant_essence": 1
+  }
+}

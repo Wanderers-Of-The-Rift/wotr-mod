@@ -1,0 +1,40 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:apply_mob_variant",
+            "variant": "wotr:skeleton/mesa_skeleton"
+        },
+        {
+            "type": "wotr:chance",
+            "chance": 0.1,
+            "functions": [
+                {
+                    "type": "wotr:equip",
+                    "equipment": {
+                        "mainhand": {
+                            "id": "minecraft:torch",
+                            "count": 1
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "wotr:chance",
+            "chance": 0.1,
+            "functions": [
+                {
+                    "type": "wotr:equip",
+                    "equipment": {
+                        "offhand": {
+                            "id": "minecraft:dead_bush",
+                            "count": 1
+                        }
+                    }
+                }
+            ]
+        },
+        "wotr:simple_spawn"
+    ]
+}

@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
+import com.wanderersoftherift.wotr.gui.menu.character.MainCharacterMenu;
 import com.wanderersoftherift.wotr.gui.menu.character.OrderHint;
 import com.wanderersoftherift.wotr.gui.menu.character.QuestMenu;
 import net.minecraft.core.Holder;
@@ -14,6 +15,13 @@ public class WotrCharacterMenuItems {
 
     public static final DeferredRegister<CharacterMenuItem> MENU_ITEMS = DeferredRegister
             .create(WotrRegistries.Keys.CHARACTER_MENU_ITEMS, WanderersOfTheRift.MODID);
+
+    public static final Holder<CharacterMenuItem> MAIN = MENU_ITEMS.register("main", () -> new CharacterMenuItem(
+            Component.translatable(WanderersOfTheRift.translationId("container", "main_character")),
+            WotrMenuTypes.MAIN_CHARACTER_MENU.get(),
+            (id, inventory, player) -> new MainCharacterMenu(id, inventory,
+                    ContainerLevelAccess.create(player.level(), player.getOnPos()))
+    ));
 
     public static final Holder<CharacterMenuItem> GUILDS = MENU_ITEMS.register("guilds", () -> new CharacterMenuItem(
             Component.translatable(WanderersOfTheRift.translationId("container", "guilds")),

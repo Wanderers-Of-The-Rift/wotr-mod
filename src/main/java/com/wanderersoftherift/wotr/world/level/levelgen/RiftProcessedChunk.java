@@ -1,10 +1,13 @@
 package com.wanderersoftherift.wotr.world.level.levelgen;
 
 import com.wanderersoftherift.wotr.mixin.AccessorPalettedContainer;
+import com.wanderersoftherift.wotr.util.FastIdMapper;
 import com.wanderersoftherift.wotr.util.FibonacciHashing;
 import com.wanderersoftherift.wotr.util.ShiftMath;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.IdMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -15,12 +18,15 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,17 +41,31 @@ public class RiftProcessedChunk {
     public static final int CHUNK_HEIGHT_SHIFT = ShiftMath.shiftForCeilPow2(LevelChunkSection.SECTION_HEIGHT);
     public static final int CHUNK_WIDTH_MASK = (1 << CHUNK_WIDTH_SHIFT) - 1;
     public static final int CHUNK_HEIGHT_MASK = (1 << CHUNK_HEIGHT_SHIFT) - 1;
+    public static final int SECTION_BIOME_SIZE = LevelChunkSection.SECTION_SIZE / (4 * 4 * 4);
+    public static final int SECTION_BIOME_SHIFT = 2;
+    public static final int SECTION_BIOME_SHIFT_2 = 4;
+    public static final int SECTION_BIOME_MASK = (1 << SECTION_BIOME_SHIFT) - 1;
     public final Vec3i origin;
-    public final BlockState[] blocks = new BlockState[LevelChunkSection.SECTION_SIZE];
     public final short[] hidden = new short[1 << CHUNK_WIDTH_SHIFT_2];
     public final short[] newlyAdded = new short[1 << CHUNK_WIDTH_SHIFT_2];
     public final RiftProcessedRoom parentRoom;
     public final ArrayList<CompoundTag> entities = new ArrayList<>();
     public final ArrayList<BlockEntity> blockEntities = new ArrayList<>(LevelChunkSection.SECTION_SIZE);
+    public final BlockState[] blocks = new BlockState[LevelChunkSection.SECTION_SIZE];
+    private final Holder<Biome>[] biomes = new Holder[SECTION_BIOME_SIZE];
+    private Holder<Biome> defaultBiome;
 
-    public RiftProcessedChunk(Vec3i origin, RiftProcessedRoom parentRoom) {
+    public RiftProcessedChunk(Vec3i origin, RiftProcessedRoom parentRoom, Holder<Biome> defaultBiome) {
         this.origin = origin;
         this.parentRoom = parentRoom;
+        this.defaultBiome = defaultBiome;
+    }
+
+    public void setDefaultBiome(Holder<Biome> biome) {
+        if (biome == null) {
+            return;
+        }
+        this.defaultBiome = biome;
     }
 
     public void placeInWorld(ChunkAccess chunk, ServerLevelAccessor level) {
@@ -100,16 +120,91 @@ public class RiftProcessedChunk {
         return blocks[index];
     }
 
+    public void setBiome(Vec3i position, Holder<Biome> biome) {
+        setBiome(position.getX(), position.getY(), position.getZ(), biome);
+    }
+
+    public void setBiome(int x, int y, int z, Holder<Biome> biome) {
+        setBiomeWithinSection(x, y - (origin.getY() << SECTION_BIOME_SHIFT), z, biome);
+    }
+
+    public void setBiomeWithinSection(int x, int y, int z, Holder<Biome> biome) {
+        var index = (x >> 2) + ((z >> 2) << SECTION_BIOME_SHIFT) + ((y >> 2) << SECTION_BIOME_SHIFT_2);
+        biomes[index] = biome;
+    }
+
+    public Holder<Biome> getBiome(Vec3i position) {
+        return getBiome(position.getX(), position.getY(), position.getZ());
+    }
+
+    public Holder<Biome> getBiome(int x, int y, int z) {
+        return getBiomeWithinSection(x, y - (origin.getY() << SECTION_BIOME_SHIFT), z);
+    }
+
+    public Holder<Biome> getBiomeWithinSection(int x, int y, int z) {
+        var index = (x >> 2) + ((z >> 2) << SECTION_BIOME_SHIFT) + ((y >> 2) << SECTION_BIOME_SHIFT_2);
+        if (biomes[index] != null) {
+            return biomes[index];
+        } else {
+            return defaultBiome;
+        }
+    }
+
     /**
      * turns this chunk into LevelSection, then swaps it with existing section in the world
      */
     public void swapMinecraftSection(LevelChunkSection[] sectionArray, int sectionIndex) {
-        var air = Blocks.AIR.defaultBlockState();
         var oldSection = sectionArray[sectionIndex];
+        var blockStateContainer = buildBlockStateContainer(oldSection);
+
+        var biomeContainer = buildBiomeContainer(oldSection);
+        sectionArray[sectionIndex] = new LevelChunkSection(blockStateContainer, biomeContainer);
+    }
+
+    private @NotNull PalettedContainer<Holder<Biome>> buildBiomeContainer(LevelChunkSection oldSection) {
+        FastIdMapper<Holder<Biome>> idMapper = new FastIdMapper<>();
+        var registry = ((AccessorPalettedContainer) oldSection.getBiomes()).getRegistry();
+        for (Holder<Biome> biome : this.biomes) {
+            var actualBiome = biome == null ? defaultBiome : biome;
+            if (idMapper.getId(actualBiome) == IdMap.DEFAULT) {
+                idMapper.add(actualBiome);
+            }
+        }
+
+        PalettedContainer.Strategy strategy = PalettedContainer.Strategy.SECTION_BIOMES;
+        var bits = ShiftMath.shiftForCeilPow2(idMapper.size());
+        var config = strategy.getConfiguration(registry, bits);
+        if (bits == 0) {
+            return new PalettedContainer<Holder<Biome>>(registry, strategy, config,
+                    new ZeroBitStorage(SECTION_BIOME_SIZE), List.of(idMapper.byId(0)));
+        }
+        IdMap<Holder<Biome>> idMap;
+        if (bits > 3) {
+            // Use full registry
+            idMap = registry;
+            bits = Mth.ceillog2(registry.size());
+        } else {
+            idMap = idMapper;
+        }
+
+        var storage = new SimpleBitStorage(bits, SECTION_BIOME_SIZE);
+        for (int i = 0; i < SECTION_BIOME_SIZE; i++) {
+            var state = biomes[i];
+            if (state == null) {
+                state = defaultBiome;
+            }
+            storage.set(i, idMap.getId(state));
+        }
+
+        return new PalettedContainer<Holder<Biome>>(registry, strategy, config, storage, idMapper.getItems());
+    }
+
+    private @Nullable PalettedContainer<BlockState> buildBlockStateContainer(LevelChunkSection oldSection) {
+        var air = Blocks.AIR.defaultBlockState();
         var size = 0;
         // var uniqueStatesList = new BlockState[LevelChunkSection.SECTION_SIZE];
         var uniqueStatesList = new BlockState[257]; // no need to check more than that, if there is so many unique
-                                                    // states, registry is used
+        // states, registry is used
         var uniqueStatesHashTable = new BlockState[64];
         var uniqueStatesIndexHashTable = new int[64];
         var uniqueStatesFallback = new Reference2IntOpenHashMap<BlockState>();
@@ -123,16 +218,15 @@ public class RiftProcessedChunk {
                 uniqueStatesIndexHashTable[idx] = size++;
             } else if (state2 != actualState) {
                 uniqueStatesList[size] = actualState;
-                uniqueStatesFallback.putIfAbsent(actualState, size++);
+                if (uniqueStatesFallback.putIfAbsent(actualState, size) == uniqueStatesFallback.defaultReturnValue()) {
+                    size++;
+                }
             }
             if (size > 256) {
                 break;
             }
         }
 
-        if (size == 0) {
-            return;
-        }
         var bits = ShiftMath.shiftForCeilPow2(size);
 
         var registry = ((AccessorPalettedContainer) oldSection.getStates()).getRegistry();
@@ -140,10 +234,7 @@ public class RiftProcessedChunk {
         if (bits == 0) {
             var config = strat.<BlockState>getConfiguration(registry, bits);
             var storage = new ZeroBitStorage(LevelChunkSection.SECTION_SIZE);
-            var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage,
-                    List.of(uniqueStatesList[0]));
-            sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
-            return;
+            return new PalettedContainer<BlockState>(registry, strat, config, storage, List.of(uniqueStatesList[0]));
         }
 
         var useRegistry = bits > 8;
@@ -160,7 +251,6 @@ public class RiftProcessedChunk {
         var storage = new SimpleBitStorage(bits, LevelChunkSection.SECTION_SIZE, longs);
 
         if (Integer.bitCount(bits) == 1) {
-
             for (int i = 0; i < longs.length; i++) {
                 var value = 0L;
                 for (int j = valuesPerLong - 1; j >= 0; j--) {
@@ -188,13 +278,12 @@ public class RiftProcessedChunk {
                 longs[i] = value;
             }
         } else {
-
             for (int i = 0; i < LevelChunkSection.SECTION_SIZE; i++) {
                 var state = blocks[i];
                 if (state == null) {
                     state = air;
                 }
-                var value = registry.getId(state);
+                int value = registry.getId(state);
                 storage.set(i, value);
             }
         }
@@ -207,8 +296,7 @@ public class RiftProcessedChunk {
             }
         }
 
-        var newPalettedContainer = new PalettedContainer<BlockState>(registry, strat, config, storage, stateList);
-        sectionArray[sectionIndex] = new LevelChunkSection(newPalettedContainer, oldSection.getBiomes());
+        return new PalettedContainer<BlockState>(registry, strat, config, storage, stateList);
     }
 
     public void setBlockEntity(BlockEntity entity) {

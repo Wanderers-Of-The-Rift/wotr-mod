@@ -5,5 +5,16 @@
       "type": "wotr:kill_mob",
       "count": 1
     }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table": "wotr:rift_objective/success"
+    },
+    {
+      "type": "wotr:progression_track",
+      "tracks": "wotr:level",
+      "amount": 1000
+    }
   ]
 }

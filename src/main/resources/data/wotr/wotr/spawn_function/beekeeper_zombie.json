@@ -1,0 +1,10 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:apply_mob_variant",
+            "variant": "wotr:zombie/beekeeper_zombie"
+        },
+        "wotr:simple_spawn"
+    ]
+}

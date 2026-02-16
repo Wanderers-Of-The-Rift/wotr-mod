@@ -8,13 +8,13 @@
   ],
   "rewards": [
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:cats_cradle",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:cats_cradle",
       "amount": 10
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:parrots_perch",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:parrots_perch",
       "amount": 10
     }
   ],

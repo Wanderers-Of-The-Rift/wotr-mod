@@ -5,6 +5,7 @@ import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.BundleTask;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.NeedleTask;
+import com.wanderersoftherift.wotr.block.blockentity.anomaly.SliceAnomalyTask;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -15,6 +16,9 @@ public class WotrAnomalyTaskTypes {
 
     public static final Supplier<AnomalyTask.AnomalyTaskType<?>> NEEDLE_TASK = ANOMALY_TASK_TYPES.register("needle",
             () -> NeedleTask.TYPE);
+
+    public static final Supplier<AnomalyTask.AnomalyTaskType<?>> SLICE_TASK = ANOMALY_TASK_TYPES.register("slice",
+            () -> SliceAnomalyTask.TYPE);
 
     public static final Supplier<AnomalyTask.AnomalyTaskType<?>> BUNDLE_TASK = ANOMALY_TASK_TYPES.register("bundle",
             () -> BundleTask.TYPE);

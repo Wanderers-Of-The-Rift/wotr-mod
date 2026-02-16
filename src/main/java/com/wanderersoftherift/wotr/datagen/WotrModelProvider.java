@@ -10,6 +10,7 @@ import com.wanderersoftherift.wotr.client.render.item.emblem.CurrencyEmblemProvi
 import com.wanderersoftherift.wotr.client.render.item.emblem.EmblemSpecialRenderer;
 import com.wanderersoftherift.wotr.client.render.item.properties.select.SelectRuneGemShape;
 import com.wanderersoftherift.wotr.init.WotrBlocks;
+import com.wanderersoftherift.wotr.init.WotrFluids;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.item.runegem.RunegemShape;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -36,17 +37,23 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
+import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.renderer.GeckolibSpecialRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.wanderersoftherift.wotr.init.WotrFluids.FLUID_MAP;
+import static com.wanderersoftherift.wotr.init.WotrFluids.WotrFluid;
 
 public class WotrModelProvider extends ModelProvider {
     public WotrModelProvider(PackOutput output) {
@@ -174,6 +181,9 @@ public class WotrModelProvider extends ModelProvider {
         WotrItems.ESSENCE_ITEMS.forEach((essenceType, essenceItem) -> {
             itemModels.generateFlatItem(essenceItem.get(), ModelTemplates.FLAT_ITEM);
         });
+
+        FLUID_MAP.values().forEach(fluid -> createModelForFluid(blockModels, itemModels, fluid));
+        createModelForFluid(blockModels, itemModels, WotrFluids.FAKE_LAVA);
     }
 
     private void createBlockStatesForTrapBlock(
@@ -415,6 +425,27 @@ public class WotrModelProvider extends ModelProvider {
                                                 }
                                         )
                         )
+        );
+    }
+
+    public void createModelForFluid(
+            BlockModelGenerators blockModels,
+            @NotNull ItemModelGenerators itemModels,
+            WotrFluid fluid) {
+        ResourceLocation resourcelocation = ModelLocationUtils.getModelLocation(Blocks.WATER);
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(fluid.fluidBlock.value(),
+                Variant.variant().with(VariantProperties.MODEL, resourcelocation)));
+
+        itemModels.itemModelOutput.accept(
+                fluid.fluidBucket.get(), new DynamicFluidContainerModel.Unbaked(
+                        new DynamicFluidContainerModel.Textures(
+                                Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")),
+                                Optional.of(ResourceLocation.withDefaultNamespace("item/bucket")), Optional.of(
+                                        ResourceLocation.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid")),
+                                Optional.of(ResourceLocation.fromNamespaceAndPath("neoforge",
+                                        "item/mask/bucket_fluid_cover"))
+                        ), fluid.fluidSource.get(), true, true, false
+                )
         );
     }
 }

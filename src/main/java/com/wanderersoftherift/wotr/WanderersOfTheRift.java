@@ -21,6 +21,7 @@ import com.wanderersoftherift.wotr.init.WotrEntities;
 import com.wanderersoftherift.wotr.init.WotrEntityDataSerializers;
 import com.wanderersoftherift.wotr.init.WotrEntitySubPredicates;
 import com.wanderersoftherift.wotr.init.WotrEquipmentSlotTypes;
+import com.wanderersoftherift.wotr.init.WotrFluids;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrMenuTypes;
 import com.wanderersoftherift.wotr.init.WotrMobEffects;
@@ -70,6 +71,8 @@ import com.wanderersoftherift.wotr.init.worldgen.WotrThemeSources;
 import com.wanderersoftherift.wotr.interop.sophisticatedbackpacks.SophisticatedBackpackInterop;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.RiftTemplates;
 import com.wanderersoftherift.wotr.world.level.levelgen.template.randomizers.RoomRandomizerImpl;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -87,6 +90,8 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
+
+import static com.wanderersoftherift.wotr.init.WotrFluids.FLUID_MAP;
 
 @Mod(WanderersOfTheRift.MODID)
 public class WanderersOfTheRift {
@@ -108,6 +113,10 @@ public class WanderersOfTheRift {
         WotrMenuTypes.MENUS.register(modEventBus);
         WotrMobEffects.MOB_EFFECTS.register(modEventBus);
         WotrSoundEvents.SOUND_EVENTS.register(modEventBus);
+        WotrFluids.FLUID_TYPES.register(modEventBus);
+        WotrFluids.FLUIDS.register(modEventBus);
+        WotrFluids.BLOCKS.register(modEventBus);
+        WotrFluids.ITEMS.register(modEventBus);
 
         // Loot
         WotrLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
@@ -260,6 +269,11 @@ public class WanderersOfTheRift {
     private void registerWidgetLookups(final FMLClientSetupEvent event) {
         RewardDisplays.init();
         GoalDisplays.init();
+
+        FLUID_MAP.values().forEach(fluid -> {
+            ItemBlockRenderTypes.setRenderLayer(fluid.fluidSource.get(), RenderType.TRANSLUCENT);
+            ItemBlockRenderTypes.setRenderLayer(fluid.fluidFlowing.get(), RenderType.TRANSLUCENT);
+        });
     }
 
 }

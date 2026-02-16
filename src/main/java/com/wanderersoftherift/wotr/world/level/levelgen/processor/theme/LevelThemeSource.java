@@ -2,13 +2,16 @@ package com.wanderersoftherift.wotr.world.level.levelgen.processor.theme;
 
 import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
+import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public record LevelThemeSource() implements ThemeSource {
     public static final LevelThemeSource INSTANCE = new LevelThemeSource();
@@ -26,6 +29,15 @@ public record LevelThemeSource() implements ThemeSource {
             return riftData.getTheme().get().value().getProcessors(themePieceType);
         }
         return ThemeSource.defaultThemeProcessors(serverLevel, themePieceType);
+    }
+
+    @Override
+    public Optional<Holder<RiftTheme>> getTheme(ServerLevel serverLevel) {
+        if (serverLevel == null) {
+            return Optional.empty();
+        }
+        var riftData = RiftData.get(serverLevel);
+        return riftData.getTheme();
     }
 
     @Override

@@ -31,8 +31,8 @@
       "amount": 15
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:parrots_perch",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:parrots_perch",
       "amount": 10
     }
   ]

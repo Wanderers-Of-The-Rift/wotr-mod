@@ -3,6 +3,7 @@ package com.wanderersoftherift.wotr.init;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
 import com.wanderersoftherift.wotr.core.rift.objective.ObjectiveType;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +17,7 @@ public class WotrTags {
 
     public static class Blocks {
         public static final TagKey<Block> BANNED_IN_RIFT = createTag("banned_in_rift");
+        public static final TagKey<Block> ATTACKABLE = createTag("attackable");
 
         private static TagKey<Block> createTag(String name) {
             return BlockTags.create(WanderersOfTheRift.id(name));
@@ -113,6 +115,14 @@ public class WotrTags {
 
         private static TagKey<ObjectiveType> createTag(String name) {
             return TagKey.create(WotrRegistries.Keys.OBJECTIVES, ResourceLocation.fromNamespaceAndPath("wotr", name));
+        }
+    }
+
+    public static class ProgressionTracks {
+        public static final TagKey<ProgressionTrack> GUILDS = createTag("guilds");
+
+        private static TagKey<ProgressionTrack> createTag(String name) {
+            return TagKey.create(WotrRegistries.Keys.PROGRESSION_TRACKS, WanderersOfTheRift.id(name));
         }
     }
 }

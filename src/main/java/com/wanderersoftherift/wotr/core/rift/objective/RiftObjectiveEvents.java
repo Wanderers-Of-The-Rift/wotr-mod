@@ -2,24 +2,25 @@ package com.wanderersoftherift.wotr.core.rift.objective;
 
 import com.google.common.collect.ImmutableList;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
+import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.rift.RiftData;
 import com.wanderersoftherift.wotr.core.rift.RiftEntryState;
 import com.wanderersoftherift.wotr.core.rift.RiftEvent;
 import com.wanderersoftherift.wotr.core.rift.RiftLevelManager;
 import com.wanderersoftherift.wotr.core.rift.parameter.RiftParameterData;
 import com.wanderersoftherift.wotr.gui.menu.RiftCompleteMenu;
+import com.wanderersoftherift.wotr.gui.menu.reward.RewardSlot;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.loot.WotrLootContextParams;
 import com.wanderersoftherift.wotr.init.worldgen.WotrRiftConfigDataTypes;
 import com.wanderersoftherift.wotr.network.rift.S2CRiftObjectiveStatusPacket;
+import com.wanderersoftherift.wotr.util.ItemStackHandlerUtil;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -32,8 +33,11 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,8 +45,6 @@ import java.util.Optional;
  */
 @EventBusSubscriber(modid = WanderersOfTheRift.MODID)
 public class RiftObjectiveEvents {
-    private static final ResourceKey<LootTable> SUCCESS_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
-            WanderersOfTheRift.id("rift_objective/success"));
     private static final ResourceKey<LootTable> FAIL_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
             WanderersOfTheRift.id("rift_objective/fail"));
     private static final ResourceKey<LootTable> SURVIVE_TABLE = ResourceKey.create(Registries.LOOT_TABLE,
@@ -94,16 +96,11 @@ public class RiftObjectiveEvents {
         if (entryState.isEmpty()) {
             return;
         }
+
+        // TODO: Do we need rift config for losing a rift?
+        ItemStackHandler rewardItems = generateObjectiveLootFromTable(player, FAIL_TABLE, 0);
         // TODO: what if player dies in multiple rifts simultaneously?
-        player.openMenu(new SimpleMenuProvider(
-                (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
-                        ContainerLevelAccess.create(player.level(), p.getOnPos()), RiftCompleteMenu.FLAG_FAILED,
-                        entryState.statSnapshot().getCustomStatDelta(player)),
-                Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
-        if (player.containerMenu instanceof RiftCompleteMenu menu) {
-            // TODO: Do we need rift config for losing a rift?
-            generateObjectiveLoot(menu, player, FAIL_TABLE, 0);
-        }
+        RiftCompleteMenu.openMenu(player, entryState, rewardItems, List.of(), RiftCompleteMenu.FLAG_FAILED);
         player.setData(WotrAttachments.DEATH_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
     }
 
@@ -129,34 +126,41 @@ public class RiftObjectiveEvents {
 
         NeoForge.EVENT_BUS.post(new RiftEvent.PlayerCompletedRift(player, success, riftLevel, riftData.getConfig()));
 
-        player.openMenu(new SimpleMenuProvider(
-                (containerId, playerInventory, p) -> new RiftCompleteMenu(containerId, playerInventory,
-                        ContainerLevelAccess.create(player.level(), p.getOnPos()),
-                        success ? RiftCompleteMenu.FLAG_SUCCESS : RiftCompleteMenu.FLAG_SURVIVED, exitedRiftEntryState
-                                .statSnapshot()
-                                .getCustomStatDelta(player)/*
-                                                            * this will include stats from subrifts, maybe todo only
-                                                            * this specific rift?
-                                                            */),
-                Component.translatable(WanderersOfTheRift.translationId("container", "rift_complete"))));
-
-        if (player.containerMenu instanceof RiftCompleteMenu menu && riftData.getConfig() != null) {
-            generateObjectiveLoot(menu, player, success ? SUCCESS_TABLE : SURVIVE_TABLE, riftData.getConfig().tier());
+        ItemStackHandler rewardItems = null;
+        List<RewardSlot> nonItemRewards = new ArrayList<>();
+        if (success) {
+            rewardItems = new ItemStackHandler(RiftCompleteMenu.NUM_REWARD_SLOTS);
+            for (Reward reward : objective.get().getRewards()) {
+                if (reward.isItem()) {
+                    ItemStackHandlerUtil.addOrGiveToPlayerOrDrop(reward.generateItem(), rewardItems, player);
+                } else {
+                    nonItemRewards.add(new RewardSlot(nonItemRewards.size(), reward));
+                }
+            }
+        } else if (riftData.getConfig() != null) {
+            rewardItems = generateObjectiveLootFromTable(player, SURVIVE_TABLE, riftData.getConfig().tier());
         }
-        player.setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
+
+        if (rewardItems != null) {
+            RiftCompleteMenu.openMenu(player, exitedRiftEntryState, rewardItems, nonItemRewards,
+                    success ? RiftCompleteMenu.FLAG_SUCCESS : RiftCompleteMenu.FLAG_SURVIVED);
+            player.setData(WotrAttachments.EXITED_RIFT_ENTRY_STATE, RiftEntryState.EMPTY);
+        }
     }
 
-    private static void generateObjectiveLoot(
-            RiftCompleteMenu menu,
+    private static ItemStackHandler generateObjectiveLootFromTable(
             ServerPlayer player,
             ResourceKey<LootTable> table,
             int riftTier) {
+        ItemStackHandler itemRewards = new ItemStackHandler(RiftCompleteMenu.NUM_REWARD_SLOTS);
         ServerLevel level = player.serverLevel();
         LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(table);
         LootParams lootParams = new LootParams.Builder(level).withParameter(LootContextParams.THIS_ENTITY, player)
                 .withParameter(WotrLootContextParams.RIFT_TIER, riftTier)
                 .create(LootContextParamSets.EMPTY);
-        lootTable.getRandomItems(lootParams).forEach(item -> menu.addReward(item, player));
+        lootTable.getRandomItems(lootParams)
+                .forEach(item -> ItemStackHandlerUtil.addOrGiveToPlayerOrDrop(item, itemRewards, player));
+        return itemRewards;
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)

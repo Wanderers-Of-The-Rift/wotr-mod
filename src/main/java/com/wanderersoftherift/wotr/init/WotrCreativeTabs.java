@@ -2,7 +2,7 @@ package com.wanderersoftherift.wotr.init;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.item.ability.ActivatableAbility;
 import com.wanderersoftherift.wotr.item.currency.CurrencyProvider;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -109,6 +109,7 @@ public class WotrCreativeTabs {
                         output.accept(WotrItems.NOIR_HELMET);
                         output.accept(WotrItems.COLOR_HELMET);
                         WotrItems.DEV_BLOCK_ITEMS.forEach(item -> output.accept(item.get()));
+                        WotrFluids.FLUID_MAP.values().forEach(wotrFluid -> output.accept(wotrFluid.fluidBucket));
                     })
                     .build());
 

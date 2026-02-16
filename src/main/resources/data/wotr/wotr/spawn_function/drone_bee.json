@@ -1,0 +1,21 @@
+{
+    "type": "wotr:list",
+    "functions": [
+        {
+            "type": "wotr:chance",
+            "chance": 0.2,
+            "functions": [
+                {
+                    "type": "wotr:add_passenger",
+                    "spawn": {
+                        "entity_type": "wotr:rift_zombie",
+                        "spawn_functions": [
+                            "wotr:beekeeper_zombie"
+                        ]
+                    }
+                }
+            ]
+        },
+        "wotr:simple_spawn"
+    ]
+}

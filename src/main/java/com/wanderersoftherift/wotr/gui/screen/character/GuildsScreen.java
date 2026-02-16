@@ -1,15 +1,17 @@
 package com.wanderersoftherift.wotr.gui.screen.character;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.Guild;
-import com.wanderersoftherift.wotr.core.guild.GuildStatus;
-import com.wanderersoftherift.wotr.core.guild.UnclaimedGuildRewards;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTracker;
 import com.wanderersoftherift.wotr.gui.menu.character.GuildMenu;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerEntry;
 import com.wanderersoftherift.wotr.gui.widget.ScrollContainerWidget;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
-import com.wanderersoftherift.wotr.network.guild.ClaimGuildRewardPayload;
+import com.wanderersoftherift.wotr.init.WotrRegistries;
+import com.wanderersoftherift.wotr.init.WotrTags;
+import com.wanderersoftherift.wotr.network.guild.ClaimTrackRewardPayload;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
@@ -23,6 +25,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +34,7 @@ import java.util.List;
 public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
 
     private ScrollContainerWidget<GuildDisplay> guildsDisplay;
-    private GuildStatus guildStatus;
+    private ProgressionTracker progressionTracker;
 
     public GuildsScreen(GuildMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -40,12 +43,19 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
     @Override
     protected void init() {
         super.init();
-        guildStatus = minecraft.player.getData(WotrAttachments.GUILD_STATUS);
-        List<Holder<Guild>> guilds = guildStatus.getGuildsWithStanding();
-        UnclaimedGuildRewards unclaimedGuildRewards = minecraft.player.getData(WotrAttachments.UNCLAIMED_GUILD_REWARDS);
-        guildsDisplay = new ScrollContainerWidget<>(300, 30, 200, 140, guilds.stream()
-                .map(guild -> new GuildDisplay(font, guild, guildStatus, unclaimedGuildRewards.hasRewards(guild)))
-                .toList());
+        progressionTracker = minecraft.player.getData(WotrAttachments.PROGRESSION_TRACKER);
+        List<GuildDisplay> displays = new ArrayList<>();
+        Minecraft.getInstance().player.registryAccess()
+                .lookupOrThrow(WotrRegistries.Keys.PROGRESSION_TRACKS)
+                .getTagOrEmpty(WotrTags.ProgressionTracks.GUILDS)
+                .forEach(guild -> {
+                    if (progressionTracker.getPoints(guild) > 0 || progressionTracker.getRank(guild) > 0) {
+                        displays.add(new GuildDisplay(font, guild, progressionTracker,
+                                progressionTracker.hasUnclaimedRewards(guild)));
+                    }
+                }
+                );
+        guildsDisplay = new ScrollContainerWidget<>(300, 30, 200, 140, displays);
         addRenderableWidget(guildsDisplay);
     }
 
@@ -68,20 +78,20 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
                 .translatable(WanderersOfTheRift.translationId("container", "guilds.claim_reward"));
 
         private final Font font;
-        private final Holder<Guild> guild;
-        private final GuildStatus status;
+        private final Holder<ProgressionTrack> track;
+        private final ProgressionTracker status;
         private final Button claimRewardsButton;
         private final boolean hasRewards;
 
-        public GuildDisplay(Font font, Holder<Guild> guild, GuildStatus status, boolean hasRewards) {
-            super(0, 0, 300, DISPLAY_HEIGHT, Guild.getDisplayName(guild));
+        public GuildDisplay(Font font, Holder<ProgressionTrack> track, ProgressionTracker status, boolean hasRewards) {
+            super(0, 0, 300, DISPLAY_HEIGHT, ProgressionTrack.getDisplayName(track));
             this.font = font;
-            this.guild = guild;
+            this.track = track;
             this.status = status;
             this.hasRewards = hasRewards;
             this.claimRewardsButton = new Button.Builder(CLAIM_MESSAGE, button -> {
                 if (hasRewards) {
-                    PacketDistributor.sendToServer(new ClaimGuildRewardPayload(guild));
+                    PacketDistributor.sendToServer(new ClaimTrackRewardPayload(track));
                 }
             }).pos(0, 0).size(font.width(CLAIM_MESSAGE) + 8, font.lineHeight + 8).build();
         }
@@ -102,21 +112,23 @@ public class GuildsScreen extends BaseCharacterScreen<GuildMenu> {
 
         @Override
         protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            guiGraphics.blit(RenderType::guiTextured, guild.value().icon32(), getX() + 4, getY() + 4, 0, 0, EMBLEM_SIZE,
-                    EMBLEM_SIZE, EMBLEM_SIZE, EMBLEM_SIZE);
+            track.value().displayIcon().ifPresent(icon -> {
+                guiGraphics.blit(RenderType::guiTextured, icon, getX() + 4, getY() + 4, 0, 0, EMBLEM_SIZE, EMBLEM_SIZE,
+                        EMBLEM_SIZE, EMBLEM_SIZE);
+            });
             guiGraphics.drawString(font, getMessage(), getX() + EMBLEM_SIZE + 8, getY() + 8,
                     ChatFormatting.WHITE.getColor(), true);
-            int rank = status.getRank(guild);
+            int rank = status.getRank(track);
             guiGraphics.drawString(font,
                     Component.translatable(WanderersOfTheRift.translationId("container", "guild.rank"),
-                            Guild.getRankTitle(guild, rank)),
+                            ProgressionTrack.getRankTitle(track, rank)),
                     getX() + EMBLEM_SIZE + 8, getY() + 8 + 2 * font.lineHeight, ChatFormatting.WHITE.getColor(), false);
 
             Component reputationLabel;
-            if (rank < guild.value().ranks().size()) {
+            if (rank + 1 <= track.value().rankCount()) {
                 reputationLabel = Component.translatable(
-                        WanderersOfTheRift.translationId("container", "guild.reputation"), status.getReputation(guild),
-                        guild.value().getRank(rank + 1).reputationRequirement());
+                        WanderersOfTheRift.translationId("container", "guild.reputation"), status.getPoints(track),
+                        track.value().getRank(rank + 1).requirement());
 
             } else {
                 reputationLabel = Component

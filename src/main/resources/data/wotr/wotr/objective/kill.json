@@ -3,6 +3,8 @@
   "goals": [
     {
       "type": "wotr:kill_mob",
+      "mob": "#wotr:rift_mobs",
+      "mob_label": "mobgroup.wotr.rift_monsters",
       "count": {
         "type": "wotr:sum",
         "values": [
@@ -19,6 +21,17 @@
           10
         ]
       }
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table": "wotr:rift_objective/success"
+    },
+    {
+      "type": "wotr:progression_track",
+      "tracks": "wotr:level",
+      "amount": 1000
     }
   ]
 }

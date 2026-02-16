@@ -14,11 +14,9 @@ import com.wanderersoftherift.wotr.abilities.triggers.TrackableTrigger;
 import com.wanderersoftherift.wotr.abilities.upgrade.AbilityUpgrade;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyReward;
 import com.wanderersoftherift.wotr.block.blockentity.anomaly.AnomalyTask;
-import com.wanderersoftherift.wotr.block.blockentity.anomaly.BattleTask;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.core.goal.Goal;
 import com.wanderersoftherift.wotr.core.goal.GoalProvider;
-import com.wanderersoftherift.wotr.core.guild.Guild;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
 import com.wanderersoftherift.wotr.core.inventory.containers.ContainerType;
 import com.wanderersoftherift.wotr.core.inventory.slot.WotrEquipmentSlot;
 import com.wanderersoftherift.wotr.core.npc.NpcIdentity;
@@ -34,6 +32,7 @@ import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RegisteredRif
 import com.wanderersoftherift.wotr.core.rift.parameter.definitions.RiftParameter;
 import com.wanderersoftherift.wotr.entity.mob.RiftMobVariantData;
 import com.wanderersoftherift.wotr.entity.player.PrimaryStatistic;
+import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
@@ -41,6 +40,7 @@ import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
+import com.wanderersoftherift.wotr.spawning.functions.SpawnFunction;
 import com.wanderersoftherift.wotr.util.listedit.EditType;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
@@ -136,7 +136,7 @@ public class WotrRegistries {
             Keys.TARGET_AREA_SHAPES).create();
     public static final Registry<AnomalyTask.AnomalyTaskType<?>> ANOMALY_TASK_TYPE = new RegistryBuilder<>(
             Keys.ANOMALY_TASK_TYPE).sync(true).create();
-    public static final Registry<MapCodec<? extends BattleTask.SpawnFunction>> SPAWN_FUNCTION_TYPES = new RegistryBuilder<>(
+    public static final Registry<MapCodec<? extends SpawnFunction>> SPAWN_FUNCTION_TYPES = new RegistryBuilder<>(
             Keys.SPAWN_FUNCTION_TYPES).sync(true).create();
 
     public static final class Keys {
@@ -155,6 +155,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("objective"));
         public static final ResourceKey<Registry<RunegemData>> RUNEGEM_DATA = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("runegem_data"));
+
+        // Riftgen
         public static final ResourceKey<Registry<MapCodec<? extends InputBlockState>>> INPUT_BLOCKSTATE_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("input_blockstate_type"));
         public static final ResourceKey<Registry<MapCodec<? extends ModifierEffect>>> MODIFIER_EFFECT_TYPES = ResourceKey
@@ -177,8 +179,8 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("rift_parameter_type"));
         public static final ResourceKey<Registry<RiftMobVariantData>> MOB_VARIANTS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_variant"));
-        public static final ResourceKey<Registry<Guild>> GUILDS = ResourceKey
-                .createRegistryKey(WanderersOfTheRift.id("guild"));
+        public static final ResourceKey<Registry<ProgressionTrack>> PROGRESSION_TRACKS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("progression_track"));
         public static final ResourceKey<Registry<NpcIdentity>> NPCS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("npc"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
@@ -250,8 +252,11 @@ public class WotrRegistries {
         // Mobs
         public static final ResourceKey<Registry<MapCodec<? extends NpcInteraction>>> MOB_INTERACTIONS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("mob_interactions"));
-        public static final ResourceKey<Registry<MapCodec<? extends BattleTask.SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
+        public static final ResourceKey<Registry<MapCodec<? extends SpawnFunction>>> SPAWN_FUNCTION_TYPES = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("spawn_function_type"));
+        public static final ResourceKey<Registry<SpawnFunction>> SPAWN_FUNCTIONS = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("spawn_function"));
+
         public static final ResourceKey<Registry<AnomalyTask<?>>> ANOMALY_TASK = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("anomaly_task"));
         public static final ResourceKey<Registry<AnomalyTask.AnomalyTaskType<?>>> ANOMALY_TASK_TYPE = ResourceKey
@@ -309,8 +314,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.MODIFIER_EFFECTS, ModifierEffect.DIRECT_CODEC, ModifierEffect.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MODIFIERS, Modifier.DIRECT_CODEC, Modifier.DIRECT_CODEC);
         event.dataPackRegistry(Keys.RIFT_THEMES, RiftTheme.DIRECT_CODEC, RiftTheme.DIRECT_SYNC_CODEC);
-        event.dataPackRegistry(Keys.RIFT_PARAMETER_CONFIGS, RiftParameter.DEFINITION_CODEC,
-                RiftParameter.DEFINITION_CODEC);
+        event.dataPackRegistry(Keys.RIFT_PARAMETER_CONFIGS, RiftParameter.CODEC, RiftParameter.CODEC);
         event.dataPackRegistry(Keys.RUNEGEM_DATA, RunegemData.CODEC, RunegemData.CODEC);
         event.dataPackRegistry(Keys.GEAR_IMPLICITS_CONFIG, ImplicitConfig.CODEC, ImplicitConfig.CODEC);
         event.dataPackRegistry(Keys.ABILITY_UPGRADES, AbilityUpgrade.CODEC, AbilityUpgrade.CODEC);
@@ -319,7 +323,7 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.OBJECTIVES, ObjectiveType.DIRECT_CODEC, ObjectiveType.DIRECT_CODEC);
         event.dataPackRegistry(Keys.MOB_VARIANTS, RiftMobVariantData.CODEC, RiftMobVariantData.CODEC);
         event.dataPackRegistry(Keys.CURRENCIES, Currency.DIRECT_CODEC, Currency.DIRECT_CODEC);
-        event.dataPackRegistry(Keys.GUILDS, Guild.DIRECT_CODEC, Guild.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.PROGRESSION_TRACKS, ProgressionTrack.DIRECT_CODEC, ProgressionTrack.DIRECT_CODEC);
         event.dataPackRegistry(Keys.QUESTS, Quest.DIRECT_CODEC, Quest.DIRECT_CODEC);
         event.dataPackRegistry(Keys.PRIMARY_STATISTICS, PrimaryStatistic.DIRECT_CODEC, PrimaryStatistic.DIRECT_CODEC);
         event.dataPackRegistry(Keys.GENERATOR_PRESETS, RiftGenerationConfig.CODEC, RiftGenerationConfig.CODEC);
@@ -327,5 +331,6 @@ public class WotrRegistries {
         event.dataPackRegistry(Keys.ANOMALY_REWARD, AnomalyReward.DIRECT_CODEC, AnomalyReward.DIRECT_CODEC);
         event.dataPackRegistry(Keys.ABILITY_RESOURCES, AbilityResource.DIRECT_CODEC, AbilityResource.DIRECT_CODEC);
         event.dataPackRegistry(Keys.NPCS, NpcIdentity.DIRECT_CODEC, NpcIdentity.DIRECT_CODEC);
+        event.dataPackRegistry(Keys.SPAWN_FUNCTIONS, SpawnFunction.CODEC, SpawnFunction.CODEC);
     }
 }

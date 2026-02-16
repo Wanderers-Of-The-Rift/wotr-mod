@@ -7,10 +7,12 @@ import net.minecraft.util.RandomSource;
 
 import java.util.function.Function;
 
-public record PowRiftParameter(RiftParameter base, RiftParameter exp) implements RegisteredRiftParameter {
+public record PowRiftParameter(RiftParameterDefinition base, RiftParameterDefinition exp)
+        implements RegisteredRiftParameter {
     public static final MapCodec<PowRiftParameter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            RiftParameter.CODEC.optionalFieldOf("base", TierRiftParameter.INSTANCE).forGetter(PowRiftParameter::base),
-            RiftParameter.CODEC.optionalFieldOf("exponent", TierRiftParameter.INSTANCE)
+            RiftParameterDefinition.CODEC.optionalFieldOf("base", TierRiftParameter.INSTANCE)
+                    .forGetter(PowRiftParameter::base),
+            RiftParameterDefinition.CODEC.optionalFieldOf("exponent", TierRiftParameter.INSTANCE)
                     .forGetter(PowRiftParameter::exp))
             .apply(instance, PowRiftParameter::new));
 

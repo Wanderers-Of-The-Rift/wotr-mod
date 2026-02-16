@@ -48,8 +48,13 @@
       "loot_table" : "wotr:chests/wooden"
     },
     {
-      "type": "wotr:reputation",
-      "guilds": "wotr:cats_cradle",
+      "type": "wotr:progression_track",
+      "tracks": "wotr:cats_cradle",
+      "amount": 10
+    },
+    {
+      "type": "wotr:currency",
+      "currency": "wotr:coin",
       "amount": 10
     }
   ]

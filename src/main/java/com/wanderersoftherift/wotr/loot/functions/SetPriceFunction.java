@@ -3,7 +3,7 @@ package com.wanderersoftherift.wotr.loot.functions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Currency;
 import com.wanderersoftherift.wotr.core.npc.trading.Price;
 import com.wanderersoftherift.wotr.init.WotrDataComponentType;
 import com.wanderersoftherift.wotr.init.loot.WotrLootItemFunctionTypes;

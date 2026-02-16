@@ -27,7 +27,6 @@ import net.minecraft.world.RandomSequences;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -372,9 +371,10 @@ public final class RiftLevelManager {
             RiftConfig config) {
         var voidBiome = overworld.registryAccess().lookupOrThrow(Registries.BIOME).get(Biomes.THE_VOID).orElse(null);
         if (voidBiome == null) {
-            return null;
+            throw new IllegalStateException("Missing biome for The Void");
         }
-        return new FastRiftGenerator(new FixedBiomeSource(voidBiome), layerCount, dimensionHeightBlocks, config);
+        return new FastRiftGenerator(config.theme().value().biome().orElse(voidBiome), layerCount,
+                dimensionHeightBlocks, config);
     }
 
     private static ServerLevel createRift(
@@ -409,7 +409,7 @@ public final class RiftLevelManager {
         riftData.setConfig(config);
 
         riftLevel.getData(WotrAttachments.OBJECTIVE_DATA)
-                .setObjective(config.objective().value().generate(riftLevel, config));
+                .setObjective(config.objective().value().generateObjective(riftLevel, config));
 
         return riftLevel;
     }

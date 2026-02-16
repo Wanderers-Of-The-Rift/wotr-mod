@@ -17,19 +17,27 @@ import java.util.Optional;
 /**
  * Predicate for filtering entities for ability targeting.
  * <p>
- * The predicate can either be ALL (accept everything) NONE (reject everything) or {@link Filter}. The filter predicate
- * wraps the standard {@link EntityPredicate} while providing targeting specific options.
+ * The predicate can either be ALL (accept everything) NONE (reject everything) or {@link Filter} or an operator and
+ * list. The filter predicate wraps the standard {@link EntityPredicate} while providing targeting specific options. The
+ * operator and list variant allows combining multiple filters or new operators and lists with logical operators.
  * </p>
  */
-public sealed interface TargetEntityPredicate {
+public sealed interface TargetEntityPredicate
+        permits TargetEntityPredicate.Filter, TargetEntityPredicate.Trivial, OperatorPredicate {
 
-    Codec<TargetEntityPredicate> CODEC = Codec.either(StringRepresentable.fromEnum(Trivial::values), Filter.CODEC)
-            .xmap(either -> either.left().isPresent() ? either.left().get() : either.right().get(), predicate -> {
-                if (predicate instanceof Filter filter) {
-                    return Either.right(filter);
-                }
-                return Either.left((Trivial) predicate);
-            });
+    Codec<TargetEntityPredicate> NON_TRIVIAL_CODEC = Codec
+            .either(Codec.lazyInitialized(() -> OperatorPredicate.CODEC), Filter.CODEC
+            )
+            .xmap(either -> either.map(operator -> (TargetEntityPredicate) operator, f -> f),
+                    predicate -> predicate instanceof OperatorPredicate o ? Either.left(o)
+                            : Either.right((Filter) predicate)
+            );
+
+    Codec<TargetEntityPredicate> CODEC = Codec.either(StringRepresentable.fromEnum(Trivial::values), NON_TRIVIAL_CODEC
+    )
+            .xmap(either -> either.map(trivial -> (TargetEntityPredicate) trivial, predicate -> predicate),
+                    predicate -> predicate instanceof Trivial t ? Either.left(t) : Either.right(predicate)
+            );
 
     /**
      * @param target  The entity to test
@@ -55,7 +63,9 @@ public sealed interface TargetEntityPredicate {
                 Codec.BOOL.optionalFieldOf("exclude_source", false).forGetter(Filter::excludeSource)
         ).apply(instance, Filter::new));
 
+        @Override
         public boolean matches(Entity target, HitResult source, AbilityContext context) {
+
             if (excludeCaster && target == context.caster()) {
                 return false;
             }
@@ -99,4 +109,21 @@ public sealed interface TargetEntityPredicate {
         }
     }
 
+    enum LogicalOperator implements StringRepresentable {
+        AND("and"),
+        OR("or"),
+        NOT("not");
+
+        public static final Codec<LogicalOperator> CODEC = StringRepresentable.fromEnum(LogicalOperator::values);
+        private String id;
+
+        LogicalOperator(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return id;
+        }
+    }
 }

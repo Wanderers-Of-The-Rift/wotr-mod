@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.network.guild;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Wallet;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;

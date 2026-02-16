@@ -19,6 +19,7 @@ import com.wanderersoftherift.wotr.world.level.levelgen.template.SerializableRif
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
@@ -28,8 +29,9 @@ import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -55,7 +57,7 @@ import static net.minecraft.world.level.block.Blocks.AIR;
 public class FastRiftGenerator extends ChunkGenerator {
 
     public static final MapCodec<FastRiftGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            BiomeSource.CODEC.fieldOf("biome_source").forGetter(FastRiftGenerator::getBiomeSource),
+            Biome.CODEC.fieldOf("default_biome").forGetter(FastRiftGenerator::getDefaultBiome),
             Codec.INT.fieldOf("layer_count").forGetter(FastRiftGenerator::layerCount),
             Codec.INT.fieldOf("height_blocks").forGetter(FastRiftGenerator::getDimensionHeightBlocks),
             RiftConfig.CODEC.fieldOf("rift").forGetter(FastRiftGenerator::getRiftConfig)
@@ -66,6 +68,7 @@ public class FastRiftGenerator extends ChunkGenerator {
     public static final int SEED_ADJUSTMENT_ROOM_GENERATOR = 949_616_156;
     public static final int SEED_ADJUSTMENT_CORRIDOR_BLENDER = 496_415;
 
+    private final Holder<Biome> defaultBiome;
     private final int layerCount;
     private final int dimensionHeightBlocks;
     private final RiftGenerationPerformanceMetrics riftGenerationPerformanceMetrics = new RiftGenerationPerformanceMetrics();
@@ -75,8 +78,9 @@ public class FastRiftGenerator extends ChunkGenerator {
     private final PositionalRandomFactory roomGeneratorRNG;
     private final SerializableRiftGeneratable filler;
 
-    public FastRiftGenerator(BiomeSource biomeSource, int layerCount, int dimensionHeightBlocks, RiftConfig config) {
-        super(biomeSource);
+    public FastRiftGenerator(Holder<Biome> defaultBiome, int layerCount, int dimensionHeightBlocks, RiftConfig config) {
+        super(new FixedBiomeSource(defaultBiome));
+        this.defaultBiome = defaultBiome;
         this.layerCount = layerCount;
         this.dimensionHeightBlocks = dimensionHeightBlocks;
         this.config = config;
@@ -97,6 +101,10 @@ public class FastRiftGenerator extends ChunkGenerator {
 
     public RiftConfig getRiftConfig() {
         return config;
+    }
+
+    public Holder<Biome> getDefaultBiome() {
+        return defaultBiome;
     }
 
     public RiftGenerationConfig getRiftGenerationConfig() {
@@ -127,7 +135,6 @@ public class FastRiftGenerator extends ChunkGenerator {
                             this.getRiftConfig().seed() + SEED_ADJUSTMENT_CORRIDOR_BLENDER),
                     level);
         }
-        super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
     @Override
@@ -174,6 +181,15 @@ public class FastRiftGenerator extends ChunkGenerator {
             runRiftGeneration(chunk, level);
             return chunk;
         }, Thread::startVirtualThread);
+    }
+
+    @Override
+    public CompletableFuture<ChunkAccess> createBiomes(
+            RandomState randomState,
+            Blender blender,
+            StructureManager structureManager,
+            ChunkAccess chunk) {
+        return CompletableFuture.completedFuture(chunk);
     }
 
     private void runRiftGeneration(ChunkAccess chunk, ServerLevelAccessor level) {

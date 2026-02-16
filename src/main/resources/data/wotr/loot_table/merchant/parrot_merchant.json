@@ -87,8 +87,8 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
                   "min": 1,
                   "max": 2
                 }
@@ -124,8 +124,8 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
                   "min": 3,
                   "max": 4
                 }
@@ -161,8 +161,8 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
                   "min": 5
                 }
               }
@@ -306,10 +306,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 0,
-                  "max": 0
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+                  "min": 1,
+                  "max": 1
                 }
               }
             }
@@ -337,10 +337,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 1,
-                  "max": 1
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+"min": 2,
+"max": 2
                 }
               }
             }
@@ -368,10 +368,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 2,
-                  "max": 2
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+"min": 3,
+"max": 3
                 }
               }
             }
@@ -399,10 +399,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 3,
-                  "max": 3
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+"min": 4,
+"max": 4
                 }
               }
             }
@@ -430,10 +430,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 4,
-                  "max": 4
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+"min": 5,
+"max": 5
                 }
               }
             }
@@ -461,10 +461,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 5,
-                  "max": 5
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+"min": 6,
+"max": 6
                 }
               }
             }
@@ -492,9 +492,9 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:parrots_perch",
-                  "min": 6
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:parrots_perch",
+                  "min": 7
                 }
               }
             }

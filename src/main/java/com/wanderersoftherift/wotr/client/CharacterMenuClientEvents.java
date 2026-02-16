@@ -12,6 +12,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.GUILD_MENU_KEY;
+import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.MAIN_CHARACTER_MENU_KEY;
 import static com.wanderersoftherift.wotr.init.client.WotrKeyMappings.QUEST_MENU_KEY;
 
 /**
@@ -28,6 +29,9 @@ public final class CharacterMenuClientEvents {
             return;
         }
 
+        if (MAIN_CHARACTER_MENU_KEY.consumeClick()) {
+            PacketDistributor.sendToServer(new OpenCharacterMenuPayload(WotrCharacterMenuItems.MAIN));
+        }
         if (GUILD_MENU_KEY.consumeClick()) {
             PacketDistributor.sendToServer(new OpenCharacterMenuPayload(WotrCharacterMenuItems.GUILDS));
         }

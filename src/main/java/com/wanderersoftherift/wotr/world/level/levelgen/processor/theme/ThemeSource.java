@@ -7,9 +7,11 @@ import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.RiftTheme;
 import com.wanderersoftherift.wotr.world.level.levelgen.theme.ThemePieceType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public interface ThemeSource {
             ServerLevel world,
             BlockPos structurePos,
             ThemePieceType themePieceType);
+
+    Optional<Holder<RiftTheme>> getTheme(ServerLevel serverLevel);
+
+    default Optional<Holder<Biome>> getBiome(ServerLevel serverLevel) {
+        return getTheme(serverLevel).flatMap(theme -> theme.value().biome());
+    }
 
     ThemeCache reloadCache(ServerLevel serverLevel, BlockPos structurePos, ThemePieceType themePieceType);
 

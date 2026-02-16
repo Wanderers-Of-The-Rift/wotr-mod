@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.HolderSetCodec;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +16,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BundleContents;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public record BundleTask(Map<HolderSet<Item>, IntProvider> rolls) implements Ano
             AnomalyBlockEntity entity,
             BundleTaskState state) {
         var handItem = player.getItemInHand(hand);
-        if (!handItem.is(Items.BUNDLE)) {
+        if (!handItem.is(ItemTags.BUNDLES)) {
             return InteractionResult.PASS;
         }
         var content = handItem.get(DataComponents.BUNDLE_CONTENTS);

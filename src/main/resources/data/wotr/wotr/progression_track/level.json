@@ -1,0 +1,19 @@
+{
+  "reward_icon": "wotr:textures/progression_track/xp.png",
+  "toast_title_id": "toast.wotr.level_up",
+  "rank_format_id": "track.wotr.level.rank_format",
+  "points_id": "track.wotr.points.xp",
+  "custom_rank_titles": false,
+  "ranks": [
+    {
+      "size": 99,
+      "cost": 1000,
+      "rewards": [
+        {
+          "type": "wotr:loot_table",
+          "loot_table": "wotr:chests/wooden"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1079 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "block_variants"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "biomeswevegone"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "stoneworks"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "chisel"
+        }
+    ],
+    "processors": [
+        {
+            "processor_type": "wotr:spot_gradient",
+            "noise_scale_x": 0.075,
+            "noise_scale_y": 0.075,
+            "noise_scale_z": 0.075,
+            "replacements": [
+                {
+                    "input_state": "wotr:processor_block_1",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:snow_block",
+                            "step_size": 0.175
+                        },
+                        {
+                            "output_state": "minecraft:packed_ice",
+                            "step_size": 0.225
+                        },
+                        {
+                            "output_state": "minecraft:deepslate",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:soul_sand",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:sculk",
+                            "step_size": 0.175
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cracked_deepslate_bricks",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:chiseled_deepslate",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:deepslate_brick_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:cracked_deepslate_brick_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:deepslate_brick_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:cracked_deepslate_brick_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:deepslate_brick_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:cracked_deepslate_brick_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:powder_snow",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:powder_snow",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_1_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:deepslate",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:polished_deepslate",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tiles",
+                            "step_size": 0.25
+                        },
+                        {
+                            "output_state": "minecraft:soul_soil",
+                            "step_size": 0.25
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:deepslate_bricks",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:chiseled_deepslate",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:polished_deepslate_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tile_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:polished_deepslate_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tile_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:polished_deepslate_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tile_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:powder_snow",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:powder_snow",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_2_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:snow_block",
+                            "step_size": 0.4
+                        },
+                        {
+                            "output_state": "minecraft:soul_soil",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:deepslate",
+                            "step_size": 0.2
+                        },
+                        {
+                            "output_state": "minecraft:sculk",
+                            "step_size": 0.2
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:deepslate_pillar",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate_slab",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate_stairs",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate_wall",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:soft_bricks/deepslate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:solid_bricks/deepslate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_3_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:sculk",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:packed_borealis_ice",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "biomeswevegone:packed_black_ice",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:panel/ice",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tile_slab",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_brick_slab",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tile_stairs",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_brick_stairs",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:stripped_warped_hyphae_wall",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_tile_wall",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:deepslate_brick_wall",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:dent/deepslate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:large_tile/deepslate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_4_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:basalt",
+                            "step_size": 0.334
+                        },
+                        {
+                            "output_state": "minecraft:smooth_basalt",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:sculk",
+                            "step_size": 0.333
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:polished_basalt",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:chiseled_basalt",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:basalt_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:smooth_basalt_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:basalt_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:smooth_basalt_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:basalt_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:smooth_basalt_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:basalt_bricks",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:basalt_tiles",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_5_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_planks",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_stem",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_slab",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_stairs",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "block_variants:stripped_warped_hyphae_wall",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_wart_block",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_wart_block",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_6_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:warped_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:soft_bricks/deepslate",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "chisel:solid_bricks/deepslate",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:circular/deepslate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:deepslate_shingle_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:deepslate_plate_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:deepslate_shingle_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:deepslate_plate_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:deepslate_shingle_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "stoneworks:deepslate_plate_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_button",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:soft_bricks/ice",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "chisel:solid_bricks/ice",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "chisel:tiles_medium/ice",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "chisel:triple_bricks/ice",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_7_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:cracked_deepslate_tiles",
+                            "step_size": 0.333
+                        },
+                        {
+                            "output_state": "minecraft:blue_ice",
+                            "step_size": 0.334
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_directional_pillar",
+                    "output_steps": [
+                        {
+                            "output_state": "stoneworks:deepslate_pillar",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_slab",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate_slab",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:cracked_deepslate_tile_slab",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_stairs",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate_stairs",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:cracked_deepslate_tile_stairs",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_wall",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:cobbled_deepslate_wall",
+                            "step_size": 0.5
+                        },
+                        {
+                            "output_state": "block_variants:cracked_deepslate_tile_wall",
+                            "step_size": 0.5
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_button",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:polished_blackstone_button",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_pressure_plate",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:polished_blackstone_pressure_plate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_fence",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_fence_gate",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_fence_gate",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_glass",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:powder_snow",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_glass_pane",
+                    "output_steps": [
+                        {
+                            "output_state": "minecraft:powder_snow",
+                            "step_size": 1.0
+                        }
+                    ]
+                },
+                {
+                    "input_state": "wotr:processor_block_8_trapdoor",
+                    "output_steps": [
+                        {
+                            "output_state": "biomeswevegone:ebony_trapdoor",
+                            "step_size": 1.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "processor_type": "wotr:anomaly",
+            "replace_with_anomaly": "minecraft:end_rod",
+            "tasks": {
+                "wotr:deepfrost/battle": 3.0,
+                "wotr:slice_anomaly": 1.0,
+                "wotr:deepfrost/essence": 1.0
+            },
+            "rewards": {
+                "wotr:strength5": 10.0,
+                "wotr:ender_pearl": 10.0
+            }
+        }
+    ]
+}

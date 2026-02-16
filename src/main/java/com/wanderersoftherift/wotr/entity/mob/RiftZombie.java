@@ -54,4 +54,9 @@ public class RiftZombie extends Zombie implements VariedRiftMob {
         super.readAdditionalSaveData(tag);
         loadVariantData(tag);
     }
+
+    @Override
+    protected boolean convertsInWater() {
+        return false;
+    }
 }

@@ -1,8 +1,8 @@
 package com.wanderersoftherift.wotr.gui.extension;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
-import com.wanderersoftherift.wotr.core.guild.currency.Currency;
-import com.wanderersoftherift.wotr.core.guild.currency.Wallet;
+import com.wanderersoftherift.wotr.core.currency.Currency;
+import com.wanderersoftherift.wotr.core.currency.Wallet;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.ChatFormatting;

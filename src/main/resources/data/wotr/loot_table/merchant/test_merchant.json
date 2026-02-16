@@ -87,8 +87,8 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
                   "min": 1,
                   "max": 2
                 }
@@ -124,8 +124,8 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
                   "min": 3,
                   "max": 4
                 }
@@ -161,8 +161,8 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
                   "min": 5
                 }
               }
@@ -255,10 +255,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 0,
-                  "max": 0
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+                  "min": 1,
+                  "max": 1
                 }
               }
             }
@@ -286,10 +286,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 1,
-                  "max": 1
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+"min": 2,
+"max": 2
                 }
               }
             }
@@ -317,10 +317,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 2,
-                  "max": 2
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+"min": 3,
+"max": 3
                 }
               }
             }
@@ -348,10 +348,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 3,
-                  "max": 3
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+"min": 4,
+"max": 4
                 }
               }
             }
@@ -379,10 +379,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 4,
-                  "max": 4
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+"min": 5,
+"max": 5
                 }
               }
             }
@@ -410,10 +410,10 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 5,
-                  "max": 5
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+"min": 6,
+"max": 6
                 }
               }
             }
@@ -441,9 +441,9 @@
               "entity": "this",
               "predicate": {
                 "type_specific":  {
-                  "type": "wotr:guild_rank",
-                  "guild": "wotr:cats_cradle",
-                  "min": 6
+                  "type": "wotr:progression_track_rank",
+                  "track": "wotr:cats_cradle",
+                  "min": 7
                 }
               }
             }
