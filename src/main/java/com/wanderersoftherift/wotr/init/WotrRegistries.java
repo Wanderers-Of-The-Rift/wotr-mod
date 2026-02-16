@@ -36,6 +36,7 @@ import com.wanderersoftherift.wotr.entity.player.progression.ProgressionTrack;
 import com.wanderersoftherift.wotr.gui.menu.character.CharacterMenuItem;
 import com.wanderersoftherift.wotr.item.implicit.ImplicitConfig;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
+import com.wanderersoftherift.wotr.loot.InstantLoot;
 import com.wanderersoftherift.wotr.modifier.Modifier;
 import com.wanderersoftherift.wotr.modifier.effect.ModifierEffect;
 import com.wanderersoftherift.wotr.modifier.source.ModifierSource;
@@ -138,6 +139,8 @@ public class WotrRegistries {
             Keys.ANOMALY_TASK_TYPE).sync(true).create();
     public static final Registry<MapCodec<? extends SpawnFunction>> SPAWN_FUNCTION_TYPES = new RegistryBuilder<>(
             Keys.SPAWN_FUNCTION_TYPES).sync(true).create();
+    public static final Registry<MapCodec<? extends InstantLoot>> INSTANT_LOOT_TYPES = new RegistryBuilder<>(
+            Keys.INSTANT_LOOT_TYPES).sync(true).create();
 
     public static final class Keys {
 
@@ -185,6 +188,9 @@ public class WotrRegistries {
                 .createRegistryKey(WanderersOfTheRift.id("npc"));
         public static final ResourceKey<Registry<CharacterMenuItem>> CHARACTER_MENU_ITEMS = ResourceKey
                 .createRegistryKey(WanderersOfTheRift.id("character_menu_item"));
+
+        public static final ResourceKey<Registry<MapCodec<? extends InstantLoot>>> INSTANT_LOOT_TYPES = ResourceKey
+                .createRegistryKey(WanderersOfTheRift.id("instant_loot_type"));
 
         // Abilities
         public static final ResourceKey<Registry<Ability>> ABILITIES = ResourceKey
@@ -293,6 +299,7 @@ public class WotrRegistries {
         event.register(MODIFIER_SOURCES);
         event.register(TARGET_AREA_SHAPES);
         event.register(RIFT_PARAMETER_TYPES);
+        event.register(INSTANT_LOOT_TYPES);
 
         // worldgen registries
         event.register(THEME_SOURCE_TYPE);

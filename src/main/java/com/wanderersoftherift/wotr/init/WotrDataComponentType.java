@@ -16,6 +16,7 @@ import com.wanderersoftherift.wotr.item.implicit.GearImplicits;
 import com.wanderersoftherift.wotr.item.riftkey.RiftKeyParameterData;
 import com.wanderersoftherift.wotr.item.runegem.RunegemData;
 import com.wanderersoftherift.wotr.item.socket.GearSockets;
+import com.wanderersoftherift.wotr.loot.InstantLoot;
 import com.wanderersoftherift.wotr.util.listedit.ListEdit;
 import com.wanderersoftherift.wotr.world.level.levelgen.RiftPostProcessingStep;
 import com.wanderersoftherift.wotr.world.level.levelgen.jigsaw.JigsawListProcessor;
@@ -68,6 +69,9 @@ public class WotrDataComponentType {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GEAR_RIFT_TIER = register(
             "gear_rift_tier", Codec.INT, ByteBufCodecs.INT);
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<InstantLoot>> INSTANT_LOOT = register(
+            "instant_loot", InstantLoot.CODEC, ByteBufCodecs.fromCodecWithRegistries(InstantLoot.CODEC));
 
     public static final class AbilityContextData {
         public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChainAbilityState>> CHAIN_ABILITY_STATE = register(
