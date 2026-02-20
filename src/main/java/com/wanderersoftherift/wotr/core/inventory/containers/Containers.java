@@ -1,13 +1,13 @@
 package com.wanderersoftherift.wotr.core.inventory.containers;
 
 import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
-import com.wanderersoftherift.wotr.core.inventory.ItemVisitor;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * Helper methods for working with containers
@@ -27,7 +27,7 @@ public final class Containers {
      * @param player
      * @param visitor
      */
-    public static void walk(Player player, ItemVisitor visitor) {
+    public static void walk(Player player, Consumer<ItemAccessor> visitor) {
         Registry<ContainerType> containerTypes = player.level()
                 .registryAccess()
                 .lookupOrThrow(WotrRegistries.Keys.CONTAINER_TYPES);
@@ -41,10 +41,13 @@ public final class Containers {
      * @param container      The container to visit
      * @param visitor        The visitor that will visit each item
      */
-    public static void walk(Registry<ContainerType> containerTypes, ContainerWrapper container, ItemVisitor visitor) {
+    public static void walk(
+            Registry<ContainerType> containerTypes,
+            ContainerWrapper container,
+            Consumer<ItemAccessor> visitor) {
         boolean modified = false;
         for (ItemAccessor item : container) {
-            visitor.visit(item);
+            visitor.accept(item);
             ContainerWrapper contents = getContents(containerTypes, item.getReadOnlyItemStack());
             if (contents != null) {
                 walk(containerTypes, contents, visitor);
