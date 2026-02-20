@@ -22,5 +22,16 @@
       },
       "item_types": 2
     }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table": "wotr:rift_objective/success"
+    },
+    {
+      "type": "wotr:progression_track",
+      "tracks": "wotr:level",
+      "amount": 1000
+    }
   ]
 }
