@@ -11,7 +11,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,13 +51,11 @@ public record TossFromLoottableGoalProvider(ResourceKey<LootTable> lootTable, Nu
     @Override
     public @NotNull List<Goal> generateGoal(LootContext context) {
         LootTable table = context.getLevel().getServer().reloadableRegistries().getLootTable(lootTable);
-        List<ItemStack> output = new ArrayList<>();
-        for (int i = 0; i < lootRolls.getInt(context); i++) {
-            table.getRandomItems(context, output::add);
-        }
-        Object2IntMap<Item> itemCounts = new Object2IntArrayMap<>(output.size());
-        for (ItemStack stack : output) {
-            itemCounts.merge(stack.getItem(), stack.getCount(), Integer::sum);
+
+        int rolls = lootRolls.getInt(context);
+        Object2IntMap<Item> itemCounts = new Object2IntArrayMap<>();
+        for (int i = 0; i < rolls; i++) {
+            table.getRandomItems(context, stack -> itemCounts.merge(stack.getItem(), stack.getCount(), Integer::sum));
         }
         return RandomUtil.randomSubset(itemCounts.keySet(), itemTypes.getInt(context), context.getRandom())
                 .stream()
