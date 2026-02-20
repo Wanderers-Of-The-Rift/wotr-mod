@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.TriState;
@@ -81,11 +80,11 @@ public record EmblemSpecialRenderer(Holder<Item> baseItem, EmblemProvider emblem
 
     private static RenderType getRenderType(ResourceLocation icon) {
         return RENDER_TYPES.computeIfAbsent(icon,
-                resourceLocation -> RenderType.create("emblem_" + icon.toString(), DefaultVertexFormat.NEW_ENTITY,
+                resourceLocation -> RenderType.create("emblem_" + icon.toString(), DefaultVertexFormat.BLOCK,
                         VertexFormat.Mode.QUADS, 786_432, true, false,
                         RenderType.CompositeState.builder()
                                 .setLightmapState(RenderStateShard.LIGHTMAP)
-                                .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER)
+                                .setShaderState(RenderStateShard.RENDERTYPE_CUTOUT_SHADER)
                                 .setTextureState(
                                         new RenderStateShard.TextureStateShard(icon, TriState.FALSE, false))
                                 .setCullState(RenderStateShard.NO_CULL)
@@ -104,7 +103,6 @@ public record EmblemSpecialRenderer(Holder<Item> baseItem, EmblemProvider emblem
         consumer.addVertex(pose, x, y, z)
                 .setColor(0xFFFFFFFF)
                 .setUv((float) u, (float) v)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
                 .setNormal(pose, 0.0F, 0.0f, -1.0F);
     }
