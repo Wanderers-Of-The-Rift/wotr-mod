@@ -154,8 +154,6 @@ public class QuestCompletionMenu extends AbstractContainerMenu {
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
-        if (player instanceof ServerPlayer serverPlayer) {
-            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, handInItems);
-        }
+        ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(player, handInItems);
     }
 }
