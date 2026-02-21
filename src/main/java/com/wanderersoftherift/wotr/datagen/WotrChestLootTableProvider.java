@@ -2,11 +2,14 @@ package com.wanderersoftherift.wotr.datagen;
 
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.Ability;
+import com.wanderersoftherift.wotr.core.quest.reward.HealReward;
+import com.wanderersoftherift.wotr.core.quest.reward.provider.FixedRewardProvider;
 import com.wanderersoftherift.wotr.init.WotrItems;
 import com.wanderersoftherift.wotr.init.WotrRegistries;
 import com.wanderersoftherift.wotr.init.WotrTags;
 import com.wanderersoftherift.wotr.loot.functions.AbilityHolderFunction;
 import com.wanderersoftherift.wotr.loot.functions.GearSocketsFunction;
+import com.wanderersoftherift.wotr.loot.functions.RewardInstantLootFunction;
 import com.wanderersoftherift.wotr.loot.functions.RollGearFunction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -60,7 +63,9 @@ public record WotrChestLootTableProvider(HolderLookup.Provider registries) imple
                                 .add(LootItem.lootTableItem(Items.POTION)
                                         .when(riftTier().max(1))
                                         .setWeight(10)
-                                        .apply(SetPotionFunction.setPotion(Potions.HEALING)))
+                                        .apply(SetPotionFunction.setPotion(Potions.HEALING))
+                                        .apply(RewardInstantLootFunction
+                                                .builder(() -> new FixedRewardProvider<>(new HealReward(6)))))
                                 .add(LootItem.lootTableItem(Items.BREAD)
                                         .setWeight(20)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))

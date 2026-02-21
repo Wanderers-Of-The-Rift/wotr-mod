@@ -8,7 +8,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -101,8 +100,7 @@ public class RewardMenu extends AbstractRewardMenu {
     public void removed(@NotNull Player player) {
         super.removed(player);
         this.access.execute((world, pos) -> {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
-            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, itemRewards);
+            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(player, itemRewards);
         });
     }
 }

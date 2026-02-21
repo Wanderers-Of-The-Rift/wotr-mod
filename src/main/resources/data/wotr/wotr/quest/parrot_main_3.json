@@ -1,7 +1,7 @@
 {
   "goals": [
     {
-      "type": "wotr:fixed_kill_mob",
+      "type": "wotr:kill_mob",
       "mob": "#wotr:undead",
       "mob_label": "mobgroup.wotr.rift_monsters",
       "count": 20

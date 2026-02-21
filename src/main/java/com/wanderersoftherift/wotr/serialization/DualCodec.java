@@ -11,5 +11,5 @@ import net.minecraft.network.codec.StreamCodec;
  * @param streamCodec
  * @param <T>
  */
-public record DualCodec<T>(MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
+public record DualCodec<T>(MapCodec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
 }

@@ -188,6 +188,8 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("container", "quest.are_you_sure"), "Really abandon?");
         add(WanderersOfTheRift.translationId("container", "quest.hand_in_to"), "Hand in to: %s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.give"), "Deliver %s/%s ");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.collect"), "Collect %s/%s");
+        add(WanderersOfTheRift.translationId("container", "quest.goal.toss"), "Find and toss %s/%s");
         add(WanderersOfTheRift.translationId("container", "quest.goal.kill"), "Defeat %s (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.complete_rifts"), "%s %srifts (%s/%s)");
         add(WanderersOfTheRift.translationId("container", "quest.goal.anomaly"), "Close anomalies (%s/%s)");
@@ -489,6 +491,7 @@ public class WotrLanguageProvider extends LanguageProvider {
         add(WanderersOfTheRift.translationId("objective", "explore.name"), "Explore");
         add(WanderersOfTheRift.translationId("objective", "kill.description"), "Defeat %s monsters");
         add(WanderersOfTheRift.translationId("objective", "stealth.description"), "Defeat monsters stealthily");
+        add(WanderersOfTheRift.translationId("objective", "collect_items.name"), "Collect Items");
         add(WanderersOfTheRift.translationId("objective", "nothing.description"), "Do nothing");
         add(WanderersOfTheRift.translationId("objective", "nothing.message"), "Survive and Escape");
         add(WanderersOfTheRift.translationId("gui", "objective_status.complete"), "Objective Complete");

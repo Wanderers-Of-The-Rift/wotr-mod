@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 public interface GoalTracker {
 
     /**
+     * @param <T>
      * @param goalType
      * @return a stream of goals of the provided type that are being tracked by this GoalTracker
-     * @param <T>
      */
     <T extends Goal> Stream<? extends GoalState<T>> streamGoals(Class<T> goalType);
 }

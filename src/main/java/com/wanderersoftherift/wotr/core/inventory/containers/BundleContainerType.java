@@ -1,9 +1,12 @@
 package com.wanderersoftherift.wotr.core.inventory.containers;
 
+import com.wanderersoftherift.wotr.core.inventory.ItemAccessor;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BundleContents;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,28 +27,39 @@ public class BundleContainerType implements ContainerType {
     }
 
     private static class BundleComponentContainerWrapper implements ContainerWrapper {
-        private final ItemStack containerItem;
-        private final List<ContainerItemWrapper> contents;
+        private final ItemAccessor containerItem;
+        private final List<ItemAccessor> contents;
 
         public BundleComponentContainerWrapper(ItemStack item) {
+            this(new DirectItemAccessor(item));
+        }
+
+        public BundleComponentContainerWrapper(ItemAccessor item) {
             this.containerItem = item;
             contents = new ArrayList<>();
-            for (ItemStack itemCopy : item.get(DataComponents.BUNDLE_CONTENTS).itemsCopy()) {
-                contents.add(new DirectContainerItemWrapper(itemCopy));
+            for (ItemStack itemCopy : item.getReadOnlyItemStack().get(DataComponents.BUNDLE_CONTENTS).itemsCopy()) {
+                contents.add(new DirectItemAccessor(itemCopy));
             }
         }
 
         @Override
         public void recordChanges() {
-            containerItem.set(DataComponents.BUNDLE_CONTENTS,
-                    new BundleContents(contents.stream()
-                            .map(ContainerItemWrapper::getReadOnlyItemStack)
-                            .filter(x -> !x.isEmpty())
-                            .toList()));
+            containerItem.applyComponents(DataComponentPatch.builder()
+                    .set(DataComponents.BUNDLE_CONTENTS,
+                            new BundleContents(contents.stream()
+                                    .map(ItemAccessor::getReadOnlyItemStack)
+                                    .filter(x -> !x.isEmpty())
+                                    .toList()))
+                    .build());
         }
 
         @Override
-        public @NotNull Iterator<ContainerItemWrapper> iterator() {
+        public @Nullable ItemAccessor containerItem() {
+            return containerItem;
+        }
+
+        @Override
+        public @NotNull Iterator<ItemAccessor> iterator() {
             return contents.iterator();
         }
     }

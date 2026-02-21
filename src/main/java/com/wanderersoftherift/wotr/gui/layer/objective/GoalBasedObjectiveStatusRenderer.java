@@ -6,8 +6,6 @@ import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.widget.goal.GoalStateWidget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
 import org.joml.Vector2i;
@@ -17,9 +15,7 @@ import java.util.List;
 /**
  * Renderer for the goal based objective. Just lists the goals and their progress
  */
-public class GoalBasedObjectiveStatusRenderer extends ObjectiveRenderer {
-
-    private static final int WIDTH = 120;
+public class GoalBasedObjectiveStatusRenderer implements ObjectiveRenderer {
 
     private final List<GoalStateWidget> goalWidgets;
 
@@ -40,12 +36,13 @@ public class GoalBasedObjectiveStatusRenderer extends ObjectiveRenderer {
 
     @Override
     public void render(GuiGraphics guiGraphics, HudElementConfig config, DeltaTracker deltaTracker) {
-        Font font = Minecraft.getInstance().font;
-        Vector2i pos = config.getPosition(WIDTH, font.lineHeight, guiGraphics.guiWidth(), guiGraphics.guiHeight());
+        int width = goalWidgets.stream().mapToInt(GoalStateWidget::getWidth).max().orElse(0);
+        int totalHeight = goalWidgets.stream().mapToInt(widget -> widget.getHeight(width)).sum();
+        Vector2i pos = config.getPosition(width, totalHeight, guiGraphics.guiWidth(), guiGraphics.guiHeight());
         for (GoalStateWidget widget : goalWidgets) {
             widget.setPosition(pos.x, pos.y);
-            widget.setWidth(WIDTH);
-            int height = widget.getHeight(WIDTH);
+            int height = widget.getHeight(width);
+            widget.setWidth(width);
             widget.setHeight(height);
             widget.render(guiGraphics, 0, 0, deltaTracker.getGameTimeDeltaPartialTick(true));
             pos.add(0, height);

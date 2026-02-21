@@ -1,0 +1,37 @@
+{
+  "type": "wotr:goal_based",
+  "goals": [
+    {
+      "type": "wotr:toss_from_loot_table",
+      "loot_table": "wotr:chests/wooden",
+      "loot_rolls": {
+        "type": "wotr:sum",
+        "values": [
+          {
+            "type": "wotr:multiply",
+            "values": [
+              {
+                "type": "wotr:rift_parameter",
+                "parameter": "wotr:objective/difficulty"
+              },
+              10
+            ]
+          },
+          1
+        ]
+      },
+      "item_types": 2
+    }
+  ],
+  "rewards": [
+    {
+      "type": "wotr:loot_table",
+      "loot_table": "wotr:rift_objective/success"
+    },
+    {
+      "type": "wotr:progression_track",
+      "tracks": "wotr:level",
+      "amount": 1000
+    }
+  ]
+}

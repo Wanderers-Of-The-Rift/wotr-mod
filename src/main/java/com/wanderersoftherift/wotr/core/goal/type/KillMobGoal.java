@@ -5,12 +5,17 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.goal.Goal;
+import com.wanderersoftherift.wotr.core.goal.GoalManager;
 import com.wanderersoftherift.wotr.serialization.DualCodec;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Optional;
 
@@ -21,6 +26,7 @@ import java.util.Optional;
  * @param rawLabel A translation string for displaying the type of mob
  * @param count    The number of mobs that need to be killed
  */
+@EventBusSubscriber
 public record KillMobGoal(Optional<EntityTypePredicate> mob, String rawLabel, int count) implements Goal {
 
     public static final MapCodec<KillMobGoal> CODEC = RecordCodecBuilder.mapCodec(
@@ -48,6 +54,18 @@ public record KillMobGoal(Optional<EntityTypePredicate> mob, String rawLabel, in
      */
     public Component mobLabel() {
         return Component.translatable(rawLabel);
+    }
+
+    @SubscribeEvent
+    public static void onDeath(LivingDeathEvent event) {
+        if (!(event.getSource().getEntity() instanceof Player player)) {
+            return;
+        }
+        GoalManager.getGoalStates(player, KillMobGoal.class).forEach(state -> {
+            if (state.getGoal().mob().map(predicate -> predicate.matches(event.getEntity().getType())).orElse(true)) {
+                state.incrementProgress(player);
+            }
+        });
     }
 
 }
