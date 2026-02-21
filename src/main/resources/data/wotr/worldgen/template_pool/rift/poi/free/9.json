@@ -4,6 +4,24 @@
         {
             "weight": 100,
             "element": {
+                "location": "wotr:rift/poi/free/9/diorite_ruin-1-mal",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/9/pris_fountain-1-k",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
                 "location": "wotr:rift/poi/free/9/pale-stump-1-jj",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
@@ -22,7 +40,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/free/9/pris_fountain-1-k",
+                "location": "wotr:rift/poi/free/9/ruin-1-mal",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -33,6 +51,15 @@
             "element": {
                 "location": "wotr:rift/poi/free/9/stump-1-mal",
                 "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/free/9/old_ruin-1-mal",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -166,6 +193,15 @@
         {
             "weight": 100,
             "element": {
+                "location": "wotr:rift/poi/free/9/pb_swing-1-k_mal",
+                "processors": "wotr:poi_12_to_wood",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
                 "location": "wotr:rift/poi/free/9/vineyard-1-k",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
@@ -222,33 +258,6 @@
             "element": {
                 "location": "wotr:rift/poi/free/9/tower-2-k",
                 "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/9/ruin-1-mal",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/9/diorite_ruin-1-mal",
-                "processors": "wotr:poi_theme_default",
-                "projection": "rigid",
-                "element_type": "minecraft:single_pool_element"
-            }
-        },
-        {
-            "weight": 100,
-            "element": {
-                "location": "wotr:rift/poi/free/9/pb_swing-1-k_mal",
-                "processors": "wotr:poi_12_to_wood",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }

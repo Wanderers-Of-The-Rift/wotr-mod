@@ -4,7 +4,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/9/tunnel-1-wout",
+                "location": "wotr:rift/poi/halfway/9/rest_stop-2-mal",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -13,7 +13,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/halfway/9/rest_stop-2-mal",
+                "location": "wotr:rift/poi/halfway/9/tunnel-1-wout",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -41,6 +41,15 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/halfway/9/namehere-1-jyu",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
+                "location": "wotr:rift/poi/halfway/9/stable-1-wout",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"

@@ -4,6 +4,15 @@
         {
             "weight": 100,
             "element": {
+                "location": "wotr:rift/poi/ceiling/9/hang_chest-4-mal",
+                "processors": "wotr:poi_theme_default",
+                "projection": "rigid",
+                "element_type": "minecraft:single_pool_element"
+            }
+        },
+        {
+            "weight": 100,
+            "element": {
                 "location": "wotr:rift/poi/ceiling/9/chandelier-1-muki",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
@@ -31,7 +40,7 @@
         {
             "weight": 100,
             "element": {
-                "location": "wotr:rift/poi/ceiling/9/hang_chest-4-mal",
+                "location": "wotr:rift/poi/ceiling/9/brick_chadelier-1-mal",
                 "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
@@ -41,7 +50,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/ceiling/9/suspended_library-1-alex642",
-                "processors": "wotr:poi_12_to_wood",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -50,7 +59,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/ceiling/9/hanging_greenhouse-1-alex642",
-                "processors": "wotr:poi_12_to_wood",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -59,7 +68,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/ceiling/9/hay_stack-1-alex642",
-                "processors": "wotr:poi_12_to_wood",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -68,7 +77,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/ceiling/9/apiary-1-alex642",
-                "processors": "wotr:poi_12_to_wood",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
@@ -77,7 +86,7 @@
             "weight": 100,
             "element": {
                 "location": "wotr:rift/poi/ceiling/9/produce_storage-1-alex642",
-                "processors": "wotr:poi_12_to_wood",
+                "processors": "wotr:poi_theme_default",
                 "projection": "rigid",
                 "element_type": "minecraft:single_pool_element"
             }
