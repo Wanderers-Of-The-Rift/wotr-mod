@@ -4,8 +4,10 @@ import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.abilities.AbilityResource;
 import com.wanderersoftherift.wotr.config.ClientConfig;
 import com.wanderersoftherift.wotr.gui.config.ConfigurableLayer;
+import com.wanderersoftherift.wotr.gui.config.HorizontalAnchor;
 import com.wanderersoftherift.wotr.gui.config.HudElementConfig;
 import com.wanderersoftherift.wotr.gui.config.UIOrientation;
+import com.wanderersoftherift.wotr.gui.config.VerticalAnchor;
 import com.wanderersoftherift.wotr.init.WotrAttachments;
 import com.wanderersoftherift.wotr.util.GuiUtil;
 import net.minecraft.client.DeltaTracker;
@@ -100,13 +102,16 @@ public class AbilityResourceBars implements ConfigurableLayer {
         var resources = getAbilityResources();
         resources.sort(Comparator.comparing(it -> it.getKey().toString()));
 
+        boolean isRightAnchored = getConfig().getAnchor().getHorizontal() == HorizontalAnchor.RIGHT;
+        boolean isBottomAnchored = getConfig().getAnchor().getVertical() == VerticalAnchor.BOTTOM;
+
         for (var resourceEntry : resources) {
             Vector2i offset;
 
             if (getConfig().getOrientation() == UIOrientation.HORIZONTAL) {
-                offset = new Vector2i(0, index * BAR_SPACING);
+                offset = new Vector2i(0, isBottomAnchored ? -index * BAR_SPACING : index * BAR_SPACING);
             } else {
-                offset = new Vector2i(-index * BAR_SPACING, 0);
+                offset = new Vector2i(isRightAnchored ? -index * BAR_SPACING : index * BAR_SPACING, 0);
             }
 
             var resource = Minecraft.getInstance().player.registryAccess().get(resourceEntry.getKey());
@@ -217,12 +222,12 @@ public class AbilityResourceBars implements ConfigurableLayer {
         int xOffset = pos.x + START_SIZE;
         int startSectionFill = calcFillLength(amount, sectionCount * MANA_PER_SECTION, maxMana, startSectionSize);
         if (startSectionFill > 0) {
-            graphics.blit(RenderType::guiTextured, TEXTURE_H, xOffset + START_SECTION_SIZE - startSectionFill,
+            graphics.blit(RenderType::guiTextured, TEXTURE_H, xOffset + startSectionSize - startSectionFill,
                     pos.y + FILL_OFFSET, START_SIZE + START_SECTION_SIZE - startSectionFill,
                     BAR_THICKNESS + frame * FILL_THICKNESS, startSectionFill, FILL_THICKNESS, TEXTURE_H_WIDTH,
                     TEXTURE_H_HEIGHT, color);
         }
-        xOffset += START_SECTION_SIZE;
+        xOffset += startSectionSize;
         for (int i = 0; i < sectionCount; i++) {
             int sectionFill = calcFillLength(amount, (sectionCount - i - 1) * MANA_PER_SECTION,
                     (sectionCount - i) * MANA_PER_SECTION, SECTION_SIZE);
@@ -249,11 +254,11 @@ public class AbilityResourceBars implements ConfigurableLayer {
         int startSectionFill = calcFillLength(amount, sectionCount * MANA_PER_SECTION, maxMana, startSectionSize);
         if (startSectionFill > 0) {
             graphics.blit(RenderType::guiTextured, TEXTURE_V, pos.x + FILL_OFFSET,
-                    yOffset + START_SECTION_SIZE - startSectionFill, BAR_THICKNESS + frame * FILL_THICKNESS,
+                    yOffset + startSectionSize - startSectionFill, BAR_THICKNESS + frame * FILL_THICKNESS,
                     START_SIZE + START_SECTION_SIZE - startSectionFill, FILL_THICKNESS, startSectionFill,
                     TEXTURE_V_WIDTH, TEXTURE_V_HEIGHT, color);
         }
-        yOffset += START_SECTION_SIZE;
+        yOffset += startSectionSize;
         for (int i = 0; i < sectionCount; i++) {
             int sectionFill = calcFillLength(amount, (sectionCount - i - 1) * MANA_PER_SECTION,
                     (sectionCount - i) * MANA_PER_SECTION, SECTION_SIZE);
