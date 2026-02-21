@@ -1,5 +1,6 @@
 package com.wanderersoftherift.wotr.util;
 
+import com.wanderersoftherift.wotr.loot.InstantLoot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
@@ -25,7 +26,7 @@ public final class ItemStackHandlerUtil {
      * @param player
      * @param handler
      */
-    public static void placeInPlayerInventoryOrDrop(ServerPlayer player, IItemHandler handler) {
+    public static void placeInPlayerInventoryOrDrop(Player player, IItemHandler handler) {
         for (int i = 0; i < handler.getSlots(); i++) {
             // TODO: may need extra logic to handle oversized stacks
             placeInPlayerInventoryOrDrop(player, handler.getStackInSlot(i).copy());
@@ -39,13 +40,14 @@ public final class ItemStackHandlerUtil {
      * @param player
      * @param stack
      */
-    public static void placeInPlayerInventoryOrDrop(ServerPlayer player, ItemStack stack) {
-        if (!stack.isEmpty()) {
-            if (player.isRemoved() || player.hasDisconnected()) {
-                player.drop(stack, false);
-            } else {
-                player.getInventory().placeItemBackInInventory(stack);
-            }
+    public static void placeInPlayerInventoryOrDrop(Player player, ItemStack stack) {
+        if (InstantLoot.tryConsume(stack, player) || stack.isEmpty()) {
+            return;
+        }
+        if (player.isRemoved() || (player instanceof ServerPlayer serverPlayer && serverPlayer.hasDisconnected())) {
+            player.drop(stack, false);
+        } else {
+            player.getInventory().placeItemBackInInventory(stack);
         }
     }
 
@@ -67,13 +69,7 @@ public final class ItemStackHandlerUtil {
                 }
             }
         }
-        if (!residual.isEmpty()) {
-            if (player.isRemoved() || (player instanceof ServerPlayer serverPlayer && serverPlayer.hasDisconnected())) {
-                player.drop(item, false);
-            } else {
-                player.getInventory().placeItemBackInInventory(item);
-            }
-        }
+        placeInPlayerInventoryOrDrop(player, residual);
     }
 
     /**

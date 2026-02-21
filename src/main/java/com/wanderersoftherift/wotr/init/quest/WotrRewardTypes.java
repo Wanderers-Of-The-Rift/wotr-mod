@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.wanderersoftherift.wotr.WanderersOfTheRift;
 import com.wanderersoftherift.wotr.core.quest.Reward;
 import com.wanderersoftherift.wotr.core.quest.RewardProvider;
+import com.wanderersoftherift.wotr.core.quest.reward.AbilityResourceReward;
 import com.wanderersoftherift.wotr.core.quest.reward.CurrencyReward;
+import com.wanderersoftherift.wotr.core.quest.reward.HealReward;
 import com.wanderersoftherift.wotr.core.quest.reward.ItemReward;
 import com.wanderersoftherift.wotr.core.quest.reward.ProgressionTrackPointReward;
 import com.wanderersoftherift.wotr.core.quest.reward.provider.CurrencyRewardProvider;
@@ -31,6 +33,10 @@ public final class WotrRewardTypes {
             .register("progression_track", () -> ProgressionTrackRewardProvider.CODEC);
     public static final Supplier<DualCodec<? extends Reward>> ITEM_REWARD = registerWithFixedProvider("item",
             () -> ItemReward.TYPE);
+    public static final Supplier<DualCodec<? extends Reward>> HEAL_REWARD = registerWithFixedProvider("heal",
+            () -> HealReward.TYPE);
+    public static final Supplier<DualCodec<? extends Reward>> ABILITY_RESOURCE_REWARD = registerWithFixedProvider(
+            "ability_resource", () -> AbilityResourceReward.TYPE);
     public static final Supplier<DualCodec<? extends Reward>> CURRENCY_REWARD = REWARD_TYPES.register("currency",
             () -> CurrencyReward.TYPE);
     public static final Supplier<DualCodec<? extends Reward>> PROGRESSION_TRACK_REWARD = REWARD_TYPES

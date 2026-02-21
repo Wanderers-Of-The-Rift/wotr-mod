@@ -127,8 +127,7 @@ public class RiftCompleteMenu extends AbstractRewardMenu {
     public void removed(@NotNull Player player) {
         super.removed(player);
         this.access.execute((world, pos) -> {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
-            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(serverPlayer, itemRewards);
+            ItemStackHandlerUtil.placeInPlayerInventoryOrDrop(player, itemRewards);
         });
     }
 
