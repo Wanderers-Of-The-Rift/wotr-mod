@@ -398,7 +398,8 @@ public record WotrAnomalyRewardLootTableProvider(HolderLookup.Provider registrie
 
     private static @NotNull ResourceKey<LootTable> getKey(String path) {
         return ResourceKey.create(
-                Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "anomaly_rewards/" + path)
+                Registries.LOOT_TABLE,
+                ResourceLocation.fromNamespaceAndPath(WanderersOfTheRift.MODID, "anomaly_rewards/" + path)
         );
     }
 
