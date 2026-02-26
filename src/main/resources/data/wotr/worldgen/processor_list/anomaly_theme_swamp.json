@@ -952,8 +952,8 @@
         "wotr:swamp/essence": 1.0
       },
       "rewards": {
-        "wotr:strength5": 10.0,
-        "wotr:ender_pearl": 10.0
+        "wotr:swamp_strength": 10.0,
+        "wotr:swamp_speed": 10.0
       }
     }
   ]

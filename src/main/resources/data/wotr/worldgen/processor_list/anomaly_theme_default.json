@@ -13,7 +13,8 @@
         "wotr:essences": 1.0
       },
       "rewards": {
-        "wotr:ender_pearl": 10.0
+        "wotr:default_strength": 10.0,
+        "wotr:default_speed": 10.0
       }
     }
   ]
