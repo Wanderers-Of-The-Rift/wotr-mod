@@ -68,6 +68,8 @@ public class DataGenerators {
         event.createProvider((output, lookupProvider) -> new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(WotrBlockLootTableProvider::new, LootContextParamSets.BLOCK),
                 new LootTableProvider.SubProviderEntry(WotrChestLootTableProvider::new, LootContextParamSets.CHEST),
+                new LootTableProvider.SubProviderEntry(WotrAnomalyRewardLootTableProvider::new,
+                        LootContextParamSets.COMMAND),
                 new LootTableProvider.SubProviderEntry(WotrRiftObjectiveLootTableProvider::new,
                         LootContextParamSets.EMPTY),
                 new LootTableProvider.SubProviderEntry(WotrLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)),

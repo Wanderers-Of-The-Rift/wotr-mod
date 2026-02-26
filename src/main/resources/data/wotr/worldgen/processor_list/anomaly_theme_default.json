@@ -1,0 +1,21 @@
+{
+  "processors": [
+    {
+      "processor_type": "wotr:rift_theme",
+      "piece_type": "poi"
+    },
+    {
+      "processor_type": "wotr:anomaly",
+      "replace_with_anomaly": "minecraft:end_rod",
+      "tasks": {
+        "wotr:zombie_horde": 3.0,
+        "wotr:slice_anomaly": 1.0,
+        "wotr:essences": 1.0
+      },
+      "rewards": {
+        "wotr:default_strength": 10.0,
+        "wotr:default_speed": 10.0
+      }
+    }
+  ]
+}
