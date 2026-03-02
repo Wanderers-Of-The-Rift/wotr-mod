@@ -147,7 +147,7 @@ public class AbilityResourceData {
 
         for (var entry : amounts.entrySet()) {
             if (entry.getKey().value().maximum().equals(attribute)) {
-                entry.getValue().onMaxCharged();
+                entry.getValue().onMaxChanged();
             }
         }
     }
@@ -192,7 +192,8 @@ public class AbilityResourceData {
             event.updateTriggers(TriggerTracker.forEntity((Entity) holder));
         }
 
-        void onMaxCharged() {
+        void onMaxChanged() {
+            System.out.println("Max Charged Called");
             var max = resource.value().maxForEntity(holder);
             var oldNotFull = isNotFull;
 
