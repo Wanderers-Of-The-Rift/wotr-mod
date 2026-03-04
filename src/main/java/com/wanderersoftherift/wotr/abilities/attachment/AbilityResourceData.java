@@ -144,6 +144,12 @@ public class AbilityResourceData {
         var eventStates = watchers.get(attribute);
         var isNonZero = isNotZero(value);
         eventStates.forEach(eventState -> eventState.setHasNonZeroDelta(triggerTracker, isNonZero));
+
+        for (var entry : amounts.entrySet()) {
+            if (entry.getKey().value().maximum().equals(attribute)) {
+                entry.getValue().onMaxChanged();
+            }
+        }
     }
 
     private static boolean isNotZero(double value) {
@@ -184,6 +190,18 @@ public class AbilityResourceData {
             var event = eventStateMap.get(eventKey);
             event.hasNonZeroDelta = newValue;
             event.updateTriggers(TriggerTracker.forEntity((Entity) holder));
+        }
+
+        void onMaxChanged() {
+            System.out.println("Max Charged Called");
+            var max = resource.value().maxForEntity(holder);
+            var oldNotFull = isNotFull;
+
+            isNotFull = value != max;
+
+            if (oldNotFull != isNotFull) {
+                updateTriggers();
+            }
         }
 
         private void updateTriggers() {
