@@ -69,7 +69,7 @@ public class DataGenerators {
                 new LootTableProvider.SubProviderEntry(WotrBlockLootTableProvider::new, LootContextParamSets.BLOCK),
                 new LootTableProvider.SubProviderEntry(WotrChestLootTableProvider::new, LootContextParamSets.CHEST),
                 new LootTableProvider.SubProviderEntry(WotrAnomalyRewardLootTableProvider::new,
-                        LootContextParamSets.COMMAND),
+                        LootContextParamSets.EMPTY),
                 new LootTableProvider.SubProviderEntry(WotrRiftObjectiveLootTableProvider::new,
                         LootContextParamSets.EMPTY),
                 new LootTableProvider.SubProviderEntry(WotrLootBoxLootTableProvider::new, LootContextParamSets.EMPTY)),
