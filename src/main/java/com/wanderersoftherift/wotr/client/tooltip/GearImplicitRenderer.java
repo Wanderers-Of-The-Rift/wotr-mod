@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import org.joml.Matrix4f;
 
 public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) implements ClientTooltipComponent {
-
+    private static final int IMPLICIT_PADDING = 2;
     public static final Component IMPLICITS_LABEL = Component
             .translatable("tooltip." + WanderersOfTheRift.MODID + ".implicit")
             .withStyle(ChatFormatting.GRAY);
@@ -25,7 +25,7 @@ public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) im
                 .stream()
                 .mapToInt(modifierInstance -> ModifierRenderHelper.countTooltips(modifierInstance, isKeyDown))
                 .sum();
-        return 12 * (1 + tooltipCount);
+        return font.lineHeight * (1 + tooltipCount);
     }
 
     @Override
@@ -44,21 +44,21 @@ public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) im
         var isKeyDown = ModifierRenderHelper.isKeyDown();
         font.drawInBatch("Implicits: ", (float) x, (float) y, ChatFormatting.GRAY.getColor(), true, matrix,
                 bufferSource, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
-        y += 12;
+        y += font.lineHeight + IMPLICIT_PADDING;
         for (var modifier : implicitsComponent.implicits.modifierInstances()) {
-            ModifierRenderHelper.renderModifierEffectDescriptions(modifier, isKeyDown, font, x, y, 12, matrix,
+            ModifierRenderHelper.renderModifierEffectDescriptions(modifier, isKeyDown, font, x, y, font.lineHeight, matrix,
                     bufferSource);
-            y += 12 * ModifierRenderHelper.countTooltips(modifier, isKeyDown);
+            y += font.lineHeight * ModifierRenderHelper.countTooltips(modifier, isKeyDown) + IMPLICIT_PADDING;
         }
     }
 
     @Override
     public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics guiGraphics) {
         var isKeyDown = ModifierRenderHelper.isKeyDown();
-        y += 12;
+        y += font.lineHeight + IMPLICIT_PADDING;
         for (var modifier : implicitsComponent.implicits.modifierInstances()) {
-            ModifierRenderHelper.renderModifierEffectIcons(modifier, isKeyDown, font, x, y, 12, guiGraphics);
-            y += 12 * ModifierRenderHelper.countTooltips(modifier, isKeyDown);
+            ModifierRenderHelper.renderModifierEffectIcons(modifier, isKeyDown, font, x, y, font.lineHeight, guiGraphics);
+            y += font.lineHeight * ModifierRenderHelper.countTooltips(modifier, isKeyDown) + IMPLICIT_PADDING;
         }
     }
 

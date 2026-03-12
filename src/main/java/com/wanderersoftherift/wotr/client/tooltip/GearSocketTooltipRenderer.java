@@ -34,6 +34,7 @@ import java.util.Map;
 public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) implements ClientTooltipComponent {
     private static final int SOCKET_LINE_HEIGHT = 20;
     private static final int MODIFIER_DESCRIPTION_HORIZONTAL_OFFSET = 30;
+    private static final int SOCKET_HEIGHT_PADDING = 2;
     private static final Map<RunegemShape, ResourceLocation> SHAPE_TEXTURES = Map.of(
             RunegemShape.CIRCLE, WanderersOfTheRift.id("textures/tooltip/runegem/shape/circle.png"),
             RunegemShape.DIAMOND, WanderersOfTheRift.id("textures/tooltip/runegem/shape/diamond.png"),
@@ -45,17 +46,17 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
 
     @Override
     public int getHeight(@NotNull Font font) {
-        int baseHeight = font.lineHeight + 2;
+        int baseHeight = font.lineHeight + SOCKET_HEIGHT_PADDING;
 
         var isKeyDown = ModifierRenderHelper.isKeyDown();
         if (!isKeyDown) {
-            baseHeight += font.lineHeight + 2;
+            baseHeight += font.lineHeight + SOCKET_HEIGHT_PADDING;
         }
 
         int contentHeight = socketComponent.gearSocket().stream().mapToInt(socket -> {
             var socketModifier = socket.modifier();
             if (socketModifier.isPresent() && socket.runegem().isPresent()) {
-                return SOCKET_LINE_HEIGHT + 12 * ModifierRenderHelper.countTooltips(socketModifier.get(), isKeyDown);
+                return SOCKET_LINE_HEIGHT + font.lineHeight * ModifierRenderHelper.countTooltips(socketModifier.get(), isKeyDown);
             } else {
                 return SOCKET_LINE_HEIGHT;
             }
@@ -104,7 +105,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
                             WotrKeyMappings.SHOW_TOOLTIP_INFO.getKey().getDisplayName().getString()),
                     pX, pY, ChatFormatting.DARK_GRAY.getColor(), true, transform, buffer, Font.DisplayMode.NORMAL, 0,
                     LightTexture.FULL_BRIGHT);
-            pY += font.lineHeight + 2;
+            pY += font.lineHeight + SOCKET_HEIGHT_PADDING;
         }
 
         var used = new ArrayList<GearSocket>(socketComponent.gearSocket().size());
@@ -134,14 +135,14 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
 
             int tooltipCount = ModifierRenderHelper.countTooltips(modifierInstance, isKeyDown);
             for (int i = 0; i < tooltipCount; i++) {
-                font.drawInBatch(Component.literal(">"), pX + 20, pY + 12 * i - 1, ChatFormatting.DARK_GRAY.getColor(),
+                font.drawInBatch(Component.literal(">"), pX + 20, pY + font.lineHeight * i - 1, ChatFormatting.DARK_GRAY.getColor(),
                         true, transform, buffer, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
             }
 
             ModifierRenderHelper.renderModifierEffectDescriptions(modifierInstance, isKeyDown, font,
-                    pX + MODIFIER_DESCRIPTION_HORIZONTAL_OFFSET, pY - 1, 12, transform, buffer);
+                    pX + MODIFIER_DESCRIPTION_HORIZONTAL_OFFSET, pY - 1, font.lineHeight, transform, buffer);
 
-            pY += 12 * tooltipCount + SOCKET_LINE_HEIGHT - 12;
+            pY += font.lineHeight * tooltipCount + SOCKET_LINE_HEIGHT - font.lineHeight;
         }
 
         for (GearSocket ignored : unused) {
@@ -167,7 +168,7 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
         y += 10;
 
         if (!isKeyDown) {
-            y += font.lineHeight + 2;
+            y += font.lineHeight + SOCKET_HEIGHT_PADDING;
         }
 
         var used = new ArrayList<GearSocket>(socketComponent.gearSocket().size());
@@ -202,11 +203,11 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
             painted = true;
 
             ModifierRenderHelper.renderModifierEffectIcons(modifierInstance, isKeyDown, font,
-                    x + MODIFIER_DESCRIPTION_HORIZONTAL_OFFSET, y + 4, 12, guiGraphics);
+                    x + MODIFIER_DESCRIPTION_HORIZONTAL_OFFSET, y + 4, font.lineHeight, guiGraphics);
 
             int tooltipCount = ModifierRenderHelper.countTooltips(modifierInstance, isKeyDown);
-            y += 12 * tooltipCount;
-            y += SOCKET_LINE_HEIGHT - 12;
+            y += font.lineHeight * tooltipCount;
+            y += SOCKET_LINE_HEIGHT - font.lineHeight;
         }
 
         painted = false;
