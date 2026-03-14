@@ -1062,8 +1062,8 @@
         "wotr:cave/essence": 1.0
       },
       "rewards": {
-        "wotr:strength5": 10.0,
-        "wotr:ender_pearl": 10.0
+        "wotr:cave_strength": 10.0,
+        "wotr:cave_speed": 10.0
       }
     }
   ]

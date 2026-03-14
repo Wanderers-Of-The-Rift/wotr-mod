@@ -1,0 +1,8 @@
+{
+  "loot_table": "wotr:anomaly_rewards/theme/mesa",
+  "effect": {
+    "id": "minecraft:speed",
+    "duration": 2000,
+    "amplifier": 1
+  }
+}

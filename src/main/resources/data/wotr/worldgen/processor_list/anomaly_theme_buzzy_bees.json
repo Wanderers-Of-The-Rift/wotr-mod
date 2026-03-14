@@ -1085,8 +1085,8 @@
                 "wotr:buzzy_bees/essence": 1.0
             },
             "rewards": {
-                "wotr:strength5": 10.0,
-                "wotr:ender_pearl": 10.0
+                "wotr:buzzy_bees_speed": 10.0,
+                "wotr:buzzy_bees_strength": 10.0
             }
         }
     ]

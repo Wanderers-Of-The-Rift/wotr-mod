@@ -1,0 +1,8 @@
+{
+  "loot_table": "wotr:anomaly_rewards/theme/deepfrost",
+  "effect": {
+    "id": "minecraft:strength",
+    "duration": 2000,
+    "amplifier": 3
+  }
+}
