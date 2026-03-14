@@ -23,7 +23,7 @@ jobs:
           # Comma separated list of Tags to be applied to nodes. The OAuth client must have permission to apply these tags.
           tags: tag:gh-runner # optional
       - name: HTTP Request Action
-        uses: fjogeleit/http-request-action@v1.16.5
+        uses: fjogeleit/http-request-action@v2.0.0
         with:
           # Request URL
           url: 'http://attack8-pc-2.elf-tyrannosaurus.ts.net:8000/create_for_issue'
