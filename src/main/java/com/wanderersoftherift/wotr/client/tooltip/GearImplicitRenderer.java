@@ -13,10 +13,10 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import org.joml.Matrix4f;
 
 public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) implements ClientTooltipComponent {
-    private static final int IMPLICIT_PADDING = 2;
     public static final Component IMPLICITS_LABEL = Component
             .translatable("tooltip." + WanderersOfTheRift.MODID + ".implicit")
             .withStyle(ChatFormatting.GRAY);
+    private static final int IMPLICIT_PADDING = 2;
 
     @Override
     public int getHeight(Font font) {
