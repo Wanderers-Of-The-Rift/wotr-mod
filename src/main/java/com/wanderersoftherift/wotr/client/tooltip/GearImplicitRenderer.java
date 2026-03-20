@@ -46,8 +46,8 @@ public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) im
                 bufferSource, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
         y += font.lineHeight + IMPLICIT_PADDING;
         for (var modifier : implicitsComponent.implicits.modifierInstances()) {
-            ModifierRenderHelper.renderModifierEffectDescriptions(modifier, isKeyDown, font, x, y, font.lineHeight, matrix,
-                    bufferSource);
+            ModifierRenderHelper.renderModifierEffectDescriptions(modifier, isKeyDown, font, x, y, font.lineHeight,
+                    matrix, bufferSource);
             y += font.lineHeight * ModifierRenderHelper.countTooltips(modifier, isKeyDown) + IMPLICIT_PADDING;
         }
     }
@@ -57,7 +57,8 @@ public record GearImplicitRenderer(GearImplicitsComponent implicitsComponent) im
         var isKeyDown = ModifierRenderHelper.isKeyDown();
         y += font.lineHeight + IMPLICIT_PADDING;
         for (var modifier : implicitsComponent.implicits.modifierInstances()) {
-            ModifierRenderHelper.renderModifierEffectIcons(modifier, isKeyDown, font, x, y, font.lineHeight, guiGraphics);
+            ModifierRenderHelper.renderModifierEffectIcons(modifier, isKeyDown, font, x, y, font.lineHeight,
+                    guiGraphics);
             y += font.lineHeight * ModifierRenderHelper.countTooltips(modifier, isKeyDown) + IMPLICIT_PADDING;
         }
     }

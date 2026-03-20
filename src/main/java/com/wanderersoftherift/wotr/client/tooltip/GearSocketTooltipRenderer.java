@@ -56,7 +56,8 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
         int contentHeight = socketComponent.gearSocket().stream().mapToInt(socket -> {
             var socketModifier = socket.modifier();
             if (socketModifier.isPresent() && socket.runegem().isPresent()) {
-                return SOCKET_LINE_HEIGHT + font.lineHeight * ModifierRenderHelper.countTooltips(socketModifier.get(), isKeyDown);
+                return SOCKET_LINE_HEIGHT
+                        + font.lineHeight * ModifierRenderHelper.countTooltips(socketModifier.get(), isKeyDown);
             } else {
                 return SOCKET_LINE_HEIGHT;
             }
@@ -135,8 +136,9 @@ public record GearSocketTooltipRenderer(GearSocketComponent socketComponent) imp
 
             int tooltipCount = ModifierRenderHelper.countTooltips(modifierInstance, isKeyDown);
             for (int i = 0; i < tooltipCount; i++) {
-                font.drawInBatch(Component.literal(">"), pX + 20, pY + font.lineHeight * i - 1, ChatFormatting.DARK_GRAY.getColor(),
-                        true, transform, buffer, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
+                font.drawInBatch(Component.literal(">"), pX + 20, pY + font.lineHeight * i - 1,
+                        ChatFormatting.DARK_GRAY.getColor(), true, transform, buffer, Font.DisplayMode.NORMAL, 0,
+                        LightTexture.FULL_BRIGHT);
             }
 
             ModifierRenderHelper.renderModifierEffectDescriptions(modifierInstance, isKeyDown, font,
